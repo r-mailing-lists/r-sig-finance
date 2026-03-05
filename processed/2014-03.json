@@ -1,0 +1,1070 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2014-03",
+  "messages": [
+    {
+      "id": "msg-994d60fdcf74",
+      "message_id": "<5310EE3F.1050904@organicfoodmarkets.com.au>",
+      "from_name": "Stephen Choularton",
+      "from_email_hash": "be50afa784ca5d067902f310283ce1e85a162aa45ff41ca22e7220432c1408b1",
+      "date": "2014-03-01T07:14:55+11:00",
+      "subject": "[R-SIG-Finance] meaning of IBroker mktData information",
+      "subject_clean": "meaning of IBroker mktData information",
+      "in_reply_to": "<53108F0E.8040503@braverock.com>",
+      "references": [
+        "<5302596D.6070405@organicfoodmarkets.com.au>",
+        "<530FCD30.2040805@organicfoodmarkets.com.au>",
+        "<53108F0E.8040503@braverock.com>"
+      ],
+      "body_plain": "Hi Brian\n\nI would imagine anyone using IB data would discover the problem I did on \nfirst use.  If not they are being a bit too trusting in their data which \nshould never be taken simply on face value.\n\nClearly others have come across this problem and thanks to everyone who \npointed me towards the TWSAPI Yahoo group which has some material on \nit.  A suggested cause is that IB sacrifices comprehensive coverage in \norder to keep to real time.  That is, they do NOT transmit all the tick \ninfo as at busy times it can push the data many second back away from \nreal time.\n\nI have emailed IB asking them how I can accurately extract price and \nsize information from the stream.  I will advise the group if I get \nanywhere.\n\n\nStephen Choularton PhD, FIoD\n\nOn 01/03/14 12:28 AM, Brian G. Peterson wrote:\n> Look at the Interactive Brokers API docs, or call IB, as you are, \n> after all, paying them.\n>\n> There are lots of people on this list.  If no one has answered, it is \n> likely because:\n>\n> 1> your example is not reproducible\n>\n> 2> no one else has encountered your problem\n>\n> 3> it would take too much time for someone to test and try to help,\n>    if this is the case, consider paying someone to do it.\n>    see 1> above to help yourself by producing reproducible code\n>\n> Brian\n>\n> On 02/27/2014 05:41 PM, Stephen Choularton wrote:\n>> I hope someone can help me with this. No one has replied so far.\n>>\n>> I am working on the principal that:\n>>\n>> 1. Volume is issued each time a trade takes place and is the cumulative\n>> volume for the day, and\n>> 2. lastPrice is the last price a trade took place and that is only\n>> issued again when the price changes.\n>>\n>> This would lead me to be able to deduce the size of each deal from the\n>> change in volume and apply the (current) lastPrice to the transaction.\n>>\n>> Have I got that right?\n>>\n>> Even if I have I still have a problem.  Logic dictates that Volume !< 1\n>> but for example if I extract just the price volume data I get some\n>> examples like this:\n>>\n>>\n>> 10:17:12.158900 volume: 135    Price: 33.13\n>> 10:17:13.720741 volume: -47    Price: 33.13\n>> 10:17:22.875066 volume: 589    Price: 33.15\n>>\n>> The original data was:\n>>\n>> <20140210 10:17:12.158900> id=1 symbol=NAB Volume: 263348\n>> <20140210 10:17:13.048749> id=1 symbol=NAB askSize: 2334\n>> <20140210 10:17:13.720741> id=1 symbol=NAB Volume: 263301\n>> <20140210 10:17:13.721744> id=1 symbol=NAB lastTimestamp: 1391987823\n>> <20140210 10:17:13.723745> id=1 symbol=NAB lastPrice: 33.16\n>> <20140210 10:17:13.724759> id=1 symbol=NAB lastSize: 88\n>> <20140210 10:17:13.943221> id=1 symbol=NAB askSize: 2246\n>> <20140210 10:17:17.308927> id=1 symbol=NAB askPrice: 33.15 askSize: 589\n>> <20140210 10:17:17.309927> id=1 symbol=NAB askSize: 589\n>> <20140210 10:17:18.195319> id=1 symbol=NAB askSize: 889\n>> <20140210 10:17:20.466965> id=1 symbol=NAB bidSize: 3998\n>> <20140210 10:17:21.219959> id=1 symbol=NAB askSize: 589\n>> <20140210 10:17:22.868062> id=1 symbol=NAB lastTimestamp: 1391987832\n>> <20140210 10:17:22.873064> id=1 symbol=NAB lastPrice: 33.15\n>> <20140210 10:17:22.874064> id=1 symbol=NAB lastSize: 589\n>> <20140210 10:17:22.875066> id=1 symbol=NAB Volume: 263890\n>> <20140210 10:17:22.877067> id=1 symbol=NAB bidPrice: 33.14 bidSize: 762\n>> <20140210 10:17:22.878067> id=1 symbol=NAB askPrice: 33.16 askSize: 3332\n>>\n>> As you can see we also have two lastPrice's before the change in volume!\n>>\n>> I know you might say just use lastPrice and lastSize but logic dictates\n>> you could have a lastPrice and multiple lastSize's but not multiple\n>> lastPrice's but see three lastPrices in a row below:\n>>\n>>\n>> 10:15:45.332624> id=1 symbol=NAB lastSize: 93\n>> 10:15:45.987894> id=1 symbol=NAB lastSize: 50\n>> 10:15:46.888228> id=1 symbol=NAB lastSize: 104\n>> 10:15:47.447062> id=1 symbol=NAB lastSize: 50\n>> 10:15:48.552406> id=1 symbol=NAB lastPrice: 33.10\n>> 10:15:49.450579> id=1 symbol=NAB lastSize: 42\n>> 10:15:50.201786> id=1 symbol=NAB lastSize: 122\n>> 10:15:51.455403> id=1 symbol=NAB lastSize: 50\n>> 10:15:54.460002> id=1 symbol=NAB lastPrice: 33.085\n>> 10:15:55.461604> id=1 symbol=NAB lastPrice: 33.10\n>> 10:15:56.463385> id=1 symbol=NAB lastPrice: 33.11\n>> 10:15:57.568193> id=1 symbol=NAB lastSize: 58\n>> 10:15:58.466236> id=1 symbol=NAB lastPrice: 33.10\n>> 10:15:59.585589> id=1 symbol=NAB lastPrice: 33.11\n>> 10:16:00.457302> id=1 symbol=NAB lastSize: 8\n>> 10:16:01.344762> id=1 symbol=NAB lastSize: 50\n>> 10:16:02.016870> id=1 symbol=NAB lastSize: 85\n>> 10:16:02.900224> id=1 symbol=NAB lastSize: 46\n>> 10:16:03.654076> id=1 symbol=NAB lastSize: 50\n>> 10:16:04.464855> id=1 symbol=NAB lastPrice: 33.095\n>>\n>> (I have only shown the relevant lines.)\n>>\n>> Have I got this wrong?  All I am trying to do is get accurate deal by\n>> deal price and size data.\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R \n> questions should go.\n>",
+      "body_snippet": "Hi Brian\n\nI would imagine anyone using IB data would discover the problem I did on \nfirst use.  If not they are being a bit too trusting in their data which \nshould never be taken simply on face value",
+      "thread_id": "thread-994d60fdcf74",
+      "thread_depth": 0,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-b3a3c2eef6c0",
+      "message_id": "<CAN=486mQtSi4-zRTbCjzvzutKTQVxMsLBtab2j5zya6h9CX3QQ@mail.gmail.com>",
+      "from_name": "Kapil Shukla",
+      "from_email_hash": "22b8894fa40ddf6f354517408768647b45c79cbb07d4344669ffc487036dc22c",
+      "date": "2014-03-03T23:04:43+08:00",
+      "subject": "[R-SIG-Finance] Time Series Data Analysis of Financial Data",
+      "subject_clean": "Time Series Data Analysis of Financial Data",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140303/65dcae7e/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140303/65dcae7e/attachment.pl>",
+      "thread_id": "thread-b3a3c2eef6c0",
+      "thread_depth": 0,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-a46724fd7af0",
+      "message_id": "<CAK2H+edR4fnv8XXweKk_yXszXFXe=HcUZ349f3PDh5B5mwBEZg@mail.gmail.com>",
+      "from_name": "Mark Knecht",
+      "from_email_hash": "60c26093da6ef493629140d820b18c224125bb61884589ce4143ff939051ea92",
+      "date": "2014-03-03T07:15:12-08:00",
+      "subject": "[R-SIG-Finance] Time Series Data Analysis of Financial Data",
+      "subject_clean": "Time Series Data Analysis of Financial Data",
+      "in_reply_to": "<CAN=486mQtSi4-zRTbCjzvzutKTQVxMsLBtab2j5zya6h9CX3QQ@mail.gmail.com>",
+      "references": [
+        "<CAN=486mQtSi4-zRTbCjzvzutKTQVxMsLBtab2j5zya6h9CX3QQ@mail.gmail.com>"
+      ],
+      "body_plain": "On Mon, Mar 3, 2014 at 7:04 AM, Kapil Shukla <shukla.kapil at gmail.com> wrote:\n> Hi All\n>\n> I am totally new to R so this question may sound basic to many of you. I am\n> trying to use R for time series analysis of some financial instruments.\n> Currently i have hourly data of a stock which has OPEN/HIGH/LOW/CLOSE in a\n> CSV file. I used read.table to import the data in R in to a dataframe but i\n> am following below issues:\n>\n> 1. Date is coming in character format and i am not sure whats the best\n> package of function to format the date in \"DD/MM/YY HH:MM\" format\n> 2. When i plot the data using PLOT() data points are so overlapping on the\n> chart that its hard to identify the data points. I am not able to specify\n> XLIM parameter as my dates are in character. I tried using the C() function\n> to provide the first hour and last hour of the data but it won't accept it.\n> Is there any better package for plotting time series data.\n> 3. Any package which can help me plot the candle stick chart for this OHLC\n> data and help me do some statistical analysis on the data.\n>\n> Thanks in Advance.\n>\n> Regards\n> Kapil\n\n\nKapil,\n   Welcome to R.\n\n   You will do better here if you provide a reproducible example. Read\nyour data in and then segment a little piece using dput to show what\nit looks like. Build an example that uses maybe 10 lines of data. Post\nthe code. From there's it's likely an issue of better defining for R\nhow to handle data/time. Look at the xts package for more info and\npost real R code showing what you are doing so others can help.\n\n   Also, there are examples of doing this sort of thing in Stack\nOverflow so possibly spend some time there.\n\n- Mark",
+      "body_snippet": "On Mon, Mar 3, 2014 at 7:04 AM, Kapil Shukla <shukla.kapil at gmail.com> wrote:\n> Hi All\n>\n> I am totally new to R so this question may sound basic to many of you. I am\n> trying to use R for time seri",
+      "thread_id": "thread-b3a3c2eef6c0",
+      "thread_depth": 1,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-a14a41df992e",
+      "message_id": "<CAN=486nnUB=fSYmnp7UsjgAoMU5gradBCMcv4r5rZkMN+WcoBw@mail.gmail.com>",
+      "from_name": "Kapil Shukla",
+      "from_email_hash": "22b8894fa40ddf6f354517408768647b45c79cbb07d4344669ffc487036dc22c",
+      "date": "2014-03-03T23:26:30+08:00",
+      "subject": "[R-SIG-Finance] Time Series Data Analysis of Financial Data",
+      "subject_clean": "Time Series Data Analysis of Financial Data",
+      "in_reply_to": "<CAK2H+edR4fnv8XXweKk_yXszXFXe=HcUZ349f3PDh5B5mwBEZg@mail.gmail.com>",
+      "references": [
+        "<CAN=486mQtSi4-zRTbCjzvzutKTQVxMsLBtab2j5zya6h9CX3QQ@mail.gmail.com>",
+        "<CAK2H+edR4fnv8XXweKk_yXszXFXe=HcUZ349f3PDh5B5mwBEZg@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140303/a8bb144f/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140303/a8bb144f/attachment.pl>",
+      "thread_id": "thread-b3a3c2eef6c0",
+      "thread_depth": 2,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-54c10d676947",
+      "message_id": "<CAK2H+efVey2GWtwZrCofvAS1DE4UNhaY==05FDivnjCsnWWnbg@mail.gmail.com>",
+      "from_name": "Mark Knecht",
+      "from_email_hash": "60c26093da6ef493629140d820b18c224125bb61884589ce4143ff939051ea92",
+      "date": "2014-03-03T08:09:58-08:00",
+      "subject": "[R-SIG-Finance] Time Series Data Analysis of Financial Data",
+      "subject_clean": "Time Series Data Analysis of Financial Data",
+      "in_reply_to": "<CAN=486nnUB=fSYmnp7UsjgAoMU5gradBCMcv4r5rZkMN+WcoBw@mail.gmail.com>",
+      "references": [
+        "<CAN=486mQtSi4-zRTbCjzvzutKTQVxMsLBtab2j5zya6h9CX3QQ@mail.gmail.com>",
+        "<CAK2H+edR4fnv8XXweKk_yXszXFXe=HcUZ349f3PDh5B5mwBEZg@mail.gmail.com>",
+        "<CAN=486nnUB=fSYmnp7UsjgAoMU5gradBCMcv4r5rZkMN+WcoBw@mail.gmail.com>"
+      ],
+      "body_plain": "On Mon, Mar 3, 2014 at 7:26 AM, Kapil Shukla <shukla.kapil at gmail.com> wrote:\n> Thanks Mark for such a quick reply. I follow the following steps\n>\n> 1. hourly_bid <- read.table(\"ech14_hourly_bid.csv\", header=TRUE, sep=\",\",\n> stringsAsFactors =FALSE)\n> 2.  This is how top 10 rows of my data look like.\n>\n>              Date   OPEN   HIGH    LOW LAST_PRICE NUMBER_TICKS VOLUME\n> VALUE\n> 1   7/29/2013 7:00 1.3292 1.3296 1.3288     1.3288           23     46\n> 61.1444\n> 2   7/29/2013 8:00 1.3286 1.3293 1.3284     1.3293           21     42\n> 55.8108\n> 3   7/29/2013 9:00 1.3294 1.3297 1.3292     1.3293            6     12\n> 15.9534\n> 4  7/29/2013 10:00 1.3294 1.3295 1.3294     1.3295            2      4\n> 5.3178\n> 5  7/29/2013 11:00 1.3290 1.3293 1.3288     1.3291            8     16\n> 21.2648\n> 6  7/29/2013 12:00 1.3286 1.3289 1.3278     1.3283           13     26\n> 34.5364\n> 7  7/29/2013 13:00 1.3284 1.3285 1.3280     1.3285            8     16\n> 21.2528\n> 8  7/29/2013 14:00 1.3280 1.3285 1.3267     1.3270           34     68\n> 90.2860\n> 9  7/29/2013 15:00 1.3271 1.3282 1.3265     1.3276           63    126\n> 167.2468\n> 10 7/29/2013 16:00 1.3271 1.3298 1.3271     1.3290          132    352\n> 467.7688\n>\n>\n> 3. Structure of my data is as follow\n>\n> 'data.frame': 10 obs. of  8 variables:\n>  $ Date        : chr  \"7/29/2013 7:00\" \"7/29/2013 8:00\" \"7/29/2013 9:00\"\n> \"7/29/2013 10:00\" ...\n>  $ OPEN        : num  1.33 1.33 1.33 1.33 1.33 ...\n>  $ HIGH        : num  1.33 1.33 1.33 1.33 1.33 ...\n>  $ LOW         : num  1.33 1.33 1.33 1.33 1.33 ...\n>  $ LAST_PRICE  : num  1.33 1.33 1.33 1.33 1.33 ...\n>  $ NUMBER_TICKS: int  23 21 6 2 8 13 8 34 63 132\n>  $ VOLUME      : int  46 42 12 4 16 26 16 68 126 352\n>  $ VALUE       : num  61.14 55.81 15.95 5.32 21.26 ...\n>\n> 3. When i try to plot the date vs the high i get the below error message. I\n> guess its due to fact that R is not able to guess the X asis points plot\n>\n>\n>\n>\n> plot(a$Date, a$HIGH, type=\"b\")\n> Error in plot.window(...) : need finite 'xlim' values\n>\n>\n>\n> 4. Now when i try to convert Date using strptime(a$Date, format = \"%m/%d/%Y\n> %H:%M\" my data frame shows correct structure but i still get the same error\n> in plotting. Should i use any specific function to plot and what if i want\n> to make candle stick chart from the data i have?\n>\n>\n>\n>\n\nKapil,\n   Please post _reproducible_ R code. It should be R code in a format\nthat people can copy straight from your email and if they run it they\nget the same results you get. Without reproducible code many/most\nrequests for help go unanswered or receive a similar response to this.\n\n   Also, please do NOT post HTML code. I generally do not respond to\npeople that post HTML. There are others that have similar practices.\nBest that you read the guideline for this list as well.\n\nGood luck,\nMark",
+      "body_snippet": "On Mon, Mar 3, 2014 at 7:26 AM, Kapil Shukla <shukla.kapil at gmail.com> wrote:\n> Thanks Mark for such a quick reply. I follow the following steps\n>\n> 1. hourly_bid <- read.table(\"ech14_hourly_bid.csv",
+      "thread_id": "thread-b3a3c2eef6c0",
+      "thread_depth": 3,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-52d9f090d4cc",
+      "message_id": "<CA+kDFFVnBJnnc-F=eMWvUq-sdJqcypH1txq2P=8os19FA22JdQ@mail.gmail.com>",
+      "from_name": "Chinmay Patil",
+      "from_email_hash": "30789bae0262aa36eea20fb27751b13996ef97168c552d2ab6f0bd04160c721d",
+      "date": "2014-03-04T08:00:33+08:00",
+      "subject": "[R-SIG-Finance] Time Series Data Analysis of Financial Data",
+      "subject_clean": "Time Series Data Analysis of Financial Data",
+      "in_reply_to": "<CAN=486nnUB=fSYmnp7UsjgAoMU5gradBCMcv4r5rZkMN+WcoBw@mail.gmail.com>",
+      "references": [
+        "<CAN=486mQtSi4-zRTbCjzvzutKTQVxMsLBtab2j5zya6h9CX3QQ@mail.gmail.com>",
+        "<CAK2H+edR4fnv8XXweKk_yXszXFXe=HcUZ349f3PDh5B5mwBEZg@mail.gmail.com>",
+        "<CAN=486nnUB=fSYmnp7UsjgAoMU5gradBCMcv4r5rZkMN+WcoBw@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140304/43d07a83/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140304/43d07a83/attachment.pl>",
+      "thread_id": "thread-b3a3c2eef6c0",
+      "thread_depth": 3,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-023c098981fc",
+      "message_id": "<CAEXmNQDkvUWBR8iW1WsHLmbGP_jco_gZmZ3Lx2XTxNOrMo-StA@mail.gmail.com>",
+      "from_name": "Jaimie Villanueva",
+      "from_email_hash": "89710ff6f806b34caf52bf14f83044d7494659c65ac6fcc6f8c306affffd14e1",
+      "date": "2014-03-04T04:22:15+01:00",
+      "subject": "[R-SIG-Finance] Time Series Data Analysis of Financial Data",
+      "subject_clean": "Time Series Data Analysis of Financial Data",
+      "in_reply_to": "<CA+kDFFVnBJnnc-F=eMWvUq-sdJqcypH1txq2P=8os19FA22JdQ@mail.gmail.com>",
+      "references": [
+        "<CAN=486mQtSi4-zRTbCjzvzutKTQVxMsLBtab2j5zya6h9CX3QQ@mail.gmail.com>",
+        "<CAK2H+edR4fnv8XXweKk_yXszXFXe=HcUZ349f3PDh5B5mwBEZg@mail.gmail.com>",
+        "<CAN=486nnUB=fSYmnp7UsjgAoMU5gradBCMcv4r5rZkMN+WcoBw@mail.gmail.com>",
+        "<CA+kDFFVnBJnnc-F=eMWvUq-sdJqcypH1txq2P=8os19FA22JdQ@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140304/cd55a801/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140304/cd55a801/attachment.pl>",
+      "thread_id": "thread-b3a3c2eef6c0",
+      "thread_depth": 4,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-4d1e6f7046c7",
+      "message_id": "<E1WLuN7-0003xg-D2@elasmtp-masked.atl.sa.earthlink.net>",
+      "from_name": "Jesper Hybel Pedersen",
+      "from_email_hash": "6490f16565d28e21ededa25d0ae6a12224e4e70a49ab8b9261665621564260bc",
+      "date": "2014-03-07T13:12:05Z",
+      "subject": "[R-SIG-Finance] Good evening R Sig Finance",
+      "subject_clean": "Good evening R Sig Finance",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140307/9cb25569/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140307/9cb25569/attachment.pl>",
+      "thread_id": "thread-4d1e6f7046c7",
+      "thread_depth": 0,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-1798e94c86e5",
+      "message_id": "<6339891F-E4FD-49E1-B4A6-065C96E8E1E0@gmail.com>",
+      "from_name": "Keith S Weintraub",
+      "from_email_hash": "46f98489670c53241c8d38eb202f6d3227b3640dae4884277c714ec22926cbdc",
+      "date": "2014-03-07T15:38:24-05:00",
+      "subject": "[R-SIG-Finance] Term structure",
+      "subject_clean": "Term structure",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Folks,\n\nI am having a difficult time finding a package that provides functionality whereby I can input a list of Swap rates and maturities  (1m, 3m, 6m, ..., 1yr, 2yr, ..., 30yr...) and get back a data-structure of some kind that will allow me to compute discount factors and/or forwards.\n\nI have looked at termstrc and a few others that seem a bit abstruse or less than useful for my purposes.\n\nCode examples welcome (but not necessary).\n\nThanks for your time,\nKW\n\n--",
+      "body_snippet": "Folks,\n\nI am having a difficult time finding a package that provides functionality whereby I can input a list of Swap rates and maturities  (1m, 3m, 6m, ..., 1yr, 2yr, ..., 30yr...) and get back a dat",
+      "thread_id": "thread-1798e94c86e5",
+      "thread_depth": 0,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-b658b5841359",
+      "message_id": "<CAPPM_gR40TKLH4D40sVffjRkKQb4HC-iw=jAq+tH6PBiAHCZRQ@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2014-03-07T14:41:05-06:00",
+      "subject": "[R-SIG-Finance] Term structure",
+      "subject_clean": "Term structure",
+      "in_reply_to": "<6339891F-E4FD-49E1-B4A6-065C96E8E1E0@gmail.com>",
+      "references": [
+        "<6339891F-E4FD-49E1-B4A6-065C96E8E1E0@gmail.com>"
+      ],
+      "body_plain": "This functionality is in RQuantLib.\n--\nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\n\n\nOn Fri, Mar 7, 2014 at 2:38 PM, Keith S Weintraub <kw1958 at gmail.com> wrote:\n> Folks,\n>\n> I am having a difficult time finding a package that provides functionality whereby I can input a list of Swap rates and maturities  (1m, 3m, 6m, ..., 1yr, 2yr, ..., 30yr...) and get back a data-structure of some kind that will allow me to compute discount factors and/or forwards.\n>\n> I have looked at termstrc and a few others that seem a bit abstruse or less than useful for my purposes.\n>\n> Code examples welcome (but not necessary).\n>\n> Thanks for your time,\n> KW\n>\n> --\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "This functionality is in RQuantLib.\n--\nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\n\n\nOn Fri, Mar 7, 2014 at 2:38 PM, Keith S Weintraub <kw1958 at gmail.com> wrote:\n> F",
+      "thread_id": "thread-1798e94c86e5",
+      "thread_depth": 1,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-b94903460147",
+      "message_id": "<1394239988697-4686477.post@n4.nabble.com>",
+      "from_name": "paulofel",
+      "from_email_hash": "adeb355374e4a0330dc619ac10b801a1fcadc26fe3bbd6ea639b46314aeeff08",
+      "date": "2014-03-07T16:53:08-08:00",
+      "subject": "[R-SIG-Finance] How to retrieve standard errors of cointegrating vector from vars/urca ?",
+      "subject_clean": "How to retrieve standard errors of cointegrating vector from vars/urca ?",
+      "in_reply_to": "<CALBLFAWBvLwyA=o366kj8vLcXOgLQ_Z-3xQaTd7CBczhrtLKkw@mail.gmail.com>",
+      "references": [
+        "<CALBLFAWBvLwyA=o366kj8vLcXOgLQ_Z-3xQaTd7CBczhrtLKkw@mail.gmail.com>"
+      ],
+      "body_plain": "The code is available at http://www.jstatsoft.org/v27/i04/.\n\n###################################################\n### VECM r = 1\n###################################################\nvecm <- ca.jo(Canada[, c(\"rw\", \"prod\", \"e\", \"U\")], type = \"trace\", ecdet =\n\"trend\", K = 3, spec = \"transitory\") \nvecm.r1 <- cajorls(vecm, r = 1)\n##\n## Calculation of t-values for alpha and beta\n##\nalpha <- coef(vecm.r1$rlm)[1, ]\nnames(alpha) <- c(\"rw\", \"prod\", \"e\", \"U\")\nalpha\nbeta <- vecm.r1$beta\nbeta\nresids <- resid(vecm.r1$rlm)\nN <- nrow(resids)\nsigma <- crossprod(resids) / N\n## t-stats for alpha (calculated by hand)\nalpha.se <- sqrt(solve(crossprod(cbind(vecm at ZK %*% beta, vecm at Z1)))[1, 1] *\ndiag(sigma))\nnames(alpha.se) <-  c(\"rw\", \"prod\", \"e\", \"U\")\nalpha.t <- alpha / alpha.se\nalpha.t\n## Differ slightly from coef(summary(vecm.r1$rlm))\n## due to degrees of freedom adjustment \ncoef(summary(vecm.r1$rlm))\n## t-stats for beta\nbeta.se <- sqrt(diag(kronecker(solve(crossprod(vecm at RK[, -1])),\n                               solve(t(alpha) %*% solve(sigma) %*% alpha))))\nbeta.t <- c(NA, beta[-1] / beta.se)\nnames(beta.t) <- rownames(vecm.r1$beta)\nbeta.t\n\n\n\n\n\n--\nView this message in context: http://r.789695.n4.nabble.com/How-to-retrieve-standard-errors-of-cointegrating-vector-from-vars-urca-tp4655136p4686477.html\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "The code is available at http://www.jstatsoft.org/v27/i04/.\n\n###################################################\n### VECM r = 1\n###################################################\nvecm <- ca.jo(Canada",
+      "thread_id": "thread-b94903460147",
+      "thread_depth": 0,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-323e04768867",
+      "message_id": "<DC5610B3-B9C2-43A3-BC52-BD7E14FE3A10@gmail.com>",
+      "from_name": "Keith S Weintraub",
+      "from_email_hash": "46f98489670c53241c8d38eb202f6d3227b3640dae4884277c714ec22926cbdc",
+      "date": "2014-03-08T10:06:40-05:00",
+      "subject": "[R-SIG-Finance] Term structure",
+      "subject_clean": "Term structure",
+      "in_reply_to": "<6339891F-E4FD-49E1-B4A6-065C96E8E1E0@gmail.com>",
+      "references": [
+        "<6339891F-E4FD-49E1-B4A6-065C96E8E1E0@gmail.com>"
+      ],
+      "body_plain": "Folks,\n\nI won't bother you all again but I don't think the RQuantLib package will fit my needs.\n\nI don't think it goes out past 30yrs and it doesn't have a flexible enough set of inputs. For example I can get a 7yr rate from my \"provider\" but there is no place in DiscountCurve to use it.\n\nAlso there are some comments about buggy code that make me less than confident.\n\nNote that I am not putting down the package or the author, I understand that these are \"free\" contributions and that the package(s) may suit some applications better than others.\n\nIf any of you have any other suggestions I would greatly appreciate them.\n\nThanks again for your time,\nKW\n\nPS I may, at my own peril, repost this to one of the other R lists just to see if a broader audience can help.\n\n--\n\nOn Mar 7, 2014, at 3:38 PM, Keith S Weintraub <kw1958 at gmail.com> wrote:\n\n> Folks,\n> \n> I am having a difficult time finding a package that provides functionality whereby I can input a list of Swap rates and maturities  (1m, 3m, 6m, ..., 1yr, 2yr, ..., 30yr...) and get back a data-structure of some kind that will allow me to compute discount factors and/or forwards.\n> \n> I have looked at termstrc and a few others that seem a bit abstruse or less than useful for my purposes.\n> \n> Code examples welcome (but not necessary).\n> \n> Thanks for your time,\n> KW\n> \n> --\n>",
+      "body_snippet": "Folks,\n\nI won't bother you all again but I don't think the RQuantLib package will fit my needs.\n\nI don't think it goes out past 30yrs and it doesn't have a flexible enough set of inputs. For example I",
+      "thread_id": "thread-1798e94c86e5",
+      "thread_depth": 1,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-9a2018044e20",
+      "message_id": "<21275.13566.663361.419114@max.nulle.part>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2014-03-08T09:19:26-06:00",
+      "subject": "[R-SIG-Finance] Term structure",
+      "subject_clean": "Term structure",
+      "in_reply_to": "<DC5610B3-B9C2-43A3-BC52-BD7E14FE3A10@gmail.com>",
+      "references": [
+        "<6339891F-E4FD-49E1-B4A6-065C96E8E1E0@gmail.com>",
+        "<DC5610B3-B9C2-43A3-BC52-BD7E14FE3A10@gmail.com>"
+      ],
+      "body_plain": "On 8 March 2014 at 10:06, Keith S Weintraub wrote:\n| I won't bother you all again but I don't think the RQuantLib package will fit my needs.\n| \n| I don't think it goes out past 30yrs and it doesn't have a flexible enough set of inputs. For example I can get a 7yr rate from my \"provider\" but there is no place in DiscountCurve to use it.\n| \n| Also there are some comments about buggy code that make me less than confident.\n\nIt's open source, so if you have improvements to the discount curve code,\nI'll gladly look at the RQuantLib part and the rest of the QuantLib team will\nsurely look at fixes to curve construction.\n\n| Note that I am not putting down the package or the author, I understand that these are \"free\" contributions and that the package(s) may suit some applications better than others.\n\nI personally have not used the fixed income parts much (apart from\nsupervising a Google Summer of Code student on this part), and that may show.\nBut contributions are always welcome.  If you have an itch to scratch ...  Or\nelse if you have professional needs, maybe some resources can be devoted to\nthis\n \n| If any of you have any other suggestions I would greatly appreciate them.\n\nThere is a Task View for Finance\n\n      http://cran.r-project.org/web/views/Finance.html\n\nContributions and updates to that are also always welcome.\n\nDirk\n\nPS And I am aware that RQuantLib currently bombs on OS X. I made the\nassumption that people compiled locally there too when they do in fact get\nRQuantLib as a prebuilt appliance so I cannot assume quantlib-config. This\nwill get fixed \"soon\".  In the meantime, it does of course work if you\nactually have quantlib-config in your $PATH ...\n\n-- \nDirk Eddelbuettel | edd at debian.org | http://dirk.eddelbuettel.com",
+      "body_snippet": "On 8 March 2014 at 10:06, Keith S Weintraub wrote:\n| I won't bother you all again but I don't think the RQuantLib package will fit my needs.\n| \n| I don't think it goes out past 30yrs and it doesn't ha",
+      "thread_id": "thread-1798e94c86e5",
+      "thread_depth": 2,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-49907746586d",
+      "message_id": "<3ECE4684-3C2A-4B1C-A37A-1248F76AC591@gmail.com>",
+      "from_name": "Keith S Weintraub",
+      "from_email_hash": "46f98489670c53241c8d38eb202f6d3227b3640dae4884277c714ec22926cbdc",
+      "date": "2014-03-08T10:49:02-05:00",
+      "subject": "[R-SIG-Finance] Term structure",
+      "subject_clean": "Term structure",
+      "in_reply_to": "<21275.13566.663361.419114@max.nulle.part>",
+      "references": [
+        "<6339891F-E4FD-49E1-B4A6-065C96E8E1E0@gmail.com>",
+        "<DC5610B3-B9C2-43A3-BC52-BD7E14FE3A10@gmail.com>",
+        "<21275.13566.663361.419114@max.nulle.part>"
+      ],
+      "body_plain": "I will look through the Finance Task View (again) in the hope that I can get something that works for me.\n\nI probably can make something that will give me the results that I want but I doubt I would be able to create a package that would be bullet-proof enough for others to use.\n\nCan you tell me what you mean by this:\n\n> This\n> will get fixed \"soon\".  In the meantime, it does of course work if you\n> actually have quantlib-config in your $PATH ...\n\n\nHave you tried this on OS X? Mavericks? What $PATH are you talking about? In R? Do I have to build RQuantLib?\n\nIf it is as simple as fixing a PATH and installing RQuantLib I'm sure I can do that. What still remains is the fact that the curve \"stuff\" isn't quite right (for me) but at least I would be able to use all the other facilities of RQuantLib.\n\nQuestion: You said you haven't used the \"fixed-income parts\". Don't you need good (reasonable) discount factors for equities and commodities?\n\n\n--\n\nOn Mar 8, 2014, at 10:19 AM, Dirk Eddelbuettel <edd at debian.org> wrote:\n\n> \n> On 8 March 2014 at 10:06, Keith S Weintraub wrote:\n> | I won't bother you all again but I don't think the RQuantLib package will fit my needs.\n> | \n> | I don't think it goes out past 30yrs and it doesn't have a flexible enough set of inputs. For example I can get a 7yr rate from my \"provider\" but there is no place in DiscountCurve to use it.\n> | \n> | Also there are some comments about buggy code that make me less than confident.\n> \n> It's open source, so if you have improvements to the discount curve code,\n> I'll gladly look at the RQuantLib part and the rest of the QuantLib team will\n> surely look at fixes to curve construction.\n> \n> | Note that I am not putting down the package or the author, I understand that these are \"free\" contributions and that the package(s) may suit some applications better than others.\n> \n> I personally have not used the fixed income parts much (apart from\n> supervising a Google Summer of Code student on this part), and that may show.\n> But contributions are always welcome.  If you have an itch to scratch ...  Or\n> else if you have professional needs, maybe some resources can be devoted to\n> this\n> \n> | If any of you have any other suggestions I would greatly appreciate them.\n> \n> There is a Task View for Finance\n> \n>      http://cran.r-project.org/web/views/Finance.html\n> \n> Contributions and updates to that are also always welcome.\n> \n> Dirk\n> \n> PS And I am aware that RQuantLib currently bombs on OS X. I made the\n> assumption that people compiled locally there too when they do in fact get\n> RQuantLib as a prebuilt appliance so I cannot assume quantlib-config. This\n> will get fixed \"soon\".  In the meantime, it does of course work if you\n> actually have quantlib-config in your $PATH ...\n> \n> -- \n> Dirk Eddelbuettel | edd at debian.org | http://dirk.eddelbuettel.com",
+      "body_snippet": "I will look through the Finance Task View (again) in the hope that I can get something that works for me.\n\nI probably can make something that will give me the results that I want but I doubt I would b",
+      "thread_id": "thread-1798e94c86e5",
+      "thread_depth": 3,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-9cc47fac6f6b",
+      "message_id": "<CAPD4hGD4zJzMPh7b1sCnwzji8VozeUu-myh7mYE9ydsvWjnmHg@mail.gmail.com>",
+      "from_name": "jun wang",
+      "from_email_hash": "056c426ba0106f9f83280bd14e4c5d70843736848bdf9c8518de2f5f86ac17d7",
+      "date": "2014-03-08T23:25:26-05:00",
+      "subject": "[R-SIG-Finance] GAS model",
+      "subject_clean": "GAS model",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140308/df5c7915/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140308/df5c7915/attachment.pl>",
+      "thread_id": "thread-9cc47fac6f6b",
+      "thread_depth": 0,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-7caeabe54caa",
+      "message_id": "<9B21CB02-4979-481C-A6AB-55C8DDC3E529@gmail.com>",
+      "from_name": "Gmail",
+      "from_email_hash": "056c426ba0106f9f83280bd14e4c5d70843736848bdf9c8518de2f5f86ac17d7",
+      "date": "2014-03-09T09:43:43-04:00",
+      "subject": "[R-SIG-Finance] GAS model",
+      "subject_clean": "GAS model",
+      "in_reply_to": "<CAD8a-zzZWz_39_6H4UVCSrjtq53eNvBMy-oZyoZUjsS7-2JJng@mail.gmail.com>",
+      "references": [
+        "<CAPD4hGD4zJzMPh7b1sCnwzji8VozeUu-myh7mYE9ydsvWjnmHg@mail.gmail.com>",
+        "<CAD8a-zy2=er2=TVeXXqy81NiV7Xw+gWrtvFjjnJaPU==QVCYdA@mail.gmail.com>",
+        "<CAD8a-zzZWz_39_6H4UVCSrjtq53eNvBMy-oZyoZUjsS7-2JJng@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140309/705359f3/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140309/705359f3/attachment.pl>",
+      "thread_id": "thread-7caeabe54caa",
+      "thread_depth": 0,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-e4079efcbfb2",
+      "message_id": "<CAPD4hGC0sOdU-HBnH1RFdry_YjaSC-=vA=EcYFj6N0RhrsDutQ@mail.gmail.com>",
+      "from_name": "jun wang",
+      "from_email_hash": "056c426ba0106f9f83280bd14e4c5d70843736848bdf9c8518de2f5f86ac17d7",
+      "date": "2014-03-09T13:07:10-04:00",
+      "subject": "[R-SIG-Finance] GAS model",
+      "subject_clean": "GAS model",
+      "in_reply_to": "<CAD8a-zwRyBEmb55dqxuSDWvt_VB--nZy1tOCJdFP__kFh4AdbQ@mail.gmail.com>",
+      "references": [
+        "<CAPD4hGD4zJzMPh7b1sCnwzji8VozeUu-myh7mYE9ydsvWjnmHg@mail.gmail.com>",
+        "<CAD8a-zy2=er2=TVeXXqy81NiV7Xw+gWrtvFjjnJaPU==QVCYdA@mail.gmail.com>",
+        "<CAD8a-zzZWz_39_6H4UVCSrjtq53eNvBMy-oZyoZUjsS7-2JJng@mail.gmail.com>",
+        "<9B21CB02-4979-481C-A6AB-55C8DDC3E529@gmail.com>",
+        "<CAD8a-zwRyBEmb55dqxuSDWvt_VB--nZy1tOCJdFP__kFh4AdbQ@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140309/5ac07aef/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140309/5ac07aef/attachment.pl>",
+      "thread_id": "thread-e4079efcbfb2",
+      "thread_depth": 0,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-73cb2377c94a",
+      "message_id": "<CAPD4hGAgs+mumUM=kBp1x--jy9i2vavDqg4Ou6i91_E3SW+ZiQ@mail.gmail.com>",
+      "from_name": "jun wang",
+      "from_email_hash": "056c426ba0106f9f83280bd14e4c5d70843736848bdf9c8518de2f5f86ac17d7",
+      "date": "2014-03-09T13:25:32-04:00",
+      "subject": "[R-SIG-Finance] GAS model",
+      "subject_clean": "GAS model",
+      "in_reply_to": "<CAD8a-zzDwzQtrkyAPD+cO3xtfjnOk7NpfatMjejP02W6m2_6kQ@mail.gmail.com>",
+      "references": [
+        "<CAPD4hGD4zJzMPh7b1sCnwzji8VozeUu-myh7mYE9ydsvWjnmHg@mail.gmail.com>",
+        "<CAD8a-zy2=er2=TVeXXqy81NiV7Xw+gWrtvFjjnJaPU==QVCYdA@mail.gmail.com>",
+        "<CAD8a-zzZWz_39_6H4UVCSrjtq53eNvBMy-oZyoZUjsS7-2JJng@mail.gmail.com>",
+        "<9B21CB02-4979-481C-A6AB-55C8DDC3E529@gmail.com>",
+        "<CAD8a-zwRyBEmb55dqxuSDWvt_VB--nZy1tOCJdFP__kFh4AdbQ@mail.gmail.com>",
+        "<CAPD4hGC0sOdU-HBnH1RFdry_YjaSC-=vA=EcYFj6N0RhrsDutQ@mail.gmail.com>",
+        "<CAD8a-zzZCTFBPYLb5nQGk6WM0e5Tu1Mj7caRQ6DtQhJPw+ZXSg@mail.gmail.com>",
+        "<CAD8a-zzDwzQtrkyAPD+cO3xtfjnOk7NpfatMjejP02W6m2_6kQ@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140309/e17198e1/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140309/e17198e1/attachment.pl>",
+      "thread_id": "thread-73cb2377c94a",
+      "thread_depth": 0,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-1df664fde62a",
+      "message_id": "<532320A3.9090702@ucla.edu>",
+      "from_name": "Noah Silverman",
+      "from_email_hash": "2f63596a6636241e43ae3eb17e53c3fb81cdabb52f4ef3fcfe62e979b11522db",
+      "date": "2014-03-14T08:30:43-07:00",
+      "subject": "[R-SIG-Finance] Quantstrat help",
+      "subject_clean": "Quantstrat help",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140314/4cad244f/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140314/4cad244f/attachment.pl>",
+      "thread_id": "thread-1df664fde62a",
+      "thread_depth": 0,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-baa56e29205f",
+      "message_id": "<CAPPM_gQQCc_w00V42RdyeGdk26zD0aouAPUf6WiCJuFn3YVqqg@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2014-03-14T10:52:11-05:00",
+      "subject": "[R-SIG-Finance] Quantstrat help",
+      "subject_clean": "Quantstrat help",
+      "in_reply_to": "<532320A3.9090702@ucla.edu>",
+      "references": [
+        "<532320A3.9090702@ucla.edu>"
+      ],
+      "body_plain": "On Fri, Mar 14, 2014 at 10:30 AM, Noah Silverman <noahsilverman at ucla.edu> wrote:\n>\n> Hi,\n>\n> Working on developing a complex portfolio and backtesting strategy.\n> >From what I've read, the quantstrat package looks ideal for working\n> through the ideas.\n>\n> Two questions:\n>\n> 1) I have an indicator that is pre-calculated.  (From a bunch of\n> complicated functions and outside data.)  I'd like to simply pass the\n> vector of values into quantstrat, but can't figure out how to do that.\n> The function to add a signal appears to only accept functions, not\n> data.  Is there a way for me to do this?\n>\nIf it needed a function and there was no way to pass data, you could\nwrap your data in a function.\ndatafun <- function(...) mydata\n\nBut nothing *requires* that you call/use add.indicator().  Simply\nmerge your indicator with your market data.\n\n> 2) Along the lines of #1 above:  I have my financial data directly from\n> a vendor.  It already has OHLC defined.  Can I simply pass this to\n> quanstrat?  If so, what is the proper order/formant/naming of columns to\n> make quanstrat happy?\n>\nThat depends on the specifics of the strategy you're trying to build,\nwhich you haven't provided.\n\n> Thanks!\n>\n> --\n> *Noah Silverman, PhD* | UCLA Department of Statistics\n> 8117 Math Sciences Building, Los Angeles, CA 90095\n>\n\n--\nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Fri, Mar 14, 2014 at 10:30 AM, Noah Silverman <noahsilverman at ucla.edu> wrote:\n>\n> Hi,\n>\n> Working on developing a complex portfolio and backtesting strategy.\n> >From what I've read, the quantstr",
+      "thread_id": "thread-1df664fde62a",
+      "thread_depth": 1,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-48e5fb9441ef",
+      "message_id": "<CAJh99TFtF6cc4ZZTAvC64LRCSjPERPbuRes0J-LeXpwrHQhuqg@mail.gmail.com>",
+      "from_name": "NOAH SILVERMAN",
+      "from_email_hash": "2f63596a6636241e43ae3eb17e53c3fb81cdabb52f4ef3fcfe62e979b11522db",
+      "date": "2014-03-14T13:26:34-07:00",
+      "subject": "[R-SIG-Finance] Quantstrat help",
+      "subject_clean": "Quantstrat help",
+      "in_reply_to": "<CAPPM_gQQCc_w00V42RdyeGdk26zD0aouAPUf6WiCJuFn3YVqqg@mail.gmail.com>",
+      "references": [
+        "<532320A3.9090702@ucla.edu>",
+        "<CAPPM_gQQCc_w00V42RdyeGdk26zD0aouAPUf6WiCJuFn3YVqqg@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140314/72b36a7f/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140314/72b36a7f/attachment.pl>",
+      "thread_id": "thread-1df664fde62a",
+      "thread_depth": 2,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-1c02cb0c224b",
+      "message_id": "<CAPPM_gTBNUKoaQu1vjw2dh+_cAK0etVZOS1qTdxf=ahLc9Jp_w@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2014-03-14T15:32:37-05:00",
+      "subject": "[R-SIG-Finance] Quantstrat help",
+      "subject_clean": "Quantstrat help",
+      "in_reply_to": "<CAJh99TFtF6cc4ZZTAvC64LRCSjPERPbuRes0J-LeXpwrHQhuqg@mail.gmail.com>",
+      "references": [
+        "<532320A3.9090702@ucla.edu>",
+        "<CAPPM_gQQCc_w00V42RdyeGdk26zD0aouAPUf6WiCJuFn3YVqqg@mail.gmail.com>",
+        "<CAJh99TFtF6cc4ZZTAvC64LRCSjPERPbuRes0J-LeXpwrHQhuqg@mail.gmail.com>"
+      ],
+      "body_plain": "On Fri, Mar 14, 2014 at 3:26 PM, NOAH SILVERMAN <noahsilverman at ucla.edu> wrote:\n> Josh,\n>\n> Your comment on the indicator makes sense.  I already have it as a column in\n> my dataFrame, so I guess that I can just pass that column name when creating\n> a signal.\n>\n> The strategy is a *single asset* with OHLC each minute.  I have a few custom\n> indicators that are pre-calculated.  Just need to test a bunch of signals\n> and rules around those indicators and close price.  Do I need to do anything\n> special to have the dataFrame setup correctly for quantstrat?\n>\nYes, you need to convert it to xts.  ?applyStrategy says:\n\n mktdata: an xts object containing market data.  depending on\n          indicators, may need to be in OHLCV or BBO formats, default\n          NULL\n\nThe package has several demos, take a look at them to get a feel for\nwhat you need to do.\n\n> Thanks!\n>\n>\n> On Fri, Mar 14, 2014 at 8:52 AM, Joshua Ulrich <josh.m.ulrich at gmail.com>\n> wrote:\n>>\n>> On Fri, Mar 14, 2014 at 10:30 AM, Noah Silverman <noahsilverman at ucla.edu>\n>> wrote:\n>> >\n>> > Hi,\n>> >\n>> > Working on developing a complex portfolio and backtesting strategy.\n>> > >From what I've read, the quantstrat package looks ideal for working\n>> > through the ideas.\n>> >\n>> > Two questions:\n>> >\n>> > 1) I have an indicator that is pre-calculated.  (From a bunch of\n>> > complicated functions and outside data.)  I'd like to simply pass the\n>> > vector of values into quantstrat, but can't figure out how to do that.\n>> > The function to add a signal appears to only accept functions, not\n>> > data.  Is there a way for me to do this?\n>> >\n>> If it needed a function and there was no way to pass data, you could\n>> wrap your data in a function.\n>> datafun <- function(...) mydata\n>>\n>> But nothing *requires* that you call/use add.indicator().  Simply\n>> merge your indicator with your market data.\n>>\n>> > 2) Along the lines of #1 above:  I have my financial data directly from\n>> > a vendor.  It already has OHLC defined.  Can I simply pass this to\n>> > quanstrat?  If so, what is the proper order/formant/naming of columns to\n>> > make quanstrat happy?\n>> >\n>> That depends on the specifics of the strategy you're trying to build,\n>> which you haven't provided.\n>>\n>> > Thanks!\n>> >\n>> > --\n>> > *Noah Silverman, PhD* | UCLA Department of Statistics\n>> > 8117 Math Sciences Building, Los Angeles, CA 90095\n>> >\n>>\n>> --\n>> Joshua Ulrich  |  about.me/joshuaulrich\n>> FOSS Trading  |  www.fosstrading.com\n>\n>",
+      "body_snippet": "On Fri, Mar 14, 2014 at 3:26 PM, NOAH SILVERMAN <noahsilverman at ucla.edu> wrote:\n> Josh,\n>\n> Your comment on the indicator makes sense.  I already have it as a column in\n> my dataFrame, so I guess t",
+      "thread_id": "thread-1df664fde62a",
+      "thread_depth": 3,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-276b5009c647",
+      "message_id": "<CAAHNhKXRqySxRAMjG=bRYCs_S4o+OWJQSpC8x5eB+d-4m-QiEQ@mail.gmail.com>",
+      "from_name": "R Vince",
+      "from_email_hash": "f7e91b6c0bf4bf0ec29ba8c1fc1518dafd58cc798dde54c4cc9d8f0bf12d215b",
+      "date": "2014-03-14T23:21:33-04:00",
+      "subject": "[R-SIG-Finance] Split-adjusted yahoo data",
+      "subject_clean": "Split-adjusted yahoo data",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140314/1adfe065/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140314/1adfe065/attachment.pl>",
+      "thread_id": "thread-276b5009c647",
+      "thread_depth": 0,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-d353a760ddee",
+      "message_id": "<21283.51688.172820.178778@max.nulle.part>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2014-03-14T22:32:56-05:00",
+      "subject": "[R-SIG-Finance] Split-adjusted yahoo data",
+      "subject_clean": "Split-adjusted yahoo data",
+      "in_reply_to": "<CAAHNhKXRqySxRAMjG=bRYCs_S4o+OWJQSpC8x5eB+d-4m-QiEQ@mail.gmail.com>",
+      "references": [
+        "<CAAHNhKXRqySxRAMjG=bRYCs_S4o+OWJQSpC8x5eB+d-4m-QiEQ@mail.gmail.com>"
+      ],
+      "body_plain": "Ralph,\n\n\nOn 14 March 2014 at 23:21, R Vince wrote:\n| I know this has been asked many times before, but for the life of me I\n| cannot find the answer in my notes. How do I get the column for\n| split-adjusted data from yahoo finance? The script I use to download the\n| data is:\n\nMaybe use a different script?\n\nR> library(quantmod)\nLoading required package: Defaults\nLoading required package: xts\nLoading required package: zoo\n\nAttaching package: ?zoo?\n\nThe following objects are masked from ?package:base?:\n\n    as.Date, as.Date.numeric\n\nLoading required package: TTR\nVersion 0.4-0 included new data defaults. See ?getSymbols.\nR> IBM <- getSymbols(\"IBM\", auto.assign=FALSE)\nR> head(IBM)\n           IBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n2007-01-03    97.18    98.40   96.26     97.27    9196800        85.57\n2007-01-04    97.25    98.79   96.88     98.31   10524500        86.48\n2007-01-05    97.60    97.95   96.91     97.42    7221300        85.70\n2007-01-08    98.50    99.50   98.35     98.90   10340000        87.00\n2007-01-09    99.08   100.33   99.07    100.07   11108200        88.03\n2007-01-10    98.50    99.05   97.93     98.89    8744800        86.99\nR> tail(IBM)\n           IBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n2014-03-07   188.35   188.92  187.18    187.68    4117800       187.68\n2014-03-10   187.55   188.37  185.85    186.39    4591200       186.39\n2014-03-11   187.41   188.45  186.04    186.76    4229500       186.76\n2014-03-12   186.01   187.45  185.89    186.22    4833000       186.22\n2014-03-13   186.41   187.00  183.71    183.90    4912600       183.90\n2014-03-14   183.89   184.29  182.21    182.21    5479700       182.21\nR> \n\nDirk\n\n-- \nDirk Eddelbuettel | edd at debian.org | http://dirk.eddelbuettel.com",
+      "body_snippet": "Ralph,\n\n\nOn 14 March 2014 at 23:21, R Vince wrote:\n| I know this has been asked many times before, but for the life of me I\n| cannot find the answer in my notes. How do I get the column for\n| split-ad",
+      "thread_id": "thread-276b5009c647",
+      "thread_depth": 1,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-d34751928c1a",
+      "message_id": "<532C3988.6040904@gmail.com>",
+      "from_name": "Dessy Anggraeni",
+      "from_email_hash": "aa277fab56daa686447ff411d5a90233ee15b717eca47c2fdec64b8fd008f1b9",
+      "date": "2014-03-21T14:07:20+01:00",
+      "subject": "[R-SIG-Finance] Different external regressor in rugarch give the same result",
+      "subject_clean": "Different external regressor in rugarch give the same result",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi all,\n\nI use rugarch package 1.2-9 to measure rice price volatility volatility \nwith GARCH model including external regressor in the variance model. \nThis package works well, however, it seems like the result doesn't \nresponse to change in value of external regressors.\n\nI test 2 external regressors:\n\n1.A matrix of dummy variable containing only 0 and 1\n\n2.Cross-sectional stock level to price return data (attached)\n\nHere is the code that I use. Can anybody advise me what's wrong?\nThanks a lot in advance.\nBest Regards,\nDessy\n\n\n*1.**With dummy variable (0 and 1) as external regressor*\n\n# where the dummy variable is define as:\n\nmat <- matrix(, nrow = n.row, ncol = 1)\n\nfor(i in 1:652){\n\nmat[i,] <- 0\n\n}\n\nfor(i in 501:n.row){\n\nmat[i,] <- 1\n\n}\n\nspec2 <- ugarchspec(\n\nvariance.model =\n\nlist(model = \"fGARCH\", garchOrder = c(1,1), submodel = \"GARCH\", \nexternal.regressors = mat, variance.targeting = FALSE),\n\nmean.model =\n\nlist(armaOrder = c(12,0), external.regressors = NULL), \ndistribution.model = \"norm\")\n\nfit = ugarchfit(spec = spec2, data=xz)\n\n*2.**With crosssectional stock level estimation as external regressor*\n\n# matrix m is cross sectional stock level data\n\nm <- matrix(cross)\n\nspec2 <- ugarchspec(\n\nvariance.model =\n\nlist(model = \"fGARCH\", garchOrder = c(1,1), submodel = \"GARCH\", \nexternal.regressors = m, variance.targeting = FALSE),\n\nmean.model =\n\nlist(armaOrder = c(12,0), external.regressors = NULL), \ndistribution.model = \"norm\")\n\nfit = ugarchfit(spec = spec2, data=xz)\n\n-------------- next part --------------\nAn HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140321/261446b4/attachment.html>\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: rice return.csv\nType: application/vnd.ms-excel\nSize: 62825 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140321/261446b4/attachment.xlb>\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: cross sectional stock.csv\nType: application/vnd.ms-excel\nSize: 53531 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140321/261446b4/attachment-0001.xlb>",
+      "body_snippet": "Hi all,\n\nI use rugarch package 1.2-9 to measure rice price volatility volatility \nwith GARCH model including external regressor in the variance model. \nThis package works well, however, it seems like ",
+      "thread_id": "thread-d34751928c1a",
+      "thread_depth": 0,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-012aaabb7a22",
+      "message_id": "<532C4236.1090005@4dscape.com>",
+      "from_name": "alexios ghalanos",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2014-03-21T13:44:22Z",
+      "subject": "[R-SIG-Finance] Different external regressor in rugarch give the same result",
+      "subject_clean": "Different external regressor in rugarch give the same result",
+      "in_reply_to": "<532C3988.6040904@gmail.com>",
+      "references": [
+        "<532C3988.6040904@gmail.com>"
+      ],
+      "body_plain": "You are obviously trying to capture a permanent \"level\" shift in your\nrice dataset, but the shift is from a high to a low state (i.e. the\ncoefficient would need to be negative). Since the bounds on the\ncoefficients of the external regressors (in the conditional variance\nequation) are preset to be positive in order to \"guarantee\" positivity\nof the variance, you need to do one of the following:\n\n1. Reverse the order of the dummy i.e. 1:652 = 1, 652:n.row=0.\n\n2. Set the bounds on vxreg:\n>setbounds(spec2)<-list(vxreg1=c(-1,1))\n\n3. Use the eGARCH model.\n\nAll tested, all working.\n\nAnd DO NOT USE c(model=\"fGARCH\", submodel=\"GARCH\"). Use directly\nmodel=\"sGARCH\".\n\n-Alexios\n\nOn 21/03/2014 13:07, Dessy Anggraeni wrote:\n> Hi all,\n> \n> I use rugarch package 1.2-9 to measure rice price volatility volatility\n> with GARCH model including external regressor in the variance model.\n> This package works well, however, it seems like the result doesn't\n> response to change in value of external regressors.\n> \n> I test 2 external regressors:\n> \n> 1.A matrix of dummy variable containing only 0 and 1\n> \n> 2.Cross-sectional stock level to price return data (attached)\n> \n> Here is the code that I use. Can anybody advise me what's wrong?\n> Thanks a lot in advance.\n> Best Regards,\n> Dessy\n> \n> \n> *1.**With dummy variable (0 and 1) as external regressor*\n> \n> # where the dummy variable is define as:\n> \n> mat <- matrix(, nrow = n.row, ncol = 1)\n> \n> for(i in 1:652){\n> \n> mat[i,] <- 0\n> \n> }\n> \n> for(i in 501:n.row){\n> \n> mat[i,] <- 1\n> \n> }\n> \n> spec2 <- ugarchspec(\n> \n> variance.model =\n> \n> list(model = \"fGARCH\", garchOrder = c(1,1), submodel = \"GARCH\",\n> external.regressors = mat, variance.targeting = FALSE),\n> \n> mean.model =\n> \n> list(armaOrder = c(12,0), external.regressors = NULL),\n> distribution.model = \"norm\")\n> \n> fit = ugarchfit(spec = spec2, data=xz)\n> \n> *2.**With crosssectional stock level estimation as external regressor*\n> \n> # matrix m is cross sectional stock level data\n> \n> m <- matrix(cross)\n> \n> spec2 <- ugarchspec(\n> \n> variance.model =\n> \n> list(model = \"fGARCH\", garchOrder = c(1,1), submodel = \"GARCH\",\n> external.regressors = m, variance.targeting = FALSE),\n> \n> mean.model =\n> \n> list(armaOrder = c(12,0), external.regressors = NULL),\n> distribution.model = \"norm\")\n> \n> fit = ugarchfit(spec = spec2, data=xz)\n> \n> \n> \n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>",
+      "body_snippet": "You are obviously trying to capture a permanent \"level\" shift in your\nrice dataset, but the shift is from a high to a low state (i.e. the\ncoefficient would need to be negative). Since the bounds on th",
+      "thread_id": "thread-d34751928c1a",
+      "thread_depth": 1,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-4ed6faca9e39",
+      "message_id": "<532C6A6A.20107@gmail.com>",
+      "from_name": "Dessy Anggraeni",
+      "from_email_hash": "aa277fab56daa686447ff411d5a90233ee15b717eca47c2fdec64b8fd008f1b9",
+      "date": "2014-03-21T17:35:54+01:00",
+      "subject": "[R-SIG-Finance] Different external regressor in rugarch give the same result",
+      "subject_clean": "Different external regressor in rugarch give the same result",
+      "in_reply_to": "<532C4236.1090005@4dscape.com>",
+      "references": [
+        "<532C3988.6040904@gmail.com>",
+        "<532C4236.1090005@4dscape.com>"
+      ],
+      "body_plain": "Dear Alexios,\n\nThanks a lot! The suggestions work well.\n\nAnother issue is that, whenever I insert external variable in the model, \nthe model fit test (AIC, HQ, etc.) and P value of Q-Statistics on \nStandardized Residuals are significantly increase. It seems like the \ninsertion of external regressor implies serial correlations in the \nresidual. How to handle this problem?\n\nBest regards,\nDessy\n\nAm 3/21/2014 2:44 PM, schrieb alexios ghalanos:\n> You are obviously trying to capture a permanent \"level\" shift in your\n> rice dataset, but the shift is from a high to a low state (i.e. the\n> coefficient would need to be negative). Since the bounds on the\n> coefficients of the external regressors (in the conditional variance\n> equation) are preset to be positive in order to \"guarantee\" positivity\n> of the variance, you need to do one of the following:\n>\n> 1. Reverse the order of the dummy i.e. 1:652 = 1, 652:n.row=0.\n>\n> 2. Set the bounds on vxreg:\n>> setbounds(spec2)<-list(vxreg1=c(-1,1))\n> 3. Use the eGARCH model.\n>\n> All tested, all working.\n>\n> And DO NOT USE c(model=\"fGARCH\", submodel=\"GARCH\"). Use directly\n> model=\"sGARCH\".\n>\n> -Alexios\n>\n> On 21/03/2014 13:07, Dessy Anggraeni wrote:\n>> Hi all,\n>>\n>> I use rugarch package 1.2-9 to measure rice price volatility volatility\n>> with GARCH model including external regressor in the variance model.\n>> This package works well, however, it seems like the result doesn't\n>> response to change in value of external regressors.\n>>\n>> I test 2 external regressors:\n>>\n>> 1.A matrix of dummy variable containing only 0 and 1\n>>\n>> 2.Cross-sectional stock level to price return data (attached)\n>>\n>> Here is the code that I use. Can anybody advise me what's wrong?\n>> Thanks a lot in advance.\n>> Best Regards,\n>> Dessy\n>>\n>>\n>> *1.**With dummy variable (0 and 1) as external regressor*\n>>\n>> # where the dummy variable is define as:\n>>\n>> mat <- matrix(, nrow = n.row, ncol = 1)\n>>\n>> for(i in 1:652){\n>>\n>> mat[i,] <- 0\n>>\n>> }\n>>\n>> for(i in 501:n.row){\n>>\n>> mat[i,] <- 1\n>>\n>> }\n>>\n>> spec2 <- ugarchspec(\n>>\n>> variance.model =\n>>\n>> list(model = \"fGARCH\", garchOrder = c(1,1), submodel = \"GARCH\",\n>> external.regressors = mat, variance.targeting = FALSE),\n>>\n>> mean.model =\n>>\n>> list(armaOrder = c(12,0), external.regressors = NULL),\n>> distribution.model = \"norm\")\n>>\n>> fit = ugarchfit(spec = spec2, data=xz)\n>>\n>> *2.**With crosssectional stock level estimation as external regressor*\n>>\n>> # matrix m is cross sectional stock level data\n>>\n>> m <- matrix(cross)\n>>\n>> spec2 <- ugarchspec(\n>>\n>> variance.model =\n>>\n>> list(model = \"fGARCH\", garchOrder = c(1,1), submodel = \"GARCH\",\n>> external.regressors = m, variance.targeting = FALSE),\n>>\n>> mean.model =\n>>\n>> list(armaOrder = c(12,0), external.regressors = NULL),\n>> distribution.model = \"norm\")\n>>\n>> fit = ugarchfit(spec = spec2, data=xz)\n>>\n>>\n>>\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n>>",
+      "body_snippet": "Dear Alexios,\n\nThanks a lot! The suggestions work well.\n\nAnother issue is that, whenever I insert external variable in the model, \nthe model fit test (AIC, HQ, etc.) and P value of Q-Statistics on \nSt",
+      "thread_id": "thread-d34751928c1a",
+      "thread_depth": 2,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-89e9e85a3b42",
+      "message_id": "<CA+dpOJmQG5Fd2mi8XB=MTh3tz2nCz18mEogSrWyV_on=aKqH2A@mail.gmail.com>",
+      "from_name": "Christofer Bogaso",
+      "from_email_hash": "94494191170f349151c3e1bde090e6754a900331a7aa0f79aada4c207f2bcfdf",
+      "date": "2014-03-22T20:47:09+05:45",
+      "subject": "[R-SIG-Finance] Seeking help to understand the Bond value",
+      "subject_clean": "Seeking help to understand the Bond value",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140322/a20653cf/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140322/a20653cf/attachment.pl>",
+      "thread_id": "thread-89e9e85a3b42",
+      "thread_depth": 0,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-86b549cbae01",
+      "message_id": "<B895CE06-89F9-459A-9574-136C9FF54246@gmail.com>",
+      "from_name": "Edu",
+      "from_email_hash": "88e2babad1baa6ce9c49d681edaf7fbbf5dca5562ac6088ea31063595bb91c35",
+      "date": "2014-03-22T15:55:44Z",
+      "subject": "[R-SIG-Finance] Seeking help to understand the Bond value",
+      "subject_clean": "Seeking help to understand the Bond value",
+      "in_reply_to": "<CA+dpOJmQG5Fd2mi8XB=MTh3tz2nCz18mEogSrWyV_on=aKqH2A@mail.gmail.com>",
+      "references": [
+        "<CA+dpOJmQG5Fd2mi8XB=MTh3tz2nCz18mEogSrWyV_on=aKqH2A@mail.gmail.com>"
+      ],
+      "body_plain": "The prices in both cases must be equal and the yield must be 5% as current price is equal to face. Look at formulas and play a bit to understand... If you want to discuss the implications in practice drop me an email. However i warn you, bonds are complex instruments being derivatives rather than base and once you go into yield curves and actual day counting it becomes pragmatic problem. \n\nSent from my iPhone\n\n> On 22 Mar 2014, at 15:02, Christofer Bogaso <bogaso.christofer at gmail.com> wrote:\n> \n> Hi again,\n> \n> It may be really simple, however I believe there may be some gap in my\n> understanding on how Bond works.\n> \n> Let say at time T, I buy a bond with face value $1mn for 2 years maturity\n> with coupon rate 5%, coupon will be paid semmi-annually.\n> \n> In this case, my question is: what is the value of bond at time T?\n> \n> Is it that, value of bond at time T is the face-value, since I paid $1mn\n> right this time?\n> \n> or,\n> \n> It is the discounted future cash flow?\n> \n> I understand that at time (T+dT), the value of this bond will be the\n> discounted values of the cfs. But I am confused on it's value at time T,\n> just when I bought that bond.\n> \n> Thanks for your explanation.\n> \n>    [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "The prices in both cases must be equal and the yield must be 5% as current price is equal to face. Look at formulas and play a bit to understand... If you want to discuss the implications in practice ",
+      "thread_id": "thread-89e9e85a3b42",
+      "thread_depth": 1,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-2e176d565cc3",
+      "message_id": "<53306337.7020009@gmail.com>",
+      "from_name": "Kevin Owens",
+      "from_email_hash": "73caccaa0827b2ea2f76caeb566a0de01147386dc75b960c31d05db3598ff39d",
+      "date": "2014-03-24T11:54:15-05:00",
+      "subject": "[R-SIG-Finance] RQuantlib tsquote meaning of rates",
+      "subject_clean": "RQuantlib tsquote meaning of rates",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I thought it was strange that the tsQuote argument used swap rates for \nlonger tenors. These types of rates don't seem very easy to get, but \nmaybe I'm misunderstanding something. I would have thought I could use \nthe semi-annual bond equivalent rates, say, from the Treasury website.\n\nMy questions are\n1. How can I figure out how the swap rates are being used in Quantlib?\n2. Is there any way to input bond equivalent rates into tsQuote, or as a \nDiscountCurve class?\n3. Would I need to convert par rates to swap rates? If so, how?\n\nThank you,\n\nKevin",
+      "body_snippet": "I thought it was strange that the tsQuote argument used swap rates for \nlonger tenors. These types of rates don't seem very easy to get, but \nmaybe I'm misunderstanding something. I would have thought",
+      "thread_id": "thread-2e176d565cc3",
+      "thread_depth": 0,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-7bb9e6fc4691",
+      "message_id": "<21296.26495.523407.845647@max.nulle.part>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2014-03-24T12:12:31-05:00",
+      "subject": "[R-SIG-Finance] RQuantlib tsquote meaning of rates",
+      "subject_clean": "RQuantlib tsquote meaning of rates",
+      "in_reply_to": "<53306337.7020009@gmail.com>",
+      "references": [
+        "<53306337.7020009@gmail.com>"
+      ],
+      "body_plain": "On 24 March 2014 at 11:54, Kevin Owens wrote:\n| I thought it was strange that the tsQuote argument used swap rates for \n| longer tenors. These types of rates don't seem very easy to get, but \n| maybe I'm misunderstanding something. I would have thought I could use \n| the semi-annual bond equivalent rates, say, from the Treasury website.\n| \n| My questions are\n| 1. How can I figure out how the swap rates are being used in Quantlib?\n| 2. Is there any way to input bond equivalent rates into tsQuote, or as a \n| DiscountCurve class?\n| 3. Would I need to convert par rates to swap rates? If so, how?\n\nIt's a QuantLib question; the existing RQuantLib code more or less follows\nthe existing QuantLib examples and regression tests -- see directories\nExamples/ and test-suite/ in the QuantLib sources.  Some of those file have\ncomments, eg Examples/Swap/swapvaluation.cpp has\n\n        /*********************\n         ***  MARKET DATA  ***\n         *********************/\n\n        Calendar calendar = TARGET();\n        Date settlementDate(22, September, 2004);\n        // must be a business day\n        settlementDate = calendar.adjust(settlementDate);\n\n        Integer fixingDays = 2;\n        Date todaysDate = calendar.advance(settlementDate, -fixingDays, Days);\n        // nothing to do with Date::todaysDate\n        Settings::instance().evaluationDate() = todaysDate;\n\n\n        todaysDate = Settings::instance().evaluationDate();\n        std::cout << \"Today: \" << todaysDate.weekday()\n                  << \", \" << todaysDate << std::endl;\n\n        std::cout << \"Settlement date: \" << settlementDate.weekday()\n                  << \", \" << settlementDate << std::endl;\n\n        // deposits\n        Rate d1wQuote=0.0382;\n        Rate d1mQuote=0.0372;\n        Rate d3mQuote=0.0363;\n        Rate d6mQuote=0.0353;\n        Rate d9mQuote=0.0348;\n        Rate d1yQuote=0.0345;\n        // FRAs\n        Rate fra3x6Quote=0.037125;\n        Rate fra6x9Quote=0.037125;\n        Rate fra6x12Quote=0.037125;\n        // futures\n        Real fut1Quote=96.2875;\n        Real fut2Quote=96.7875;\n        Real fut3Quote=96.9875;\n        Real fut4Quote=96.6875;\n        Real fut5Quote=96.4875;\n        Real fut6Quote=96.3875;\n        Real fut7Quote=96.2875;\n        Real fut8Quote=96.0875;\n        // swaps\n        Rate s2yQuote=0.037125;\n        Rate s3yQuote=0.0398;\n        Rate s5yQuote=0.0443;\n        Rate s10yQuote=0.05165;\n        Rate s15yQuote=0.055175;\n\nThe file was setup a while back under a different curve, obviously. See the\nQuantLib documentation for the exact convention or assumptions.\n\nCheers, Dirk \n\n-- \nDirk Eddelbuettel | edd at debian.org | http://dirk.eddelbuettel.com",
+      "body_snippet": "On 24 March 2014 at 11:54, Kevin Owens wrote:\n| I thought it was strange that the tsQuote argument used swap rates for \n| longer tenors. These types of rates don't seem very easy to get, but \n| maybe ",
+      "thread_id": "thread-2e176d565cc3",
+      "thread_depth": 1,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-5366180c83dc",
+      "message_id": "<CAAHNhKUKHi2UFq1TXeAUZ2a2H3Kzp2R9hVN5AFJkk7Vo9pVioA@mail.gmail.com>",
+      "from_name": "R Vince",
+      "from_email_hash": "f7e91b6c0bf4bf0ec29ba8c1fc1518dafd58cc798dde54c4cc9d8f0bf12d215b",
+      "date": "2014-03-24T18:10:33-04:00",
+      "subject": "[R-SIG-Finance] TryCatch and continuing within a loop",
+      "subject_clean": "TryCatch and continuing within a loop",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140324/b06ac2ff/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140324/b06ac2ff/attachment.pl>",
+      "thread_id": "thread-5366180c83dc",
+      "thread_depth": 0,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-d6f3ab9fdc83",
+      "message_id": "<CAPPM_gTsz0B2BPjsJSoBEWKaq8an35GjmfKao9oPbfa+DRL1Bw@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2014-03-25T08:23:30-05:00",
+      "subject": "[R-SIG-Finance] TryCatch and continuing within a loop",
+      "subject_clean": "TryCatch and continuing within a loop",
+      "in_reply_to": "<CAAHNhKUKHi2UFq1TXeAUZ2a2H3Kzp2R9hVN5AFJkk7Vo9pVioA@mail.gmail.com>",
+      "references": [
+        "<CAAHNhKUKHi2UFq1TXeAUZ2a2H3Kzp2R9hVN5AFJkk7Vo9pVioA@mail.gmail.com>"
+      ],
+      "body_plain": "Ralph,\n\nThis isn't really on-topic for R-SIG-Finance, so please respond to me\noff-list if you have any questions.\n\nThe bad news: I'm not sure how to do what you want with a try-catch\nblock.  I can see why you tried this (given your Java experience) but\nthe good news is that it's not necessary.  The solution below should\nwork and should also be faster.\n\n# vector of symbols\nbrsym <- c(\"^BVSP\", \"^GSPTSE\", \"^N225\", \"CAC4L.NX\", \"^BSESN\")\n# paste is vectorized, no need to loop\nj <- \"http://finance.yahoo.com/d/quotes.csv?s=\"\nj <- paste0(j, paste0(brsym,collapse=\"+\"), \"&f=sd1ohgl1vqd\")\n# use na.strings arg to convert \"N/A\" to R's NA\nX <- read.csv(j, header=FALSE, as.is=TRUE, na.strings=\"N/A\")\n# store rows with missing dates in new object\nbadsymbols <- X[is.na(X$V2),]\n# remove rows with missing dates from 'X'\nX <- X[!is.na(X$V2),]\n# reformat date\nX$V2 <- format(as.Date(X$V2, \"%m/%d/%Y\"), \"%Y%m%d\")\n# paste into one string per row\nY <- with(X, paste(paste(V1, \"-\", V2), V3, V4, V5, V6, V7, sep=\",\"))\n# write to file\n\nBest,\n--\nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\n\n\nOn Mon, Mar 24, 2014 at 5:10 PM, R Vince <rvince99 at gmail.com> wrote:\n>\n> I'm terribly confused on how to use try catch to continue execution within\n> a loop\n>\n> I take, say, the data for 150 symbols from yahoo, and seek to parse them\n> and append to existing index files in csv format. Sometimes the data is\n> bad, the code pukes inside the loop and execution stops, as evident here:\n>\n> [109] \"^BVSP - 20140324,47381.98,48141.789,47381.98,47993.422,0\"\n> [110] \"^GSPTSE - 20140324,14335.76,14402.49,14226.88,14278.55,163174560\"\n> [111] \"^N225 - 20140324,0,0,0,14475.3,0\"\n> [112] \"CAC4L.NX - 20140324,N/A,N/A,N/A,0,N/A\"\n> [113] \"^BSESN - 20140324,N/A,N/A,N/A,0,N/A\"\n> Error in value[[3L]](cond) : unused argument(s) (cond)\n> Calls: tryCatch -> tryCatchList -> tryCatchOne -> <Anonymous>\n> In addition: Warning message:\n> In if (file == \"\") file <- stdout() else if (is.character(file)) { :\n>   the condition has length > 1 and only the first element will be used\n> Execution halted\n>\n> Below is the code I am using, where i use tryCatch() to continue execution\n> within the loop, but for whatever reason, it still breaks out of the loop\n> on an error. Can someone please point out the error of my ways here? Thanks\n> , Ralph Vince\n>\n> j <- \"http://finance.yahoo.com/d/quotes.csv?s=\";\n> for (i in 1:150) {\n>     j <- paste(j,brsym[[i]],sep=\"+\");\n> }\n> j <- paste(j,\"&f=sd1ohgl1vqd\",sep=\"\");\n> print(j);\n> X <- read.csv(j, header=FALSE,as.is=TRUE);\n> #print(X);\n> for (i in 1:150) {\n>     tryCatch({\n>         d<-strsplit(X[i,2], '/');\n>         dd<-d[[1]][3];\n>         if (as.numeric(d[[1]][1]) < 10){\n>           dd<-paste(dd,0,sep=\"\");\n>         }\n>         dd<-paste(dd,d[[1]][1],sep=\"\");\n>         if (as.numeric(d[[1]][2]) < 10){\n>           dd<-paste(dd,0,sep=\"\");\n>         }\n>         dd<-paste(dd,d[[1]][2],sep=\"\");\n>         dd<-paste(dd,X[i,3],sep=\",\");\n>         dd<-paste(dd,X[i,4],sep=\",\");\n>         dd<-paste(dd,X[i,5],sep=\",\");\n>         dd<-paste(dd,X[i,6],sep=\",\");\n>         dd<-paste(dd,X[i,7],sep=\",\");\n>         ko <- paste(X[i,1], \"-\",dd);\n>         print(ko);\n>\n>         k <- paste(\"/home/rvince/AsciiCsv/ES50/\", X[i,1], sep=\"\");\n>         k <- trim.whitespace(k);\n>         k <- paste(k,\".csv\", sep=\"\");\n>         write.table(dd, k, append = TRUE, quote = FALSE, sep = \",\",\n>                     eol = \"\\n\", na = \"0\", dec = \".\", row.names = FALSE,\n>                     col.names = FALSE, qmethod = c(\"escape\", \"double\"));\n>     }, error = function() next)\n> }\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Ralph,\n\nThis isn't really on-topic for R-SIG-Finance, so please respond to me\noff-list if you have any questions.\n\nThe bad news: I'm not sure how to do what you want with a try-catch\nblock.  I can see",
+      "thread_id": "thread-5366180c83dc",
+      "thread_depth": 1,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-f90d9ae1e47a",
+      "message_id": "<21297.54297.778358.161051@max.nulle.part>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2014-03-25T14:08:09-05:00",
+      "subject": "[R-SIG-Finance] R/Finance 2014 Agenda posted",
+      "subject_clean": "R/Finance 2014 Agenda posted",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "The draft program of R/Finance 2014 is now available at\n\n    http://www.RinFinance.com/agenda/\n\nWe anticipate that registration will be available 'in due course' and will\nannounce it too.\n\nFor the committee,   Dirk\n\n-- \nDirk Eddelbuettel | edd at debian.org | http://dirk.eddelbuettel.com",
+      "body_snippet": "The draft program of R/Finance 2014 is now available at\n\n    http://www.RinFinance.com/agenda/\n\nWe anticipate that registration will be available 'in due course' and will\nannounce it too.\n\nFor the com",
+      "thread_id": "thread-f90d9ae1e47a",
+      "thread_depth": 0,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-4978a3393af9",
+      "message_id": "<CAC6sL=FwUYSQucnsND9cNpaugRApWTs9vrfeTezqKL9tUT=1GQ@mail.gmail.com>",
+      "from_name": "Russell Miller",
+      "from_email_hash": "b9f3e2c29f55ed00762253c0ff4ec5c814769482904836818ecad86b3cd5cbe1",
+      "date": "2014-03-26T13:59:21-04:00",
+      "subject": "[R-SIG-Finance] apply.paramset and parallel",
+      "subject_clean": "apply.paramset and parallel",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I'm receiving an error when trying to run apply.paramset in parallel.\nIt works fine when running \"registerDoSEQ()\" (line ~146), however,\nwith that commented out I get \"error calling combine function: ....\".\n\nI'm running this on windows and I understand there are some\ndifferences in the parallel functionality between Windows and Linux,\nbut I think I have those addressed properly.\n\nCode is below, basically a cut from the luxor demo (I experienced the\nsame problem with the actual demo code).  Any help is greatly\nappreciated.\n\nThanks -\nRussell\n\n\n\n\n# most of the code below is courtesy of the r-sig-finance mailing list\n(Rob Schmidt, 4/21/13)\nrequire(quantstrat)\n\n# first pass values of sweep parameters for chart\n.fast = 5\n.slow = 20\n\n.qty=100000\ninitDate = '2002-10-21'\n.from='2002-10-21'\n.to='2002-10-30'\n#.to='2002-10-31'\n\ncurrency(c('GBP', 'USD'))\nexchange_rate(c('GBPUSD'), tick_size=0.0001)\nsetSymbolLookup.FI(system.file('extdata', package='quantstrat'),\n                   'GBPUSD')\n\ngetSymbols('GBPUSD', from=.from, to=.to, verbose=FALSE)\nGBPUSD = to.minutes30(GBPUSD)\nGBPUSD = align.time(to.minutes30(GBPUSD), 1800)\n\nstrat.st = 'xoverStrat'\nport.st = 'xoverPort'\nacct.st = 'xoverAcct'\n\n###################################################################\n\ntry(rm(\"order_book.xoverPort\", pos=.strategy))\ntry(rm(\"account.xoverAcct\", \"portfolio.xoverPort\", pos=.blotter))\n\ninitPortf(port.st, symbols='GBPUSD', initDate=initDate, currency='USD')\ninitAcct(acct.st, portfolios=port.st, initDate=initDate, currency='USD')\ninitOrders(port.st, initDate=initDate)\n\nstrategy(strat.st, store=TRUE)\n\naddPosLimit(portfolio=port.st,\n            symbol='GBPUSD',\n            timestamp=initDate,\n            maxpos=.qty)\n\n### indicators\n\nadd.indicator(strat.st, name = \"SMA\",\n              arguments = list(\n                x = quote(Cl(mktdata)[,1]),\n                n = .fast\n              ),\n              label=\"nFast\"\n)\n\nadd.indicator(strat.st, name=\"SMA\",\n              arguments = list(\n                x = quote(Cl(mktdata)[,1]),\n                n = .slow\n              ),\n              label=\"nSlow\"\n)\n\n### signals\n\nadd.signal(strat.st, name = 'sigComparison',\n           arguments = list(\n             columns=c(\"nFast\",\"nSlow\"),\n             relationship=\"gte\",\n             cross=FALSE\n           ),\n           label='smaUp'\n)\n\nadd.signal(strat.st, name = 'sigComparison',\n           arguments = list(\n             columns=c(\"nFast\",\"nSlow\"),\n             relationship=\"lt\",\n             cross=FALSE\n           ),\n           label='smaDn'\n)\n\n### rules\n\nadd.rule(strategy=strat.st,\n         name='ruleSignal',\n         type='enter',\n         arguments=list(sigcol=\"smaUp\",\n                        sigval=TRUE,\n                        orderqty=+.qty,\n                        ordertype='market',\n                        osFUN=osMaxPos,\n                        orderside='long'))\n\nadd.rule(strategy=strat.st,\n         name='ruleSignal',\n         type='exit',\n         arguments=list(sigcol=\"smaDn\",\n                        sigval=TRUE,\n                        orderqty='all',\n                        ordertype='market',\n                        orderside='long'))\n\nadd.rule(strategy=strat.st,\n         name='ruleSignal',\n         type='enter',\n         arguments=list(sigcol=\"smaDn\",\n                        sigval=TRUE,\n                        orderqty=-.qty,\n                        ordertype='market',\n                        osFUN=osMaxPos,\n                        orderside='short'))\n\nadd.rule(strategy=strat.st,\n         name='ruleSignal',\n         type='exit',\n         arguments=list(sigcol=\"smaUp\",\n                        sigval=TRUE,\n                        orderqty='all',\n                        ordertype='market',\n                        orderside='short'))\n\n#applyStrategy(strat.st, port.st, prefer='Open', verbose = FALSE)\n#updatePortf(port.st, Symbols='GBPUSD',\n,Dates=paste('::',as.Date(Sys.time()),sep=''))\n#chart.Posn(port.st, \"GBPUSD\")\n\n###################################################################\n\nrequire(foreach)\n#require(doMC)  #  for linux\n#registerDoMC(cores=4)  # (my quad core)\n\n\nrequire(doParallel)  # for windows\n\ncl1 <- makeCluster(2)\nregisterDoParallel(cl1) #cluster, cores=2) # by default number of\nphysical cores -1\n\n# registerDoSEQ: do sequential execution (single thread)\n# can be used to detect nontrading param combinations\n# which will give this error:\n#     error calling combine function:\n#     <simpleError in results[[r$portfolio.st]] <- r: attempt to\n#     select less than one element>\n#registerDoSEQ()   #  comment this command for parallel calc\n\n# parameter sweep distributions\n.FastSMA = c(7,8)\n.SlowSMA = c(10,11)\n\nadd.distribution(strat.st,\n                 paramset.label = 'SMA',\n                 component.type = 'indicator',\n                 component.label = 'nFast',\n                 variable = list(n = .FastSMA),\n                 label = 'nFAST'\n)\n\nadd.distribution(strat.st,\n                 paramset.label = 'SMA',\n                 component.type = 'indicator',\n                 component.label = 'nSlow',\n                 variable = list(n = .SlowSMA),\n                 label = 'nSLOW'\n)\n\nadd.distribution.constraint(strat.st,\n               paramset.label = 'SMA',\n               distribution.label.1 = 'nFAST',\n               distribution.label.2 = 'nSLOW',\n               operator = '<',\n               label = 'SMA'\n)\n\nresults <- apply.paramset(strat.st,\n                          paramset.label='SMA',\n                          portfolio.st=port.st,\n                          account.st=acct.st)\n\nprint(results$tradeStats[,c(1,2,25,31)])\n\nstopCluster(cl1)\n\n\n\n# END CODE\n##############################################\n##############################################\n##############################################\n##############################################",
+      "body_snippet": "I'm receiving an error when trying to run apply.paramset in parallel.\nIt works fine when running \"registerDoSEQ()\" (line ~146), however,\nwith that commented out I get \"error calling combine function: ",
+      "thread_id": "thread-4978a3393af9",
+      "thread_depth": 0,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-c809b7267bfe",
+      "message_id": "<1395933494669-4687664.post@n4.nabble.com>",
+      "from_name": "philippe",
+      "from_email_hash": "b8322704b0d1c45dbe40037563d21b019ca873c7253c94aed7abbb1aa12b6366",
+      "date": "2014-03-27T08:18:14-07:00",
+      "subject": "[R-SIG-Finance] Different significance of parameter estimation in GARCH models using r (rugarch & fGarch package)",
+      "subject_clean": "Different significance of parameter estimation in GARCH models using r (rugarch & fGarch package)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I have been working with the two packages fGarch and rugarch to fit a\nGARCH(1,1) model to my exchange rate time series consisting of 3980 daily\nlog-returns.\n\nCode:\nfx_rates <- data.frame(read.csv(\"WMCOFixingsTimeSeries.csv\", header=T,\nsep=\";\", stringsAsFactors=FALSE))\nEURUSD <- ts(diff(log(fx_rates$EURUSD), lag=1), frequency=1)\n\n#GARCH(1,1)\nlibrary(timeSeries)\nlibrary(fGarch)\nx <- EURUSD\nfit <- garchFit(~garch(1,1), data=x, cond.dist=\"std\", trace=F,\ninclude.mean=F)\nfit at fit$matcoef\n\nlibrary(rugarch)\nspec <- ugarchspec(variance.model = list(model = \"sGARCH\", garchOrder = c(1,\n1)),\n                   mean.model=list(armaOrder=c(0,0), include.mean=F),\ndistribution.model=\"std\")\ngfit <- ugarchfit(spec, x, solver=\"hybrid\",\nfit.control=list(stationarity=1))\ngfit at fit$matcoef\n\nThe two models show the following results:\n\nfGarch:\n\nfit at fit$matcoef \n            Estimate         Std. Error          t value     Pr(>|t|) \nomega  1.372270e-07  6.206406e-08   2.211054  2.703207e-02 \nalpha1  2.695012e-02  3.681467e-03   7.320484  2.471356e-13 \nbeta1   9.697648e-01  3.961845e-03 244.776060 0.000000e+00 \nshape   8.969562e+00 1.264957e+00   7.090804  1.333378e-12\nrugarch:\n\ngfit at fit$matcoef\n           Estimate              Std. Error         t value     Pr(>|t|)\nomega  1.346631e-07  3.664294e-07    0.3675008   7.132455e-01\nalpha1  2.638156e-02  2.364896e-03   11.1554837  0.000000e+00\nbeta1   9.703710e-01  1.999087e-03 485.4070764   0.000000e+00\nshape   8.951322e+00 1.671404e+00    5.3555696   8.528729e-08\n\nI have found a thread\nhttp://r.789695.n4.nabble.com/Comparison-between-rugarch-and-fGarch-td4683770.html\non why the estimates are not identical, however I can't figure out the big\ndifference in the standard errors and therethrough the different\nsignificancs for omega. Furthermore, I was not able to detect how the\nstandard errors are computed by investigating the source code of the rugarch\npackage. The difference is not caused by the stationarity constraint as\nomega remains insignificant. Does anybody know how the standard errors of\nthe estimated parameters (omega, alpha, beta and nu (shape)) are calculated?\nIf possible I would like to proceed with the rugarch package, as I wish to\nforecast volatility and determine VaR measures. rugarch has shown to a very\nprofound package for this intentions. Thank you for your support.\n\n\n\n--\nView this message in context: http://r.789695.n4.nabble.com/Different-significance-of-parameter-estimation-in-GARCH-models-using-r-rugarch-fGarch-package-tp4687664.html\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "I have been working with the two packages fGarch and rugarch to fit a\nGARCH(1,1) model to my exchange rate time series consisting of 3980 daily\nlog-returns.\n\nCode:\nfx_rates <- data.frame(read.csv(\"WMC",
+      "thread_id": "thread-c809b7267bfe",
+      "thread_depth": 0,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-f30cfbd45a72",
+      "message_id": "<ED00376E-A666-44DC-B5B4-7A548AD95D38@4dscape.com>",
+      "from_name": "Alexios Ghalanos",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2014-03-27T15:54:42Z",
+      "subject": "[R-SIG-Finance] Different significance of parameter estimation in GARCH models using r (rugarch & fGarch package)",
+      "subject_clean": "Different significance of parameter estimation in GARCH models using r (rugarch & fGarch package)",
+      "in_reply_to": "<1395933494669-4687664.post@n4.nabble.com>",
+      "references": [
+        "<1395933494669-4687664.post@n4.nabble.com>"
+      ],
+      "body_plain": "1. Section 3.1 of the vignette discusses robust standard error calculation. The non-robust version is calculated using the hessian function from the numDeriv package. A search of the package source R folder for terms \"hessian\" or \"grad\" will surely reveal where to look.\n2. Method vcov can be used to extract the parameter covariance matrix (with option to extract the robust one as well).\n3. Try using scaling (fit.control) or increasing the default tolerance of the solver.\n4. There is no point supplying code for the dataset when no one else has access to that (so this is not really a reproducible example).\n5. You did not report the log likelihood of the two estimated models, so I cannot gauge if rugarch may have stopped at a non global optimum, in which case (3) may be useful.\n\nAlexios\n\nOn 27 Mar 2014, at 03:18 PM, philippe <philippe.kappeler at hotmail.com> wrote:\n\n> I have been working with the two packages fGarch and rugarch to fit a\n> GARCH(1,1) model to my exchange rate time series consisting of 3980 daily\n> log-returns.\n> \n> Code:\n> fx_rates <- data.frame(read.csv(\"WMCOFixingsTimeSeries.csv\", header=T,\n> sep=\";\", stringsAsFactors=FALSE))\n> EURUSD <- ts(diff(log(fx_rates$EURUSD), lag=1), frequency=1)\n> \n> #GARCH(1,1)\n> library(timeSeries)\n> library(fGarch)\n> x <- EURUSD\n> fit <- garchFit(~garch(1,1), data=x, cond.dist=\"std\", trace=F,\n> include.mean=F)\n> fit at fit$matcoef\n> \n> library(rugarch)\n> spec <- ugarchspec(variance.model = list(model = \"sGARCH\", garchOrder = c(1,\n> 1)),\n>                  mean.model=list(armaOrder=c(0,0), include.mean=F),\n> distribution.model=\"std\")\n> gfit <- ugarchfit(spec, x, solver=\"hybrid\",\n> fit.control=list(stationarity=1))\n> gfit at fit$matcoef\n> \n> The two models show the following results:\n> \n> fGarch:\n> \n> fit at fit$matcoef \n>           Estimate         Std. Error          t value     Pr(>|t|) \n> omega  1.372270e-07  6.206406e-08   2.211054  2.703207e-02 \n> alpha1  2.695012e-02  3.681467e-03   7.320484  2.471356e-13 \n> beta1   9.697648e-01  3.961845e-03 244.776060 0.000000e+00 \n> shape   8.969562e+00 1.264957e+00   7.090804  1.333378e-12\n> rugarch:\n> \n> gfit at fit$matcoef\n>          Estimate              Std. Error         t value     Pr(>|t|)\n> omega  1.346631e-07  3.664294e-07    0.3675008   7.132455e-01\n> alpha1  2.638156e-02  2.364896e-03   11.1554837  0.000000e+00\n> beta1   9.703710e-01  1.999087e-03 485.4070764   0.000000e+00\n> shape   8.951322e+00 1.671404e+00    5.3555696   8.528729e-08\n> \n> I have found a thread\n> http://r.789695.n4.nabble.com/Comparison-between-rugarch-and-fGarch-td4683770.html\n> on why the estimates are not identical, however I can't figure out the big\n> difference in the standard errors and therethrough the different\n> significancs for omega. Furthermore, I was not able to detect how the\n> standard errors are computed by investigating the source code of the rugarch\n> package. The difference is not caused by the stationarity constraint as\n> omega remains insignificant. Does anybody know how the standard errors of\n> the estimated parameters (omega, alpha, beta and nu (shape)) are calculated?\n> If possible I would like to proceed with the rugarch package, as I wish to\n> forecast volatility and determine VaR measures. rugarch has shown to a very\n> profound package for this intentions. Thank you for your support.\n> \n> \n> \n> --\n> View this message in context: http://r.789695.n4.nabble.com/Different-significance-of-parameter-estimation-in-GARCH-models-using-r-rugarch-fGarch-package-tp4687664.html\n> Sent from the Rmetrics mailing list archive at Nabble.com.\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>",
+      "body_snippet": "1. Section 3.1 of the vignette discusses robust standard error calculation. The non-robust version is calculated using the hessian function from the numDeriv package. A search of the package source R ",
+      "thread_id": "thread-c809b7267bfe",
+      "thread_depth": 1,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-5527e0ce6a23",
+      "message_id": "<1395937153732-4687673.post@n4.nabble.com>",
+      "from_name": "philippe",
+      "from_email_hash": "b8322704b0d1c45dbe40037563d21b019ca873c7253c94aed7abbb1aa12b6366",
+      "date": "2014-03-27T09:19:13-07:00",
+      "subject": "[R-SIG-Finance] Different significance of parameter estimation in GARCH models using r (rugarch & fGarch package)",
+      "subject_clean": "Different significance of parameter estimation in GARCH models using r (rugarch & fGarch package)",
+      "in_reply_to": "<ED00376E-A666-44DC-B5B4-7A548AD95D38@4dscape.com>",
+      "references": [
+        "<1395933494669-4687664.post@n4.nabble.com>",
+        "<ED00376E-A666-44DC-B5B4-7A548AD95D38@4dscape.com>"
+      ],
+      "body_plain": "Thank you for your swift response. I have attached the link with the fx\nrates: \nhttps://drive.google.com/folderview?id=0BwSzkfw3xUH3REsxRHprZEU1R00&usp=sharing\n<https://drive.google.com/folderview?id=0BwSzkfw3xUH3REsxRHprZEU1R00&usp=sharing>  \n\nScaling or increasing the tolerance of the solver did not work out so far. \nPhilippe\n\n\n\n\n--\nView this message in context: http://r.789695.n4.nabble.com/Different-significance-of-parameter-estimation-in-GARCH-models-using-r-rugarch-fGarch-package-tp4687664p4687673.html\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "Thank you for your swift response. I have attached the link with the fx\nrates: \nhttps://drive.google.com/folderview?id=0BwSzkfw3xUH3REsxRHprZEU1R00&usp=sharing\n<https://drive.google.com/folderview?id=",
+      "thread_id": "thread-c809b7267bfe",
+      "thread_depth": 2,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-5f61f669e830",
+      "message_id": "<53345F45.7080508@4dscape.com>",
+      "from_name": "alexios ghalanos",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2014-03-27T17:26:29Z",
+      "subject": "[R-SIG-Finance] Different significance of parameter estimation in GARCH models using r (rugarch & fGarch package)",
+      "subject_clean": "Different significance of parameter estimation in GARCH models using r (rugarch & fGarch package)",
+      "in_reply_to": "<1395937153732-4687673.post@n4.nabble.com>",
+      "references": [
+        "<1395933494669-4687664.post@n4.nabble.com>",
+        "<ED00376E-A666-44DC-B5B4-7A548AD95D38@4dscape.com>",
+        "<1395937153732-4687673.post@n4.nabble.com>"
+      ],
+      "body_plain": "ok, found the solution...the default control options for the hessian\nroutine had a zero tolerance value of sqrt(.Machine$double.eps/7e-7)\nwhich is obviously not sufficient for parameters like omega which are\nmuch smaller.\n\nFixed and committed. Please download latest from its bitbucket\ndevelopment repository using the following commands:\n\nlibrary(devtools)\ninstall_bitbucket(\"rugarch\",\"alexiosg\")\n\n-Alexios\n\nOn 27/03/2014 16:19, philippe wrote:\n> Thank you for your swift response. I have attached the link with the fx\n> rates: \n> https://drive.google.com/folderview?id=0BwSzkfw3xUH3REsxRHprZEU1R00&usp=sharing\n> <https://drive.google.com/folderview?id=0BwSzkfw3xUH3REsxRHprZEU1R00&usp=sharing>  \n> \n> Scaling or increasing the tolerance of the solver did not work out so far. \n> Philippe\n> \n> \n> \n> \n> --\n> View this message in context: http://r.789695.n4.nabble.com/Different-significance-of-parameter-estimation-in-GARCH-models-using-r-rugarch-fGarch-package-tp4687664p4687673.html\n> Sent from the Rmetrics mailing list archive at Nabble.com.\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n> \n>",
+      "body_snippet": "ok, found the solution...the default control options for the hessian\nroutine had a zero tolerance value of sqrt(.Machine$double.eps/7e-7)\nwhich is obviously not sufficient for parameters like omega wh",
+      "thread_id": "thread-c809b7267bfe",
+      "thread_depth": 3,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-c6172778a37e",
+      "message_id": "<CAPxWS07ejs13TRS6J8Y-zmFnhRdOB_i2VaboyMSRPzjKfz01aw@mail.gmail.com>",
+      "from_name": "Simon Otziger",
+      "from_email_hash": "df95a1b7ba9b12aac5f1d720291b0d657651a7c6ed88fbebe32e7f896113efb4",
+      "date": "2014-03-28T22:00:45+01:00",
+      "subject": "[R-SIG-Finance] quantstrat demo(faber_rebal)",
+      "subject_clean": "quantstrat demo(faber_rebal)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear list members,\n\nI'm trying to run the demo(faber_rebal) from the Quantstrat package\n(R-Forge Rev. 1590):\nlibrary(quantstrat)\nSys.setenv(TZ = \"America/New_York\")\ndemo(faber_rebal)\n\nThe demo stops on line 133 with the error message:\n> out<-applyStrategy.rebalancing(strategy='faber' , portfolios='faber')\nError in paste(\"::\", timestamp, sep = \"\") :\n  cannot coerce type 'closure' to vector of type 'character'\n\nI guess it's a namespace/masking clash with the timestamp() function\nof the R.utils package. Another quantstrat user posted the same issue\nin the R-Forge forums, see\nhttps://r-forge.r-project.org/forum/forum.php?thread_id=28525&forum_id=1032&group_id=316\n\nAny idea how to fix it?\n\nThanks,\nSimon\n\n\n> sessionInfo()\nR version 3.0.3 (2014-03-06)\nPlatform: x86_64-pc-linux-gnu (64-bit)\n\nlocale:\n [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C\n [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8\n [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8\n [7] LC_PAPER=en_US.UTF-8       LC_NAME=C\n [9] LC_ADDRESS=C               LC_TELEPHONE=C\n[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base\n\nother attached packages:\n [1] quantstrat_0.8.0           foreach_1.4.1\n [3] blotter_0.8.17             PerformanceAnalytics_1.1.0\n [5] FinancialInstrument_1.1.9  quantmod_0.4-0\n [7] Defaults_1.1-1             TTR_0.22-0\n [9] xts_0.9-7                  zoo_1.7-11\n\nloaded via a namespace (and not attached):\n[1] codetools_0.2-8 grid_3.0.3      iterators_1.0.6 lattice_0.20-27\n[5] tools_3.0.3",
+      "body_snippet": "Dear list members,\n\nI'm trying to run the demo(faber_rebal) from the Quantstrat package\n(R-Forge Rev. 1590):\nlibrary(quantstrat)\nSys.setenv(TZ = \"America/New_York\")\ndemo(faber_rebal)\n\nThe demo stops o",
+      "thread_id": "thread-c6172778a37e",
+      "thread_depth": 0,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-f6174dddc666",
+      "message_id": "<CAJFvkcdzLn9imttxNTMKUWvOmLG9Tr2Owei=ZwMuyLkSNvJb5g@mail.gmail.com>",
+      "from_name": "Gei Lin",
+      "from_email_hash": "cd526ad143553bfdcf0e30eca6d76bb2d9c53aa0a6b5bef6979735276e8fe65f",
+      "date": "2014-03-28T18:36:45-04:00",
+      "subject": "[R-SIG-Finance] quantstrat demo(faber_rebal)",
+      "subject_clean": "quantstrat demo(faber_rebal)",
+      "in_reply_to": "<CAPxWS07ejs13TRS6J8Y-zmFnhRdOB_i2VaboyMSRPzjKfz01aw@mail.gmail.com>",
+      "references": [
+        "<CAPxWS07ejs13TRS6J8Y-zmFnhRdOB_i2VaboyMSRPzjKfz01aw@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140328/3285b8d4/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140328/3285b8d4/attachment.pl>",
+      "thread_id": "thread-c6172778a37e",
+      "thread_depth": 1,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-6a3715153ab9",
+      "message_id": "<CAPxWS043N_CprTRnhqw0UjgHQpk1D6e-HbYfZ2AaY3E6su3sKw@mail.gmail.com>",
+      "from_name": "Simon Otziger",
+      "from_email_hash": "df95a1b7ba9b12aac5f1d720291b0d657651a7c6ed88fbebe32e7f896113efb4",
+      "date": "2014-03-29T10:45:16+01:00",
+      "subject": "[R-SIG-Finance] quantstrat demo(faber_rebal)",
+      "subject_clean": "quantstrat demo(faber_rebal)",
+      "in_reply_to": "<CAJFvkcdzLn9imttxNTMKUWvOmLG9Tr2Owei=ZwMuyLkSNvJb5g@mail.gmail.com>",
+      "references": [
+        "<CAPxWS07ejs13TRS6J8Y-zmFnhRdOB_i2VaboyMSRPzjKfz01aw@mail.gmail.com>",
+        "<CAJFvkcdzLn9imttxNTMKUWvOmLG9Tr2Owei=ZwMuyLkSNvJb5g@mail.gmail.com>"
+      ],
+      "body_plain": "Dear Gei,\n\nThanks for the swift reply. Replacing timestamp by pindex[i] in the\nadd.rule doesn't solve the problem. Does the quick fix work for you?\nThe downloaded data doesn't have any missing values.\n\nSimon\n\nlibrary(quantstrat)\nSys.setenv(TZ = \"America/New_York\")\nsource(\"faber_rebal.R\")\n\n[1] \"setup completed\"\nError in if (is.na(price)) stop(\"order at timestamp \", timestamp, \"\nmust not have price of NA\") :\n  argument is of length zero\n\n# add quaterly rebalancing\nadd.rule('faber', 'rulePctEquity',\n        arguments=list(rebalance_on='quarters',\n                trade.percent=1/length(symbols),\n\nrefprice=quote(last(getPrice(mktdata)[paste('::',pindex[i],sep='')][,1])),\n                digits=0\n        ),\n        type='rebalance',\n        label='rebalance'\n)\n\nOn Fri, Mar 28, 2014 at 11:36 PM, Gei Lin <gmonaie at gmail.com> wrote:\n> Looking at applyStrategy.rebalancing(), timestamp is being passed here to\n> the function rulePctEquity, so it can be used *inside* rulePctEquity, but\n> you can't reference it in passing arguments because it isn't defined inside\n> applyStrategy.rebalancing(), it is floating around as the value pindex[i]\n>\n> ruleProc(s$rules$rebalance, timestamp = pindex[i],\n>                       path.dep = TRUE, ruletype = \"rebalance\",\n>                       ..., mktdata = md_subset, parameters = parameters,\n>                       portfolio = portfolio, symbol = symbol)\n>\n> Quick fix, replace \"timestamp\" in the add.rule with \"pindex[i]\" which has\n> the intended value and won't be missing.\n>\n> # add quarterly rebalancing\n>> add.rule('faber', 'rulePctEquity',\n> +         arguments=list(rebalance_on='quarters',\n> +                 trade.percent=1/length(symbols),\n> +\n> refprice=quote(last(getPrice(mktdata)[paste('::',timestamp,sep='')][,1])),\n> +                 digits=0\n> +         ),\n> +         type='rebalance',\n> +         label='rebalance'\n> + )\n>\n>\n> On Fri, Mar 28, 2014 at 5:00 PM, Simon Otziger <simon at volemont.com> wrote:\n>>\n>> Dear list members,\n>>\n>> I'm trying to run the demo(faber_rebal) from the Quantstrat package\n>> (R-Forge Rev. 1590):\n>> library(quantstrat)\n>> Sys.setenv(TZ = \"America/New_York\")\n>> demo(faber_rebal)\n>>\n>> The demo stops on line 133 with the error message:\n>> > out<-applyStrategy.rebalancing(strategy='faber' , portfolios='faber')\n>> Error in paste(\"::\", timestamp, sep = \"\") :\n>>   cannot coerce type 'closure' to vector of type 'character'\n>>\n>> I guess it's a namespace/masking clash with the timestamp() function\n>> of the R.utils package. Another quantstrat user posted the same issue\n>> in the R-Forge forums, see\n>>\n>> https://r-forge.r-project.org/forum/forum.php?thread_id=28525&forum_id=1032&group_id=316\n>>\n>> Any idea how to fix it?\n>>\n>> Thanks,\n>> Simon\n>>\n>>\n>> > sessionInfo()\n>> R version 3.0.3 (2014-03-06)\n>> Platform: x86_64-pc-linux-gnu (64-bit)\n>>\n>> locale:\n>>  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C\n>>  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8\n>>  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8\n>>  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C\n>>  [9] LC_ADDRESS=C               LC_TELEPHONE=C\n>> [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C\n>>\n>> attached base packages:\n>> [1] stats     graphics  grDevices utils     datasets  methods   base\n>>\n>> other attached packages:\n>>  [1] quantstrat_0.8.0           foreach_1.4.1\n>>  [3] blotter_0.8.17             PerformanceAnalytics_1.1.0\n>>  [5] FinancialInstrument_1.1.9  quantmod_0.4-0\n>>  [7] Defaults_1.1-1             TTR_0.22-0\n>>  [9] xts_0.9-7                  zoo_1.7-11\n>>\n>> loaded via a namespace (and not attached):\n>> [1] codetools_0.2-8 grid_3.0.3      iterators_1.0.6 lattice_0.20-27\n>> [5] tools_3.0.3\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>\n>\n>\n>\n> --\n>\n> Don't quit. Suffer now and live the rest of your life as a champion.\n>\n>                                                 - Muhammad Ali\n>\n> The world is full of obvious things which nobody by any chance observes.\n>\n>                                                 - Sir Arthur Conan Doyle\n>\n> Towering genius disdains a beaten path. It seeks regions hitherto\n> unexplored.\n>\n>                                                 - Abraham Lincoln",
+      "body_snippet": "Dear Gei,\n\nThanks for the swift reply. Replacing timestamp by pindex[i] in the\nadd.rule doesn't solve the problem. Does the quick fix work for you?\nThe downloaded data doesn't have any missing values.",
+      "thread_id": "thread-c6172778a37e",
+      "thread_depth": 2,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-ecafcc3e9b75",
+      "message_id": "<21302.60648.374619.87454@max.nulle.part>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2014-03-29T10:55:20-05:00",
+      "subject": "[R-SIG-Finance] R/Finance 2014 Registration now open",
+      "subject_clean": "R/Finance 2014 Registration now open",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Now open for registrations --- and more details as always at http://www.RinFinance.com :\n\n  R / Finance 2014: Applied Finance with R\n  May 16 and 17, 2014 \n  Chicago, IL, USA\n\n  The registration for R/Finance 2014 -- which will take place May 16 and 17\n  in Chicago -- is NOW OPEN!\n\n  Building on the success of the previous conferences in 2009, 2010, 2011,\n  2012 and 2013, we expect around 300 attendees from around the world. R\n  users from industry, academia, and government will joining 30+ presenters\n  covering all areas of finance with R.\n\n  We are very excited about the four keynotes by Luke Tierney, Alexios Ghalanos,\n  Bob McDonald and Bill Cleveland.  The main agenda (currently) includes sixteen\n  full presentations and twenty-one shorter \"lightning talks\". We are also\n  excited to offer four optional pre-conference seminars on Friday morning.\n\n  To celebrate the sixth year of the conference in style, the dinner will be\n  returning to The Terrace of the Trump Hotel. Overlooking the Chicago River and\n  skyline, it is a perfect venue to continue conversations while dining and\n  drinking.\n                                                                                                          \n  More details of the agenda are available at:\n                                                                                                          \n    http://www.RinFinance.com/agenda/\n                                                                                                          \n  Registration information is available at\n                                                                                                          \n    http://www.RinFinance.com/register/\n                                                                                                          \n  and can also be directly accessed by going to\n                                                                                                          \n    http://www.regonline.com/RFinance2014\n                                                                                                          \n  We would to thank our 2014 Sponsors for the continued support enabling us\n  to host such an exciting conference:\n                                                                                                          \n    International Center for Futures and Derivatives at UIC\n                                                                                                          \n    Revolution Analytics\n    MS-Computational Finance at University of Washington\n                                                                                                          \n    OneMarketData\n    RStudio\n                                                                                                          \n  On behalf of the committee and sponsors, we look forward to seeing you in\n  Chicago!\n\n    Gib Bassett, Peter Carl, Dirk Eddelbuettel, Brian Peterson, \n    Dale Rosenthal, Jeffrey Ryan, Joshua Ulrich\n\nSee you in Chicago in May!!\n\nDirk\n\n-- \nDirk Eddelbuettel | edd at debian.org | http://dirk.eddelbuettel.com",
+      "body_snippet": "Now open for registrations --- and more details as always at http://www.RinFinance.com :\n\n  R / Finance 2014: Applied Finance with R\n  May 16 and 17, 2014 \n  Chicago, IL, USA\n\n  The registration for R",
+      "thread_id": "thread-ecafcc3e9b75",
+      "thread_depth": 0,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-4f6271b21777",
+      "message_id": "<1396122935.90898.YahooMailNeo@web186003.mail.ir2.yahoo.com>",
+      "from_name": "amarjit chandhial",
+      "from_email_hash": "57050f3e1f422ebc70ce89ae753c2c203bc5af3184ac8820c6414afcbc20d3b6",
+      "date": "2014-03-29T19:55:35Z",
+      "subject": "[R-SIG-Finance] quantstrat demo(faber_rebal)",
+      "subject_clean": "quantstrat demo(faber_rebal)",
+      "in_reply_to": "<CAPxWS043N_CprTRnhqw0UjgHQpk1D6e-HbYfZ2AaY3E6su3sKw@mail.gmail.com>",
+      "references": [
+        "<CAPxWS07ejs13TRS6J8Y-zmFnhRdOB_i2VaboyMSRPzjKfz01aw@mail.gmail.com>",
+        "<CAJFvkcdzLn9imttxNTMKUWvOmLG9Tr2Owei=ZwMuyLkSNvJb5g@mail.gmail.com>",
+        "<CAPxWS043N_CprTRnhqw0UjgHQpk1D6e-HbYfZ2AaY3E6su3sKw@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140329/6c42372e/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140329/6c42372e/attachment.pl>",
+      "thread_id": "thread-c6172778a37e",
+      "thread_depth": 3,
+      "month": "2014-03"
+    },
+    {
+      "id": "msg-8b9617ab249c",
+      "message_id": "<1396254858.41457.YahooMailNeo@web186004.mail.ir2.yahoo.com>",
+      "from_name": "amarjit chandhial",
+      "from_email_hash": "57050f3e1f422ebc70ce89ae753c2c203bc5af3184ac8820c6414afcbc20d3b6",
+      "date": "2014-03-31T09:34:18+01:00",
+      "subject": "[R-SIG-Finance] quantstrat - stochastic oscillator overbought-oversold (OBOS) strategy",
+      "subject_clean": "quantstrat - stochastic oscillator overbought-oversold (OBOS) strategy",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140331/89069d2c/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140331/89069d2c/attachment.pl>",
+      "thread_id": "thread-8b9617ab249c",
+      "thread_depth": 0,
+      "month": "2014-03"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-994d60fdcf74",
+      "subject": "meaning of IBroker mktData information",
+      "message_count": 1,
+      "participants": [
+        "Stephen Choularton"
+      ],
+      "started": "2014-03-01T07:14:55+11:00",
+      "last_reply": "2014-03-01T07:14:55+11:00",
+      "root_message_id": "msg-994d60fdcf74"
+    },
+    {
+      "id": "thread-b3a3c2eef6c0",
+      "subject": "Time Series Data Analysis of Financial Data",
+      "message_count": 6,
+      "participants": [
+        "Chinmay Patil",
+        "Jaimie Villanueva",
+        "Kapil Shukla",
+        "Mark Knecht"
+      ],
+      "started": "2014-03-03T23:04:43+08:00",
+      "last_reply": "2014-03-04T04:22:15+01:00",
+      "root_message_id": "msg-b3a3c2eef6c0"
+    },
+    {
+      "id": "thread-4d1e6f7046c7",
+      "subject": "Good evening R Sig Finance",
+      "message_count": 1,
+      "participants": [
+        "Jesper Hybel Pedersen"
+      ],
+      "started": "2014-03-07T13:12:05+00:00",
+      "last_reply": "2014-03-07T13:12:05+00:00",
+      "root_message_id": "msg-4d1e6f7046c7"
+    },
+    {
+      "id": "thread-1798e94c86e5",
+      "subject": "Term structure",
+      "message_count": 5,
+      "participants": [
+        "Dirk Eddelbuettel",
+        "Joshua Ulrich",
+        "Keith S Weintraub"
+      ],
+      "started": "2014-03-07T15:38:24-05:00",
+      "last_reply": "2014-03-08T10:49:02-05:00",
+      "root_message_id": "msg-1798e94c86e5"
+    },
+    {
+      "id": "thread-b94903460147",
+      "subject": "How to retrieve standard errors of cointegrating vector from vars/urca ?",
+      "message_count": 1,
+      "participants": [
+        "paulofel"
+      ],
+      "started": "2014-03-07T16:53:08-08:00",
+      "last_reply": "2014-03-07T16:53:08-08:00",
+      "root_message_id": "msg-b94903460147"
+    },
+    {
+      "id": "thread-9cc47fac6f6b",
+      "subject": "GAS model",
+      "message_count": 1,
+      "participants": [
+        "jun wang"
+      ],
+      "started": "2014-03-08T23:25:26-05:00",
+      "last_reply": "2014-03-08T23:25:26-05:00",
+      "root_message_id": "msg-9cc47fac6f6b"
+    },
+    {
+      "id": "thread-7caeabe54caa",
+      "subject": "GAS model",
+      "message_count": 1,
+      "participants": [
+        "Gmail"
+      ],
+      "started": "2014-03-09T09:43:43-04:00",
+      "last_reply": "2014-03-09T09:43:43-04:00",
+      "root_message_id": "msg-7caeabe54caa"
+    },
+    {
+      "id": "thread-e4079efcbfb2",
+      "subject": "GAS model",
+      "message_count": 1,
+      "participants": [
+        "jun wang"
+      ],
+      "started": "2014-03-09T13:07:10-04:00",
+      "last_reply": "2014-03-09T13:07:10-04:00",
+      "root_message_id": "msg-e4079efcbfb2"
+    },
+    {
+      "id": "thread-73cb2377c94a",
+      "subject": "GAS model",
+      "message_count": 1,
+      "participants": [
+        "jun wang"
+      ],
+      "started": "2014-03-09T13:25:32-04:00",
+      "last_reply": "2014-03-09T13:25:32-04:00",
+      "root_message_id": "msg-73cb2377c94a"
+    },
+    {
+      "id": "thread-1df664fde62a",
+      "subject": "Quantstrat help",
+      "message_count": 4,
+      "participants": [
+        "Joshua Ulrich",
+        "NOAH SILVERMAN",
+        "Noah Silverman"
+      ],
+      "started": "2014-03-14T08:30:43-07:00",
+      "last_reply": "2014-03-14T15:32:37-05:00",
+      "root_message_id": "msg-1df664fde62a"
+    },
+    {
+      "id": "thread-276b5009c647",
+      "subject": "Split-adjusted yahoo data",
+      "message_count": 2,
+      "participants": [
+        "Dirk Eddelbuettel",
+        "R Vince"
+      ],
+      "started": "2014-03-14T23:21:33-04:00",
+      "last_reply": "2014-03-14T22:32:56-05:00",
+      "root_message_id": "msg-276b5009c647"
+    },
+    {
+      "id": "thread-d34751928c1a",
+      "subject": "Different external regressor in rugarch give the same result",
+      "message_count": 3,
+      "participants": [
+        "Dessy Anggraeni",
+        "alexios ghalanos"
+      ],
+      "started": "2014-03-21T14:07:20+01:00",
+      "last_reply": "2014-03-21T17:35:54+01:00",
+      "root_message_id": "msg-d34751928c1a"
+    },
+    {
+      "id": "thread-89e9e85a3b42",
+      "subject": "Seeking help to understand the Bond value",
+      "message_count": 2,
+      "participants": [
+        "Christofer Bogaso",
+        "Edu"
+      ],
+      "started": "2014-03-22T20:47:09+05:45",
+      "last_reply": "2014-03-22T15:55:44+00:00",
+      "root_message_id": "msg-89e9e85a3b42"
+    },
+    {
+      "id": "thread-2e176d565cc3",
+      "subject": "RQuantlib tsquote meaning of rates",
+      "message_count": 2,
+      "participants": [
+        "Dirk Eddelbuettel",
+        "Kevin Owens"
+      ],
+      "started": "2014-03-24T11:54:15-05:00",
+      "last_reply": "2014-03-24T12:12:31-05:00",
+      "root_message_id": "msg-2e176d565cc3"
+    },
+    {
+      "id": "thread-5366180c83dc",
+      "subject": "TryCatch and continuing within a loop",
+      "message_count": 2,
+      "participants": [
+        "Joshua Ulrich",
+        "R Vince"
+      ],
+      "started": "2014-03-24T18:10:33-04:00",
+      "last_reply": "2014-03-25T08:23:30-05:00",
+      "root_message_id": "msg-5366180c83dc"
+    },
+    {
+      "id": "thread-f90d9ae1e47a",
+      "subject": "R/Finance 2014 Agenda posted",
+      "message_count": 1,
+      "participants": [
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2014-03-25T14:08:09-05:00",
+      "last_reply": "2014-03-25T14:08:09-05:00",
+      "root_message_id": "msg-f90d9ae1e47a"
+    },
+    {
+      "id": "thread-4978a3393af9",
+      "subject": "apply.paramset and parallel",
+      "message_count": 1,
+      "participants": [
+        "Russell Miller"
+      ],
+      "started": "2014-03-26T13:59:21-04:00",
+      "last_reply": "2014-03-26T13:59:21-04:00",
+      "root_message_id": "msg-4978a3393af9"
+    },
+    {
+      "id": "thread-c809b7267bfe",
+      "subject": "Different significance of parameter estimation in GARCH models using r (rugarch & fGarch package)",
+      "message_count": 4,
+      "participants": [
+        "Alexios Ghalanos",
+        "alexios ghalanos",
+        "philippe"
+      ],
+      "started": "2014-03-27T08:18:14-07:00",
+      "last_reply": "2014-03-27T17:26:29+00:00",
+      "root_message_id": "msg-c809b7267bfe"
+    },
+    {
+      "id": "thread-c6172778a37e",
+      "subject": "quantstrat demo(faber_rebal)",
+      "message_count": 4,
+      "participants": [
+        "Gei Lin",
+        "Simon Otziger",
+        "amarjit chandhial"
+      ],
+      "started": "2014-03-28T22:00:45+01:00",
+      "last_reply": "2014-03-29T19:55:35+00:00",
+      "root_message_id": "msg-c6172778a37e"
+    },
+    {
+      "id": "thread-ecafcc3e9b75",
+      "subject": "R/Finance 2014 Registration now open",
+      "message_count": 1,
+      "participants": [
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2014-03-29T10:55:20-05:00",
+      "last_reply": "2014-03-29T10:55:20-05:00",
+      "root_message_id": "msg-ecafcc3e9b75"
+    },
+    {
+      "id": "thread-8b9617ab249c",
+      "subject": "quantstrat - stochastic oscillator overbought-oversold (OBOS) strategy",
+      "message_count": 1,
+      "participants": [
+        "amarjit chandhial"
+      ],
+      "started": "2014-03-31T09:34:18+01:00",
+      "last_reply": "2014-03-31T09:34:18+01:00",
+      "root_message_id": "msg-8b9617ab249c"
+    }
+  ]
+}

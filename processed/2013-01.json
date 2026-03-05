@@ -1,0 +1,1567 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2013-01",
+  "messages": [
+    {
+      "id": "msg-2db5fd2e0d44",
+      "message_id": "<1357112658435-4654391.post@n4.nabble.com>",
+      "from_name": "altaf",
+      "from_email_hash": "e2c6c02342376320e4ac37771b35d8ce57a4621bc54a8674409f75b937e3332e",
+      "date": "2013-01-01T23:44:18-08:00",
+      "subject": "[R-SIG-Finance] Rbbg package's CONNECTION_FAILURE",
+      "subject_clean": "Rbbg package's CONNECTION_FAILURE",
+      "in_reply_to": "<1356613227630-4654046.post@n4.nabble.com>",
+      "references": [
+        "<CAA7=MyVOMr1re0ZN=5D1hg6AqxgWQ5Ozx4XCmk+yaAdiVpfpyA@mail.gmail.com>",
+        "<CAA3Wa=seWG4VSxCbmsi9iZa6jYMFXBVVVFRFFaRsBX9DPjLfQA@mail.gmail.com>",
+        "<1356601226217-4654022.post@n4.nabble.com>",
+        "<COL125-W699FA61C3EC6533CA22778F380@phx.gbl>",
+        "<1356602654062-4654026.post@n4.nabble.com>",
+        "<COL125-W1686437030E060DE8C85F18F380@phx.gbl>",
+        "<1356604511937-4654031.post@n4.nabble.com>",
+        "<CABM-keFdUmCx+daCJCzsFaz5+mB4aF=pvpYBVJahbC+V3Uh+hQ@mail.gmail.com>",
+        "<CAA3Wa=uOv=Yazoah5hTm7f6CQ03S+m_M8=jHwkBO4d4EpcVOkA@mail.gmail.com>",
+        "<1356613227630-4654046.post@n4.nabble.com>"
+      ],
+      "body_plain": "Thanks to everyone for their suggestions here.  I managed to resolve the\nissue by going through the following steps:\n1)  Reinstall the Bloomberg Java API from WAPI <Go> on Bloomberg to make\nsure I had the Java API v.3 and point the Rbbg blp.connect() call to this\nversion.\n2)  Reinstall the JRE and JDK from Oracle to make sure I had the right\njavac.exe and add this version to the PATH.\n3)  To limit memory usage run 'memory.size(4095)' and add the parameters\n'jvm.params = \"-Xss1024k\", cache.responses = FALSE' to the blp.connect()\ncall.\n4)  Make sure bbcomm.exe was running.\n\nThanks again for all your help,\n\n\naltaf wrote\n> Thanks, John.  I found the other blpapi3.jar file and made sure I\n> specified that but then I got the following CONNECTION_FAILURE:\n> \n>> con.BBG <-\n>> blpConnect(blpapi.jar.file=\"C:\\\\blp\\\\API\\\\APIv3\\\\JavaAPI\\\\v3.5.1.1\\\\lib\\\\blpapi3.jar\")\n> R version 2.15.2 (2012-10-26) \n> rJava Version 0.9-3 \n> Rbbg Version 0.4-155 \n> Java environment initialized successfully.\n> Adding C:\\blp\\API\\APIv3\\JavaAPI\\v3.5.1.1\\lib\\blpapi3.jar to Java classpath\n> Error in .jnew(\"org/findata/blpwrapper/Connection\", java.log.level) : \n>   org.findata.blpwrapper.WrapperException: Session not started because:\n> CONNECTION_FAILURE\n> John Laing wrote\n>> A typical Bloomberg SDK installation includes 2 blpapi3.jar files. They\n>> are\n>> not the same, and for use with Rbbg one is \"right\" and one is \"wrong\". On\n>> my Windows box I have:\n>> right file: C:\\blp\\API\\APIv3\\JavaAPI\\v3.4.5.5\\lib\\blpapi3.jar\n>> wrong file: C:\\blp\\API\\blpapi3.jar\n>> \n>> I don't know the details of Altaf's installation, but I imagine it looks\n>> similar except that the root has been moved from C:\\blp to C:\\Program\n>> Files\\Bloomberg\\bloomberg. If you can find the other jar file buried in\n>> there you should be all set.\n>> \n>> -John\n>> \n>> \n>> On Thu, Dec 27, 2012 at 6:58 AM, Nuno Ramiro &lt;\n\n>> nunoramiro@\n\n>> &gt; wrote:\n>> \n>>> Hi,\n>>>\n>>> It looks like you might have a class path issue, i.e., Java is not able\n>>> to\n>>> find your WAPI jar/Java classes.\n>>>\n>>> I suggest that you double check that you have a blpapi3.jar file (or\n>>> similar) under C:\\Program Files\\Bloomberg\\bloomberg\\API, as that's the\n>>> required file.\n>>>\n>>> If you do, I would then suggest that you point the blpapi.jar.file\n>>> variable\n>>> to the correct jar, e.g.:\n>>>\n>>> blpConnect(blpapi.jar.file=\"C:\\\\Program\n>>> Files\\\\Bloomberg\\\\bloomberg\\\\API\\\\blpapi3.jar\")\n>>>\n>>> Hope it helps.\n>>>\n>>> Nuno\n>>>\n>>>\n>>> On 27 December 2012 10:35, altaf &lt;\n\n>> altaf.kassam@\n\n>> &gt; wrote:\n>>>\n>>> > Thanks again Julien.  The BBG isntallataion is centrally maintained\n>>> from\n>>> a\n>>> > package by my company's IT support and so I don't really have any\n>>> control\n>>> > over it and Bloomberg is so essential to my work (more, even than R)\n>>> that I\n>>> > don't really want to reinstall any part of it.\n>>> > I will alert the maintainer of this package as you suggest (John\n>>> Laing?)\n>>> > Thanks again and Happy Holidays!\n>>> >\n>>> >\n>>> >\n>>> > --\n>>> > View this message in context:\n>>> >\n>>> http://r.789695.n4.nabble.com/Rbbg-package-s-CONNECTION-FAILURE-tp4642600p4654031.html\n>>> > Sent from the Rmetrics mailing list archive at Nabble.com.\n>>> >\n>>> > _______________________________________________\n>>> > \n\n>> R-SIG-Finance@\n\n>>  mailing list\n>>> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> > -- Subscriber-posting only. If you want to post, subscribe first.\n>>> > -- Also note that this is not the r-help list where general R\n>>> questions\n>>> > should go.\n>>> >\n>>>\n>>>\n>>>\n>>> --\n>>> Nuno Ramiro\n>>>\n>>>         [[alternative HTML version deleted]]\n>>>\n>>> _______________________________________________\n>>> \n\n>> R-SIG-Finance@\n\n>>  mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>> -- Also note that this is not the r-help list where general R questions\n>>> should go.\n>>>\n>> \n>> \t[[alternative HTML version deleted]]\n>> \n>> _______________________________________________\n\n>> R-SIG-Finance@\n\n>>  mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n\n\n\n\n\n--\nView this message in context: http://r.789695.n4.nabble.com/Rbbg-package-s-CONNECTION-FAILURE-tp4642600p4654391.html\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "Thanks to everyone for their suggestions here.  I managed to resolve the\nissue by going through the following steps:\n1)  Reinstall the Bloomberg Java API from WAPI <Go> on Bloomberg to make\nsure I had",
+      "thread_id": "thread-2db5fd2e0d44",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-e6c00ef4917a",
+      "message_id": "<1357177858456-4654469.post@n4.nabble.com>",
+      "from_name": "rquantnoob",
+      "from_email_hash": "1de7e77469fe47f497f2ced74683ac3d1bea94b5a265726be3d72200eb1652b7",
+      "date": "2013-01-02T17:50:58-08:00",
+      "subject": "[R-SIG-Finance] Installed quantstrat along with blotter and FinancialInstrument but seems I'm missing .instrument",
+      "subject_clean": "Installed quantstrat along with blotter and FinancialInstrument but seems I'm missing .instrument",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I'm following quantstrat-I.pdf by Guy Yollin to learn the language.  But it\nseems the .instrument does not load for me as it does in the .pdf. \nInstalling quanstrat, installed 3 packages, \"blotter\",\"financialinstrument\"\nand \"quantstrat\".\n\n.PDF example\n\nR Code:\n> ls(all=T)\n[1] \".blotter\" \".instrument\"\n\n_______________________________\n\nMine.\n\n> ls(all=T)\n[1] \".blotter\"\n\nSince I'm missing \".instrument\" it isn't allowing me to follow through with\nthe next step.\n\nThe installation seemed to have gone through fine, please help.\n\nThank you.\n\n\n\n--\nView this message in context: http://r.789695.n4.nabble.com/Installed-quantstrat-along-with-blotter-and-FinancialInstrument-but-seems-I-m-missing-instrument-tp4654469.html\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "I'm following quantstrat-I.pdf by Guy Yollin to learn the language.  But it\nseems the .instrument does not load for me as it does in the .pdf. \nInstalling quanstrat, installed 3 packages, \"blotter\",\"f",
+      "thread_id": "thread-e6c00ef4917a",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-913838340dd2",
+      "message_id": "<CA+xi=qZCaC8hgWGUncy5WXDrqCM31X2JajnTBw74e=tqp3Rigg@mail.gmail.com>",
+      "from_name": "G See",
+      "from_email_hash": "9e2196e2f2c9a9c79bb5b29bd87645c7a75b58fc093ff9cf52d847253a97f8b1",
+      "date": "2013-01-02T20:04:13-06:00",
+      "subject": "[R-SIG-Finance] Installed quantstrat along with blotter and FinancialInstrument but seems I'm missing .instrument",
+      "subject_clean": "Installed quantstrat along with blotter and FinancialInstrument but seems I'm missing .instrument",
+      "in_reply_to": "<1357177858456-4654469.post@n4.nabble.com>",
+      "references": [
+        "<1357177858456-4654469.post@n4.nabble.com>"
+      ],
+      "body_plain": "The .instrument environment is now stored in the FinancialInstrument\nNAMESPACE.\n\n.instrument is now FinancialInstrument:::.instrument\n\n I don't know what the rest of the pdf does, so I'm not sure what's\nkeeping you from following through.  I suppose you could do this\nassignment\n\n.instrument <- FinancialInstrument:::.instrument\n\nI'd guess that will make things work for you since environments are by\nreference, but it's probably necessary.  What specifically is holding\nyou back?\n\nGarrett\n\n\n\n\n\nOn Wed, Jan 2, 2013 at 7:50 PM, rquantnoob <kpomichowski at gmail.com> wrote:\n> I'm following quantstrat-I.pdf by Guy Yollin to learn the language.  But it\n> seems the .instrument does not load for me as it does in the .pdf.\n> Installing quanstrat, installed 3 packages, \"blotter\",\"financialinstrument\"\n> and \"quantstrat\".\n>\n> .PDF example\n>\n> R Code:\n>> ls(all=T)\n> [1] \".blotter\" \".instrument\"\n>\n> _______________________________\n>\n> Mine.\n>\n>> ls(all=T)\n> [1] \".blotter\"\n>\n> Since I'm missing \".instrument\" it isn't allowing me to follow through with\n> the next step.\n>\n> The installation seemed to have gone through fine, please help.\n>\n> Thank you.\n>\n>\n>\n> --\n> View this message in context: http://r.789695.n4.nabble.com/Installed-quantstrat-along-with-blotter-and-FinancialInstrument-but-seems-I-m-missing-instrument-tp4654469.html\n> Sent from the Rmetrics mailing list archive at Nabble.com.\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "The .instrument environment is now stored in the FinancialInstrument\nNAMESPACE.\n\n.instrument is now FinancialInstrument:::.instrument\n\n I don't know what the rest of the pdf does, so I'm not sure what",
+      "thread_id": "thread-e6c00ef4917a",
+      "thread_depth": 1,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-f26a1959e157",
+      "message_id": "<CA+xi=qYt6NToO15f2r6mpM=gcnsfhjudhXFNgyDiOYLNrhPomQ@mail.gmail.com>",
+      "from_name": "G See",
+      "from_email_hash": "9e2196e2f2c9a9c79bb5b29bd87645c7a75b58fc093ff9cf52d847253a97f8b1",
+      "date": "2013-01-02T20:05:59-06:00",
+      "subject": "[R-SIG-Finance] Installed quantstrat along with blotter and FinancialInstrument but seems I'm missing .instrument",
+      "subject_clean": "Installed quantstrat along with blotter and FinancialInstrument but seems I'm missing .instrument",
+      "in_reply_to": "<CA+xi=qZCaC8hgWGUncy5WXDrqCM31X2JajnTBw74e=tqp3Rigg@mail.gmail.com>",
+      "references": [
+        "<1357177858456-4654469.post@n4.nabble.com>",
+        "<CA+xi=qZCaC8hgWGUncy5WXDrqCM31X2JajnTBw74e=tqp3Rigg@mail.gmail.com>"
+      ],
+      "body_plain": "I mean it's probably NOT necessary to assign it to your workspace.\n\nOn Wed, Jan 2, 2013 at 8:04 PM, G See <gsee000 at gmail.com> wrote:\n> The .instrument environment is now stored in the FinancialInstrument\n> NAMESPACE.\n>\n> .instrument is now FinancialInstrument:::.instrument\n>\n>  I don't know what the rest of the pdf does, so I'm not sure what's\n> keeping you from following through.  I suppose you could do this\n> assignment\n>\n> .instrument <- FinancialInstrument:::.instrument\n>\n> I'd guess that will make things work for you since environments are by\n> reference, but it's probably necessary.  What specifically is holding\n> you back?\n>\n> Garrett\n>\n>\n>\n>\n>\n> On Wed, Jan 2, 2013 at 7:50 PM, rquantnoob <kpomichowski at gmail.com> wrote:\n>> I'm following quantstrat-I.pdf by Guy Yollin to learn the language.  But it\n>> seems the .instrument does not load for me as it does in the .pdf.\n>> Installing quanstrat, installed 3 packages, \"blotter\",\"financialinstrument\"\n>> and \"quantstrat\".\n>>\n>> .PDF example\n>>\n>> R Code:\n>>> ls(all=T)\n>> [1] \".blotter\" \".instrument\"\n>>\n>> _______________________________\n>>\n>> Mine.\n>>\n>>> ls(all=T)\n>> [1] \".blotter\"\n>>\n>> Since I'm missing \".instrument\" it isn't allowing me to follow through with\n>> the next step.\n>>\n>> The installation seemed to have gone through fine, please help.\n>>\n>> Thank you.\n>>\n>>\n>>\n>> --\n>> View this message in context: http://r.789695.n4.nabble.com/Installed-quantstrat-along-with-blotter-and-FinancialInstrument-but-seems-I-m-missing-instrument-tp4654469.html\n>> Sent from the Rmetrics mailing list archive at Nabble.com.\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "I mean it's probably NOT necessary to assign it to your workspace.\n\nOn Wed, Jan 2, 2013 at 8:04 PM, G See <gsee000 at gmail.com> wrote:\n> The .instrument environment is now stored in the FinancialInst",
+      "thread_id": "thread-e6c00ef4917a",
+      "thread_depth": 2,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-47ec25c87b51",
+      "message_id": "<1357178894509-4654475.post@n4.nabble.com>",
+      "from_name": "rquantnoob",
+      "from_email_hash": "1de7e77469fe47f497f2ced74683ac3d1bea94b5a265726be3d72200eb1652b7",
+      "date": "2013-01-02T18:08:14-08:00",
+      "subject": "[R-SIG-Finance] Installed quantstrat along with blotter and FinancialInstrument but seems I'm missing .instrument",
+      "subject_clean": "Installed quantstrat along with blotter and FinancialInstrument but seems I'm missing .instrument",
+      "in_reply_to": "<CA+xi=qZCaC8hgWGUncy5WXDrqCM31X2JajnTBw74e=tqp3Rigg@mail.gmail.com>",
+      "references": [
+        "<1357177858456-4654469.post@n4.nabble.com>",
+        "<CA+xi=qZCaC8hgWGUncy5WXDrqCM31X2JajnTBw74e=tqp3Rigg@mail.gmail.com>"
+      ],
+      "body_plain": "First, thank you for taking your time to reply to my message.  \n\nHere is the next step that perhaps will shed light on what's happening. \n\n> currency(\"USD\")\n[1] \"USD\"\n\n > get(\"USD\",envir=.instrument)\nError in get(\"USD\", envir = .instrument) : object '.instrument' not found\n\n\n\n\n\n--\nView this message in context: http://r.789695.n4.nabble.com/Installed-quantstrat-along-with-blotter-and-FinancialInstrument-but-seems-I-m-missing-instrument-tp4654469p4654475.html\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "First, thank you for taking your time to reply to my message.  \n\nHere is the next step that perhaps will shed light on what's happening. \n\n> currency(\"USD\")\n[1] \"USD\"\n\n > get(\"USD\",envir=.instrument)\n",
+      "thread_id": "thread-e6c00ef4917a",
+      "thread_depth": 2,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-8f29bb188b68",
+      "message_id": "<CA+xi=qZPpRNfk1=UVVKpFmTSr4sgTjTJq_9z--GtF=eAMjjz2A@mail.gmail.com>",
+      "from_name": "G See",
+      "from_email_hash": "9e2196e2f2c9a9c79bb5b29bd87645c7a75b58fc093ff9cf52d847253a97f8b1",
+      "date": "2013-01-02T20:11:11-06:00",
+      "subject": "[R-SIG-Finance] Installed quantstrat along with blotter and FinancialInstrument but seems I'm missing .instrument",
+      "subject_clean": "Installed quantstrat along with blotter and FinancialInstrument but seems I'm missing .instrument",
+      "in_reply_to": "<1357178894509-4654475.post@n4.nabble.com>",
+      "references": [
+        "<1357177858456-4654469.post@n4.nabble.com>",
+        "<CA+xi=qZCaC8hgWGUncy5WXDrqCM31X2JajnTBw74e=tqp3Rigg@mail.gmail.com>",
+        "<1357178894509-4654475.post@n4.nabble.com>"
+      ],
+      "body_plain": "> getInstrument(\"USD\")\nprimary_id :\"USD\"\ncurrency   :\"USD\"\nmultiplier :1\ntick_size  :0.01\nidentifiers: list()\ntype       :\"currency\"\n\nPlease have a look at the demo directory of the package.\n\nBest,\nGarrett\n\nOn Wed, Jan 2, 2013 at 8:08 PM, rquantnoob <kpomichowski at gmail.com> wrote:\n> First, thank you for taking your time to reply to my message.\n>\n> Here is the next step that perhaps will shed light on what's happening.\n>\n>> currency(\"USD\")\n> [1] \"USD\"\n>\n>  > get(\"USD\",envir=.instrument)\n> Error in get(\"USD\", envir = .instrument) : object '.instrument' not found\n>\n>\n>\n>\n>\n> --\n> View this message in context: http://r.789695.n4.nabble.com/Installed-quantstrat-along-with-blotter-and-FinancialInstrument-but-seems-I-m-missing-instrument-tp4654469p4654475.html\n> Sent from the Rmetrics mailing list archive at Nabble.com.\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "> getInstrument(\"USD\")\nprimary_id :\"USD\"\ncurrency   :\"USD\"\nmultiplier :1\ntick_size  :0.01\nidentifiers: list()\ntype       :\"currency\"\n\nPlease have a look at the demo directory of the package.\n\nBest,\nGa",
+      "thread_id": "thread-e6c00ef4917a",
+      "thread_depth": 3,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-9ed31cb56772",
+      "message_id": "<CA+xi=qaU=u-uoCpazyccOvPz401BqV9EX53z4k9SstgRAtkNoQ@mail.gmail.com>",
+      "from_name": "G See",
+      "from_email_hash": "9e2196e2f2c9a9c79bb5b29bd87645c7a75b58fc093ff9cf52d847253a97f8b1",
+      "date": "2013-01-02T20:17:40-06:00",
+      "subject": "[R-SIG-Finance] Installed quantstrat along with blotter and FinancialInstrument but seems I'm missing .instrument",
+      "subject_clean": "Installed quantstrat along with blotter and FinancialInstrument but seems I'm missing .instrument",
+      "in_reply_to": "<CA+xi=qZPpRNfk1=UVVKpFmTSr4sgTjTJq_9z--GtF=eAMjjz2A@mail.gmail.com>",
+      "references": [
+        "<1357177858456-4654469.post@n4.nabble.com>",
+        "<CA+xi=qZCaC8hgWGUncy5WXDrqCM31X2JajnTBw74e=tqp3Rigg@mail.gmail.com>",
+        "<1357178894509-4654475.post@n4.nabble.com>",
+        "<CA+xi=qZPpRNfk1=UVVKpFmTSr4sgTjTJq_9z--GtF=eAMjjz2A@mail.gmail.com>"
+      ],
+      "body_plain": "If you specifically want to use \"get\"\n\n> get(\"USD\", envir=FinancialInstrument:::.instrument)\nprimary_id :\"USD\"\ncurrency   :\"USD\"\nmultiplier :1\ntick_size  :0.01\nidentifiers: list()\ntype       :\"currency\"\n\nor, I think this works too\n\n> .instrument <- FinancialInstrument:::.instrument\n> get(\"USD\", envir=.instrument)\nprimary_id :\"USD\"\ncurrency   :\"USD\"\nmultiplier :1\ntick_size  :0.01\nidentifiers: list()\ntype       :\"currency\"\n\nGarrett\n\nOn Wed, Jan 2, 2013 at 8:11 PM, G See <gsee000 at gmail.com> wrote:\n>> getInstrument(\"USD\")\n> primary_id :\"USD\"\n> currency   :\"USD\"\n> multiplier :1\n> tick_size  :0.01\n> identifiers: list()\n> type       :\"currency\"\n>\n> Please have a look at the demo directory of the package.\n>\n> Best,\n> Garrett\n>\n> On Wed, Jan 2, 2013 at 8:08 PM, rquantnoob <kpomichowski at gmail.com> wrote:\n>> First, thank you for taking your time to reply to my message.\n>>\n>> Here is the next step that perhaps will shed light on what's happening.\n>>\n>>> currency(\"USD\")\n>> [1] \"USD\"\n>>\n>>  > get(\"USD\",envir=.instrument)\n>> Error in get(\"USD\", envir = .instrument) : object '.instrument' not found\n>>\n>>\n>>\n>>\n>>\n>> --\n>> View this message in context: http://r.789695.n4.nabble.com/Installed-quantstrat-along-with-blotter-and-FinancialInstrument-but-seems-I-m-missing-instrument-tp4654469p4654475.html\n>> Sent from the Rmetrics mailing list archive at Nabble.com.\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "If you specifically want to use \"get\"\n\n> get(\"USD\", envir=FinancialInstrument:::.instrument)\nprimary_id :\"USD\"\ncurrency   :\"USD\"\nmultiplier :1\ntick_size  :0.01\nidentifiers: list()\ntype       :\"currenc",
+      "thread_id": "thread-e6c00ef4917a",
+      "thread_depth": 4,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-9d91629fd9ef",
+      "message_id": "<1357179675178-4654482.post@n4.nabble.com>",
+      "from_name": "rquantnoob",
+      "from_email_hash": "1de7e77469fe47f497f2ced74683ac3d1bea94b5a265726be3d72200eb1652b7",
+      "date": "2013-01-02T18:21:15-08:00",
+      "subject": "[R-SIG-Finance] Installed quantstrat along with blotter and FinancialInstrument but seems I'm missing .instrument",
+      "subject_clean": "Installed quantstrat along with blotter and FinancialInstrument but seems I'm missing .instrument",
+      "in_reply_to": "<CA+xi=qaU=u-uoCpazyccOvPz401BqV9EX53z4k9SstgRAtkNoQ@mail.gmail.com>",
+      "references": [
+        "<1357177858456-4654469.post@n4.nabble.com>",
+        "<CA+xi=qZCaC8hgWGUncy5WXDrqCM31X2JajnTBw74e=tqp3Rigg@mail.gmail.com>",
+        "<1357178894509-4654475.post@n4.nabble.com>",
+        "<CA+xi=qZPpRNfk1=UVVKpFmTSr4sgTjTJq_9z--GtF=eAMjjz2A@mail.gmail.com>",
+        "<CA+xi=qaU=u-uoCpazyccOvPz401BqV9EX53z4k9SstgRAtkNoQ@mail.gmail.com>"
+      ],
+      "body_plain": "That worked, you are awesome!\n\nThank you so much.\n\n\n\n--\nView this message in context: http://r.789695.n4.nabble.com/Installed-quantstrat-along-with-blotter-and-FinancialInstrument-but-seems-I-m-missing-instrument-tp4654469p4654482.html\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "That worked, you are awesome!\n\nThank you so much.\n\n\n\n--\nView this message in context: http://r.789695.n4.nabble.com/Installed-quantstrat-along-with-blotter-and-FinancialInstrument-but-seems-I-m-missin",
+      "thread_id": "thread-e6c00ef4917a",
+      "thread_depth": 5,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-4f44df681e5c",
+      "message_id": "<1357181881140-4654484.post@n4.nabble.com>",
+      "from_name": "rquantnoob",
+      "from_email_hash": "1de7e77469fe47f497f2ced74683ac3d1bea94b5a265726be3d72200eb1652b7",
+      "date": "2013-01-02T18:58:01-08:00",
+      "subject": "[R-SIG-Finance] Installed quantstrat along with blotter and FinancialInstrument but seems I'm missing .instrument",
+      "subject_clean": "Installed quantstrat along with blotter and FinancialInstrument but seems I'm missing .instrument",
+      "in_reply_to": "<CA+xi=qaU=u-uoCpazyccOvPz401BqV9EX53z4k9SstgRAtkNoQ@mail.gmail.com>",
+      "references": [
+        "<1357177858456-4654469.post@n4.nabble.com>",
+        "<CA+xi=qZCaC8hgWGUncy5WXDrqCM31X2JajnTBw74e=tqp3Rigg@mail.gmail.com>",
+        "<1357178894509-4654475.post@n4.nabble.com>",
+        "<CA+xi=qZPpRNfk1=UVVKpFmTSr4sgTjTJq_9z--GtF=eAMjjz2A@mail.gmail.com>",
+        "<CA+xi=qaU=u-uoCpazyccOvPz401BqV9EX53z4k9SstgRAtkNoQ@mail.gmail.com>"
+      ],
+      "body_plain": "I don't see your last post but I have the email.  Thank you for your\nsuggestion and I appreciate it, I started yesterday I'm really new, I'll\ntake anything at this point. :)\n\n\n\n--\nView this message in context: http://r.789695.n4.nabble.com/Installed-quantstrat-along-with-blotter-and-FinancialInstrument-but-seems-I-m-missing-instrument-tp4654469p4654484.html\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "I don't see your last post but I have the email.  Thank you for your\nsuggestion and I appreciate it, I started yesterday I'm really new, I'll\ntake anything at this point. :)\n\n\n\n--\nView this message in",
+      "thread_id": "thread-e6c00ef4917a",
+      "thread_depth": 5,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-90a2f3b249ea",
+      "message_id": "<CA+xi=qa49GtJLCKWwrRUntG=UvLyGcHAV9BxL7j3X13i2xszkQ@mail.gmail.com>",
+      "from_name": "G See",
+      "from_email_hash": "9e2196e2f2c9a9c79bb5b29bd87645c7a75b58fc093ff9cf52d847253a97f8b1",
+      "date": "2013-01-02T21:09:20-06:00",
+      "subject": "[R-SIG-Finance] Installed quantstrat along with blotter and FinancialInstrument but seems I'm missing .instrument",
+      "subject_clean": "Installed quantstrat along with blotter and FinancialInstrument but seems I'm missing .instrument",
+      "in_reply_to": "<1357181881140-4654484.post@n4.nabble.com>",
+      "references": [
+        "<1357177858456-4654469.post@n4.nabble.com>",
+        "<CA+xi=qZCaC8hgWGUncy5WXDrqCM31X2JajnTBw74e=tqp3Rigg@mail.gmail.com>",
+        "<1357178894509-4654475.post@n4.nabble.com>",
+        "<CA+xi=qZPpRNfk1=UVVKpFmTSr4sgTjTJq_9z--GtF=eAMjjz2A@mail.gmail.com>",
+        "<CA+xi=qaU=u-uoCpazyccOvPz401BqV9EX53z4k9SstgRAtkNoQ@mail.gmail.com>",
+        "<1357181881140-4654484.post@n4.nabble.com>"
+      ],
+      "body_plain": "I sent the e-mail to you directly and did not copy the list.  This is\na mailing list.  nabble makes it look like an online forum, but it is\nnot.  Most people receive and reply to messages as e-mails not with\nnabble.\n\nSince you mention it on-list, and people are curious beings, here's what I sent:\n\nOn Wed, Jan 2, 2013 at 7:50 PM, rquantnoob <kpomichowski at gmail.com> wrote:\n> I'm following quantstrat-I.pdf by Guy Yollin to learn the language.\n\nWith all due respect to Mr. Yollin and the authors of the packages\noutlined in that (now outdated) pdf, a better place to start learning\nR is \"An Introduction to R\"\n(http://cran.r-project.org/doc/manuals/R-intro.pdf).\n\nGarrett\n\nOn Wed, Jan 2, 2013 at 8:58 PM, rquantnoob <kpomichowski at gmail.com> wrote:\n> I don't see your last post but I have the email.  Thank you for your\n> suggestion and I appreciate it, I started yesterday I'm really new, I'll\n> take anything at this point. :)\n>\n>\n>\n> --\n> View this message in context: http://r.789695.n4.nabble.com/Installed-quantstrat-along-with-blotter-and-FinancialInstrument-but-seems-I-m-missing-instrument-tp4654469p4654484.html\n> Sent from the Rmetrics mailing list archive at Nabble.com.\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "I sent the e-mail to you directly and did not copy the list.  This is\na mailing list.  nabble makes it look like an online forum, but it is\nnot.  Most people receive and reply to messages as e-mails n",
+      "thread_id": "thread-e6c00ef4917a",
+      "thread_depth": 6,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-71dca3532f92",
+      "message_id": "<CAA7=MyXqs4rYvtisT-xkTB9pGN+wj+m2xGK-qx8PkpNOgFcJUA@mail.gmail.com>",
+      "from_name": "Robert A'gata",
+      "from_email_hash": "67ffc11191b5ddc8ff8e57473661a99cac154b0a14ba1f834aef3a4ed791e8b5",
+      "date": "2013-01-03T08:00:35-05:00",
+      "subject": "[R-SIG-Finance] Quantstrat runs quite slow on large data",
+      "subject_clean": "Quantstrat runs quite slow on large data",
+      "in_reply_to": "<CAA7=MyV=tQ4LaLwrnckimdNSRDMnqoQmv3rx1E8rNMtM73-gDw@mail.gmail.com>",
+      "references": [
+        "<CAA7=MyV=tQ4LaLwrnckimdNSRDMnqoQmv3rx1E8rNMtM73-gDw@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130103/be45808b/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130103/be45808b/attachment.pl>",
+      "thread_id": "thread-71dca3532f92",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-70dd43dfd103",
+      "message_id": "<CAA7=MyUS7jAx0gkka8GD1jCZGQja5HfiHYLNXrBAhheSD8Xc7g@mail.gmail.com>",
+      "from_name": "Robert A'gata",
+      "from_email_hash": "67ffc11191b5ddc8ff8e57473661a99cac154b0a14ba1f834aef3a4ed791e8b5",
+      "date": "2013-01-03T19:25:31-05:00",
+      "subject": "[R-SIG-Finance] Limit order and level in position limit in quantstrat",
+      "subject_clean": "Limit order and level in position limit in quantstrat",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130103/a7460732/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130103/a7460732/attachment.pl>",
+      "thread_id": "thread-70dd43dfd103",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-823d7a12157d",
+      "message_id": "<CAF=8oOZD_PRKWFgLLWiXkBS+on=1WAZkpxFE1+P05w2eEdzEVw@mail.gmail.com>",
+      "from_name": "Yolande Tra",
+      "from_email_hash": "8b7fc1f949eb8fa6531c50b5940bd6e8cafdf3a6d932928539dcd05066d91a9c",
+      "date": "2013-01-05T21:25:23-05:00",
+      "subject": "[R-SIG-Finance] dis aggregate from 3 month rolling average to monthly",
+      "subject_clean": "dis aggregate from 3 month rolling average to monthly",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130105/79a12ece/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130105/79a12ece/attachment.pl>",
+      "thread_id": "thread-823d7a12157d",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-c74bd55ad331",
+      "message_id": "<CABDUZc8wYMHA+vACVoNsDp3zdsUJborpTMU_CNxSb7f2KHiOqA@mail.gmail.com>",
+      "from_name": "Jeff Ryan",
+      "from_email_hash": "4c11198e12fc267ae3e3c06487930e8e9dd8ef89399ad783a1835a1dd01ce593",
+      "date": "2013-01-05T20:58:15-06:00",
+      "subject": "[R-SIG-Finance] dis aggregate from 3 month rolling average to monthly",
+      "subject_clean": "dis aggregate from 3 month rolling average to monthly",
+      "in_reply_to": "<CAF=8oOZD_PRKWFgLLWiXkBS+on=1WAZkpxFE1+P05w2eEdzEVw@mail.gmail.com>",
+      "references": [
+        "<CAF=8oOZD_PRKWFgLLWiXkBS+on=1WAZkpxFE1+P05w2eEdzEVw@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130105/c4a7b66a/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130105/c4a7b66a/attachment.pl>",
+      "thread_id": "thread-823d7a12157d",
+      "thread_depth": 1,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-0cf79cd562af",
+      "message_id": "<1357442784684-4654769.post@n4.nabble.com>",
+      "from_name": "ytra",
+      "from_email_hash": "8b7fc1f949eb8fa6531c50b5940bd6e8cafdf3a6d932928539dcd05066d91a9c",
+      "date": "2013-01-05T19:26:24-08:00",
+      "subject": "[R-SIG-Finance] dis aggregate from 3 month rolling average to monthly",
+      "subject_clean": "dis aggregate from 3 month rolling average to monthly",
+      "in_reply_to": "<CABDUZc8wYMHA+vACVoNsDp3zdsUJborpTMU_CNxSb7f2KHiOqA@mail.gmail.com>",
+      "references": [
+        "<CAF=8oOZD_PRKWFgLLWiXkBS+on=1WAZkpxFE1+P05w2eEdzEVw@mail.gmail.com>",
+        "<CABDUZc8wYMHA+vACVoNsDp3zdsUJborpTMU_CNxSb7f2KHiOqA@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Jeff,\n\nThank you for your reply and the link. The problem I have is that the\nfrequency is not quarterly. The values were smoothed already as 3 months\nmoving average. Hope to hear more for help.\n\nThanks.\n\n\n\n--\nView this message in context: http://r.789695.n4.nabble.com/dis-aggregate-from-3-month-rolling-average-to-monthly-tp4654765p4654769.html\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "Hi Jeff,\n\nThank you for your reply and the link. The problem I have is that the\nfrequency is not quarterly. The values were smoothed already as 3 months\nmoving average. Hope to hear more for help.\n\nTh",
+      "thread_id": "thread-823d7a12157d",
+      "thread_depth": 2,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-7869a941a648",
+      "message_id": "<CABDUZc_sU_EWk6q=6iTRequT8qDL43UUv=1XiX9BbREktV-kTg@mail.gmail.com>",
+      "from_name": "Jeff Ryan",
+      "from_email_hash": "4c11198e12fc267ae3e3c06487930e8e9dd8ef89399ad783a1835a1dd01ce593",
+      "date": "2013-01-05T21:37:18-06:00",
+      "subject": "[R-SIG-Finance] dis aggregate from 3 month rolling average to monthly",
+      "subject_clean": "dis aggregate from 3 month rolling average to monthly",
+      "in_reply_to": "<1357442784684-4654769.post@n4.nabble.com>",
+      "references": [
+        "<CAF=8oOZD_PRKWFgLLWiXkBS+on=1WAZkpxFE1+P05w2eEdzEVw@mail.gmail.com>",
+        "<CABDUZc8wYMHA+vACVoNsDp3zdsUJborpTMU_CNxSb7f2KHiOqA@mail.gmail.com>",
+        "<1357442784684-4654769.post@n4.nabble.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130105/9d33f4f6/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130105/9d33f4f6/attachment.pl>",
+      "thread_id": "thread-823d7a12157d",
+      "thread_depth": 3,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-694bae38ba1b",
+      "message_id": "<1357470220.97302.YahooMailNeo@web142301.mail.bf1.yahoo.com>",
+      "from_name": "v mande",
+      "from_email_hash": "3775e5cf796e7155c2b227508b6c2b0050997133b921ed3e9871a19de037a399",
+      "date": "2013-01-06T03:03:40-08:00",
+      "subject": "[R-SIG-Finance] (no subject)",
+      "subject_clean": "(no subject)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130106/29a4c19d/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130106/29a4c19d/attachment.pl>",
+      "thread_id": "thread-694bae38ba1b",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-c8aac7024f30",
+      "message_id": "<50E9873C.7020809@considine.net>",
+      "from_name": "Matt Considine",
+      "from_email_hash": "2cc8bd9d28bc161b5daff5fc0a3fc80cd17fe3fc6cdf726876f9143459c63ed3",
+      "date": "2013-01-06T09:16:28-05:00",
+      "subject": "[R-SIG-Finance] dis aggregate from 3 month rolling average to\tmonthly",
+      "subject_clean": "dis aggregate from 3 month rolling average to\tmonthly",
+      "in_reply_to": "<mailman.0.1357470002.14574.r-sig-finance@r-project.org>",
+      "references": [
+        "<mailman.0.1357470002.14574.r-sig-finance@r-project.org>"
+      ],
+      "body_plain": "You will need at least n actual, consecutive datapoints and knowledge of \nthe exact smoothing weights for an n-period smoothed series (or, \ngenerally, all the actual underlying data for one smoothed point).  From \nthere you can deconstruct not only the one corresponding smoothed \ndatapoint but also the datapoint that preceded and followed, by backing \nout the missing datapoint from the known smoothed value.  Then you work \nyour way up and down the time period to retrieve the series...\nMatt",
+      "body_snippet": "You will need at least n actual, consecutive datapoints and knowledge of \nthe exact smoothing weights for an n-period smoothed series (or, \ngenerally, all the actual underlying data for one smoothed p",
+      "thread_id": "thread-c8aac7024f30",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-1d9f2e3f9b83",
+      "message_id": "<CAF=8oOY4New1GCxHvQ58ggtEbX8bvcToczFkfKF6wUWwRLsTpw@mail.gmail.com>",
+      "from_name": "Yolande Tra",
+      "from_email_hash": "8b7fc1f949eb8fa6531c50b5940bd6e8cafdf3a6d932928539dcd05066d91a9c",
+      "date": "2013-01-06T10:18:57-05:00",
+      "subject": "[R-SIG-Finance] dis aggregate from 3 month rolling average to monthly",
+      "subject_clean": "dis aggregate from 3 month rolling average to monthly",
+      "in_reply_to": "<50E9873C.7020809@considine.net>",
+      "references": [
+        "<mailman.0.1357470002.14574.r-sig-finance@r-project.org>",
+        "<50E9873C.7020809@considine.net>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130106/57fc4fa5/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130106/57fc4fa5/attachment.pl>",
+      "thread_id": "thread-c8aac7024f30",
+      "thread_depth": 1,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-895af258b334",
+      "message_id": "<1357549835881-4654814.post@n4.nabble.com>",
+      "from_name": "intertodd",
+      "from_email_hash": "2af97d89776ad50606683d8b9a15799578aa9e8e4676d1a7e6d877a350e7c538",
+      "date": "2013-01-07T01:10:35-08:00",
+      "subject": "[R-SIG-Finance] Neural Network for trading",
+      "subject_clean": "Neural Network for trading",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi ,\n\nIm trying to develop some trading strategies based on neural network\ntheory..but Im quite new to this area..\n\nI checked neuralnet package which is built in the context of regression\nanalyses. Not exactly what I need..\n\nCan anyone help me with this issue. like what package should I use, what\nkinds of paper should I read etc..\n\nthanks guys\n\nLouis\n\n\n\n\n\n\n\n--\nView this message in context: http://r.789695.n4.nabble.com/Neural-Network-for-trading-tp4654814.html\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "Hi ,\n\nIm trying to develop some trading strategies based on neural network\ntheory..but Im quite new to this area..\n\nI checked neuralnet package which is built in the context of regression\nanalyses. No",
+      "thread_id": "thread-895af258b334",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-f5e3d3055e40",
+      "message_id": "<CAPtbhHwgDmvcfB3DT03smo9qpy+Q=-EOFfcewnyRsqUNK-73jw@mail.gmail.com>",
+      "from_name": "Suzen, Mehmet",
+      "from_email_hash": "e94e7b7fb4c4caf962a9c80d4311b38be10aced869b8240f5d248e0349ca78fd",
+      "date": "2013-01-07T11:12:59+01:00",
+      "subject": "[R-SIG-Finance] Neural Network for trading",
+      "subject_clean": "Neural Network for trading",
+      "in_reply_to": "<1357549835881-4654814.post@n4.nabble.com>",
+      "references": [
+        "<1357549835881-4654814.post@n4.nabble.com>"
+      ],
+      "body_plain": "Hey Louis,\n\nThere is a book called \"Biologically Inspired Algorithms for Financial\nModelling\" by\nBrabazon, Anthony and  O'Neill, Michael\n\nAlso, have a look at R package DEoptim.\n\nBest,\n-m\n\nOn 7 January 2013 10:10, intertodd <louisinuq at yahoo.com.au> wrote:\n> Hi ,\n>\n> Im trying to develop some trading strategies based on neural network\n> theory..but Im quite new to this area..\n>\n> I checked neuralnet package which is built in the context of regression\n> analyses. Not exactly what I need..\n>\n> Can anyone help me with this issue. like what package should I use, what\n> kinds of paper should I read etc..\n>\n> thanks guys\n>\n> Louis\n>\n>\n>\n>\n>\n>\n>\n> --\n> View this message in context: http://r.789695.n4.nabble.com/Neural-Network-for-trading-tp4654814.html\n> Sent from the Rmetrics mailing list archive at Nabble.com.\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Hey Louis,\n\nThere is a book called \"Biologically Inspired Algorithms for Financial\nModelling\" by\nBrabazon, Anthony and  O'Neill, Michael\n\nAlso, have a look at R package DEoptim.\n\nBest,\n-m\n\nOn 7 Januar",
+      "thread_id": "thread-895af258b334",
+      "thread_depth": 1,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-6f8d4db2c378",
+      "message_id": "<1357559088921-4654827.post@n4.nabble.com>",
+      "from_name": "a1492dc",
+      "from_email_hash": "e41ed976d6bc999d040c72ad49a4a07852eac5b31c3eec414dde7aa4cb557109",
+      "date": "2013-01-07T03:44:48-08:00",
+      "subject": "[R-SIG-Finance] Neural Network for trading",
+      "subject_clean": "Neural Network for trading",
+      "in_reply_to": "<1357549835881-4654814.post@n4.nabble.com>",
+      "references": [
+        "<1357549835881-4654814.post@n4.nabble.com>"
+      ],
+      "body_plain": "Hi,\n\ntry this article. \n\nhttp://www.inside-r.org/howto/time-series-analysis-and-order-prediction-r\n\nIt could be useful.\n\nBye\nA.\n\n\n\n--\nView this message in context: http://r.789695.n4.nabble.com/Neural-Network-for-trading-tp4654814p4654827.html\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "Hi,\n\ntry this article. \n\nhttp://www.inside-r.org/howto/time-series-analysis-and-order-prediction-r\n\nIt could be useful.\n\nBye\nA.\n\n\n\n--\nView this message in context: http://r.789695.n4.nabble.com/Neural",
+      "thread_id": "thread-895af258b334",
+      "thread_depth": 1,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-e814f648cc96",
+      "message_id": "<1357714167818-4655006.post@n4.nabble.com>",
+      "from_name": "intertodd",
+      "from_email_hash": "2af97d89776ad50606683d8b9a15799578aa9e8e4676d1a7e6d877a350e7c538",
+      "date": "2013-01-08T22:49:28-08:00",
+      "subject": "[R-SIG-Finance] wavelet analyisis to denoising time series",
+      "subject_clean": "wavelet analyisis to denoising time series",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi everyone,\n\nIm trying to use wavelet analysis to denoising time series data(stock index)\nin order to perform a SVM forecast..\nlike use  db4, sqtwolog,4 levels...\n\nThere are a few packages avaliable with R:\nwavelets: A package of funtions for computing wavelet filters, wavelet\ntransforms and multiresolution analyses. \n\nwaveslim: Basic wavelet routines for one-, two- and three-dimensional signal\nprocessing. \n\nwavethresh: Wavelets statistics and transforms. \n\nwmtsa: Insightful Wavelet Methods for Time Series Analysis\n\ncan anyone tell me which package should I use or maybe some codes please...\n\nthanks guys\n\nBest Regards\n\nLouis\n\n\n\n--\nView this message in context: http://r.789695.n4.nabble.com/wavelet-analyisis-to-denoising-time-series-tp4655006.html\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "Hi everyone,\n\nIm trying to use wavelet analysis to denoising time series data(stock index)\nin order to perform a SVM forecast..\nlike use  db4, sqtwolog,4 levels...\n\nThere are a few packages avaliable ",
+      "thread_id": "thread-e814f648cc96",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-d3263d670688",
+      "message_id": "<E2339A3600811248AB525B8FAB3A1BCE8C51360E@srv-mail-101.zhaw.ch>",
+      "from_name": "Wildi Marc (wlmr)",
+      "from_email_hash": "e127ded159142062ef61242cd7111ae506a2a3aab4d62d2e165a1d33487069bf",
+      "date": "2013-01-09T09:05:17Z",
+      "subject": "[R-SIG-Finance] wavelet analyisis to denoising time series",
+      "subject_clean": "wavelet analyisis to denoising time series",
+      "in_reply_to": "<1357714167818-4655006.post@n4.nabble.com>",
+      "references": [
+        "<1357714167818-4655006.post@n4.nabble.com>"
+      ],
+      "body_plain": "Before you get involved too deeply into this application please consider that wavelets are not well-suited for the task you intend to perform (SVM forecasting).\n-Wavelets are well-suited for a posteriori data-analysis in the middle of a time series\n-They fail to behave well towards the sample boundaries (the last data point).\nBut you're free to allocate your time as you want, of course.\n\nMarc\n\n\n________________________________________\nVon: r-sig-finance-bounces at r-project.org [r-sig-finance-bounces at r-project.org]&quot; im Auftrag von &quot;intertodd [louisinuq at yahoo.com.au]\nGesendet: Mittwoch, 9. Januar 2013 07:49\nAn: r-sig-finance at r-project.org\nBetreff: [R-SIG-Finance] wavelet analyisis to denoising time series\n\nHi everyone,\n\nIm trying to use wavelet analysis to denoising time series data(stock index)\nin order to perform a SVM forecast..\nlike use  db4, sqtwolog,4 levels...\n\nThere are a few packages avaliable with R:\nwavelets: A package of funtions for computing wavelet filters, wavelet\ntransforms and multiresolution analyses.\n\nwaveslim: Basic wavelet routines for one-, two- and three-dimensional signal\nprocessing.\n\nwavethresh: Wavelets statistics and transforms.\n\nwmtsa: Insightful Wavelet Methods for Time Series Analysis\n\ncan anyone tell me which package should I use or maybe some codes please...\n\nthanks guys\n\nBest Regards\n\nLouis\n\n\n\n--\nView this message in context: http://r.789695.n4.nabble.com/wavelet-analyisis-to-denoising-time-series-tp4655006.html\nSent from the Rmetrics mailing list archive at Nabble.com.\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Before you get involved too deeply into this application please consider that wavelets are not well-suited for the task you intend to perform (SVM forecasting).\n-Wavelets are well-suited for a posteri",
+      "thread_id": "thread-e814f648cc96",
+      "thread_depth": 1,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-1a557a673dad",
+      "message_id": "<1357741644.75982.YahooMailNeo@web172506.mail.ir2.yahoo.com>",
+      "from_name": "Alexander Gracian",
+      "from_email_hash": "c257f8ed15d3b726e0ae638124511114ee6afbffa32e07a27e73f17f554cc4a9",
+      "date": "2013-01-09T14:27:24Z",
+      "subject": "[R-SIG-Finance] Junior Quantitative Strategist role",
+      "subject_clean": "Junior Quantitative Strategist role",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130109/60d33f1f/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130109/60d33f1f/attachment.pl>",
+      "thread_id": "thread-1a557a673dad",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-816b1723f25e",
+      "message_id": "<50EDED2E.8090301@gmail.com>",
+      "from_name": "Worik Stanton",
+      "from_email_hash": "ef9581e816f90e639197e5f42df9d3f6ad989116121781a4abfc05dc8d7cd413",
+      "date": "2013-01-10T11:20:30+13:00",
+      "subject": "[R-SIG-Finance] Minor bug in addSAR",
+      "subject_clean": "Minor bug in addSAR",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "> getSymbols(\"YHOO\")\n > YH <- YHOO[,-5] # Remove volume\n > chartSeries(YH, subset='2012-11::2013-01-07')\n > addSAR()\n\nThe SAR plot extends off the plot area.\n\nUsing chart_Series(..) it is the same except that the background colour \nof the plot is changed from white to black.\n\ncheers\nWorik\n-- \nOvercoming poverty is not a task of charity, it is an act of justice",
+      "body_snippet": "> getSymbols(\"YHOO\")\n > YH <- YHOO[,-5] # Remove volume\n > chartSeries(YH, subset='2012-11::2013-01-07')\n > addSAR()\n\nThe SAR plot extends off the plot area.\n\nUsing chart_Series(..) it is the same exc",
+      "thread_id": "thread-816b1723f25e",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-ec6d48eaaa65",
+      "message_id": "<50EE535C.50809@organicfoodmarkets.com.au>",
+      "from_name": "Stephen Choularton",
+      "from_email_hash": "be50afa784ca5d067902f310283ce1e85a162aa45ff41ca22e7220432c1408b1",
+      "date": "2013-01-10T16:36:28+11:00",
+      "subject": "[R-SIG-Finance] programming opportunity",
+      "subject_clean": "programming opportunity",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi\n\nI'm looking for someone to re-implement Ngai Hang Chan's Trading with \nCointegration Pairs (p235 Time Series book) using the ASX SPI (200)\n\nIf successful could lead on to IBroker programming to implement dealing \nalgorithm.\n\n\n-- \nStephen Choularton PhD, FIoD",
+      "body_snippet": "Hi\n\nI'm looking for someone to re-implement Ngai Hang Chan's Trading with \nCointegration Pairs (p235 Time Series book) using the ASX SPI (200)\n\nIf successful could lead on to IBroker programming to im",
+      "thread_id": "thread-ec6d48eaaa65",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-6dde3d254a0e",
+      "message_id": "<CALBLFAWBvLwyA=o366kj8vLcXOgLQ_Z-3xQaTd7CBczhrtLKkw@mail.gmail.com>",
+      "from_name": "asfdoij asfoij",
+      "from_email_hash": "0309ea624de1685599ef758fda68b20db5e491a26d8670733fb1eb2c972a8db8",
+      "date": "2013-01-10T05:32:11-08:00",
+      "subject": "[R-SIG-Finance] How to retrieve standard errors of cointegrating vector from vars/urca ?",
+      "subject_clean": "How to retrieve standard errors of cointegrating vector from vars/urca ?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130110/992e9c8d/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130110/992e9c8d/attachment.pl>",
+      "thread_id": "thread-6dde3d254a0e",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-207cd004620a",
+      "message_id": "<CAEXmNQAcHE0gjkDtiP2xVKZzB=m3wXWSQgWpCiEGg9H3CMXZXQ@mail.gmail.com>",
+      "from_name": "jaimie villanueva",
+      "from_email_hash": "89710ff6f806b34caf52bf14f83044d7494659c65ac6fcc6f8c306affffd14e1",
+      "date": "2013-01-11T20:50:01+01:00",
+      "subject": "[R-SIG-Finance] Fitting RSLN models",
+      "subject_clean": "Fitting RSLN models",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130111/bd8d0c92/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130111/bd8d0c92/attachment.pl>",
+      "thread_id": "thread-207cd004620a",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-c2c4206458ec",
+      "message_id": "<CA+xi=qZO6DWPFyUdDs1ydanNPGBgJ-hBc6Ux1jKCjwa11i6LuA@mail.gmail.com>",
+      "from_name": "G See",
+      "from_email_hash": "9e2196e2f2c9a9c79bb5b29bd87645c7a75b58fc093ff9cf52d847253a97f8b1",
+      "date": "2013-01-11T13:56:29-06:00",
+      "subject": "[R-SIG-Finance] Fitting RSLN models",
+      "subject_clean": "Fitting RSLN models",
+      "in_reply_to": "<CAEXmNQAcHE0gjkDtiP2xVKZzB=m3wXWSQgWpCiEGg9H3CMXZXQ@mail.gmail.com>",
+      "references": [
+        "<CAEXmNQAcHE0gjkDtiP2xVKZzB=m3wXWSQgWpCiEGg9H3CMXZXQ@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130111/57e815d7/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130111/57e815d7/attachment.pl>",
+      "thread_id": "thread-207cd004620a",
+      "thread_depth": 1,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-fcd25f35f92f",
+      "message_id": "<CA+xi=qZjxrFJPN5nMyoYttedcoaw7pT1_7fndCw9GdOb8EbcNg@mail.gmail.com>",
+      "from_name": "G See",
+      "from_email_hash": "9e2196e2f2c9a9c79bb5b29bd87645c7a75b58fc093ff9cf52d847253a97f8b1",
+      "date": "2013-01-11T14:02:53-06:00",
+      "subject": "[R-SIG-Finance] Fitting RSLN models",
+      "subject_clean": "Fitting RSLN models",
+      "in_reply_to": "<CA+xi=qZO6DWPFyUdDs1ydanNPGBgJ-hBc6Ux1jKCjwa11i6LuA@mail.gmail.com>",
+      "references": [
+        "<CAEXmNQAcHE0gjkDtiP2xVKZzB=m3wXWSQgWpCiEGg9H3CMXZXQ@mail.gmail.com>",
+        "<CA+xi=qZO6DWPFyUdDs1ydanNPGBgJ-hBc6Ux1jKCjwa11i6LuA@mail.gmail.com>"
+      ],
+      "body_plain": "Sorry for the html, I'm having a hell of a time getting gmail to\nconsistently send plain text.\n\n\nLooks like the code has been removed in Rev. 8.  You can still get\nRev. 7, but since the author removed the code, maybe you don't want it\nafterall?\n\nsvn checkout svn://svn.r-forge.r-project.org/svnroot/rsln/@7\n\nIf the above line doesn't make sense, see\n\nhttp://stackoverflow.com/questions/11105131/cannot-install-r-forge-package-using-install-packages/11105132#11105132\n\nGarrett\n\nOn Fri, Jan 11, 2013 at 1:56 PM, G See <gsee000 at gmail.com> wrote:\n> Looks like the code has been removed in Rev. 8.  You can still get Rev. 7,\n> but since the author removed the code, maybe you don't want it afterall?\n>\n> svn checkout svn://svn.r-forge.r-project.org/svnroot/rsln/@7\n>\n> If the above line doesn't make sense, see\n>\n> http://stackoverflow.com/questions/11105131/cannot-install-r-forge-package-using-install-packages/11105132#11105132\n>\n> Garrett\n>\n> On Fri, Jan 11, 2013 at 1:50 PM, jaimie villanueva\n> <jaimie.villanueva at gmail.com> wrote:\n>>\n>> Fitting RSLN\n>\n>\n>",
+      "body_snippet": "Sorry for the html, I'm having a hell of a time getting gmail to\nconsistently send plain text.\n\n\nLooks like the code has been removed in Rev. 8.  You can still get\nRev. 7, but since the author removed",
+      "thread_id": "thread-207cd004620a",
+      "thread_depth": 2,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-4b989ce073b3",
+      "message_id": "<DUB107-ds523F0E3516C73A505A4C1D3290@phx.gbl>",
+      "from_name": "Simone Gogna",
+      "from_email_hash": "2c2cc75e7f9afd5d4c5eabc4eff341032acb7334a692b13b52f5c71939ac8799",
+      "date": "2013-01-11T21:34:38+01:00",
+      "subject": "[R-SIG-Finance] high frequency italian market data",
+      "subject_clean": "high frequency italian market data",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130111/fe112b5c/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130111/fe112b5c/attachment.pl>",
+      "thread_id": "thread-4b989ce073b3",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-bb8f5e4c813c",
+      "message_id": "<15B75F17-8083-4469-BFA7-1742401A5AD8@gmail.com>",
+      "from_name": "Michael Weylandt",
+      "from_email_hash": "44e8775a589b9ef81880469e200f3cce307c7180b4289ca1696a578afb772b3a",
+      "date": "2013-01-11T22:33:39Z",
+      "subject": "[R-SIG-Finance] high frequency italian market data",
+      "subject_clean": "high frequency italian market data",
+      "in_reply_to": "<DUB107-ds523F0E3516C73A505A4C1D3290@phx.gbl>",
+      "references": [
+        "<DUB107-ds523F0E3516C73A505A4C1D3290@phx.gbl>"
+      ],
+      "body_plain": "Intraday data usually requires a paid data subscription. Do you have any particular source in mind?\n\nMW\n\nOn Jan 11, 2013, at 8:34 PM, \"Simone Gogna\" <singletonthebest at msn.com> wrote:\n\n> Dear R users,\n> I hope this is not an already discussed topic. I tried with RSiteSearch(?high frequency italian market data?) but I was not successful in the research.\n> I need to download data of the price of italian stocks with the highest possible frequency. \n> I know that, for example, in the library tseries\n> \n> get.hist.quote(\"\",start=())\n> \n> would give me Open-High-Low-Close price but, as fas as get.hist.quote is concerned this gives me only data at daily frequency at most.\n> I wonder if there is something similar that allows to import data of the italian stock market with frequencies of, at least, one hour.\n> \n> thanks and best regards,\n> Simone Gogna\n>    [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Intraday data usually requires a paid data subscription. Do you have any particular source in mind?\n\nMW\n\nOn Jan 11, 2013, at 8:34 PM, \"Simone Gogna\" <singletonthebest at msn.com> wrote:\n\n> Dear R user",
+      "thread_id": "thread-4b989ce073b3",
+      "thread_depth": 1,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-bb82ee5ad21e",
+      "message_id": "<DUB405-EAS1876969F0DE3A6169D946EED3290@phx.gbl>",
+      "from_name": "singletonthebest",
+      "from_email_hash": "2c2cc75e7f9afd5d4c5eabc4eff341032acb7334a692b13b52f5c71939ac8799",
+      "date": "2013-01-11T23:40:05+01:00",
+      "subject": "[R-SIG-Finance] R: Re:  high frequency italian market data",
+      "subject_clean": "R: Re:  high frequency italian market data",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130111/a6e7a043/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130111/a6e7a043/attachment.pl>",
+      "thread_id": "thread-bb82ee5ad21e",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-6a2b2d5a3e75",
+      "message_id": "<CAAmySGPSBU-K_ePjbnGwCFrn+PHUOMLc5qBMxun1k-G6g0HwzQ@mail.gmail.com>",
+      "from_name": "R. Michael Weylandt",
+      "from_email_hash": "44e8775a589b9ef81880469e200f3cce307c7180b4289ca1696a578afb772b3a",
+      "date": "2013-01-11T22:45:00Z",
+      "subject": "[R-SIG-Finance] high frequency italian market data",
+      "subject_clean": "high frequency italian market data",
+      "in_reply_to": "<DUB405-EAS1876969F0DE3A6169D946EED3290@phx.gbl>",
+      "references": [
+        "<DUB405-EAS1876969F0DE3A6169D946EED3290@phx.gbl>"
+      ],
+      "body_plain": "Backtesting we can do; historical intraday data, not so much (to the\nbest of my knowledge) -- sorry...\n\nMW\n\nOn Fri, Jan 11, 2013 at 10:40 PM, singletonthebest\n<singletonthebest at msn.com> wrote:\n> Thanks for the answers!\n> Michael: no particular source in mind. Actually I was hoping to find\n> something for free even if I knew it would have been not much likely.\n> The purpose of my request was due to the fact that I was willing to backtest\n> with R some strategy that requires intraday data.\n>\n>\n>\n>\n>\n> Michael Weylandt <michael.weylandt at gmail.com> ha scritto:\n>\n> Intraday data usually requires a paid data subscription. Do you have any\n> particular source in mind?\n>\n> MW\n>\n> On Jan 11, 2013, at 8:34 PM, \"Simone Gogna\" <singletonthebest at msn.com>\n> wrote:\n>\n>> Dear R users,\n>> I hope this is not an already discussed topic. I tried with\n>> RSiteSearch(?high frequency italian market data?) but I was not successful\n>> in the research.\n>> I need to download data of the price of italian stocks with the highest\n>> possible frequency.\n>> I know that, for example, in the library tseries\n>>\n>> get.hist.quote(\"\",start=())\n>>\n>> would give me Open-High-Low-Close price but, as fas as get.hist.quote is\n>> concerned this gives me only data at daily frequency at most.\n>> I wonder if there is something similar that allows to import data of the\n>> italian stock market with frequencies of, at least, one hour.\n>>\n>> thanks and best regards,\n>> Simone Gogna\n>>    [[alternative HTML version deleted]]\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.",
+      "body_snippet": "Backtesting we can do; historical intraday data, not so much (to the\nbest of my knowledge) -- sorry...\n\nMW\n\nOn Fri, Jan 11, 2013 at 10:40 PM, singletonthebest\n<singletonthebest at msn.com> wrote:\n> Th",
+      "thread_id": "thread-bb82ee5ad21e",
+      "thread_depth": 1,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-05f523be5274",
+      "message_id": "<50F0B9C0.7000905@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2013-01-11T19:17:52-06:00",
+      "subject": "[R-SIG-Finance] R: Re:  high frequency italian market data",
+      "subject_clean": "R: Re:  high frequency italian market data",
+      "in_reply_to": "<DUB405-EAS1876969F0DE3A6169D946EED3290@phx.gbl>",
+      "references": [
+        "<DUB405-EAS1876969F0DE3A6169D946EED3290@phx.gbl>"
+      ],
+      "body_plain": "On 01/11/2013 04:40 PM, singletonthebest wrote:\n> Thanks for the answers!\n> Michael: no particular source in mind. Actually I was hoping to find something for free even if I knew it would have been not much likely.?\n> The purpose of my request was due to the fact that I was willing to backtest with R some strategy that requires intraday data.\n\nTry Interactive Brokers.  The IBrokers R package can download intraday \ndata.  You may be able to use a free paper trading account to get some \ndata.  Typically, though, you have to pay for quality intraday data.\n\n-- \nBrian",
+      "body_snippet": "On 01/11/2013 04:40 PM, singletonthebest wrote:\n> Thanks for the answers!\n> Michael: no particular source in mind. Actually I was hoping to find something for free even if I knew it would have been no",
+      "thread_id": "thread-bb82ee5ad21e",
+      "thread_depth": 1,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-65bdd873a6de",
+      "message_id": "<CABDUZc9=ChQHwvnwBQsnM7Su3D3fbSzM_ZX9uaPB6gnySU19sw@mail.gmail.com>",
+      "from_name": "Jeff Ryan",
+      "from_email_hash": "4c11198e12fc267ae3e3c06487930e8e9dd8ef89399ad783a1835a1dd01ce593",
+      "date": "2013-01-11T19:38:54-06:00",
+      "subject": "[R-SIG-Finance] R: Re: high frequency italian market data",
+      "subject_clean": "R: Re: high frequency italian market data",
+      "in_reply_to": "<50F0B9C0.7000905@braverock.com>",
+      "references": [
+        "<DUB405-EAS1876969F0DE3A6169D946EED3290@phx.gbl>",
+        "<50F0B9C0.7000905@braverock.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130111/b53e49d4/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130111/b53e49d4/attachment.pl>",
+      "thread_id": "thread-bb82ee5ad21e",
+      "thread_depth": 2,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-650014e29b3f",
+      "message_id": "<771AE4FBFBCF204D819D8B346ACFCB7419C9EF29@USPMSEXC110N01.na.blkint.com>",
+      "from_name": "Maheshwari, Dhruv",
+      "from_email_hash": "038c6ff59deb38ea52fe14639cacb16334c64587166c0ad83f39f73f12cfe755",
+      "date": "2013-01-14T06:35:44Z",
+      "subject": "[R-SIG-Finance] blotter date question",
+      "subject_clean": "blotter date question",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\nI was planning on using blotter for a project, and I've looked through the demos, but I'm having difficulty understanding some behavior in the simple example below. The initial account equity is set to exactly the close for SPY on 2012-01-03, and one share is bought @ 127.5. But as I examine the ending equity for a series of dates, it appears to correspond to the *following* day's close. Similarly, the output from PortfReturns implies the share purchased on Jan 3 experienced a return (that day) from Jan 3 -> 4, which seems odd. I must be missing something simple -- perhaps a subtle timezone issue or something.\n\n-- Main output:\n> getTxns('tst','SPY')\n           Txn.Qty Txn.Price Txn.Fees Txn.Value Txn.Avg.Cost Net.Txn.Realized.PL\n2011-12-31       0       0.0        0       0.0          0.0                   0\n2012-01-03       1     127.5        0     127.5        127.5                   0\n> getEndEq('tst','2012-01-03')\n[1] 127.7\n> getEndEq('tst','2012-01-04')\n[1] 128.04\n> head(PortfReturns('tst'),4)\n                            SPY\n2011-12-31 00:00:00 0.000000000\n2012-01-03 00:00:00 0.000000000\n2012-01-03 19:00:00 0.001568627\n2012-01-04 19:00:00 0.002666667\n> head(Cl(SPY), 3)\n           SPY.Close\n2012-01-03    127.50\n2012-01-04    127.70\n2012-01-05    128.04\n\n-- Code:\nrequire(blotter)\nrequire(quantmod)\n\n# basic set up / data retrieval\ncurrency('USD')\nstock('SPY',currency='USD',multiplier=1)\ngetSymbols('SPY',from='2012-01-01',to='2012-12-31',src='yahoo', index.class=c(\"Date\"))\n\n# initial equity = price of SPY on txn.date\ninit.date = '2011-12-31'\ntxn.date = '2012-01-03'\nprice = as.numeric(Cl(SPY)[txn.date])\n\n# portfolio/acct set up\n.blotter <- new.env() \ninitPortf('tst', symbols='SPY', currency=\"USD\", initDate=init.date)\ninitAcct(name='tst', portfolios='tst', initEq=price, currency='USD', initDate=init.date)\n\n# add transaction\naddTxn(Portfolio='tst', Symbol='SPY', TxnDate=txn.date, TxnQty=1, TxnPrice=price)\n\n# updates\nupdatePortf(Portfolio='tst', Dates='2012')\nupdateAcct('tst', '2012')\nupdateEndEq('tst','2012')\n\n# result\ngetTxns('tst','SPY')\ngetEndEq('tst','2012-01-03')\ngetEndEq('tst','2012-01-04')\nhead(PortfReturns('tst'),4)\nhead(Cl(SPY), 3)\n\n\n\nThanks!\nDhruv\n\nP.S. sessionInfo (blotter, FinancialInstrument, quantmod all built from SVN this evening):\n\nR version 2.15.1 (2012-06-22)\nPlatform: i386-pc-mingw32/i386 (32-bit)\n\nlocale:\n[1] LC_COLLATE=English_United States.1252  LC_CTYPE=English_United States.1252    LC_MONETARY=English_United States.1252\n[4] LC_NUMERIC=C                           LC_TIME=English_United States.1252    \n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base     \n\nother attached packages:\n [1] qmao_1.4.7                XML_3.95-0.1              gdata_2.12.0              blotter_0.8.13            FinancialInstrument_1.1.2\n [6] quantmod_0.4-0            TTR_0.21-1                Defaults_1.1-1            xts_0.9-1                 zoo_1.7-9                \n\nloaded via a namespace (and not attached):\n [1] bitops_1.0-5     caTools_1.14     digest_0.6.0     grid_2.15.1      gtools_2.7.0     lattice_0.20-13  pander_0.3       RCurl_1.95-3    \n [9] RJSONIO_1.0-1    shiny_0.2.4      tools_2.15.1     websockets_1.1.7 xtable_1.7-0\n\n\n\n\n\nTHIS MESSAGE AND ANY ATTACHMENTS ARE CONFIDENTIAL, PROPRIETARY, AND MAY BE PRIVILEGED.  If this message was misdirected, BlackRock, Inc. and its subsidiaries, (\"BlackRock\") does not waive any confidentiality or privilege.  If you are not the intended recipient, please notify us immediately and destroy the message without disclosing its contents to anyone.  Any distribution, use or copying of this e-mail or the information it contains by other than an intended recipient is unauthorized.  The views and opinions expressed in this e-mail message are the author's own and may not reflect the views and opinions of BlackRock, unless the author is authorized by BlackRock to express such views or opinions on its behalf.  All email sent to or from this address is subject to electronic storage and review by BlackRock.  Although BlackRock operates anti-virus programs, it does not accept responsibility for any damage whatsoever caused by viruses being passed.",
+      "body_snippet": "Hi,\nI was planning on using blotter for a project, and I've looked through the demos, but I'm having difficulty understanding some behavior in the simple example below. The initial account equity is s",
+      "thread_id": "thread-650014e29b3f",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-0b1f0e5b1e58",
+      "message_id": "<771AE4FBFBCF204D819D8B346ACFCB7419CA625D@USPMSEXC110N01.na.blkint.com>",
+      "from_name": "Maheshwari, Dhruv",
+      "from_email_hash": "038c6ff59deb38ea52fe14639cacb16334c64587166c0ad83f39f73f12cfe755",
+      "date": "2013-01-14T15:34:42Z",
+      "subject": "[R-SIG-Finance] blotter date question",
+      "subject_clean": "blotter date question",
+      "in_reply_to": "<771AE4FBFBCF204D819D8B346ACFCB7419C9EF29@USPMSEXC110N01.na.blkint.com>",
+      "references": [
+        "<771AE4FBFBCF204D819D8B346ACFCB7419C9EF29@USPMSEXC110N01.na.blkint.com>"
+      ],
+      "body_plain": "Someone pointed out to me off-list that the PortfReturns time-stamps of 1900 indicate some sort of timezone offset. Indeed, I am in EST (GMT -5).\n\nDoing something like\nSys.setenv(TZ=\"UTC\") or Sys.setenv(TZ=\"GMT \")\n\nSeems to resolve the issue. I understand that blotter uses POSIXct/POSIXlt under the hood, but I wonder why this requires setting my own timezone to GMT. I use xts quite a bit for daily data with indexClass POSIXct, and this hasn't come up, so clarifications on this point would be helpful for my understanding of the package.\n\nRegards,\nDhruv\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at r-project.org [mailto:r-sig-finance-bounces at r-project.org] On Behalf Of Maheshwari, Dhruv\nSent: Monday, January 14, 2013 01:36\nTo: 'r-sig-finance at r-project.org'\nSubject: [R-SIG-Finance] blotter date question\n\nHi,\nI was planning on using blotter for a project, and I've looked through the demos, but I'm having difficulty understanding some behavior in the simple example below. The initial account equity is set to exactly the close for SPY on 2012-01-03, and one share is bought @ 127.5. But as I examine the ending equity for a series of dates, it appears to correspond to the *following* day's close. Similarly, the output from PortfReturns implies the share purchased on Jan 3 experienced a return (that day) from Jan 3 -> 4, which seems odd. I must be missing something simple -- perhaps a subtle timezone issue or something.\n\n-- Main output:\n> getTxns('tst','SPY')\n           Txn.Qty Txn.Price Txn.Fees Txn.Value Txn.Avg.Cost Net.Txn.Realized.PL\n2011-12-31       0       0.0        0       0.0          0.0                   0\n2012-01-03       1     127.5        0     127.5        127.5                   0\n> getEndEq('tst','2012-01-03')\n[1] 127.7\n> getEndEq('tst','2012-01-04')\n[1] 128.04\n> head(PortfReturns('tst'),4)\n                            SPY\n2011-12-31 00:00:00 0.000000000\n2012-01-03 00:00:00 0.000000000\n2012-01-03 19:00:00 0.001568627\n2012-01-04 19:00:00 0.002666667\n> head(Cl(SPY), 3)\n           SPY.Close\n2012-01-03    127.50\n2012-01-04    127.70\n2012-01-05    128.04\n\n-- Code:\nrequire(blotter)\nrequire(quantmod)\n\n# basic set up / data retrieval\ncurrency('USD')\nstock('SPY',currency='USD',multiplier=1)\ngetSymbols('SPY',from='2012-01-01',to='2012-12-31',src='yahoo', index.class=c(\"Date\"))\n\n# initial equity = price of SPY on txn.date init.date = '2011-12-31'\ntxn.date = '2012-01-03'\nprice = as.numeric(Cl(SPY)[txn.date])\n\n# portfolio/acct set up\n.blotter <- new.env()\ninitPortf('tst', symbols='SPY', currency=\"USD\", initDate=init.date) initAcct(name='tst', portfolios='tst', initEq=price, currency='USD', initDate=init.date)\n\n# add transaction\naddTxn(Portfolio='tst', Symbol='SPY', TxnDate=txn.date, TxnQty=1, TxnPrice=price)\n\n# updates\nupdatePortf(Portfolio='tst', Dates='2012') updateAcct('tst', '2012')\nupdateEndEq('tst','2012')\n\n# result\ngetTxns('tst','SPY')\ngetEndEq('tst','2012-01-03')\ngetEndEq('tst','2012-01-04')\nhead(PortfReturns('tst'),4)\nhead(Cl(SPY), 3)\n\n\n\nThanks!\nDhruv\n\nP.S. sessionInfo (blotter, FinancialInstrument, quantmod all built from SVN this evening):\n\nR version 2.15.1 (2012-06-22)\nPlatform: i386-pc-mingw32/i386 (32-bit)\n\nlocale:\n[1] LC_COLLATE=English_United States.1252  LC_CTYPE=English_United States.1252    LC_MONETARY=English_United States.1252\n[4] LC_NUMERIC=C                           LC_TIME=English_United States.1252    \n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base     \n\nother attached packages:\n [1] qmao_1.4.7                XML_3.95-0.1              gdata_2.12.0              blotter_0.8.13            FinancialInstrument_1.1.2\n [6] quantmod_0.4-0            TTR_0.21-1                Defaults_1.1-1            xts_0.9-1                 zoo_1.7-9                \n\nloaded via a namespace (and not attached):\n [1] bitops_1.0-5     caTools_1.14     digest_0.6.0     grid_2.15.1      gtools_2.7.0     lattice_0.20-13  pander_0.3       RCurl_1.95-3    \n [9] RJSONIO_1.0-1    shiny_0.2.4      tools_2.15.1     websockets_1.1.7 xtable_1.7-0\n\n\n\nTHIS MESSAGE AND ANY ATTACHMENTS ARE CONFIDENTIAL, PROPRIETARY, AND MAY BE PRIVILEGED.  If this message was misdirected, BlackRock, Inc. and its subsidiaries, (\"BlackRock\") does not waive any confidentiality or privilege.  If you are not the intended recipient, please notify us immediately and destroy the message without disclosing its contents to anyone.  Any distribution, use or copying of this e-mail or the information it contains by other than an intended recipient is unauthorized.  The views and opinions expressed in this e-mail message are the author's own and may not reflect the views and opinions of BlackRock, unless the author is authorized by BlackRock to express such views or opinions on its behalf.  All email sent to or from this address is subject to electronic storage and review by BlackRock.  Although BlackRock operates anti-virus programs, it does not accept responsibility for any damage whatsoever caused by viruses being passed.",
+      "body_snippet": "Someone pointed out to me off-list that the PortfReturns time-stamps of 1900 indicate some sort of timezone offset. Indeed, I am in EST (GMT -5).\n\nDoing something like\nSys.setenv(TZ=\"UTC\") or Sys.sete",
+      "thread_id": "thread-650014e29b3f",
+      "thread_depth": 1,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-fdc0f563e020",
+      "message_id": "<CAA7=MyXo7ra7Nnc3bO1+8X0VzC_=ezU0M6PUz-z8qmj-7CGDFw@mail.gmail.com>",
+      "from_name": "Robert A'gata",
+      "from_email_hash": "67ffc11191b5ddc8ff8e57473661a99cac154b0a14ba1f834aef3a4ed791e8b5",
+      "date": "2013-01-14T22:00:24-05:00",
+      "subject": "[R-SIG-Finance] Search for best parameter set when backtesting",
+      "subject_clean": "Search for best parameter set when backtesting",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130114/35abc902/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130114/35abc902/attachment.pl>",
+      "thread_id": "thread-fdc0f563e020",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-4f53dbda70b2",
+      "message_id": "<8E3B434C-EE7C-48F9-B4C5-2BDAED346542@gmail.com>",
+      "from_name": "jkaprich at gmail.com",
+      "from_email_hash": "fa86f8886071c41ac595cb1dab5f07c17a9a473c24ae894f259cab51829dfb1d",
+      "date": "2013-01-15T12:48:50-06:00",
+      "subject": "[R-SIG-Finance] DEoptim Risk Return Scatter Plot",
+      "subject_clean": "DEoptim Risk Return Scatter Plot",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nWhat is the best function to print a risk return scatter plot of a DEoptim object?\n\nI saw such a chart in The R Journal Vol.3/1, June 2011, but have been unable to recreate it. My charting capabilities in R are weak, but improving.\n\nThanks for your help.\n\nSent from my iPhone",
+      "body_snippet": "Hi,\n\nWhat is the best function to print a risk return scatter plot of a DEoptim object?\n\nI saw such a chart in The R Journal Vol.3/1, June 2011, but have been unable to recreate it. My charting capabi",
+      "thread_id": "thread-4f53dbda70b2",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-6f305bb43606",
+      "message_id": "<CAPPM_gRw39NS=zLLvSbwf-oYP09LcGGdzi58OWP4hiQzs+FSkw@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2013-01-15T13:16:15-06:00",
+      "subject": "[R-SIG-Finance] DEoptim Risk Return Scatter Plot",
+      "subject_clean": "DEoptim Risk Return Scatter Plot",
+      "in_reply_to": "<8E3B434C-EE7C-48F9-B4C5-2BDAED346542@gmail.com>",
+      "references": [
+        "<8E3B434C-EE7C-48F9-B4C5-2BDAED346542@gmail.com>"
+      ],
+      "body_plain": "I would email the author(s) of the article and ask for the code they used.\n\nBest,\n--\nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\n\nR/Finance 2013: Applied Finance with R  | www.RinFinance.com\n\n\nOn Tue, Jan 15, 2013 at 12:48 PM,  <jkaprich at gmail.com> wrote:\n> Hi,\n>\n> What is the best function to print a risk return scatter plot of a DEoptim object?\n>\n> I saw such a chart in The R Journal Vol.3/1, June 2011, but have been unable to recreate it. My charting capabilities in R are weak, but improving.\n>\n> Thanks for your help.\n>\n> Sent from my iPhone\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "I would email the author(s) of the article and ask for the code they used.\n\nBest,\n--\nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\n\nR/Finance 2013: Applied Finance with ",
+      "thread_id": "thread-4f53dbda70b2",
+      "thread_depth": 1,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-042c505ca15b",
+      "message_id": "<1358312542.81952.YahooMailNeo@web161904.mail.bf1.yahoo.com>",
+      "from_name": "Wei Wu",
+      "from_email_hash": "4d6a9be5fe813d20bb514ee4c30b79dfed78e3ab8a403f3574c80b4edc95dfef",
+      "date": "2013-01-15T21:02:22-08:00",
+      "subject": "[R-SIG-Finance] Can any of the GARCH model R packages handle seasonality ?",
+      "subject_clean": "Can any of the GARCH model R packages handle seasonality ?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I hope this is the correct list to submit this question. I am relatively new to this list and to GARCH modeling.\n?\n1. Is there any GARCH model R package that can handle seasonality in the data series?\n2. For example, for intraday financial data, it is clearly the volatility is relatively high at the open and close. To me it seems like a seasonality/periodic effect.\n3. When doing GARCH modeling for intraday data, how do people handle the gap inter-day?\n4. Any suggestion of which GARCH r package has features built in to handle intraday data?\n?\nThanks",
+      "body_snippet": "I hope this is the correct list to submit this question. I am relatively new to this list and to GARCH modeling.\n?\n1. Is there any GARCH model R package that can handle seasonality in the data series?",
+      "thread_id": "thread-042c505ca15b",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-96bef8697d43",
+      "message_id": "<1CD1AB10-780F-4134-BA4C-AC4868F9C4A7@gmail.com>",
+      "from_name": "jkaprich at gmail.com",
+      "from_email_hash": "fa86f8886071c41ac595cb1dab5f07c17a9a473c24ae894f259cab51829dfb1d",
+      "date": "2013-01-18T00:58:43-06:00",
+      "subject": "[R-SIG-Finance] PerformanceAnalytics CoSkewness Function",
+      "subject_clean": "PerformanceAnalytics CoSkewness Function",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Running ES using...\n\nMethod = \"modified\"\n\nData is a timeSeries object (SC.Adjusted) with 12 variables.\n\nWhen calculating m3, do I follow ...\n\nCoSkewness (SC.Adjusted, SC.Adjusted)\n\nAppreciate your help.\n\nSent from my iPhone",
+      "body_snippet": "Running ES using...\n\nMethod = \"modified\"\n\nData is a timeSeries object (SC.Adjusted) with 12 variables.\n\nWhen calculating m3, do I follow ...\n\nCoSkewness (SC.Adjusted, SC.Adjusted)\n\nAppreciate your hel",
+      "thread_id": "thread-96bef8697d43",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-89b0ba775a7d",
+      "message_id": "<50F9209D.6000809@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2013-01-18T04:14:53-06:00",
+      "subject": "[R-SIG-Finance] PerformanceAnalytics CoSkewness Function",
+      "subject_clean": "PerformanceAnalytics CoSkewness Function",
+      "in_reply_to": "<1CD1AB10-780F-4134-BA4C-AC4868F9C4A7@gmail.com>",
+      "references": [
+        "<1CD1AB10-780F-4134-BA4C-AC4868F9C4A7@gmail.com>"
+      ],
+      "body_plain": "On 01/18/2013 12:58 AM, jkaprich at gmail.com wrote:\n> Running ES using...\n>\n> Method = \"modified\"\n>\n> Data is a timeSeries object (SC.Adjusted) with 12 variables.\n>\n> When calculating m3, do I follow ...\n>\n> CoSkewness (SC.Adjusted, SC.Adjusted)\n>\n> Appreciate your help.\n\nWhat about the documentation isn't clear?\n\nYou haven't followed the posting guide and provided a reproducible \nexample, so it is rather difficult to guess what you are talking about.\n\n\"a timeSeries object (SC.Adjusted) with 12 variables\" doesn't tell me \nwhether you have a returns object with 12 columns, where each column \nrepresents the returns of one asset or whether you have twelve \nobservations on a single return series.\n\nIf you have a univariate series, as the documentation says, you will use \nthe skewness of the series as m3, see ?skewness\n\nIf you have a multivariate series, and you're doing component ES, you \nwill again follow the documentation and use the coskewness matrix.  see \n?CoSkewnessMatrix\n\nIf you want the math, it is also all in the documentation (I suggest \nlooking at the pdf version so that the math will be laid out nicely) and \nin even more detail in the references.\n\nGiven that R doesn't run on an iPhone, perhaps next time you would be so \nkind as to construct a reproducible example on your computer and use the \nbrowser interface to gmail to provide a bit more detail on your query \n(providing your name wouldn't hurt either).\n\nRegards,\n\n    - Brian\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
+      "body_snippet": "On 01/18/2013 12:58 AM, jkaprich at gmail.com wrote:\n> Running ES using...\n>\n> Method = \"modified\"\n>\n> Data is a timeSeries object (SC.Adjusted) with 12 variables.\n>\n> When calculating m3, do I follow",
+      "thread_id": "thread-96bef8697d43",
+      "thread_depth": 1,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-fb63fdb73a3f",
+      "message_id": "<CAEXmNQDmpimhATAkOfTjFr0A1w6NAS5Jp3Vw42BwVWSEuczeFg@mail.gmail.com>",
+      "from_name": "jaimie villanueva",
+      "from_email_hash": "89710ff6f806b34caf52bf14f83044d7494659c65ac6fcc6f8c306affffd14e1",
+      "date": "2013-01-20T17:33:25+01:00",
+      "subject": "[R-SIG-Finance] Help with rugarch",
+      "subject_clean": "Help with rugarch",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130120/54acab04/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130120/54acab04/attachment.pl>",
+      "thread_id": "thread-fb63fdb73a3f",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-54aae081d7ff",
+      "message_id": "<61D74828-2671-4272-BCD6-7042E20767EB@4dscape.com>",
+      "from_name": "Alexios Ghalanos",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2013-01-20T17:51:43Z",
+      "subject": "[R-SIG-Finance] Help with rugarch",
+      "subject_clean": "Help with rugarch",
+      "in_reply_to": "<CAEXmNQDmpimhATAkOfTjFr0A1w6NAS5Jp3Vw42BwVWSEuczeFg@mail.gmail.com>",
+      "references": [
+        "<CAEXmNQDmpimhATAkOfTjFr0A1w6NAS5Jp3Vw42BwVWSEuczeFg@mail.gmail.com>"
+      ],
+      "body_plain": "Try updating Rcpp and RcppArmadillo.\n\n-Alexios\n\n\nOn Jan 20, 2013, at 16:33, jaimie villanueva <jaimie.villanueva at gmail.com> wrote:\n\n> Hi R users,\n> \n> I've just updated my rugarch package version from \"rugarch_1.0-8\" to\n> \"rugarch_1.0-16\" and I'm getting a warning message never happened before.\n> \n> This is the code I'm working with:.\n> \n> *spec2=ugarchspec(variance.model = list(model = \"sGARCH\", garchOrder = c(1,\n> 1)),mean.model = list(armaOrder = c(0,0), include.mean =\n> F),distribution.model = \"norm\")*\n> *modelo2=ugarchfit(spec2,Ut,solver = \"solnp\")*\n> *modelo2*\n> \n> When I run this, I get the following message:\n> \n> *> spec2=ugarchspec(variance.model = list(model = \"sGARCH\", garchOrder =\n> c(1, 1)),mean.model = list(armaOrder = c(0,0), include.mean =\n> F),distribution.model = \"norm\")*\n> *> modelo2=ugarchfit(spec2,d_Ut,solver = \"solnp\")*\n> *Error in .hessian2sidedcpp(f, ipars[estidx, 1], arglist = arglist) : *\n> *  SET_VECTOR_ELT() can only be applied to a 'list', not a 'symbol'*\n> \n> The problem might be in relation with the version change, as this code\n> works perfectly with my former version (\"rugarch_1.0-8\")\n> \n> I don't know what this message stands for, so It would be apreciated any\n> suggestion on this.\n> \n> Jaimie.\n> -- \n> *Jaimie.*\n> \n>    [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Try updating Rcpp and RcppArmadillo.\n\n-Alexios\n\n\nOn Jan 20, 2013, at 16:33, jaimie villanueva <jaimie.villanueva at gmail.com> wrote:\n\n> Hi R users,\n> \n> I've just updated my rugarch package version f",
+      "thread_id": "thread-fb63fdb73a3f",
+      "thread_depth": 1,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-617dee956631",
+      "message_id": "<CAPPM_gTFZT90QB3=jiPzByAKntnWG=HBvzTChy+rUQeUj3NT2Q@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2013-01-20T12:57:07-06:00",
+      "subject": "[R-SIG-Finance] Minor bug in addSAR",
+      "subject_clean": "Minor bug in addSAR",
+      "in_reply_to": "<50EDED2E.8090301@gmail.com>",
+      "references": [
+        "<50EDED2E.8090301@gmail.com>"
+      ],
+      "body_plain": "On Wed, Jan 9, 2013 at 4:20 PM, Worik Stanton <worik.stanton at gmail.com> wrote:\n>> getSymbols(\"YHOO\")\n>> YH <- YHOO[,-5] # Remove volume\n>> chartSeries(YH, subset='2012-11::2013-01-07')\n>> addSAR()\n>\n> The SAR plot extends off the plot area.\n>\nIf you consider this a bug in addSAR, then it's a bug in all the\noverlay functions (i.e. all moving averages, Bollinger Bands, ZigZag,\netc.).  It would be nice if the overlay functions checked and revised\nthe y-axis limits, but it's probably more than a trivial patch.\n\n> Using chart_Series(..) it is the same except that the background colour of\n> the plot is changed from white to black.\n>\nThere is no add_SAR, so I'm not sure how you got (or expected)\nreasonable results by combining chart_Series with addSAR.\n\n> cheers\n> Worik\n> --\n> Overcoming poverty is not a task of charity, it is an act of justice\n>\n\nBest,\n--\nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\n\nR/Finance 2013: Applied Finance with R  | www.RinFinance.com",
+      "body_snippet": "On Wed, Jan 9, 2013 at 4:20 PM, Worik Stanton <worik.stanton at gmail.com> wrote:\n>> getSymbols(\"YHOO\")\n>> YH <- YHOO[,-5] # Remove volume\n>> chartSeries(YH, subset='2012-11::2013-01-07')\n>> addSAR()\n",
+      "thread_id": "thread-816b1723f25e",
+      "thread_depth": 1,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-50fdf9117297",
+      "message_id": "<bcd82c864f05143ed436636b5fa8e24e@mail.gmail.com>",
+      "from_name": "Michael Berman",
+      "from_email_hash": "a490ecef8222ca2d893f6d2ca9cf000749af00e061850f52bf64b58440fcf91e",
+      "date": "2013-01-21T22:42:07+11:00",
+      "subject": "[R-SIG-Finance] RAPA Trader Database Available to R Community for Download",
+      "subject_clean": "RAPA Trader Database Available to R Community for Download",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130121/a1ab5a7e/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130121/a1ab5a7e/attachment.pl>",
+      "thread_id": "thread-50fdf9117297",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-8e034686f839",
+      "message_id": "<1358812337455-4656211.post@n4.nabble.com>",
+      "from_name": "SebastianBrown",
+      "from_email_hash": "e6b72ef174c1a9da1aec7500f8f36918af45a7e77f3d0d7cfd0e0b15e4301d2a",
+      "date": "2013-01-21T15:52:17-08:00",
+      "subject": "[R-SIG-Finance] Rbbg",
+      "subject_clean": "Rbbg",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI've installed Rbbg and have the latest software from Bloomberg running on\nmy workstation and BBComm is running. However, when running blpconnect, I\nrun into the following problem\n\n> library(Rbbg)\nLoading required package: rJava\n> con.BBG <- blpconnect()\nError: could not find function \"blpconnect\"\n> con.BBG <- blpConnect()\nR version 2.15.2 (2012-10-26) \nrJava Version 0.9-3 \nRbbg Version 0.4-155 \nJava environment initialized successfully.\nLooking for most recent blpapi3.jar file...\nAdding C:\\blp\\API\\APIv3\\JavaAPI\\v3.5.1.1\\lib\\blpapi3.jar to Java classpath\nError in .jnew(\"org/findata/blpwrapper/Connection\", java.log.level) : \n  org.findata.blpwrapper.WrapperException: Session not started because:\nCONNECTION_FAILURE\n> \n\nAny help with this would be much appreciated. Thanks a lot.\n\nBest,\nSebastian\n\n\n\n--\nView this message in context: http://r.789695.n4.nabble.com/Rbbg-tp4656211.html\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "Hi,\n\nI've installed Rbbg and have the latest software from Bloomberg running on\nmy workstation and BBComm is running. However, when running blpconnect, I\nrun into the following problem\n\n> library(Rbbg",
+      "thread_id": "thread-8e034686f839",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-a87b2e337e57",
+      "message_id": "<C2C1FBAD-D75B-4E3F-B502-F45A6BC57F01@gmail.com>",
+      "from_name": "Pierre-Alexandre des Mazis",
+      "from_email_hash": "83f2e5d0515fcdbcee668c2c913271c987484dd4869f7e604960b27bde5bbee3",
+      "date": "2013-01-22T00:03:14Z",
+      "subject": "[R-SIG-Finance] Rbbg",
+      "subject_clean": "Rbbg",
+      "in_reply_to": "<1358812337455-4656211.post@n4.nabble.com>",
+      "references": [
+        "<1358812337455-4656211.post@n4.nabble.com>"
+      ],
+      "body_plain": "Hi,\n\nusing Rbbg is isually pretty straighforward if the path of your bloomberg files is the default one.\nConfirm that you have a valid licence for bloomberg and that you are currently logged in on the same machine\n\nRgds\n\n\nOn 21 Jan 2013, at 23:52, SebastianBrown <sebastian.brown.v at gmail.com> wrote:\n\n> Hi,\n> \n> I've installed Rbbg and have the latest software from Bloomberg running on\n> my workstation and BBComm is running. However, when running blpconnect, I\n> run into the following problem\n> \n>> library(Rbbg)\n> Loading required package: rJava\n>> con.BBG <- blpconnect()\n> Error: could not find function \"blpconnect\"\n>> con.BBG <- blpConnect()\n> R version 2.15.2 (2012-10-26) \n> rJava Version 0.9-3 \n> Rbbg Version 0.4-155 \n> Java environment initialized successfully.\n> Looking for most recent blpapi3.jar file...\n> Adding C:\\blp\\API\\APIv3\\JavaAPI\\v3.5.1.1\\lib\\blpapi3.jar to Java classpath\n> Error in .jnew(\"org/findata/blpwrapper/Connection\", java.log.level) : \n>  org.findata.blpwrapper.WrapperException: Session not started because:\n> CONNECTION_FAILURE\n> \n> Any help with this would be much appreciated. Thanks a lot.\n> \n> Best,\n> Sebastian\n> \n> \n> \n> --\n> View this message in context: http://r.789695.n4.nabble.com/Rbbg-tp4656211.html\n> Sent from the Rmetrics mailing list archive at Nabble.com.\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Hi,\n\nusing Rbbg is isually pretty straighforward if the path of your bloomberg files is the default one.\nConfirm that you have a valid licence for bloomberg and that you are currently logged in on the",
+      "thread_id": "thread-8e034686f839",
+      "thread_depth": 1,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-9da29157a46f",
+      "message_id": "<1358813239973-4656214.post@n4.nabble.com>",
+      "from_name": "SebastianBrown",
+      "from_email_hash": "e6b72ef174c1a9da1aec7500f8f36918af45a7e77f3d0d7cfd0e0b15e4301d2a",
+      "date": "2013-01-21T16:07:19-08:00",
+      "subject": "[R-SIG-Finance] Rbbg",
+      "subject_clean": "Rbbg",
+      "in_reply_to": "<C2C1FBAD-D75B-4E3F-B502-F45A6BC57F01@gmail.com>",
+      "references": [
+        "<1358812337455-4656211.post@n4.nabble.com>",
+        "<C2C1FBAD-D75B-4E3F-B502-F45A6BC57F01@gmail.com>"
+      ],
+      "body_plain": "Thanks for your reply.\n\nI do have a valid license for Bloomberg and I am logged into the same\nworkstation.\n\nIn terms of the location of the program, Bloomberg is installed in\nC:\\Program Files\\Bloomberg and I have installed the SDK into C:\\blp\\\n\n\n\n--\nView this message in context: http://r.789695.n4.nabble.com/Rbbg-tp4656211p4656214.html\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "Thanks for your reply.\n\nI do have a valid license for Bloomberg and I am logged into the same\nworkstation.\n\nIn terms of the location of the program, Bloomberg is installed in\nC:\\Program Files\\Bloomber",
+      "thread_id": "thread-8e034686f839",
+      "thread_depth": 2,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-734e1472fe28",
+      "message_id": "<1358856656808-4656254.post@n4.nabble.com>",
+      "from_name": "SebastianBrown",
+      "from_email_hash": "e6b72ef174c1a9da1aec7500f8f36918af45a7e77f3d0d7cfd0e0b15e4301d2a",
+      "date": "2013-01-22T04:10:56-08:00",
+      "subject": "[R-SIG-Finance] Rbbg",
+      "subject_clean": "Rbbg",
+      "in_reply_to": "<1358827387133-4656232.post@n4.nabble.com>",
+      "references": [
+        "<1358812337455-4656211.post@n4.nabble.com>",
+        "<C2C1FBAD-D75B-4E3F-B502-F45A6BC57F01@gmail.com>",
+        "<1358813239973-4656214.post@n4.nabble.com>",
+        "<1358827387133-4656232.post@n4.nabble.com>"
+      ],
+      "body_plain": "This is what I get when I do traceback():\n\n> con.BBG <-  blpConnect()\nR version 2.15.2 (2012-10-26) \nrJava Version 0.9-3 \nRbbg Version 0.4-155 \nJava environment initialized successfully.\nLooking for most recent blpapi3.jar file...\nAdding C:\\blp\\API\\APIv3\\JavaAPI\\v3.5.1.1\\lib\\blpapi3.jar to Java classpath\nError in .jnew(\"org/findata/blpwrapper/Connection\", java.log.level) : \n  org.findata.blpwrapper.WrapperException: Session not started because:\nCONNECTION_FAILURE\n> traceback()\n7: stop(list(message = \"org.findata.blpwrapper.WrapperException: Session not\nstarted because: CONNECTION_FAILURE\", \n       call = .jnew(\"org/findata/blpwrapper/Connection\", java.log.level), \n       jobj = <S4 object of class \"jobjRef\">))\n6: .External(RcreateObject, class, ..., silent = silent)\n5: .jnew(\"org/findata/blpwrapper/Connection\", java.log.level)\n4: blpConnect.Java(\"warning\", NULL, TRUE, NULL, TRUE, FALSE)\n3: eval(expr, envir, enclos)\n2: eval(fn.call)\n1: blpConnect()\n\nThanks\n\n\n\n--\nView this message in context: http://r.789695.n4.nabble.com/Rbbg-tp4656211p4656254.html\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "This is what I get when I do traceback():\n\n> con.BBG <-  blpConnect()\nR version 2.15.2 (2012-10-26) \nrJava Version 0.9-3 \nRbbg Version 0.4-155 \nJava environment initialized successfully.\nLooking for m",
+      "thread_id": "thread-734e1472fe28",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-d52d06face92",
+      "message_id": "<1359128988.7263.YahooMailNeo@web2818.biz.mail.ne1.yahoo.com>",
+      "from_name": "Thomas P. Fuller",
+      "from_email_hash": "3b021161fd989322bc154aa1ec05003531fe2816e6e657e0af3d1cbc6bbe2eed",
+      "date": "2013-01-25T07:49:48-08:00",
+      "subject": "[R-SIG-Finance] Coherent Datafeed: Historic Time Series Data from Thomson Reuters is available",
+      "subject_clean": "Coherent Datafeed: Historic Time Series Data from Thomson Reuters is available",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130125/5df71fc6/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130125/5df71fc6/attachment.pl>",
+      "thread_id": "thread-d52d06face92",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-c575a1b90216",
+      "message_id": "<51050272.5060904@gmail.com>",
+      "from_name": "Nikos Rachmanis",
+      "from_email_hash": "d795a4b5166e23994ceb4211b86639a0dd9bfe418436e78bccdc6bdc21a5c10e",
+      "date": "2013-01-27T05:33:22-05:00",
+      "subject": "[R-SIG-Finance] Conversion of xts to ts object",
+      "subject_clean": "Conversion of xts to ts object",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi all,\n\nI am trying to convert a xts to ts object in order to use with \ndecompose() and forecast() functions.\n\nI am currently using the following command which works:\n\ntsdata<-ts(tradedata$dif,frequency=252)\n\nwhere tradedata is the xts object.\n\nI would feel more comfortable if i did not have to set the trading days \nin advance cause I am dealing with many years of daily data. I have \nsearch the internet but most people suggest similar ways.\n\nHas anyone come across this problem?\n\nThank you,\n\nNikos",
+      "body_snippet": "Hi all,\n\nI am trying to convert a xts to ts object in order to use with \ndecompose() and forecast() functions.\n\nI am currently using the following command which works:\n\ntsdata<-ts(tradedata$dif,freque",
+      "thread_id": "thread-c575a1b90216",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-402adaba4cfe",
+      "message_id": "<1359329061560-4656796.post@n4.nabble.com>",
+      "from_name": "hova9411",
+      "from_email_hash": "7960d331f64d8372150cd503bce013732615fc1b31c411ac5dab0868720600fc",
+      "date": "2013-01-27T15:24:21-08:00",
+      "subject": "[R-SIG-Finance] Bloomberg login through R",
+      "subject_clean": "Bloomberg login through R",
+      "in_reply_to": "<9DE405308A6AA24AA794B76282C6C00F0DEA9E3B47@HQ-POST1>",
+      "references": [
+        "<37F03B5FAABCC94D8AF66166AAE3639902EA5496@fnymail.fnylocal.com>",
+        "<9DE405308A6AA24AA794B76282C6C00F0DEA9E3B47@HQ-POST1>"
+      ],
+      "body_plain": "Awesome script! Thanks so much for posting that! What I noticed is that it\nwill work 85% of the time but bloomberg does something odd at the login\nwhere you need to use a secondary script to login in case the first attempt\nfails... If you just augment the posted script file, you can use this one\ninstead... \n\n<package> \n   <job id=\"vbs\"> \n       \n   </job> \n</package> \n\nGoodluck guys! \n\n\n\n--\nView this message in context: http://r.789695.n4.nabble.com/Bloomberg-login-through-R-tp4160992p4656796.html\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "Awesome script! Thanks so much for posting that! What I noticed is that it\nwill work 85% of the time but bloomberg does something odd at the login\nwhere you need to use a secondary script to login in ",
+      "thread_id": "thread-402adaba4cfe",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-5203ad097943",
+      "message_id": "<CAP0TLd8FtWzcB7FNLOT6fQQwkQJv2q8ngbWbF6NvRaZGFiBiaQ@mail.gmail.com>",
+      "from_name": "Velappan Periasamy",
+      "from_email_hash": "608884ceb756f54a188306d22942de1df7185cd987b3cde970dddfdb1e6605aa",
+      "date": "2013-01-28T22:17:53+05:30",
+      "subject": "[R-SIG-Finance] getting subset of data from the price series",
+      "subject_clean": "getting subset of data from the price series",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130128/19942df4/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130128/19942df4/attachment.pl>",
+      "thread_id": "thread-5203ad097943",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-22fb079443ef",
+      "message_id": "<CABDUZc8RSMy9KP3XoTT-xua1mpEVi-CmfYnyCn+Uk=ET0xf_FA@mail.gmail.com>",
+      "from_name": "Jeff Ryan",
+      "from_email_hash": "4c11198e12fc267ae3e3c06487930e8e9dd8ef89399ad783a1835a1dd01ce593",
+      "date": "2013-01-28T10:53:16-06:00",
+      "subject": "[R-SIG-Finance] getting subset of data from the price series",
+      "subject_clean": "getting subset of data from the price series",
+      "in_reply_to": "<CAP0TLd8FtWzcB7FNLOT6fQQwkQJv2q8ngbWbF6NvRaZGFiBiaQ@mail.gmail.com>",
+      "references": [
+        "<CAP0TLd8FtWzcB7FNLOT6fQQwkQJv2q8ngbWbF6NvRaZGFiBiaQ@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130128/f941e09c/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130128/f941e09c/attachment.pl>",
+      "thread_id": "thread-5203ad097943",
+      "thread_depth": 1,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-5aa9ccccb059",
+      "message_id": "<ECE981EF316A4F37A372C4C482D2EB3B@Franki7>",
+      "from_name": "Frank",
+      "from_email_hash": "abdffc2429bfa78db9949f51e22b4e11e2e14915791103deccd563dd4d9da29e",
+      "date": "2013-01-28T11:20:33-06:00",
+      "subject": "[R-SIG-Finance] getOptionChain",
+      "subject_clean": "getOptionChain",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130128/3f332fb6/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130128/3f332fb6/attachment.pl>",
+      "thread_id": "thread-5aa9ccccb059",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-0806ccd391e3",
+      "message_id": "<CABDUZc-0M3FSy64SOT8uYRnLRdPs5qd06HmFdS1En9yfU2Hcgg@mail.gmail.com>",
+      "from_name": "Jeff Ryan",
+      "from_email_hash": "4c11198e12fc267ae3e3c06487930e8e9dd8ef89399ad783a1835a1dd01ce593",
+      "date": "2013-01-28T11:40:25-06:00",
+      "subject": "[R-SIG-Finance] getOptionChain",
+      "subject_clean": "getOptionChain",
+      "in_reply_to": "<ECE981EF316A4F37A372C4C482D2EB3B@Franki7>",
+      "references": [
+        "<ECE981EF316A4F37A372C4C482D2EB3B@Franki7>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130128/835026b5/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130128/835026b5/attachment.pl>",
+      "thread_id": "thread-5aa9ccccb059",
+      "thread_depth": 1,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-2529805aaab6",
+      "message_id": "<20130131100314.925769ptjo1bd7eq@fisica.unam.mx>",
+      "from_name": "natorro at fisica.unam.mx",
+      "from_email_hash": "81c1af5969ace30e2280daae6eec901cf75cfa32b932ca4dfc68260a877b0fb7",
+      "date": "2013-01-31T10:03:14-06:00",
+      "subject": "[R-SIG-Finance] QRMlib not in R version 2.15.1",
+      "subject_clean": "QRMlib not in R version 2.15.1",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Anyone has any idea why the package QRMlib is not available for R  \nversion 2.15.1???\n\nIt even seems it's deprecated by now...\n\nAny pointers would be greatly appreciated.\n\nRegards\nCarlos L?pez",
+      "body_snippet": "Anyone has any idea why the package QRMlib is not available for R  \nversion 2.15.1???\n\nIt even seems it's deprecated by now...\n\nAny pointers would be greatly appreciated.\n\nRegards\nCarlos L?pez",
+      "thread_id": "thread-2529805aaab6",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-8ea34e46677c",
+      "message_id": "<SNT002-W737EC7276108999570516FF81D0@phx.gbl>",
+      "from_name": "brendan dornan",
+      "from_email_hash": "0d43e8fd18c60c49fa96a3a7cd2b68067b746e500926b3aa8cd84a9215ce4144",
+      "date": "2013-01-31T15:02:49-05:00",
+      "subject": "[R-SIG-Finance] Question on re-indexing data for graphing",
+      "subject_clean": "Question on re-indexing data for graphing",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi, \nA file contains data for 1975-2012 of housing prices across a panel of countries.\nHowever, it's indexed to 2005, so each country's housing price series converges to 100 in 2005, then they spread apart again to 2012.\nThis makes graphing all data series on one chart for comparison's sake somewhat awkward and unintelligible.\nWithout the original data, a. could one properly reindex the data from 1975 in a statistically correct manner, and b. how could someone do this in R?\nPosted this in cross-validated, but if there is a better forum for this question, just let me know. \nThanks for any help! \t\t \t   \t\t  \n-------------- next part --------------\nAn HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130131/029def92/attachment.html>\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: Housing Prices 1975-2012 (OECD).png\nType: image/png\nSize: 120154 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130131/029def92/attachment.png>\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: housing_pricesDF.csv\nType: application/octet-stream\nSize: 22365 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130131/029def92/attachment.obj>\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: gvisLineChart_HousePrices.R\nType: application/octet-stream\nSize: 609 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130131/029def92/attachment-0001.obj>",
+      "body_snippet": "Hi, \nA file contains data for 1975-2012 of housing prices across a panel of countries.\nHowever, it's indexed to 2005, so each country's housing price series converges to 100 in 2005, then they spread ",
+      "thread_id": "thread-8ea34e46677c",
+      "thread_depth": 0,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-730151c8260b",
+      "message_id": "<CAKV7AS=kFSrniytE7yyj-Dk9xM29spm+-Hz_cKh91L3G1X=nLQ@mail.gmail.com>",
+      "from_name": "Harris Butler",
+      "from_email_hash": "f4f12a2c2c08bdde2b74a993c00fd169ff256ba825356b24919bfa3139c377b6",
+      "date": "2013-01-31T12:09:52-08:00",
+      "subject": "[R-SIG-Finance] QRMlib not in R version 2.15.1",
+      "subject_clean": "QRMlib not in R version 2.15.1",
+      "in_reply_to": "<20130131100314.925769ptjo1bd7eq@fisica.unam.mx>",
+      "references": [
+        "<20130131100314.925769ptjo1bd7eq@fisica.unam.mx>"
+      ],
+      "body_plain": "It appears that the package QRMlib is deprecated, but there is a very\nsimilar looking package called QRM:\nhttp://cran.r-project.org/web/packages/QRM/index.html\n\nI hope that helps, I do not know if it has the same functions or not,\nbut they both claim to accompany the same book.\n-- \nCheers,\n\nHarris Butler\n\nOn 1/31/13, natorro at fisica.unam.mx <natorro at fisica.unam.mx> wrote:\n> Anyone has any idea why the package QRMlib is not available for R\n> version 2.15.1???\n>\n> It even seems it's deprecated by now...\n>\n> Any pointers would be greatly appreciated.\n>\n> Regards\n> Carlos L?pez\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>",
+      "body_snippet": "It appears that the package QRMlib is deprecated, but there is a very\nsimilar looking package called QRM:\nhttp://cran.r-project.org/web/packages/QRM/index.html\n\nI hope that helps, I do not know if it ",
+      "thread_id": "thread-2529805aaab6",
+      "thread_depth": 1,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-e219efeb4c15",
+      "message_id": "<CAKV7AS=0aVPqp10KKeWA6+ypJKWoEarQ3s2eeJT2N_0=y2aGYw@mail.gmail.com>",
+      "from_name": "Harris Butler",
+      "from_email_hash": "f4f12a2c2c08bdde2b74a993c00fd169ff256ba825356b24919bfa3139c377b6",
+      "date": "2013-01-31T12:30:46-08:00",
+      "subject": "[R-SIG-Finance] Question on re-indexing data for graphing",
+      "subject_clean": "Question on re-indexing data for graphing",
+      "in_reply_to": "<SNT002-W737EC7276108999570516FF81D0@phx.gbl>",
+      "references": [
+        "<SNT002-W737EC7276108999570516FF81D0@phx.gbl>"
+      ],
+      "body_plain": "This probably isn't an appropriate question for R-SIG-Finance, which\nfrom what I've seen is usually for stuff related to financial details\nlike model fiting and financial/quant packages/functions.  General R\nquestions like data manipulation and plotting should probably be asked\nto the R-help mailing list.\n\nWith that said, I'll try to help anyway.  Assuming your data is in a\ndata frame and has the countries in columns and years in rows, you can\nreindex by dividing the whole frame (which I call \"df\") by the first\nrow:\n\ndf = df / df[1,]\n\nThis will reindex everything and have the first row starting at 1.\nYou can multiply by 100 if you want.  I'm not in front of my\nworkstation right now, but I'm pretty sure it will work.\n\n-- \nCheers,\n\nHarris Butler\n\n\nOn 1/31/13, brendan dornan <brendan_dornan at hotmail.com> wrote:\n> Hi,\n> A file contains data for 1975-2012 of housing prices across a panel of\n> countries.\n> However, it's indexed to 2005, so each country's housing price series\n> converges to 100 in 2005, then they spread apart again to 2012.\n> This makes graphing all data series on one chart for comparison's sake\n> somewhat awkward and unintelligible.\n> Without the original data, a. could one properly reindex the data from 1975\n> in a statistically correct manner, and b. how could someone do this in R?\n> Posted this in cross-validated, but if there is a better forum for this\n> question, just let me know.\n> Thanks for any help!",
+      "body_snippet": "This probably isn't an appropriate question for R-SIG-Finance, which\nfrom what I've seen is usually for stuff related to financial details\nlike model fiting and financial/quant packages/functions.  Ge",
+      "thread_id": "thread-8ea34e46677c",
+      "thread_depth": 1,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-9620b60becac",
+      "message_id": "<771AE4FBFBCF204D819D8B346ACFCB7419CE3A13@USPMSEXC110N01.na.blkint.com>",
+      "from_name": "Maheshwari, Dhruv",
+      "from_email_hash": "038c6ff59deb38ea52fe14639cacb16334c64587166c0ad83f39f73f12cfe755",
+      "date": "2013-01-31T20:57:58Z",
+      "subject": "[R-SIG-Finance] QRMlib not in R version 2.15.1",
+      "subject_clean": "QRMlib not in R version 2.15.1",
+      "in_reply_to": "<CAKV7AS=kFSrniytE7yyj-Dk9xM29spm+-Hz_cKh91L3G1X=nLQ@mail.gmail.com>",
+      "references": [
+        "<20130131100314.925769ptjo1bd7eq@fisica.unam.mx>",
+        "<CAKV7AS=kFSrniytE7yyj-Dk9xM29spm+-Hz_cKh91L3G1X=nLQ@mail.gmail.com>"
+      ],
+      "body_plain": "I did manage to install QRMlib from the archived source code a month ago, but it was quite painful and required many similarly obsolete dependencies (fSeries, fCalendar, etc.). QRM does appear to be a good substitute.\n\nIn the package reference:\nhttp://cran.r-project.org/web/packages/QRM/QRM.pdf\n\nThe author notes that not all functions were ported. See the section QRM-defunct for a listing.\n\n- Dhruv\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at r-project.org [mailto:r-sig-finance-bounces at r-project.org] On Behalf Of Harris Butler\nSent: Thursday, January 31, 2013 15:10\nTo: natorro at fisica.unam.mx\nCc: R-SIG-Finance at r-project.org\nSubject: Re: [R-SIG-Finance] QRMlib not in R version 2.15.1\n\nIt appears that the package QRMlib is deprecated, but there is a very similar looking package called QRM:\nhttp://cran.r-project.org/web/packages/QRM/index.html\n\nI hope that helps, I do not know if it has the same functions or not, but they both claim to accompany the same book.\n--\nCheers,\n\nHarris Butler\n\nOn 1/31/13, natorro at fisica.unam.mx <natorro at fisica.unam.mx> wrote:\n> Anyone has any idea why the package QRMlib is not available for R \n> version 2.15.1???\n>\n> It even seems it's deprecated by now...\n>\n> Any pointers would be greatly appreciated.\n>\n> Regards\n> Carlos L?pez\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list \n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R \n> questions should go.\n>\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\nTHIS MESSAGE AND ANY ATTACHMENTS ARE CONFIDENTIAL, PROPRIETARY, AND MAY BE PRIVILEGED.  If this message was misdirected, BlackRock, Inc. and its subsidiaries, (\"BlackRock\") does not waive any confidentiality or privilege.  If you are not the intended recipient, please notify us immediately and destroy the message without disclosing its contents to anyone.  Any distribution, use or copying of this e-mail or the information it contains by other than an intended recipient is unauthorized.  The views and opinions expressed in this e-mail message are the author's own and may not reflect the views and opinions of BlackRock, unless the author is authorized by BlackRock to express such views or opinions on its behalf.  All email sent to or from this address is subject to electronic storage and review by BlackRock.  Although BlackRock operates anti-virus programs, it does not accept responsibility for any damage whatsoever caused by viruses being passed.",
+      "body_snippet": "I did manage to install QRMlib from the archived source code a month ago, but it was quite painful and required many similarly obsolete dependencies (fSeries, fCalendar, etc.). QRM does appear to be a",
+      "thread_id": "thread-2529805aaab6",
+      "thread_depth": 2,
+      "month": "2013-01"
+    },
+    {
+      "id": "msg-5742d66abfef",
+      "message_id": "<20747.16224.804981.54498@max.nulle.part>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2013-01-31T22:06:56-06:00",
+      "subject": "[R-SIG-Finance] R/Finance 2013 -- Call for Papers: Two weeks remaining",
+      "subject_clean": "R/Finance 2013 -- Call for Papers: Two weeks remaining",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "(Reposting with keynote speakers; deadline is coming up on Feb 15  --Dirk)\n\n\nCall for Papers:\n\nR/Finance 2013: Applied Finance with R\nMay 17 and 18, 2013\nUniversity of Illinois at Chicago\n\nThe fifth annual R/Finance conference for applied finance using R will be\nheld on May 17 and 18, 2013 in Chicago, IL, USA at the University of Illinois\nat Chicago.  The conference is expected to cover topics including portfolio\nmanagement, time series analysis, advanced risk tools, high-performance\ncomputing, market microstructure, and econometrics. All will be discussed\nwithin the context of using R as a primary tool for financial risk\nmanagement, portfolio construction, and trading.\n\nOver the past four years, R/Finance has included attendees from around the\nworld. It featured presentations from prominent academics and practitioners.\nWe are happy to announce the following keynote presentations for R/Finance\n2013:\n\n   Sanjiv Das\n      Santa Clara University, Author of \"Derivatives: Principles and Practice\";\n\n   Attilio Meucci\n      Kepos Capital, LP; Author of \"Risk and Asset Allocation\"\n\n   Ryan Sheftel\n      Managing Director for Electronic Market Making at Credit Suisse\n\n   Ruey Tsay\n      U of Chicago; Author of \"Intro. to Analysis of Financial Data with R\"\n\n\nWe invite you to submit complete papers in pdf format for consideration. We\nwill also consider one-page abstracts (in txt or pdf format) although more\ncomplete papers are preferred.  We welcome submissions for full talks and\nabbreviated \"lightning talks\". Both academic and practitioner proposals\nrelated to R are encouraged.\n\nPresenters are strongly encouraged to provide working R code to accompany the\npresentation/paper.  Data sets should also be made public for the purposes of\nreproducibility (though we realize this may be limited due to contracts with\ndata vendors). Preference may be given to presenters who have released R\npackages.\n\nThe conference will award two (or more) $1000 prizes for best papers. A\nsubmission must be a full paper to be eligible for a best paper\naward. Extended abstracts, even if a full paper is provided by conference\ntime, are not eligible for a best paper award.  Financial assistance for\ntravel and accommodation may be available to presenters at the discretion of\nthe conference committee. Requests for assistance should be made at the time\nof submission.\n\nPlease send submissions to: committee <at> RinFinance.com.  The submission\ndeadline is February 15, 2013. Submitters will be notified of acceptance via\nemail by February 28, 2013. Notification of whether a presentation will be a\nlong presentation or a lightning talk will also be made at that time.\n\nAdditional details will be announced via the conference website \n \n   http://www.RinFinance.com/ \n\nas they become available. Information on previous years' presenters and their\npresentations are also at the conference website.\n\nFor the program committee:\n   Gib Bassett, Peter Carl, Dirk Eddelbuettel, Brian Peterson, \n   Dale Rosenthal, Jeffrey Ryan, Joshua Ulrich \n\n-- \nDirk Eddelbuettel | edd at debian.org | http://dirk.eddelbuettel.com",
+      "body_snippet": "(Reposting with keynote speakers; deadline is coming up on Feb 15  --Dirk)\n\n\nCall for Papers:\n\nR/Finance 2013: Applied Finance with R\nMay 17 and 18, 2013\nUniversity of Illinois at Chicago\n\nThe fifth a",
+      "thread_id": "thread-5742d66abfef",
+      "thread_depth": 0,
+      "month": "2013-01"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-2db5fd2e0d44",
+      "subject": "Rbbg package's CONNECTION_FAILURE",
+      "message_count": 1,
+      "participants": [
+        "altaf"
+      ],
+      "started": "2013-01-01T23:44:18-08:00",
+      "last_reply": "2013-01-01T23:44:18-08:00",
+      "root_message_id": "msg-2db5fd2e0d44"
+    },
+    {
+      "id": "thread-e6c00ef4917a",
+      "subject": "Installed quantstrat along with blotter and FinancialInstrument but seems I'm missing .instrument",
+      "message_count": 9,
+      "participants": [
+        "G See",
+        "rquantnoob"
+      ],
+      "started": "2013-01-02T17:50:58-08:00",
+      "last_reply": "2013-01-02T21:09:20-06:00",
+      "root_message_id": "msg-e6c00ef4917a"
+    },
+    {
+      "id": "thread-71dca3532f92",
+      "subject": "Quantstrat runs quite slow on large data",
+      "message_count": 1,
+      "participants": [
+        "Robert A'gata"
+      ],
+      "started": "2013-01-03T08:00:35-05:00",
+      "last_reply": "2013-01-03T08:00:35-05:00",
+      "root_message_id": "msg-71dca3532f92"
+    },
+    {
+      "id": "thread-70dd43dfd103",
+      "subject": "Limit order and level in position limit in quantstrat",
+      "message_count": 1,
+      "participants": [
+        "Robert A'gata"
+      ],
+      "started": "2013-01-03T19:25:31-05:00",
+      "last_reply": "2013-01-03T19:25:31-05:00",
+      "root_message_id": "msg-70dd43dfd103"
+    },
+    {
+      "id": "thread-823d7a12157d",
+      "subject": "dis aggregate from 3 month rolling average to monthly",
+      "message_count": 4,
+      "participants": [
+        "Jeff Ryan",
+        "Yolande Tra",
+        "ytra"
+      ],
+      "started": "2013-01-05T21:25:23-05:00",
+      "last_reply": "2013-01-05T21:37:18-06:00",
+      "root_message_id": "msg-823d7a12157d"
+    },
+    {
+      "id": "thread-694bae38ba1b",
+      "subject": "(no subject)",
+      "message_count": 1,
+      "participants": [
+        "v mande"
+      ],
+      "started": "2013-01-06T03:03:40-08:00",
+      "last_reply": "2013-01-06T03:03:40-08:00",
+      "root_message_id": "msg-694bae38ba1b"
+    },
+    {
+      "id": "thread-c8aac7024f30",
+      "subject": "dis aggregate from 3 month rolling average to\tmonthly",
+      "message_count": 2,
+      "participants": [
+        "Matt Considine",
+        "Yolande Tra"
+      ],
+      "started": "2013-01-06T09:16:28-05:00",
+      "last_reply": "2013-01-06T10:18:57-05:00",
+      "root_message_id": "msg-c8aac7024f30"
+    },
+    {
+      "id": "thread-895af258b334",
+      "subject": "Neural Network for trading",
+      "message_count": 3,
+      "participants": [
+        "Suzen, Mehmet",
+        "a1492dc",
+        "intertodd"
+      ],
+      "started": "2013-01-07T01:10:35-08:00",
+      "last_reply": "2013-01-07T03:44:48-08:00",
+      "root_message_id": "msg-895af258b334"
+    },
+    {
+      "id": "thread-e814f648cc96",
+      "subject": "wavelet analyisis to denoising time series",
+      "message_count": 2,
+      "participants": [
+        "Wildi Marc (wlmr)",
+        "intertodd"
+      ],
+      "started": "2013-01-08T22:49:28-08:00",
+      "last_reply": "2013-01-09T09:05:17+00:00",
+      "root_message_id": "msg-e814f648cc96"
+    },
+    {
+      "id": "thread-1a557a673dad",
+      "subject": "Junior Quantitative Strategist role",
+      "message_count": 1,
+      "participants": [
+        "Alexander Gracian"
+      ],
+      "started": "2013-01-09T14:27:24+00:00",
+      "last_reply": "2013-01-09T14:27:24+00:00",
+      "root_message_id": "msg-1a557a673dad"
+    },
+    {
+      "id": "thread-6dde3d254a0e",
+      "subject": "How to retrieve standard errors of cointegrating vector from vars/urca ?",
+      "message_count": 1,
+      "participants": [
+        "asfdoij asfoij"
+      ],
+      "started": "2013-01-10T05:32:11-08:00",
+      "last_reply": "2013-01-10T05:32:11-08:00",
+      "root_message_id": "msg-6dde3d254a0e"
+    },
+    {
+      "id": "thread-816b1723f25e",
+      "subject": "Minor bug in addSAR",
+      "message_count": 2,
+      "participants": [
+        "Joshua Ulrich",
+        "Worik Stanton"
+      ],
+      "started": "2013-01-10T11:20:30+13:00",
+      "last_reply": "2013-01-20T12:57:07-06:00",
+      "root_message_id": "msg-816b1723f25e"
+    },
+    {
+      "id": "thread-ec6d48eaaa65",
+      "subject": "programming opportunity",
+      "message_count": 1,
+      "participants": [
+        "Stephen Choularton"
+      ],
+      "started": "2013-01-10T16:36:28+11:00",
+      "last_reply": "2013-01-10T16:36:28+11:00",
+      "root_message_id": "msg-ec6d48eaaa65"
+    },
+    {
+      "id": "thread-207cd004620a",
+      "subject": "Fitting RSLN models",
+      "message_count": 3,
+      "participants": [
+        "G See",
+        "jaimie villanueva"
+      ],
+      "started": "2013-01-11T20:50:01+01:00",
+      "last_reply": "2013-01-11T14:02:53-06:00",
+      "root_message_id": "msg-207cd004620a"
+    },
+    {
+      "id": "thread-4b989ce073b3",
+      "subject": "high frequency italian market data",
+      "message_count": 2,
+      "participants": [
+        "Michael Weylandt",
+        "Simone Gogna"
+      ],
+      "started": "2013-01-11T21:34:38+01:00",
+      "last_reply": "2013-01-11T22:33:39+00:00",
+      "root_message_id": "msg-4b989ce073b3"
+    },
+    {
+      "id": "thread-bb82ee5ad21e",
+      "subject": "R: Re:  high frequency italian market data",
+      "message_count": 4,
+      "participants": [
+        "Brian G. Peterson",
+        "Jeff Ryan",
+        "R. Michael Weylandt",
+        "singletonthebest"
+      ],
+      "started": "2013-01-11T23:40:05+01:00",
+      "last_reply": "2013-01-11T19:38:54-06:00",
+      "root_message_id": "msg-bb82ee5ad21e"
+    },
+    {
+      "id": "thread-650014e29b3f",
+      "subject": "blotter date question",
+      "message_count": 2,
+      "participants": [
+        "Maheshwari, Dhruv"
+      ],
+      "started": "2013-01-14T06:35:44+00:00",
+      "last_reply": "2013-01-14T15:34:42+00:00",
+      "root_message_id": "msg-650014e29b3f"
+    },
+    {
+      "id": "thread-fdc0f563e020",
+      "subject": "Search for best parameter set when backtesting",
+      "message_count": 1,
+      "participants": [
+        "Robert A'gata"
+      ],
+      "started": "2013-01-14T22:00:24-05:00",
+      "last_reply": "2013-01-14T22:00:24-05:00",
+      "root_message_id": "msg-fdc0f563e020"
+    },
+    {
+      "id": "thread-4f53dbda70b2",
+      "subject": "DEoptim Risk Return Scatter Plot",
+      "message_count": 2,
+      "participants": [
+        "Joshua Ulrich",
+        "jkaprich at gmail.com"
+      ],
+      "started": "2013-01-15T12:48:50-06:00",
+      "last_reply": "2013-01-15T13:16:15-06:00",
+      "root_message_id": "msg-4f53dbda70b2"
+    },
+    {
+      "id": "thread-042c505ca15b",
+      "subject": "Can any of the GARCH model R packages handle seasonality ?",
+      "message_count": 1,
+      "participants": [
+        "Wei Wu"
+      ],
+      "started": "2013-01-15T21:02:22-08:00",
+      "last_reply": "2013-01-15T21:02:22-08:00",
+      "root_message_id": "msg-042c505ca15b"
+    },
+    {
+      "id": "thread-96bef8697d43",
+      "subject": "PerformanceAnalytics CoSkewness Function",
+      "message_count": 2,
+      "participants": [
+        "Brian G. Peterson",
+        "jkaprich at gmail.com"
+      ],
+      "started": "2013-01-18T00:58:43-06:00",
+      "last_reply": "2013-01-18T04:14:53-06:00",
+      "root_message_id": "msg-96bef8697d43"
+    },
+    {
+      "id": "thread-fb63fdb73a3f",
+      "subject": "Help with rugarch",
+      "message_count": 2,
+      "participants": [
+        "Alexios Ghalanos",
+        "jaimie villanueva"
+      ],
+      "started": "2013-01-20T17:33:25+01:00",
+      "last_reply": "2013-01-20T17:51:43+00:00",
+      "root_message_id": "msg-fb63fdb73a3f"
+    },
+    {
+      "id": "thread-8e034686f839",
+      "subject": "Rbbg",
+      "message_count": 3,
+      "participants": [
+        "Pierre-Alexandre des Mazis",
+        "SebastianBrown"
+      ],
+      "started": "2013-01-21T15:52:17-08:00",
+      "last_reply": "2013-01-21T16:07:19-08:00",
+      "root_message_id": "msg-8e034686f839"
+    },
+    {
+      "id": "thread-50fdf9117297",
+      "subject": "RAPA Trader Database Available to R Community for Download",
+      "message_count": 1,
+      "participants": [
+        "Michael Berman"
+      ],
+      "started": "2013-01-21T22:42:07+11:00",
+      "last_reply": "2013-01-21T22:42:07+11:00",
+      "root_message_id": "msg-50fdf9117297"
+    },
+    {
+      "id": "thread-734e1472fe28",
+      "subject": "Rbbg",
+      "message_count": 1,
+      "participants": [
+        "SebastianBrown"
+      ],
+      "started": "2013-01-22T04:10:56-08:00",
+      "last_reply": "2013-01-22T04:10:56-08:00",
+      "root_message_id": "msg-734e1472fe28"
+    },
+    {
+      "id": "thread-d52d06face92",
+      "subject": "Coherent Datafeed: Historic Time Series Data from Thomson Reuters is available",
+      "message_count": 1,
+      "participants": [
+        "Thomas P. Fuller"
+      ],
+      "started": "2013-01-25T07:49:48-08:00",
+      "last_reply": "2013-01-25T07:49:48-08:00",
+      "root_message_id": "msg-d52d06face92"
+    },
+    {
+      "id": "thread-c575a1b90216",
+      "subject": "Conversion of xts to ts object",
+      "message_count": 1,
+      "participants": [
+        "Nikos Rachmanis"
+      ],
+      "started": "2013-01-27T05:33:22-05:00",
+      "last_reply": "2013-01-27T05:33:22-05:00",
+      "root_message_id": "msg-c575a1b90216"
+    },
+    {
+      "id": "thread-402adaba4cfe",
+      "subject": "Bloomberg login through R",
+      "message_count": 1,
+      "participants": [
+        "hova9411"
+      ],
+      "started": "2013-01-27T15:24:21-08:00",
+      "last_reply": "2013-01-27T15:24:21-08:00",
+      "root_message_id": "msg-402adaba4cfe"
+    },
+    {
+      "id": "thread-5aa9ccccb059",
+      "subject": "getOptionChain",
+      "message_count": 2,
+      "participants": [
+        "Frank",
+        "Jeff Ryan"
+      ],
+      "started": "2013-01-28T11:20:33-06:00",
+      "last_reply": "2013-01-28T11:40:25-06:00",
+      "root_message_id": "msg-5aa9ccccb059"
+    },
+    {
+      "id": "thread-5203ad097943",
+      "subject": "getting subset of data from the price series",
+      "message_count": 2,
+      "participants": [
+        "Jeff Ryan",
+        "Velappan Periasamy"
+      ],
+      "started": "2013-01-28T22:17:53+05:30",
+      "last_reply": "2013-01-28T10:53:16-06:00",
+      "root_message_id": "msg-5203ad097943"
+    },
+    {
+      "id": "thread-2529805aaab6",
+      "subject": "QRMlib not in R version 2.15.1",
+      "message_count": 3,
+      "participants": [
+        "Harris Butler",
+        "Maheshwari, Dhruv",
+        "natorro at fisica.unam.mx"
+      ],
+      "started": "2013-01-31T10:03:14-06:00",
+      "last_reply": "2013-01-31T20:57:58+00:00",
+      "root_message_id": "msg-2529805aaab6"
+    },
+    {
+      "id": "thread-8ea34e46677c",
+      "subject": "Question on re-indexing data for graphing",
+      "message_count": 2,
+      "participants": [
+        "Harris Butler",
+        "brendan dornan"
+      ],
+      "started": "2013-01-31T15:02:49-05:00",
+      "last_reply": "2013-01-31T12:30:46-08:00",
+      "root_message_id": "msg-8ea34e46677c"
+    },
+    {
+      "id": "thread-5742d66abfef",
+      "subject": "R/Finance 2013 -- Call for Papers: Two weeks remaining",
+      "message_count": 1,
+      "participants": [
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2013-01-31T22:06:56-06:00",
+      "last_reply": "2013-01-31T22:06:56-06:00",
+      "root_message_id": "msg-5742d66abfef"
+    }
+  ]
+}

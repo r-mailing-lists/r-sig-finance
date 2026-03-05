@@ -1,0 +1,930 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2015-12",
+  "messages": [
+    {
+      "id": "msg-f5aaa06f9475",
+      "message_id": "<CAHUwa6Pge3OfzMhsghwDACtJxWkfPSsKt5Q1FVOv7OXVUc=sRg@mail.gmail.com>",
+      "from_name": "Pedro Oliveira",
+      "from_email_hash": "1413803cad4732070b6ca911b47c37b03beae200789f9a58c5122cbf16f27ad3",
+      "date": "2015-12-01T11:47:57Z",
+      "subject": "[R-SIG-Finance] fPortfolio (version 3011.81) - solveRglpk.CVAR - lower bound constraints (z_i >= 0) allows negative values",
+      "subject_clean": "fPortfolio (version 3011.81) - solveRglpk.CVAR - lower bound constraints (z_i >= 0) allows negative values",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI have been looking at the code of the solveRglpk.CVAR function, in order\nto create a similar function but where the objective function will be a\ntrade-off between the expected return and a risk aversion factor times the\nCVaR risk measure. In the hidden function .cvarRglpkArguments, where the\nmatrices, served as input for the Rglpk solver, are built, I think the\nlower bounds are not properly defined. Namely, the optimization problem has\nthe following constraints z_i >= 0 where i = 1:nScenarios, thus the lower\nbound should not be -Inf, but 0. Am I making any mistake?\n\nLines of code (164-166):\n    bounds <- list(\n        lower = list(ind = nInd, val = c(rep(-Inf, 1+nScenarios), minW)),\n        upper = list(ind = nInd, val = c(rep( Inf, 1+nScenarios), maxW)) )\n\n\nNote: z_i is the term being summed after we discretized the integral.\n\nThanks and regards\n\nPedro Oliveira\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI have been looking at the code of the solveRglpk.CVAR function, in order\nto create a similar function but where the objective function will be a\ntrade-off between the expected return and a risk ",
+      "thread_id": "thread-f5aaa06f9475",
+      "thread_depth": 0,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-7d104e2ebab5",
+      "message_id": "<70C28E80655BFC46978030281154E85862211814@EXCHMBOX001P.optrust.local>",
+      "from_name": "Erol Biceroglu",
+      "from_email_hash": "b9934a555693d41cd7d96d03fd435aa737b836909e7eadb1d2feb094c462e360",
+      "date": "2015-12-01T19:18:20Z",
+      "subject": "[R-SIG-Finance] R-Forge TradeAnalytics packages for R 3.2.2",
+      "subject_clean": "R-Forge TradeAnalytics packages for R 3.2.2",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nI'm attempting to install quantstrat, and I'm getting the following message:\n\n> install.packages(\"quantstrat\", repos=\"http://R-Forge.R-project.org\")\nInstalling package into '/home/optdev/R_libs'\n(as 'lib' is unspecified)\nWarning in install.packages :\n  package 'quantstrat' is not available (for R version 3.2.2)\n>\n\nWould anyone happen to know if I'm missing anything?  Thanks\n\nHere's my session info:\n> sessionInfo()\nR version 3.2.2 (2015-08-14)\nPlatform: x86_64-pc-linux-gnu (64-bit)\nRunning under: Ubuntu 14.04.3 LTS\n\nlocale:\n[1] LC_CTYPE=en_CA.UTF-8       LC_NUMERIC=C               LC_TIME=en_CA.UTF-8\n [4] LC_COLLATE=en_CA.UTF-8     LC_MONETARY=en_CA.UTF-8    LC_MESSAGES=en_CA.UTF-8\n [7] LC_PAPER=en_CA.UTF-8       LC_NAME=C                  LC_ADDRESS=C\n[10] LC_TELEPHONE=C             LC_MEASUREMENT=en_CA.UTF-8 LC_IDENTIFICATION=C\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base\n\nother attached packages:\n[1] devtools_1.9.1\n\nloaded via a namespace (and not attached):\n[1] tools_3.2.2   memoise_0.2.1 digest_0.6.8\n\n\n\nErol Biceroglu\n\n\n\nDisclaimer \n--------------- \nThis e-mail and files transmitted with it are confidential and intended solely for the use of the individual or entity to whom they are addressed. If you have received this in error, contact OPTrust by telephone toll free at 1-800-906-7738 and delete the email without making a paper or electronic copy. The recipient should check this e-mail and attachments for the presence of viruses. OPTrust accepts no liability for any damage caused by any virus transmitted by e-mail. \nPlease consider the environment before printing this e-mail message.\n \nAvis de non-responsabilit? \n-------------------------------------- \nCe message et toutes les pi?ces jointes sont ?tablis ? l'intention exclusive de leur destinataire et sont confidentiels. Si vous recevez ce message par erreur, veuillez le d?truire sans produire de copie papier ou ?lectronique, et avertir imm?diatement OPTrust par t?l?phone ou sans frais au 1-800-906-7738. Le destinataire doit s?assurer que ce message et toutes les pi?ces jointes ne contiennent pas de virus. OPTrust n?accepte aucune responsabilit? pour les dommages caus?s par d??ventuels virus transmis par courriel. \nPensez ? l?environnement avant d?imprimer ce message. \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\nI'm attempting to install quantstrat, and I'm getting the following message:\n\n> install.packages(\"quantstrat\", repos=\"http://R-Forge.R-project.org\")\nInstalling package into '/home/optdev/R_lib",
+      "thread_id": "thread-7d104e2ebab5",
+      "thread_depth": 0,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-6293d8d03bf1",
+      "message_id": "<CA+ZLyiW1VCf-vryZjToK9kwXuWBkhT5vMnCRmrOp62JCynn+Gw@mail.gmail.com>",
+      "from_name": "Ingo Boland",
+      "from_email_hash": "f993729acfc26afc68bf65afcc66182a6d3f92e5dd6bbeffae0bba88e002a56b",
+      "date": "2015-12-03T10:03:04+01:00",
+      "subject": "[R-SIG-Finance] Trailing stop in Andreas Clenow trend-following system",
+      "subject_clean": "Trailing stop in Andreas Clenow trend-following system",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Good morning,\n\nI'm trying to rebuild the basic strategy out of Andreas Clenow's book\n\"Following the trend in quantstrat but struggling with the trailing stop.\nThe rules are as follows (only for long trades):\n\n1.     *Entry rule*: Buy open tomorrow when close is higher or equal to the\nhighest close of the past 50 days\n\n2*.*     *Filter*: Long entries only if SMA50 >= SMA100\n\n3.     *Closing*: Sell open tomorrow when breakout to the downside or SMA50\n< SMA100\n\n4.     *Trailing stop (and this seems to be the difficult one)*: Sell open\ntomorrow when close price is lower than highest high since deal entry minus\n3 times the current ATR (100days) - current ATR and not the ATR at deal\nentry\n\n5.     *Position sizing*: Risking always a fixed amount\n\nI read about the idea of just adding an indicator which is triggering the\nstop but the problem is that this indicator has to depend on the entry\ndates of the strategy. My idea was to alter the indicator in the mktdata\nobject every time I enter a trade via the ordersizing function osFUN. But\nthis didn't work.\n\nDoes anyone have a solution for this problem?\n\nKind regards,\n\nIngo\n-------------- next part --------------\nAn HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20151203/57473725/attachment.html>\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: Quantstrat_ClenowTrend.R\nType: application/octet-stream\nSize: 5106 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20151203/57473725/attachment.obj>",
+      "body_snippet": "Good morning,\n\nI'm trying to rebuild the basic strategy out of Andreas Clenow's book\n\"Following the trend in quantstrat but struggling with the trailing stop.\nThe rules are as follows (only for long t",
+      "thread_id": "thread-6293d8d03bf1",
+      "thread_depth": 0,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-80cab8d0f08f",
+      "message_id": "<CAM0JZ3kTjg8LaSDr11Uc37=rF2-qzThgWmgN8DmOKsXwALqH2g@mail.gmail.com>",
+      "from_name": "Thomas Fuller",
+      "from_email_hash": "3b021161fd989322bc154aa1ec05003531fe2816e6e657e0af3d1cbc6bbe2eed",
+      "date": "2015-12-04T11:09:12-05:00",
+      "subject": "[R-SIG-Finance] Coherent Datafeed: Thomson Reuters Elektron Edition",
+      "subject_clean": "Coherent Datafeed: Thomson Reuters Elektron Edition",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Folks,\n\nWe have an update for the *Coherent Datafeed*: *Thomson Reuters Elektron\nEdition* available here:\n\nhttps://coherentlogic.com/middleware-development/solutions-for-traders-using-thomson-reuters-market-data/version101-update-elektron-migration/\n\nThis software is available under the open source LGPL license for both Java\ndevelopers and users of the R Project for Statistical Computing.\n\nWe have a new version which will be released in the coming weeks which will\nprovide market by order (currently available), market by price, and market\nmaker (in development) functionality -- if you're interested in using these\nnew functions, please get in touch as I'd appreciate some help with testing.\n\nQuestions and comments are welcomed.\n\nTom\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Folks,\n\nWe have an update for the *Coherent Datafeed*: *Thomson Reuters Elektron\nEdition* available here:\n\nhttps://coherentlogic.com/middleware-development/solutions-for-traders-using-thomson-reute",
+      "thread_id": "thread-80cab8d0f08f",
+      "thread_depth": 0,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-b2a80b45ab9d",
+      "message_id": "<CAPPM_gSkuYwomtHmxZ-bnjHks+AYBSafraiyXv-yz2EbZepMWQ@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-12-05T09:25:17-06:00",
+      "subject": "[R-SIG-Finance] R-Forge TradeAnalytics packages for R 3.2.2",
+      "subject_clean": "R-Forge TradeAnalytics packages for R 3.2.2",
+      "in_reply_to": "<70C28E80655BFC46978030281154E85862211814@EXCHMBOX001P.optrust.local>",
+      "references": [
+        "<70C28E80655BFC46978030281154E85862211814@EXCHMBOX001P.optrust.local>"
+      ],
+      "body_plain": "On Tue, Dec 1, 2015 at 1:18 PM, Erol Biceroglu <EBiceroglu at optrust.com> wrote:\n> Hello,\n>\n> I'm attempting to install quantstrat, and I'm getting the following message:\n>\n>> install.packages(\"quantstrat\", repos=\"http://R-Forge.R-project.org\")\n> Installing package into '/home/optdev/R_libs'\n> (as 'lib' is unspecified)\n> Warning in install.packages :\n>   package 'quantstrat' is not available (for R version 3.2.2)\n>>\n>\n> Would anyone happen to know if I'm missing anything?  Thanks\n>\nThe R-Forge build system can be quirky at times. The most reliable\nthing you can do is check out the source and build/install from that.\n\nHere's a Q/A on Stack Overflow that describes the process:\nhttp://stackoverflow.com/q/11105131/271616\n\n> Here's my session info:\n>> sessionInfo()\n> R version 3.2.2 (2015-08-14)\n> Platform: x86_64-pc-linux-gnu (64-bit)\n> Running under: Ubuntu 14.04.3 LTS\n>\n> locale:\n> [1] LC_CTYPE=en_CA.UTF-8       LC_NUMERIC=C               LC_TIME=en_CA.UTF-8\n>  [4] LC_COLLATE=en_CA.UTF-8     LC_MONETARY=en_CA.UTF-8    LC_MESSAGES=en_CA.UTF-8\n>  [7] LC_PAPER=en_CA.UTF-8       LC_NAME=C                  LC_ADDRESS=C\n> [10] LC_TELEPHONE=C             LC_MEASUREMENT=en_CA.UTF-8 LC_IDENTIFICATION=C\n>\n> attached base packages:\n> [1] stats     graphics  grDevices utils     datasets  methods   base\n>\n> other attached packages:\n> [1] devtools_1.9.1\n>\n> loaded via a namespace (and not attached):\n> [1] tools_3.2.2   memoise_0.2.1 digest_0.6.8\n>\n>\n>\n> Erol Biceroglu\n>\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Tue, Dec 1, 2015 at 1:18 PM, Erol Biceroglu <EBiceroglu at optrust.com> wrote:\n> Hello,\n>\n> I'm attempting to install quantstrat, and I'm getting the following message:\n>\n>> install.packages(\"quant",
+      "thread_id": "thread-7d104e2ebab5",
+      "thread_depth": 1,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-0135cc68045e",
+      "message_id": "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9C@EXVMBX018-3.exch018.msoutlookonline.net>",
+      "from_name": "Michael Ashton",
+      "from_email_hash": "0ea431508e3ece53b39935dc57c9c20562fc6bfd29340c13716746377b1d41af",
+      "date": "2015-12-14T16:13:01-08:00",
+      "subject": "[R-SIG-Finance] solnp Problem Inverting Hessian",
+      "subject_clean": "solnp Problem Inverting Hessian",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I must admit to being flummoxed here, mainly because my linear algebra was 25 years ago and I can't remember what a Hessian is.\n\nI have a matrix of 60 securities' weekly returns, along with 60 projected returns. The returns are in a vector called Ret.vect and the covariance matrix of weekly returns in cov.mat . I have the minConstraints and maxConstraints that the parameters are permitted to take. I cycle through targeted risks and get the same error for each risk targeted...below I have removed the loop to focus on the risk=0.002.\n\nwgt.vect=c(rep(1/60, 60))\nconstr.fun <- function(wgt.vect) {;\n                c1 = sqrt(crossprod(t(wgt.vect %*% cov.mat),wgt.vect));\n                c2 = sum(wgt.vect);\n                return(c(c1,c2));\n                }\nineqconstr.fun <- function(wgt.vect) {\n                wgt.vect[1:60];\n                }\nopt.fun <- function(wgt.vect) {-crossprod(wgt.vect,t(Ret.vect))}\n\nOptimSolution <- solnp(wgt.vect,opt.fun,constr.fun,eqB=c(0.002,1),ineqconstr.fun,ineqLB=minConstraints,ineqUB=maxConstraints)\n\nI get the following error:\nsolnp--> Solution not reliable....Problem Inverting Hessian.\n\nWell, that doesn't tell me very much! The parameters (weights) that are output for each run, as I cycle through the weights, are very scrambled...lots of little allocations, rather than clumping as you would expect to happen especially at the risky and riskless ends of the spectrum.\n\nCan anyone with more math than me give me a helping hand on the Hessian?\n\nThanks,\n\n\nMike\n\nMichael Ashton, CFA\nManaging Principal\n\nEnduring Investments LLC\nW: 973.457.4602\nC: 551.655.8006\n\n\n________________________________\nThis email and any attachments are confidential and inte...{{dropped:9}}",
+      "body_snippet": "I must admit to being flummoxed here, mainly because my linear algebra was 25 years ago and I can't remember what a Hessian is.\n\nI have a matrix of 60 securities' weekly returns, along with 60 project",
+      "thread_id": "thread-0135cc68045e",
+      "thread_depth": 0,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-9f5687e6601c",
+      "message_id": "<CAAmySGPpMNsbsZQ+sDtd+owdhG3c-j3mdBj_ywe21dT6FnoEfQ@mail.gmail.com>",
+      "from_name": "Michael Weylandt",
+      "from_email_hash": "44e8775a589b9ef81880469e200f3cce307c7180b4289ca1696a578afb772b3a",
+      "date": "2015-12-14T19:31:38-06:00",
+      "subject": "[R-SIG-Finance] solnp Problem Inverting Hessian",
+      "subject_clean": "solnp Problem Inverting Hessian",
+      "in_reply_to": "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9C@EXVMBX018-3.exch018.msoutlookonline.net>",
+      "references": [
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9C@EXVMBX018-3.exch018.msoutlookonline.net>"
+      ],
+      "body_plain": "The Hessian is the matrix of second derivatives\n(https://en.wikipedia.org/wiki/Hessian_matrix) -- in scalar terms,\nyou're finding a point where the second derivative is zero and then\ntrying to divide by the second derivative to calculate the step size.\n\nI haven't gone through your code in any detail, but I'd start by\nchecking the covariance matrix since that's proportional to the\nHessian of your objective function. Is it (comfortably) non-singular?\n\nSince you're just solving the standard Markowitz problem, you might\ntry a simpler (quadratic/convex) solver instead of a general\nnon-linear solver. Should behave a bit better.\n\nMichael\n\n\nOn Mon, Dec 14, 2015 at 6:13 PM, Michael Ashton\n<m.ashton at enduringinvestments.com> wrote:\n> I must admit to being flummoxed here, mainly because my linear algebra was 25 years ago and I can't remember what a Hessian is.\n>\n> I have a matrix of 60 securities' weekly returns, along with 60 projected returns. The returns are in a vector called Ret.vect and the covariance matrix of weekly returns in cov.mat . I have the minConstraints and maxConstraints that the parameters are permitted to take. I cycle through targeted risks and get the same error for each risk targeted...below I have removed the loop to focus on the risk=0.002.\n>\n> wgt.vect=c(rep(1/60, 60))\n> constr.fun <- function(wgt.vect) {;\n>                 c1 = sqrt(crossprod(t(wgt.vect %*% cov.mat),wgt.vect));\n>                 c2 = sum(wgt.vect);\n>                 return(c(c1,c2));\n>                 }\n> ineqconstr.fun <- function(wgt.vect) {\n>                 wgt.vect[1:60];\n>                 }\n> opt.fun <- function(wgt.vect) {-crossprod(wgt.vect,t(Ret.vect))}\n>\n> OptimSolution <- solnp(wgt.vect,opt.fun,constr.fun,eqB=c(0.002,1),ineqconstr.fun,ineqLB=minConstraints,ineqUB=maxConstraints)\n>\n> I get the following error:\n> solnp--> Solution not reliable....Problem Inverting Hessian.\n>\n> Well, that doesn't tell me very much! The parameters (weights) that are output for each run, as I cycle through the weights, are very scrambled...lots of little allocations, rather than clumping as you would expect to happen especially at the risky and riskless ends of the spectrum.\n>\n> Can anyone with more math than me give me a helping hand on the Hessian?\n>\n> Thanks,\n>\n>\n> Mike\n>\n> Michael Ashton, CFA\n> Managing Principal\n>\n> Enduring Investments LLC\n> W: 973.457.4602\n> C: 551.655.8006\n>\n>\n> ________________________________\n> This email and any attachments are confidential and inte...{{dropped:9}}\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "The Hessian is the matrix of second derivatives\n(https://en.wikipedia.org/wiki/Hessian_matrix) -- in scalar terms,\nyou're finding a point where the second derivative is zero and then\ntrying to divide ",
+      "thread_id": "thread-0135cc68045e",
+      "thread_depth": 1,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-75c5639438ec",
+      "message_id": "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9D@EXVMBX018-3.exch018.msoutlookonline.net>",
+      "from_name": "Michael Ashton",
+      "from_email_hash": "0ea431508e3ece53b39935dc57c9c20562fc6bfd29340c13716746377b1d41af",
+      "date": "2015-12-14T18:06:15-08:00",
+      "subject": "[R-SIG-Finance] solnp Problem Inverting Hessian",
+      "subject_clean": "solnp Problem Inverting Hessian",
+      "in_reply_to": "<CAAmySGPpMNsbsZQ+sDtd+owdhG3c-j3mdBj_ywe21dT6FnoEfQ@mail.gmail.com>",
+      "references": [
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9C@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGPpMNsbsZQ+sDtd+owdhG3c-j3mdBj_ywe21dT6FnoEfQ@mail.gmail.com>"
+      ],
+      "body_plain": "Do you have a suggestion for such? I have in the past tried fPortfolio, but it would not allow me to specify my own projected return vectors rather than the historical returns of the series (which is exactly backwards).\n\nAs for whether the matrix is comfortably non-singular...I suppose it depends in a Clintonian way on the meaning of \"comfortably,\" but I can create a Cholesky decomposition without it blowing up, which is usually how I can tell if I have done something stupid. Well, stupider than normal.\n\n-----Original Message-----\nFrom: Michael Weylandt [mailto:michael.weylandt at gmail.com]\nSent: Monday, December 14, 2015 8:32 PM\nTo: Michael Ashton\nCc: r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] solnp Problem Inverting Hessian\n\nThe Hessian is the matrix of second derivatives\n(https://en.wikipedia.org/wiki/Hessian_matrix) -- in scalar terms, you're finding a point where the second derivative is zero and then trying to divide by the second derivative to calculate the step size.\n\nI haven't gone through your code in any detail, but I'd start by checking the covariance matrix since that's proportional to the Hessian of your objective function. Is it (comfortably) non-singular?\n\nSince you're just solving the standard Markowitz problem, you might try a simpler (quadratic/convex) solver instead of a general non-linear solver. Should behave a bit better.\n\nMichael\n\n\nOn Mon, Dec 14, 2015 at 6:13 PM, Michael Ashton <m.ashton at enduringinvestments.com> wrote:\n> I must admit to being flummoxed here, mainly because my linear algebra was 25 years ago and I can't remember what a Hessian is.\n>\n> I have a matrix of 60 securities' weekly returns, along with 60 projected returns. The returns are in a vector called Ret.vect and the covariance matrix of weekly returns in cov.mat . I have the minConstraints and maxConstraints that the parameters are permitted to take. I cycle through targeted risks and get the same error for each risk targeted...below I have removed the loop to focus on the risk=0.002.\n>\n> wgt.vect=c(rep(1/60, 60))\n> constr.fun <- function(wgt.vect) {;\n>                 c1 = sqrt(crossprod(t(wgt.vect %*% cov.mat),wgt.vect));\n>                 c2 = sum(wgt.vect);\n>                 return(c(c1,c2));\n>                 }\n> ineqconstr.fun <- function(wgt.vect) {\n>                 wgt.vect[1:60];\n>                 }\n> opt.fun <- function(wgt.vect) {-crossprod(wgt.vect,t(Ret.vect))}\n>\n> OptimSolution <-\n> solnp(wgt.vect,opt.fun,constr.fun,eqB=c(0.002,1),ineqconstr.fun,ineqLB\n> =minConstraints,ineqUB=maxConstraints)\n>\n> I get the following error:\n> solnp--> Solution not reliable....Problem Inverting Hessian.\n>\n> Well, that doesn't tell me very much! The parameters (weights) that are output for each run, as I cycle through the weights, are very scrambled...lots of little allocations, rather than clumping as you would expect to happen especially at the risky and riskless ends of the spectrum.\n>\n> Can anyone with more math than me give me a helping hand on the Hessian?\n>\n> Thanks,\n>\n>\n> Mike\n>\n> Michael Ashton, CFA\n> Managing Principal\n>\n> Enduring Investments LLC\n> W: 973.457.4602\n> C: 551.655.8006\n>\n>\n> ________________________________\n> This email and any attachments are confidential and\n> inte...{{dropped:9}}\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\nThis email and any attachments are confidential and intended only for the recipient noted above. You are hereby notified that any use, printing, copying or disclosure is strictly prohibited without the permission of Enduring Investments LLC. For further information please contact: Management at EnduringInvestments.com; (973) 457-4602.",
+      "body_snippet": "Do you have a suggestion for such? I have in the past tried fPortfolio, but it would not allow me to specify my own projected return vectors rather than the historical returns of the series (which is ",
+      "thread_id": "thread-0135cc68045e",
+      "thread_depth": 2,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-87ae32f40129",
+      "message_id": "<4459A915-39FA-4074-B601-DB12AA1166DE@optonline.net>",
+      "from_name": "Krishna Kumar",
+      "from_email_hash": "199c5edd34f531d8670ffec2b21443c2d5b2e1064819580515a7be5747770f55",
+      "date": "2015-12-14T21:27:11-05:00",
+      "subject": "[R-SIG-Finance] solnp Problem Inverting Hessian",
+      "subject_clean": "solnp Problem Inverting Hessian",
+      "in_reply_to": "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9D@EXVMBX018-3.exch018.msoutlookonline.net>",
+      "references": [
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9C@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGPpMNsbsZQ+sDtd+owdhG3c-j3mdBj_ywe21dT6FnoEfQ@mail.gmail.com>",
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9D@EXVMBX018-3.exch018.msoutlookonline.net>"
+      ],
+      "body_plain": "Michael,\n\n\nPerhaps your covariance matrix is singular (non positive definite) so you can \"fix\" this matrix by finding the nearest correlation matrix that is non singular. \n\nThe simplest recipe is to  set the negative eigenvalues to a small positive number and rescale the  matrix.\nAlso look at nearPD in the Matrix package.\n\nBest\nKrishna\n\n----\n\n> On Dec 14, 2015, at 9:06 PM, Michael Ashton <m.ashton at enduringinvestments.com> wrote:\n> \n> Do you have a suggestion for such? I have in the past tried fPortfolio, but it would not allow me to specify my own projected return vectors rather than the historical returns of the series (which is exactly backwards).\n> \n> As for whether the matrix is comfortably non-singular...I suppose it depends in a Clintonian way on the meaning of \"comfortably,\" but I can create a Cholesky decomposition without it blowing up, which is usually how I can tell if I have done something stupid. Well, stupider than normal.\n> \n> -----Original Message-----\n> From: Michael Weylandt [mailto:michael.weylandt at gmail.com]\n> Sent: Monday, December 14, 2015 8:32 PM\n> To: Michael Ashton\n> Cc: r-sig-finance at r-project.org\n> Subject: Re: [R-SIG-Finance] solnp Problem Inverting Hessian\n> \n> The Hessian is the matrix of second derivatives\n> (https://en.wikipedia.org/wiki/Hessian_matrix) -- in scalar terms, you're finding a point where the second derivative is zero and then trying to divide by the second derivative to calculate the step size.\n> \n> I haven't gone through your code in any detail, but I'd start by checking the covariance matrix since that's proportional to the Hessian of your objective function. Is it (comfortably) non-singular?\n> \n> Since you're just solving the standard Markowitz problem, you might try a simpler (quadratic/convex) solver instead of a general non-linear solver. Should behave a bit better.\n> \n> Michael\n> \n> \n>> On Mon, Dec 14, 2015 at 6:13 PM, Michael Ashton <m.ashton at enduringinvestments.com> wrote:\n>> I must admit to being flummoxed here, mainly because my linear algebra was 25 years ago and I can't remember what a Hessian is.\n>> \n>> I have a matrix of 60 securities' weekly returns, along with 60 projected returns. The returns are in a vector called Ret.vect and the covariance matrix of weekly returns in cov.mat . I have the minConstraints and maxConstraints that the parameters are permitted to take. I cycle through targeted risks and get the same error for each risk targeted...below I have removed the loop to focus on the risk=0.002.\n>> \n>> wgt.vect=c(rep(1/60, 60))\n>> constr.fun <- function(wgt.vect) {;\n>>                c1 = sqrt(crossprod(t(wgt.vect %*% cov.mat),wgt.vect));\n>>                c2 = sum(wgt.vect);\n>>                return(c(c1,c2));\n>>                }\n>> ineqconstr.fun <- function(wgt.vect) {\n>>                wgt.vect[1:60];\n>>                }\n>> opt.fun <- function(wgt.vect) {-crossprod(wgt.vect,t(Ret.vect))}\n>> \n>> OptimSolution <-\n>> solnp(wgt.vect,opt.fun,constr.fun,eqB=c(0.002,1),ineqconstr.fun,ineqLB\n>> =minConstraints,ineqUB=maxConstraints)\n>> \n>> I get the following error:\n>> solnp--> Solution not reliable....Problem Inverting Hessian.\n>> \n>> Well, that doesn't tell me very much! The parameters (weights) that are output for each run, as I cycle through the weights, are very scrambled...lots of little allocations, rather than clumping as you would expect to happen especially at the risky and riskless ends of the spectrum.\n>> \n>> Can anyone with more math than me give me a helping hand on the Hessian?\n>> \n>> Thanks,\n>> \n>> \n>> Mike\n>> \n>> Michael Ashton, CFA\n>> Managing Principal\n>> \n>> Enduring Investments LLC\n>> W: 973.457.4602\n>> C: 551.655.8006\n>> \n>> \n>> ________________________________\n>> This email and any attachments are confidential and\n>> inte...{{dropped:9}}\n>> \n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n> \n> This email and any attachments are confidential and in...{{dropped:10}}",
+      "body_snippet": "Michael,\n\n\nPerhaps your covariance matrix is singular (non positive definite) so you can \"fix\" this matrix by finding the nearest correlation matrix that is non singular. \n\nThe simplest recipe is to  ",
+      "thread_id": "thread-0135cc68045e",
+      "thread_depth": 3,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-55e91bc2427a",
+      "message_id": "<CAAmySGMXqikXMhO7r7Ofz8E1C2nD0O5YjNr_9ua9NT7O8RVbbQ@mail.gmail.com>",
+      "from_name": "Michael Weylandt",
+      "from_email_hash": "44e8775a589b9ef81880469e200f3cce307c7180b4289ca1696a578afb772b3a",
+      "date": "2015-12-14T20:28:50-06:00",
+      "subject": "[R-SIG-Finance] solnp Problem Inverting Hessian",
+      "subject_clean": "solnp Problem Inverting Hessian",
+      "in_reply_to": "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9D@EXVMBX018-3.exch018.msoutlookonline.net>",
+      "references": [
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9C@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGPpMNsbsZQ+sDtd+owdhG3c-j3mdBj_ywe21dT6FnoEfQ@mail.gmail.com>",
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9D@EXVMBX018-3.exch018.msoutlookonline.net>"
+      ],
+      "body_plain": "What's the condition number of your correlation/covariance matrix? (?kappa)\n\nI think I've used quadprog for portfolio optimization with success,\nbut it's been a while.\n\nMW\n\nOn Mon, Dec 14, 2015 at 8:06 PM, Michael Ashton\n<m.ashton at enduringinvestments.com> wrote:\n> Do you have a suggestion for such? I have in the past tried fPortfolio, but it would not allow me to specify my own projected return vectors rather than the historical returns of the series (which is exactly backwards).\n>\n> As for whether the matrix is comfortably non-singular...I suppose it depends in a Clintonian way on the meaning of \"comfortably,\" but I can create a Cholesky decomposition without it blowing up, which is usually how I can tell if I have done something stupid. Well, stupider than normal.\n>\n> -----Original Message-----\n> From: Michael Weylandt [mailto:michael.weylandt at gmail.com]\n> Sent: Monday, December 14, 2015 8:32 PM\n> To: Michael Ashton\n> Cc: r-sig-finance at r-project.org\n> Subject: Re: [R-SIG-Finance] solnp Problem Inverting Hessian\n>\n> The Hessian is the matrix of second derivatives\n> (https://en.wikipedia.org/wiki/Hessian_matrix) -- in scalar terms, you're finding a point where the second derivative is zero and then trying to divide by the second derivative to calculate the step size.\n>\n> I haven't gone through your code in any detail, but I'd start by checking the covariance matrix since that's proportional to the Hessian of your objective function. Is it (comfortably) non-singular?\n>\n> Since you're just solving the standard Markowitz problem, you might try a simpler (quadratic/convex) solver instead of a general non-linear solver. Should behave a bit better.\n>\n> Michael\n>\n>\n> On Mon, Dec 14, 2015 at 6:13 PM, Michael Ashton <m.ashton at enduringinvestments.com> wrote:\n>> I must admit to being flummoxed here, mainly because my linear algebra was 25 years ago and I can't remember what a Hessian is.\n>>\n>> I have a matrix of 60 securities' weekly returns, along with 60 projected returns. The returns are in a vector called Ret.vect and the covariance matrix of weekly returns in cov.mat . I have the minConstraints and maxConstraints that the parameters are permitted to take. I cycle through targeted risks and get the same error for each risk targeted...below I have removed the loop to focus on the risk=0.002.\n>>\n>> wgt.vect=c(rep(1/60, 60))\n>> constr.fun <- function(wgt.vect) {;\n>>                 c1 = sqrt(crossprod(t(wgt.vect %*% cov.mat),wgt.vect));\n>>                 c2 = sum(wgt.vect);\n>>                 return(c(c1,c2));\n>>                 }\n>> ineqconstr.fun <- function(wgt.vect) {\n>>                 wgt.vect[1:60];\n>>                 }\n>> opt.fun <- function(wgt.vect) {-crossprod(wgt.vect,t(Ret.vect))}\n>>\n>> OptimSolution <-\n>> solnp(wgt.vect,opt.fun,constr.fun,eqB=c(0.002,1),ineqconstr.fun,ineqLB\n>> =minConstraints,ineqUB=maxConstraints)\n>>\n>> I get the following error:\n>> solnp--> Solution not reliable....Problem Inverting Hessian.\n>>\n>> Well, that doesn't tell me very much! The parameters (weights) that are output for each run, as I cycle through the weights, are very scrambled...lots of little allocations, rather than clumping as you would expect to happen especially at the risky and riskless ends of the spectrum.\n>>\n>> Can anyone with more math than me give me a helping hand on the Hessian?\n>>\n>> Thanks,\n>>\n>>\n>> Mike\n>>\n>> Michael Ashton, CFA\n>> Managing Principal\n>>\n>> Enduring Investments LLC\n>> W: 973.457.4602\n>> C: 551.655.8006\n>>\n>>\n>> ________________________________\n>> This email and any attachments are confidential and\n>> inte...{{dropped:9}}\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n>\n> This email and any attachments are confidential and in...{{dropped:6}}",
+      "body_snippet": "What's the condition number of your correlation/covariance matrix? (?kappa)\n\nI think I've used quadprog for portfolio optimization with success,\nbut it's been a while.\n\nMW\n\nOn Mon, Dec 14, 2015 at 8:0",
+      "thread_id": "thread-0135cc68045e",
+      "thread_depth": 3,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-cf60c412ca8b",
+      "message_id": "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9F@EXVMBX018-3.exch018.msoutlookonline.net>",
+      "from_name": "Michael Ashton",
+      "from_email_hash": "0ea431508e3ece53b39935dc57c9c20562fc6bfd29340c13716746377b1d41af",
+      "date": "2015-12-14T20:14:17-08:00",
+      "subject": "[R-SIG-Finance] solnp Problem Inverting Hessian",
+      "subject_clean": "solnp Problem Inverting Hessian",
+      "in_reply_to": "<4459A915-39FA-4074-B601-DB12AA1166DE@optonline.net>",
+      "references": [
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9C@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGPpMNsbsZQ+sDtd+owdhG3c-j3mdBj_ywe21dT6FnoEfQ@mail.gmail.com>",
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9D@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<4459A915-39FA-4074-B601-DB12AA1166DE@optonline.net>"
+      ],
+      "body_plain": "All eigenvalues are positive.\n\nFrom: Krishna Kumar [mailto:kk2250 at optonline.net]\nSent: Monday, December 14, 2015 9:27 PM\nTo: Michael Ashton\nCc: Michael Weylandt; r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] solnp Problem Inverting Hessian\n\nMichael,\n\n\nPerhaps your covariance matrix is singular (non positive definite) so you can \"fix\" this matrix by finding the nearest correlation matrix that is non singular.\n\n\nThe simplest recipe is to  set the negative eigenvalues to a small positive number and rescale the  matrix.\n\nAlso look at nearPD in the Matrix package.\n\n\n\nBest\n\nKrishna\n\n----\n\nOn Dec 14, 2015, at 9:06 PM, Michael Ashton <m.ashton at enduringinvestments.com<mailto:m.ashton at enduringinvestments.com>> wrote:\nDo you have a suggestion for such? I have in the past tried fPortfolio, but it would not allow me to specify my own projected return vectors rather than the historical returns of the series (which is exactly backwards).\n\nAs for whether the matrix is comfortably non-singular...I suppose it depends in a Clintonian way on the meaning of \"comfortably,\" but I can create a Cholesky decomposition without it blowing up, which is usually how I can tell if I have done something stupid. Well, stupider than normal.\n\n-----Original Message-----\nFrom: Michael Weylandt [mailto:michael.weylandt at gmail.com]\nSent: Monday, December 14, 2015 8:32 PM\nTo: Michael Ashton\nCc: r-sig-finance at r-project.org<mailto:r-sig-finance at r-project.org>\nSubject: Re: [R-SIG-Finance] solnp Problem Inverting Hessian\n\nThe Hessian is the matrix of second derivatives\n(https://en.wikipedia.org/wiki/Hessian_matrix) -- in scalar terms, you're finding a point where the second derivative is zero and then trying to divide by the second derivative to calculate the step size.\n\nI haven't gone through your code in any detail, but I'd start by checking the covariance matrix since that's proportional to the Hessian of your objective function. Is it (comfortably) non-singular?\n\nSince you're just solving the standard Markowitz problem, you might try a simpler (quadratic/convex) solver instead of a general non-linear solver. Should behave a bit better.\n\nMichael\n\n\nOn Mon, Dec 14, 2015 at 6:13 PM, Michael Ashton <m.ashton at enduringinvestments.com<mailto:m.ashton at enduringinvestments.com>> wrote:\n\nI must admit to being flummoxed here, mainly because my linear algebra was 25 years ago and I can't remember what a Hessian is.\n\nI have a matrix of 60 securities' weekly returns, along with 60 projected returns. The returns are in a vector called Ret.vect and the covariance matrix of weekly returns in cov.mat . I have the minConstraints and maxConstraints that the parameters are permitted to take. I cycle through targeted risks and get the same error for each risk targeted...below I have removed the loop to focus on the risk=0.002.\n\nwgt.vect=c(rep(1/60, 60))\nconstr.fun <- function(wgt.vect) {;\n               c1 = sqrt(crossprod(t(wgt.vect %*% cov.mat),wgt.vect));\n               c2 = sum(wgt.vect);\n               return(c(c1,c2));\n               }\nineqconstr.fun <- function(wgt.vect) {\n               wgt.vect[1:60];\n               }\nopt.fun <- function(wgt.vect) {-crossprod(wgt.vect,t(Ret.vect))}\n\nOptimSolution <-\nsolnp(wgt.vect,opt.fun,constr.fun,eqB=c(0.002,1),ineqconstr.fun,ineqLB\n=minConstraints,ineqUB=maxConstraints)\n\nI get the following error:\nsolnp--> Solution not reliable....Problem Inverting Hessian.\n\nWell, that doesn't tell me very much! The parameters (weights) that are output for each run, as I cycle through the weights, are very scrambled...lots of little allocations, rather than clumping as you would expect to happen especially at the risky and riskless ends of the spectrum.\n\nCan anyone with more math than me give me a helping hand on the Hessian?\n\nThanks,\n\n\nMike\n\nMichael Ashton, CFA\nManaging Principal\n\nEnduring Investments LLC\nW: 973.457.4602\nC: 551.655.8006\n\n\n________________________________\nThis email and any attachments are confidential and\ninte...{{dropped:9}}\n\n_______________________________________________\nR-SIG-Finance at r-project.org<mailto:R-SIG-Finance at r-project.org> mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\nThis email and any attachments are confidential and intended only for the recipient noted above. You are hereby notified that any use, printing, copying or disclosure is strictly prohibited without the permission of Enduring Investments LLC. For further information please contact: Management at EnduringInvestments.com<mailto:Management at enduringinvestments.com>; (973) 457-4602.\n_______________________________________________\nR-SIG-Finance at r-project.org<mailto:R-SIG-Finance at r-project.org> mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n________________________________\nThis email and any attachments are confidential and intended only for the recipient noted above. You are hereby notified that any use, printing, copying or disclosure is strictly prohibited without the permission of Enduring Investments LLC. For further information please contact: Management at EnduringInvestments.com; (973) 457-4602.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "All eigenvalues are positive.\n\nFrom: Krishna Kumar [mailto:kk2250 at optonline.net]\nSent: Monday, December 14, 2015 9:27 PM\nTo: Michael Ashton\nCc: Michael Weylandt; r-sig-finance at r-project.org\nSubj",
+      "thread_id": "thread-0135cc68045e",
+      "thread_depth": 4,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-422467618c3f",
+      "message_id": "<CAAmySGN3RTee9puDqURXvXE3ndWx4=wTuyRhhq6W_mjGpYOkVQ@mail.gmail.com>",
+      "from_name": "Michael Weylandt",
+      "from_email_hash": "44e8775a589b9ef81880469e200f3cce307c7180b4289ca1696a578afb772b3a",
+      "date": "2015-12-14T22:39:28-06:00",
+      "subject": "[R-SIG-Finance] solnp Problem Inverting Hessian",
+      "subject_clean": "solnp Problem Inverting Hessian",
+      "in_reply_to": "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9E@EXVMBX018-3.exch018.msoutlookonline.net>",
+      "references": [
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9C@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGPpMNsbsZQ+sDtd+owdhG3c-j3mdBj_ywe21dT6FnoEfQ@mail.gmail.com>",
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9D@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGMXqikXMhO7r7Ofz8E1C2nD0O5YjNr_9ua9NT7O8RVbbQ@mail.gmail.com>",
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9E@EXVMBX018-3.exch018.msoutlookonline.net>"
+      ],
+      "body_plain": "(+list -- I'm not a numerical linear algebra expert or portfolio\noptimization expert, but there are a number on this list who might\nchime in)\n\nThat is quite high, and almost certainly problematic.\n\nI'm not sure what an acceptable bound is (will depend on your solver),\nbut that's almost certainly above it for any algorithm which will\nrequire inverting cov.mat.\n\nTwo things you could try:\n- use a different (non-Hessian-using) optimization algorithm;\n- use some form of shrinkage/regularization (Ledoit-Wolf is a common\nchoice) to tame your covariance matrix.\n\nMichael\n\nOn Mon, Dec 14, 2015 at 10:10 PM, Michael Ashton\n<m.ashton at enduringinvestments.com> wrote:\n> Well, not sure whether this makes any sense but kappa(cov.mat) gives me 11148245007.\n>\n> That seems large. But I am not sure what it is supposed to be.\n>\n> -----Original Message-----\n> From: Michael Weylandt [mailto:michael.weylandt at gmail.com]\n> Sent: Monday, December 14, 2015 9:29 PM\n> To: Michael Ashton\n> Cc: r-sig-finance at r-project.org\n> Subject: Re: [R-SIG-Finance] solnp Problem Inverting Hessian\n>\n> What's the condition number of your correlation/covariance matrix? (?kappa)\n>\n> I think I've used quadprog for portfolio optimization with success, but it's been a while.\n>\n> MW\n>\n> On Mon, Dec 14, 2015 at 8:06 PM, Michael Ashton <m.ashton at enduringinvestments.com> wrote:\n>> Do you have a suggestion for such? I have in the past tried fPortfolio, but it would not allow me to specify my own projected return vectors rather than the historical returns of the series (which is exactly backwards).\n>>\n>> As for whether the matrix is comfortably non-singular...I suppose it depends in a Clintonian way on the meaning of \"comfortably,\" but I can create a Cholesky decomposition without it blowing up, which is usually how I can tell if I have done something stupid. Well, stupider than normal.\n>>\n>> -----Original Message-----\n>> From: Michael Weylandt [mailto:michael.weylandt at gmail.com]\n>> Sent: Monday, December 14, 2015 8:32 PM\n>> To: Michael Ashton\n>> Cc: r-sig-finance at r-project.org\n>> Subject: Re: [R-SIG-Finance] solnp Problem Inverting Hessian\n>>\n>> The Hessian is the matrix of second derivatives\n>> (https://en.wikipedia.org/wiki/Hessian_matrix) -- in scalar terms, you're finding a point where the second derivative is zero and then trying to divide by the second derivative to calculate the step size.\n>>\n>> I haven't gone through your code in any detail, but I'd start by checking the covariance matrix since that's proportional to the Hessian of your objective function. Is it (comfortably) non-singular?\n>>\n>> Since you're just solving the standard Markowitz problem, you might try a simpler (quadratic/convex) solver instead of a general non-linear solver. Should behave a bit better.\n>>\n>> Michael\n>>\n>>\n>> On Mon, Dec 14, 2015 at 6:13 PM, Michael Ashton <m.ashton at enduringinvestments.com> wrote:\n>>> I must admit to being flummoxed here, mainly because my linear algebra was 25 years ago and I can't remember what a Hessian is.\n>>>\n>>> I have a matrix of 60 securities' weekly returns, along with 60 projected returns. The returns are in a vector called Ret.vect and the covariance matrix of weekly returns in cov.mat . I have the minConstraints and maxConstraints that the parameters are permitted to take. I cycle through targeted risks and get the same error for each risk targeted...below I have removed the loop to focus on the risk=0.002.\n>>>\n>>> wgt.vect=c(rep(1/60, 60))\n>>> constr.fun <- function(wgt.vect) {;\n>>>                 c1 = sqrt(crossprod(t(wgt.vect %*% cov.mat),wgt.vect));\n>>>                 c2 = sum(wgt.vect);\n>>>                 return(c(c1,c2));\n>>>                 }\n>>> ineqconstr.fun <- function(wgt.vect) {\n>>>                 wgt.vect[1:60];\n>>>                 }\n>>> opt.fun <- function(wgt.vect) {-crossprod(wgt.vect,t(Ret.vect))}\n>>>\n>>> OptimSolution <-\n>>> solnp(wgt.vect,opt.fun,constr.fun,eqB=c(0.002,1),ineqconstr.fun,ineqL\n>>> B\n>>> =minConstraints,ineqUB=maxConstraints)\n>>>\n>>> I get the following error:\n>>> solnp--> Solution not reliable....Problem Inverting Hessian.\n>>>\n>>> Well, that doesn't tell me very much! The parameters (weights) that are output for each run, as I cycle through the weights, are very scrambled...lots of little allocations, rather than clumping as you would expect to happen especially at the risky and riskless ends of the spectrum.\n>>>\n>>> Can anyone with more math than me give me a helping hand on the Hessian?\n>>>\n>>> Thanks,\n>>>\n>>>\n>>> Mike\n>>>\n>>> Michael Ashton, CFA\n>>> Managing Principal\n>>>\n>>> Enduring Investments LLC\n>>> W: 973.457.4602\n>>> C: 551.655.8006\n>>>\n>>>\n>>> ________________________________\n>>> This email and any attachments are confidential and\n>>> inte...{{dropped:9}}\n>>>\n>>> _______________________________________________\n>>> R-SIG-Finance at r-project.org mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>> -- Also note that this is not the r-help list where general R questions should go.\n>>\n>> This email and any attachments are confidential and intended only for the recipient noted above. You are hereby notified that any use, printing, copying or disclosure is strictly prohibited without the permission of Enduring Investments LLC. For further information please contact: Management at EnduringInvestments.com; (973) 457-4602.\n>\n> This email and any attachments are confidential and in...{{dropped:6}}",
+      "body_snippet": "(+list -- I'm not a numerical linear algebra expert or portfolio\noptimization expert, but there are a number on this list who might\nchime in)\n\nThat is quite high, and almost certainly problematic.\n\nI'",
+      "thread_id": "thread-422467618c3f",
+      "thread_depth": 0,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-1b2263ba9d24",
+      "message_id": "<CA+3g=Dcapp5AEwwKQOkt9SMDU=8PQsc4WWFUzMMGUi1tax1R7A@mail.gmail.com>",
+      "from_name": "Damon Verial",
+      "from_email_hash": "50fe874a3e5a1ed3ddcd1f20b44fc3cf3dbb14e0cba5243250aa04135412df1f",
+      "date": "2015-12-15T17:51:07+09:00",
+      "subject": "[R-SIG-Finance] Quantstrat code works for long position but not short position",
+      "subject_clean": "Quantstrat code works for long position but not short position",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "So I have this code that works fine for long positions. However, when I\nreversed the code to make a short version, it breaks, giving me an error of:\n\nError in osFUN(strategy = strategy, data = mktdata, timestamp = timestamp,\n:\n  ATR corresponding to atrX is invalid at this point in time.\n               Add a logical operator to account for this.\n\nWhy does this occur with the short position but not the long position? The\ncode follows, for reference:\n\nlibrary(\"quantstrat\")\nrequire(IKTrading)\n\ninitDate<-startDate<-'2015-01-01'\nendDate<-'2015-12-09'\n\nrm(list = ls(.blotter), envir = .blotter)\ncurrency(\"USD\")\nSys.setenv(TZ = \"UTC\")\nsymbols<-\"SPY\"\n\nstrategy.st <- portfolio.st <- account.st <- \"Gaps\"\ngetSymbols(symbols, src=\"yahoo\",\nindex.class=c(\"POSIXt\",\"POSIXct\"),from=startDate,\nto=endDate, adjust=T)\nstock(symbols,currency=\"USD\",multiplier=1)\ntradeSize <- 100000\ninitEq <- tradeSize*length(symbols)\n\nstrategy.st <- portfolio.st <- account.st <- \"Gaps\"\nrm.strat(strategy.st)\ninitPortf(portfolio.st, symbols=symbols, initDate=initDate, currency='USD')\ninitAcct(account.st, portfolios=portfolio.st, initDate=initDate,\ncurrency='USD',initEq=initEq)\ninitOrders(portfolio.st, initDate=initDate)\nstrategy(strategy.st, store=TRUE)\n\n\nperiod=10\npctATR=.1\n\n####################\n## UP GAPS ##\n####################\n\n#necessary functions\n\ngap <- function(x,k) {\n low <- Lo(x)\n high<- Hi(x)\n yesHigh <- lag.xts(high,k=1)\n gapDay <- low > yesHigh\n gapDay[1] <- 0\n gaps <- x[gapDay==1,]\n gaps$takeProfit <- yesHigh[gapDay==1,]\n gaps<-cbind(gapDay,gaps$takeProfit)\n gaps$takeProfit<-na.locf(gaps$takeProfit)\n colnames(gaps) <- c(\"gap\",\"TP\")\n return(gaps)\n}\n\n\nperiod=10\npctATR=.1\n\n\n#indicators\n\nadd.indicator(strategy.st, name=\"lagATR\",\n              arguments=list(HLC=quote(HLC(mktdata)),\n                             n=period),\n              label=\"atrX\")\n\nadd.indicator(strategy.st, name=\"gap\",\n              arguments=list(x=quote(HLC(mktdata))),\n              label=\"gap\")\n\n\ntest <- applyIndicators(strategy.st, mktdata=SPY)\ntail(test, 50)\n\n#signals\nadd.signal(strategy.st, name=\"sigThreshold\",\n           arguments=list(column=\"gap.gap\", threshold=.5,\n                          relationship=\"gt\", cross=TRUE),\n           label=\"shortEntry\")\n\ntest <- applySignals(strategy.st, test)\ntail(test,50)\n\n#Add rules\n#rules\nadd.rule(strategy.st, name=\"ruleSignal\",\n         arguments=list(sigcol=\"shortEntry\",\n                        sigval=TRUE,\n                        ordertype=\"market\",\n                        orderside=\"short\",\n                        replace=FALSE,\n                        osFUN=osDollarATR,\n                        tradeSize=tradeSize,\n                        prefer=\"Open\",\n                        pctATR=pctATR,\n                        atrMod=\"X\",\n                        orderset=\"orders\"),\n         type=\"enter\", path.dep=TRUE,\n         label=\"gapEntry\")\n\nadd.rule(strategy.st, name=\"ruleSignal\",\n         arguments=list(sigcol=\"shortEntry\",\n                        sigval=TRUE,\n                        ordertype=\"limit\",\n                        orderside=\"short\",\n                        replace=FALSE,\n                        orderqty='all',\n                        order.price=quote(mktdata$TP.gap[timestamp]),\n                        orderset=\"orders\"),\n         type=\"chain\",\n         parent=\"gapEntry\",\n         label=\"takeProfitShort\",\n         path.dep=TRUE)\n\n\n#apply strategy\nt1 <- Sys.time()\nout <- applyStrategy(strategy=strategy.st,portfolios=portfolio.st)\n\nDamon Verial\nOffice: (206) 395-3688\nSkype: DamonVerial\nLinkedIn: https://www.linkedin.com/profile/view?id=175736313\nA Seasonal Healthcare Portfolio\n<http://seekingalpha.com/article/3693506-a-seasonal-healthcare-portfolio-using-vht>\nI purposely keep my emails to 5 sentences or fewer - which is a miracle for\na writer.\nI do this to show that I respect both your time and mine.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "So I have this code that works fine for long positions. However, when I\nreversed the code to make a short version, it breaks, giving me an error of:\n\nError in osFUN(strategy = strategy, data = mktdata",
+      "thread_id": "thread-1b2263ba9d24",
+      "thread_depth": 0,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-491c238c21a0",
+      "message_id": "<CAPPM_gRwt6e87MkFv3850ufaNLfnab6cZn0-hSeMDsV5kjjuaw@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-12-15T06:39:06-06:00",
+      "subject": "[R-SIG-Finance] Quantstrat code works for long position but not short position",
+      "subject_clean": "Quantstrat code works for long position but not short position",
+      "in_reply_to": "<CA+3g=Dcapp5AEwwKQOkt9SMDU=8PQsc4WWFUzMMGUi1tax1R7A@mail.gmail.com>",
+      "references": [
+        "<CA+3g=Dcapp5AEwwKQOkt9SMDU=8PQsc4WWFUzMMGUi1tax1R7A@mail.gmail.com>"
+      ],
+      "body_plain": "On Tue, Dec 15, 2015 at 2:51 AM, Damon Verial <verial.damon at gmail.com> wrote:\n> So I have this code that works fine for long positions. However, when I\n> reversed the code to make a short version, it breaks, giving me an error of:\n>\n> Error in osFUN(strategy = strategy, data = mktdata, timestamp = timestamp,\n> :\n>   ATR corresponding to atrX is invalid at this point in time.\n>                Add a logical operator to account for this.\n>\nThe error could be more informative ('at this point in time' should be\n'for this timestamp', and it would be nice if the specific timestamp\nwere reported in the error), but it does give you hints about what's\nwrong.  Look at your mktdata:\n\n           atr.atrX gap.gap   TP.gap shortEntry\n2015-01-02       NA       0       NA         NA\n2015-01-05       NA       0       NA          0\n2015-01-06       NA       0       NA          0\n2015-01-07       NA       0       NA          0\n2015-01-08       NA       1 199.8034          1\n2015-01-09       NA       0 199.8034          0\n2015-01-12       NA       0 199.8034          0\n2015-01-13       NA       0 199.8034          0\n2015-01-14       NA       0 199.8034          0\n2015-01-15       NA       0 199.8034          0\n2015-01-16       NA       0 199.8034          0\n2015-01-20 3.465414       0 199.8034          0\n\nYour first sell signal is on 2015-01-08, but atr.atrX is NA at that\npoint.  So the order sizing function doesn't know how to size that\nsell order.\n\nI think the \"IKTrading-way\" to fix this is to change your signals to:\n\n#signals\nadd.signal(strategy.st, name=\"sigThreshold\",\n           arguments=list(column=\"gap.gap\", threshold=.5,\n                          relationship=\"gt\", cross=TRUE),\n           label=\"shortEntryRaw\")\n\nadd.signal(strategy.st, name=\"sigAND\",\n           arguments=list(columns=c(\"atr.atrX\",\"shortEntryRaw\")),\n           label=\"shortEntry\")\n\nWhich will make 'shortEntry' NA if 'shortEntryRaw' is true before\natr.atrX is non-NA.\n\nIt might be more user-friendly if the osDollarATR function returned an\norder size of zero, with a warning, if the ATR column it references is\nNA.\n\n> Why does this occur with the short position but not the long position? The\n> code follows, for reference:\n>\nThank you for the reproducible example.\n\n> library(\"quantstrat\")\n> require(IKTrading)\n>\n> initDate<-startDate<-'2015-01-01'\n> endDate<-'2015-12-09'\n>\n> rm(list = ls(.blotter), envir = .blotter)\n> currency(\"USD\")\n> Sys.setenv(TZ = \"UTC\")\n> symbols<-\"SPY\"\n>\n> strategy.st <- portfolio.st <- account.st <- \"Gaps\"\n> getSymbols(symbols, src=\"yahoo\",\n> index.class=c(\"POSIXt\",\"POSIXct\"),from=startDate,\n> to=endDate, adjust=T)\n> stock(symbols,currency=\"USD\",multiplier=1)\n> tradeSize <- 100000\n> initEq <- tradeSize*length(symbols)\n>\n> strategy.st <- portfolio.st <- account.st <- \"Gaps\"\n> rm.strat(strategy.st)\n> initPortf(portfolio.st, symbols=symbols, initDate=initDate, currency='USD')\n> initAcct(account.st, portfolios=portfolio.st, initDate=initDate,\n> currency='USD',initEq=initEq)\n> initOrders(portfolio.st, initDate=initDate)\n> strategy(strategy.st, store=TRUE)\n>\nYou do not need to specify initDate in the calls to initPortf,\ninitAcct, and initOrders.  The defaults (1950-01-01, and 1997-12-31\nfor initOrders until recently) should be sufficient.  Specifying them\nhas the potential to cause errors that are hard for users to recognize\nand fix, so you should only specify them if you know what you're doing\n(or need them to be earlier than Jan-1950).\n\n>\n> period=10\n> pctATR=.1\n>\n> ####################\n> ## UP GAPS ##\n> ####################\n>\n> #necessary functions\n>\n> gap <- function(x,k) {\n>  low <- Lo(x)\n>  high<- Hi(x)\n>  yesHigh <- lag.xts(high,k=1)\n>  gapDay <- low > yesHigh\n>  gapDay[1] <- 0\n>  gaps <- x[gapDay==1,]\n>  gaps$takeProfit <- yesHigh[gapDay==1,]\n>  gaps<-cbind(gapDay,gaps$takeProfit)\n>  gaps$takeProfit<-na.locf(gaps$takeProfit)\n>  colnames(gaps) <- c(\"gap\",\"TP\")\n>  return(gaps)\n> }\n>\n>\n> period=10\n> pctATR=.1\n>\n>\n> #indicators\n>\n> add.indicator(strategy.st, name=\"lagATR\",\n>               arguments=list(HLC=quote(HLC(mktdata)),\n>                              n=period),\n>               label=\"atrX\")\n>\n> add.indicator(strategy.st, name=\"gap\",\n>               arguments=list(x=quote(HLC(mktdata))),\n>               label=\"gap\")\n>\n>\n> test <- applyIndicators(strategy.st, mktdata=SPY)\n> tail(test, 50)\n>\n> #signals\n> add.signal(strategy.st, name=\"sigThreshold\",\n>            arguments=list(column=\"gap.gap\", threshold=.5,\n>                           relationship=\"gt\", cross=TRUE),\n>            label=\"shortEntry\")\n>\n> test <- applySignals(strategy.st, test)\n> tail(test,50)\n>\n> #Add rules\n> #rules\n> add.rule(strategy.st, name=\"ruleSignal\",\n>          arguments=list(sigcol=\"shortEntry\",\n>                         sigval=TRUE,\n>                         ordertype=\"market\",\n>                         orderside=\"short\",\n>                         replace=FALSE,\n>                         osFUN=osDollarATR,\n>                         tradeSize=tradeSize,\n>                         prefer=\"Open\",\n>                         pctATR=pctATR,\n>                         atrMod=\"X\",\n>                         orderset=\"orders\"),\n>          type=\"enter\", path.dep=TRUE,\n>          label=\"gapEntry\")\n>\n> add.rule(strategy.st, name=\"ruleSignal\",\n>          arguments=list(sigcol=\"shortEntry\",\n>                         sigval=TRUE,\n>                         ordertype=\"limit\",\n>                         orderside=\"short\",\n>                         replace=FALSE,\n>                         orderqty='all',\n>                         order.price=quote(mktdata$TP.gap[timestamp]),\n>                         orderset=\"orders\"),\n>          type=\"chain\",\n>          parent=\"gapEntry\",\n>          label=\"takeProfitShort\",\n>          path.dep=TRUE)\n>\n>\n> #apply strategy\n> t1 <- Sys.time()\n> out <- applyStrategy(strategy=strategy.st,portfolios=portfolio.st)\n>\n> Damon Verial\n> Office: (206) 395-3688\n> Skype: DamonVerial\n> LinkedIn: https://www.linkedin.com/profile/view?id=175736313\n> A Seasonal Healthcare Portfolio\n> <http://seekingalpha.com/article/3693506-a-seasonal-healthcare-portfolio-using-vht>\n> I purposely keep my emails to 5 sentences or fewer - which is a miracle for\n> a writer.\n> I do this to show that I respect both your time and mine.\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Tue, Dec 15, 2015 at 2:51 AM, Damon Verial <verial.damon at gmail.com> wrote:\n> So I have this code that works fine for long positions. However, when I\n> reversed the code to make a short version, ",
+      "thread_id": "thread-1b2263ba9d24",
+      "thread_depth": 1,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-f5800ac7b2ee",
+      "message_id": "<56702A68.8010304@gmail.com>",
+      "from_name": "Paul Gilbert",
+      "from_email_hash": "aa7dbc26c3f15087b2ccda228b01f598ecfa2ae9d7fa19309941c01a2c4f0d2f",
+      "date": "2015-12-15T09:57:44-05:00",
+      "subject": "[R-SIG-Finance] solnp Problem Inverting Hessian",
+      "subject_clean": "solnp Problem Inverting Hessian",
+      "in_reply_to": "<CAAmySGN3RTee9puDqURXvXE3ndWx4=wTuyRhhq6W_mjGpYOkVQ@mail.gmail.com>",
+      "references": [
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9C@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGPpMNsbsZQ+sDtd+owdhG3c-j3mdBj_ywe21dT6FnoEfQ@mail.gmail.com>",
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9D@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGMXqikXMhO7r7Ofz8E1C2nD0O5YjNr_9ua9NT7O8RVbbQ@mail.gmail.com>",
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9E@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGN3RTee9puDqURXvXE3ndWx4=wTuyRhhq6W_mjGpYOkVQ@mail.gmail.com>"
+      ],
+      "body_plain": "I have not been paying close attention and I've missed something in this \nthread, but ...\n\nI think the hessian in the optimization will be the second derivative of \nthis function\n\n >>>>opt.fun <- function(wgt.vect) {-crossprod(wgt.vect,t(Ret.vect))}\n\nWRT  wgt.vect. If there are zero elements in Ret.vect then that hessian \nwill be singular. And if there are orders of magnitude difference \nbetween the largest and smallest elements in Ret.vect then the hessian \nwill be ill-conditioned.\n\nThe ill-conditioned case is a numerical problem and you might solve it \nwith a different algorithm, or by better scaling. The zero case is a \ntheoretical problem, there is not a unique optimal point but rather \nwhole continuum of optimal points (your parameters corresponding to the \nzero elements will not make any difference in the function value).\n\nHTH,\nPaul\n\nOn 12/14/2015 11:39 PM, Michael Weylandt wrote:\n> (+list -- I'm not a numerical linear algebra expert or portfolio\n> optimization expert, but there are a number on this list who might\n> chime in)\n>\n> That is quite high, and almost certainly problematic.\n>\n> I'm not sure what an acceptable bound is (will depend on your solver),\n> but that's almost certainly above it for any algorithm which will\n> require inverting cov.mat.\n>\n> Two things you could try:\n> - use a different (non-Hessian-using) optimization algorithm;\n> - use some form of shrinkage/regularization (Ledoit-Wolf is a common\n> choice) to tame your covariance matrix.\n>\n> Michael\n>\n> On Mon, Dec 14, 2015 at 10:10 PM, Michael Ashton\n> <m.ashton at enduringinvestments.com> wrote:\n>> Well, not sure whether this makes any sense but kappa(cov.mat) gives me 11148245007.\n>>\n>> That seems large. But I am not sure what it is supposed to be.\n>>\n>> -----Original Message-----\n>> From: Michael Weylandt [mailto:michael.weylandt at gmail.com]\n>> Sent: Monday, December 14, 2015 9:29 PM\n>> To: Michael Ashton\n>> Cc: r-sig-finance at r-project.org\n>> Subject: Re: [R-SIG-Finance] solnp Problem Inverting Hessian\n>>\n>> What's the condition number of your correlation/covariance matrix? (?kappa)\n>>\n>> I think I've used quadprog for portfolio optimization with success, but it's been a while.\n>>\n>> MW\n>>\n>> On Mon, Dec 14, 2015 at 8:06 PM, Michael Ashton <m.ashton at enduringinvestments.com> wrote:\n>>> Do you have a suggestion for such? I have in the past tried fPortfolio, but it would not allow me to specify my own projected return vectors rather than the historical returns of the series (which is exactly backwards).\n>>>\n>>> As for whether the matrix is comfortably non-singular...I suppose it depends in a Clintonian way on the meaning of \"comfortably,\" but I can create a Cholesky decomposition without it blowing up, which is usually how I can tell if I have done something stupid. Well, stupider than normal.\n>>>\n>>> -----Original Message-----\n>>> From: Michael Weylandt [mailto:michael.weylandt at gmail.com]\n>>> Sent: Monday, December 14, 2015 8:32 PM\n>>> To: Michael Ashton\n>>> Cc: r-sig-finance at r-project.org\n>>> Subject: Re: [R-SIG-Finance] solnp Problem Inverting Hessian\n>>>\n>>> The Hessian is the matrix of second derivatives\n>>> (https://en.wikipedia.org/wiki/Hessian_matrix) -- in scalar terms, you're finding a point where the second derivative is zero and then trying to divide by the second derivative to calculate the step size.\n>>>\n>>> I haven't gone through your code in any detail, but I'd start by checking the covariance matrix since that's proportional to the Hessian of your objective function. Is it (comfortably) non-singular?\n>>>\n>>> Since you're just solving the standard Markowitz problem, you might try a simpler (quadratic/convex) solver instead of a general non-linear solver. Should behave a bit better.\n>>>\n>>> Michael\n>>>\n>>>\n>>> On Mon, Dec 14, 2015 at 6:13 PM, Michael Ashton <m.ashton at enduringinvestments.com> wrote:\n>>>> I must admit to being flummoxed here, mainly because my linear algebra was 25 years ago and I can't remember what a Hessian is.\n>>>>\n>>>> I have a matrix of 60 securities' weekly returns, along with 60 projected returns. The returns are in a vector called Ret.vect and the covariance matrix of weekly returns in cov.mat . I have the minConstraints and maxConstraints that the parameters are permitted to take. I cycle through targeted risks and get the same error for each risk targeted...below I have removed the loop to focus on the risk=0.002.\n>>>>\n>>>> wgt.vect=c(rep(1/60, 60))\n>>>> constr.fun <- function(wgt.vect) {;\n>>>>                  c1 = sqrt(crossprod(t(wgt.vect %*% cov.mat),wgt.vect));\n>>>>                  c2 = sum(wgt.vect);\n>>>>                  return(c(c1,c2));\n>>>>                  }\n>>>> ineqconstr.fun <- function(wgt.vect) {\n>>>>                  wgt.vect[1:60];\n>>>>                  }\n>>>> opt.fun <- function(wgt.vect) {-crossprod(wgt.vect,t(Ret.vect))}\n>>>>\n>>>> OptimSolution <-\n>>>> solnp(wgt.vect,opt.fun,constr.fun,eqB=c(0.002,1),ineqconstr.fun,ineqL\n>>>> B\n>>>> =minConstraints,ineqUB=maxConstraints)\n>>>>\n>>>> I get the following error:\n>>>> solnp--> Solution not reliable....Problem Inverting Hessian.\n>>>>\n>>>> Well, that doesn't tell me very much! The parameters (weights) that are output for each run, as I cycle through the weights, are very scrambled...lots of little allocations, rather than clumping as you would expect to happen especially at the risky and riskless ends of the spectrum.\n>>>>\n>>>> Can anyone with more math than me give me a helping hand on the Hessian?\n>>>>\n>>>> Thanks,\n>>>>\n>>>>\n>>>> Mike\n>>>>\n>>>> Michael Ashton, CFA\n>>>> Managing Principal\n>>>>\n>>>> Enduring Investments LLC\n>>>> W: 973.457.4602\n>>>> C: 551.655.8006\n>>>>\n>>>>\n>>>> ________________________________\n>>>> This email and any attachments are confidential and\n>>>> inte...{{dropped:9}}\n>>>>\n>>>> _______________________________________________\n>>>> R-SIG-Finance at r-project.org mailing list\n>>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>>> -- Also note that this is not the r-help list where general R questions should go.\n>>>\n>>> This email and any attachments are confidential and intended only for the recipient noted above. You are hereby notified that any use, printing, copying or disclosure is strictly prohibited without the permission of Enduring Investments LLC. For further information please contact: Management at EnduringInvestments.com; (973) 457-4602.\n>>\n>> This email and any attachments are confidential and in...{{dropped:6}}\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>",
+      "body_snippet": "I have not been paying close attention and I've missed something in this \nthread, but ...\n\nI think the hessian in the optimization will be the second derivative of \nthis function\n\n >>>>opt.fun <- func",
+      "thread_id": "thread-422467618c3f",
+      "thread_depth": 1,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-2b219793ae33",
+      "message_id": "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10AB6@EXVMBX018-3.exch018.msoutlookonline.net>",
+      "from_name": "Michael Ashton",
+      "from_email_hash": "0ea431508e3ece53b39935dc57c9c20562fc6bfd29340c13716746377b1d41af",
+      "date": "2015-12-15T07:17:48-08:00",
+      "subject": "[R-SIG-Finance] solnp Problem Inverting Hessian",
+      "subject_clean": "solnp Problem Inverting Hessian",
+      "in_reply_to": "<56702A68.8010304@gmail.com>",
+      "references": [
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9C@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGPpMNsbsZQ+sDtd+owdhG3c-j3mdBj_ywe21dT6FnoEfQ@mail.gmail.com>",
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9D@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGMXqikXMhO7r7Ofz8E1C2nD0O5YjNr_9ua9NT7O8RVbbQ@mail.gmail.com>",
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9E@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGN3RTee9puDqURXvXE3ndWx4=wTuyRhhq6W_mjGpYOkVQ@mail.gmail.com>",
+        "<56702A68.8010304@gmail.com>"
+      ],
+      "body_plain": "That is very interesting. Actually some of the projected returns are negative, some are very close to zero. None is exactly zero, which I guess is why it's not singular, but that's why it's ill-conditioned. Very interesting. And hard to solve...if I add 5% to all returns will I still get the same portfolio? Seems to me intuitively I shouldn't since the proportional risk/return tradeoff then is greater for the assets on the low end of the spectrum, but I might be wrong.\n\n-----Original Message-----\nFrom: Paul Gilbert [mailto:pgilbert902 at gmail.com]\nSent: Tuesday, December 15, 2015 9:58 AM\nTo: Michael Ashton\nCc: Michael Weylandt; r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] solnp Problem Inverting Hessian\n\nI have not been paying close attention and I've missed something in this thread, but ...\n\nI think the hessian in the optimization will be the second derivative of this function\n\n >>>>opt.fun <- function(wgt.vect) {-crossprod(wgt.vect,t(Ret.vect))}\n\nWRT  wgt.vect. If there are zero elements in Ret.vect then that hessian will be singular. And if there are orders of magnitude difference between the largest and smallest elements in Ret.vect then the hessian will be ill-conditioned.\n\nThe ill-conditioned case is a numerical problem and you might solve it with a different algorithm, or by better scaling. The zero case is a theoretical problem, there is not a unique optimal point but rather whole continuum of optimal points (your parameters corresponding to the zero elements will not make any difference in the function value).\n\nHTH,\nPaul\n\nOn 12/14/2015 11:39 PM, Michael Weylandt wrote:\n> (+list -- I'm not a numerical linear algebra expert or portfolio\n> optimization expert, but there are a number on this list who might\n> chime in)\n>\n> That is quite high, and almost certainly problematic.\n>\n> I'm not sure what an acceptable bound is (will depend on your solver),\n> but that's almost certainly above it for any algorithm which will\n> require inverting cov.mat.\n>\n> Two things you could try:\n> - use a different (non-Hessian-using) optimization algorithm;\n> - use some form of shrinkage/regularization (Ledoit-Wolf is a common\n> choice) to tame your covariance matrix.\n>\n> Michael\n>\n> On Mon, Dec 14, 2015 at 10:10 PM, Michael Ashton\n> <m.ashton at enduringinvestments.com> wrote:\n>> Well, not sure whether this makes any sense but kappa(cov.mat) gives me 11148245007.\n>>\n>> That seems large. But I am not sure what it is supposed to be.\n>>\n>> -----Original Message-----\n>> From: Michael Weylandt [mailto:michael.weylandt at gmail.com]\n>> Sent: Monday, December 14, 2015 9:29 PM\n>> To: Michael Ashton\n>> Cc: r-sig-finance at r-project.org\n>> Subject: Re: [R-SIG-Finance] solnp Problem Inverting Hessian\n>>\n>> What's the condition number of your correlation/covariance matrix?\n>> (?kappa)\n>>\n>> I think I've used quadprog for portfolio optimization with success, but it's been a while.\n>>\n>> MW\n>>\n>> On Mon, Dec 14, 2015 at 8:06 PM, Michael Ashton <m.ashton at enduringinvestments.com> wrote:\n>>> Do you have a suggestion for such? I have in the past tried fPortfolio, but it would not allow me to specify my own projected return vectors rather than the historical returns of the series (which is exactly backwards).\n>>>\n>>> As for whether the matrix is comfortably non-singular...I suppose it depends in a Clintonian way on the meaning of \"comfortably,\" but I can create a Cholesky decomposition without it blowing up, which is usually how I can tell if I have done something stupid. Well, stupider than normal.\n>>>\n>>> -----Original Message-----\n>>> From: Michael Weylandt [mailto:michael.weylandt at gmail.com]\n>>> Sent: Monday, December 14, 2015 8:32 PM\n>>> To: Michael Ashton\n>>> Cc: r-sig-finance at r-project.org\n>>> Subject: Re: [R-SIG-Finance] solnp Problem Inverting Hessian\n>>>\n>>> The Hessian is the matrix of second derivatives\n>>> (https://en.wikipedia.org/wiki/Hessian_matrix) -- in scalar terms, you're finding a point where the second derivative is zero and then trying to divide by the second derivative to calculate the step size.\n>>>\n>>> I haven't gone through your code in any detail, but I'd start by checking the covariance matrix since that's proportional to the Hessian of your objective function. Is it (comfortably) non-singular?\n>>>\n>>> Since you're just solving the standard Markowitz problem, you might try a simpler (quadratic/convex) solver instead of a general non-linear solver. Should behave a bit better.\n>>>\n>>> Michael\n>>>\n>>>\n>>> On Mon, Dec 14, 2015 at 6:13 PM, Michael Ashton <m.ashton at enduringinvestments.com> wrote:\n>>>> I must admit to being flummoxed here, mainly because my linear algebra was 25 years ago and I can't remember what a Hessian is.\n>>>>\n>>>> I have a matrix of 60 securities' weekly returns, along with 60 projected returns. The returns are in a vector called Ret.vect and the covariance matrix of weekly returns in cov.mat . I have the minConstraints and maxConstraints that the parameters are permitted to take. I cycle through targeted risks and get the same error for each risk targeted...below I have removed the loop to focus on the risk=0.002.\n>>>>\n>>>> wgt.vect=c(rep(1/60, 60))\n>>>> constr.fun <- function(wgt.vect) {;\n>>>>                  c1 = sqrt(crossprod(t(wgt.vect %*% cov.mat),wgt.vect));\n>>>>                  c2 = sum(wgt.vect);\n>>>>                  return(c(c1,c2));\n>>>>                  }\n>>>> ineqconstr.fun <- function(wgt.vect) {\n>>>>                  wgt.vect[1:60];\n>>>>                  }\n>>>> opt.fun <- function(wgt.vect) {-crossprod(wgt.vect,t(Ret.vect))}\n>>>>\n>>>> OptimSolution <-\n>>>> solnp(wgt.vect,opt.fun,constr.fun,eqB=c(0.002,1),ineqconstr.fun,ine\n>>>> qL\n>>>> B\n>>>> =minConstraints,ineqUB=maxConstraints)\n>>>>\n>>>> I get the following error:\n>>>> solnp--> Solution not reliable....Problem Inverting Hessian.\n>>>>\n>>>> Well, that doesn't tell me very much! The parameters (weights) that are output for each run, as I cycle through the weights, are very scrambled...lots of little allocations, rather than clumping as you would expect to happen especially at the risky and riskless ends of the spectrum.\n>>>>\n>>>> Can anyone with more math than me give me a helping hand on the Hessian?\n>>>>\n>>>> Thanks,\n>>>>\n>>>>\n>>>> Mike\n>>>>\n>>>> Michael Ashton, CFA\n>>>> Managing Principal\n>>>>\n>>>> Enduring Investments LLC\n>>>> W: 973.457.4602\n>>>> C: 551.655.8006\n>>>>\n>>>>\n>>>> ________________________________\n>>>> This email and any attachments are confidential and\n>>>> inte...{{dropped:9}}\n>>>>\n>>>> _______________________________________________\n>>>> R-SIG-Finance at r-project.org mailing list\n>>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>>> -- Also note that this is not the r-help list where general R questions should go.\n>>>\n>>> This email and any attachments are confidential and intended only for the recipient noted above. You are hereby notified that any use, printing, copying or disclosure is strictly prohibited without the permission of Enduring Investments LLC. For further information please contact: Management at EnduringInvestments.com; (973) 457-4602.\n>>\n>> This email and any attachments are confidential and\n>> in...{{dropped:6}}\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>\n\nThis email and any attachments are confidential and inte...{{dropped:6}}",
+      "body_snippet": "That is very interesting. Actually some of the projected returns are negative, some are very close to zero. None is exactly zero, which I guess is why it's not singular, but that's why it's ill-condit",
+      "thread_id": "thread-422467618c3f",
+      "thread_depth": 2,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-3c2e354ed07c",
+      "message_id": "<CAM0JZ3=syOBQ9FBD13g3viKoh3UX_C1HL2PfwGx9iCpC+vEzMg@mail.gmail.com>",
+      "from_name": "Thomas Fuller",
+      "from_email_hash": "3b021161fd989322bc154aa1ec05003531fe2816e6e657e0af3d1cbc6bbe2eed",
+      "date": "2015-12-15T10:25:54-05:00",
+      "subject": "[R-SIG-Finance] CUSIP Data in R",
+      "subject_clean": "CUSIP Data in R",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Folks,\n\nDevelopment has officially started on the *Coherent Data Adapter*: *CUSIP\nGlobal Services Web Edition* package -- see here\n<https://coherentlogic.com/middleware-development/coherent-data-adapter-cusip-global-services-web-edition/>\n.\n\nThis package utilizes CUSIP Global Services <https://www.cusip.com/> web\nservices to access the entire universe of CUSIP identifiers for corporate,\nmunicipal, government and mortgage-backed issues, and private placements.\nThe CUSIP Global Services database contains issuer and issue identifiers,\nstandardized descriptions and related data for more than 9.1 million unique\nfinancial instruments.\n\nPlease get in touch if you would like to use this package.\n\nQuestions and comments are welcomed.\n\nTom\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Folks,\n\nDevelopment has officially started on the *Coherent Data Adapter*: *CUSIP\nGlobal Services Web Edition* package -- see here\n<https://coherentlogic.com/middleware-development/coherent-data-ad",
+      "thread_id": "thread-3c2e354ed07c",
+      "thread_depth": 0,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-94c5bce8d92b",
+      "message_id": "<567034F5.7090909@gmail.com>",
+      "from_name": "Paul Gilbert",
+      "from_email_hash": "aa7dbc26c3f15087b2ccda228b01f598ecfa2ae9d7fa19309941c01a2c4f0d2f",
+      "date": "2015-12-15T10:42:45-05:00",
+      "subject": "[R-SIG-Finance] solnp Problem Inverting Hessian",
+      "subject_clean": "solnp Problem Inverting Hessian",
+      "in_reply_to": "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10AB6@EXVMBX018-3.exch018.msoutlookonline.net>",
+      "references": [
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9C@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGPpMNsbsZQ+sDtd+owdhG3c-j3mdBj_ywe21dT6FnoEfQ@mail.gmail.com>",
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9D@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGMXqikXMhO7r7Ofz8E1C2nD0O5YjNr_9ua9NT7O8RVbbQ@mail.gmail.com>",
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9E@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGN3RTee9puDqURXvXE3ndWx4=wTuyRhhq6W_mjGpYOkVQ@mail.gmail.com>",
+        "<56702A68.8010304@gmail.com>",
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10AB6@EXVMBX018-3.exch018.msoutlookonline.net>"
+      ],
+      "body_plain": "Just to be clear, when I said \"difference between the largest and \nsmallest elements\" I am think of the absolute value. It is the scale not \nthe sign that causes problems in optimization. And I cannot commenting \non whether you have the correct objective function, just pointing out \nwhat would happen numerically with the one you specified.\n\nPaul\n\nOn 12/15/2015 10:17 AM, Michael Ashton wrote:\n> That is very interesting. Actually some of the projected returns are\n> negative, some are very close to zero. None is exactly zero, which I\n> guess is why it's not singular, but that's why it's ill-conditioned.\n> Very interesting. And hard to solve...if I add 5% to all returns will\n> I still get the same portfolio? Seems to me intuitively I shouldn't\n> since the proportional risk/return tradeoff then is greater for the\n> assets on the low end of the spectrum, but I might be wrong.\n>\n> -----Original Message----- From: Paul Gilbert\n> [mailto:pgilbert902 at gmail.com] Sent: Tuesday, December 15, 2015 9:58\n> AM To: Michael Ashton Cc: Michael Weylandt;\n> r-sig-finance at r-project.org Subject: Re: [R-SIG-Finance] solnp\n> Problem Inverting Hessian\n>\n> I have not been paying close attention and I've missed something in\n> this thread, but ...\n>\n> I think the hessian in the optimization will be the second derivative\n> of this function\n>\n>>>>> opt.fun <- function(wgt.vect)\n>>>>> {-crossprod(wgt.vect,t(Ret.vect))}\n>\n> WRT  wgt.vect. If there are zero elements in Ret.vect then that\n> hessian will be singular. And if there are orders of magnitude\n> difference between the largest and smallest elements in Ret.vect then\n> the hessian will be ill-conditioned.\n>\n> The ill-conditioned case is a numerical problem and you might solve\n> it with a different algorithm, or by better scaling. The zero case is\n> a theoretical problem, there is not a unique optimal point but rather\n> whole continuum of optimal points (your parameters corresponding to\n> the zero elements will not make any difference in the function\n> value).\n>\n> HTH, Paul\n>\n> On 12/14/2015 11:39 PM, Michael Weylandt wrote:\n>> (+list -- I'm not a numerical linear algebra expert or portfolio\n>> optimization expert, but there are a number on this list who might\n>> chime in)\n>>\n>> That is quite high, and almost certainly problematic.\n>>\n>> I'm not sure what an acceptable bound is (will depend on your\n>> solver), but that's almost certainly above it for any algorithm\n>> which will require inverting cov.mat.\n>>\n>> Two things you could try: - use a different (non-Hessian-using)\n>> optimization algorithm; - use some form of shrinkage/regularization\n>> (Ledoit-Wolf is a common choice) to tame your covariance matrix.\n>>\n>> Michael\n>>\n>> On Mon, Dec 14, 2015 at 10:10 PM, Michael Ashton\n>> <m.ashton at enduringinvestments.com> wrote:\n>>> Well, not sure whether this makes any sense but kappa(cov.mat)\n>>> gives me 11148245007.\n>>>\n>>> That seems large. But I am not sure what it is supposed to be.\n>>>\n>>> -----Original Message----- From: Michael Weylandt\n>>> [mailto:michael.weylandt at gmail.com] Sent: Monday, December 14,\n>>> 2015 9:29 PM To: Michael Ashton Cc: r-sig-finance at r-project.org\n>>> Subject: Re: [R-SIG-Finance] solnp Problem Inverting Hessian\n>>>\n>>> What's the condition number of your correlation/covariance\n>>> matrix? (?kappa)\n>>>\n>>> I think I've used quadprog for portfolio optimization with\n>>> success, but it's been a while.\n>>>\n>>> MW\n>>>\n>>> On Mon, Dec 14, 2015 at 8:06 PM, Michael Ashton\n>>> <m.ashton at enduringinvestments.com> wrote:\n>>>> Do you have a suggestion for such? I have in the past tried\n>>>> fPortfolio, but it would not allow me to specify my own\n>>>> projected return vectors rather than the historical returns of\n>>>> the series (which is exactly backwards).\n>>>>\n>>>> As for whether the matrix is comfortably non-singular...I\n>>>> suppose it depends in a Clintonian way on the meaning of\n>>>> \"comfortably,\" but I can create a Cholesky decomposition\n>>>> without it blowing up, which is usually how I can tell if I\n>>>> have done something stupid. Well, stupider than normal.\n>>>>\n>>>> -----Original Message----- From: Michael Weylandt\n>>>> [mailto:michael.weylandt at gmail.com] Sent: Monday, December 14,\n>>>> 2015 8:32 PM To: Michael Ashton Cc:\n>>>> r-sig-finance at r-project.org Subject: Re: [R-SIG-Finance] solnp\n>>>> Problem Inverting Hessian\n>>>>\n>>>> The Hessian is the matrix of second derivatives\n>>>> (https://en.wikipedia.org/wiki/Hessian_matrix) -- in scalar\n>>>> terms, you're finding a point where the second derivative is\n>>>> zero and then trying to divide by the second derivative to\n>>>> calculate the step size.\n>>>>\n>>>> I haven't gone through your code in any detail, but I'd start\n>>>> by checking the covariance matrix since that's proportional to\n>>>> the Hessian of your objective function. Is it (comfortably)\n>>>> non-singular?\n>>>>\n>>>> Since you're just solving the standard Markowitz problem, you\n>>>> might try a simpler (quadratic/convex) solver instead of a\n>>>> general non-linear solver. Should behave a bit better.\n>>>>\n>>>> Michael\n>>>>\n>>>>\n>>>> On Mon, Dec 14, 2015 at 6:13 PM, Michael Ashton\n>>>> <m.ashton at enduringinvestments.com> wrote:\n>>>>> I must admit to being flummoxed here, mainly because my\n>>>>> linear algebra was 25 years ago and I can't remember what a\n>>>>> Hessian is.\n>>>>>\n>>>>> I have a matrix of 60 securities' weekly returns, along with\n>>>>> 60 projected returns. The returns are in a vector called\n>>>>> Ret.vect and the covariance matrix of weekly returns in\n>>>>> cov.mat . I have the minConstraints and maxConstraints that\n>>>>> the parameters are permitted to take. I cycle through\n>>>>> targeted risks and get the same error for each risk\n>>>>> targeted...below I have removed the loop to focus on the\n>>>>> risk=0.002.\n>>>>>\n>>>>> wgt.vect=c(rep(1/60, 60)) constr.fun <- function(wgt.vect)\n>>>>> {; c1 = sqrt(crossprod(t(wgt.vect %*% cov.mat),wgt.vect)); c2\n>>>>> = sum(wgt.vect); return(c(c1,c2)); } ineqconstr.fun <-\n>>>>> function(wgt.vect) { wgt.vect[1:60]; } opt.fun <-\n>>>>> function(wgt.vect) {-crossprod(wgt.vect,t(Ret.vect))}\n>>>>>\n>>>>> OptimSolution <-\n>>>>> solnp(wgt.vect,opt.fun,constr.fun,eqB=c(0.002,1),ineqconstr.fun,ine\n>>>>>\n>>>>>\nqL\n>>>>> B =minConstraints,ineqUB=maxConstraints)\n>>>>>\n>>>>> I get the following error: solnp--> Solution not\n>>>>> reliable....Problem Inverting Hessian.\n>>>>>\n>>>>> Well, that doesn't tell me very much! The parameters\n>>>>> (weights) that are output for each run, as I cycle through\n>>>>> the weights, are very scrambled...lots of little allocations,\n>>>>> rather than clumping as you would expect to happen especially\n>>>>> at the risky and riskless ends of the spectrum.\n>>>>>\n>>>>> Can anyone with more math than me give me a helping hand on\n>>>>> the Hessian?\n>>>>>\n>>>>> Thanks,\n>>>>>\n>>>>>\n>>>>> Mike\n>>>>>\n>>>>> Michael Ashton, CFA Managing Principal\n>>>>>\n>>>>> Enduring Investments LLC W: 973.457.4602 C: 551.655.8006\n>>>>>\n>>>>>\n>>>>> ________________________________ This email and any\n>>>>> attachments are confidential and inte...{{dropped:9}}\n>>>>>\n>>>>> _______________________________________________\n>>>>> R-SIG-Finance at r-project.org mailing list\n>>>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance --\n>>>>> Subscriber-posting only. If you want to post, subscribe\n>>>>> first. -- Also note that this is not the r-help list where\n>>>>> general R questions should go.\n>>>>\n>>>> This email and any attachments are confidential and intended\n>>>> only for the recipient noted above. You are hereby notified\n>>>> that any use, printing, copying or disclosure is strictly\n>>>> prohibited without the permission of Enduring Investments LLC.\n>>>> For further information please contact:\n>>>> Management at EnduringInvestments.com; (973) 457-4602.\n>>>\n>>> This email and any attachments are confidential and\n>>> in...{{dropped:6}}\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance --\n>> Subscriber-posting only. If you want to post, subscribe first. --\n>> Also note that this is not the r-help list where general R\n>> questions should go.\n>>\n>\n> This email and any attachments are confidential and in...{{dropped:7}}",
+      "body_snippet": "Just to be clear, when I said \"difference between the largest and \nsmallest elements\" I am think of the absolute value. It is the scale not \nthe sign that causes problems in optimization. And I cannot",
+      "thread_id": "thread-422467618c3f",
+      "thread_depth": 3,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-479913a921f3",
+      "message_id": "<3A100961-A8BC-4C8A-85BF-A73C1BCCFE5B@enduringinvestments.com>",
+      "from_name": "Michael Ashton",
+      "from_email_hash": "0ea431508e3ece53b39935dc57c9c20562fc6bfd29340c13716746377b1d41af",
+      "date": "2015-12-15T07:45:42-08:00",
+      "subject": "[R-SIG-Finance] solnp Problem Inverting Hessian",
+      "subject_clean": "solnp Problem Inverting Hessian",
+      "in_reply_to": "<567034F5.7090909@gmail.com>",
+      "references": [
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9C@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGPpMNsbsZQ+sDtd+owdhG3c-j3mdBj_ywe21dT6FnoEfQ@mail.gmail.com>",
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9D@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGMXqikXMhO7r7Ofz8E1C2nD0O5YjNr_9ua9NT7O8RVbbQ@mail.gmail.com>",
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9E@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGN3RTee9puDqURXvXE3ndWx4=wTuyRhhq6W_mjGpYOkVQ@mail.gmail.com>",
+        "<56702A68.8010304@gmail.com>",
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10AB6@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<567034F5.7090909@gmail.com>"
+      ],
+      "body_plain": "Understood. I was just noting that Ret.vect spans zero, and thus some projected returns will always be pretty close to zero.\n\n> On Dec 15, 2015, at 10:43 AM, Paul Gilbert <pgilbert902 at gmail.com> wrote:\n>\n> Just to be clear, when I said \"difference between the largest and\n> smallest elements\" I am think of the absolute value. It is the scale not\n> the sign that causes problems in optimization. And I cannot commenting\n> on whether you have the correct objective function, just pointing out\n> what would happen numerically with the one you specified.\n>\n> Paul\n>\n>> On 12/15/2015 10:17 AM, Michael Ashton wrote:\n>> That is very interesting. Actually some of the projected returns are\n>> negative, some are very close to zero. None is exactly zero, which I\n>> guess is why it's not singular, but that's why it's ill-conditioned.\n>> Very interesting. And hard to solve...if I add 5% to all returns will\n>> I still get the same portfolio? Seems to me intuitively I shouldn't\n>> since the proportional risk/return tradeoff then is greater for the\n>> assets on the low end of the spectrum, but I might be wrong.\n>>\n>> -----Original Message----- From: Paul Gilbert\n>> [mailto:pgilbert902 at gmail.com] Sent: Tuesday, December 15, 2015 9:58\n>> AM To: Michael Ashton Cc: Michael Weylandt;\n>> r-sig-finance at r-project.org Subject: Re: [R-SIG-Finance] solnp\n>> Problem Inverting Hessian\n>>\n>> I have not been paying close attention and I've missed something in\n>> this thread, but ...\n>>\n>> I think the hessian in the optimization will be the second derivative\n>> of this function\n>>\n>>>>>> opt.fun <- function(wgt.vect)\n>>>>>> {-crossprod(wgt.vect,t(Ret.vect))}\n>>\n>> WRT  wgt.vect. If there are zero elements in Ret.vect then that\n>> hessian will be singular. And if there are orders of magnitude\n>> difference between the largest and smallest elements in Ret.vect then\n>> the hessian will be ill-conditioned.\n>>\n>> The ill-conditioned case is a numerical problem and you might solve\n>> it with a different algorithm, or by better scaling. The zero case is\n>> a theoretical problem, there is not a unique optimal point but rather\n>> whole continuum of optimal points (your parameters corresponding to\n>> the zero elements will not make any difference in the function\n>> value).\n>>\n>> HTH, Paul\n>>\n>>> On 12/14/2015 11:39 PM, Michael Weylandt wrote:\n>>> (+list -- I'm not a numerical linear algebra expert or portfolio\n>>> optimization expert, but there are a number on this list who might\n>>> chime in)\n>>>\n>>> That is quite high, and almost certainly problematic.\n>>>\n>>> I'm not sure what an acceptable bound is (will depend on your\n>>> solver), but that's almost certainly above it for any algorithm\n>>> which will require inverting cov.mat.\n>>>\n>>> Two things you could try: - use a different (non-Hessian-using)\n>>> optimization algorithm; - use some form of shrinkage/regularization\n>>> (Ledoit-Wolf is a common choice) to tame your covariance matrix.\n>>>\n>>> Michael\n>>>\n>>> On Mon, Dec 14, 2015 at 10:10 PM, Michael Ashton\n>>> <m.ashton at enduringinvestments.com> wrote:\n>>>> Well, not sure whether this makes any sense but kappa(cov.mat)\n>>>> gives me 11148245007.\n>>>>\n>>>> That seems large. But I am not sure what it is supposed to be.\n>>>>\n>>>> -----Original Message----- From: Michael Weylandt\n>>>> [mailto:michael.weylandt at gmail.com] Sent: Monday, December 14,\n>>>> 2015 9:29 PM To: Michael Ashton Cc: r-sig-finance at r-project.org\n>>>> Subject: Re: [R-SIG-Finance] solnp Problem Inverting Hessian\n>>>>\n>>>> What's the condition number of your correlation/covariance\n>>>> matrix? (?kappa)\n>>>>\n>>>> I think I've used quadprog for portfolio optimization with\n>>>> success, but it's been a while.\n>>>>\n>>>> MW\n>>>>\n>>>> On Mon, Dec 14, 2015 at 8:06 PM, Michael Ashton\n>>>> <m.ashton at enduringinvestments.com> wrote:\n>>>>> Do you have a suggestion for such? I have in the past tried\n>>>>> fPortfolio, but it would not allow me to specify my own\n>>>>> projected return vectors rather than the historical returns of\n>>>>> the series (which is exactly backwards).\n>>>>>\n>>>>> As for whether the matrix is comfortably non-singular...I\n>>>>> suppose it depends in a Clintonian way on the meaning of\n>>>>> \"comfortably,\" but I can create a Cholesky decomposition\n>>>>> without it blowing up, which is usually how I can tell if I\n>>>>> have done something stupid. Well, stupider than normal.\n>>>>>\n>>>>> -----Original Message----- From: Michael Weylandt\n>>>>> [mailto:michael.weylandt at gmail.com] Sent: Monday, December 14,\n>>>>> 2015 8:32 PM To: Michael Ashton Cc:\n>>>>> r-sig-finance at r-project.org Subject: Re: [R-SIG-Finance] solnp\n>>>>> Problem Inverting Hessian\n>>>>>\n>>>>> The Hessian is the matrix of second derivatives\n>>>>> (https://en.wikipedia.org/wiki/Hessian_matrix) -- in scalar\n>>>>> terms, you're finding a point where the second derivative is\n>>>>> zero and then trying to divide by the second derivative to\n>>>>> calculate the step size.\n>>>>>\n>>>>> I haven't gone through your code in any detail, but I'd start\n>>>>> by checking the covariance matrix since that's proportional to\n>>>>> the Hessian of your objective function. Is it (comfortably)\n>>>>> non-singular?\n>>>>>\n>>>>> Since you're just solving the standard Markowitz problem, you\n>>>>> might try a simpler (quadratic/convex) solver instead of a\n>>>>> general non-linear solver. Should behave a bit better.\n>>>>>\n>>>>> Michael\n>>>>>\n>>>>>\n>>>>> On Mon, Dec 14, 2015 at 6:13 PM, Michael Ashton\n>>>>> <m.ashton at enduringinvestments.com> wrote:\n>>>>>> I must admit to being flummoxed here, mainly because my\n>>>>>> linear algebra was 25 years ago and I can't remember what a\n>>>>>> Hessian is.\n>>>>>>\n>>>>>> I have a matrix of 60 securities' weekly returns, along with\n>>>>>> 60 projected returns. The returns are in a vector called\n>>>>>> Ret.vect and the covariance matrix of weekly returns in\n>>>>>> cov.mat . I have the minConstraints and maxConstraints that\n>>>>>> the parameters are permitted to take. I cycle through\n>>>>>> targeted risks and get the same error for each risk\n>>>>>> targeted...below I have removed the loop to focus on the\n>>>>>> risk=0.002.\n>>>>>>\n>>>>>> wgt.vect=c(rep(1/60, 60)) constr.fun <- function(wgt.vect)\n>>>>>> {; c1 = sqrt(crossprod(t(wgt.vect %*% cov.mat),wgt.vect)); c2\n>>>>>> = sum(wgt.vect); return(c(c1,c2)); } ineqconstr.fun <-\n>>>>>> function(wgt.vect) { wgt.vect[1:60]; } opt.fun <-\n>>>>>> function(wgt.vect) {-crossprod(wgt.vect,t(Ret.vect))}\n>>>>>>\n>>>>>> OptimSolution <-\n>>>>>> solnp(wgt.vect,opt.fun,constr.fun,eqB=c(0.002,1),ineqconstr.fun,ine\n> qL\n>>>>>> B =minConstraints,ineqUB=maxConstraints)\n>>>>>>\n>>>>>> I get the following error: solnp--> Solution not\n>>>>>> reliable....Problem Inverting Hessian.\n>>>>>>\n>>>>>> Well, that doesn't tell me very much! The parameters\n>>>>>> (weights) that are output for each run, as I cycle through\n>>>>>> the weights, are very scrambled...lots of little allocations,\n>>>>>> rather than clumping as you would expect to happen especially\n>>>>>> at the risky and riskless ends of the spectrum.\n>>>>>>\n>>>>>> Can anyone with more math than me give me a helping hand on\n>>>>>> the Hessian?\n>>>>>>\n>>>>>> Thanks,\n>>>>>>\n>>>>>>\n>>>>>> Mike\n>>>>>>\n>>>>>> Michael Ashton, CFA Managing Principal\n>>>>>>\n>>>>>> Enduring Investments LLC W: 973.457.4602 C: 551.655.8006\n>>>>>>\n>>>>>>\n>>>>>> ________________________________ This email and any\n>>>>>> attachments are confidential and inte...{{dropped:9}}\n>>>>>>\n>>>>>> _______________________________________________\n>>>>>> R-SIG-Finance at r-project.org mailing list\n>>>>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance --\n>>>>>> Subscriber-posting only. If you want to post, subscribe\n>>>>>> first. -- Also note that this is not the r-help list where\n>>>>>> general R questions should go.\n>>>>>\n>>>>> This email and any attachments are confidential and intended\n>>>>> only for the recipient noted above. You are hereby notified\n>>>>> that any use, printing, copying or disclosure is strictly\n>>>>> prohibited without the permission of Enduring Investments LLC.\n>>>>> For further information please contact:\n>>>>> Management at EnduringInvestments.com; (973) 457-4602.\n>>>>\n>>>> This email and any attachments are confidential and\n>>>> in...{{dropped:6}}\n>>>\n>>> _______________________________________________\n>>> R-SIG-Finance at r-project.org mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance --\n>>> Subscriber-posting only. If you want to post, subscribe first. --\n>>> Also note that this is not the r-help list where general R\n>>> questions should go.\n>>\n>> This email and any attachments are confidential and intended only for\n>> the recipient noted above. You are hereby notified that any use,\n>> printing, copying or disclosure is strictly prohibited without the\n>> permission of Enduring Investments LLC. For further information\n>> please contact: Management at EnduringInvestments.com; (973) 457-4602.\n>>\n\nThis email and any attachments are confidential and inte...{{dropped:6}}",
+      "body_snippet": "Understood. I was just noting that Ret.vect spans zero, and thus some projected returns will always be pretty close to zero.\n\n> On Dec 15, 2015, at 10:43 AM, Paul Gilbert <pgilbert902 at gmail.com> wr",
+      "thread_id": "thread-422467618c3f",
+      "thread_depth": 4,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-84a374d2f647",
+      "message_id": "<56705772.5080506@gmail.com>",
+      "from_name": "Paul Gilbert",
+      "from_email_hash": "aa7dbc26c3f15087b2ccda228b01f598ecfa2ae9d7fa19309941c01a2c4f0d2f",
+      "date": "2015-12-15T13:09:54-05:00",
+      "subject": "[R-SIG-Finance] solnp Problem Inverting Hessian",
+      "subject_clean": "solnp Problem Inverting Hessian",
+      "in_reply_to": "<3A100961-A8BC-4C8A-85BF-A73C1BCCFE5B@enduringinvestments.com>",
+      "references": [
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9C@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGPpMNsbsZQ+sDtd+owdhG3c-j3mdBj_ywe21dT6FnoEfQ@mail.gmail.com>",
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9D@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGMXqikXMhO7r7Ofz8E1C2nD0O5YjNr_9ua9NT7O8RVbbQ@mail.gmail.com>",
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9E@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGN3RTee9puDqURXvXE3ndWx4=wTuyRhhq6W_mjGpYOkVQ@mail.gmail.com>",
+        "<56702A68.8010304@gmail.com>",
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10AB6@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<567034F5.7090909@gmail.com>",
+        "<3A100961-A8BC-4C8A-85BF-A73C1BCCFE5B@enduringinvestments.com>"
+      ],
+      "body_plain": "WRT scaling I should also add that, while it is almost always the right \nthing to do numerically, it does not always make sense in a particular \napplication. One often does optimization in a situation where the \nparameters have different units, or have no units, so the scales are \narbitrary to begin with and rescaling is numerically convenient. In \napplication like yours, you may be summing things that are all in the \nsame unit, dollars. Rescaling could mean some are in dollars and some in \nmillions or billions of dollars. Theoretically, at the maximum of an \nunconstrained problem, scaling will not make any difference because the \ngradient will be zero in all directions. Practically, there is a \ndifficulty that the numerical solution stops according to some rule when \nit gets \"close enough\". By rescaling you will be emphasizing the \nimportance of parameters that really have no effect on the portfolio. It \nmight be better to simply eliminate the parameters that have no \ncontribution to the objective. (Take this all with a grain of salt, I \ndon't know anything about portfolio optimization.)\n\nPaul\n\nOn 12/15/2015 10:45 AM, Michael Ashton wrote:\n> Understood. I was just noting that Ret.vect spans zero, and thus some\n> projected returns will always be pretty close to zero.\n>\n>> On Dec 15, 2015, at 10:43 AM, Paul Gilbert <pgilbert902 at gmail.com>\n>> wrote:\n>>\n>> Just to be clear, when I said \"difference between the largest and\n>> smallest elements\" I am think of the absolute value. It is the\n>> scale not the sign that causes problems in optimization. And I\n>> cannot commenting on whether you have the correct objective\n>> function, just pointing out what would happen numerically with the\n>> one you specified.\n>>\n>> Paul\n>>\n>>> On 12/15/2015 10:17 AM, Michael Ashton wrote: That is very\n>>> interesting. Actually some of the projected returns are negative,\n>>> some are very close to zero. None is exactly zero, which I guess\n>>> is why it's not singular, but that's why it's ill-conditioned.\n>>> Very interesting. And hard to solve...if I add 5% to all returns\n>>> will I still get the same portfolio? Seems to me intuitively I\n>>> shouldn't since the proportional risk/return tradeoff then is\n>>> greater for the assets on the low end of the spectrum, but I\n>>> might be wrong.\n>>>\n>>> -----Original Message----- From: Paul Gilbert\n>>> [mailto:pgilbert902 at gmail.com] Sent: Tuesday, December 15, 2015\n>>> 9:58 AM To: Michael Ashton Cc: Michael Weylandt;\n>>> r-sig-finance at r-project.org Subject: Re: [R-SIG-Finance] solnp\n>>> Problem Inverting Hessian\n>>>\n>>> I have not been paying close attention and I've missed something\n>>> in this thread, but ...\n>>>\n>>> I think the hessian in the optimization will be the second\n>>> derivative of this function\n>>>\n>>>>>>> opt.fun <- function(wgt.vect)\n>>>>>>> {-crossprod(wgt.vect,t(Ret.vect))}\n>>>\n>>> WRT  wgt.vect. If there are zero elements in Ret.vect then that\n>>> hessian will be singular. And if there are orders of magnitude\n>>> difference between the largest and smallest elements in Ret.vect\n>>> then the hessian will be ill-conditioned.\n>>>\n>>> The ill-conditioned case is a numerical problem and you might\n>>> solve it with a different algorithm, or by better scaling. The\n>>> zero case is a theoretical problem, there is not a unique optimal\n>>> point but rather whole continuum of optimal points (your\n>>> parameters corresponding to the zero elements will not make any\n>>> difference in the function value).\n>>>\n>>> HTH, Paul\n>>>\n>>>> On 12/14/2015 11:39 PM, Michael Weylandt wrote: (+list -- I'm\n>>>> not a numerical linear algebra expert or portfolio optimization\n>>>> expert, but there are a number on this list who might chime\n>>>> in)\n>>>>\n>>>> That is quite high, and almost certainly problematic.\n>>>>\n>>>> I'm not sure what an acceptable bound is (will depend on your\n>>>> solver), but that's almost certainly above it for any\n>>>> algorithm which will require inverting cov.mat.\n>>>>\n>>>> Two things you could try: - use a different\n>>>> (non-Hessian-using) optimization algorithm; - use some form of\n>>>> shrinkage/regularization (Ledoit-Wolf is a common choice) to\n>>>> tame your covariance matrix.\n>>>>\n>>>> Michael\n>>>>\n>>>> On Mon, Dec 14, 2015 at 10:10 PM, Michael Ashton\n>>>> <m.ashton at enduringinvestments.com> wrote:\n>>>>> Well, not sure whether this makes any sense but\n>>>>> kappa(cov.mat) gives me 11148245007.\n>>>>>\n>>>>> That seems large. But I am not sure what it is supposed to\n>>>>> be.\n>>>>>\n>>>>> -----Original Message----- From: Michael Weylandt\n>>>>> [mailto:michael.weylandt at gmail.com] Sent: Monday, December\n>>>>> 14, 2015 9:29 PM To: Michael Ashton Cc:\n>>>>> r-sig-finance at r-project.org Subject: Re: [R-SIG-Finance]\n>>>>> solnp Problem Inverting Hessian\n>>>>>\n>>>>> What's the condition number of your correlation/covariance\n>>>>> matrix? (?kappa)\n>>>>>\n>>>>> I think I've used quadprog for portfolio optimization with\n>>>>> success, but it's been a while.\n>>>>>\n>>>>> MW\n>>>>>\n>>>>> On Mon, Dec 14, 2015 at 8:06 PM, Michael Ashton\n>>>>> <m.ashton at enduringinvestments.com> wrote:\n>>>>>> Do you have a suggestion for such? I have in the past\n>>>>>> tried fPortfolio, but it would not allow me to specify my\n>>>>>> own projected return vectors rather than the historical\n>>>>>> returns of the series (which is exactly backwards).\n>>>>>>\n>>>>>> As for whether the matrix is comfortably non-singular...I\n>>>>>> suppose it depends in a Clintonian way on the meaning of\n>>>>>> \"comfortably,\" but I can create a Cholesky decomposition\n>>>>>> without it blowing up, which is usually how I can tell if\n>>>>>> I have done something stupid. Well, stupider than normal.\n>>>>>>\n>>>>>> -----Original Message----- From: Michael Weylandt\n>>>>>> [mailto:michael.weylandt at gmail.com] Sent: Monday, December\n>>>>>> 14, 2015 8:32 PM To: Michael Ashton Cc:\n>>>>>> r-sig-finance at r-project.org Subject: Re: [R-SIG-Finance]\n>>>>>> solnp Problem Inverting Hessian\n>>>>>>\n>>>>>> The Hessian is the matrix of second derivatives\n>>>>>> (https://en.wikipedia.org/wiki/Hessian_matrix) -- in\n>>>>>> scalar terms, you're finding a point where the second\n>>>>>> derivative is zero and then trying to divide by the second\n>>>>>> derivative to calculate the step size.\n>>>>>>\n>>>>>> I haven't gone through your code in any detail, but I'd\n>>>>>> start by checking the covariance matrix since that's\n>>>>>> proportional to the Hessian of your objective function. Is\n>>>>>> it (comfortably) non-singular?\n>>>>>>\n>>>>>> Since you're just solving the standard Markowitz problem,\n>>>>>> you might try a simpler (quadratic/convex) solver instead\n>>>>>> of a general non-linear solver. Should behave a bit\n>>>>>> better.\n>>>>>>\n>>>>>> Michael\n>>>>>>\n>>>>>>\n>>>>>> On Mon, Dec 14, 2015 at 6:13 PM, Michael Ashton\n>>>>>> <m.ashton at enduringinvestments.com> wrote:\n>>>>>>> I must admit to being flummoxed here, mainly because my\n>>>>>>> linear algebra was 25 years ago and I can't remember what\n>>>>>>> a Hessian is.\n>>>>>>>\n>>>>>>> I have a matrix of 60 securities' weekly returns, along\n>>>>>>> with 60 projected returns. The returns are in a vector\n>>>>>>> called Ret.vect and the covariance matrix of weekly\n>>>>>>> returns in cov.mat . I have the minConstraints and\n>>>>>>> maxConstraints that the parameters are permitted to take.\n>>>>>>> I cycle through targeted risks and get the same error for\n>>>>>>> each risk targeted...below I have removed the loop to\n>>>>>>> focus on the risk=0.002.\n>>>>>>>\n>>>>>>> wgt.vect=c(rep(1/60, 60)) constr.fun <-\n>>>>>>> function(wgt.vect) {; c1 = sqrt(crossprod(t(wgt.vect %*%\n>>>>>>> cov.mat),wgt.vect)); c2 = sum(wgt.vect);\n>>>>>>> return(c(c1,c2)); } ineqconstr.fun <- function(wgt.vect)\n>>>>>>> { wgt.vect[1:60]; } opt.fun <- function(wgt.vect)\n>>>>>>> {-crossprod(wgt.vect,t(Ret.vect))}\n>>>>>>>\n>>>>>>> OptimSolution <-\n>>>>>>> solnp(wgt.vect,opt.fun,constr.fun,eqB=c(0.002,1),ineqconstr.fun,ine\n>>\n>>>>>>>\nqL\n>>>>>>> B =minConstraints,ineqUB=maxConstraints)\n>>>>>>>\n>>>>>>> I get the following error: solnp--> Solution not\n>>>>>>> reliable....Problem Inverting Hessian.\n>>>>>>>\n>>>>>>> Well, that doesn't tell me very much! The parameters\n>>>>>>> (weights) that are output for each run, as I cycle\n>>>>>>> through the weights, are very scrambled...lots of little\n>>>>>>> allocations, rather than clumping as you would expect to\n>>>>>>> happen especially at the risky and riskless ends of the\n>>>>>>> spectrum.\n>>>>>>>\n>>>>>>> Can anyone with more math than me give me a helping hand\n>>>>>>> on the Hessian?\n>>>>>>>\n>>>>>>> Thanks,\n>>>>>>>\n>>>>>>>\n>>>>>>> Mike\n>>>>>>>\n>>>>>>> Michael Ashton, CFA Managing Principal\n>>>>>>>\n>>>>>>> Enduring Investments LLC W: 973.457.4602 C: 551.655.8006\n>>>>>>>\n>>>>>>>\n>>>>>>> ________________________________ This email and any\n>>>>>>> attachments are confidential and inte...{{dropped:9}}\n>>>>>>>\n>>>>>>> _______________________________________________\n>>>>>>> R-SIG-Finance at r-project.org mailing list\n>>>>>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance --\n>>>>>>> Subscriber-posting only. If you want to post, subscribe\n>>>>>>> first. -- Also note that this is not the r-help list\n>>>>>>> where general R questions should go.\n>>>>>>\n>>>>>> This email and any attachments are confidential and\n>>>>>> intended only for the recipient noted above. You are hereby\n>>>>>> notified that any use, printing, copying or disclosure is\n>>>>>> strictly prohibited without the permission of Enduring\n>>>>>> Investments LLC. For further information please contact:\n>>>>>> Management at EnduringInvestments.com; (973) 457-4602.\n>>>>>\n>>>>> This email and any attachments are confidential and\n>>>>> in...{{dropped:6}}\n>>>>\n>>>> _______________________________________________\n>>>> R-SIG-Finance at r-project.org mailing list\n>>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance --\n>>>> Subscriber-posting only. If you want to post, subscribe first.\n>>>> -- Also note that this is not the r-help list where general R\n>>>> questions should go.\n>>>\n>>> This email and any attachments are confidential and intended only\n>>> for the recipient noted above. You are hereby notified that any\n>>> use, printing, copying or disclosure is strictly prohibited\n>>> without the permission of Enduring Investments LLC. For further\n>>> information please contact: Management at EnduringInvestments.com;\n>>> (973) 457-4602.\n>>>\n>\n> This email and any attachments are confidential and in...{{dropped:7}}",
+      "body_snippet": "WRT scaling I should also add that, while it is almost always the right \nthing to do numerically, it does not always make sense in a particular \napplication. One often does optimization in a situation",
+      "thread_id": "thread-422467618c3f",
+      "thread_depth": 5,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-143fb1805e28",
+      "message_id": "<F37F7E97-81A6-41D6-9311-1058D2F5DF46@optonline.net>",
+      "from_name": "Krishna Kumar",
+      "from_email_hash": "199c5edd34f531d8670ffec2b21443c2d5b2e1064819580515a7be5747770f55",
+      "date": "2015-12-15T18:16:35-05:00",
+      "subject": "[R-SIG-Finance] solnp Problem Inverting Hessian",
+      "subject_clean": "solnp Problem Inverting Hessian",
+      "in_reply_to": "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10AB6@EXVMBX018-3.exch018.msoutlookonline.net>",
+      "references": [
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9C@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGPpMNsbsZQ+sDtd+owdhG3c-j3mdBj_ywe21dT6FnoEfQ@mail.gmail.com>",
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9D@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGMXqikXMhO7r7Ofz8E1C2nD0O5YjNr_9ua9NT7O8RVbbQ@mail.gmail.com>",
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10A9E@EXVMBX018-3.exch018.msoutlookonline.net>",
+        "<CAAmySGN3RTee9puDqURXvXE3ndWx4=wTuyRhhq6W_mjGpYOkVQ@mail.gmail.com>",
+        "<56702A68.8010304@gmail.com>",
+        "<E30D0E7822EEB443A5B9CC8273D99C74C0FEC10AB6@EXVMBX018-3.exch018.msoutlookonline.net>"
+      ],
+      "body_plain": "In addition to Paul's comments I have noticed with a large number of assets when the correlation matrix is hand cooked  (not estimated) it often could end up with small eigenvalues which are arbitrarily close to zero and hessian blows up this could well be the cause of the issue here. A minimum reproducible example would help diagnose your problem better.\n\n----\n\n> On Dec 15, 2015, at 10:17 AM, Michael Ashton <m.ashton at enduringinvestments.com> wrote:\n> \n> That is very interesting. Actually some of the projected returns are negative, some are very close to zero. None is exactly zero, which I guess is why it's not singular, but that's why it's ill-conditioned. Very interesting. And hard to solve...if I add 5% to all returns will I still get the same portfolio? Seems to me intuitively I shouldn't since the proportional risk/return tradeoff then is greater for the assets on the low end of the spectrum, but I might be wrong.\n> \n> -----Original Message-----\n> From: Paul Gilbert [mailto:pgilbert902 at gmail.com]\n> Sent: Tuesday, December 15, 2015 9:58 AM\n> To: Michael Ashton\n> Cc: Michael Weylandt; r-sig-finance at r-project.org\n> Subject: Re: [R-SIG-Finance] solnp Problem Inverting Hessian\n> \n> I have not been paying close attention and I've missed something in this thread, but ...\n> \n> I think the hessian in the optimization will be the second derivative of this function\n> \n>>>>> opt.fun <- function(wgt.vect) {-crossprod(wgt.vect,t(Ret.vect))}\n> \n> WRT  wgt.vect. If there are zero elements in Ret.vect then that hessian will be singular. And if there are orders of magnitude difference between the largest and smallest elements in Ret.vect then the hessian will be ill-conditioned.\n> \n> The ill-conditioned case is a numerical problem and you might solve it with a different algorithm, or by better scaling. The zero case is a theoretical problem, there is not a unique optimal point but rather whole continuum of optimal points (your parameters corresponding to the zero elements will not make any difference in the function value).\n> \n> HTH,\n> Paul\n> \n>> On 12/14/2015 11:39 PM, Michael Weylandt wrote:\n>> (+list -- I'm not a numerical linear algebra expert or portfolio\n>> optimization expert, but there are a number on this list who might\n>> chime in)\n>> \n>> That is quite high, and almost certainly problematic.\n>> \n>> I'm not sure what an acceptable bound is (will depend on your solver),\n>> but that's almost certainly above it for any algorithm which will\n>> require inverting cov.mat.\n>> \n>> Two things you could try:\n>> - use a different (non-Hessian-using) optimization algorithm;\n>> - use some form of shrinkage/regularization (Ledoit-Wolf is a common\n>> choice) to tame your covariance matrix.\n>> \n>> Michael\n>> \n>> On Mon, Dec 14, 2015 at 10:10 PM, Michael Ashton\n>> <m.ashton at enduringinvestments.com> wrote:\n>>> Well, not sure whether this makes any sense but kappa(cov.mat) gives me 11148245007.\n>>> \n>>> That seems large. But I am not sure what it is supposed to be.\n>>> \n>>> -----Original Message-----\n>>> From: Michael Weylandt [mailto:michael.weylandt at gmail.com]\n>>> Sent: Monday, December 14, 2015 9:29 PM\n>>> To: Michael Ashton\n>>> Cc: r-sig-finance at r-project.org\n>>> Subject: Re: [R-SIG-Finance] solnp Problem Inverting Hessian\n>>> \n>>> What's the condition number of your correlation/covariance matrix?\n>>> (?kappa)\n>>> \n>>> I think I've used quadprog for portfolio optimization with success, but it's been a while.\n>>> \n>>> MW\n>>> \n>>>> On Mon, Dec 14, 2015 at 8:06 PM, Michael Ashton <m.ashton at enduringinvestments.com> wrote:\n>>>> Do you have a suggestion for such? I have in the past tried fPortfolio, but it would not allow me to specify my own projected return vectors rather than the historical returns of the series (which is exactly backwards).\n>>>> \n>>>> As for whether the matrix is comfortably non-singular...I suppose it depends in a Clintonian way on the meaning of \"comfortably,\" but I can create a Cholesky decomposition without it blowing up, which is usually how I can tell if I have done something stupid. Well, stupider than normal.\n>>>> \n>>>> -----Original Message-----\n>>>> From: Michael Weylandt [mailto:michael.weylandt at gmail.com]\n>>>> Sent: Monday, December 14, 2015 8:32 PM\n>>>> To: Michael Ashton\n>>>> Cc: r-sig-finance at r-project.org\n>>>> Subject: Re: [R-SIG-Finance] solnp Problem Inverting Hessian\n>>>> \n>>>> The Hessian is the matrix of second derivatives\n>>>> (https://en.wikipedia.org/wiki/Hessian_matrix) -- in scalar terms, you're finding a point where the second derivative is zero and then trying to divide by the second derivative to calculate the step size.\n>>>> \n>>>> I haven't gone through your code in any detail, but I'd start by checking the covariance matrix since that's proportional to the Hessian of your objective function. Is it (comfortably) non-singular?\n>>>> \n>>>> Since you're just solving the standard Markowitz problem, you might try a simpler (quadratic/convex) solver instead of a general non-linear solver. Should behave a bit better.\n>>>> \n>>>> Michael\n>>>> \n>>>> \n>>>>> On Mon, Dec 14, 2015 at 6:13 PM, Michael Ashton <m.ashton at enduringinvestments.com> wrote:\n>>>>> I must admit to being flummoxed here, mainly because my linear algebra was 25 years ago and I can't remember what a Hessian is.\n>>>>> \n>>>>> I have a matrix of 60 securities' weekly returns, along with 60 projected returns. The returns are in a vector called Ret.vect and the covariance matrix of weekly returns in cov.mat . I have the minConstraints and maxConstraints that the parameters are permitted to take. I cycle through targeted risks and get the same error for each risk targeted...below I have removed the loop to focus on the risk=0.002.\n>>>>> \n>>>>> wgt.vect=c(rep(1/60, 60))\n>>>>> constr.fun <- function(wgt.vect) {;\n>>>>>                 c1 = sqrt(crossprod(t(wgt.vect %*% cov.mat),wgt.vect));\n>>>>>                 c2 = sum(wgt.vect);\n>>>>>                 return(c(c1,c2));\n>>>>>                 }\n>>>>> ineqconstr.fun <- function(wgt.vect) {\n>>>>>                 wgt.vect[1:60];\n>>>>>                 }\n>>>>> opt.fun <- function(wgt.vect) {-crossprod(wgt.vect,t(Ret.vect))}\n>>>>> \n>>>>> OptimSolution <-\n>>>>> solnp(wgt.vect,opt.fun,constr.fun,eqB=c(0.002,1),ineqconstr.fun,ine\n>>>>> qL\n>>>>> B\n>>>>> =minConstraints,ineqUB=maxConstraints)\n>>>>> \n>>>>> I get the following error:\n>>>>> solnp--> Solution not reliable....Problem Inverting Hessian.\n>>>>> \n>>>>> Well, that doesn't tell me very much! The parameters (weights) that are output for each run, as I cycle through the weights, are very scrambled...lots of little allocations, rather than clumping as you would expect to happen especially at the risky and riskless ends of the spectrum.\n>>>>> \n>>>>> Can anyone with more math than me give me a helping hand on the Hessian?\n>>>>> \n>>>>> Thanks,\n>>>>> \n>>>>> \n>>>>> Mike\n>>>>> \n>>>>> Michael Ashton, CFA\n>>>>> Managing Principal\n>>>>> \n>>>>> Enduring Investments LLC\n>>>>> W: 973.457.4602\n>>>>> C: 551.655.8006\n>>>>> \n>>>>> \n>>>>> ________________________________\n>>>>> This email and any attachments are confidential and\n>>>>> inte...{{dropped:9}}\n>>>>> \n>>>>> _______________________________________________\n>>>>> R-SIG-Finance at r-project.org mailing list\n>>>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>>>> -- Also note that this is not the r-help list where general R questions should go.\n>>>> \n>>>> This email and any attachments are confidential and intended only for the recipient noted above. You are hereby notified that any use, printing, copying or disclosure is strictly prohibited without the permission of Enduring Investments LLC. For further information please contact: Management at EnduringInvestments.com; (973) 457-4602.\n>>> \n>>> This email and any attachments are confidential and\n>>> in...{{dropped:6}}\n>> \n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n> \n> This email and any attachments are confidential and in...{{dropped:8}}",
+      "body_snippet": "In addition to Paul's comments I have noticed with a large number of assets when the correlation matrix is hand cooked  (not estimated) it often could end up with small eigenvalues which are arbitrari",
+      "thread_id": "thread-422467618c3f",
+      "thread_depth": 3,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-2c0fb90abee6",
+      "message_id": "<E19EDD28-2353-4313-9F4A-BA4E9543A405@gmail.com>",
+      "from_name": "Keith S Weintraub",
+      "from_email_hash": "46f98489670c53241c8d38eb202f6d3227b3640dae4884277c714ec22926cbdc",
+      "date": "2015-12-18T11:06:36-05:00",
+      "subject": "[R-SIG-Finance] LIBOR Yield Curve.",
+      "subject_clean": "LIBOR Yield Curve.",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Folks,\n\nRecently I lost my access to LIBOR rates from a large financial institution.\n\nI was able to retrieve the values on any given day in the following form:\n(Note that I am using plain text here):\n\nISIN Bond Name, Maturity, Swap NYK\nUSD Swap 3m, 0.247, 0.372\nUSD Swap 6m, 0.493, 0.462\nUSD Swap 9m, 0.740, 0.549\nUSD Swap 1y, 1.000, 0.626\nUSD Swap 2y, 2.000, 0.939\nUSD Swap 3y, 3.000, 1.211\nUSD Swap 4y, 4.000, 1.430\nUSD Swap 5y, 5.000, 1.607\n  ...\nUSD Swap 10y, 10.000, 2.158\nUSD Swap 11y, 11.000, 2.226\n ...\nUSD Swap 50y 50.000, 2.641\n\nI have the following questions:\n1) I looked at FRED data and I wonder if anyone can tell me what and why the differences between: \n       USD12MD156N (12-Month London Interbank Offered Rate (LIBOR), based on U.S. Dollar?) \nand \n       DSWP1 (1-Year Swap Rate)\n\nFor the date 2015-11-30 FRED has 0.9806 for USD12MD156N and 0.69 for DSWP1\n\n2) Is there a reliable place to download LIBOR yield curve data?\n3) I have been using the SmithWilson package. Note that at most I need the (closing) rates daily. Any better ideas?\n4) It would be ideal if I could get GBP and EUR as well.\n\nThanks so much for your time,\nBest,\nKW",
+      "body_snippet": "Folks,\n\nRecently I lost my access to LIBOR rates from a large financial institution.\n\nI was able to retrieve the values on any given day in the following form:\n(Note that I am using plain text here):\n",
+      "thread_id": "thread-2c0fb90abee6",
+      "thread_depth": 0,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-35eb6cbc02d1",
+      "message_id": "<CAMi=pg4KRJCt=4eZeTX481752_mm7Zx16SO6CHVRVb1r9qZ50A@mail.gmail.com>",
+      "from_name": "Whit Armstrong",
+      "from_email_hash": "9f0af921ac5e402b55cb0593a435b87162faa6caa4eef5ccb3498c95d81634d0",
+      "date": "2015-12-18T11:32:46-05:00",
+      "subject": "[R-SIG-Finance] LIBOR Yield Curve.",
+      "subject_clean": "LIBOR Yield Curve.",
+      "in_reply_to": "<E19EDD28-2353-4313-9F4A-BA4E9543A405@gmail.com>",
+      "references": [
+        "<E19EDD28-2353-4313-9F4A-BA4E9543A405@gmail.com>"
+      ],
+      "body_plain": "I'm not sure what you consider 'reliable' but bbg is usually good enough.\n buy some icap or superD data if you want something high quality, or get it\ndirectly from your brokers and take the weighted avg.\n\n(just change the curve id below to use the USD libor curve, and you should\nbe all set)\n\nwarmstrong at krypton:~$ R\n> library(Rblpapi)\n> bds(\"YCGT0111\nIndex\",\"CURVE_TENOR_RATES\",overrides=c(\"CURVE_DATE\"=\"20151218\"))\n   Ask Yield Bid Yield Last Update Mid Yield Tenor  Tenor Ticker\n1      0.163     0.168  2015-12-18     0.165    1M 912796GX Govt\n2      0.183     0.188  2015-12-18     0.186    3M 912796HG Govt\n3      0.443     0.448  2015-12-18     0.446    6M 912796HX Govt\n4      0.659     0.664  2015-12-18     0.661    1Y 912796HU Govt\n5      0.960     0.964  2015-12-18     0.962    2Y 912828M7 Govt\n6      1.279     1.282  2015-12-18     1.281    3Y 912828N2 Govt\n7      1.529     1.537  2015-12-18     1.533    4Y 912828G6 Govt\n8      1.676     1.678  2015-12-18     1.677    5Y 912828M9 Govt\n9      1.872     1.875  2015-12-18     1.874    6Y 912828G5 Govt\n10     2.005     2.007  2015-12-18     2.006    7Y 912828M8 Govt\n11     2.069     2.073  2015-12-18     2.071    8Y 912828WE Govt\n12     2.186     2.188  2015-12-18     2.187    9Y 912828G3 Govt\n13     2.200     2.202  2015-12-18     2.201   10Y 912828M5 Govt\n14     2.424     2.428  2015-12-18     2.426   15Y 912810FP Govt\n15     2.557     2.559  2015-12-18     2.558   20Y 912810FT Govt\n16     2.798     2.800  2015-12-18     2.799   25Y 912810QL Govt\n17     2.916     2.917  2015-12-18     2.916   30Y 912810RP Govt\n\n\nOn Fri, Dec 18, 2015 at 11:06 AM, Keith S Weintraub <kw1958 at gmail.com>\nwrote:\n\n> Folks,\n>\n> Recently I lost my access to LIBOR rates from a large financial\n> institution.\n>\n> I was able to retrieve the values on any given day in the following form:\n> (Note that I am using plain text here):\n>\n> ISIN Bond Name, Maturity, Swap NYK\n> USD Swap 3m, 0.247, 0.372\n> USD Swap 6m, 0.493, 0.462\n> USD Swap 9m, 0.740, 0.549\n> USD Swap 1y, 1.000, 0.626\n> USD Swap 2y, 2.000, 0.939\n> USD Swap 3y, 3.000, 1.211\n> USD Swap 4y, 4.000, 1.430\n> USD Swap 5y, 5.000, 1.607\n>   ...\n> USD Swap 10y, 10.000, 2.158\n> USD Swap 11y, 11.000, 2.226\n>  ...\n> USD Swap 50y 50.000, 2.641\n>\n> I have the following questions:\n> 1) I looked at FRED data and I wonder if anyone can tell me what and why\n> the differences between:\n>        USD12MD156N (12-Month London Interbank Offered Rate (LIBOR), based\n> on U.S. Dollar?)\n> and\n>        DSWP1 (1-Year Swap Rate)\n>\n> For the date 2015-11-30 FRED has 0.9806 for USD12MD156N and 0.69 for DSWP1\n>\n> 2) Is there a reliable place to download LIBOR yield curve data?\n> 3) I have been using the SmithWilson package. Note that at most I need the\n> (closing) rates daily. Any better ideas?\n> 4) It would be ideal if I could get GBP and EUR as well.\n>\n> Thanks so much for your time,\n> Best,\n> KW\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I'm not sure what you consider 'reliable' but bbg is usually good enough.\n buy some icap or superD data if you want something high quality, or get it\ndirectly from your brokers and take the weighted a",
+      "thread_id": "thread-2c0fb90abee6",
+      "thread_depth": 1,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-42b8f8a05a0a",
+      "message_id": "<528C117C-DF37-4FD6-847A-59DEE97040B0@gmail.com>",
+      "from_name": "Keith S Weintraub",
+      "from_email_hash": "46f98489670c53241c8d38eb202f6d3227b3640dae4884277c714ec22926cbdc",
+      "date": "2015-12-18T11:59:56-05:00",
+      "subject": "[R-SIG-Finance] LIBOR Yield Curve.",
+      "subject_clean": "LIBOR Yield Curve.",
+      "in_reply_to": "<CAMi=pg4KRJCt=4eZeTX481752_mm7Zx16SO6CHVRVb1r9qZ50A@mail.gmail.com>",
+      "references": [
+        "<E19EDD28-2353-4313-9F4A-BA4E9543A405@gmail.com>",
+        "<CAMi=pg4KRJCt=4eZeTX481752_mm7Zx16SO6CHVRVb1r9qZ50A@mail.gmail.com>"
+      ],
+      "body_plain": "Wouldn?t I need a Bloomberg password/account/terminal?\n\nIn addition I got some errors just trying to install the software on my Mac.\n\nSorry that I did not mention that I was on a Mac.\n---\nKW\n\nPS I was able to download the software on my Windows (via Parallels) but the command blpConnect() doesn?t work. Again I think it is because I don?t have Bloomberg. \n\n\n\n\n\n> On Dec 18, 2015, at 11:32 AM, Whit Armstrong <armstrong.whit at gmail.com> wrote:\n> \n> I'm not sure what you consider 'reliable' but bbg is usually good enough.  buy some icap or superD data if you want something high quality, or get it directly from your brokers and take the weighted avg.\n> \n> (just change the curve id below to use the USD libor curve, and you should be all set)\n> \n> warmstrong at krypton:~$ R\n> > library(Rblpapi)\n> > bds(\"YCGT0111 Index\",\"CURVE_TENOR_RATES\",overrides=c(\"CURVE_DATE\"=\"20151218\"))\n>    Ask Yield Bid Yield Last Update Mid Yield Tenor  Tenor Ticker\n> 1      0.163     0.168  2015-12-18     0.165    1M 912796GX Govt\n> 2      0.183     0.188  2015-12-18     0.186    3M 912796HG Govt\n> 3      0.443     0.448  2015-12-18     0.446    6M 912796HX Govt\n> 4      0.659     0.664  2015-12-18     0.661    1Y 912796HU Govt\n> 5      0.960     0.964  2015-12-18     0.962    2Y 912828M7 Govt\n> 6      1.279     1.282  2015-12-18     1.281    3Y 912828N2 Govt\n> 7      1.529     1.537  2015-12-18     1.533    4Y 912828G6 Govt\n> 8      1.676     1.678  2015-12-18     1.677    5Y 912828M9 Govt\n> 9      1.872     1.875  2015-12-18     1.874    6Y 912828G5 Govt\n> 10     2.005     2.007  2015-12-18     2.006    7Y 912828M8 Govt\n> 11     2.069     2.073  2015-12-18     2.071    8Y 912828WE Govt\n> 12     2.186     2.188  2015-12-18     2.187    9Y 912828G3 Govt\n> 13     2.200     2.202  2015-12-18     2.201   10Y 912828M5 Govt\n> 14     2.424     2.428  2015-12-18     2.426   15Y 912810FP Govt\n> 15     2.557     2.559  2015-12-18     2.558   20Y 912810FT Govt\n> 16     2.798     2.800  2015-12-18     2.799   25Y 912810QL Govt\n> 17     2.916     2.917  2015-12-18     2.916   30Y 912810RP Govt\n> \n> \n> On Fri, Dec 18, 2015 at 11:06 AM, Keith S Weintraub <kw1958 at gmail.com> wrote:\n> Folks,\n> \n> Recently I lost my access to LIBOR rates from a large financial institution.\n> \n> I was able to retrieve the values on any given day in the following form:\n> (Note that I am using plain text here):\n> \n> ISIN Bond Name, Maturity, Swap NYK\n> USD Swap 3m, 0.247, 0.372\n> USD Swap 6m, 0.493, 0.462\n> USD Swap 9m, 0.740, 0.549\n> USD Swap 1y, 1.000, 0.626\n> USD Swap 2y, 2.000, 0.939\n> USD Swap 3y, 3.000, 1.211\n> USD Swap 4y, 4.000, 1.430\n> USD Swap 5y, 5.000, 1.607\n>   ...\n> USD Swap 10y, 10.000, 2.158\n> USD Swap 11y, 11.000, 2.226\n>  ...\n> USD Swap 50y 50.000, 2.641\n> \n> I have the following questions:\n> 1) I looked at FRED data and I wonder if anyone can tell me what and why the differences between:\n>        USD12MD156N (12-Month London Interbank Offered Rate (LIBOR), based on U.S. Dollar?)\n> and\n>        DSWP1 (1-Year Swap Rate)\n> \n> For the date 2015-11-30 FRED has 0.9806 for USD12MD156N and 0.69 for DSWP1\n> \n> 2) Is there a reliable place to download LIBOR yield curve data?\n> 3) I have been using the SmithWilson package. Note that at most I need the (closing) rates daily. Any better ideas?\n> 4) It would be ideal if I could get GBP and EUR as well.\n> \n> Thanks so much for your time,\n> Best,\n> KW\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>",
+      "body_snippet": "Wouldn?t I need a Bloomberg password/account/terminal?\n\nIn addition I got some errors just trying to install the software on my Mac.\n\nSorry that I did not mention that I was on a Mac.\n---\nKW\n\nPS I was",
+      "thread_id": "thread-2c0fb90abee6",
+      "thread_depth": 2,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-021723c1ae26",
+      "message_id": "<567574DE.1060309@considine.net>",
+      "from_name": "Matt Considine",
+      "from_email_hash": "2cc8bd9d28bc161b5daff5fc0a3fc80cd17fe3fc6cdf726876f9143459c63ed3",
+      "date": "2015-12-19T10:16:46-05:00",
+      "subject": "[R-SIG-Finance] LIBOR Yield Curve.",
+      "subject_clean": "LIBOR Yield Curve.",
+      "in_reply_to": "<mailman.8.1450522802.18613.r-sig-finance@r-project.org>",
+      "references": [
+        "<mailman.8.1450522802.18613.r-sig-finance@r-project.org>"
+      ],
+      "body_plain": "On 12/19/2015 6:00 AM, r-sig-finance-request at r-project.org wrote:\n> LIBOR Yield Curve.\nHere is a markdown file I use to print out a list of recent LIBOR \nrates.  The URL and code might be of help.  I recognize too that it may \nnot be the most elegant/efficient, but it has worked for my ad hoc purposes\nMatt\n\n---\ntitle: \"LIBOR\"\noutput: pdf_document\n---\n\n```{r echo=FALSE, message=FALSE, warning=FALSE, results='asis'}\nlibrary(Quandl)\nlibrary(quantmod)\nlibrary(XML)\nlibrary(lubridate)\nlibrary(xtable)\n\ncurrentDate <- Sys.Date()\neopm <- currentDate - days(day(currentDate))\nsopm <- currentDate - days(day(currentDate))\nsopm <- sopm - days(day(sopm) - 1)\n##for just latest date\n##eopm <- currentDate\n##sopm <- currentDate - days(day(currentDate))\nLIBOR <- getSymbols(src=\"FRED\",Symbols=c(\"USD1MTD156N\",\"USD3MTD156N\"))\n\nall_webpage     <- \n'http://www.global-rates.com/interest-rates/libor/american-dollar/american-dollar.aspx'\n\nall_web.table = readHTMLTable(all_webpage, header=T, which=14, \nstringsAsFactors=F)\n\nall_data <- gsub(\"[^a-zA-Z0-9\\\\.\\\\ -]\",\"\",as.matrix(all_web.table[,]))\ncolnames(all_data) <- c(\"data\",colnames(all_data[,2:ncol(all_data)]))\nall_dates <- as.Date(colnames(all_data[,2:ncol(all_data)]), \"%m-%d-%Y\")\n\ndatarows <- c(match(\"USD LIBOR - 1 month\",all_data[,1]),match(\"USD LIBOR \n- 3 months\",all_data[,1]))\n\nnewdata <- as.xts(t(all_data[datarows,2:ncol(all_data)]), \norder.by=all_dates)\ncolnames(newdata) <- LIBOR\nstorage.mode(newdata)<-\"numeric\"\n\nLIBORdata <- cbind(USD1MTD156N,USD3MTD156N)\nnewdata2 <- rbind(LIBORdata,newdata)\nnewdata2 <- newdata2[!duplicated(index(newdata2))]\ncolnames(newdata2) <- c(\"1mo LIBOR\",\"3mo LIBOR\")\n\ndatablock <- newdata2[paste(sopm,\"::\",eopm,sep=''),]\nnewdatablock <- as.matrix(datablock)[NROW(datablock):1,,drop=FALSE]\n\nprint(xtable(newdatablock,digits=5),floating=TRUE,comment=FALSE,type=\"latex\")\n```\n\n\n\n---\nThis email has been checked for viruses by Avast antivirus software.\nhttps://www.avast.com/antivirus",
+      "body_snippet": "On 12/19/2015 6:00 AM, r-sig-finance-request at r-project.org wrote:\n> LIBOR Yield Curve.\nHere is a markdown file I use to print out a list of recent LIBOR \nrates.  The URL and code might be of help. ",
+      "thread_id": "thread-021723c1ae26",
+      "thread_depth": 0,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-1259c22b0289",
+      "message_id": "<434667025.1606072.1450703207262.JavaMail.apache@nm62.abv.bg>",
+      "from_name": "Nayden Valev",
+      "from_email_hash": "311c769757de9b0f10eb8637b5e165265c83939c66a819b7420e67ebd1c0150c",
+      "date": "2015-12-21T15:06:47+02:00",
+      "subject": "[R-SIG-Finance] Backtesting VaR model",
+      "subject_clean": "Backtesting VaR model",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi guys,  \n I am a student from Germany and I need help for my R-class project. I want to validate Value-at-Risk model. For this purpose a time series of values in{0, 1}is available, where the value 1 represents a VaR violation, i.e. a higher loss than the Value-at-Risk, and respectively, the value 0 represents a VaR non-violation. The Value-at-Risk estimation was conducted with a con?dence level of 95%. In the following denote p as the probability for a VaR violation (here 5%) and T as the number of observations. To begin with, a simple Kupiec test is to be carried out, which is based on the number of VaR violations. The time series that is given is: 0...0 (88)\n 1\n 0...0 (9)\n 1\n 0...0 (28)\n 11 \n0...0 (16)\n 111 \n0...0 (33)\n 1\n 0....0 (15)\n 1 \n0....0 (8)\n 1 \n0....0 (15)\n 1 \n0....0 (17). These are 240 observations with binom. distrib. sum of 11 exceptions.  I want to compute the 95% non-rejection regions (i.e. upper and lower bounds of the regions) for a Kupiec test given p, T, and cf (where cf is chosen as 0.95). The code \nshould offer the possibility to choose between the computational method to determine the non-rejection regions. For that matter the regions can either be calculated by using the asymptotic distribution or using Monte-Carlo simulation. I want to fill up the following table  \n   Non-rejection region  \n \n \n \n \n \n \n \n T= 100 \n T= 250 \n T= 500 \n T=1000  p=10.0%\n  p=7.5%  p=5.0%\n  p=2.5%\n  p=1.0%   \n  \nand then extend the analysis using the Christoffersen test. Should I use the empirical distribution instead of normal distribution for the MC simulation?\n  \n  I will be very grateful if someone can help with some advice or example!  \n  Nayden\n  \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi guys,  \n I am a student from Germany and I need help for my R-class project. I want to validate Value-at-Risk model. For this purpose a time series of values in{0, 1}is available, where the value 1",
+      "thread_id": "thread-1259c22b0289",
+      "thread_depth": 0,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-b8167a492213",
+      "message_id": "<CAJLULw=MB_catzPU5LDeF-D0t2=mB2Uob71fkSwoFO4nca+2Jw@mail.gmail.com>",
+      "from_name": "Rods",
+      "from_email_hash": "b86db090f595f1f3518ed67324ed896ec98845b2f144a4dcb70c06b50a5c4ab3",
+      "date": "2015-12-22T18:02:00-06:00",
+      "subject": "[R-SIG-Finance] xts timeBasedSeq",
+      "subject_clean": "xts timeBasedSeq",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI'm trying to make a time sequence using the length.out argument but it\njust outputs a list without the sequence. I'm just running the example\nshown in the xts package:\n\ntimeBasedSeq('20080101 0830',length=100)\n\nIs there something wrong with my installation?\n\nThanks in advance,\nRod\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI'm trying to make a time sequence using the length.out argument but it\njust outputs a list without the sequence. I'm just running the example\nshown in the xts package:\n\ntimeBasedSeq('20080101 08",
+      "thread_id": "thread-b8167a492213",
+      "thread_depth": 0,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-e76f64d028fe",
+      "message_id": "<CAPPM_gR-tcyuJs=ssgN=xG7i4R34N8isV8SkMD5Pn165LxOhCA@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-12-22T21:40:59-06:00",
+      "subject": "[R-SIG-Finance] xts timeBasedSeq",
+      "subject_clean": "xts timeBasedSeq",
+      "in_reply_to": "<CAJLULw=MB_catzPU5LDeF-D0t2=mB2Uob71fkSwoFO4nca+2Jw@mail.gmail.com>",
+      "references": [
+        "<CAJLULw=MB_catzPU5LDeF-D0t2=mB2Uob71fkSwoFO4nca+2Jw@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Rod,\n\nOn Tue, Dec 22, 2015 at 6:02 PM, Rods <uchiharj at gmail.com> wrote:\n> Hi,\n>\n> I'm trying to make a time sequence using the length.out argument but it\n> just outputs a list without the sequence. I'm just running the example\n> shown in the xts package:\n>\n> timeBasedSeq('20080101 0830',length=100)\n>\n> Is there something wrong with my installation?\n>\nHard to know, since you haven't told us anything about your installation. ;)\n\nThat said, most of the code in that function has not been touched\nsince mid-2008. There was a commit in early 2009 that attempted to fix\na bug, and the commit message says the fix is incomplete:\nhttps://github.com/joshuaulrich/xts/commit/743c686c8e2819d0991821d8965ccbe4b7782f3\n\nSo that's likely what you're seeing.  I'll investigate and open an\nissue once I can put a bit more context into the report.\n\n> Thanks in advance,\n> Rod\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "Hi Rod,\n\nOn Tue, Dec 22, 2015 at 6:02 PM, Rods <uchiharj at gmail.com> wrote:\n> Hi,\n>\n> I'm trying to make a time sequence using the length.out argument but it\n> just outputs a list without the sequen",
+      "thread_id": "thread-b8167a492213",
+      "thread_depth": 1,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-12f0a3a50c9b",
+      "message_id": "<CAJOpux23hb=wVEwi2zLRE=5Uy7Ta+7CJs7FNDiQHT2k+H9RkNQ@mail.gmail.com>",
+      "from_name": "Oleksandr Anufriyev",
+      "from_email_hash": "2067e55f0f0604c4761ddf02ce5d852c8ea06bd297bae68dda9b26de81aa01e7",
+      "date": "2015-12-23T09:11:52+01:00",
+      "subject": "[R-SIG-Finance] R-Fiddle",
+      "subject_clean": "R-Fiddle",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi, everybody,\n\nWhen I have free time I program in R in the office as well. However, I need\nto use here only R-Fiddle http://www.r-fiddle.org (online R compiler).\nPretty cool stuff, however, one problem: getSymbols from quantmod doesn't\nwork. May be someone could help?\n\nThx a lot.\n\nAlex\n\nDetails:\nlibrary(quantmod)\ngetSymbols(\"SPY\")\nError: cannot open destfile '(null).65534.65534/filed1f450ed0a0', reason\n'No such file or directory'\n\nI tried already with defining env, auto.assign etc. Didn't help.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi, everybody,\n\nWhen I have free time I program in R in the office as well. However, I need\nto use here only R-Fiddle http://www.r-fiddle.org (online R compiler).\nPretty cool stuff, however, one probl",
+      "thread_id": "thread-12f0a3a50c9b",
+      "thread_depth": 0,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-0a999aa32d8d",
+      "message_id": "<CAPPM_gRSanqwtxksxF9V0-wTKwHkUT=huS_c4YAyaPVFeYEXOg@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-12-23T09:16:25-06:00",
+      "subject": "[R-SIG-Finance] R-Fiddle",
+      "subject_clean": "R-Fiddle",
+      "in_reply_to": "<CAJOpux23hb=wVEwi2zLRE=5Uy7Ta+7CJs7FNDiQHT2k+H9RkNQ@mail.gmail.com>",
+      "references": [
+        "<CAJOpux23hb=wVEwi2zLRE=5Uy7Ta+7CJs7FNDiQHT2k+H9RkNQ@mail.gmail.com>"
+      ],
+      "body_plain": "On Wed, Dec 23, 2015 at 2:11 AM, Oleksandr Anufriyev\n<oanufriyev at gmail.com> wrote:\n> Hi, everybody,\n>\n> When I have free time I program in R in the office as well. However, I need\n> to use here only R-Fiddle http://www.r-fiddle.org (online R compiler).\n> Pretty cool stuff, however, one problem: getSymbols from quantmod doesn't\n> work. May be someone could help?\n>\nThe problem isn't with quantmod::getSymbols. The problem is that\nR-Fiddle (apparently) does not allow code to create temporary\nfiles/directories in the usual way.  So any code that requires\ntemporary files/directories won't work with R-Fiddle.\n\nSo you need to contact them and ask why it doesn't work.\n\n> Thx a lot.\n>\n> Alex\n>\n> Details:\n> library(quantmod)\n> getSymbols(\"SPY\")\n> Error: cannot open destfile '(null).65534.65534/filed1f450ed0a0', reason\n> 'No such file or directory'\n>\n> I tried already with defining env, auto.assign etc. Didn't help.\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Wed, Dec 23, 2015 at 2:11 AM, Oleksandr Anufriyev\n<oanufriyev at gmail.com> wrote:\n> Hi, everybody,\n>\n> When I have free time I program in R in the office as well. However, I need\n> to use here onl",
+      "thread_id": "thread-12f0a3a50c9b",
+      "thread_depth": 1,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-283dbf55f908",
+      "message_id": "<CAJOpux0X-YH5gRR=T9sDnq7vkQLvu9mo+1tSpzQOX9qbssmn3Q@mail.gmail.com>",
+      "from_name": "Oleksandr Anufriyev",
+      "from_email_hash": "2067e55f0f0604c4761ddf02ce5d852c8ea06bd297bae68dda9b26de81aa01e7",
+      "date": "2015-12-23T16:27:17+01:00",
+      "subject": "[R-SIG-Finance] R-Fiddle",
+      "subject_clean": "R-Fiddle",
+      "in_reply_to": "<CAPPM_gRSanqwtxksxF9V0-wTKwHkUT=huS_c4YAyaPVFeYEXOg@mail.gmail.com>",
+      "references": [
+        "<CAJOpux23hb=wVEwi2zLRE=5Uy7Ta+7CJs7FNDiQHT2k+H9RkNQ@mail.gmail.com>",
+        "<CAPPM_gRSanqwtxksxF9V0-wTKwHkUT=huS_c4YAyaPVFeYEXOg@mail.gmail.com>"
+      ],
+      "body_plain": "Thanks a lot, Joshua. That's what I thought. Already waiting for the reply\nfrom Datacamp. If smth valuable comes, I'll share it here.\n\nHappy holidays!\n\nAlex\n\nOn Wed, Dec 23, 2015 at 4:16 PM, Joshua Ulrich <josh.m.ulrich at gmail.com>\nwrote:\n\n> On Wed, Dec 23, 2015 at 2:11 AM, Oleksandr Anufriyev\n> <oanufriyev at gmail.com> wrote:\n> > Hi, everybody,\n> >\n> > When I have free time I program in R in the office as well. However, I\n> need\n> > to use here only R-Fiddle http://www.r-fiddle.org (online R compiler).\n> > Pretty cool stuff, however, one problem: getSymbols from quantmod doesn't\n> > work. May be someone could help?\n> >\n> The problem isn't with quantmod::getSymbols. The problem is that\n> R-Fiddle (apparently) does not allow code to create temporary\n> files/directories in the usual way.  So any code that requires\n> temporary files/directories won't work with R-Fiddle.\n>\n> So you need to contact them and ask why it doesn't work.\n>\n> > Thx a lot.\n> >\n> > Alex\n> >\n> > Details:\n> > library(quantmod)\n> > getSymbols(\"SPY\")\n> > Error: cannot open destfile '(null).65534.65534/filed1f450ed0a0', reason\n> > 'No such file or directory'\n> >\n> > I tried already with defining env, auto.assign etc. Didn't help.\n> >\n> >         [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n>\n>\n> --\n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thanks a lot, Joshua. That's what I thought. Already waiting for the reply\nfrom Datacamp. If smth valuable comes, I'll share it here.\n\nHappy holidays!\n\nAlex\n\nOn Wed, Dec 23, 2015 at 4:16 PM, Joshua Ul",
+      "thread_id": "thread-12f0a3a50c9b",
+      "thread_depth": 2,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-ce435522c9d3",
+      "message_id": "<800052531.2657341.1450894950675.JavaMail.yahoo@mail.yahoo.com>",
+      "from_name": "Tom Clifford",
+      "from_email_hash": "96044b3db63b78ef8178aa958c0ea2e41185f1a7e868b411cd3ac76e1764ac77",
+      "date": "2015-12-23T18:22:30Z",
+      "subject": "[R-SIG-Finance] xts timeBasedSeq",
+      "subject_clean": "xts timeBasedSeq",
+      "in_reply_to": "<CAJLULw=MB_catzPU5LDeF-D0t2=mB2Uob71fkSwoFO4nca+2Jw@mail.gmail.com>",
+      "references": [
+        "<CAJLULw=MB_catzPU5LDeF-D0t2=mB2Uob71fkSwoFO4nca+2Jw@mail.gmail.com>"
+      ],
+      "body_plain": "Rod, if you're looking to get a sequence of incrementing minutes, you can use\n\ntimeBasedSeq(\"20080101 0830/M\", length.out = 100)\n\nthis will give you:\n\n?[1] \"2008-01-01 08:30:00 EST\" \"2008-01-01 08:31:00 EST\" \"2008-01-01 08:32:00 EST\" \"2008-01-01 08:33:00 EST\"\n?[5] \"2008-01-01 08:34:00 EST\" \"2008-01-01 08:35:00 EST\" \"2008-01-01 08:36:00 EST\" \"2008-01-01 08:37:00 EST\"\n?[9] \"2008-01-01 08:38:00 EST\" \"2008-01-01 08:39:00 EST\" \"2008-01-01 08:40:00 EST\" \"2008-01-01 08:41:00 EST\"\n\n.....\n\n\n[93] \"2008-01-01 10:02:00 EST\" \"2008-01-01 10:03:00 EST\" \"2008-01-01 10:04:00 EST\" \"2008-01-01 10:05:00 EST\"\n[97] \"2008-01-01 10:06:00 EST\" \"2008-01-01 10:07:00 EST\" \"2008-01-01 10:08:00 EST\" \"2008-01-01 10:09:00 EST\"?Tom Clifford Northwood Univ MBA '13 Lansing, Michigan 48912 tjclifford at yahoo.com\n \n\n      From: Rods <uchiharj at gmail.com>\n To: r-sig-finance at r-project.org \n Sent: Tuesday, December 22, 2015 7:02 PM\n Subject: [R-SIG-Finance] xts timeBasedSeq\n   \nHi,\n\nI'm trying to make a time sequence using the length.out argument but it\njust outputs a list without the sequence. I'm just running the example\nshown in the xts package:\n\ntimeBasedSeq('20080101 0830',length=100)\n\nIs there something wrong with my installation?\n\nThanks in advance,\nRod\n\n??? [[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\n  \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Rod, if you're looking to get a sequence of incrementing minutes, you can use\n\ntimeBasedSeq(\"20080101 0830/M\", length.out = 100)\n\nthis will give you:\n\n?[1] \"2008-01-01 08:30:00 EST\" \"2008-01-01 08:31:",
+      "thread_id": "thread-b8167a492213",
+      "thread_depth": 1,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-8e1ed18bd73d",
+      "message_id": "<CAJLULwn7=KbpW-yPdxpCyFvnXD2P53KCeoosOM7_2B9fsKN+zw@mail.gmail.com>",
+      "from_name": "Rods",
+      "from_email_hash": "b86db090f595f1f3518ed67324ed896ec98845b2f144a4dcb70c06b50a5c4ab3",
+      "date": "2015-12-23T15:56:53-06:00",
+      "subject": "[R-SIG-Finance] xts timeBasedSeq",
+      "subject_clean": "xts timeBasedSeq",
+      "in_reply_to": "<800052531.2657341.1450894950675.JavaMail.yahoo@mail.yahoo.com>",
+      "references": [
+        "<CAJLULw=MB_catzPU5LDeF-D0t2=mB2Uob71fkSwoFO4nca+2Jw@mail.gmail.com>",
+        "<800052531.2657341.1450894950675.JavaMail.yahoo@mail.yahoo.com>"
+      ],
+      "body_plain": "Thank you that works!\n\nOn Wed, Dec 23, 2015 at 12:22 PM, Tom Clifford via R-SIG-Finance <\nr-sig-finance at r-project.org> wrote:\n\n> Rod, if you're looking to get a sequence of incrementing minutes, you can\n> use\n>\n> timeBasedSeq(\"20080101 0830/M\", length.out = 100)\n>\n> this will give you:\n>\n>  [1] \"2008-01-01 08:30:00 EST\" \"2008-01-01 08:31:00 EST\" \"2008-01-01\n> 08:32:00 EST\" \"2008-01-01 08:33:00 EST\"\n>  [5] \"2008-01-01 08:34:00 EST\" \"2008-01-01 08:35:00 EST\" \"2008-01-01\n> 08:36:00 EST\" \"2008-01-01 08:37:00 EST\"\n>  [9] \"2008-01-01 08:38:00 EST\" \"2008-01-01 08:39:00 EST\" \"2008-01-01\n> 08:40:00 EST\" \"2008-01-01 08:41:00 EST\"\n>\n> .....\n>\n>\n> [93] \"2008-01-01 10:02:00 EST\" \"2008-01-01 10:03:00 EST\" \"2008-01-01\n> 10:04:00 EST\" \"2008-01-01 10:05:00 EST\"\n> [97] \"2008-01-01 10:06:00 EST\" \"2008-01-01 10:07:00 EST\" \"2008-01-01\n> 10:08:00 EST\" \"2008-01-01 10:09:00 EST\" Tom Clifford Northwood Univ MBA '13\n> Lansing, Michigan 48912 tjclifford at yahoo.com\n>\n>\n>       From: Rods <uchiharj at gmail.com>\n>  To: r-sig-finance at r-project.org\n>  Sent: Tuesday, December 22, 2015 7:02 PM\n>  Subject: [R-SIG-Finance] xts timeBasedSeq\n>\n> Hi,\n>\n> I'm trying to make a time sequence using the length.out argument but it\n> just outputs a list without the sequence. I'm just running the example\n> shown in the xts package:\n>\n> timeBasedSeq('20080101 0830',length=100)\n>\n> Is there something wrong with my installation?\n>\n> Thanks in advance,\n> Rod\n>\n>     [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n>\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thank you that works!\n\nOn Wed, Dec 23, 2015 at 12:22 PM, Tom Clifford via R-SIG-Finance <\nr-sig-finance at r-project.org> wrote:\n\n> Rod, if you're looking to get a sequence of incrementing minutes, yo",
+      "thread_id": "thread-b8167a492213",
+      "thread_depth": 2,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-063820654c48",
+      "message_id": "<CAOqQqq2VzrXgN975i1HV6uZ=Q0jKx=Xt24LEmt_Pgnu=Eygw4w@mail.gmail.com>",
+      "from_name": "Gayatri Nesarikar",
+      "from_email_hash": "39d9e62fd061aab4ebe6cef19505f184e9c09c133f5e68894d6c6eabd11270b5",
+      "date": "2015-12-27T20:32:56+05:30",
+      "subject": "[R-SIG-Finance] Not able to install fOptions R package on ec2 spark cluster",
+      "subject_clean": "Not able to install fOptions R package on ec2 spark cluster",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nI have deployed a spark cluster on ec2 using the spark-ec2 script. I am\ntrying to install the 'fOptions' R package in Rstudio on the master but I\nam getting the following errors while the install.packages() tries to\ninstall a depedency called 'gss'\n\n/usr/bin/ld: cannot find -lRlapack\n/usr/bin/ld: cannot find -lRblas\n\nThere are many more warnings too. I also tried yum install liblpack3\nlibperl-dev but I get another error - no package libperl-dev available and\nsame for other packages.\n\nOther packages like ggplot2 were successfully installed and some sample\ncodes are running fine on the spark cluster.\n\nIs there any solution to this error or any work around to install fOptions\nand its dependencies?\n\nThanks,\nGayatri\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\nI have deployed a spark cluster on ec2 using the spark-ec2 script. I am\ntrying to install the 'fOptions' R package in Rstudio on the master but I\nam getting the following errors while the inst",
+      "thread_id": "thread-063820654c48",
+      "thread_depth": 0,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-717cb94b9973",
+      "message_id": "<22144.2051.814803.123823@max.nulle.part>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2015-12-27T09:47:15-06:00",
+      "subject": "[R-SIG-Finance] Not able to install fOptions R package on ec2 spark\tcluster",
+      "subject_clean": "Not able to install fOptions R package on ec2 spark\tcluster",
+      "in_reply_to": "<CAOqQqq2VzrXgN975i1HV6uZ=Q0jKx=Xt24LEmt_Pgnu=Eygw4w@mail.gmail.com>",
+      "references": [
+        "<CAOqQqq2VzrXgN975i1HV6uZ=Q0jKx=Xt24LEmt_Pgnu=Eygw4w@mail.gmail.com>"
+      ],
+      "body_plain": "On 27 December 2015 at 20:32, Gayatri Nesarikar wrote:\n| Hello,\n| \n| I have deployed a spark cluster on ec2 using the spark-ec2 script. I am\n| trying to install the 'fOptions' R package in Rstudio on the master but I\n| am getting the following errors while the install.packages() tries to\n| install a depedency called 'gss'\n| \n| /usr/bin/ld: cannot find -lRlapack\n| /usr/bin/ld: cannot find -lRblas\n| \n| There are many more warnings too. I also tried yum install liblpack3\n| libperl-dev but I get another error - no package libperl-dev available and\n| same for other packages.\n| \n| Other packages like ggplot2 were successfully installed and some sample\n| codes are running fine on the spark cluster.\n| \n| Is there any solution to this error or any work around to install fOptions\n| and its dependencies?\n\nPlease do not crosspost!  I already replied on StackOverflow:\n  http://stackoverflow.com/a/34481640/143305\n\nLet me add that if you weren't on RedHat it would be as easy as\n  sudo apt-get install r-cran-foptions\nwhich  would also install gss and all other dependencies of fOptions (as I\nhappen to have been maintaining this for Debian/Ubuntu for a decade+).\n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 27 December 2015 at 20:32, Gayatri Nesarikar wrote:\n| Hello,\n| \n| I have deployed a spark cluster on ec2 using the spark-ec2 script. I am\n| trying to install the 'fOptions' R package in Rstudio on ",
+      "thread_id": "thread-063820654c48",
+      "thread_depth": 1,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-57f3c8135822",
+      "message_id": "<3e8e7bce90e34f5f828d7992abae3a32@ex13-live-mbn1.ad.kent.ac.uk>",
+      "from_name": "T.Riedle",
+      "from_email_hash": "e052ead61f6e1433fb39824191213e9549a10562eb3c85b4b6164218d64fb718",
+      "date": "2015-12-27T19:36:23Z",
+      "subject": "[R-SIG-Finance] rugarch package: VaR exceedances plot",
+      "subject_clean": "rugarch package: VaR exceedances plot",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear all,\n\n\n\nI am trying to backtest my VaR model in R using the rugarch package. Hence, I am trying to plot the VaR exceedances using following code from the rugarch package:\n\n\n\nVaRplot(alpha=0.025,actual = returns,VaR = VaR,ylab = \"daily log returns\",xlab = \"date\")\n\n\n\nUnfortunately, I get this error message and do not know the reason for this\n\n\n\nError in plot.window(...) : invalid 'ylim' value In addition: Warning message:\n\nIn as.double.xts(actual) : NAs introduced by coercion\n\n\n\nIf I take the ylim error message into account I get the error:\n\n\n\nError in VaRplot(alpha = 0.025, actual = returns, VaR = VaR, ylab = \"daily log returns\",  :\n\n  unused argument (ylim = rangereturns)\n\n\n\nI thought that it could be a mistake in my dataset. I converted the dataset into a xts object using following codes but this seems to be correct:\n\n\nVaR<-xts(BuVaR_Chapter_13_4_VaR[,4],order.by=as.POSIXct(BuVaR_Chapter_13_4_VaR$Date))\n\nreturns<-xts(BuVaR_Chapter_13_4_VaR[,3],order.by=as.POSIXct(BuVaR_Chapter_13_4_VaR$Date))\n\n\n\nDoes anyone have an idea? Many thanks in advance.\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,\n\n\n\nI am trying to backtest my VaR model in R using the rugarch package. Hence, I am trying to plot the VaR exceedances using following code from the rugarch package:\n\n\n\nVaRplot(alpha=0.025,a",
+      "thread_id": "thread-57f3c8135822",
+      "thread_depth": 0,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-91c678049c96",
+      "message_id": "<CAJDeD2r0nSBw0owc-++oV5crGeHGA+m8JSjjn+F_EH=0REK65w@mail.gmail.com>",
+      "from_name": "George Kumar",
+      "from_email_hash": "266543d61875e8a576c233860b614f4a9565c7fb046d1b4d506073fc8009de3e",
+      "date": "2015-12-28T22:34:06-08:00",
+      "subject": "[R-SIG-Finance] How to suppress getSymbols error message",
+      "subject_clean": "How to suppress getSymbols error message",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi all,\n\nI am using getSymbols to with the following options:\n\nsetDefaults(getSymbols,src='csv')\n\nThe problem is that when it cannot find the file locally it gives an error\nmessage like the following:\n\nfile  abcd.csv does not exist  in   ....skipping ..\n\nIt is coming from the following lines of source code:\n\n if(!file.exists(sym.file)) {\n      cat(\"\\nfile \",paste(Symbols[[i]],extension,sep='.'),\" does not exist \",\n          \"in \",dir,\"....skipping\\n\")\n      next\n }\n\nIf would have been nice if the cat statement above was under a if (verbose)\n\ncheck.\n\nAnyway to suppress this message ? I have tried using try statement too.\nStill no luck.\n\nThanks in advance.\nGeorge\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi all,\n\nI am using getSymbols to with the following options:\n\nsetDefaults(getSymbols,src='csv')\n\nThe problem is that when it cannot find the file locally it gives an error\nmessage like the following:",
+      "thread_id": "thread-91c678049c96",
+      "thread_depth": 0,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-31b08b5c6697",
+      "message_id": "<CAAmySGNj4pji3Ga8N5jyW_No1Hs0NKa3a6jF33at3i+HwuhRQQ@mail.gmail.com>",
+      "from_name": "Michael Weylandt",
+      "from_email_hash": "44e8775a589b9ef81880469e200f3cce307c7180b4289ca1696a578afb772b3a",
+      "date": "2015-12-29T11:38:40-06:00",
+      "subject": "[R-SIG-Finance] How to suppress getSymbols error message",
+      "subject_clean": "How to suppress getSymbols error message",
+      "in_reply_to": "<CAJDeD2r0nSBw0owc-++oV5crGeHGA+m8JSjjn+F_EH=0REK65w@mail.gmail.com>",
+      "references": [
+        "<CAJDeD2r0nSBw0owc-++oV5crGeHGA+m8JSjjn+F_EH=0REK65w@mail.gmail.com>"
+      ],
+      "body_plain": "You can use a sink(NULL) (R equivalent of >/dev/null) to suppress all\noutput temporarily.\n\nAs far as I know, there's no simple way to just catch this one cat().\n\nOn Tue, Dec 29, 2015 at 12:34 AM, George Kumar <grgkumar4 at gmail.com> wrote:\n> Hi all,\n>\n> I am using getSymbols to with the following options:\n>\n> setDefaults(getSymbols,src='csv')\n>\n> The problem is that when it cannot find the file locally it gives an error\n> message like the following:\n>\n> file  abcd.csv does not exist  in   ....skipping ..\n>\n> It is coming from the following lines of source code:\n>\n>  if(!file.exists(sym.file)) {\n>       cat(\"\\nfile \",paste(Symbols[[i]],extension,sep='.'),\" does not exist \",\n>           \"in \",dir,\"....skipping\\n\")\n>       next\n>  }\n>\n> If would have been nice if the cat statement above was under a if (verbose)\n>\n> check.\n>\n> Anyway to suppress this message ? I have tried using try statement too.\n> Still no luck.\n>\n> Thanks in advance.\n> George\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "You can use a sink(NULL) (R equivalent of >/dev/null) to suppress all\noutput temporarily.\n\nAs far as I know, there's no simple way to just catch this one cat().\n\nOn Tue, Dec 29, 2015 at 12:34 AM, Geor",
+      "thread_id": "thread-91c678049c96",
+      "thread_depth": 1,
+      "month": "2015-12"
+    },
+    {
+      "id": "msg-627302904eca",
+      "message_id": "<CAJDeD2ps6NHtkxyg-6uKPzLV-dyW4=6E4_+1OcSV4xPzXJbAXQ@mail.gmail.com>",
+      "from_name": "George Kumar",
+      "from_email_hash": "266543d61875e8a576c233860b614f4a9565c7fb046d1b4d506073fc8009de3e",
+      "date": "2015-12-29T11:58:37-08:00",
+      "subject": "[R-SIG-Finance] How to suppress getSymbols error message",
+      "subject_clean": "How to suppress getSymbols error message",
+      "in_reply_to": "<CAAmySGNj4pji3Ga8N5jyW_No1Hs0NKa3a6jF33at3i+HwuhRQQ@mail.gmail.com>",
+      "references": [
+        "<CAJDeD2r0nSBw0owc-++oV5crGeHGA+m8JSjjn+F_EH=0REK65w@mail.gmail.com>",
+        "<CAAmySGNj4pji3Ga8N5jyW_No1Hs0NKa3a6jF33at3i+HwuhRQQ@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Michael,\n\nThanks a lot for replying. This is exactly I ended up doing. I wrapped the\noffending code around sink(\"/dev/null\") and sink(). This seems to have\nsolved my problem for the time being.\n\nBest Regards.\nGeorge\n\nOn Tue, Dec 29, 2015 at 9:38 AM, Michael Weylandt <\nmichael.weylandt at gmail.com> wrote:\n\n> You can use a sink(NULL) (R equivalent of >/dev/null) to suppress all\n> output temporarily.\n>\n> As far as I know, there's no simple way to just catch this one cat().\n>\n> On Tue, Dec 29, 2015 at 12:34 AM, George Kumar <grgkumar4 at gmail.com>\n> wrote:\n> > Hi all,\n> >\n> > I am using getSymbols to with the following options:\n> >\n> > setDefaults(getSymbols,src='csv')\n> >\n> > The problem is that when it cannot find the file locally it gives an\n> error\n> > message like the following:\n> >\n> > file  abcd.csv does not exist  in   ....skipping ..\n> >\n> > It is coming from the following lines of source code:\n> >\n> >  if(!file.exists(sym.file)) {\n> >       cat(\"\\nfile \",paste(Symbols[[i]],extension,sep='.'),\" does not\n> exist \",\n> >           \"in \",dir,\"....skipping\\n\")\n> >       next\n> >  }\n> >\n> > If would have been nice if the cat statement above was under a if\n> (verbose)\n> >\n> > check.\n> >\n> > Anyway to suppress this message ? I have tried using try statement too.\n> > Still no luck.\n> >\n> > Thanks in advance.\n> > George\n> >\n> >         [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Michael,\n\nThanks a lot for replying. This is exactly I ended up doing. I wrapped the\noffending code around sink(\"/dev/null\") and sink(). This seems to have\nsolved my problem for the time being.\n\nBe",
+      "thread_id": "thread-91c678049c96",
+      "thread_depth": 2,
+      "month": "2015-12"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-f5aaa06f9475",
+      "subject": "fPortfolio (version 3011.81) - solveRglpk.CVAR - lower bound constraints (z_i >= 0) allows negative values",
+      "message_count": 1,
+      "participants": [
+        "Pedro Oliveira"
+      ],
+      "started": "2015-12-01T11:47:57+00:00",
+      "last_reply": "2015-12-01T11:47:57+00:00",
+      "root_message_id": "msg-f5aaa06f9475"
+    },
+    {
+      "id": "thread-7d104e2ebab5",
+      "subject": "R-Forge TradeAnalytics packages for R 3.2.2",
+      "message_count": 2,
+      "participants": [
+        "Erol Biceroglu",
+        "Joshua Ulrich"
+      ],
+      "started": "2015-12-01T19:18:20+00:00",
+      "last_reply": "2015-12-05T09:25:17-06:00",
+      "root_message_id": "msg-7d104e2ebab5"
+    },
+    {
+      "id": "thread-6293d8d03bf1",
+      "subject": "Trailing stop in Andreas Clenow trend-following system",
+      "message_count": 1,
+      "participants": [
+        "Ingo Boland"
+      ],
+      "started": "2015-12-03T10:03:04+01:00",
+      "last_reply": "2015-12-03T10:03:04+01:00",
+      "root_message_id": "msg-6293d8d03bf1"
+    },
+    {
+      "id": "thread-80cab8d0f08f",
+      "subject": "Coherent Datafeed: Thomson Reuters Elektron Edition",
+      "message_count": 1,
+      "participants": [
+        "Thomas Fuller"
+      ],
+      "started": "2015-12-04T11:09:12-05:00",
+      "last_reply": "2015-12-04T11:09:12-05:00",
+      "root_message_id": "msg-80cab8d0f08f"
+    },
+    {
+      "id": "thread-0135cc68045e",
+      "subject": "solnp Problem Inverting Hessian",
+      "message_count": 6,
+      "participants": [
+        "Krishna Kumar",
+        "Michael Ashton",
+        "Michael Weylandt"
+      ],
+      "started": "2015-12-14T16:13:01-08:00",
+      "last_reply": "2015-12-14T20:14:17-08:00",
+      "root_message_id": "msg-0135cc68045e"
+    },
+    {
+      "id": "thread-422467618c3f",
+      "subject": "solnp Problem Inverting Hessian",
+      "message_count": 7,
+      "participants": [
+        "Krishna Kumar",
+        "Michael Ashton",
+        "Michael Weylandt",
+        "Paul Gilbert"
+      ],
+      "started": "2015-12-14T22:39:28-06:00",
+      "last_reply": "2015-12-15T18:16:35-05:00",
+      "root_message_id": "msg-422467618c3f"
+    },
+    {
+      "id": "thread-3c2e354ed07c",
+      "subject": "CUSIP Data in R",
+      "message_count": 1,
+      "participants": [
+        "Thomas Fuller"
+      ],
+      "started": "2015-12-15T10:25:54-05:00",
+      "last_reply": "2015-12-15T10:25:54-05:00",
+      "root_message_id": "msg-3c2e354ed07c"
+    },
+    {
+      "id": "thread-1b2263ba9d24",
+      "subject": "Quantstrat code works for long position but not short position",
+      "message_count": 2,
+      "participants": [
+        "Damon Verial",
+        "Joshua Ulrich"
+      ],
+      "started": "2015-12-15T17:51:07+09:00",
+      "last_reply": "2015-12-15T06:39:06-06:00",
+      "root_message_id": "msg-1b2263ba9d24"
+    },
+    {
+      "id": "thread-2c0fb90abee6",
+      "subject": "LIBOR Yield Curve.",
+      "message_count": 3,
+      "participants": [
+        "Keith S Weintraub",
+        "Whit Armstrong"
+      ],
+      "started": "2015-12-18T11:06:36-05:00",
+      "last_reply": "2015-12-18T11:59:56-05:00",
+      "root_message_id": "msg-2c0fb90abee6"
+    },
+    {
+      "id": "thread-021723c1ae26",
+      "subject": "LIBOR Yield Curve.",
+      "message_count": 1,
+      "participants": [
+        "Matt Considine"
+      ],
+      "started": "2015-12-19T10:16:46-05:00",
+      "last_reply": "2015-12-19T10:16:46-05:00",
+      "root_message_id": "msg-021723c1ae26"
+    },
+    {
+      "id": "thread-1259c22b0289",
+      "subject": "Backtesting VaR model",
+      "message_count": 1,
+      "participants": [
+        "Nayden Valev"
+      ],
+      "started": "2015-12-21T15:06:47+02:00",
+      "last_reply": "2015-12-21T15:06:47+02:00",
+      "root_message_id": "msg-1259c22b0289"
+    },
+    {
+      "id": "thread-b8167a492213",
+      "subject": "xts timeBasedSeq",
+      "message_count": 4,
+      "participants": [
+        "Joshua Ulrich",
+        "Rods",
+        "Tom Clifford"
+      ],
+      "started": "2015-12-22T18:02:00-06:00",
+      "last_reply": "2015-12-23T15:56:53-06:00",
+      "root_message_id": "msg-b8167a492213"
+    },
+    {
+      "id": "thread-12f0a3a50c9b",
+      "subject": "R-Fiddle",
+      "message_count": 3,
+      "participants": [
+        "Joshua Ulrich",
+        "Oleksandr Anufriyev"
+      ],
+      "started": "2015-12-23T09:11:52+01:00",
+      "last_reply": "2015-12-23T16:27:17+01:00",
+      "root_message_id": "msg-12f0a3a50c9b"
+    },
+    {
+      "id": "thread-57f3c8135822",
+      "subject": "rugarch package: VaR exceedances plot",
+      "message_count": 1,
+      "participants": [
+        "T.Riedle"
+      ],
+      "started": "2015-12-27T19:36:23+00:00",
+      "last_reply": "2015-12-27T19:36:23+00:00",
+      "root_message_id": "msg-57f3c8135822"
+    },
+    {
+      "id": "thread-063820654c48",
+      "subject": "Not able to install fOptions R package on ec2 spark cluster",
+      "message_count": 2,
+      "participants": [
+        "Dirk Eddelbuettel",
+        "Gayatri Nesarikar"
+      ],
+      "started": "2015-12-27T20:32:56+05:30",
+      "last_reply": "2015-12-27T09:47:15-06:00",
+      "root_message_id": "msg-063820654c48"
+    },
+    {
+      "id": "thread-91c678049c96",
+      "subject": "How to suppress getSymbols error message",
+      "message_count": 3,
+      "participants": [
+        "George Kumar",
+        "Michael Weylandt"
+      ],
+      "started": "2015-12-28T22:34:06-08:00",
+      "last_reply": "2015-12-29T11:58:37-08:00",
+      "root_message_id": "msg-91c678049c96"
+    }
+  ]
+}

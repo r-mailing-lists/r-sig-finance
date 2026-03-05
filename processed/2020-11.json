@@ -1,0 +1,323 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2020-11",
+  "messages": [
+    {
+      "id": "msg-4e8daeeea5e6",
+      "message_id": "<000d01d6b33f$972eb320$c58c1960$@gmail.com>",
+      "from_name": "borkrese@rch m@iii@g oii gm@ii@com",
+      "from_email_hash": "41f189c14f921958579bcd09aa92cdfaf633f6ac243a84406c7ea58c3679cc9c",
+      "date": "2020-11-05T07:47:54+01:00",
+      "subject": "[R-SIG-Finance] dccfit (RMGARCH): using uGARCHmultifit",
+      "subject_clean": "dccfit (RMGARCH): using uGARCHmultifit",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Anyone tried the function input uGARCHmultifit of the dccfit function from rmgarch? If so can you provide an example of how you used it and how to setup the uGARCHmultifit object? I can't figure it out.\n\nAccording to the documentation <https://www.rdocumentation.org/packages/rmgarch/versions/1.3-7/topics/dccfit-methods>  it should be possible to use the fit argument in dccfit where\n\n*\t\" fit: (A previously estimated univariate '>uGARCHmultifit object (see details).\"\n\nI'd like to input my fits of several GARCH models directly into the final DCC estimation because the GARCH models where difficult to estimate (I used several optimizers).\n\n \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Anyone tried the function input uGARCHmultifit of the dccfit function from rmgarch? If so can you provide an example of how you used it and how to setup the uGARCHmultifit object? I can't figure it ou",
+      "thread_id": "thread-4e8daeeea5e6",
+      "thread_depth": 0,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-ffb2b93c86dd",
+      "message_id": "<4DA4983D-1C70-46D0-A974-D88D784A523B@4dscape.com>",
+      "from_name": "Alexios Galanos",
+      "from_email_hash": "a96d1f9bc31603cc8b7738f0d9a0b72c41ec7e0b943e1806c497adc2018497a3",
+      "date": "2020-11-04T23:15:57-08:00",
+      "subject": "[R-SIG-Finance] dccfit (RMGARCH): using uGARCHmultifit",
+      "subject_clean": "dccfit (RMGARCH): using uGARCHmultifit",
+      "in_reply_to": "<000d01d6b33f$972eb320$c58c1960$@gmail.com>",
+      "references": [
+        "<000d01d6b33f$972eb320$c58c1960$@gmail.com>"
+      ],
+      "body_plain": "Take a look at the examples in the inst/rmgarch.tests folder of the source package or this post from 7+ years ago: \n\nhttp://www.unstarched.net/2013/01/03/the-garch-dcc-model-and-2-stage-dccmvt-estimation/\n\n-Alexios\n\n\n> On Nov 4, 2020, at 10:48 PM, borkresearch at gmail.com wrote:\n> \n> ?Anyone tried the function input uGARCHmultifit of the dccfit function from rmgarch? If so can you provide an example of how you used it and how to setup the uGARCHmultifit object? I can't figure it out.\n> \n> According to the documentation <https://www.rdocumentation.org/packages/rmgarch/versions/1.3-7/topics/dccfit-methods>  it should be possible to use the fit argument in dccfit where\n> \n> *    \" fit: (A previously estimated univariate '>uGARCHmultifit object (see details).\"\n> \n> I'd like to input my fits of several GARCH models directly into the final DCC estimation because the GARCH models where difficult to estimate (I used several optimizers).\n> \n> \n> \n> \n>    [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Take a look at the examples in the inst/rmgarch.tests folder of the source package or this post from 7+ years ago: \n\nhttp://www.unstarched.net/2013/01/03/the-garch-dcc-model-and-2-stage-dccmvt-estimat",
+      "thread_id": "thread-4e8daeeea5e6",
+      "thread_depth": 1,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-13a7df5144c2",
+      "message_id": "<000001d6b3b9$9ed0e420$dc72ac60$@gmail.com>",
+      "from_name": "borkrese@rch m@iii@g oii gm@ii@com",
+      "from_email_hash": "41f189c14f921958579bcd09aa92cdfaf633f6ac243a84406c7ea58c3679cc9c",
+      "date": "2020-11-05T22:21:25+01:00",
+      "subject": "[R-SIG-Finance] dccfit (RMGARCH): using uGARCHmultifit",
+      "subject_clean": "dccfit (RMGARCH): using uGARCHmultifit",
+      "in_reply_to": "<4DA4983D-1C70-46D0-A974-D88D784A523B@4dscape.com>",
+      "references": [
+        "<000d01d6b33f$972eb320$c58c1960$@gmail.com>",
+        "<4DA4983D-1C70-46D0-A974-D88D784A523B@4dscape.com>"
+      ],
+      "body_plain": "Thanks Alexios for providing me references to examples. However, I?m not able to add a fit to the multifit object. How can I do this? See example below\n\n \n\nlibrary(rmgarch)\n\nlibrary(parallel)\n\ndata(dji30retw)\n\nDat = dji30retw[, 1:10, drop = FALSE]\n\n \n\n# Ten-asset example from http://www.unstarched.net/2013/01/03/the-garch-dcc-model-and-2-stage-dccmvt-estimation/\n\n \n\n# (1) Replicate example\n\nxspec = ugarchspec(mean.model = list(armaOrder = c(1, 1)), variance.model = list(garchOrder = c(1,1), model = 'sGARCH'), distribution.model = 'norm')\n\nuspec = multispec(replicate(10, xspec))\n\nspec1 = dccspec(uspec = uspec, dccOrder = c(1, 1), distribution = 'mvnorm')\n\n \n\ncl = makePSOCKcluster(10)\n\nmultf = multifit(uspec, Dat, cluster = cl)\n\nmultf at fit\n\n \n\nfit1 = dccfit(spec1, data = Dat, fit.control = list(eval.se = TRUE), fit = multf, cluster = cl)\n\nfit1 at mfit$matcoef\n\n \n\n# (2) subset of 9 assets. \n\nuspec9 = multispec(replicate(9, xspec))\n\ncl9 = makePSOCKcluster(9)\n\nmultf9 = multifit(uspec9, Dat[,1:9], cluster = cl9)\n\nmultf9 at fit\n\n \n\n# (3) Suppose we want to add an additional fit (imagine it was hard to estimate)\n\nfit10 <- ugarchfit(spec=xspec,data=Dat[,10],solver.control=list(trace=0))\n\n \n\nmultf10 <- multf9\n\nmultf10 at fit[[10]] <- fit10   # to be used in  dccfit(spec10, data = cbind(Dat[,1:9],Dat[,10]), fit.control = list(eval.se = TRUE), fit = multf10, cluster = cl)\n\n \n\n## the last line does not seem to work: \n\n# Error in `colnames<-`(`*tmp*`, value = asset.names) \n\n#   attempt to set 'colnames' on an object with less than two dimensions\n\n \n\nThanks, Lasse\n\n \n\nFrom: Alexios Galanos <alexios at 4dscape.com> \nSent: 05 November 2020 08:16\nTo: borkresearch at gmail.com\nCc: R-SIG-Finance at r-project.org\nSubject: Re: [R-SIG-Finance] dccfit (RMGARCH): using uGARCHmultifit\n\n \n\nTake a look at the examples in the inst/rmgarch.tests folder of the source package or this post from 7+ years ago: \n\nhttp://www.unstarched.net/2013/01/03/the-garch-dcc-model-and-2-stage-dccmvt-estimation/\n\n \n\n-Alexios\n\n \n\n\n\n\n\nOn Nov 4, 2020, at 10:48 PM, borkresearch at gmail.com <mailto:borkresearch at gmail.com>  wrote:\n\n?Anyone tried the function input uGARCHmultifit of the dccfit function from rmgarch? If so can you provide an example of how you used it and how to setup the uGARCHmultifit object? I can't figure it out.\n\nAccording to the documentation <https://www.rdocumentation.org/packages/rmgarch/versions/1.3-7/topics/dccfit-methods>  it should be possible to use the fit argument in dccfit where\n\n*    \" fit: (A previously estimated univariate '>uGARCHmultifit object (see details).\"\n\nI'd like to input my fits of several GARCH models directly into the final DCC estimation because the GARCH models where difficult to estimate (I used several optimizers).\n\n\n\n\n   [[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at r-project.org <mailto:R-SIG-Finance at r-project.org>  mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thanks Alexios for providing me references to examples. However, I?m not able to add a fit to the multifit object. How can I do this? See example below\n\n \n\nlibrary(rmgarch)\n\nlibrary(parallel)\n\ndata(dj",
+      "thread_id": "thread-4e8daeeea5e6",
+      "thread_depth": 2,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-ff34da22eaaa",
+      "message_id": "<CALj2E8XfwafQKyArcbHpBWMV9+u-2tALPAgrQrf2Zni_qZifhA@mail.gmail.com>",
+      "from_name": "Ayhan yuksel",
+      "from_email_hash": "ea329b0f97b4e808dad953a3c712f8f8c676874536dfde072dfc4bcb2a212a18",
+      "date": "2020-11-08T00:11:41+03:00",
+      "subject": "[R-SIG-Finance] Quantstrat Position Accounting System: Netting vs Hedging Systems",
+      "subject_clean": "Quantstrat Position Accounting System: Netting vs Hedging Systems",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear all,\n\nIn quantstrat, as described in package documentation, orders turn into\ntransactions,  transactions turn into positions, positions turn into\ntrades. And the underlying logic of how you define a position (using\nnetting or hedging system) or a trade (flat-to-flat or FIFO etc)\nsignificantly affects the mechanics of money management rules (stop loss\netc) and trade statistics (profit factor etc).\n\nFor defining positions, the netting vs hedging systems are defined as\nfollows:\nhttps://www.metatrader5.com/en/mobile-trading/iphone/help/trade/general_concept\n\nThe original implementation of quantstrat is based on a netting system\nwhere after having a long position, each additional long trade increases\nthe current position amount (unless you have a position limit) and the\nstop-loss/take profit is applied to the total position as a whole and not\nto the individual long trades separately.\n\nMy question is that is there a way to apply stop loss and take profit to\neach opened trade independently, regardless of order side (long or short)\nand previous positions? If yes, would you provide an example of it?\n\nBest regards\nAyhan\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,\n\nIn quantstrat, as described in package documentation, orders turn into\ntransactions,  transactions turn into positions, positions turn into\ntrades. And the underlying logic of how you defin",
+      "thread_id": "thread-ff34da22eaaa",
+      "thread_depth": 0,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-e90f732b0aea",
+      "message_id": "<CA+oJuEFRNSHFM3Mfjcg6UfSNhdxK4F3SSWN7tn4QRs4sN3km+w@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "3e375900f97169bfcb61fc4fdc48bafc91349f60a4f7a4813c93bbe535a52a19",
+      "date": "2020-11-07T17:40:37-05:00",
+      "subject": "[R-SIG-Finance]  Quantstrat Position Accounting System: Netting vs Hedging Systems",
+      "subject_clean": "Quantstrat Position Accounting System: Netting vs Hedging Systems",
+      "in_reply_to": "<CALj2E8XfwafQKyArcbHpBWMV9+u-2tALPAgrQrf2Zni_qZifhA@mail.gmail.com>",
+      "references": [
+        "<CALj2E8XfwafQKyArcbHpBWMV9+u-2tALPAgrQrf2Zni_qZifhA@mail.gmail.com>"
+      ],
+      "body_plain": "Ayhan,\n\nIf I'm understanding correctly:\n\nAre you familiar with order sets?\n\nBy defining a stop loss that works on a particular parent rule, that\nshould do the trick.\n\nSee this post:\nhttps://quantstrattrader.wordpress.com/2014/08/18/a-hammer-trading-system-demonstrating-custom-indicator-based-limit-orders-in-quantstrat/\n\n-Ilya\n\nOn Sat, Nov 7, 2020 at 4:12 PM Ayhan yuksel <ayhanyuksel78 at gmail.com> wrote:\n\n> Dear all,\n>\n> In quantstrat, as described in package documentation, orders turn into\n> transactions,  transactions turn into positions, positions turn into\n> trades. And the underlying logic of how you define a position (using\n> netting or hedging system) or a trade (flat-to-flat or FIFO etc)\n> significantly affects the mechanics of money management rules (stop loss\n> etc) and trade statistics (profit factor etc).\n>\n> For defining positions, the netting vs hedging systems are defined as\n> follows:\n>\n> https://www.metatrader5.com/en/mobile-trading/iphone/help/trade/general_concept\n>\n> The original implementation of quantstrat is based on a netting system\n> where after having a long position, each additional long trade increases\n> the current position amount (unless you have a position limit) and the\n> stop-loss/take profit is applied to the total position as a whole and not\n> to the individual long trades separately.\n>\n> My question is that is there a way to apply stop loss and take profit to\n> each opened trade independently, regardless of order side (long or short)\n> and previous positions? If yes, would you provide an example of it?\n>\n> Best regards\n> Ayhan\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Ayhan,\n\nIf I'm understanding correctly:\n\nAre you familiar with order sets?\n\nBy defining a stop loss that works on a particular parent rule, that\nshould do the trick.\n\nSee this post:\nhttps://quantstrat",
+      "thread_id": "thread-ff34da22eaaa",
+      "thread_depth": 1,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-a4292ad51ea6",
+      "message_id": "<CALj2E8VUL5tr6PCp_Zj1PhPSNzSiL8VNu5PyV_tGgttnd4H_eA@mail.gmail.com>",
+      "from_name": "Ayhan yuksel",
+      "from_email_hash": "ea329b0f97b4e808dad953a3c712f8f8c676874536dfde072dfc4bcb2a212a18",
+      "date": "2020-11-08T15:40:59+03:00",
+      "subject": "[R-SIG-Finance]  Quantstrat Position Accounting System: Netting vs Hedging Systems",
+      "subject_clean": "Quantstrat Position Accounting System: Netting vs Hedging Systems",
+      "in_reply_to": "<CA+oJuEFRNSHFM3Mfjcg6UfSNhdxK4F3SSWN7tn4QRs4sN3km+w@mail.gmail.com>",
+      "references": [
+        "<CALj2E8XfwafQKyArcbHpBWMV9+u-2tALPAgrQrf2Zni_qZifhA@mail.gmail.com>",
+        "<CA+oJuEFRNSHFM3Mfjcg6UfSNhdxK4F3SSWN7tn4QRs4sN3km+w@mail.gmail.com>"
+      ],
+      "body_plain": "Ilya thanks for your reply, your help is much appreciated\n\nYes I am familiar with ordersets and orderchains, but my question is\nrelated to how stop loss is applied to each trade\n\nBelow I put a minimal example of a strategy where we only open long trades\nwith a size of 100 lots using moving average crossover, and we have a stop\nloss with a threshold of 0.001.\n\nAfter running the strategy on GBPUSD data, please have a look at the 3rd,\n4th and 5 th transactions. In these transactions, the strategy first have a\nlong trade with  100 lot, then another long trade with 100 lot (so now our\nposition is 200 lots), and then the stop loss rule is executed and the\nwhole 200 lots will be closed, which means that the stop loss rule is based\non the whole position that we have.\n\nEvery time the strategy adds new long positions to the existing ones (like\npyramiding), the stop loss rule is executed on the whole position and\nposition is always flattened.\n\nMy question is that is there a way to apply the stop loss rule\n**seperately** for each of the 100 lot trades, which may have different\ncost basis, so may have different stop loss prices? In this case, for\ninstance, each stop loss will be executed independently and each stop loss\ntransaction will have a size of -100 lots.\n\nRegards\nAyhan\n\n###########################################\n# Example strategy\n\nlibrary(quantstrat)\n\nsource(paste0(path.package(\"quantstrat\"),\"/demo/luxor.include.R\"))\n.fast = 5\n.slow = 10\n\nsource(paste0(path.package(\"quantstrat\"),\"/demo/luxor.getSymbols.R\"))\n\n### blotter\n\ninitPortf(portfolio.st, symbols='GBPUSD', currency='USD')\ninitAcct(account.st, portfolios=portfolio.st, currency='USD')\n\n### quantstrat\n\ninitOrders(portfolio.st)\n\n### define strategy\n\nstrategy(strategy.st, store=TRUE)\n\n\nadd.indicator(strategy.st, name = \"SMA\",\n              arguments = list(\n                x = quote(Cl(mktdata)[,1]),\n                n = .fast\n              ),\n              label=\"nFast\"\n)\n\nadd.indicator(strategy.st, name=\"SMA\",\n              arguments = list(\n                x = quote(Cl(mktdata)[,1]),\n                n = .slow\n              ),\n              label=\"nSlow\"\n)\n\n### signals\n\nadd.signal(strategy.st, name='sigCrossover',\n           arguments = list(\n             columns=c(\"nFast\",\"nSlow\"),\n             relationship=\"gte\"\n           ),\n           label='long'\n)\n\n### rules ############\n# normal entry rules\n\nadd.rule(strategy.st, name = 'ruleSignal',\n         arguments=list(sigcol='long' , sigval=TRUE,\n                        replace=FALSE,\n                        orderside='long' ,\n                        ordertype='stoplimit',\n                        prefer='High',\n                        threshold=.threshold,\n                        TxnFees=0,\n                        orderqty=100,\n                        orderset='ocolong'\n         ),\n         type='enter',\n         timespan = .timespan,\n         label='EnterLONG'\n)\n\n\n# stop-loss\n\nadd.rule(strategy.st, name = 'ruleSignal',\n         arguments=list(sigcol='long' , sigval=TRUE,\n                        replace=FALSE,\n                        orderside='long',\n                        ordertype='stoplimit', tmult=TRUE, threshold=0.001,\n                        TxnFees=.txnfees,\n                        orderqty='all',\n                        orderset='ocolong'\n         ),\n         type='chain', parent='EnterLONG',\n         label='StopLossLONG',\n         enabled=TRUE\n)\n\n\n\napplyStrategy(strategy.st, portfolio.st)\n\nView(getOrderBook(portfolio.st)[[portfolio.st]]$GBPUSD)\n\nView(getTxns(portfolio.st,\"GBPUSD\"))\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nOn Sun, 8 Nov 2020 at 01:40, Ilya Kipnis <ilya.kipnis at gmail.com> wrote:\n\n> Ayhan,\n>\n> If I'm understanding correctly:\n>\n> Are you familiar with order sets?\n>\n> By defining a stop loss that works on a particular parent rule, that\n> should do the trick.\n>\n> See this post:\n> https://quantstrattrader.wordpress.com/2014/08/18/a-hammer-trading-system-demonstrating-custom-indicator-based-limit-orders-in-quantstrat/\n>\n> -Ilya\n>\n> On Sat, Nov 7, 2020 at 4:12 PM Ayhan yuksel <ayhanyuksel78 at gmail.com>\n> wrote:\n>\n>> Dear all,\n>>\n>> In quantstrat, as described in package documentation, orders turn into\n>> transactions,  transactions turn into positions, positions turn into\n>> trades. And the underlying logic of how you define a position (using\n>> netting or hedging system) or a trade (flat-to-flat or FIFO etc)\n>> significantly affects the mechanics of money management rules (stop loss\n>> etc) and trade statistics (profit factor etc).\n>>\n>> For defining positions, the netting vs hedging systems are defined as\n>> follows:\n>>\n>> https://www.metatrader5.com/en/mobile-trading/iphone/help/trade/general_concept\n>>\n>> The original implementation of quantstrat is based on a netting system\n>> where after having a long position, each additional long trade increases\n>> the current position amount (unless you have a position limit) and the\n>> stop-loss/take profit is applied to the total position as a whole and not\n>> to the individual long trades separately.\n>>\n>> My question is that is there a way to apply stop loss and take profit to\n>> each opened trade independently, regardless of order side (long or short)\n>> and previous positions? If yes, would you provide an example of it?\n>>\n>> Best regards\n>> Ayhan\n>>\n>>         [[alternative HTML version deleted]]\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Ilya thanks for your reply, your help is much appreciated\n\nYes I am familiar with ordersets and orderchains, but my question is\nrelated to how stop loss is applied to each trade\n\nBelow I put a minimal",
+      "thread_id": "thread-ff34da22eaaa",
+      "thread_depth": 2,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-4de139efaa9d",
+      "message_id": "<CA+oJuEF06Q35VeafSPqzjszhptFyqyW_YMNHRUCZszJb-xiLYg@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "3e375900f97169bfcb61fc4fdc48bafc91349f60a4f7a4813c93bbe535a52a19",
+      "date": "2020-11-08T08:21:01-05:00",
+      "subject": "[R-SIG-Finance]  Quantstrat Position Accounting System: Netting vs Hedging Systems",
+      "subject_clean": "Quantstrat Position Accounting System: Netting vs Hedging Systems",
+      "in_reply_to": "<CALj2E8VUL5tr6PCp_Zj1PhPSNzSiL8VNu5PyV_tGgttnd4H_eA@mail.gmail.com>",
+      "references": [
+        "<CALj2E8XfwafQKyArcbHpBWMV9+u-2tALPAgrQrf2Zni_qZifhA@mail.gmail.com>",
+        "<CA+oJuEFRNSHFM3Mfjcg6UfSNhdxK4F3SSWN7tn4QRs4sN3km+w@mail.gmail.com>",
+        "<CALj2E8VUL5tr6PCp_Zj1PhPSNzSiL8VNu5PyV_tGgttnd4H_eA@mail.gmail.com>"
+      ],
+      "body_plain": "Look at your stoploss rule and the orderqty it calls for. You actively\nspecify orderqty = 'all'. That means to flatten the entire position.\n\nAs far as a stop loss on a partial position, in your particular case, you\ncan simply set that with a better specified orderqty argument by specifying\n100 lots instead of 'all'.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Look at your stoploss rule and the orderqty it calls for. You actively\nspecify orderqty = 'all'. That means to flatten the entire position.\n\nAs far as a stop loss on a partial position, in your partic",
+      "thread_id": "thread-ff34da22eaaa",
+      "thread_depth": 3,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-dcae9ca167c8",
+      "message_id": "<CALj2E8WPwKd720UAC25TxByma-nVa6v8E8ueARJNz+mX39dW0A@mail.gmail.com>",
+      "from_name": "Ayhan yuksel",
+      "from_email_hash": "ea329b0f97b4e808dad953a3c712f8f8c676874536dfde072dfc4bcb2a212a18",
+      "date": "2020-11-09T11:09:21+03:00",
+      "subject": "[R-SIG-Finance]  Quantstrat Position Accounting System: Netting vs Hedging Systems",
+      "subject_clean": "Quantstrat Position Accounting System: Netting vs Hedging Systems",
+      "in_reply_to": "<CA+oJuEF06Q35VeafSPqzjszhptFyqyW_YMNHRUCZszJb-xiLYg@mail.gmail.com>",
+      "references": [
+        "<CALj2E8XfwafQKyArcbHpBWMV9+u-2tALPAgrQrf2Zni_qZifhA@mail.gmail.com>",
+        "<CA+oJuEFRNSHFM3Mfjcg6UfSNhdxK4F3SSWN7tn4QRs4sN3km+w@mail.gmail.com>",
+        "<CALj2E8VUL5tr6PCp_Zj1PhPSNzSiL8VNu5PyV_tGgttnd4H_eA@mail.gmail.com>",
+        "<CA+oJuEF06Q35VeafSPqzjszhptFyqyW_YMNHRUCZszJb-xiLYg@mail.gmail.com>"
+      ],
+      "body_plain": "Thank you for the clarification.\n\nOn Sun, 8 Nov 2020 at 16:21, Ilya Kipnis <ilya.kipnis at gmail.com> wrote:\n\n> Look at your stoploss rule and the orderqty it calls for. You actively\n> specify orderqty = 'all'. That means to flatten the entire position.\n>\n> As far as a stop loss on a partial position, in your particular case, you\n> can simply set that with a better specified orderqty argument by specifying\n> 100 lots instead of 'all'.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thank you for the clarification.\n\nOn Sun, 8 Nov 2020 at 16:21, Ilya Kipnis <ilya.kipnis at gmail.com> wrote:\n\n> Look at your stoploss rule and the orderqty it calls for. You actively\n> specify orderqt",
+      "thread_id": "thread-ff34da22eaaa",
+      "thread_depth": 4,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-c1f1d557d8e8",
+      "message_id": "<9d93eb08-02ab-2de6-4f72-4c0cc62c0bf8@gmail.com>",
+      "from_name": "Maulik Bhatt",
+      "from_email_hash": "a0bb25c128dab1051f354531ce58f29c47e0d8df6316a7f0853b9cf9065a6a04",
+      "date": "2020-11-09T13:45:43+05:30",
+      "subject": "[R-SIG-Finance] How can I calculate annualized log returns when the year is different from a calendar year",
+      "subject_clean": "How can I calculate annualized log returns when the year is different from a calendar year",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear all,\n\nI want to calculate annualized log return for a security. But the issue \nis that the company follows financial year from April to March. So, all \nits other ratios are calculated from April to March year. The data is \ntaken using the package tidyquant.\n\nlibrary(tidyquant)\n\ndf<- tq_get(\"SBIN.NS\")\n\n From the package vignette of tidyquant, the periodReturn can be \ncalculated for yearly, but in that case the year is calendar year. But I \nwant to get the return for financial year. In case of this company, the \nfinancial year is from April to March. So, what modifications do I need \nto make in order to calculate annual log return from April to March?\n\nThanks in advance,\n\nMaulik.",
+      "body_snippet": "Dear all,\n\nI want to calculate annualized log return for a security. But the issue \nis that the company follows financial year from April to March. So, all \nits other ratios are calculated from April ",
+      "thread_id": "thread-c1f1d557d8e8",
+      "thread_depth": 0,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-1116382462a6",
+      "message_id": "<1625a1a9e0e4fac262a359c1f5607051e52661e4.camel@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "8f7d7863b98c36f594dc0b3ee1ea66fe80f3c655487f1e98dd55606a26ed6070",
+      "date": "2020-11-09T07:29:09-06:00",
+      "subject": "[R-SIG-Finance]  How can I calculate annualized log returns when the year is different from a calendar year",
+      "subject_clean": "How can I calculate annualized log returns when the year is different from a calendar year",
+      "in_reply_to": "<9d93eb08-02ab-2de6-4f72-4c0cc62c0bf8@gmail.com>",
+      "references": [
+        "<9d93eb08-02ab-2de6-4f72-4c0cc62c0bf8@gmail.com>"
+      ],
+      "body_plain": "I don't use tidyquant, but you can easily use endpoints() in xts to get\nthe end of March timestamps and calculate your period return that way.\n\nBrian\n\nOn Mon, 2020-11-09 at 13:45 +0530, Maulik Bhatt wrote:\n> Dear all,\n> \n> I want to calculate annualized log return for a security. But the\n> issue \n> is that the company follows financial year from April to March. So,\n> all \n> its other ratios are calculated from April to March year. The data is\n> taken using the package tidyquant.\n> \n> library(tidyquant)\n> \n> df<- tq_get(\"SBIN.NS\")\n> \n> ?From the package vignette of tidyquant, the periodReturn can be \n> calculated for yearly, but in that case the year is calendar year.\n> But I \n> want to get the return for financial year. In case of this company,\n> the \n> financial year is from April to March. So, what modifications do I\n> need \n> to make in order to calculate annual log return from April to March?\n> \n> Thanks in advance,\n> \n> Maulik.\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org?mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R\n> questions should go.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I don't use tidyquant, but you can easily use endpoints() in xts to get\nthe end of March timestamps and calculate your period return that way.\n\nBrian\n\nOn Mon, 2020-11-09 at 13:45 +0530, Maulik Bhatt w",
+      "thread_id": "thread-c1f1d557d8e8",
+      "thread_depth": 1,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-53cbc2cb3ce7",
+      "message_id": "<CALj2E8WnQ3zu_mZfhZk-Kj6dV8SR+LJbSMraNMZ82L1TawjR3A@mail.gmail.com>",
+      "from_name": "Ayhan yuksel",
+      "from_email_hash": "ea329b0f97b4e808dad953a3c712f8f8c676874536dfde072dfc4bcb2a212a18",
+      "date": "2020-11-12T13:43:49+03:00",
+      "subject": "[R-SIG-Finance]  Quantstrat Position Accounting System: Netting vs Hedging Systems",
+      "subject_clean": "Quantstrat Position Accounting System: Netting vs Hedging Systems",
+      "in_reply_to": "<CALj2E8WPwKd720UAC25TxByma-nVa6v8E8ueARJNz+mX39dW0A@mail.gmail.com>",
+      "references": [
+        "<CALj2E8XfwafQKyArcbHpBWMV9+u-2tALPAgrQrf2Zni_qZifhA@mail.gmail.com>",
+        "<CA+oJuEFRNSHFM3Mfjcg6UfSNhdxK4F3SSWN7tn4QRs4sN3km+w@mail.gmail.com>",
+        "<CALj2E8VUL5tr6PCp_Zj1PhPSNzSiL8VNu5PyV_tGgttnd4H_eA@mail.gmail.com>",
+        "<CA+oJuEF06Q35VeafSPqzjszhptFyqyW_YMNHRUCZszJb-xiLYg@mail.gmail.com>",
+        "<CALj2E8WPwKd720UAC25TxByma-nVa6v8E8ueARJNz+mX39dW0A@mail.gmail.com>"
+      ],
+      "body_plain": "One more question to solve my case\n\nWe can access the parent rule?s order price using chain.price argument  in\nrule functions.\n\nIs it also possible to access parent rule?s order size as well? I searched\nbut couldn't find it\n\nAssume that the parent order may take variable position size for each\ntrade. It takes one long position and then adds a second long position\nbefore hitting the stop loss for the first one. After that the stop loss\nfor the first position is hit. We need to know the position size of the\nfirst trade in writing stop loss rule. Is it possible to access the\nposition size of the parent rule?\n\nThanks for your help\nRegards\n\n\n\n\n\nOn 9 Nov 2020 Mon at 11:09 Ayhan yuksel <ayhanyuksel78 at gmail.com> wrote:\n\n> Thank you for the clarification.\n>\n> On Sun, 8 Nov 2020 at 16:21, Ilya Kipnis <ilya.kipnis at gmail.com> wrote:\n>\n>> Look at your stoploss rule and the orderqty it calls for. You actively\n>> specify orderqty = 'all'. That means to flatten the entire position.\n>>\n>> As far as a stop loss on a partial position, in your particular case, you\n>> can simply set that with a better specified orderqty argument by specifying\n>> 100 lots instead of 'all'.\n>>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "One more question to solve my case\n\nWe can access the parent rule?s order price using chain.price argument  in\nrule functions.\n\nIs it also possible to access parent rule?s order size as well? I search",
+      "thread_id": "thread-ff34da22eaaa",
+      "thread_depth": 5,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-821a3b3b2fa2",
+      "message_id": "<7176d4b5e308cc6788fc9e1013ca5221abd6106a.camel@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "8f7d7863b98c36f594dc0b3ee1ea66fe80f3c655487f1e98dd55606a26ed6070",
+      "date": "2020-11-12T05:28:17-06:00",
+      "subject": "[R-SIG-Finance]  Quantstrat Position Accounting System: Netting vs Hedging Systems",
+      "subject_clean": "Quantstrat Position Accounting System: Netting vs Hedging Systems",
+      "in_reply_to": "<CALj2E8WnQ3zu_mZfhZk-Kj6dV8SR+LJbSMraNMZ82L1TawjR3A@mail.gmail.com>",
+      "references": [
+        "<CALj2E8XfwafQKyArcbHpBWMV9+u-2tALPAgrQrf2Zni_qZifhA@mail.gmail.com>",
+        "<CA+oJuEFRNSHFM3Mfjcg6UfSNhdxK4F3SSWN7tn4QRs4sN3km+w@mail.gmail.com>",
+        "<CALj2E8VUL5tr6PCp_Zj1PhPSNzSiL8VNu5PyV_tGgttnd4H_eA@mail.gmail.com>",
+        "<CA+oJuEF06Q35VeafSPqzjszhptFyqyW_YMNHRUCZszJb-xiLYg@mail.gmail.com>",
+        "<CALj2E8WPwKd720UAC25TxByma-nVa6v8E8ueARJNz+mX39dW0A@mail.gmail.com>",
+        "<CALj2E8WnQ3zu_mZfhZk-Kj6dV8SR+LJbSMraNMZ82L1TawjR3A@mail.gmail.com>"
+      ],
+      "body_plain": "The chained order quantity isn't directly passed to the triggered chain\nrule right now.\n\nRules have access to the full current state, since they are path\ndependent.  \n\nSo, you have two options here.  You can either?\n\n- write a custom order sizing function that queries the order status to\ncheck the chained rule and order to get the quantity\n\n- propose a patch/pull request to rules.R and ruleSignal.R that could\nprocess a chain.qty optional argument\n\nsee the code in rules.R to see how we pass chain.price, and it should\ninform how you would take either of the above approaches.\n\nRegards,\n\nBrian\n\n-- \nBrian G. Peterson\nph: +1.773.459.4973\nim: bgpbraverock\n\nOn Thu, 2020-11-12 at 13:43 +0300, Ayhan yuksel wrote:\n> One more question to solve my case\n> \n> We can access the parent rule?s order price using chain.price\n> argument? in\n> rule functions.\n> \n> Is it also possible to access parent rule?s order size as well? I\n> searched\n> but couldn't find it\n> \n> Assume that the parent order may take variable position size for each\n> trade. It takes one long position and then adds a second long\n> position\n> before hitting the stop loss for the first one. After that the stop\n> loss\n> for the first position is hit. We need to know the position size of\n> the\n> first trade in writing stop loss rule. Is it possible to access the\n> position size of the parent rule?\n> \n> Thanks for your help\n> Regards\n> \n> \n> \n> \n> \n> On 9 Nov 2020 Mon at 11:09 Ayhan yuksel <ayhanyuksel78 at gmail.com>\n> wrote:\n> \n> > Thank you for the clarification.\n> > \n> > On Sun, 8 Nov 2020 at 16:21, Ilya Kipnis <ilya.kipnis at gmail.com>\n> > wrote:\n> > \n> > > Look at your stoploss rule and the orderqty it calls for. You\n> > > actively\n> > > specify orderqty = 'all'. That means to flatten the entire\n> > > position.\n> > > \n> > > As far as a stop loss on a partial position, in your particular\n> > > case, you\n> > > can simply set that with a better specified orderqty argument by\n> > > specifying\n> > > 100 lots instead of 'all'.\n> > > \n> > \n> \n> ????????[[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org?mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R\n> questions should go.\n>",
+      "body_snippet": "The chained order quantity isn't directly passed to the triggered chain\nrule right now.\n\nRules have access to the full current state, since they are path\ndependent.  \n\nSo, you have two options here.  ",
+      "thread_id": "thread-ff34da22eaaa",
+      "thread_depth": 6,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-4a94e1469a80",
+      "message_id": "<CALj2E8W2C-xG+LXE032wLMGk5yP2JYy6OFCaMKzSP6f6RwH7sw@mail.gmail.com>",
+      "from_name": "Ayhan yuksel",
+      "from_email_hash": "ea329b0f97b4e808dad953a3c712f8f8c676874536dfde072dfc4bcb2a212a18",
+      "date": "2020-11-12T18:06:23+03:00",
+      "subject": "[R-SIG-Finance]  Quantstrat Position Accounting System: Netting vs Hedging Systems",
+      "subject_clean": "Quantstrat Position Accounting System: Netting vs Hedging Systems",
+      "in_reply_to": "<7176d4b5e308cc6788fc9e1013ca5221abd6106a.camel@braverock.com>",
+      "references": [
+        "<CALj2E8XfwafQKyArcbHpBWMV9+u-2tALPAgrQrf2Zni_qZifhA@mail.gmail.com>",
+        "<CA+oJuEFRNSHFM3Mfjcg6UfSNhdxK4F3SSWN7tn4QRs4sN3km+w@mail.gmail.com>",
+        "<CALj2E8VUL5tr6PCp_Zj1PhPSNzSiL8VNu5PyV_tGgttnd4H_eA@mail.gmail.com>",
+        "<CA+oJuEF06Q35VeafSPqzjszhptFyqyW_YMNHRUCZszJb-xiLYg@mail.gmail.com>",
+        "<CALj2E8WPwKd720UAC25TxByma-nVa6v8E8ueARJNz+mX39dW0A@mail.gmail.com>",
+        "<CALj2E8WnQ3zu_mZfhZk-Kj6dV8SR+LJbSMraNMZ82L1TawjR3A@mail.gmail.com>",
+        "<7176d4b5e308cc6788fc9e1013ca5221abd6106a.camel@braverock.com>"
+      ],
+      "body_plain": "Thank you very much for the clarification\nI will work on it\n\nRegards\nAyhan\n\nOn 12 Nov 2020 Thu at 14:28 Brian G. Peterson <brian at braverock.com> wrote:\n\n> The chained order quantity isn't directly passed to the triggered chain\n> rule right now.\n>\n> Rules have access to the full current state, since they are path\n> dependent.\n>\n> So, you have two options here.  You can either\n>\n> - write a custom order sizing function that queries the order status to\n> check the chained rule and order to get the quantity\n>\n> - propose a patch/pull request to rules.R and ruleSignal.R that could\n> process a chain.qty optional argument\n>\n> see the code in rules.R to see how we pass chain.price, and it should\n> inform how you would take either of the above approaches.\n>\n> Regards,\n>\n> Brian\n>\n> --\n> Brian G. Peterson\n> ph: +1.773.459.4973\n> im: bgpbraverock\n>\n> On Thu, 2020-11-12 at 13:43 +0300, Ayhan yuksel wrote:\n> > One more question to solve my case\n> >\n> > We can access the parent rule?s order price using chain.price\n> > argument  in\n> > rule functions.\n> >\n> > Is it also possible to access parent rule?s order size as well? I\n> > searched\n> > but couldn't find it\n> >\n> > Assume that the parent order may take variable position size for each\n> > trade. It takes one long position and then adds a second long\n> > position\n> > before hitting the stop loss for the first one. After that the stop\n> > loss\n> > for the first position is hit. We need to know the position size of\n> > the\n> > first trade in writing stop loss rule. Is it possible to access the\n> > position size of the parent rule?\n> >\n> > Thanks for your help\n> > Regards\n> >\n> >\n> >\n> >\n> >\n> > On 9 Nov 2020 Mon at 11:09 Ayhan yuksel <ayhanyuksel78 at gmail.com>\n> > wrote:\n> >\n> > > Thank you for the clarification.\n> > >\n> > > On Sun, 8 Nov 2020 at 16:21, Ilya Kipnis <ilya.kipnis at gmail.com>\n> > > wrote:\n> > >\n> > > > Look at your stoploss rule and the orderqty it calls for. You\n> > > > actively\n> > > > specify orderqty = 'all'. That means to flatten the entire\n> > > > position.\n> > > >\n> > > > As far as a stop loss on a partial position, in your particular\n> > > > case, you\n> > > > can simply set that with a better specified orderqty argument by\n> > > > specifying\n> > > > 100 lots instead of 'all'.\n> > > >\n> > >\n> >\n> >         [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R\n> > questions should go.\n> >\n>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thank you very much for the clarification\nI will work on it\n\nRegards\nAyhan\n\nOn 12 Nov 2020 Thu at 14:28 Brian G. Peterson <brian at braverock.com> wrote:\n\n> The chained order quantity isn't directly p",
+      "thread_id": "thread-ff34da22eaaa",
+      "thread_depth": 7,
+      "month": "2020-11"
+    },
+    {
+      "id": "msg-a71aaf611791",
+      "message_id": "<CAMDYzbs8yneG9b2aWVgTSHnKUR_-nCFORyhtSarGZBnzsagLvg@mail.gmail.com>",
+      "from_name": "oliver",
+      "from_email_hash": "8912e6d8b1149e5d1db4da31a9c1bf31d42fdd5d5fb536f85e7a7eedb421ae78",
+      "date": "2020-11-27T14:17:19+08:00",
+      "subject": "[R-SIG-Finance] Partial profits and moving SL to breakeven in Quantstrat",
+      "subject_clean": "Partial profits and moving SL to breakeven in Quantstrat",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Is there any other way to instruct R to take half position size at first TP\nand move the new SL to breakeven?\n\nI currently take 2 runs to do this.\n\nFirst run: with SL and 1st TP\nSecond run: with SL and no TP (Closes when indicators give signal)\n\n\nAfterwhich, I merge the results of both runs.\n\nWould appreciate some reference to achieve this.\n\nPosition size is not fixed but based on ATR (package: IKTrading)\n\nOliver\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Is there any other way to instruct R to take half position size at first TP\nand move the new SL to breakeven?\n\nI currently take 2 runs to do this.\n\nFirst run: with SL and 1st TP\nSecond run: with SL an",
+      "thread_id": "thread-a71aaf611791",
+      "thread_depth": 0,
+      "month": "2020-11"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-4e8daeeea5e6",
+      "subject": "dccfit (RMGARCH): using uGARCHmultifit",
+      "message_count": 3,
+      "participants": [
+        "Alexios Galanos",
+        "borkrese@rch m@iii@g oii gm@ii@com"
+      ],
+      "started": "2020-11-05T07:47:54+01:00",
+      "last_reply": "2020-11-05T22:21:25+01:00",
+      "root_message_id": "msg-4e8daeeea5e6"
+    },
+    {
+      "id": "thread-ff34da22eaaa",
+      "subject": "Quantstrat Position Accounting System: Netting vs Hedging Systems",
+      "message_count": 8,
+      "participants": [
+        "Ayhan yuksel",
+        "Brian G. Peterson",
+        "Ilya Kipnis"
+      ],
+      "started": "2020-11-08T00:11:41+03:00",
+      "last_reply": "2020-11-12T18:06:23+03:00",
+      "root_message_id": "msg-ff34da22eaaa"
+    },
+    {
+      "id": "thread-c1f1d557d8e8",
+      "subject": "How can I calculate annualized log returns when the year is different from a calendar year",
+      "message_count": 2,
+      "participants": [
+        "Brian G. Peterson",
+        "Maulik Bhatt"
+      ],
+      "started": "2020-11-09T13:45:43+05:30",
+      "last_reply": "2020-11-09T07:29:09-06:00",
+      "root_message_id": "msg-c1f1d557d8e8"
+    },
+    {
+      "id": "thread-a71aaf611791",
+      "subject": "Partial profits and moving SL to breakeven in Quantstrat",
+      "message_count": 1,
+      "participants": [
+        "oliver"
+      ],
+      "started": "2020-11-27T14:17:19+08:00",
+      "last_reply": "2020-11-27T14:17:19+08:00",
+      "root_message_id": "msg-a71aaf611791"
+    }
+  ]
+}

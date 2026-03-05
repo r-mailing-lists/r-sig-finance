@@ -1,0 +1,479 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2015-11",
+  "messages": [
+    {
+      "id": "msg-c3fb95507328",
+      "message_id": "<CAPPM_gTVLL5UKThcR1wFe1JVFkH8+ngu7US7WRMiDktJ8iVpVQ@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-11-02T11:50:15-06:00",
+      "subject": "[R-SIG-Finance] Bug in ruleOrderProc (as.Date(tif.xts)",
+      "subject_clean": "Bug in ruleOrderProc (as.Date(tif.xts)",
+      "in_reply_to": "<CAPPM_gT+nk8F089eGN3aUb4BBPxuhP8PFsK81X1D-wy5ii10=Q@mail.gmail.com>",
+      "references": [
+        "<CAFauerN+6xZNARiryuopphvYM7t39ix5mHxdoK4ZtSf2F1UUJA@mail.gmail.com>",
+        "<CAPPM_gT+nk8F089eGN3aUb4BBPxuhP8PFsK81X1D-wy5ii10=Q@mail.gmail.com>"
+      ],
+      "body_plain": "On Wed, Sep 2, 2015 at 5:23 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> Hi Amod,\n>\n> On Tue, Sep 1, 2015 at 9:36 PM, Amod Karve (????) <karve.amod at gmail.com> wrote:\n>> I ran into a bug when trying to use time.in.force in ruleOrderProc. When\n>> specifying a numeric value for time.in.force, I was getting an error in\n>> ruleOrderProc when calling:\n>>\n>>  tif <- as.Date(tif.xts)\n>>\n>> I think the problem is that the underlying tif.xts is a zoo object and\n>> as.Date() fails on it. When I removed the as.Date(), the backtest ran fine.\n>>\n>> What's the process for patching in bug fixes?\n>>\n> Thanks for the feedback.  The best way to contribute a patch is to\n> create a minimal strategy that allows us to reproduce the issue you\n> see, along with your patch.  That will allow us to verify the issue,\n> and evaluate your patch.\n>\n> Once you have that, please open an issue on the TradeAnalytics tracker\n> on R-Forge:\n> https://r-forge.r-project.org/tracker/?group_id=316\n>\nI've tracked this down and it should be fixed in r1712.\n\n>> Thanks\n>> amod\n>>\n>>         [[alternative HTML version deleted]]\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n>\n>\n>\n> --\n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Wed, Sep 2, 2015 at 5:23 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> Hi Amod,\n>\n> On Tue, Sep 1, 2015 at 9:36 PM, Amod Karve (????) <karve.amod at gmail.com> wrote:\n>> I ran into a bug ",
+      "thread_id": "thread-c3fb95507328",
+      "thread_depth": 0,
+      "month": "2015-11"
+    },
+    {
+      "id": "msg-7a8f2e2e40d1",
+      "message_id": "<CAPPM_gRtaF5BVm5gNKVj7Pn-TBE0vJo9wDTHZNNAarqSK9ifuQ@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-11-04T09:13:09-06:00",
+      "subject": "[R-SIG-Finance] Help activating stop loss order.",
+      "subject_clean": "Help activating stop loss order.",
+      "in_reply_to": "<CAFauerOCNZPgK6PzFySWmwDUEjPr01DO-faGg8dPb0szGWw3NQ@mail.gmail.com>",
+      "references": [
+        "<CAFauerNdNhXc+uN2_OxSk+AgmSECo7iwnxiQGEA43L0U+9yj=Q@mail.gmail.com>",
+        "<CAFauerOCNZPgK6PzFySWmwDUEjPr01DO-faGg8dPb0szGWw3NQ@mail.gmail.com>"
+      ],
+      "body_plain": "Thanks for the reproducible example.  Your chain rule isn't executing\nbecause of timezone issues.  Your script works if you call\nSys.setenv(TZ=\"UTC\") before calling applyStrategy.\n\nOn Thu, Aug 27, 2015 at 12:00 AM, Amod Karve (????)\n<karve.amod at gmail.com> wrote:\n> forgot to add the contents of position_sizing.r. Here it is:\n>\n> osFixedDollar <- function(data, timestamp, orderqty, portfolio, symbol,\n> ruletype, ...) {\n>   ClosePrice <- as.numeric(Cl(mktdata[timestamp,]))\n>   orderqty <- round(tradeSize / ClosePrice, -2)\n>   return(orderqty)\n> }\n>\n>\n> On Thu, Aug 27, 2015 at 12:51 AM, Amod Karve (????) <karve.amod at gmail.com>\n> wrote:\n>\n>> Hey All,\n>>\n>>  For the life of me I can't figure out why my stop loss order is not\n>> getting triggered. I am trying to play around with a simple Trend vigor\n>> strategy as illustrated in Ilya kipnis's blog. Everything else works except\n>> for the stop loss order which doesn't seem to take effect. I can't even see\n>> the stop loss in my order book (I see it only if I set type='risk' instead\n>> of chain).\n>>\n>> Could someone help me figure out where the problem might be?\n>>\n>> Attached please find the code.\n>>\n>> Thanks\n>> amod\n>>\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "Thanks for the reproducible example.  Your chain rule isn't executing\nbecause of timezone issues.  Your script works if you call\nSys.setenv(TZ=\"UTC\") before calling applyStrategy.\n\nOn Thu, Aug 27, 201",
+      "thread_id": "thread-7a8f2e2e40d1",
+      "thread_depth": 0,
+      "month": "2015-11"
+    },
+    {
+      "id": "msg-5f33bd655a59",
+      "message_id": "<CAKoFBbe6DeGbOkMweVc4J29RUALTWdSwJyNJe6nRQ30D0cCpig@mail.gmail.com>",
+      "from_name": "Milos Cipovic",
+      "from_email_hash": "ca93534e18cea4297334dfafd85b2946e38da2a83a59a185c7b05849f01f743c",
+      "date": "2015-11-09T22:37:02+01:00",
+      "subject": "[R-SIG-Finance] Estimating credit rating transition matrices",
+      "subject_clean": "Estimating credit rating transition matrices",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello guys,\n\nHas anybody done this with one of the markov chain packages? I've been\ntrying to find a function for hazard rate (or duration, or homogeneous\ntime) approach but I kinda get confused with every vignete i find. I've\ntried markovchain, semimarkovchain, msm, hmm packages, and I think that\nhazard rate is nested in one of models from these packages, but I'm not\nshore.\n\nI noticed that some of them use two columns for states (start state and end\nstate), although this is not a big deal, it would be great if I could fit\ndata with one column of states.\n\nAlso, in discrete case, how did you solve non rating state?\n\nThank you.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello guys,\n\nHas anybody done this with one of the markov chain packages? I've been\ntrying to find a function for hazard rate (or duration, or homogeneous\ntime) approach but I kinda get confused with ",
+      "thread_id": "thread-5f33bd655a59",
+      "thread_depth": 0,
+      "month": "2015-11"
+    },
+    {
+      "id": "msg-305a8d0f869b",
+      "message_id": "<KL1PR01MB0839FF287C6D529DFAD3F6D3FE1F0@KL1PR01MB0839.apcprd01.prod.exchangelabs.com>",
+      "from_name": "#OU KUN#",
+      "from_email_hash": "57729161ed4a5a26c0bcd53add9f7e2deaa4f4fc2116dd8e7700faa61e54079f",
+      "date": "2015-11-15T13:46:12Z",
+      "subject": "[R-SIG-Finance] Pckg mftsr and Book Modeling Financial Time Series with R by Prof. Eric Zivot",
+      "subject_clean": "Pckg mftsr and Book Modeling Financial Time Series with R by Prof. Eric Zivot",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear all,\n\nI am not sure whether this is the right place to raise this question. Do you notice a book called Modeling Financial Time Series with R by Prof. Eric Zivot should have been published according to his website http://faculty.washington.edu/ezivot/ezresearch.htm It looks like a great book judging from its content as well as predecessor, Modeling Financial Time Series with S-PLUS.\n\nHowever, I just cannot find it on amazon or from the publisher website. Any one has any idea?\n\nThank you.\n\nRegards,\nKun OU\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,\n\nI am not sure whether this is the right place to raise this question. Do you notice a book called Modeling Financial Time Series with R by Prof. Eric Zivot should have been published accord",
+      "thread_id": "thread-305a8d0f869b",
+      "thread_depth": 0,
+      "month": "2015-11"
+    },
+    {
+      "id": "msg-f701a914e7f5",
+      "message_id": "<CAEEj48mrL0H8h8NqxYiAro4KzxOGrewLmEBjCV0h=7tMe8QJWA@mail.gmail.com>",
+      "from_name": "Adam Ginensky",
+      "from_email_hash": "33138a5b6715412ac7dd1fd1173e7315077671bb2dc9510719cbab0c88697d05",
+      "date": "2015-11-15T07:09:57-08:00",
+      "subject": "[R-SIG-Finance] Pckg mftsr and Book Modeling Financial Time Series with R by Prof. Eric Zivot",
+      "subject_clean": "Pckg mftsr and Book Modeling Financial Time Series with R by Prof. Eric Zivot",
+      "in_reply_to": "<KL1PR01MB0839FF287C6D529DFAD3F6D3FE1F0@KL1PR01MB0839.apcprd01.prod.exchangelabs.com>",
+      "references": [
+        "<KL1PR01MB0839FF287C6D529DFAD3F6D3FE1F0@KL1PR01MB0839.apcprd01.prod.exchangelabs.com>"
+      ],
+      "body_plain": "I went to the website.  There is only a link to the S book.  The R book\nsays coming Oct. 2015, but there is no link.\n\nOn Sun, Nov 15, 2015 at 5:46 AM, #OU KUN# <KOU001 at e.ntu.edu.sg> wrote:\n\n> Dear all,\n>\n> I am not sure whether this is the right place to raise this question. Do\n> you notice a book called Modeling Financial Time Series with R by Prof.\n> Eric Zivot should have been published according to his website\n> http://faculty.washington.edu/ezivot/ezresearch.htm It looks like a great\n> book judging from its content as well as predecessor, Modeling Financial\n> Time Series with S-PLUS.\n>\n> However, I just cannot find it on amazon or from the publisher website.\n> Any one has any idea?\n>\n> Thank you.\n>\n> Regards,\n> Kun OU\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I went to the website.  There is only a link to the S book.  The R book\nsays coming Oct. 2015, but there is no link.\n\nOn Sun, Nov 15, 2015 at 5:46 AM, #OU KUN# <KOU001 at e.ntu.edu.sg> wrote:\n\n> Dear ",
+      "thread_id": "thread-305a8d0f869b",
+      "thread_depth": 1,
+      "month": "2015-11"
+    },
+    {
+      "id": "msg-ff6b9fd001f2",
+      "message_id": "<2DF8F7C0-E7CE-4558-8698-736FE083628E@verizon.net>",
+      "from_name": "Dan Mack",
+      "from_email_hash": "4651efd9039f1cd71673bd43d20b7d080955db90a235ed72e1500a4dc4522d7d",
+      "date": "2015-11-17T20:11:57-05:00",
+      "subject": "[R-SIG-Finance] Advice on Forecasting",
+      "subject_clean": "Advice on Forecasting",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,  I could use some advice on a problem I have trying to solve for projecting forward some predict functions.  I have a backtest that is working very well but would like a more sound projection because I am feel I not doing this as well as I could.   I feel I am at the limit of the predict() function and need a bridge to a forecast() like function.\n\nI am interested in making a next prediction on a stock going up or down and use the following equation.  This is one of many algorithms I use but they are all set up the same way.\n\nI run the follow example code to fit and predict the model:\n\n strat.fit <- glm(DirNDay ~l_UUP.Close + l_FXE.Close + MA50 + +MA10 + RSI06 + BIAS10 + BBands05, data=STCK.df,family=\"binomial\")\n\n\nstrat.probs <- predict(strat.fit, STCK.test.df,type=\"response\")\n\nI am also trying to predict the direction DirNDay (Direction Next Day).  I have moved the next day up t+1 against day t EOD Data.  This collectively works well with many algorithms in a stacking scheme.   \n\nWhat I would really like to do is to be able use my algorithms (a combination of regression classifiers, decision trees and meta learners) and get them to do a forecast like function like used with a time series.   An example would be to use something like an ADABoost to fit and then merge it with an ARIMA like function.   Any suggested methods or functions (packages) would be helpful.\n\nThanks,  Dan\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,  I could use some advice on a problem I have trying to solve for projecting forward some predict functions.  I have a backtest that is working very well but would like a more sound projection b",
+      "thread_id": "thread-ff6b9fd001f2",
+      "thread_depth": 0,
+      "month": "2015-11"
+    },
+    {
+      "id": "msg-ca884381fbfd",
+      "message_id": "<CA+oJuEEBMrTEFbjgtpBnS1O2D9jzS1uUrksekkpmSsumMJo3YA@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "82540aa84df90b083b58f5752a77274af680540119bfecc0c0436c59ddd13e5c",
+      "date": "2015-11-17T20:14:45-05:00",
+      "subject": "[R-SIG-Finance] Advice on Forecasting",
+      "subject_clean": "Advice on Forecasting",
+      "in_reply_to": "<2DF8F7C0-E7CE-4558-8698-736FE083628E@verizon.net>",
+      "references": [
+        "<2DF8F7C0-E7CE-4558-8698-736FE083628E@verizon.net>"
+      ],
+      "body_plain": "Please provide a minimum reproducible example to the mailing list, not just\none line.\n\nThank you.\n\nOn Tue, Nov 17, 2015 at 8:11 PM, Dan Mack <dmack10 at verizon.net> wrote:\n\n> Hello,  I could use some advice on a problem I have trying to solve for\n> projecting forward some predict functions.  I have a backtest that is\n> working very well but would like a more sound projection because I am feel\n> I not doing this as well as I could.   I feel I am at the limit of the\n> predict() function and need a bridge to a forecast() like function.\n>\n> I am interested in making a next prediction on a stock going up or down\n> and use the following equation.  This is one of many algorithms I use but\n> they are all set up the same way.\n>\n> I run the follow example code to fit and predict the model:\n>\n>  strat.fit <- glm(DirNDay ~l_UUP.Close + l_FXE.Close + MA50 + +MA10 +\n> RSI06 + BIAS10 + BBands05, data=STCK.df,family=\"binomial\")\n>\n>\n> strat.probs <- predict(strat.fit, STCK.test.df,type=\"response\")\n>\n> I am also trying to predict the direction DirNDay (Direction Next Day).  I\n> have moved the next day up t+1 against day t EOD Data.  This collectively\n> works well with many algorithms in a stacking scheme.\n>\n> What I would really like to do is to be able use my algorithms (a\n> combination of regression classifiers, decision trees and meta learners)\n> and get them to do a forecast like function like used with a time series.\n>  An example would be to use something like an ADABoost to fit and then\n> merge it with an ARIMA like function.   Any suggested methods or functions\n> (packages) would be helpful.\n>\n> Thanks,  Dan\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Please provide a minimum reproducible example to the mailing list, not just\none line.\n\nThank you.\n\nOn Tue, Nov 17, 2015 at 8:11 PM, Dan Mack <dmack10 at verizon.net> wrote:\n\n> Hello,  I could use some",
+      "thread_id": "thread-ff6b9fd001f2",
+      "thread_depth": 1,
+      "month": "2015-11"
+    },
+    {
+      "id": "msg-ff43378f9435",
+      "message_id": "<CAH+4RFt+Vti9h=ARPS+Lnsw-VAy_sV24Cg4VFQL81SEp962WTw@mail.gmail.com>",
+      "from_name": "Nick White",
+      "from_email_hash": "755b954b2e1da59d788f98fd9781ed277833818df2c256f74e3b2a68f37cdcb8",
+      "date": "2015-11-19T15:02:59+11:00",
+      "subject": "[R-SIG-Finance] Advice on Forecasting",
+      "subject_clean": "Advice on Forecasting",
+      "in_reply_to": "<2DF8F7C0-E7CE-4558-8698-736FE083628E@verizon.net>",
+      "references": [
+        "<2DF8F7C0-E7CE-4558-8698-736FE083628E@verizon.net>"
+      ],
+      "body_plain": "Dan,\n\nthis sounds like an interesting problem and one that several members of the\nlist could help you with. As Ilya said, please give us a reproducible\nexample so we can help you out.\n\nOn Wed, Nov 18, 2015 at 12:11 PM, Dan Mack <dmack10 at verizon.net> wrote:\n\n> Hello,  I could use some advice on a problem I have trying to solve for\n> projecting forward some predict functions.  I have a backtest that is\n> working very well but would like a more sound projection because I am feel\n> I not doing this as well as I could.   I feel I am at the limit of the\n> predict() function and need a bridge to a forecast() like function.\n>\n> I am interested in making a next prediction on a stock going up or down\n> and use the following equation.  This is one of many algorithms I use but\n> they are all set up the same way.\n>\n> I run the follow example code to fit and predict the model:\n>\n>  strat.fit <- glm(DirNDay ~l_UUP.Close + l_FXE.Close + MA50 + +MA10 +\n> RSI06 + BIAS10 + BBands05, data=STCK.df,family=\"binomial\")\n>\n>\n> strat.probs <- predict(strat.fit, STCK.test.df,type=\"response\")\n>\n> I am also trying to predict the direction DirNDay (Direction Next Day).  I\n> have moved the next day up t+1 against day t EOD Data.  This collectively\n> works well with many algorithms in a stacking scheme.\n>\n> What I would really like to do is to be able use my algorithms (a\n> combination of regression classifiers, decision trees and meta learners)\n> and get them to do a forecast like function like used with a time series.\n>  An example would be to use something like an ADABoost to fit and then\n> merge it with an ARIMA like function.   Any suggested methods or functions\n> (packages) would be helpful.\n>\n> Thanks,  Dan\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dan,\n\nthis sounds like an interesting problem and one that several members of the\nlist could help you with. As Ilya said, please give us a reproducible\nexample so we can help you out.\n\nOn Wed, Nov 18,",
+      "thread_id": "thread-ff6b9fd001f2",
+      "thread_depth": 1,
+      "month": "2015-11"
+    },
+    {
+      "id": "msg-9cfe27427e5a",
+      "message_id": "<5EFD4D58-1D0A-44A9-88CD-BEF7A22FA57C@verizon.net>",
+      "from_name": "Dan Mack",
+      "from_email_hash": "4651efd9039f1cd71673bd43d20b7d080955db90a235ed72e1500a4dc4522d7d",
+      "date": "2015-11-19T04:44:54-05:00",
+      "subject": "[R-SIG-Finance] Advice on Forecasting",
+      "subject_clean": "Advice on Forecasting",
+      "in_reply_to": "<CAH+4RFt+Vti9h=ARPS+Lnsw-VAy_sV24Cg4VFQL81SEp962WTw@mail.gmail.com>",
+      "references": [
+        "<2DF8F7C0-E7CE-4558-8698-736FE083628E@verizon.net>",
+        "<CAH+4RFt+Vti9h=ARPS+Lnsw-VAy_sV24Cg4VFQL81SEp962WTw@mail.gmail.com>"
+      ],
+      "body_plain": "Nick, IIyla,   Thanks,  I will post some this weekend.  I am finishing my grad school semester this week so my time is limited until the week end.  My code to get to this point is about 800 lines of code and this is a very reduced snippet of it.  Let me get it in a form where I can share and show where I had questions.\n\nThanks,  Dan \n\n\nOn Nov 18, 2015, at 11:02 PM, Nick White <n-e-w at qtradr.net> wrote:\n\n> Dan,\n> \n> this sounds like an interesting problem and one that several members of the list could help you with. As Ilya said, please give us a reproducible example so we can help you out.\n> \n> On Wed, Nov 18, 2015 at 12:11 PM, Dan Mack <dmack10 at verizon.net> wrote:\n> Hello,  I could use some advice on a problem I have trying to solve for projecting forward some predict functions.  I have a backtest that is working very well but would like a more sound projection because I am feel I not doing this as well as I could.   I feel I am at the limit of the predict() function and need a bridge to a forecast() like function.\n> \n> I am interested in making a next prediction on a stock going up or down and use the following equation.  This is one of many algorithms I use but they are all set up the same way.\n> \n> I run the follow example code to fit and predict the model:\n> \n>  strat.fit <- glm(DirNDay ~l_UUP.Close + l_FXE.Close + MA50 + +MA10 + RSI06 + BIAS10 + BBands05, data=STCK.df,family=\"binomial\")\n> \n> \n> strat.probs <- predict(strat.fit, STCK.test.df,type=\"response\")\n> \n> I am also trying to predict the direction DirNDay (Direction Next Day).  I have moved the next day up t+1 against day t EOD Data.  This collectively works well with many algorithms in a stacking scheme.\n> \n> What I would really like to do is to be able use my algorithms (a combination of regression classifiers, decision trees and meta learners) and get them to do a forecast like function like used with a time series.   An example would be to use something like an ADABoost to fit and then merge it with an ARIMA like function.   Any suggested methods or functions (packages) would be helpful.\n> \n> Thanks,  Dan\n>         [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n> \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Nick, IIyla,   Thanks,  I will post some this weekend.  I am finishing my grad school semester this week so my time is limited until the week end.  My code to get to this point is about 800 lines of c",
+      "thread_id": "thread-ff6b9fd001f2",
+      "thread_depth": 2,
+      "month": "2015-11"
+    },
+    {
+      "id": "msg-83af9542dd51",
+      "message_id": "<CAK2H+ecuFK2-8g-EEiCfcf-1wRbWSTLvHXF9vgNWSJqT7QC+dQ@mail.gmail.com>",
+      "from_name": "Mark Knecht",
+      "from_email_hash": "60c26093da6ef493629140d820b18c224125bb61884589ce4143ff939051ea92",
+      "date": "2015-11-23T11:33:18-08:00",
+      "subject": "[R-SIG-Finance] Older financials?",
+      "subject_clean": "Older financials?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I'm reading a book on quant value investing that wants to look at more\nfinancial data than I'm getting with the small program below. Looking at\nthe getFinancials help page I'm not seeing anything that tells it to go\nback more than 4 years. Is there a way to do that with free data or is this\na limitation WRT what Google provides and you have to go somewhere else/pay\nmoney to get it?\n\nThanks,\nMark\n\nlibrary(quantmod);\n\nSymList=c(\"MCD\",\"GD\",\"AAPL\");\nQuotes = getQuote(SymList, src=\"yahoo\");\n\nfor (Sym in SymList){\n  getFinancials(Sym, src=\"google\");\n  getDividends(Sym, src=\"google\");\n}\n\nprint(Quotes)\n\nprint(viewFinancials(MCD.f, period=\"Q\", type=\"IS\"))\nprint(viewFinancials(MCD.f, period=\"A\", type=\"CF\"))\nprint(viewFinancials(MCD.f, period=\"Q\", type=\"BS\"))\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I'm reading a book on quant value investing that wants to look at more\nfinancial data than I'm getting with the small program below. Looking at\nthe getFinancials help page I'm not seeing anything that",
+      "thread_id": "thread-83af9542dd51",
+      "thread_depth": 0,
+      "month": "2015-11"
+    },
+    {
+      "id": "msg-cccc0551f8a0",
+      "message_id": "<CACjNfm=nBFviQC_TqCCT7rDhKWquv80TGBNOJFSk7-L=4889Xg@mail.gmail.com>",
+      "from_name": "Erol Biceroglu",
+      "from_email_hash": "1c913c5823dc119883c6c86d1addf58a2399c9c18607f641f97847d84bb8ff29",
+      "date": "2015-11-23T16:35:53-05:00",
+      "subject": "[R-SIG-Finance] Older financials?",
+      "subject_clean": "Older financials?",
+      "in_reply_to": "<CAK2H+ecuFK2-8g-EEiCfcf-1wRbWSTLvHXF9vgNWSJqT7QC+dQ@mail.gmail.com>",
+      "references": [
+        "<CAK2H+ecuFK2-8g-EEiCfcf-1wRbWSTLvHXF9vgNWSJqT7QC+dQ@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Mark,\n\nThe only data source I've been able to find that's affordable is Sharadar's\nfundamental data, which can be downloaded with the \"quandl\" R Package.\nNote, it's a premium database (not free), details are on quandl's website.\nLastly, they are adding de-listed companies, but my understanding is that\nit's not completely free from survivorship bias.  Note, I personally have\nnot used it yet.\n\nI'd be interested to hear if anyone has any other thoughts as well.  My\napologies if my the comments above are not completely on topic.\n\n\n\n\nErol Biceroglu\n\n\n*erol.biceroglu at alumni.utoronto.ca\n<erol.biceroglu at alumni.utoronto.ca>416-275-7970*\n\nOn Mon, Nov 23, 2015 at 2:33 PM, Mark Knecht <markknecht at gmail.com> wrote:\n\n> I'm reading a book on quant value investing that wants to look at more\n> financial data than I'm getting with the small program below. Looking at\n> the getFinancials help page I'm not seeing anything that tells it to go\n> back more than 4 years. Is there a way to do that with free data or is this\n> a limitation WRT what Google provides and you have to go somewhere else/pay\n> money to get it?\n>\n> Thanks,\n> Mark\n>\n> library(quantmod);\n>\n> SymList=c(\"MCD\",\"GD\",\"AAPL\");\n> Quotes = getQuote(SymList, src=\"yahoo\");\n>\n> for (Sym in SymList){\n>   getFinancials(Sym, src=\"google\");\n>   getDividends(Sym, src=\"google\");\n> }\n>\n> print(Quotes)\n>\n> print(viewFinancials(MCD.f, period=\"Q\", type=\"IS\"))\n> print(viewFinancials(MCD.f, period=\"A\", type=\"CF\"))\n> print(viewFinancials(MCD.f, period=\"Q\", type=\"BS\"))\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Mark,\n\nThe only data source I've been able to find that's affordable is Sharadar's\nfundamental data, which can be downloaded with the \"quandl\" R Package.\nNote, it's a premium database (not free), d",
+      "thread_id": "thread-83af9542dd51",
+      "thread_depth": 1,
+      "month": "2015-11"
+    },
+    {
+      "id": "msg-3c27042755cf",
+      "message_id": "<CA1CB4F2-72E7-45B6-A124-A12BDAB33CE0@gmail.com>",
+      "from_name": "Ernest Stokely",
+      "from_email_hash": "fa220f9ae3e3af99f3fc019139ad98d901533dc1706960885003f6130d5a219c",
+      "date": "2015-11-24T18:27:19-06:00",
+      "subject": "[R-SIG-Finance] Computing stop probability",
+      "subject_clean": "Computing stop probability",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Maybe a naive question but given the price and SD of an asset, is there a way to calculate the probability of hitting a stop set at X over the next N days? I know making appropriate assumptions, this is a Wiener process but can't find the correct equation.\n\nA) Is there a closed form solution for this?\nB) Is there an R function related to this?\n\nErnie\n\nSent from my iPhone",
+      "body_snippet": "Maybe a naive question but given the price and SD of an asset, is there a way to calculate the probability of hitting a stop set at X over the next N days? I know making appropriate assumptions, this ",
+      "thread_id": "thread-3c27042755cf",
+      "thread_depth": 0,
+      "month": "2015-11"
+    },
+    {
+      "id": "msg-f08f6a16fbf7",
+      "message_id": "<CAH+4RFuzFbgrp484UwkoX7N3KGhMpk9okF_BNiNvDbCs8DoEqw@mail.gmail.com>",
+      "from_name": "Nick White",
+      "from_email_hash": "755b954b2e1da59d788f98fd9781ed277833818df2c256f74e3b2a68f37cdcb8",
+      "date": "2015-11-25T11:31:32+11:00",
+      "subject": "[R-SIG-Finance] Computing stop probability",
+      "subject_clean": "Computing stop probability",
+      "in_reply_to": "<CA1CB4F2-72E7-45B6-A124-A12BDAB33CE0@gmail.com>",
+      "references": [
+        "<CA1CB4F2-72E7-45B6-A124-A12BDAB33CE0@gmail.com>"
+      ],
+      "body_plain": "You might want to check out the derivation of the Thorp /\nBlack-Scholes-Merton formula as it deals with essentially the same\nconcepts...\n\nOn Wed, Nov 25, 2015 at 11:27 AM, Ernest Stokely <wizardchef at gmail.com>\nwrote:\n\n> Maybe a naive question but given the price and SD of an asset, is there a\n> way to calculate the probability of hitting a stop set at X over the next N\n> days? I know making appropriate assumptions, this is a Wiener process but\n> can't find the correct equation.\n>\n> A) Is there a closed form solution for this?\n> B) Is there an R function related to this?\n>\n> Ernie\n>\n> Sent from my iPhone\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "You might want to check out the derivation of the Thorp /\nBlack-Scholes-Merton formula as it deals with essentially the same\nconcepts...\n\nOn Wed, Nov 25, 2015 at 11:27 AM, Ernest Stokely <wizardchef a",
+      "thread_id": "thread-3c27042755cf",
+      "thread_depth": 1,
+      "month": "2015-11"
+    },
+    {
+      "id": "msg-dd146fa649d8",
+      "message_id": "<CAAmySGNDhY2dES61-DfeB9+BTfJSihSWWoiqc0bgNhbreG2afw@mail.gmail.com>",
+      "from_name": "Michael Weylandt",
+      "from_email_hash": "44e8775a589b9ef81880469e200f3cce307c7180b4289ca1696a578afb772b3a",
+      "date": "2015-11-24T19:23:57-06:00",
+      "subject": "[R-SIG-Finance] Computing stop probability",
+      "subject_clean": "Computing stop probability",
+      "in_reply_to": "<CAH+4RFuzFbgrp484UwkoX7N3KGhMpk9okF_BNiNvDbCs8DoEqw@mail.gmail.com>",
+      "references": [
+        "<CA1CB4F2-72E7-45B6-A124-A12BDAB33CE0@gmail.com>",
+        "<CAH+4RFuzFbgrp484UwkoX7N3KGhMpk9okF_BNiNvDbCs8DoEqw@mail.gmail.com>"
+      ],
+      "body_plain": "On Tue, Nov 24, 2015 at 6:31 PM, Nick White <n-e-w at qtradr.net> wrote:\n> You might want to check out the derivation of the Thorp /\n> Black-Scholes-Merton formula as it deals with essentially the same\n> concepts...\n>\n> On Wed, Nov 25, 2015 at 11:27 AM, Ernest Stokely <wizardchef at gmail.com>\n> wrote:\n>\n>> Maybe a naive question but given the price and SD of an asset, is there a\n>> way to calculate the probability of hitting a stop set at X over the next N\n>> days? I know making appropriate assumptions, this is a Wiener process but\n>> can't find the correct equation.\n>>\n>> A) Is there a closed form solution for this?\n>> B) Is there an R function related to this?\n>>\n\nBlack-Scholes (and stochastic volatility extensions) can give you a\nprobability of hitting a price under the equivalent martingale measure\n(\"Q\") but that can be pretty far from the \"real-world\" (\"P\")\nprobability of the same event happening. Or it may be close, depends\non your market.\n\nIf you don't want to do the math (it really is easy though -- half a\npage at most), the relevant delta is decent approximation.",
+      "body_snippet": "On Tue, Nov 24, 2015 at 6:31 PM, Nick White <n-e-w at qtradr.net> wrote:\n> You might want to check out the derivation of the Thorp /\n> Black-Scholes-Merton formula as it deals with essentially the sam",
+      "thread_id": "thread-3c27042755cf",
+      "thread_depth": 2,
+      "month": "2015-11"
+    },
+    {
+      "id": "msg-de7873dd05b0",
+      "message_id": "<20151125025107.GC18255@nosyntax.net>",
+      "from_name": "rex",
+      "from_email_hash": "cfebfcecaf5e74c4dd4ced6c9cc1734768e70ba0338576db01652b9fd36190af",
+      "date": "2015-11-24T18:51:07-08:00",
+      "subject": "[R-SIG-Finance] Computing stop probability",
+      "subject_clean": "Computing stop probability",
+      "in_reply_to": "<CA1CB4F2-72E7-45B6-A124-A12BDAB33CE0@gmail.com>",
+      "references": [
+        "<CA1CB4F2-72E7-45B6-A124-A12BDAB33CE0@gmail.com>"
+      ],
+      "body_plain": "Ernest Stokely <wizardchef at gmail.com> [2015-11-24 16:28]:\n> Maybe a naive question but given the price and SD of an asset, is there a way to calculate the probability of hitting a stop set at X over the next N days? I know making appropriate assumptions, this is a Wiener process but can't find the correct equation.\n> \n> A) Is there a closed form solution for this?\n> B) Is there an R function related to this?\n\nA) NAFAIK.\n\nMy solution using iteration is here:\n\nhttp://www.nosyntax.net/cfwiki/index.php/Probability_of_Touch-lognormal-3\n\n\nNote that this is not the same as the probability the price is not less than X N days hence.\n\nHTH,\n\n-rex\n--\nClassical economists look for their keys under a streetlight\nafter losing them in an alley.",
+      "body_snippet": "Ernest Stokely <wizardchef at gmail.com> [2015-11-24 16:28]:\n> Maybe a naive question but given the price and SD of an asset, is there a way to calculate the probability of hitting a stop set at X ove",
+      "thread_id": "thread-3c27042755cf",
+      "thread_depth": 1,
+      "month": "2015-11"
+    },
+    {
+      "id": "msg-783b3ca2baf4",
+      "message_id": "<CAAmySGOBB16kgeZQN6PRfjMAeopubceq=BXfzXBBFRz3n3+7-A@mail.gmail.com>",
+      "from_name": "Michael Weylandt",
+      "from_email_hash": "44e8775a589b9ef81880469e200f3cce307c7180b4289ca1696a578afb772b3a",
+      "date": "2015-11-24T21:39:24-06:00",
+      "subject": "[R-SIG-Finance] Computing stop probability",
+      "subject_clean": "Computing stop probability",
+      "in_reply_to": "<CAAmySGNDhY2dES61-DfeB9+BTfJSihSWWoiqc0bgNhbreG2afw@mail.gmail.com>",
+      "references": [
+        "<CA1CB4F2-72E7-45B6-A124-A12BDAB33CE0@gmail.com>",
+        "<CAH+4RFuzFbgrp484UwkoX7N3KGhMpk9okF_BNiNvDbCs8DoEqw@mail.gmail.com>",
+        "<CAAmySGNDhY2dES61-DfeB9+BTfJSihSWWoiqc0bgNhbreG2afw@mail.gmail.com>"
+      ],
+      "body_plain": "I misread your question: delta is only an approximation to being below\na level at a fixed time, not during an interval.\n\nIf you want the probability of hitting a stop over an interval, you\nwant the running max (or running min -- Weiner process is symmetrical)\nof a Weiner process. This is a bit trickier to derive and I can't find\na simple derivation to point you to, so I typed one up quickly.\n\nAlso see: https://en.wikipedia.org/wiki/Wiener_process#Running_maximum\nand http://math.stackexchange.com/questions/946968/law-of-a-geometric-brownian-motion-first-hitting-time-proof-checking?rq=1\n(though note there's a mistake in the latter)\n\nHope this helps,\nMichael\n\nOn Tue, Nov 24, 2015 at 7:23 PM, Michael Weylandt\n<michael.weylandt at gmail.com> wrote:\n> On Tue, Nov 24, 2015 at 6:31 PM, Nick White <n-e-w at qtradr.net> wrote:\n>> You might want to check out the derivation of the Thorp /\n>> Black-Scholes-Merton formula as it deals with essentially the same\n>> concepts...\n>>\n>> On Wed, Nov 25, 2015 at 11:27 AM, Ernest Stokely <wizardchef at gmail.com>\n>> wrote:\n>>\n>>> Maybe a naive question but given the price and SD of an asset, is there a\n>>> way to calculate the probability of hitting a stop set at X over the next N\n>>> days? I know making appropriate assumptions, this is a Wiener process but\n>>> can't find the correct equation.\n>>>\n>>> A) Is there a closed form solution for this?\n>>> B) Is there an R function related to this?\n>>>\n>\n> Black-Scholes (and stochastic volatility extensions) can give you a\n> probability of hitting a price under the equivalent martingale measure\n> (\"Q\") but that can be pretty far from the \"real-world\" (\"P\")\n> probability of the same event happening. Or it may be close, depends\n> on your market.\n>\n> If you don't want to do the math (it really is easy though -- half a\n> page at most), the relevant delta is decent approximation.\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: WP_RunningMax.pdf\nType: application/pdf\nSize: 97446 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20151124/f2bb76e0/attachment.pdf>",
+      "body_snippet": "I misread your question: delta is only an approximation to being below\na level at a fixed time, not during an interval.\n\nIf you want the probability of hitting a stop over an interval, you\nwant the ru",
+      "thread_id": "thread-3c27042755cf",
+      "thread_depth": 3,
+      "month": "2015-11"
+    },
+    {
+      "id": "msg-756a529cc089",
+      "message_id": "<5655A842.20009@trapletti.org>",
+      "from_name": "Adrian Trapletti",
+      "from_email_hash": "2cb44aa45db1e2e304774e6a2cf5fb69267a278d2f19a62823c5702988137396",
+      "date": "2015-11-25T13:23:30+01:00",
+      "subject": "[R-SIG-Finance] R-SIG-Finance Digest, Vol 138, Issue 8",
+      "subject_clean": "R-SIG-Finance Digest, Vol 138, Issue 8",
+      "in_reply_to": "<mailman.17.1448449204.6307.r-sig-finance@r-project.org>",
+      "references": [
+        "<mailman.17.1448449204.6307.r-sig-finance@r-project.org>"
+      ],
+      "body_plain": "Using simulation\n\np <- 100\nsd <- 0.2\nX <- 90\nN <- 10\nn <- 1000000\nhit <- double(n)\nfor (i in 1:n) {\n  hit[i] <- as.numeric(any(p * exp(cumsum(\n    rnorm(N, sd = sd / sqrt(250))\n  )) < X))\n}\nsum(hit)/n\n\nInstead of using rnorm you may want to use e.g. rt() or an (G)ARCH\nprocess or...\n\nBest Adrian\n\nOn 25.11.2015 12:00, r-sig-finance-request at r-project.org wrote:\n> Message: 1\n> Date: Tue, 24 Nov 2015 18:27:19 -0600\n> From: Ernest Stokely <wizardchef at gmail.com>\n> To: R-SIG-Finance at r-project.org\n> Subject: [R-SIG-Finance] Computing stop probability\n> Message-ID: <CA1CB4F2-72E7-45B6-A124-A12BDAB33CE0 at gmail.com>\n> Content-Type: text/plain;\tcharset=us-ascii\n>\n> Maybe a naive question but given the price and SD of an asset, is there a way to calculate the probability of hitting a stop set at X over the next N days? I know making appropriate assumptions, this is a Wiener process but can't find the correct equation.\n>\n> A) Is there a closed form solution for this?\n> B) Is there an R function related to this?\n>\n> Ernie\n>\n> Sent from my iPhone\n\n-- \nDr. Adrian Trapletti\nSteinstrasse 9b\nCH-8610 Uster\nSwitzerland\n\nPhone : +41 (0) 44 994 56 30\nMobile : +41 (0) 79 103 71 31\n\nEmail : adrian at trapletti.org\nWWW : www.trapletti.org",
+      "body_snippet": "Using simulation\n\np <- 100\nsd <- 0.2\nX <- 90\nN <- 10\nn <- 1000000\nhit <- double(n)\nfor (i in 1:n) {\n  hit[i] <- as.numeric(any(p * exp(cumsum(\n    rnorm(N, sd = sd / sqrt(250))\n  )) < X))\n}\nsum(hit)/n",
+      "thread_id": "thread-756a529cc089",
+      "thread_depth": 0,
+      "month": "2015-11"
+    },
+    {
+      "id": "msg-295828ef3084",
+      "message_id": "<CAK2H+ecSsRpxNYWEaNGjMntbH0c-953VCiskpEOKcvwCZHR0+A@mail.gmail.com>",
+      "from_name": "Mark Knecht",
+      "from_email_hash": "60c26093da6ef493629140d820b18c224125bb61884589ce4143ff939051ea92",
+      "date": "2015-11-25T05:17:46-08:00",
+      "subject": "[R-SIG-Finance] Older financials?",
+      "subject_clean": "Older financials?",
+      "in_reply_to": "<CACjNfm=nBFviQC_TqCCT7rDhKWquv80TGBNOJFSk7-L=4889Xg@mail.gmail.com>",
+      "references": [
+        "<CAK2H+ecuFK2-8g-EEiCfcf-1wRbWSTLvHXF9vgNWSJqT7QC+dQ@mail.gmail.com>",
+        "<CACjNfm=nBFviQC_TqCCT7rDhKWquv80TGBNOJFSk7-L=4889Xg@mail.gmail.com>"
+      ],
+      "body_plain": "Thanks Erol. I'll give it a look.\n\nCheers,\nMark\nOn Nov 23, 2015 1:35 PM, \"Erol Biceroglu\" <erol.biceroglu at alumni.utoronto.ca>\nwrote:\n\n> Hi Mark,\n>\n> The only data source I've been able to find that's affordable is\n> Sharadar's fundamental data, which can be downloaded with the \"quandl\" R\n> Package.  Note, it's a premium database (not free), details are on quandl's\n> website.  Lastly, they are adding de-listed companies, but my understanding\n> is that it's not completely free from survivorship bias.  Note, I\n> personally have not used it yet.\n>\n> I'd be interested to hear if anyone has any other thoughts as well.  My\n> apologies if my the comments above are not completely on topic.\n>\n>\n>\n>\n> Erol Biceroglu\n>\n>\n> *erol.biceroglu at alumni.utoronto.ca\n> <erol.biceroglu at alumni.utoronto.ca>416-275-7970 <416-275-7970>*\n>\n> On Mon, Nov 23, 2015 at 2:33 PM, Mark Knecht <markknecht at gmail.com> wrote:\n>\n>> I'm reading a book on quant value investing that wants to look at more\n>> financial data than I'm getting with the small program below. Looking at\n>> the getFinancials help page I'm not seeing anything that tells it to go\n>> back more than 4 years. Is there a way to do that with free data or is\n>> this\n>> a limitation WRT what Google provides and you have to go somewhere\n>> else/pay\n>> money to get it?\n>>\n>> Thanks,\n>> Mark\n>>\n>> library(quantmod);\n>>\n>> SymList=c(\"MCD\",\"GD\",\"AAPL\");\n>> Quotes = getQuote(SymList, src=\"yahoo\");\n>>\n>> for (Sym in SymList){\n>>   getFinancials(Sym, src=\"google\");\n>>   getDividends(Sym, src=\"google\");\n>> }\n>>\n>> print(Quotes)\n>>\n>> print(viewFinancials(MCD.f, period=\"Q\", type=\"IS\"))\n>> print(viewFinancials(MCD.f, period=\"A\", type=\"CF\"))\n>> print(viewFinancials(MCD.f, period=\"Q\", type=\"BS\"))\n>>\n>>         [[alternative HTML version deleted]]\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thanks Erol. I'll give it a look.\n\nCheers,\nMark\nOn Nov 23, 2015 1:35 PM, \"Erol Biceroglu\" <erol.biceroglu at alumni.utoronto.ca>\nwrote:\n\n> Hi Mark,\n>\n> The only data source I've been able to find that",
+      "thread_id": "thread-83af9542dd51",
+      "thread_depth": 2,
+      "month": "2015-11"
+    },
+    {
+      "id": "msg-f94d418a1139",
+      "message_id": "<5659E25D.3010004@macey.us>",
+      "from_name": "Rex Macey",
+      "from_email_hash": "5cfa79bcd11971eaf15cd37bc2059d66740f71052186dc7cd25309df5743fb0c",
+      "date": "2015-11-28T12:20:29-05:00",
+      "subject": "[R-SIG-Finance] Older financials?",
+      "subject_clean": "Older financials?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "A suggestion on where to get extensive fundamental data cheaply.\nThis is a response to Mark's Nov 23rd message.\n\nConsider data from the American Association of Individual Investor?s \nStock Investor Pro (SIP) software. I?ve had a lifetime membership to the \nAAII for many years. For the additional, but more than reasonable price \nof $198/yr, one can license SIP. What makes this source valuable is that \nit is survivorship-bias free historical data. Subscribers have access to \nthe old software and data as it was when it was distributed going back \nto 2003. The data include balance sheet, income statement, cash flow, \nprice, and many calculated fields. The list of fields \n<https://www.aaii.com/files/sipro/Stock%20Investor%20Pro%20Field%20List.pdf> runs \nto 22 pages. In 2003, over 8,500 companies were covered.\nFor info on SIP, check out the AAII \n<file:///C:/Users/Rex/Documents/Quant%20Trading/SMW/www.aaii.com> webpage and \nthis presentation \n<http://www.aaii.com/files/presentations/2011/20%20Joe%20Lan%20-%20Introduction%20to%20Stock%20Investor%20Pro.pdf>. \nI downloaded about 150 install files from the AAII archives \n<http://www.aaii.com/stock-investor-pro/archives> page site access to \nwhich requires membership ($29) and a subscription. I installed them one \nby one putting each into its own directory. I downloaded the month-end \nupdates though weekly data was sometime available. I watched an entire \nseason of Friends while doing this and probably lost three IQ points. \nEach install includes about 7 years of annual data and 8 quarters of \nquarterly data.\nThe AAII data files are in a Foxpro/DBF format. Fortunately R has the \nread.dbf \n<https://stat.ethz.ch/R-manual/R-devel/library/foreign/html/read.dbf.html> function \nin the foreign package to handle this.\n\nLet me emphasize that this data is (almost) free of survivor-ship and \nlook-ahead biases.  You are getting the data as SIP released it back in \nthe day.  So companies around in 2003 that are not are in the data set.  \nThe data only has data that was available at the time of the release, so \nthere is no look-ahead problem.  I added \"almost\" to cover 2 caveats.  \nAs an example, if you use the first install (end of 2002) to figure out \ncompanies with P/E's less than X in 2001, you've got a survivor-ship \nbias problem.  The SIP data is available pretty much at month end, but \nyou won't be able to trade at month-end.  If you assume that you can, \nyou have a look-ahead bias.\n\nWeekly data is available beginning in 2005.\n\nI hope this helps.  If you use SIP and find data errors, I'd like to \nknow about them.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "A suggestion on where to get extensive fundamental data cheaply.\nThis is a response to Mark's Nov 23rd message.\n\nConsider data from the American Association of Individual Investor?s \nStock Investor Pr",
+      "thread_id": "thread-f94d418a1139",
+      "thread_depth": 0,
+      "month": "2015-11"
+    },
+    {
+      "id": "msg-47e029300c89",
+      "message_id": "<22108.26393.172955.68761@max.nulle.part>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2015-11-30T09:11:21-06:00",
+      "subject": "[R-SIG-Finance] [Help Neeeded] QuantLib 1.7 windows build",
+      "subject_clean": "[Help Neeeded] QuantLib 1.7 windows build",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "QuantLib 1.7 came out a week ago. Among the new features is an optional use\nof Boost Date_Time for intra-daily time.  I added support for this (for all\nthe option prices and implied volatility computation) to RQuantLib (see the\nGitHub repo) but before releasing to CRAN I was wondering if someone could do\nus the favour and update the Windows builds accordingly?\n\nJeroen helped with the previous issues but ran into a snag related to use of\nBoost Threads.  That can probably be worked around by means of a proper\nconfigure call before compilation (as some threading features are also new).\n\nIt would be awesome if someone could volunteer and look into this. If so,\nplease get in touch with Jerome and myself off-list.\n\nThanks,  Dirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "QuantLib 1.7 came out a week ago. Among the new features is an optional use\nof Boost Date_Time for intra-daily time.  I added support for this (for all\nthe option prices and implied volatility computa",
+      "thread_id": "thread-47e029300c89",
+      "thread_depth": 0,
+      "month": "2015-11"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-c3fb95507328",
+      "subject": "Bug in ruleOrderProc (as.Date(tif.xts)",
+      "message_count": 1,
+      "participants": [
+        "Joshua Ulrich"
+      ],
+      "started": "2015-11-02T11:50:15-06:00",
+      "last_reply": "2015-11-02T11:50:15-06:00",
+      "root_message_id": "msg-c3fb95507328"
+    },
+    {
+      "id": "thread-7a8f2e2e40d1",
+      "subject": "Help activating stop loss order.",
+      "message_count": 1,
+      "participants": [
+        "Joshua Ulrich"
+      ],
+      "started": "2015-11-04T09:13:09-06:00",
+      "last_reply": "2015-11-04T09:13:09-06:00",
+      "root_message_id": "msg-7a8f2e2e40d1"
+    },
+    {
+      "id": "thread-5f33bd655a59",
+      "subject": "Estimating credit rating transition matrices",
+      "message_count": 1,
+      "participants": [
+        "Milos Cipovic"
+      ],
+      "started": "2015-11-09T22:37:02+01:00",
+      "last_reply": "2015-11-09T22:37:02+01:00",
+      "root_message_id": "msg-5f33bd655a59"
+    },
+    {
+      "id": "thread-305a8d0f869b",
+      "subject": "Pckg mftsr and Book Modeling Financial Time Series with R by Prof. Eric Zivot",
+      "message_count": 2,
+      "participants": [
+        "#OU KUN#",
+        "Adam Ginensky"
+      ],
+      "started": "2015-11-15T13:46:12+00:00",
+      "last_reply": "2015-11-15T07:09:57-08:00",
+      "root_message_id": "msg-305a8d0f869b"
+    },
+    {
+      "id": "thread-ff6b9fd001f2",
+      "subject": "Advice on Forecasting",
+      "message_count": 4,
+      "participants": [
+        "Dan Mack",
+        "Ilya Kipnis",
+        "Nick White"
+      ],
+      "started": "2015-11-17T20:11:57-05:00",
+      "last_reply": "2015-11-19T04:44:54-05:00",
+      "root_message_id": "msg-ff6b9fd001f2"
+    },
+    {
+      "id": "thread-83af9542dd51",
+      "subject": "Older financials?",
+      "message_count": 3,
+      "participants": [
+        "Erol Biceroglu",
+        "Mark Knecht"
+      ],
+      "started": "2015-11-23T11:33:18-08:00",
+      "last_reply": "2015-11-25T05:17:46-08:00",
+      "root_message_id": "msg-83af9542dd51"
+    },
+    {
+      "id": "thread-3c27042755cf",
+      "subject": "Computing stop probability",
+      "message_count": 5,
+      "participants": [
+        "Ernest Stokely",
+        "Michael Weylandt",
+        "Nick White",
+        "rex"
+      ],
+      "started": "2015-11-24T18:27:19-06:00",
+      "last_reply": "2015-11-24T21:39:24-06:00",
+      "root_message_id": "msg-3c27042755cf"
+    },
+    {
+      "id": "thread-756a529cc089",
+      "subject": "R-SIG-Finance Digest, Vol 138, Issue 8",
+      "message_count": 1,
+      "participants": [
+        "Adrian Trapletti"
+      ],
+      "started": "2015-11-25T13:23:30+01:00",
+      "last_reply": "2015-11-25T13:23:30+01:00",
+      "root_message_id": "msg-756a529cc089"
+    },
+    {
+      "id": "thread-f94d418a1139",
+      "subject": "Older financials?",
+      "message_count": 1,
+      "participants": [
+        "Rex Macey"
+      ],
+      "started": "2015-11-28T12:20:29-05:00",
+      "last_reply": "2015-11-28T12:20:29-05:00",
+      "root_message_id": "msg-f94d418a1139"
+    },
+    {
+      "id": "thread-47e029300c89",
+      "subject": "[Help Neeeded] QuantLib 1.7 windows build",
+      "message_count": 1,
+      "participants": [
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2015-11-30T09:11:21-06:00",
+      "last_reply": "2015-11-30T09:11:21-06:00",
+      "root_message_id": "msg-47e029300c89"
+    }
+  ]
+}

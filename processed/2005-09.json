@@ -1,0 +1,584 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2005-09",
+  "messages": [
+    {
+      "id": "msg-aea67d1703ae",
+      "message_id": "<20050901182431.95328.qmail@web60324.mail.yahoo.com>",
+      "from_name": "Andrew West",
+      "from_email_hash": "5fe1f4c6a9d1f71d717cb66afe5473898fe43ee03adac541d574d0d791698e2c",
+      "date": "2005-09-01T11:24:31-07:00",
+      "subject": "[R-sig-finance] function to calc Fama-French 3 factor model",
+      "subject_clean": "function to calc Fama-French 3 factor model",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\nI have written a function that downloads data from\nYahoo and Ken French's website to automatically\ncalculate a regular beta, a robust beta, and the betas\nfor the Fama-French 3-factor model, then using these\nfactor estimates to estimate various costs of equity\nfor the company. After pasting in the function, one\ncalls it by typing:\ngetffBeta(\"CSX\") -for example to look at CSX\n\nThe function doesn't work however for companies whose\nstock history doesn't go back to Jan 1991. I haven't\nbeen able to figure out how to automatically set the\nstarts of the time series to adjust to short histories\nin a get.hist.quote data download, mostly because I\ncannot figure out how to connect dates from the\nget.hist.quote data to the dating of ts objects. The\ncode also assumes a C: drive exists.\n\nI am quite a novice programmer, and know that the code\nis pretty poor, but may be still be worthwhile to\nsomeone. Any improvements offered for the function's\ncode would be appreciated. It follows here:\n\ngetffBeta=function(tool) {\nrequire(MASS);\nrequire(tseries);\nrequire(wle)\nstock= (get.hist.quote(instrument = tool, quote =\nc(\"Ad\"),compression=?m?));\nspx=(get.hist.quote(instrument = \"^gspc\", quote =\nc(\"Ad\"),compression=?m?));\ntoday=Sys.Date()\nseqmo=length(seq(as.Date(\"1926-07-01\"),today,by=\"month\"))-2\nurl=\n?http://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors.zip?\ndestfile=\"C:\\\\F-F_Research_Data_Factors.zip\"\ndataff=download.file(url, destfile, mode=?wb?)\nunzip=unz(destfile,\"F-F_Research_Data_Factors.txt\")\nff4 <- read.table(unzip, header=FALSE, sep=\"\",\nna.strings=\"NA\", dec=\".\", strip.white=TRUE, skip=4,\nnrows=seqmo)\nffdata <- ff4\nattach(ffdata);\nffdata=ffdata/100\n#find out starting year month for ffdata;\nffdatats=ts(ffdata, start=c(1926,7), frequency=12);\nstock=ts(na.remove(stock), start=c(1991, 1),\nfrequency=12);\nspx=ts(na.remove(spx), start=c(1991, 1),\nfrequency=12);\ncombined= na.remove(ts.union(stock,spx));\ncombreturn= na.remove(diff(log(combined)));\ncombreturn=ts(combreturn,\nstart=c(1991,2),frequency=12);\ncombined=na.remove(ts.intersect(combreturn,ffdatats),\nnames=c(?stockret?, ?spxret?, ?dates?,?ffmktret?,\n?smb?,?hml?,?rf?));\ncombined[,1]=combined[,1]-combined[,7]\ncombined[,2]=combined[,2]-combined[,7]\n\nsimplereg=lm(combined[,1]~combined[,2]);\nstockbeta=simplereg$coef[2];\ntextout=paste(?stock beta=?, stockbeta);\nrobustreg=wle.lm(combined[,1]~combined[,2]);\nrobstockbeta=robustreg$coef[2];\ntextout2=paste(?robust stock beta=?, robstockbeta);\n\nplot(as.numeric(combined[,1])~as.numeric(combined[,2]),xlab=?S&P?,\nylab=tool)\ntitle(main=textout, sub=list(textout2, col=?red?))\nabline(coef(simplereg));\nabline(coef(robustreg),col=?red?)\nprint(textout);\nprint(textout2);\nffreg=wle.lm(combined[,1]~combined[,4]+combined[,5]+combined[,6]);\nffbeta=ffreg$coef[2];\nffsmb=ffreg$coef[3];\nffhml=ffreg$coef[4] ;\ntextout3=paste(?robust ff beta=?,ffbeta) ;\ntextout4=paste(?robust ff smb=?,ffsmb) ;\ntextout5=paste(?robust ff hml=?,ffhml) ;\nprint(textout3) ;\nprint(textout4) ;\nprint(textout5) ;\nrf=5\nsmb=1\nhml=2\nrm=5\nffcoe=rf+ffbeta*rm+ffsmb*smb+ffhml*hml\nrobcoe=rf+robstockbeta*rm\nregcoe=rf+stockbeta*rm\ntextout6=paste(?regular coe=?,regcoe,? robustcoe=?,\nrobcoe)\ntextout7=paste(?Fama-French coe=?,ffcoe)\nprint(textout6)\nprint(textout7)\n}",
+      "body_snippet": "Hello,\nI have written a function that downloads data from\nYahoo and Ken French's website to automatically\ncalculate a regular beta, a robust beta, and the betas\nfor the Fama-French 3-factor model, the",
+      "thread_id": "thread-aea67d1703ae",
+      "thread_depth": 0,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-ddefbcdd599b",
+      "message_id": "<17175.42251.250660.170222@basebud.nulle.part>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2005-09-01T20:04:11-05:00",
+      "subject": "[R-sig-finance] function to calc Fama-French 3 factor model",
+      "subject_clean": "function to calc Fama-French 3 factor model",
+      "in_reply_to": "<20050901182431.95328.qmail@web60324.mail.yahoo.com>",
+      "references": [
+        "<20050901182431.95328.qmail@web60324.mail.yahoo.com>"
+      ],
+      "body_plain": "On 1 September 2005 at 11:24, Andrew West wrote:\n| Hello,\n| I have written a function that downloads data from\n| Yahoo and Ken French's website to automatically\n| calculate a regular beta, a robust beta, and the betas\n| for the Fama-French 3-factor model, then using these\n| factor estimates to estimate various costs of equity\n| for the company. After pasting in the function, one\n| calls it by typing:\n| getffBeta(\"CSX\") -for example to look at CSX\n\nVery nice, thanks for contributing that!\n\n| The function doesn't work however for companies whose\n| stock history doesn't go back to Jan 1991. I haven't\n| been able to figure out how to automatically set the\n| starts of the time series to adjust to short histories\n| in a get.hist.quote data download, mostly because I\n| cannot figure out how to connect dates from the\n| get.hist.quote data to the dating of ts objects. The\n\nI would use the zoo class as the container, and possibly (if you stick to the\nmontly resolution) use the zooreg class from the zoo package. There is ample\ndocumentation in the zoo package, have a look and don't hesitate to ask here\nif you need help.\n\n| code also assumes a C: drive exists.\n\nNaa, for that you want tempfile() which will also keep it portable and\ncross-platform.  Moreover, you probably want to cache the Fama/French file to\nnot have to download it for each equity.\n \n| I am quite a novice programmer, and know that the code\n| is pretty poor, but may be still be worthwhile to\n| someone. Any improvements offered for the function's\n| code would be appreciated. It follows here:\n\nAnd you may want to use a real R/S-aware editor such as ESS for Emacs (which\nis happy on Windoze too) to get auto-indentation. And a lot more in the case\nof ESS.\n\nTime permitting, I may have a stab at your function. I can't promise that I\nget to it, though.\n\nRegards, Dirk\n\n-- \nStatistics: The (futile) attempt to offer certainty about uncertainty.\n         -- Roger Koenker, 'Dictionary of Received Ideas of Statistics'",
+      "body_snippet": "On 1 September 2005 at 11:24, Andrew West wrote:\n| Hello,\n| I have written a function that downloads data from\n| Yahoo and Ken French's website to automatically\n| calculate a regular beta, a robust be",
+      "thread_id": "thread-aea67d1703ae",
+      "thread_depth": 1,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-8313d6f74174",
+      "message_id": "<971536df050902080062a81935@mail.gmail.com>",
+      "from_name": "Gabor Grothendieck",
+      "from_email_hash": "2252aad0894f89a900da56345b1c4e0414e3b441d448c40b473f7149e06e5a05",
+      "date": "2005-09-02T11:00:10-04:00",
+      "subject": "[R-sig-finance] function to calc Fama-French 3 factor model",
+      "subject_clean": "function to calc Fama-French 3 factor model",
+      "in_reply_to": "<20050901182431.95328.qmail@web60324.mail.yahoo.com>",
+      "references": [
+        "<20050901182431.95328.qmail@web60324.mail.yahoo.com>"
+      ],
+      "body_plain": "First load the zoo package so that we can use some of its\ndate handling facilities: \n\n- zoo includes an extra as.Date method, not in base, that \n  will convert daily numeric series that are represented\n  as the number of days since the Date class' origin\n  to Date class\n\n- zoo includes a new date class, yearmon, that represents\n  monthly time series using the same internal representation\n  that ts uses (for easy conversion)\n\nFirst download the quotes specifying (1) monthly quotes and\nthat the origin is to be the Date class origin.\n\nNow extract the data part from ibm.ts.0 using the coredata\nfunction in zoo and omit the missing values.  To get the\nstart date convert the numeric ts start date to Date class\n(which we can do since we specified the origin consistently)\nand from that convert it to yearmon class.  Finally get the\nnumeric representation of the start date, which is what\nts uses.\n\nlibrary(tseries)\nlibrary(zoo) \nibm.ts.0 <- get.hist.quote(\"cryp\", compression = \"m\", origin = as.Date(0))\nibm.ts <- ts( na.omit(coredata(ibm.ts.0)), frequency = 12,\n\tstart = as.numeric(as.yearmon(as.Date(start(ibm.ts.0)[1]))) )\n\n\nOn 9/1/05, Andrew West <jgalt70 at yahoo.com> wrote:\n> Hello,\n> I have written a function that downloads data from\n> Yahoo and Ken French's website to automatically\n> calculate a regular beta, a robust beta, and the betas\n> for the Fama-French 3-factor model, then using these\n> factor estimates to estimate various costs of equity\n> for the company. After pasting in the function, one\n> calls it by typing:\n> getffBeta(\"CSX\") -for example to look at CSX\n> \n> The function doesn't work however for companies whose\n> stock history doesn't go back to Jan 1991. I haven't\n> been able to figure out how to automatically set the\n> starts of the time series to adjust to short histories\n> in a get.hist.quote data download, mostly because I\n> cannot figure out how to connect dates from the\n> get.hist.quote data to the dating of ts objects. The\n> code also assumes a C: drive exists.\n> \n> I am quite a novice programmer, and know that the code\n> is pretty poor, but may be still be worthwhile to\n> someone. Any improvements offered for the function's\n> code would be appreciated. It follows here:\n> \n> getffBeta=function(tool) {\n> require(MASS);\n> require(tseries);\n> require(wle)\n> stock= (get.hist.quote(instrument = tool, quote =\n> c(\"Ad\"),compression=\"m\"));\n> spx=(get.hist.quote(instrument = \"^gspc\", quote =\n> c(\"Ad\"),compression=\"m\"));\n> today=Sys.Date()\n> seqmo=length(seq(as.Date(\"1926-07-01\"),today,by=\"month\"))-2\n> url=\n> \"http://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors.zip\"\n> destfile=\"C:\\\\F-F_Research_Data_Factors.zip\"\n> dataff=download.file(url, destfile, mode='wb')\n> unzip=unz(destfile,\"F-F_Research_Data_Factors.txt\")\n> ff4 <- read.table(unzip, header=FALSE, sep=\"\",\n> na.strings=\"NA\", dec=\".\", strip.white=TRUE, skip=4,\n> nrows=seqmo)\n> ffdata <- ff4\n> attach(ffdata);\n> ffdata=ffdata/100\n> #find out starting year month for ffdata;\n> ffdatats=ts(ffdata, start=c(1926,7), frequency=12);\n> stock=ts(na.remove(stock), start=c(1991, 1),\n> frequency=12);\n> spx=ts(na.remove(spx), start=c(1991, 1),\n> frequency=12);\n> combined= na.remove(ts.union(stock,spx));\n> combreturn= na.remove(diff(log(combined)));\n> combreturn=ts(combreturn,\n> start=c(1991,2),frequency=12);\n> combined=na.remove(ts.intersect(combreturn,ffdatats),\n> names=c(\"stockret\", \"spxret\", \"dates\",\"ffmktret\",\n> \"smb\",\"hml\",\"rf\"));\n> combined[,1]=combined[,1]-combined[,7]\n> combined[,2]=combined[,2]-combined[,7]\n> \n> simplereg=lm(combined[,1]~combined[,2]);\n> stockbeta=simplereg$coef[2];\n> textout=paste(\"stock beta=\", stockbeta);\n> robustreg=wle.lm(combined[,1]~combined[,2]);\n> robstockbeta=robustreg$coef[2];\n> textout2=paste(\"robust stock beta=\", robstockbeta);\n> \n> plot(as.numeric(combined[,1])~as.numeric(combined[,2]),xlab=\"S&P\",\n> ylab=tool)\n> title(main=textout, sub=list(textout2, col=\"red\"))\n> abline(coef(simplereg));\n> abline(coef(robustreg),col=\"red\")\n> print(textout);\n> print(textout2);\n> ffreg=wle.lm(combined[,1]~combined[,4]+combined[,5]+combined[,6]);\n> ffbeta=ffreg$coef[2];\n> ffsmb=ffreg$coef[3];\n> ffhml=ffreg$coef[4] ;\n> textout3=paste('robust ff beta=',ffbeta) ;\n> textout4=paste('robust ff smb=',ffsmb) ;\n> textout5=paste('robust ff hml=',ffhml) ;\n> print(textout3) ;\n> print(textout4) ;\n> print(textout5) ;\n> rf=5\n> smb=1\n> hml=2\n> rm=5\n> ffcoe=rf+ffbeta*rm+ffsmb*smb+ffhml*hml\n> robcoe=rf+robstockbeta*rm\n> regcoe=rf+stockbeta*rm\n> textout6=paste('regular coe=',regcoe,' robustcoe=',\n> robcoe)\n> textout7=paste('Fama-French coe=',ffcoe)\n> print(textout6)\n> print(textout7)\n> }\n> \n> _______________________________________________\n> R-sig-finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>",
+      "body_snippet": "First load the zoo package so that we can use some of its\ndate handling facilities: \n\n- zoo includes an extra as.Date method, not in base, that \n  will convert daily numeric series that are represente",
+      "thread_id": "thread-aea67d1703ae",
+      "thread_depth": 1,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-9dbd6b0d7571",
+      "message_id": "<20050905062950.GS350@lubyanka.local>",
+      "from_name": "Ajay Narottam Shah",
+      "from_email_hash": "44daf6d5b15f2615777d1fb204165d8dd630c3fb70829ad9e4ccbfec8f81cc1c",
+      "date": "2005-09-05T11:59:50+05:30",
+      "subject": "[R-sig-finance] Bug report for get.hist.quote()",
+      "subject_clean": "Bug report for get.hist.quote()",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I just installed the newest tseries package. I get one wrong error message:\n\n> x <- get.hist.quote(instrument = \"GBP/USD\", provider = \"oanda\", start=\"1900-01-01\", end=\"1900-12-31\")\ntrying URL 'http://www.oanda.com/convert/fxhistory?lang=en&date1=01%2F01%2F1900&date=12%2F31%2F1900&date_fmt=us&exch=GBP&exch2=&expr=USD&expr2=&margin_fixed=0&&SUBMIT=Get+Table&format=ASCII&redirected=1'\nContent type 'text/html' length unknown\nopened URL\n.......... .\ndownloaded 11Kb\n\nError in get.hist.quote(instrument = \"GBP/USD\", provider = \"oanda\", start = \"1900-01-01\",  : \n        time period is too big (maximum 2000 days can be downloaded)\n\n\n-- \nAjay Shah                                                   Consultant\najayshah at mayin.org                      Department of Economic Affairs\nhttp://www.mayin.org/ajayshah           Ministry of Finance, New Delhi",
+      "body_snippet": "I just installed the newest tseries package. I get one wrong error message:\n\n> x <- get.hist.quote(instrument = \"GBP/USD\", provider = \"oanda\", start=\"1900-01-01\", end=\"1900-12-31\")\ntrying URL 'http://",
+      "thread_id": "thread-9dbd6b0d7571",
+      "thread_depth": 0,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-d967d3e8bcab",
+      "message_id": "<20050905075115.GA350@lubyanka.local>",
+      "from_name": "Ajay Narottam Shah",
+      "from_email_hash": "44daf6d5b15f2615777d1fb204165d8dd630c3fb70829ad9e4ccbfec8f81cc1c",
+      "date": "2005-09-05T13:21:15+05:30",
+      "subject": "[R-sig-finance] Bug report for get.hist.quote()",
+      "subject_clean": "Bug report for get.hist.quote()",
+      "in_reply_to": "<op.swmgfddh0efqu7@neyman.fam.tuwien.ac.at>",
+      "references": [
+        "<20050905062950.GS350@lubyanka.local>",
+        "<op.swmgfddh0efqu7@neyman.fam.tuwien.ac.at>"
+      ],
+      "body_plain": "On Mon, Sep 05, 2005 at 08:55:51AM -0000, Martin Keller-Ressel wrote:\n> Why should this be a bug?? The error message clearly says what the problem  \n> is:\n> \"time period is too big (maximum 2000 days can be downloaded)\"\n> I dont know whether this restriction is due to the data provider or to the  \n> package,\n> but why not try a shorter time period or download the data in chunks?\n\nMy dates were: From 1 Jan 1900 till 31 Jan 1900. So it's not 2000 days.\n\n> >>x <- get.hist.quote(instrument = \"GBP/USD\", provider = \"oanda\",  \n> >>start=\"1900-01-01\", end=\"1900-12-31\")\n> >trying URL  \n> >'http://www.oanda.com/convert/fxhistory?lang=en&date1=01%2F01%2F1900&date=12%2F31%2F1900&date_fmt=us&exch=GBP&exch2=&expr=USD&expr2=&margin_fixed=0&&SUBMIT=Get+Table&format=ASCII&redirected=1'\n> >Content type 'text/html' length unknown\n> >opened URL\n> >.......... .\n> >downloaded 11Kb\n> >\n> >Error in get.hist.quote(instrument = \"GBP/USD\", provider = \"oanda\",  \n> >start = \"1900-01-01\",  :\n> >        time period is too big (maximum 2000 days can be downloaded)\n\n-- \nAjay Shah                                                   Consultant\najayshah at mayin.org                      Department of Economic Affairs\nhttp://www.mayin.org/ajayshah           Ministry of Finance, New Delhi",
+      "body_snippet": "On Mon, Sep 05, 2005 at 08:55:51AM -0000, Martin Keller-Ressel wrote:\n> Why should this be a bug?? The error message clearly says what the problem  \n> is:\n> \"time period is too big (maximum 2000 days ",
+      "thread_id": "thread-9dbd6b0d7571",
+      "thread_depth": 2,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-e09147f3d1b0",
+      "message_id": "<op.swmgfddh0efqu7@neyman.fam.tuwien.ac.at>",
+      "from_name": "Martin Keller-Ressel",
+      "from_email_hash": "b0e52bf438acd6aa46aee002a0d06375c27af9e1ba793073898531026b6da23e",
+      "date": "2005-09-05T08:55:51Z",
+      "subject": "[R-sig-finance] Bug report for get.hist.quote()",
+      "subject_clean": "Bug report for get.hist.quote()",
+      "in_reply_to": "<20050905062950.GS350@lubyanka.local>",
+      "references": [
+        "<20050905062950.GS350@lubyanka.local>"
+      ],
+      "body_plain": "Why should this be a bug?? The error message clearly says what the problem  \nis:\n\"time period is too big (maximum 2000 days can be downloaded)\"\nI dont know whether this restriction is due to the data provider or to the  \npackage,\nbut why not try a shorter time period or download the data in chunks?\n\nbest regards,\n\nMartin Keller-Ressel\n\n\nOn Mon, 05 Sep 2005 06:29:50 -0000, Ajay Narottam Shah  \n<ajayshah at mayin.org> wrote:\n\n> I just installed the newest tseries package. I get one wrong error  \n> message:\n>\n>> x <- get.hist.quote(instrument = \"GBP/USD\", provider = \"oanda\",  \n>> start=\"1900-01-01\", end=\"1900-12-31\")\n> trying URL  \n> 'http://www.oanda.com/convert/fxhistory?lang=en&date1=01%2F01%2F1900&date=12%2F31%2F1900&date_fmt=us&exch=GBP&exch2=&expr=USD&expr2=&margin_fixed=0&&SUBMIT=Get+Table&format=ASCII&redirected=1'\n> Content type 'text/html' length unknown\n> opened URL\n> .......... .\n> downloaded 11Kb\n>\n> Error in get.hist.quote(instrument = \"GBP/USD\", provider = \"oanda\",  \n> start = \"1900-01-01\",  :\n>         time period is too big (maximum 2000 days can be downloaded)\n>\n>\n\n\n\n-- \nMartin Keller-Ressel\nResearch Unit of Financial and Actuarial Mathematics\nTU Vienna",
+      "body_snippet": "Why should this be a bug?? The error message clearly says what the problem  \nis:\n\"time period is too big (maximum 2000 days can be downloaded)\"\nI dont know whether this restriction is due to the data ",
+      "thread_id": "thread-9dbd6b0d7571",
+      "thread_depth": 1,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-e6dfeb31188d",
+      "message_id": "<op.swmhb0fz0efqu7@neyman.fam.tuwien.ac.at>",
+      "from_name": "Martin Keller-Ressel",
+      "from_email_hash": "b0e52bf438acd6aa46aee002a0d06375c27af9e1ba793073898531026b6da23e",
+      "date": "2005-09-05T09:15:26Z",
+      "subject": "[R-sig-finance] Bug report for get.hist.quote()",
+      "subject_clean": "Bug report for get.hist.quote()",
+      "in_reply_to": "<20050905075115.GA350@lubyanka.local>",
+      "references": [
+        "<20050905062950.GS350@lubyanka.local>",
+        "<op.swmgfddh0efqu7@neyman.fam.tuwien.ac.at>",
+        "<20050905075115.GA350@lubyanka.local>"
+      ],
+      "body_plain": "Sorry for my rash reply... you are right this is a bug.\n\nregards,\nMartin Keller-Ressl\n\n\nOn Mon, 05 Sep 2005 07:51:15 -0000, Ajay Narottam Shah  \n<ajayshah at mayin.org> wrote:\n\n> On Mon, Sep 05, 2005 at 08:55:51AM -0000, Martin Keller-Ressel wrote:\n>> Why should this be a bug?? The error message clearly says what the  \n>> problem\n>> is:\n>> \"time period is too big (maximum 2000 days can be downloaded)\"\n>> I dont know whether this restriction is due to the data provider or to  \n>> the\n>> package,\n>> but why not try a shorter time period or download the data in chunks?\n>\n> My dates were: From 1 Jan 1900 till 31 Jan 1900. So it's not 2000 days.\n>\n>> >>x <- get.hist.quote(instrument = \"GBP/USD\", provider = \"oanda\",\n>> >>start=\"1900-01-01\", end=\"1900-12-31\")\n>> >trying URL\n>> >'http://www.oanda.com/convert/fxhistory?lang=en&date1=01%2F01%2F1900&date=12%2F31%2F1900&date_fmt=us&exch=GBP&exch2=&expr=USD&expr2=&margin_fixed=0&&SUBMIT=Get+Table&format=ASCII&redirected=1'\n>> >Content type 'text/html' length unknown\n>> >opened URL\n>> >.......... .\n>> >downloaded 11Kb\n>> >\n>> >Error in get.hist.quote(instrument = \"GBP/USD\", provider = \"oanda\",\n>> >start = \"1900-01-01\",  :\n>> >        time period is too big (maximum 2000 days can be downloaded)\n>\n\n\n\n-- \nMartin Keller-Ressel\nResearch Unit of Financial and Actuarial Mathematics\nTU Vienna",
+      "body_snippet": "Sorry for my rash reply... you are right this is a bug.\n\nregards,\nMartin Keller-Ressl\n\n\nOn Mon, 05 Sep 2005 07:51:15 -0000, Ajay Narottam Shah  \n<ajayshah at mayin.org> wrote:\n\n> On Mon, Sep 05, 2005 ",
+      "thread_id": "thread-9dbd6b0d7571",
+      "thread_depth": 3,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-24d0ea757c08",
+      "message_id": "<431C218B.9010801@swissonline.ch>",
+      "from_name": "Adrian Trapletti",
+      "from_email_hash": "8ef317913635f2eb99705d48e347f755fb3f9abcdcaa447bda61b9d2c686fa69",
+      "date": "2005-09-05T12:44:27+02:00",
+      "subject": "[R-sig-finance] Bug report for get.hist.quote()",
+      "subject_clean": "Bug report for get.hist.quote()",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": ">\n>\n>Message: 1\n>Date: Mon, 5 Sep 2005 11:59:50 +0530\n>From: Ajay Narottam Shah <ajayshah at mayin.org>\n>Subject: [R-sig-finance] Bug report for get.hist.quote()\n>To: r-sig-finance <r-sig-finance at stat.math.ethz.ch>\n>Message-ID: <20050905062950.GS350 at lubyanka.local>\n>Content-Type: text/plain; charset=us-ascii\n>\n>I just installed the newest tseries package. I get one wrong error message:\n>\n>  \n>\n>>> x <- get.hist.quote(instrument = \"GBP/USD\", provider = \"oanda\", start=\"1900-01-01\", end=\"1900-12-31\")\n>>    \n>>\n>trying URL 'http://www.oanda.com/convert/fxhistory?lang=en&date1=01%2F01%2F1900&date=12%2F31%2F1900&date_fmt=us&exch=GBP&exch2=&expr=USD&expr2=&margin_fixed=0&&SUBMIT=Get+Table&format=ASCII&redirected=1'\n>Content type 'text/html' length unknown\n>opened URL\n>.......... .\n>downloaded 11Kb\n>\n>Error in get.hist.quote(instrument = \"GBP/USD\", provider = \"oanda\", start = \"1900-01-01\",  : \n>        time period is too big (maximum 2000 days can be downloaded)\n>\n>\n> -- Ajay Shah Consultant ajayshah at mayin.org Department of Economic \n> Affairs http://www.mayin.org/ajayshah Ministry of Finance, New Delhi\n>\nThis is not a real bug, just a bit an unclear error message for this \nkind of situation. Retry with\n\nstart=\"1990-01-01\", end=\"1990-12-31\" \n\nfor example.I will improve the error message. Thx for the report.\n\nBest regards\nAdrian",
+      "body_snippet": ">\n>\n>Message: 1\n>Date: Mon, 5 Sep 2005 11:59:50 +0530\n>From: Ajay Narottam Shah <ajayshah at mayin.org>\n>Subject: [R-sig-finance] Bug report for get.hist.quote()\n>To: r-sig-finance <r-sig-finance at s",
+      "thread_id": "thread-24d0ea757c08",
+      "thread_depth": 0,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-dc539ecf7fb6",
+      "message_id": "<20050908134310.90245.qmail@web60319.mail.yahoo.com>",
+      "from_name": "Andrew West",
+      "from_email_hash": "5fe1f4c6a9d1f71d717cb66afe5473898fe43ee03adac541d574d0d791698e2c",
+      "date": "2005-09-08T06:43:10-07:00",
+      "subject": "[R-sig-finance] function to calc Fama-French 3 factor model",
+      "subject_clean": "function to calc Fama-French 3 factor model",
+      "in_reply_to": "<971536df050902080062a81935@mail.gmail.com>",
+      "references": [],
+      "body_plain": "Thanks to Gabor and Dirk, I think I fixed some of the\nworst problems, but then continued on to add new\noutput, perhaps intoroducing new problems.\n\nI added an extra plot showing fits vs. actual returns\nfor the 2 models (CAPM & FamaFrench), and added a test\nof AIC scores for the 2 models, resulting in a\nstatement of which is the better model for the stock.\n\nFor a good example of why using Fama French for COE\nestimation might be a good idea, try:\ngetffBeta(\"DUK\")\n\nNotes of minor frustrations: \n1.Couldn't figure out how to extract a single AIC for\na WLE model, or pull an Adj. R2 from a WLE summary.\n(could get AIC in best subsets form, but that's not\nthe same thing, so had to do AIC comparisons on LM\nmodels)\n\n2. Couldn't figure out how to convince a \"pairs\" plot\nto share a window with another plot (tried par,\nsplit.screen).\n\n3. Was hoping that the strucchange package could\nautomatically show me time-varying coefficients, but\nsomehow the plot outputs of efp(type=\"ME\" or \"RE\",\nfunctional=NULL) didn't correspond to what I thought\nit might, (rolling window coefficient estimates, which\nI've done before but which is another lengthy\nprocedure).\n\n4. It would be nice to offer a choice of more verbose\noutput, e.g. with model summaries. \n\n5. It would be nice to only download the Fama-French\ndata once per session.\n\nI also haven't acquired/learned a substitute for\nMSWord for code editing, thus the function paste below\nmay need reformatting to avoid inappropriate line\nbreaks.\n\nHere's the code:\n\ngetffBeta=function(tool) {\nrequire(MASS);\nrequire(tseries);\nrequire(wle)\nrequire(zoo)\nstock= (get.hist.quote(instrument = tool, quote\n=c(\"Ad\"),compression=\"m\",origin=as.Date(0)));\nspx=(get.hist.quote(instrument = \"^gspc\", quote\n=c(\"Ad\"),compression=\"m\",origin=as.Date(0)));\ntoday=Sys.Date();\nseqmo=length(seq(as.Date(\"1926-07-01\"),today,by=\"month\"))-2;\nurl=\"http://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors.zip\";\ndestfile=tempfile();\ndataff=download.file(url, destfile, mode='wb');\nunzip=unz(destfile,\"F-F_Research_Data_Factors.txt\");\nff4 <- read.table(unzip, header=FALSE,\nsep=\"\",na.strings=\"NA\", dec=\".\", strip.white=TRUE,\nskip=4,nrows=seqmo)\nffdata <- ff4\nattach(ffdata);\nffdata=ffdata/100\n#find out starting year month for ffdata;\nffdatats=ts(ffdata, start=c(1926,7), frequency=12);\nstock=ts(na.omit(coredata(stock)), start=\nas.numeric(as.yearmon(as.Date(start(stock)[1]))),\nfrequency=12);\nspx=ts(na.remove(spx), start=\nas.numeric(as.yearmon(as.Date(start(spx)[1]))),\nfrequency=12);\ncombined= na.remove(ts.union(stock,spx));\ncombreturn= na.remove(diff(log(combined)));\ncombined=na.remove(ts.intersect(combreturn,ffdatats),\nnames=list(\"stockret\", \"spxret\",\n\"dates\",\"ffmktret\",\"smb\",\"hml\",\"rf\"));\ncombined[,1]=combined[,1]-combined[,7]\ncombined[,2]=combined[,2]-combined[,7]\n\nsimplereg=lm(combined[,1]~combined[,2]);\nstockbeta=simplereg$coef[2];\ntextout=paste(\"CAPM beta=\", stockbeta);\nrobustreg=wle.lm(combined[,1]~combined[,2]);\nrobstockbeta=robustreg$coef[2];\ntextout2=paste(\"robust stock beta=\", robstockbeta);\n\nplot(as.numeric(combined[,1])~as.numeric(combined[,2]),xlab=\"S&P\",\nylab=tool)\ntitle(main=textout, sub=list(textout2, col=\"red\"))\nabline(coef(simplereg));\nabline(coef(robustreg),col=\"red\")\n\nprint(textout);\nprint(textout2);\nffreg=wle.lm(combined[,1]~combined[,4]+combined[,5]+combined[,6]);\nffbeta=ffreg$coef[2];\nffsmb=ffreg$coef[3];\nffhml=ffreg$coef[4] ;\ntextout3=paste('robust ff beta=',ffbeta) ;\ntextout4=paste('robust ff smb=',ffsmb) ;\ntextout5=paste('robust ff hml=',ffhml) ;\nprint(textout3) ;\nprint(textout4) ;\nprint(textout5) ;\nrf=5\nsmb=1\nhml=2\nrm=5\nffcoe=rf+ffbeta*rm+ffsmb*smb+ffhml*hml\nrobcoe=rf+robstockbeta*rm\nregcoe=rf+stockbeta*rm\ntextout6=paste('regular coe=',regcoe,' robustcoe=',\nrobcoe)\ntextout7=paste('Fama-French coe=',ffcoe)\nprint(textout6)\nprint(textout7) ;\nffreg2=lm(combined[,1]~combined[,4]+combined[,5]+combined[,6]);\n\na1=as.vector(combined[,1])\nb1=as.vector(ffreg2$fitted)\nc1=as.vector(simplereg$fitted)\nplot3= (data.frame(a1,b1,c1))\nwin.graph()\npanel.cor <- function(x, y, digits=2, prefix=\"\",\ncex.cor)\n      {\n          usr <- par(\"usr\"); on.exit(par(usr))\n          par(usr = c(0, 1, 0, 1))\n          r <- abs(cor(x, y))\n          txt <- format(c(r, 0.123456789),\ndigits=digits)[1]\n          txt <- paste(prefix, txt, sep=\"\")\n          if(missing(cex.cor)) cex <-\n0.8/strwidth(txt)\n          text(0.5, 0.5, txt, cex = cex * r)\n      }\npairs(plot3, upper.panel=panel.cor,labels=c(\"stock\nreturns\",\"FF fits\",\"CAPM fits\"))\n\n\nffreg2=lm(combined[,1]~combined[,4]+combined[,5]+combined[,6]);\nif((AIC(simplereg))<(AIC(ffreg2))) \"CAPM superior to\nFF\" else \"FF superior to CAPM\";\n}",
+      "body_snippet": "Thanks to Gabor and Dirk, I think I fixed some of the\nworst problems, but then continued on to add new\noutput, perhaps intoroducing new problems.\n\nI added an extra plot showing fits vs. actual returns",
+      "thread_id": "thread-aea67d1703ae",
+      "thread_depth": 2,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-e69d3e53b1dd",
+      "message_id": "<20050910181006.79300.qmail@web36201.mail.mud.yahoo.com>",
+      "from_name": "Jan-Paul Roodbol",
+      "from_email_hash": "c21ab30ef6bb8f8c3ecb0a2a403b19c4487cff03033f71bf1c3c5da6723232dd",
+      "date": "2005-09-10T19:10:06+01:00",
+      "subject": "[R-sig-finance] Missing",
+      "subject_clean": "Missing",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Does anyone know if randomForest in R can handle\ndataset with missings?\n\nThank you\n\nKind regards\n\nJan-Paul",
+      "body_snippet": "Does anyone know if randomForest in R can handle\ndataset with missings?\n\nThank you\n\nKind regards\n\nJan-Paul",
+      "thread_id": "thread-e69d3e53b1dd",
+      "thread_depth": 0,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-25ddcadf1b76",
+      "message_id": "<43237B92.8040505@pdf.com>",
+      "from_name": "Spencer Graves",
+      "from_email_hash": "0d1725402b5f223aa45a1714f600b741ea6c2ccb2d67d2b94ddab1ed1e80aefd",
+      "date": "2005-09-10T17:34:26-07:00",
+      "subject": "[R-sig-finance] function to calc Fama-French 3 factor model",
+      "subject_clean": "function to calc Fama-French 3 factor model",
+      "in_reply_to": "<20050908134310.90245.qmail@web60319.mail.yahoo.com>",
+      "references": [
+        "<20050908134310.90245.qmail@web60319.mail.yahoo.com>"
+      ],
+      "body_plain": "(see comments inline)\n\nAndrew West wrote:\n\n> Thanks to Gabor and Dirk, I think I fixed some of the\n> worst problems, but then continued on to add new\n> output, perhaps intoroducing new problems.\n> \n> I added an extra plot showing fits vs. actual returns\n> for the 2 models (CAPM & FamaFrench), and added a test\n> of AIC scores for the 2 models, resulting in a\n> statement of which is the better model for the stock.\n> \n> For a good example of why using Fama French for COE\n> estimation might be a good idea, try:\n> getffBeta(\"DUK\")\n> \n> Notes of minor frustrations: \n> 1.Couldn't figure out how to extract a single AIC for\n> a WLE model, \n\n\t  In the output from help.search(\"AIC\"), I saw \"wle.aic\".  After your \nline 'robustreg=wle.lm(combined[,1]~combined[,2])', I tried the following:\n\n >   wle.aic(robustreg)\n\nCall:\nwle.aic(formula = robustreg)\n\n\nWeighted Akaike Information Criterion (WAIC):\n      (Intercept) combined[, 2]   waic\n[1,]           1             1 -478.0\n[2,]           1             0 -477.0\n[3,]           0             1 -476.5\n\nPrinted the first  3  best models\n\nor pull an Adj. R2 from a WLE summary.\n> (could get AIC in best subsets form, but that's not\n> the same thing, so had to do AIC comparisons on LM\n> models)\n> \n\t  I'm not sure what you are asking here.  I did the following:\n\n > str(summary(robustreg))\nList of 1\n  $ :List of 10\n   ..$ call         : language wle.lm(formula = combined[, 1] ~\n<snip>\n   ..$ adj.r.squared: num 0.0119\n<snip>\n\n\t  This led me to the following:\n > summary(robustreg)[[1]]$adj.r.squared\n[1] 0.01192491\n >\n\t  If this is not what you are asking, please provide a much smaller \n\"toy\" example to try to clarify your question.\n\n> 2. Couldn't figure out how to convince a \"pairs\" plot\n> to share a window with another plot (tried par,\n> split.screen).\n> \n\t  A more specific toy example might produce a quick and effective \nsolution.  Ditto for your other questions.\n\n\t  I know this doesn't answer all your questions, but I hope you some of \nit helpful.\n\n\t  spencer graves\n\n> 3. Was hoping that the strucchange package could\n> automatically show me time-varying coefficients, but\n> somehow the plot outputs of efp(type=\"ME\" or \"RE\",\n> functional=NULL) didn't correspond to what I thought\n> it might, (rolling window coefficient estimates, which\n> I've done before but which is another lengthy\n> procedure).\n> \n> 4. It would be nice to offer a choice of more verbose\n> output, e.g. with model summaries. \n> \n> 5. It would be nice to only download the Fama-French\n> data once per session.\n> \n> I also haven't acquired/learned a substitute for\n> MSWord for code editing, thus the function paste below\n> may need reformatting to avoid inappropriate line\n> breaks.\n> \n> Here's the code:\n> \n> getffBeta=function(tool) {\n> require(MASS);\n> require(tseries);\n> require(wle)\n> require(zoo)\n> stock= (get.hist.quote(instrument = tool, quote\n> =c(\"Ad\"),compression=\"m\",origin=as.Date(0)));\n> spx=(get.hist.quote(instrument = \"^gspc\", quote\n> =c(\"Ad\"),compression=\"m\",origin=as.Date(0)));\n> today=Sys.Date();\n> seqmo=length(seq(as.Date(\"1926-07-01\"),today,by=\"month\"))-2;\n> url=\"http://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors.zip\";\n> destfile=tempfile();\n> dataff=download.file(url, destfile, mode='wb');\n> unzip=unz(destfile,\"F-F_Research_Data_Factors.txt\");\n> ff4 <- read.table(unzip, header=FALSE,\n> sep=\"\",na.strings=\"NA\", dec=\".\", strip.white=TRUE,\n> skip=4,nrows=seqmo)\n> ffdata <- ff4\n> attach(ffdata);\n> ffdata=ffdata/100\n> #find out starting year month for ffdata;\n> ffdatats=ts(ffdata, start=c(1926,7), frequency=12);\n> stock=ts(na.omit(coredata(stock)), start=\n> as.numeric(as.yearmon(as.Date(start(stock)[1]))),\n> frequency=12);\n> spx=ts(na.remove(spx), start=\n> as.numeric(as.yearmon(as.Date(start(spx)[1]))),\n> frequency=12);\n> combined= na.remove(ts.union(stock,spx));\n> combreturn= na.remove(diff(log(combined)));\n> combined=na.remove(ts.intersect(combreturn,ffdatats),\n> names=list(\"stockret\", \"spxret\",\n> \"dates\",\"ffmktret\",\"smb\",\"hml\",\"rf\"));\n> combined[,1]=combined[,1]-combined[,7]\n> combined[,2]=combined[,2]-combined[,7]\n> \n> simplereg=lm(combined[,1]~combined[,2]);\n> stockbeta=simplereg$coef[2];\n> textout=paste(\"CAPM beta=\", stockbeta);\n> robustreg=wle.lm(combined[,1]~combined[,2]);\n> robstockbeta=robustreg$coef[2];\n> textout2=paste(\"robust stock beta=\", robstockbeta);\n> \n> plot(as.numeric(combined[,1])~as.numeric(combined[,2]),xlab=\"S&P\",\n> ylab=tool)\n> title(main=textout, sub=list(textout2, col=\"red\"))\n> abline(coef(simplereg));\n> abline(coef(robustreg),col=\"red\")\n> \n> print(textout);\n> print(textout2);\n> ffreg=wle.lm(combined[,1]~combined[,4]+combined[,5]+combined[,6]);\n> ffbeta=ffreg$coef[2];\n> ffsmb=ffreg$coef[3];\n> ffhml=ffreg$coef[4] ;\n> textout3=paste('robust ff beta=',ffbeta) ;\n> textout4=paste('robust ff smb=',ffsmb) ;\n> textout5=paste('robust ff hml=',ffhml) ;\n> print(textout3) ;\n> print(textout4) ;\n> print(textout5) ;\n> rf=5\n> smb=1\n> hml=2\n> rm=5\n> ffcoe=rf+ffbeta*rm+ffsmb*smb+ffhml*hml\n> robcoe=rf+robstockbeta*rm\n> regcoe=rf+stockbeta*rm\n> textout6=paste('regular coe=',regcoe,' robustcoe=',\n> robcoe)\n> textout7=paste('Fama-French coe=',ffcoe)\n> print(textout6)\n> print(textout7) ;\n> ffreg2=lm(combined[,1]~combined[,4]+combined[,5]+combined[,6]);\n> \n> a1=as.vector(combined[,1])\n> b1=as.vector(ffreg2$fitted)\n> c1=as.vector(simplereg$fitted)\n> plot3= (data.frame(a1,b1,c1))\n> win.graph()\n> panel.cor <- function(x, y, digits=2, prefix=\"\",\n> cex.cor)\n>       {\n>           usr <- par(\"usr\"); on.exit(par(usr))\n>           par(usr = c(0, 1, 0, 1))\n>           r <- abs(cor(x, y))\n>           txt <- format(c(r, 0.123456789),\n> digits=digits)[1]\n>           txt <- paste(prefix, txt, sep=\"\")\n>           if(missing(cex.cor)) cex <-\n> 0.8/strwidth(txt)\n>           text(0.5, 0.5, txt, cex = cex * r)\n>       }\n> pairs(plot3, upper.panel=panel.cor,labels=c(\"stock\n> returns\",\"FF fits\",\"CAPM fits\"))\n> \n> \n> ffreg2=lm(combined[,1]~combined[,4]+combined[,5]+combined[,6]);\n> if((AIC(simplereg))<(AIC(ffreg2))) \"CAPM superior to\n> FF\" else \"FF superior to CAPM\";\n> }\n> \n> _______________________________________________\n> R-sig-finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n\n-- \nSpencer Graves, PhD\nSenior Development Engineer\nPDF Solutions, Inc.\n333 West San Carlos Street Suite 700\nSan Jose, CA 95110, USA\n\nspencer.graves at pdf.com\nwww.pdf.com <http://www.pdf.com>\nTel:  408-938-4420\nFax: 408-280-7915",
+      "body_snippet": "(see comments inline)\n\nAndrew West wrote:\n\n> Thanks to Gabor and Dirk, I think I fixed some of the\n> worst problems, but then continued on to add new\n> output, perhaps intoroducing new problems.\n> \n> ",
+      "thread_id": "thread-aea67d1703ae",
+      "thread_depth": 3,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-b58bf2318d02",
+      "message_id": "<OF42DDB084.C5AF684D-ONC125707A.004234A5-C125707A.00424CEB@sanpaoloam.com>",
+      "from_name": "Marco Salvini",
+      "from_email_hash": "0fcda441c9a80c9e2d23bd4ab929cec687f057585c2c399c34daee38cc1b2827",
+      "date": "2005-09-12T14:04:10+02:00",
+      "subject": "[R-sig-finance] Missing",
+      "subject_clean": "Missing",
+      "in_reply_to": "<20050910181006.79300.qmail@web36201.mail.mud.yahoo.com>",
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20050912/e9129710/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20050912/e9129710/attachment.pl",
+      "thread_id": "thread-e69d3e53b1dd",
+      "thread_depth": 1,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-95a0f94cbfc4",
+      "message_id": "<OF37614F44.F8A70BBF-ONC125707B.00400B27-C125707B.004035EF@sanpaoloam.com>",
+      "from_name": "Marco Salvini",
+      "from_email_hash": "0fcda441c9a80c9e2d23bd4ab929cec687f057585c2c399c34daee38cc1b2827",
+      "date": "2005-09-13T13:41:20+02:00",
+      "subject": "[R-sig-finance] Book",
+      "subject_clean": "Book",
+      "in_reply_to": "<20050908134310.90245.qmail@web60319.mail.yahoo.com>",
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20050913/60b098a6/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20050913/60b098a6/attachment.pl",
+      "thread_id": "thread-aea67d1703ae",
+      "thread_depth": 3,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-42249ad0b40b",
+      "message_id": "<01fa01c5bc43$1d08bdb0$b5640a3e@paolodell>",
+      "from_name": "Paolo Cavatore",
+      "from_email_hash": "e6e07d0565376b283918c7d85d05fb4b0d96260860d3792d65abd05c33ada5bc",
+      "date": "2005-09-18T13:10:21+02:00",
+      "subject": "[R-sig-finance] Compatibility between Rmetrics and Finmetrics",
+      "subject_clean": "Compatibility between Rmetrics and Finmetrics",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20050918/86c1b2ac/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20050918/86c1b2ac/attachment.pl",
+      "thread_id": "thread-42249ad0b40b",
+      "thread_depth": 0,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-a2bc6f60c6ec",
+      "message_id": "<139ef1c20509190027693b235@mail.gmail.com>",
+      "from_name": "Krishna",
+      "from_email_hash": "c9a2d55e44928ec731687d5859bd21d01d4cd45731f4ee2532a5e90966a54e34",
+      "date": "2005-09-19T12:57:05+05:30",
+      "subject": "[R-sig-finance] minimum variance hedge ratio",
+      "subject_clean": "minimum variance hedge ratio",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi all\n\ni have two data sets, spot and futures cash market prices. to estimate\nthe minimum variance hedge ratio, i first had a glance on the\ncorrelation coefficient of relative price change (ln(St / St-1).\nsurprizingly the value is just 0.2 compared to actual price\ncorrelation of 0.9. (i did regress the spot change on future change,\nco-effi is 0.3, and R2 is only 0.025\n\na) in such scenario can someone help me in estimating the ratio which\nare time varying.\nb) is there a way to define the function as the correlation will work\nat given level of basis (futures - spot).\n\nthank u for the help and co-operation\n\nrgds\n\nsnvk",
+      "body_snippet": "Hi all\n\ni have two data sets, spot and futures cash market prices. to estimate\nthe minimum variance hedge ratio, i first had a glance on the\ncorrelation coefficient of relative price change (ln(St / S",
+      "thread_id": "thread-a2bc6f60c6ec",
+      "thread_depth": 0,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-b73d299a6861",
+      "message_id": "<829e6c8a05092022487e655439@mail.gmail.com>",
+      "from_name": "Manoj",
+      "from_email_hash": "16ebd46bb0e77308d08d586502ac87e3855a44c20cd5969dd7c2c8a82eb5316e",
+      "date": "2005-09-21T14:48:30+09:00",
+      "subject": "[R-sig-finance] Portfolio Wgts Optimization",
+      "subject_clean": "Portfolio Wgts Optimization",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Greeting,\n     Apologies for the blank email...I am quite new to optim function\nin R. I am trying to do the following:\n\n     I am trying to optimize Portfolio wgts subjected to certain\nconstraints. The constraints are that individual weights can be either\n0 or maximum 40% and that the sum of the weights should be 1.\n\n      While I know that I can use L-BFGS-B method and specify the\nlower & upper bound, How can I specify the constraint that the sum of\nthe weights should add up to 1?\n\n     Thanks in advance for your help.\n\nCheers\n\nManoj",
+      "body_snippet": "Greeting,\n     Apologies for the blank email...I am quite new to optim function\nin R. I am trying to do the following:\n\n     I am trying to optimize Portfolio wgts subjected to certain\nconstraints. Th",
+      "thread_id": "thread-b73d299a6861",
+      "thread_depth": 0,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-20842ec7a9dc",
+      "message_id": "<433120DA.6060205@burns-stat.com>",
+      "from_name": "Patrick Burns",
+      "from_email_hash": "406962932e1b0e9aa889ddffedf6a8e166ef21efd83628c67b1f8e535ee909c2",
+      "date": "2005-09-21T09:59:06+01:00",
+      "subject": "[R-sig-finance] Portfolio Wgts Optimization",
+      "subject_clean": "Portfolio Wgts Optimization",
+      "in_reply_to": "<829e6c8a05092022487e655439@mail.gmail.com>",
+      "references": [
+        "<829e6c8a05092022487e655439@mail.gmail.com>"
+      ],
+      "body_plain": "To answer your immediate question, one approach\nis to add a Lagrange multiplier to your function.  Another\nis to rescale the weights before computing the utility\n(this has the potential to confuse the optimizer, but often\nworks okay).\n\nBut if you are using mean-variance utility, then you should\ninvestigate the 'quadprog' package.  If your requirements\nare more complex and you are willing to spend money,\nthen POP from Burns Statistics is a possibility.\n\nPatrick Burns\npatrick at burns-stat.com\n+44 (0)20 8525 0696\nhttp://www.burns-stat.com\n(home of S Poetry and \"A Guide for the Unwilling S User\")\n\nManoj wrote:\n\n>Greeting,\n>     Apologies for the blank email...I am quite new to optim function\n>in R. I am trying to do the following:\n>\n>     I am trying to optimize Portfolio wgts subjected to certain\n>constraints. The constraints are that individual weights can be either\n>0 or maximum 40% and that the sum of the weights should be 1.\n>\n>      While I know that I can use L-BFGS-B method and specify the\n>lower & upper bound, How can I specify the constraint that the sum of\n>the weights should add up to 1?\n>\n>     Thanks in advance for your help.\n>\n>Cheers\n>\n>Manoj\n>\n>_______________________________________________\n>R-sig-finance at stat.math.ethz.ch mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>\n>  \n>",
+      "body_snippet": "To answer your immediate question, one approach\nis to add a Lagrange multiplier to your function.  Another\nis to rescale the weights before computing the utility\n(this has the potential to confuse the",
+      "thread_id": "thread-b73d299a6861",
+      "thread_depth": 1,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-6836ec78aab4",
+      "message_id": "<1127316793.c82bb77cL.Isella@myrealbox.com>",
+      "from_name": "L.Isella",
+      "from_email_hash": "e83286d14c4fa9f4a44217fdbbf1fb21f4fc76e631493f09faaf675cb0054803",
+      "date": "2005-09-21T15:33:13Z",
+      "subject": "[R-sig-finance] PTF Optimization Beyond Historical Data",
+      "subject_clean": "PTF Optimization Beyond Historical Data",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear All,\nI am doing some portfolio optimization for a small financial company.\nAs a first step, I just solve Markowitz model based on historical data.\nNow, the company trades above all European ETFs and  Japan equities.\nWe need to improve the historical returns and correlations of the assets for a portfolio made up of about 18 assets.\nSince I am a bit drowning in the vast literature (time series, technical analysis, CAPM and so on), I would like to know if anyone can come forward with a bit of advice.\nIn order to start, the simpler the better. Finally, is there some sort of routine or standard method which is taken as a \"benchmark\" for the composition of the efficient portfolio?\nIf yes, is it implemented in R?\nLorenzo",
+      "body_snippet": "Dear All,\nI am doing some portfolio optimization for a small financial company.\nAs a first step, I just solve Markowitz model based on historical data.\nNow, the company trades above all European ETFs ",
+      "thread_id": "thread-6836ec78aab4",
+      "thread_depth": 0,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-a60c61d2e3df",
+      "message_id": "<000701c5bfac$88a91670$4501a8c0@DDG0MG21>",
+      "from_name": "P. Hénaff",
+      "from_email_hash": "0d8d11d65d40a72af0de5f40c7a162bb2a8409bfb7b04609c3c0cb65490e4572",
+      "date": "2005-09-22T14:33:37-05:00",
+      "subject": "[R-sig-finance] Portfolio optimization",
+      "subject_clean": "Portfolio optimization",
+      "in_reply_to": null,
+      "references": [
+        "<mailman.19.1127383202.22046.r-sig-finance@stat.math.ethz.ch>"
+      ],
+      "body_plain": "Hi Lorenzo\n\nYou might want to look at the Black-Litterman portfolio optimization model \n(google will give you links to relevent papers). The main advantage wrt \nMarkowitz is that you do not have to provide return forecasts for all \nassets. You express your point of view in absolute term or in relative terms \nwhen you have one. Results are a lot more stable than Markowitz's model, and \nit is straight forward to implement.\n\nCheers\n\nPatrick H?naff",
+      "body_snippet": "Hi Lorenzo\n\nYou might want to look at the Black-Litterman portfolio optimization model \n(google will give you links to relevent papers). The main advantage wrt \nMarkowitz is that you do not have to pr",
+      "thread_id": "thread-a60c61d2e3df",
+      "thread_depth": 0,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-d42eb8081018",
+      "message_id": "<433555C8.80401@pdf.com>",
+      "from_name": "Spencer Graves",
+      "from_email_hash": "0d1725402b5f223aa45a1714f600b741ea6c2ccb2d67d2b94ddab1ed1e80aefd",
+      "date": "2005-09-24T08:34:00-05:00",
+      "subject": "[R-sig-finance] Compatibility between Rmetrics and Finmetrics",
+      "subject_clean": "Compatibility between Rmetrics and Finmetrics",
+      "in_reply_to": "<01fa01c5bc43$1d08bdb0$b5640a3e@paolodell>",
+      "references": [
+        "<01fa01c5bc43$1d08bdb0$b5640a3e@paolodell>"
+      ],
+      "body_plain": "The short answer is no:  I'm not familiar with FINmetrics, but I've \nbeen told that it has capabilites not (yet) available in R.  And I can't \nsay anything about the compatibility (or lack thereof) of the \ncapabilities that do exist.\n\n\t  Moreover, FINmetrics is a commericial product distributed by \nInsightful, and I don't know the status of what they consider \nproprietary.  I just got 12 hits from RSiteSearch(\"Rmetrics and \nFINmetrics\"), but didn't learn much from that.  Googling for \"Rmetrics \nand FINmetrics\" seemed more profitable.\n\n\t  spencer graves\n\nPaolo Cavatore wrote:\n\n> I'm pretty new to the world of R and Rmetrics but I'm reading a book \nabout portfolio optimization with S-plus and Finmetrics...I'm already\naware of the compatibility between S-plus and R languages so I was\nwondering if it's the same with Rmetrics and Finmetrics.\n> \n> Thanks,\n> \n> pc\n> \t[[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-sig-finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n\n-- \nSpencer Graves, PhD\nSenior Development Engineer\nPDF Solutions, Inc.\n333 West San Carlos Street Suite 700\nSan Jose, CA 95110, USA\n\nspencer.graves at pdf.com\nwww.pdf.com <http://www.pdf.com>\nTel:  408-938-4420\nFax: 408-280-7915",
+      "body_snippet": "The short answer is no:  I'm not familiar with FINmetrics, but I've \nbeen told that it has capabilites not (yet) available in R.  And I can't \nsay anything about the compatibility (or lack thereof) of",
+      "thread_id": "thread-42249ad0b40b",
+      "thread_depth": 1,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-002022bbb848",
+      "message_id": "<000501c5c2a7$e7190230$6300000a@headquarters.qes.com>",
+      "from_name": "Katherine Walton",
+      "from_email_hash": "a09a44ef9d58575de6f75ee927381473740be6d7fd7514a625d9bfc57eb98515",
+      "date": "2005-09-26T08:38:03-06:00",
+      "subject": "[R-sig-finance] Creating a Price Series From a Returns Series Using R",
+      "subject_clean": "Creating a Price Series From a Returns Series Using R",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20050926/b391f5e2/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20050926/b391f5e2/attachment.pl",
+      "thread_id": "thread-002022bbb848",
+      "thread_depth": 0,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-f7e269aca184",
+      "message_id": "<ff91746c0509270423719b396f@mail.gmail.com>",
+      "from_name": "Sankalp Upadhyay",
+      "from_email_hash": "0c5e1a6b2e84ac6ac3c950d45d2f1f6aa532ab84a96d42218458fb1363479a95",
+      "date": "2005-09-27T16:53:20+05:30",
+      "subject": "[R-sig-finance] Portfolio performance metrics/ratios",
+      "subject_clean": "Portfolio performance metrics/ratios",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI am looking for a package that can calculate portfolio performance\nmetrics and ratios from a time series of returns or asset values. Is\nthere such a package? one that can give comparison ratios with\nbenchmarks also?\nThe closest seems to be tseries that has maxdrawdown, sharpe and\nsterling ratios. I have started writing own code based on that but\nthere are a lot of ratios and performance analysis metrics.\nAm I missing some package that can help?\n\nThanks,\n\nSankalp",
+      "body_snippet": "Hi,\n\nI am looking for a package that can calculate portfolio performance\nmetrics and ratios from a time series of returns or asset values. Is\nthere such a package? one that can give comparison ratios ",
+      "thread_id": "thread-f7e269aca184",
+      "thread_depth": 0,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-b2a154c4df6f",
+      "message_id": "<433933B9.7060602@burns-stat.com>",
+      "from_name": "Patrick Burns",
+      "from_email_hash": "406962932e1b0e9aa889ddffedf6a8e166ef21efd83628c67b1f8e535ee909c2",
+      "date": "2005-09-27T12:57:45+01:00",
+      "subject": "[R-sig-finance] Creating a Price Series From a Returns Series Using\tR",
+      "subject_clean": "Creating a Price Series From a Returns Series Using\tR",
+      "in_reply_to": "<000501c5c2a7$e7190230$6300000a@headquarters.qes.com>",
+      "references": [
+        "<000501c5c2a7$e7190230$6300000a@headquarters.qes.com>"
+      ],
+      "body_plain": "It will depend on what type of returns you have, but\nassuming you have log returns and your returns are in\n'retvec', then:\n\npseudoprice <- orig.price * exp(cumsum(retvec))\n\nWill give you a price series.  If you have simple returns,\none approach is to first transform them into log returns.\n\n\nPatrick Burns\npatrick at burns-stat.com\n+44 (0)20 8525 0696\nhttp://www.burns-stat.com\n(home of S Poetry and \"A Guide for the Unwilling S User\")\n\nKatherine Walton wrote:\n\n>I was wondering if anyone had a simple way to make a price series (or\n>Vami) from a return series using R (or S+).\n> \n>Katherine Walton\n>Mathematician\n>QES: Quantitative Equity Strategies\n>303-471-0244\n> <mailto:katherine at qesinvest.com> katherine at qesinvest.com\n> \n> \n>\n>\t[[alternative HTML version deleted]]\n>\n>_______________________________________________\n>R-sig-finance at stat.math.ethz.ch mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>\n>  \n>",
+      "body_snippet": "It will depend on what type of returns you have, but\nassuming you have log returns and your returns are in\n'retvec', then:\n\npseudoprice <- orig.price * exp(cumsum(retvec))\n\nWill give you a price serie",
+      "thread_id": "thread-002022bbb848",
+      "thread_depth": 1,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-311b6b0c2e8a",
+      "message_id": "<INH6Q3$4A719CB2E467791ACE863DD6F6FDBFEA@uol.com.br>",
+      "from_name": "walmir-rodrigues",
+      "from_email_hash": "825201811d690c7ddefe13ab597cbf651ecb5e859d1870eb82bf4cd14514959d",
+      "date": "2005-09-27T09:30:03-03:00",
+      "subject": "[R-sig-finance] Creating a Price Series From a Returns Series Using R",
+      "subject_clean": "Creating a Price Series From a Returns Series Using R",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20050927/a84d5de8/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20050927/a84d5de8/attachment.pl",
+      "thread_id": "thread-311b6b0c2e8a",
+      "thread_depth": 0,
+      "month": "2005-09"
+    },
+    {
+      "id": "msg-86f5920e9f9b",
+      "message_id": "<4DD6F8B8782D584FABF50BF3A32B03D802960992@MSGBOSCLF2WIN.DMN1.FMR.COM>",
+      "from_name": "Brahm, David",
+      "from_email_hash": "a7a625c3d1b4d784b9bd6c1505a0d161aaacff3229a24d9364039015491b7163",
+      "date": "2005-09-27T18:11:02-04:00",
+      "subject": "[R-sig-finance] Creating a Price Series From a Returns Series Using R",
+      "subject_clean": "Creating a Price Series From a Returns Series Using R",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Katherine Walton wrote:\n> a simple way to make a price series (or Vami) from a return series\nusing R\n\nvami <- 1000 * cumprod(1 + r)\n\n-- David Brahm (brahm at alum.mit.edu)",
+      "body_snippet": "Katherine Walton wrote:\n> a simple way to make a price series (or Vami) from a return series\nusing R\n\nvami <- 1000 * cumprod(1 + r)\n\n-- David Brahm (brahm at alum.mit.edu)",
+      "thread_id": "thread-86f5920e9f9b",
+      "thread_depth": 0,
+      "month": "2005-09"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-aea67d1703ae",
+      "subject": "function to calc Fama-French 3 factor model",
+      "message_count": 6,
+      "participants": [
+        "Andrew West",
+        "Dirk Eddelbuettel",
+        "Gabor Grothendieck",
+        "Marco Salvini",
+        "Spencer Graves"
+      ],
+      "started": "2005-09-01T11:24:31-07:00",
+      "last_reply": "2005-09-13T13:41:20+02:00",
+      "root_message_id": "msg-aea67d1703ae"
+    },
+    {
+      "id": "thread-9dbd6b0d7571",
+      "subject": "Bug report for get.hist.quote()",
+      "message_count": 4,
+      "participants": [
+        "Ajay Narottam Shah",
+        "Martin Keller-Ressel"
+      ],
+      "started": "2005-09-05T11:59:50+05:30",
+      "last_reply": "2005-09-05T09:15:26+00:00",
+      "root_message_id": "msg-9dbd6b0d7571"
+    },
+    {
+      "id": "thread-24d0ea757c08",
+      "subject": "Bug report for get.hist.quote()",
+      "message_count": 1,
+      "participants": [
+        "Adrian Trapletti"
+      ],
+      "started": "2005-09-05T12:44:27+02:00",
+      "last_reply": "2005-09-05T12:44:27+02:00",
+      "root_message_id": "msg-24d0ea757c08"
+    },
+    {
+      "id": "thread-e69d3e53b1dd",
+      "subject": "Missing",
+      "message_count": 2,
+      "participants": [
+        "Jan-Paul Roodbol",
+        "Marco Salvini"
+      ],
+      "started": "2005-09-10T19:10:06+01:00",
+      "last_reply": "2005-09-12T14:04:10+02:00",
+      "root_message_id": "msg-e69d3e53b1dd"
+    },
+    {
+      "id": "thread-42249ad0b40b",
+      "subject": "Compatibility between Rmetrics and Finmetrics",
+      "message_count": 2,
+      "participants": [
+        "Paolo Cavatore",
+        "Spencer Graves"
+      ],
+      "started": "2005-09-18T13:10:21+02:00",
+      "last_reply": "2005-09-24T08:34:00-05:00",
+      "root_message_id": "msg-42249ad0b40b"
+    },
+    {
+      "id": "thread-a2bc6f60c6ec",
+      "subject": "minimum variance hedge ratio",
+      "message_count": 1,
+      "participants": [
+        "Krishna"
+      ],
+      "started": "2005-09-19T12:57:05+05:30",
+      "last_reply": "2005-09-19T12:57:05+05:30",
+      "root_message_id": "msg-a2bc6f60c6ec"
+    },
+    {
+      "id": "thread-b73d299a6861",
+      "subject": "Portfolio Wgts Optimization",
+      "message_count": 2,
+      "participants": [
+        "Manoj",
+        "Patrick Burns"
+      ],
+      "started": "2005-09-21T14:48:30+09:00",
+      "last_reply": "2005-09-21T09:59:06+01:00",
+      "root_message_id": "msg-b73d299a6861"
+    },
+    {
+      "id": "thread-6836ec78aab4",
+      "subject": "PTF Optimization Beyond Historical Data",
+      "message_count": 1,
+      "participants": [
+        "L.Isella"
+      ],
+      "started": "2005-09-21T15:33:13+00:00",
+      "last_reply": "2005-09-21T15:33:13+00:00",
+      "root_message_id": "msg-6836ec78aab4"
+    },
+    {
+      "id": "thread-a60c61d2e3df",
+      "subject": "Portfolio optimization",
+      "message_count": 1,
+      "participants": [
+        "P. Hénaff"
+      ],
+      "started": "2005-09-22T14:33:37-05:00",
+      "last_reply": "2005-09-22T14:33:37-05:00",
+      "root_message_id": "msg-a60c61d2e3df"
+    },
+    {
+      "id": "thread-002022bbb848",
+      "subject": "Creating a Price Series From a Returns Series Using R",
+      "message_count": 2,
+      "participants": [
+        "Katherine Walton",
+        "Patrick Burns"
+      ],
+      "started": "2005-09-26T08:38:03-06:00",
+      "last_reply": "2005-09-27T12:57:45+01:00",
+      "root_message_id": "msg-002022bbb848"
+    },
+    {
+      "id": "thread-311b6b0c2e8a",
+      "subject": "Creating a Price Series From a Returns Series Using R",
+      "message_count": 1,
+      "participants": [
+        "walmir-rodrigues"
+      ],
+      "started": "2005-09-27T09:30:03-03:00",
+      "last_reply": "2005-09-27T09:30:03-03:00",
+      "root_message_id": "msg-311b6b0c2e8a"
+    },
+    {
+      "id": "thread-f7e269aca184",
+      "subject": "Portfolio performance metrics/ratios",
+      "message_count": 1,
+      "participants": [
+        "Sankalp Upadhyay"
+      ],
+      "started": "2005-09-27T16:53:20+05:30",
+      "last_reply": "2005-09-27T16:53:20+05:30",
+      "root_message_id": "msg-f7e269aca184"
+    },
+    {
+      "id": "thread-86f5920e9f9b",
+      "subject": "Creating a Price Series From a Returns Series Using R",
+      "message_count": 1,
+      "participants": [
+        "Brahm, David"
+      ],
+      "started": "2005-09-27T18:11:02-04:00",
+      "last_reply": "2005-09-27T18:11:02-04:00",
+      "root_message_id": "msg-86f5920e9f9b"
+    }
+  ]
+}

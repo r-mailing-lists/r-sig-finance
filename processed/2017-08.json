@@ -1,0 +1,188 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2017-08",
+  "messages": [
+    {
+      "id": "msg-548aa0cddc9c",
+      "message_id": "<CAO7kh0EOcLO8Ak29j8vrCYOP77HH5bH4Fras5EsZzACVPorcJQ@mail.gmail.com>",
+      "from_name": "amol gupta",
+      "from_email_hash": "8f47f3a3a52fe90284b2effd82ffac6526209190bf919ee76e75fb9a02a511bf",
+      "date": "2017-08-03T11:42:11+05:30",
+      "subject": "[R-SIG-Finance] Error in lm prediction",
+      "subject_clean": "Error in lm prediction",
+      "in_reply_to": "<CAG1eqLak2O=xzaDy2jiOSVLU7OuehD01+ui5g5ZEmSSSN-_TRg@mail.gmail.com>",
+      "references": [
+        "<CAO7kh0HLGJYKGX0J0LaAxmNe5YTidsRHkaK7ZqyE185XYMRYbw@mail.gmail.com>",
+        "<CAG1eqLak2O=xzaDy2jiOSVLU7OuehD01+ui5g5ZEmSSSN-_TRg@mail.gmail.com>"
+      ],
+      "body_plain": "All\n\nThank you all for the response. I could resolve the issue by separating\nformula and data. That is where I was committing error.\n\nJoshua Ulrich\n I will try to send data set along  or ensure that the problem is\nreproducible.\n\n\n\nOn Fri, Jul 28, 2017 at 7:28 PM, Kevin Dhingra <\nkevin.dhingra at appliedacademics.com> wrote:\n\n> Hi Amol,\n>\n> The lm function is not intended to be used in the way you are calling it.\n> Even though you can actually pass y and x as actual data in the formula\n> argument (y~x), its better to pass the data set in the data argument and\n> use column names in the formula argument especially when you want to use\n> the predict function on the fitted object as predict.lm looks for variables\n> in the function environment. In your example, newdata and those variables\n> would not have similar length that results in length of y_hat equal to 300.\n>\n> Now there might be some clever way to get around this with the same\n> function call that you used (you can try playing with the variable name of\n> new data to be same as column names in x) but I would rather suggest using\n> this -\n>\n> a<-300\n> data_fit = data.frame(x = matrix(rnorm(1700*5), ncol = 5), y =\n> matrix(rnorm(1700)))\n> data_fit_is = data_fit[1:a,] #In Sample\n> data_fit_os = data_fit[(a+1):nrow(data_fit), ] #Out of Sample\n> m1 = lm(y~., data = data_fit_is)\n> length(predict(m1, data_fit_os[, 1:5])) #Should be equal to 1400 now and\n> 300 now\n>\n> Regards,\n> Kshitij Dhingra\n>\n> On Sun, Jul 16, 2017 at 4:31 PM, amol gupta <amolgupta87 at gmail.com> wrote:\n>\n>> Hi\n>>\n>> I am most likely committing an error in trying to predict  using linear\n>> regression lm model. please help me figure out what am I doing wrong. I am\n>> trying to regress a index and its constituents. Here is the code\n>>\n>>\n>> #split ts inttwo parts\n>> a<-300;\n>>\n>> x1<-x[1:a,];\n>> y1<-y[1:a,];\n>>\n>> x2<-x[(a+1):nrow(x),];\n>> y2<-y[(a+1):nrow(y),];\n>>\n>>\n>> #regression\n>> m1<-lm( y1~x1)\n>> r1<-residuals(m1)\n>> coef(m1)\n>>\n>> ##out of sample\n>> y_hat<-predict.lm(m1,x2);\n>> r2<-y_hat-y2;\n>>\n>>\n>> x,y are xts. X contains multiple time series. The y_ hat turns out to be\n>> of\n>> 300 samples only, whereas x2 contains 1400 samples.\n>>\n>> Please help me figure out how to predict using model that I have found\n>> using regression.\n>>\n>>\n>> --\n>> Regards\n>> Amol\n>> +91-9897860992\n>> +91-8889676918\n>>\n>>         [[alternative HTML version deleted]]\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n>\n>\n>\n> --\n> Kshitij Dhingra\n> Applied Academics LLC\n> Office: +1.917.262.0516\n> Mobile: +1.206.696.5945\n> Email: kshitij.dhingra at appliedacademics.com\n> Website: http://www.AppliedAcademics.com\n>\n\n\n\n-- \nRegards\nAmol\n+91-9897860992\n+91-8889676918\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "All\n\nThank you all for the response. I could resolve the issue by separating\nformula and data. That is where I was committing error.\n\nJoshua Ulrich\n I will try to send data set along  or ensure that t",
+      "thread_id": "thread-548aa0cddc9c",
+      "thread_depth": 0,
+      "month": "2017-08"
+    },
+    {
+      "id": "msg-27ab8de12145",
+      "message_id": "<CAOw5HqQbjMrcFqxiuVfx+rt=aXW3Oyv2yOBbknOqQKJK7z9oJQ@mail.gmail.com>",
+      "from_name": "Igor Sosa Mayor",
+      "from_email_hash": "ab71344d4c5fd9567a2da452a15da85568e8f17116313988e72bbe2b36513e81",
+      "date": "2017-08-07T10:05:32+02:00",
+      "subject": "[R-SIG-Finance] Different results of vcovCL (sandwich) and of cluster() in Stata",
+      "subject_clean": "Different results of vcovCL (sandwich) and of cluster() in Stata",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\n(first of all, sorry for the crossposting. I sent this message to the\ngeneral R-list, but I noticed, this list is maybe more appropiate for this\nquestion).\n\nI'm trying to reproduce with R the results of this study:\nhttps://learn.gold.ac.uk/mod/resource/view.php?id=262406\n\nMore precisely I want to reproduce the results of the table 6 (pag.280),\nwhich can also be seen here:\nhttp://picpaste.de/pics/table-robin-llKCOeWV.1501745645.png\n\nLet's take the 4th column: we have a coeff. of 0.042 and a SE of\n0.036, which represents clustered robust standard errors. If I try to\nreproduce in R the analysis, I get the same coefficient, but I'm not\nable to get the same SE.\n\nThe author made the stata file available here:\nhttps://drive.google.com/file/d/0B_QoCd-1jkVXTmNDWmViWkJFdmM/edit?usp=sharing\n(see: http://www.jaredcrubin.com/research)\n\nTo make the regression, he uses (as far as I can understand the stata\ncode) the following command:\n\nlocal conditions \"city != \"Mainz\" & city != \"Wittenberg\" & city != \"Z?rich\"\"\nlocal citysize \"logpop1500 i.indepcity\"\nlocal demandcity \"i.univ1450 i.bishop i.laymag\"\nprobit prot`y' i.press `citysize' `demandcity' if `conditions', robust\ncluster(territory)\n    estpost margins, dydx(*)\n\nI'm trying to translate this into R-code doing the following:\n\nlibrary(foreign)\nlibrary(dplyr)\nlibrary(sandwich)\nlibrary(margins)\n\n# the data are here:\n#\nhttps://drive.google.com/file/d/0B_QoCd-1jkVXRGdUMTlkYTNiNGc/edit?usp=sharing\ncities <- read.dta(\"data/Printing_and_Protestants_Data-ReStat.dta\")\n\n# we filter the data\ncities <- filter(cities, !is.na(pop1500))\ncities <- filter(cities, city != \"Z?rich\" & city != \"Mainz\" & city !=\n\"Wittenberg\")\n\n# the model\nm1 <- glm(formula = factor(prot1530) ~ factor(press) + logpop1500 +\n                factor(indepcity) + factor(univ1450) + factor(bishop) +\nfactor(laymag),\n            family = binomial(link = \"probit\"), data = cities)\n\n# calculate margins with clustered standard errors\nm1.margins <- margins(m1, vcov = vcovCL(m1, cluster=cities$territory))\n\nI tried different types (HC1, HC2, etc), but always the value for the SE\nis not the same as in the table.\n\nAny ideas?\n\nMany thanks in advance.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\n(first of all, sorry for the crossposting. I sent this message to the\ngeneral R-list, but I noticed, this list is maybe more appropiate for this\nquestion).\n\nI'm trying to reproduce with R the res",
+      "thread_id": "thread-27ab8de12145",
+      "thread_depth": 0,
+      "month": "2017-08"
+    },
+    {
+      "id": "msg-5e8399acfef1",
+      "message_id": "<5996ff6f.495d1c0a.16b2e.ca96@mx.google.com>",
+      "from_name": "Oleg Mubarakshin",
+      "from_email_hash": "b6ffbde57ec694cc26b2271e1f3d4f93c0444ea85c538d02fc8b91725c1ef7b0",
+      "date": "2017-08-18T15:53:25+01:00",
+      "subject": "[R-SIG-Finance] Rblpapi dividends",
+      "subject_clean": "Rblpapi dividends",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi all,\n\nDoes anyone know how to fetch dividends (pay and entitlement dates and amount) with bdh() function?\n\nAll the fields return NA\n\nMany thanks,\nOleg\n\nSent from my Huawei\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: flds.gif\nType: image/gif\nSize: 22018 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20170818/2347350a/attachment.gif>",
+      "body_snippet": "Hi all,\n\nDoes anyone know how to fetch dividends (pay and entitlement dates and amount) with bdh() function?\n\nAll the fields return NA\n\nMany thanks,\nOleg\n\nSent from my Huawei\n-------------- next part ",
+      "thread_id": "thread-5e8399acfef1",
+      "thread_depth": 0,
+      "month": "2017-08"
+    },
+    {
+      "id": "msg-6acd200b7253",
+      "message_id": "<CAMi=pg4FLfuMt5L9D==hR5ZF7Gu=5cZp-Fu5sQmL+78jEpEsog@mail.gmail.com>",
+      "from_name": "Whit Armstrong",
+      "from_email_hash": "9f0af921ac5e402b55cb0593a435b87162faa6caa4eef5ccb3498c95d81634d0",
+      "date": "2017-08-18T11:02:38-04:00",
+      "subject": "[R-SIG-Finance] Rblpapi dividends",
+      "subject_clean": "Rblpapi dividends",
+      "in_reply_to": "<5996ff6f.495d1c0a.16b2e.ca96@mx.google.com>",
+      "references": [
+        "<5996ff6f.495d1c0a.16b2e.ca96@mx.google.com>"
+      ],
+      "body_plain": "this is not an r-sig-finance question.\n\nbut I suggest using the bds function to get this data...\nbds(ticker, \"DVD_HIST\")\n\n\nOn Fri, Aug 18, 2017 at 10:53 AM, Oleg Mubarakshin <\noleg.mubarakshin at gmail.com> wrote:\n\n> Hi all,\n>\n> Does anyone know how to fetch dividends (pay and entitlement dates and\n> amount) with bdh() function?\n>\n> All the fields return NA\n>\n> Many thanks,\n> Oleg\n>\n> Sent from my Huawei\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "this is not an r-sig-finance question.\n\nbut I suggest using the bds function to get this data...\nbds(ticker, \"DVD_HIST\")\n\n\nOn Fri, Aug 18, 2017 at 10:53 AM, Oleg Mubarakshin <\noleg.mubarakshin at gmai",
+      "thread_id": "thread-5e8399acfef1",
+      "thread_depth": 1,
+      "month": "2017-08"
+    },
+    {
+      "id": "msg-1dcaeb67b587",
+      "message_id": "<1708014085.779676.1503840927491@mail.yahoo.com>",
+      "from_name": "Baki UNAL",
+      "from_email_hash": "2ed5181bae4b90b6dac187ec741829ff3cd57027c7acdaf96e9c588410ea1e4d",
+      "date": "2017-08-27T13:35:27Z",
+      "subject": "[R-SIG-Finance] Some problems while reading Diethelm Würtz's Portfolio Optimization with R book",
+      "subject_clean": "Some problems while reading Diethelm Würtz's Portfolio Optimization with R book",
+      "in_reply_to": null,
+      "references": [
+        "<1708014085.779676.1503840927491.ref@mail.yahoo.com>"
+      ],
+      "body_plain": "Hello\nI am reading?Diethelm W?rtz's Portfolio Optimization with R book. I encountered a problem at \"17.2 How to Compute a Minimum Risk Efficient Portfolio\" part. I entered the commands:\n\n> minriskSpec <- portfolioSpec()> targetReturn <- getTargetReturn(ewPortfolio at portfolio)[\"mean\"]> setTargetReturn(minriskSpec) <- targetReturn\n> minriskPortfolio <- efficientPortfolio(data = lppData,spec = minriskSpec,constraints = \"LongOnly\")> print(minriskPortfolio)\n\n\n\nBut I got the following output:\n\n\nTitle:?MV Efficient Portfolio??Estimator: ? ? ? ? covEstimator??Solver: ? ? ? ? ? ?solveRquadprog??Optimize: ? ? ? ? ?minRisk??Constraints: ? ? ? LongOnly?\nPortfolio Weights:SBI SPI SII LMI MPI ALT?? 0 ? 0 ? 0 ? 0 ? 0 ? 0?\nCovariance Risk Budgets:SBI SPI SII LMI MPI ALT?? ? ? ? ? ? ? ? ? ? ? ??\nTarget Returns and Risks:mean ?Cov CVaR ?VaR?? ?0 ? ?0 ? ?0 ? ?0?\nDescription:?Sun Aug 27 16:00:42 2017 by user: win7120\n\nAs you notice R does not compute Portfolio Weights, Target Returns and Risks... etc.\nI also tried to run the code at \"17.3 How to Compute the Global Minimum Variance Portfolio\" which is:\n\n> globminSpec <- portfolioSpec()> globminPortfolio <- minvariancePortfolio(data = lppData,spec = globminSpec,constraints = \"LongOnly\")> print(globminPortfolio)\n\nBut I got the following output:\n\nTitle:\n?MV Minimum Variance Portfolio?\n?Estimator: ? ? ? ? covEstimator?\n?Solver: ? ? ? ? ? ?solveRquadprog?\n?Optimize: ? ? ? ? ?minRisk?\n?Constraints: ? ? ? LongOnly?\n\nPortfolio Weights:\nSBI SPI SII LMI MPI ALT?\n? 0 ? 0 ? 0 ? 0 ? 0 ? 0?\n\nCovariance Risk Budgets:\nSBI SPI SII LMI MPI ALT?\n? ? ? ? ? ? ? ? ? ? ? ??\n\nTarget Returns and Risks:\nmean ?Cov CVaR ?VaR?\n? ?0 ? ?0 ? ?0 ? ?0?\n\nDescription:\n?Sun Aug 27 16:12:21 2017 by user: win7120?\n\n\n\nAs you see R does not make computations again.\n\nI also tried to run the code at \"17.4 How to Compute the Tangency Portfolio\" which is:\n\n> tgSpec <- portfolioSpec()> setRiskFreeRate(tgSpec) <- 0\n\n> tgPortfolio <- tangencyPortfolio(data = lppData,spec = tgSpec,constraints = \"LongOnly\")\n\nThis time I got the following error:\n\n\nError in if (STATUS != 0) { : argument is of length zero\n\nWhat may be the problem? Could you help?\nThanks\n\n\n\n\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello\nI am reading?Diethelm W?rtz's Portfolio Optimization with R book. I encountered a problem at \"17.2 How to Compute a Minimum Risk Efficient Portfolio\" part. I entered the commands:\n\n> minriskSpec",
+      "thread_id": "thread-1dcaeb67b587",
+      "thread_depth": 0,
+      "month": "2017-08"
+    },
+    {
+      "id": "msg-377a6af8cf9e",
+      "message_id": "<aa8b6c64-ddc6-d44c-fa20-c58fff716524@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2017-08-27T08:41:01-05:00",
+      "subject": "[R-SIG-Finance] Some problems while reading Diethelm Würtz's Portfolio Optimization with R book",
+      "subject_clean": "Some problems while reading Diethelm Würtz's Portfolio Optimization with R book",
+      "in_reply_to": "<1708014085.779676.1503840927491@mail.yahoo.com>",
+      "references": [
+        "<1708014085.779676.1503840927491.ref@mail.yahoo.com>",
+        "<1708014085.779676.1503840927491@mail.yahoo.com>"
+      ],
+      "body_plain": "Regrettably, Diethelm died in a car accident last year.  He is missed by \nmany in this community who appreciated his advice, openness, and \nfostering of the community.\n\nfPortfolio has not been updated for some time.  I would suggest looking \nat Berhard Pfaff's excellent risk and portfolio management book, as well \nas at packages such as PortfolioAnalytics for actually doing portfolio \noptimization in R.\n\nI still refer to Diethelm's book for ideas and visualizations, but I do \nnot use that code.\n\nRegards,\n\nBrian\n\nOn 08/27/2017 08:35 AM, Baki UNAL via R-SIG-Finance wrote:\n> Hello\n> I am reading Diethelm W?rtz's Portfolio Optimization with R book. I encountered a problem at \"17.2 How to Compute a Minimum Risk Efficient Portfolio\" part. I entered the commands:\n> \n>> minriskSpec <- portfolioSpec()> targetReturn <- getTargetReturn(ewPortfolio at portfolio)[\"mean\"]> setTargetReturn(minriskSpec) <- targetReturn\n>> minriskPortfolio <- efficientPortfolio(data = lppData,spec = minriskSpec,constraints = \"LongOnly\")> print(minriskPortfolio)\n> \n> \n> \n> But I got the following output:\n> \n> \n> Title: MV Efficient Portfolio  Estimator:         covEstimator  Solver:            solveRquadprog  Optimize:          minRisk  Constraints:       LongOnly\n> Portfolio Weights:SBI SPI SII LMI MPI ALT   0   0   0   0   0   0\n> Covariance Risk Budgets:SBI SPI SII LMI MPI ALT\n> Target Returns and Risks:mean  Cov CVaR  VaR    0    0    0    0\n> Description: Sun Aug 27 16:00:42 2017 by user: win7120\n> \n> As you notice R does not compute Portfolio Weights, Target Returns and Risks... etc.\n> I also tried to run the code at \"17.3 How to Compute the Global Minimum Variance Portfolio\" which is:\n> \n>> globminSpec <- portfolioSpec()> globminPortfolio <- minvariancePortfolio(data = lppData,spec = globminSpec,constraints = \"LongOnly\")> print(globminPortfolio)\n> \n> But I got the following output:\n> \n> Title:\n>   MV Minimum Variance Portfolio\n>   Estimator:         covEstimator\n>   Solver:            solveRquadprog\n>   Optimize:          minRisk\n>   Constraints:       LongOnly\n> \n> Portfolio Weights:\n> SBI SPI SII LMI MPI ALT\n>    0   0   0   0   0   0\n> \n> Covariance Risk Budgets:\n> SBI SPI SII LMI MPI ALT\n>                          \n> \n> Target Returns and Risks:\n> mean  Cov CVaR  VaR\n>     0    0    0    0\n> \n> Description:\n>   Sun Aug 27 16:12:21 2017 by user: win7120\n> \n> \n> \n> As you see R does not make computations again.\n> \n> I also tried to run the code at \"17.4 How to Compute the Tangency Portfolio\" which is:\n> \n>> tgSpec <- portfolioSpec()> setRiskFreeRate(tgSpec) <- 0\n> \n>> tgPortfolio <- tangencyPortfolio(data = lppData,spec = tgSpec,constraints = \"LongOnly\")\n> \n> This time I got the following error:\n> \n> \n> Error in if (STATUS != 0) { : argument is of length zero\n> \n> What may be the problem? Could you help?\n> Thanks\n> \n> \n> \n> \n> \n> \n> \n> \t[[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n> \n\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
+      "body_snippet": "Regrettably, Diethelm died in a car accident last year.  He is missed by \nmany in this community who appreciated his advice, openness, and \nfostering of the community.\n\nfPortfolio has not been updated",
+      "thread_id": "thread-1dcaeb67b587",
+      "thread_depth": 1,
+      "month": "2017-08"
+    },
+    {
+      "id": "msg-d8130f6bdbfb",
+      "message_id": "<DA1557D1-C81E-45E5-8019-07C2F0EAE9D1@gmail.com>",
+      "from_name": "Jonathan Shore",
+      "from_email_hash": "81a63d02ba1202989c583f45ec54e7e7df911a942bc7b0d0b09c02c3fecf69aa",
+      "date": "2017-08-30T15:56:00-04:00",
+      "subject": "[R-SIG-Finance] NEW: rDotNet package",
+      "subject_clean": "NEW: rDotNet package",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI?ve published a new package on CRAN called ?rDotNet?.   The package allows one to call to .NET based code seamlessly from R, with .NET objects appearing as S4-style object proxies in the R session.   A similar package using this framework was made available for Python as well.   From R one can:\n\n1. Create an instance of any .NET type (whether C#, F#, or otherwise)\n2. Call methods on a type\n3. Call functions (static methods / functions in modules)\n4. Get / Set properties\n\nOne interacts with the package as:\n\nrequire (rDotNet)\n\n## optional initialization (dll location can also be set with an environment var)\n.cinit (dll=?~/Dev/MyModels.dll?)\n\n## create object\nobj <- .cnew(?com.stg.models.UnivariateHawkes?, 10.0, 1e-2, 1e-3)\n\n## call method ?F? on the object\nexcitation <- obj$F (2.5) \n\nI may add the ability to inline F# or C# code into R files at some point (much in the way Rcpp does), but for now requires that your F# or C# functions be compiled into a .NET assembly. \n\nFor more information:\n\n- https://github.com/tr8dr/.Net-Bridge <https://github.com/tr8dr/.Net-Bridge>\n\nAnd the R package is available on CRAN:\n\n- https://cran.r-project.org/package=rDotNet <https://cran.r-project.org/package=rDotNet>\n\nFinally, the package has been tested on OS X (where I do most of my work), Linux, and Windows.   Note that for unix systems ?mono? or .NET core must be installed.   See the installation instructions for more information. \n\nregards\nJonathan\n\n\n\n \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI?ve published a new package on CRAN called ?rDotNet?.   The package allows one to call to .NET based code seamlessly from R, with .NET objects appearing as S4-style object proxies in the R sessi",
+      "thread_id": "thread-d8130f6bdbfb",
+      "thread_depth": 0,
+      "month": "2017-08"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-548aa0cddc9c",
+      "subject": "Error in lm prediction",
+      "message_count": 1,
+      "participants": [
+        "amol gupta"
+      ],
+      "started": "2017-08-03T11:42:11+05:30",
+      "last_reply": "2017-08-03T11:42:11+05:30",
+      "root_message_id": "msg-548aa0cddc9c"
+    },
+    {
+      "id": "thread-27ab8de12145",
+      "subject": "Different results of vcovCL (sandwich) and of cluster() in Stata",
+      "message_count": 1,
+      "participants": [
+        "Igor Sosa Mayor"
+      ],
+      "started": "2017-08-07T10:05:32+02:00",
+      "last_reply": "2017-08-07T10:05:32+02:00",
+      "root_message_id": "msg-27ab8de12145"
+    },
+    {
+      "id": "thread-5e8399acfef1",
+      "subject": "Rblpapi dividends",
+      "message_count": 2,
+      "participants": [
+        "Oleg Mubarakshin",
+        "Whit Armstrong"
+      ],
+      "started": "2017-08-18T15:53:25+01:00",
+      "last_reply": "2017-08-18T11:02:38-04:00",
+      "root_message_id": "msg-5e8399acfef1"
+    },
+    {
+      "id": "thread-1dcaeb67b587",
+      "subject": "Some problems while reading Diethelm Würtz's Portfolio Optimization with R book",
+      "message_count": 2,
+      "participants": [
+        "Baki UNAL",
+        "Brian G. Peterson"
+      ],
+      "started": "2017-08-27T13:35:27+00:00",
+      "last_reply": "2017-08-27T08:41:01-05:00",
+      "root_message_id": "msg-1dcaeb67b587"
+    },
+    {
+      "id": "thread-d8130f6bdbfb",
+      "subject": "NEW: rDotNet package",
+      "message_count": 1,
+      "participants": [
+        "Jonathan Shore"
+      ],
+      "started": "2017-08-30T15:56:00-04:00",
+      "last_reply": "2017-08-30T15:56:00-04:00",
+      "root_message_id": "msg-d8130f6bdbfb"
+    }
+  ]
+}

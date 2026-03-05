@@ -1,0 +1,928 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2018-03",
+  "messages": [
+    {
+      "id": "msg-62aa876d9674",
+      "message_id": "<AM0PR0602MB3492B9A6D52C01397102909E8FC60@AM0PR0602MB3492.eurprd06.prod.outlook.com>",
+      "from_name": "Andreas Bregiannis",
+      "from_email_hash": "0e4b8dcf3bfd02689a8aabd764a93bf87d6586c3d46d1bc6c2adaf3f2aa6a9dc",
+      "date": "2018-03-01T16:32:22Z",
+      "subject": "[R-SIG-Finance] Question about rugarch",
+      "subject_clean": "Question about rugarch",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear Sir or Madam,\n\n\nI am trying to fit an AR-t-(E)GARCH model in stock log return data using the rugarch package.\n\nMy code is :\n\ninstall.packages(\"rugarch\")\nlibrary(rugarch)\ndata <- read.csv2(\"C:/Users/bregi/Desktop/Thesis/R/euro.csv\",header = TRUE,sep=\";\")\nlr.AEX<- diff(log(data$AEX))  ## log returns of stock market index AEX\negarcht.spec=ugarchspec(variance.model=list(model=\"eGARCH\",garchOrder=c(2,1)),\n                       mean.model=list(armaOrder=c(1,0)),distribution.model = \"std\")\negarcht.fit = ugarchfit(egarcht.spec, lr.AEX)\n\nThe problem is that I want to transform my standardized residuals to follow uniform distribution. But when I run the following:\nres<-residuals(egarcht.fit, standardize=TRUE)\necdf(res)\nplot.ecdf(res)\nI realized that they have not transformed. I think that I found the problem but I don't know how to fix it.\nWhen I run residuals(egarcht.fit, standardize=TRUE) I get data in the following form:\n1970-01-02 01:00:00 -0.3766309  instead of just -0.3766309.\n\nAfter that, I tried to solve this problem by doing:\n\nrequire(xts)\ntime <- date[2:3914]\nlrAEX.xts <- na.omit(xts(x = lr.AEX, order.by = time))\n\negarcht.spec=ugarchspec(variance.model=list(model=\"eGARCH\",garchOrder=c(2,1)),\n                       mean.model=list(armaOrder=c(1,0)),distribution.model = \"std\")\negarcht.fit = ugarchfit(egarcht.spec, data=lrAEX.xts)\n\nresiduals(egarcht.fit,standardize=TRUE)[1]\n\nBut the only improvement is that I receive the real dates of my data\n\n                 [,1]\n2001-01-02 -0.3766309\n\nHowever, my goal is to receive only the residuals ( so only -0.3766309).\n\n\nCould you please tell me if you know how I can achieve this?\n\nThank you in advance.\n\nKind regards,\nAndreas\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear Sir or Madam,\n\n\nI am trying to fit an AR-t-(E)GARCH model in stock log return data using the rugarch package.\n\nMy code is :\n\ninstall.packages(\"rugarch\")\nlibrary(rugarch)\ndata <- read.csv2(\"C:/Use",
+      "thread_id": "thread-62aa876d9674",
+      "thread_depth": 0,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-26aa65aa1706",
+      "message_id": "<9DC0297C-D387-4347-948E-681AA263109F@gmail.com>",
+      "from_name": "ibrahim ergen",
+      "from_email_hash": "5af1ef97b4e21e4fca21b653c25a86b524968b34444c11424e516602baf6210b",
+      "date": "2018-03-01T12:49:50-05:00",
+      "subject": "[R-SIG-Finance] Question about rugarch",
+      "subject_clean": "Question about rugarch",
+      "in_reply_to": "<AM0PR0602MB3492B9A6D52C01397102909E8FC60@AM0PR0602MB3492.eurprd06.prod.outlook.com>",
+      "references": [
+        "<AM0PR0602MB3492B9A6D52C01397102909E8FC60@AM0PR0602MB3492.eurprd06.prod.outlook.com>"
+      ],
+      "body_plain": "Standardized residuals would be approx. normally distributed. Those are the shocks. Standardization here means filetering of vol clustering. So you get the garch shocks which are approx normal. You can use pnorm function to transform them to uniform distribution. \n\nBest\nIbrahim\n\nSent from my iPhone\n\n> On Mar 1, 2018, at 11:32 AM, Andreas Bregiannis <bregiannis.andreas at hotmail.com> wrote:\n> \n> Dear Sir or Madam,\n> \n> \n> I am trying to fit an AR-t-(E)GARCH model in stock log return data using the rugarch package.\n> \n> My code is :\n> \n> install.packages(\"rugarch\")\n> library(rugarch)\n> data <- read.csv2(\"C:/Users/bregi/Desktop/Thesis/R/euro.csv\",header = TRUE,sep=\";\")\n> lr.AEX<- diff(log(data$AEX))  ## log returns of stock market index AEX\n> egarcht.spec=ugarchspec(variance.model=list(model=\"eGARCH\",garchOrder=c(2,1)),\n>                       mean.model=list(armaOrder=c(1,0)),distribution.model = \"std\")\n> egarcht.fit = ugarchfit(egarcht.spec, lr.AEX)\n> \n> The problem is that I want to transform my standardized residuals to follow uniform distribution. But when I run the following:\n> res<-residuals(egarcht.fit, standardize=TRUE)\n> ecdf(res)\n> plot.ecdf(res)\n> I realized that they have not transformed. I think that I found the problem but I don't know how to fix it.\n> When I run residuals(egarcht.fit, standardize=TRUE) I get data in the following form:\n> 1970-01-02 01:00:00 -0.3766309  instead of just -0.3766309.\n> \n> After that, I tried to solve this problem by doing:\n> \n> require(xts)\n> time <- date[2:3914]\n> lrAEX.xts <- na.omit(xts(x = lr.AEX, order.by = time))\n> \n> egarcht.spec=ugarchspec(variance.model=list(model=\"eGARCH\",garchOrder=c(2,1)),\n>                       mean.model=list(armaOrder=c(1,0)),distribution.model = \"std\")\n> egarcht.fit = ugarchfit(egarcht.spec, data=lrAEX.xts)\n> \n> residuals(egarcht.fit,standardize=TRUE)[1]\n> \n> But the only improvement is that I receive the real dates of my data\n> \n>                 [,1]\n> 2001-01-02 -0.3766309\n> \n> However, my goal is to receive only the residuals ( so only -0.3766309).\n> \n> \n> Could you please tell me if you know how I can achieve this?\n> \n> Thank you in advance.\n> \n> Kind regards,\n> Andreas\n> \n> \n>    [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Standardized residuals would be approx. normally distributed. Those are the shocks. Standardization here means filetering of vol clustering. So you get the garch shocks which are approx normal. You ca",
+      "thread_id": "thread-62aa876d9674",
+      "thread_depth": 1,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-029da35731c7",
+      "message_id": "<AM0PR0602MB3492B1ADBE4EC6CB411054B98FC60@AM0PR0602MB3492.eurprd06.prod.outlook.com>",
+      "from_name": "Andreas Bregiannis",
+      "from_email_hash": "0e4b8dcf3bfd02689a8aabd764a93bf87d6586c3d46d1bc6c2adaf3f2aa6a9dc",
+      "date": "2018-03-01T18:37:39Z",
+      "subject": "[R-SIG-Finance] Απ:  Question about rugarch",
+      "subject_clean": "Απ:  Question about rugarch",
+      "in_reply_to": "<9DC0297C-D387-4347-948E-681AA263109F@gmail.com>",
+      "references": [
+        "<AM0PR0602MB3492B9A6D52C01397102909E8FC60@AM0PR0602MB3492.eurprd06.prod.outlook.com>",
+        "<9DC0297C-D387-4347-948E-681AA263109F@gmail.com>"
+      ],
+      "body_plain": "Dear Ibrahim,\n\n\nFirst of all, I would like to sincerely thank you for your reply!\n\nIndeed, standardized residuals are approx. normally distributed in my model.\n\nIf I understood correctly, I should do the following to transform them in uniform: pnorm(residuals(egarcht.fit,standardize=TRUE)). I just did it and I checked through a histogram that indeed they look like uniform.\n\nThank you very much!\n\nSo, do you think that my code, in general, is right? Is it reasonable that in the output of the standardized residuals, I received also the dates? I am asking because I also used fgarch package and in the output I received just the standardized residuals without the dates, so after that I just use the ecdf and I convert them.\n\n\nBest regards,\n\nAndreas\n\n\n\n________________________________\n???: ibrahim ergen <ibrahimergen at gmail.com>\n????????: ??????, 1 ??????? 2018 6:49 ??\n????: Andreas Bregiannis\n????.: r-sig-finance at r-project.org\n????: Re: [R-SIG-Finance] Question about rugarch\n\n\nStandardized residuals would be approx. normally distributed. Those are the shocks. Standardization here means filetering of vol clustering. So you get the garch shocks which are approx normal. You can use pnorm function to transform them to uniform distribution.\n\nBest\nIbrahim\n\nSent from my iPhone\n\n> On Mar 1, 2018, at 11:32 AM, Andreas Bregiannis <bregiannis.andreas at hotmail.com> wrote:\n>\n> Dear Sir or Madam,\n>\n>\n> I am trying to fit an AR-t-(E)GARCH model in stock log return data using the rugarch package.\n>\n> My code is :\n>\n> install.packages(\"rugarch\")\n> library(rugarch)\n> data <- read.csv2(\"C:/Users/bregi/Desktop/Thesis/R/euro.csv\",header = TRUE,sep=\";\")\n> lr.AEX<- diff(log(data$AEX))  ## log returns of stock market index AEX\n> egarcht.spec=ugarchspec(variance.model=list(model=\"eGARCH\",garchOrder=c(2,1)),\n>                       mean.model=list(armaOrder=c(1,0)),distribution.model = \"std\")\n> egarcht.fit = ugarchfit(egarcht.spec, lr.AEX)\n>\n> The problem is that I want to transform my standardized residuals to follow uniform distribution. But when I run the following:\n> res<-residuals(egarcht.fit, standardize=TRUE)\n> ecdf(res)\n> plot.ecdf(res)\n> I realized that they have not transformed. I think that I found the problem but I don't know how to fix it.\n> When I run residuals(egarcht.fit, standardize=TRUE) I get data in the following form:\n> 1970-01-02 01:00:00 -0.3766309  instead of just -0.3766309.\n>\n> After that, I tried to solve this problem by doing:\n>\n> require(xts)\n> time <- date[2:3914]\n> lrAEX.xts <- na.omit(xts(x = lr.AEX, order.by = time))\n>\n> egarcht.spec=ugarchspec(variance.model=list(model=\"eGARCH\",garchOrder=c(2,1)),\n>                       mean.model=list(armaOrder=c(1,0)),distribution.model = \"std\")\n> egarcht.fit = ugarchfit(egarcht.spec, data=lrAEX.xts)\n>\n> residuals(egarcht.fit,standardize=TRUE)[1]\n>\n> But the only improvement is that I receive the real dates of my data\n>\n>                 [,1]\n> 2001-01-02 -0.3766309\n>\n> However, my goal is to receive only the residuals ( so only -0.3766309).\n>\n>\n> Could you please tell me if you know how I can achieve this?\n>\n> Thank you in advance.\n>\n> Kind regards,\n> Andreas\n>\n>\n>    [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\nR-SIG-Finance Info Page<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\nstat.ethz.ch\nTo see the collection of prior postings to the list, visit the R-SIG-Finance Archives. Using R-SIG-Finance: To post a message to all the list members ...\n\n\n\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear Ibrahim,\n\n\nFirst of all, I would like to sincerely thank you for your reply!\n\nIndeed, standardized residuals are approx. normally distributed in my model.\n\nIf I understood correctly, I should do ",
+      "thread_id": "thread-62aa876d9674",
+      "thread_depth": 2,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-9a34e56dbb53",
+      "message_id": "<22F8AA06-DABD-4A13-BC76-E07C716A0EB1@4dscape.com>",
+      "from_name": "Alexios Ghalanos",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2018-03-01T11:08:05-08:00",
+      "subject": "[R-SIG-Finance]  Απ:  Question about rugarch",
+      "subject_clean": "Απ:  Question about rugarch",
+      "in_reply_to": "<AM0PR0602MB3492B1ADBE4EC6CB411054B98FC60@AM0PR0602MB3492.eurprd06.prod.outlook.com>",
+      "references": [
+        "<AM0PR0602MB3492B9A6D52C01397102909E8FC60@AM0PR0602MB3492.eurprd06.prod.outlook.com>",
+        "<9DC0297C-D387-4347-948E-681AA263109F@gmail.com>",
+        "<AM0PR0602MB3492B1ADBE4EC6CB411054B98FC60@AM0PR0602MB3492.eurprd06.prod.outlook.com>"
+      ],
+      "body_plain": "Andreas, you can just extract the numeric values from the output :\nEither coredata() or as.numeric().\n\nrugarch was designed to work with xts as it was the author?s opinion at the time that it was the gold standard for working with timeseries data in the context of GARCH models and greatly simplified design decisions.\n\nRegards,\n\nAlexios\n\n> On Mar 1, 2018, at 10:37 AM, Andreas Bregiannis <bregiannis.andreas at hotmail.com> wrote:\n> \n> Dear Ibrahim,\n> \n> \n> First of all, I would like to sincerely thank you for your reply!\n> \n> Indeed, standardized residuals are approx. normally distributed in my model.\n> \n> If I understood correctly, I should do the following to transform them in uniform: pnorm(residuals(egarcht.fit,standardize=TRUE)). I just did it and I checked through a histogram that indeed they look like uniform.\n> \n> Thank you very much!\n> \n> So, do you think that my code, in general, is right? Is it reasonable that in the output of the standardized residuals, I received also the dates? I am asking because I also used fgarch package and in the output I received just the standardized residuals without the dates, so after that I just use the ecdf and I convert them.\n> \n> \n> Best regards,\n> \n> Andreas\n> \n> \n> \n> ________________________________\n> ???: ibrahim ergen <ibrahimergen at gmail.com>\n> ????????: ??????, 1 ??????? 2018 6:49 ??\n> ????: Andreas Bregiannis\n> ????.: r-sig-finance at r-project.org\n> ????: Re: [R-SIG-Finance] Question about rugarch\n> \n> \n> Standardized residuals would be approx. normally distributed. Those are the shocks. Standardization here means filetering of vol clustering. So you get the garch shocks which are approx normal. You can use pnorm function to transform them to uniform distribution.\n> \n> Best\n> Ibrahim\n> \n> Sent from my iPhone\n> \n>> On Mar 1, 2018, at 11:32 AM, Andreas Bregiannis <bregiannis.andreas at hotmail.com> wrote:\n>> \n>> Dear Sir or Madam,\n>> \n>> \n>> I am trying to fit an AR-t-(E)GARCH model in stock log return data using the rugarch package.\n>> \n>> My code is :\n>> \n>> install.packages(\"rugarch\")\n>> library(rugarch)\n>> data <- read.csv2(\"C:/Users/bregi/Desktop/Thesis/R/euro.csv\",header = TRUE,sep=\";\")\n>> lr.AEX<- diff(log(data$AEX))  ## log returns of stock market index AEX\n>> egarcht.spec=ugarchspec(variance.model=list(model=\"eGARCH\",garchOrder=c(2,1)),\n>>                      mean.model=list(armaOrder=c(1,0)),distribution.model = \"std\")\n>> egarcht.fit = ugarchfit(egarcht.spec, lr.AEX)\n>> \n>> The problem is that I want to transform my standardized residuals to follow uniform distribution. But when I run the following:\n>> res<-residuals(egarcht.fit, standardize=TRUE)\n>> ecdf(res)\n>> plot.ecdf(res)\n>> I realized that they have not transformed. I think that I found the problem but I don't know how to fix it.\n>> When I run residuals(egarcht.fit, standardize=TRUE) I get data in the following form:\n>> 1970-01-02 01:00:00 -0.3766309  instead of just -0.3766309.\n>> \n>> After that, I tried to solve this problem by doing:\n>> \n>> require(xts)\n>> time <- date[2:3914]\n>> lrAEX.xts <- na.omit(xts(x = lr.AEX, order.by = time))\n>> \n>> egarcht.spec=ugarchspec(variance.model=list(model=\"eGARCH\",garchOrder=c(2,1)),\n>>                      mean.model=list(armaOrder=c(1,0)),distribution.model = \"std\")\n>> egarcht.fit = ugarchfit(egarcht.spec, data=lrAEX.xts)\n>> \n>> residuals(egarcht.fit,standardize=TRUE)[1]\n>> \n>> But the only improvement is that I receive the real dates of my data\n>> \n>>                [,1]\n>> 2001-01-02 -0.3766309\n>> \n>> However, my goal is to receive only the residuals ( so only -0.3766309).\n>> \n>> \n>> Could you please tell me if you know how I can achieve this?\n>> \n>> Thank you in advance.\n>> \n>> Kind regards,\n>> Andreas\n>> \n>> \n>>   [[alternative HTML version deleted]]\n>> \n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> R-SIG-Finance Info Page<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\n> stat.ethz.ch\n> To see the collection of prior postings to the list, visit the R-SIG-Finance Archives. Using R-SIG-Finance: To post a message to all the list members ...\n> \n> \n> \n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n> \n>    [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Andreas, you can just extract the numeric values from the output :\nEither coredata() or as.numeric().\n\nrugarch was designed to work with xts as it was the author?s opinion at the time that it was the ",
+      "thread_id": "thread-62aa876d9674",
+      "thread_depth": 3,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-6dd1cd4c1430",
+      "message_id": "<AM0PR0602MB34928A11822CBBA3374E18998FC60@AM0PR0602MB3492.eurprd06.prod.outlook.com>",
+      "from_name": "Andreas Bregiannis",
+      "from_email_hash": "0e4b8dcf3bfd02689a8aabd764a93bf87d6586c3d46d1bc6c2adaf3f2aa6a9dc",
+      "date": "2018-03-01T19:50:11Z",
+      "subject": "[R-SIG-Finance] Απ:  Απ:  Question about rugarch",
+      "subject_clean": "Απ:  Απ:  Question about rugarch",
+      "in_reply_to": "<22F8AA06-DABD-4A13-BC76-E07C716A0EB1@4dscape.com>",
+      "references": [
+        "<AM0PR0602MB3492B9A6D52C01397102909E8FC60@AM0PR0602MB3492.eurprd06.prod.outlook.com>",
+        "<9DC0297C-D387-4347-948E-681AA263109F@gmail.com>",
+        "<AM0PR0602MB3492B1ADBE4EC6CB411054B98FC60@AM0PR0602MB3492.eurprd06.prod.outlook.com>",
+        "<22F8AA06-DABD-4A13-BC76-E07C716A0EB1@4dscape.com>"
+      ],
+      "body_plain": "Yes, that worked great!\n\nThank you so much for all your assistance!\n\n\nBest regards,\n\nAndreas\n\n________________________________\n???: Alexios Ghalanos <alexios at 4dscape.com>\n????????: ??????, 1 ??????? 2018 8:08 ??\n????: Andreas Bregiannis\n????.: ibrahim ergen; r-sig-finance at r-project.org\n????: Re: [R-SIG-Finance] ??: Question about rugarch\n\nAndreas, you can just extract the numeric values from the output :\nEither coredata() or as.numeric().\n\nrugarch was designed to work with xts as it was the author?s opinion at the time that it was the gold standard for working with timeseries data in the context of GARCH models and greatly simplified design decisions.\n\nRegards,\n\nAlexios\n\n> On Mar 1, 2018, at 10:37 AM, Andreas Bregiannis <bregiannis.andreas at hotmail.com> wrote:\n>\n> Dear Ibrahim,\n>\n>\n> First of all, I would like to sincerely thank you for your reply!\n>\n> Indeed, standardized residuals are approx. normally distributed in my model.\n>\n> If I understood correctly, I should do the following to transform them in uniform: pnorm(residuals(egarcht.fit,standardize=TRUE)). I just did it and I checked through a histogram that indeed they look like uniform.\n>\n> Thank you very much!\n>\n> So, do you think that my code, in general, is right? Is it reasonable that in the output of the standardized residuals, I received also the dates? I am asking because I also used fgarch package and in the output I received just the standardized residuals without the dates, so after that I just use the ecdf and I convert them.\n>\n>\n> Best regards,\n>\n> Andreas\n>\n>\n>\n> ________________________________\n> ???: ibrahim ergen <ibrahimergen at gmail.com>\n> ????????: ??????, 1 ??????? 2018 6:49 ??\n> ????: Andreas Bregiannis\n> ????.: r-sig-finance at r-project.org\n> ????: Re: [R-SIG-Finance] Question about rugarch\n>\n>\n> Standardized residuals would be approx. normally distributed. Those are the shocks. Standardization here means filetering of vol clustering. So you get the garch shocks which are approx normal. You can use pnorm function to transform them to uniform distribution.\n>\n> Best\n> Ibrahim\n>\n> Sent from my iPhone\n>\n>> On Mar 1, 2018, at 11:32 AM, Andreas Bregiannis <bregiannis.andreas at hotmail.com> wrote:\n>>\n>> Dear Sir or Madam,\n>>\n>>\n>> I am trying to fit an AR-t-(E)GARCH model in stock log return data using the rugarch package.\n>>\n>> My code is :\n>>\n>> install.packages(\"rugarch\")\n>> library(rugarch)\n>> data <- read.csv2(\"C:/Users/bregi/Desktop/Thesis/R/euro.csv\",header = TRUE,sep=\";\")\n>> lr.AEX<- diff(log(data$AEX))  ## log returns of stock market index AEX\n>> egarcht.spec=ugarchspec(variance.model=list(model=\"eGARCH\",garchOrder=c(2,1)),\n>>                      mean.model=list(armaOrder=c(1,0)),distribution.model = \"std\")\n>> egarcht.fit = ugarchfit(egarcht.spec, lr.AEX)\n>>\n>> The problem is that I want to transform my standardized residuals to follow uniform distribution. But when I run the following:\n>> res<-residuals(egarcht.fit, standardize=TRUE)\n>> ecdf(res)\n>> plot.ecdf(res)\n>> I realized that they have not transformed. I think that I found the problem but I don't know how to fix it.\n>> When I run residuals(egarcht.fit, standardize=TRUE) I get data in the following form:\n>> 1970-01-02 01:00:00 -0.3766309  instead of just -0.3766309.\n>>\n>> After that, I tried to solve this problem by doing:\n>>\n>> require(xts)\n>> time <- date[2:3914]\n>> lrAEX.xts <- na.omit(xts(x = lr.AEX, order.by = time))\n>>\n>> egarcht.spec=ugarchspec(variance.model=list(model=\"eGARCH\",garchOrder=c(2,1)),\n>>                      mean.model=list(armaOrder=c(1,0)),distribution.model = \"std\")\n>> egarcht.fit = ugarchfit(egarcht.spec, data=lrAEX.xts)\n>>\n>> residuals(egarcht.fit,standardize=TRUE)[1]\n>>\n>> But the only improvement is that I receive the real dates of my data\n>>\n>>                [,1]\n>> 2001-01-02 -0.3766309\n>>\n>> However, my goal is to receive only the residuals ( so only -0.3766309).\n>>\n>>\n>> Could you please tell me if you know how I can achieve this?\n>>\n>> Thank you in advance.\n>>\n>> Kind regards,\n>> Andreas\n>>\n>>\n>>   [[alternative HTML version deleted]]\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\nR-SIG-Finance Info Page<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\nstat.ethz.ch\nTo see the collection of prior postings to the list, visit the R-SIG-Finance Archives. Using R-SIG-Finance: To post a message to all the list members ...\n\n\n\n> R-SIG-Finance Info Page<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\nR-SIG-Finance Info Page<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\nstat.ethz.ch\nTo see the collection of prior postings to the list, visit the R-SIG-Finance Archives. Using R-SIG-Finance: To post a message to all the list members ...\n\n\n\n> stat.ethz.ch\n> To see the collection of prior postings to the list, visit the R-SIG-Finance Archives. Using R-SIG-Finance: To post a message to all the list members ...\n>\n>\n>\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n>\n>    [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\nR-SIG-Finance Info Page<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\nstat.ethz.ch\nTo see the collection of prior postings to the list, visit the R-SIG-Finance Archives. Using R-SIG-Finance: To post a message to all the list members ...\n\n\n\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Yes, that worked great!\n\nThank you so much for all your assistance!\n\n\nBest regards,\n\nAndreas\n\n________________________________\n???: Alexios Ghalanos <alexios at 4dscape.com>\n????????: ??????, 1 ??????",
+      "thread_id": "thread-62aa876d9674",
+      "thread_depth": 4,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-79cd9a65549f",
+      "message_id": "<CAHdfS95Ds5FtWOQ-7MBGqtJ60mxPNPViQ_ptB=W+5MNFRNy0Mg@mail.gmail.com>",
+      "from_name": "Robert Harlow",
+      "from_email_hash": "2c96b632dc73a771c658ad5cde557091e78e2b62dff2172cb47f752aebbc29ed",
+      "date": "2018-03-06T17:21:53-05:00",
+      "subject": "[R-SIG-Finance] Question quadprogXT",
+      "subject_clean": "Question quadprogXT",
+      "in_reply_to": "<5935071.17239934.1520345019628@mail.yahoo.com>",
+      "references": [
+        "<5935071.17239934.1520345019628.ref@mail.yahoo.com>",
+        "<5935071.17239934.1520345019628@mail.yahoo.com>"
+      ],
+      "body_plain": "Hi Antoine,\n  Yes - it handles turnover constraints. Check out the second to last\nexample from ?solveQPXT.\nBob\n\nOn Tue, Mar 6, 2018 at 9:03 AM, Antoine <antoinegg7 at yahoo.fr> wrote:\n\n> Hello Bob,\n>\n> First of all, thanks for your R Package quadprogXT, I hope that I will use\n> it for my turnover constraint (in financial context). Could you please tell\n> me if you use this topic to implement the solution.\n>\n>\n> Convex Optimization problem with sum of absolute value constraints\n> <https://scicomp.stackexchange.com/questions/20321/convex-optimization-problem-with-sum-of-absolute-value-constraints>\n>\n> Convex Optimization problem with sum of absolute value constraints\n>\n> How to solve the optimization problem written below? $$\\begin{align}\n> &\\operatorname{argmax}\\limits_{a}\\; a^T b ...\n>\n> <https://scicomp.stackexchange.com/questions/20321/convex-optimization-problem-with-sum-of-absolute-value-constraints>\n>\n> Thanks in advance,\n>\n> Best Regards,\n>\n> Antoine\n>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Antoine,\n  Yes - it handles turnover constraints. Check out the second to last\nexample from ?solveQPXT.\nBob\n\nOn Tue, Mar 6, 2018 at 9:03 AM, Antoine <antoinegg7 at yahoo.fr> wrote:\n\n> Hello Bob,\n>\n",
+      "thread_id": "thread-79cd9a65549f",
+      "thread_depth": 0,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-e2282010abc3",
+      "message_id": "<1520474119352.56010@stevens.edu>",
+      "from_name": "Alec Schmidt",
+      "from_email_hash": "b5fa4f912dd5f9147e83da9e745dfaae8b7e1c2f9429d7b0112a8df5b60693cd",
+      "date": "2018-03-08T01:55:18Z",
+      "subject": "[R-SIG-Finance] Minimizing tracking error with restricted number of stocks",
+      "subject_clean": "Minimizing tracking error with restricted number of stocks",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Say I have a portfolio of 100 stocks and want to find a subset of 20 stocks with minimum tracking error in respect to the original portfolio. I wonder if a solver to this problem is implemented in some R-based library.\n\nThanks! Alec\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Say I have a portfolio of 100 stocks and want to find a subset of 20 stocks with minimum tracking error in respect to the original portfolio. I wonder if a solver to this problem is implemented in som",
+      "thread_id": "thread-e2282010abc3",
+      "thread_depth": 0,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-9cdd13596d8a",
+      "message_id": "<797485991.9774726.1520474890164@mail.yahoo.com>",
+      "from_name": "Vivek Rao",
+      "from_email_hash": "a81066339c2197ad565d503ef095b8cd2372aa49d2203f8967ae094a261e3f8b",
+      "date": "2018-03-08T02:08:10Z",
+      "subject": "[R-SIG-Finance]  Minimizing tracking error with restricted number of stocks",
+      "subject_clean": "Minimizing tracking error with restricted number of stocks",
+      "in_reply_to": "<1520474119352.56010@stevens.edu>",
+      "references": [
+        "<1520474119352.56010@stevens.edu>"
+      ],
+      "body_plain": "Alec,\nYou could regress the returns of the 100-stock portfolio on the?returns of the 100 stocks, using the Lasso or Elastic Net(there are R packages glmnet and elasticnet?for these methods)?to zero out most of the regression?coefficients.\nVivek RaoBoston, MA\n      From: Alec Schmidt <aschmid1 at stevens.edu>\n To: \"r-sig-finance at r-project.org\" <r-sig-finance at r-project.org> \n Sent: Wednesday, March 7, 2018 8:55 PM\n Subject: [R-SIG-Finance] Minimizing tracking error with restricted number of stocks\n   \nSay I have a portfolio of 100 stocks and want to find a subset of 20 stocks with minimum tracking error in respect to the original portfolio. I wonder if a solver to this problem is implemented in some R-based library.\n\nThanks! Alec\n\n??? [[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\n   \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Alec,\nYou could regress the returns of the 100-stock portfolio on the?returns of the 100 stocks, using the Lasso or Elastic Net(there are R packages glmnet and elasticnet?for these methods)?to zero ou",
+      "thread_id": "thread-e2282010abc3",
+      "thread_depth": 1,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-51c23e6a337b",
+      "message_id": "<ed493d3a-a7a0-4d39-c263-624387cb0b6f@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2018-03-07T20:14:32-06:00",
+      "subject": "[R-SIG-Finance]  Minimizing tracking error with restricted number of stocks",
+      "subject_clean": "Minimizing tracking error with restricted number of stocks",
+      "in_reply_to": "<1520474119352.56010@stevens.edu>",
+      "references": [
+        "<1520474119352.56010@stevens.edu>"
+      ],
+      "body_plain": "On 03/07/2018 07:55 PM, Alec Schmidt wrote:\n> Say I have a portfolio of 100 stocks and want to find a subset of 20 stocks with minimum tracking error in respect to the original portfolio. I wonder if a solver to this problem is implemented in some R-based library.\n\nPortfolioAnalytics can do this.\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
+      "body_snippet": "On 03/07/2018 07:55 PM, Alec Schmidt wrote:\n> Say I have a portfolio of 100 stocks and want to find a subset of 20 stocks with minimum tracking error in respect to the original portfolio. I wonder if ",
+      "thread_id": "thread-e2282010abc3",
+      "thread_depth": 1,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-90e85327b29f",
+      "message_id": "<1520476756408.85376@stevens.edu>",
+      "from_name": "Alec Schmidt",
+      "from_email_hash": "b5fa4f912dd5f9147e83da9e745dfaae8b7e1c2f9429d7b0112a8df5b60693cd",
+      "date": "2018-03-08T02:39:15Z",
+      "subject": "[R-SIG-Finance]  Minimizing tracking error with restricted number of stocks",
+      "subject_clean": "Minimizing tracking error with restricted number of stocks",
+      "in_reply_to": "<ed493d3a-a7a0-4d39-c263-624387cb0b6f@braverock.com>",
+      "references": [
+        "<1520474119352.56010@stevens.edu>",
+        "<ed493d3a-a7a0-4d39-c263-624387cb0b6f@braverock.com>"
+      ],
+      "body_plain": "Thank you Brian. I searched PortfolioAnalytics.pdf for 'tracking' but didn't find one. Are there any implementation examples?\n________________________________________\nFrom: R-SIG-Finance <r-sig-finance-bounces at r-project.org> on behalf of Brian G. Peterson <brian at braverock.com>\nSent: Wednesday, March 7, 2018 9:14 PM\nTo: r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance]  Minimizing tracking error with restricted number of stocks\n\nOn 03/07/2018 07:55 PM, Alec Schmidt wrote:\n> Say I have a portfolio of 100 stocks and want to find a subset of 20 stocks with minimum tracking error in respect to the original portfolio. I wonder if a solver to this problem is implemented in some R-based library.\n\nPortfolioAnalytics can do this.\n\n--\nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Thank you Brian. I searched PortfolioAnalytics.pdf for 'tracking' but didn't find one. Are there any implementation examples?\n________________________________________\nFrom: R-SIG-Finance <r-sig-financ",
+      "thread_id": "thread-e2282010abc3",
+      "thread_depth": 2,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-b1fbc0839b10",
+      "message_id": "<94e03e7b-d59f-c98b-90ba-925b82e332e0@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2018-03-07T21:00:59-06:00",
+      "subject": "[R-SIG-Finance]  Minimizing tracking error with restricted number of stocks",
+      "subject_clean": "Minimizing tracking error with restricted number of stocks",
+      "in_reply_to": "<1520476756408.85376@stevens.edu>",
+      "references": [
+        "<1520474119352.56010@stevens.edu>",
+        "<ed493d3a-a7a0-4d39-c263-624387cb0b6f@braverock.com>",
+        "<1520476756408.85376@stevens.edu>"
+      ],
+      "body_plain": "On 03/07/2018 08:39 PM, Alec Schmidt wrote:\n> Thank you Brian. I searched PortfolioAnalytics.pdf for 'tracking' but didn't find one. Are there any implementation examples?\n\nSee Ross Bennett's tutorial from R/Finance 2017:\n\nhttps://rossb34.github.io/PortfolioAnalyticsPresentation2017/#1\n\nTracking Error example starts on slide 29, though you should find the \nrest of the tutorial useful.\n\n- Brian\n\n> ________________________________________\n> From: R-SIG-Finance <r-sig-finance-bounces at r-project.org> on behalf of Brian G. Peterson <brian at braverock.com>\n> Sent: Wednesday, March 7, 2018 9:14 PM\n> To: r-sig-finance at r-project.org\n> Subject: Re: [R-SIG-Finance]  Minimizing tracking error with restricted number of stocks\n> \n> On 03/07/2018 07:55 PM, Alec Schmidt wrote:\n>> Say I have a portfolio of 100 stocks and want to find a subset of 20 stocks with minimum tracking error in respect to the original portfolio. I wonder if a solver to this problem is implemented in some R-based library.\n> \n> PortfolioAnalytics can do this.\n>",
+      "body_snippet": "On 03/07/2018 08:39 PM, Alec Schmidt wrote:\n> Thank you Brian. I searched PortfolioAnalytics.pdf for 'tracking' but didn't find one. Are there any implementation examples?\n\nSee Ross Bennett's tutorial",
+      "thread_id": "thread-e2282010abc3",
+      "thread_depth": 3,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-71074776bff6",
+      "message_id": "<12D698AB-8BFF-4296-88A7-07E79B69E21B@icloud.com>",
+      "from_name": "Jason Hart",
+      "from_email_hash": "8b556620772a14aa9de23a6fe90137023b3f2ef08221c02ab22d56ba68b0b3bf",
+      "date": "2018-03-08T09:46:51-05:00",
+      "subject": "[R-SIG-Finance]  Minimizing tracking error with restricted number of stocks",
+      "subject_clean": "Minimizing tracking error with restricted number of stocks",
+      "in_reply_to": "<94e03e7b-d59f-c98b-90ba-925b82e332e0@braverock.com>",
+      "references": [
+        "<1520474119352.56010@stevens.edu>",
+        "<ed493d3a-a7a0-4d39-c263-624387cb0b6f@braverock.com>",
+        "<1520476756408.85376@stevens.edu>",
+        "<94e03e7b-d59f-c98b-90ba-925b82e332e0@braverock.com>"
+      ],
+      "body_plain": "Great presentation, thanks for sharing the link\n\nSent from my iPad\n\n> On Mar 7, 2018, at 10:00 PM, Brian G. Peterson <brian at braverock.com> wrote:\n> \n>> On 03/07/2018 08:39 PM, Alec Schmidt wrote:\n>> Thank you Brian. I searched PortfolioAnalytics.pdf for 'tracking' but didn't find one. Are there any implementation examples?\n> \n> See Ross Bennett's tutorial from R/Finance 2017:\n> \n> https://rossb34.github.io/PortfolioAnalyticsPresentation2017/#1\n> \n> Tracking Error example starts on slide 29, though you should find the rest of the tutorial useful.\n> \n> - Brian\n> \n>> ________________________________________\n>> From: R-SIG-Finance <r-sig-finance-bounces at r-project.org> on behalf of Brian G. Peterson <brian at braverock.com>\n>> Sent: Wednesday, March 7, 2018 9:14 PM\n>> To: r-sig-finance at r-project.org\n>> Subject: Re: [R-SIG-Finance]  Minimizing tracking error with restricted number of stocks\n>>> On 03/07/2018 07:55 PM, Alec Schmidt wrote:\n>>> Say I have a portfolio of 100 stocks and want to find a subset of 20 stocks with minimum tracking error in respect to the original portfolio. I wonder if a solver to this problem is implemented in some R-based library.\n>> PortfolioAnalytics can do this.\n>> \n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Great presentation, thanks for sharing the link\n\nSent from my iPad\n\n> On Mar 7, 2018, at 10:00 PM, Brian G. Peterson <brian at braverock.com> wrote:\n> \n>> On 03/07/2018 08:39 PM, Alec Schmidt wrote:\n>",
+      "thread_id": "thread-e2282010abc3",
+      "thread_depth": 4,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-e9e41bf65bc4",
+      "message_id": "<1520525051876.38986@stevens.edu>",
+      "from_name": "Alec Schmidt",
+      "from_email_hash": "b5fa4f912dd5f9147e83da9e745dfaae8b7e1c2f9429d7b0112a8df5b60693cd",
+      "date": "2018-03-08T16:04:08Z",
+      "subject": "[R-SIG-Finance]  Minimizing tracking error with restricted number of stocks",
+      "subject_clean": "Minimizing tracking error with restricted number of stocks",
+      "in_reply_to": "<12D698AB-8BFF-4296-88A7-07E79B69E21B@icloud.com>",
+      "references": [
+        "<1520474119352.56010@stevens.edu>",
+        "<ed493d3a-a7a0-4d39-c263-624387cb0b6f@braverock.com>",
+        "<1520476756408.85376@stevens.edu>",
+        "<94e03e7b-d59f-c98b-90ba-925b82e332e0@braverock.com>",
+        "<12D698AB-8BFF-4296-88A7-07E79B69E21B@icloud.com>"
+      ],
+      "body_plain": "This is a very handy doc indeed. I'm not sure though that examples on #29 - #31 address the problem I'm looking into. Namely, I need minimum tracking error with explicit constraint on the number of stocks that is lower than in the benchmark portfolio. Coleman, Li, and Henniger (2004) state that it's NP-hard problem and review a few heuristic methods. Is there one implemented in PortfolioAnalytics?\nThanks much! Alec\n________________________________________\nFrom: R-SIG-Finance <r-sig-finance-bounces at r-project.org> on behalf of Jason Hart <jasonhart4 at icloud.com>\nSent: Thursday, March 8, 2018 9:46 AM\nTo: Brian G. Peterson\nCc: R-SIG-Finance\nSubject: Re: [R-SIG-Finance]  Minimizing tracking error with restricted number of stocks\n\nGreat presentation, thanks for sharing the link\n\nSent from my iPad\n\n> On Mar 7, 2018, at 10:00 PM, Brian G. Peterson <brian at braverock.com> wrote:\n>\n>> On 03/07/2018 08:39 PM, Alec Schmidt wrote:\n>> Thank you Brian. I searched PortfolioAnalytics.pdf for 'tracking' but didn't find one. Are there any implementation examples?\n>\n> See Ross Bennett's tutorial from R/Finance 2017:\n>\n> https://rossb34.github.io/PortfolioAnalyticsPresentation2017/#1\n>\n> Tracking Error example starts on slide 29, though you should find the rest of the tutorial useful.\n>\n> - Brian\n>\n>> ________________________________________\n>> From: R-SIG-Finance <r-sig-finance-bounces at r-project.org> on behalf of Brian G. Peterson <brian at braverock.com>\n>> Sent: Wednesday, March 7, 2018 9:14 PM\n>> To: r-sig-finance at r-project.org\n>> Subject: Re: [R-SIG-Finance]  Minimizing tracking error with restricted number of stocks\n>>> On 03/07/2018 07:55 PM, Alec Schmidt wrote:\n>>> Say I have a portfolio of 100 stocks and want to find a subset of 20 stocks with minimum tracking error in respect to the original portfolio. I wonder if a solver to this problem is implemented in some R-based library.\n>> PortfolioAnalytics can do this.\n>>\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "This is a very handy doc indeed. I'm not sure though that examples on #29 - #31 address the problem I'm looking into. Namely, I need minimum tracking error with explicit constraint on the number of st",
+      "thread_id": "thread-e2282010abc3",
+      "thread_depth": 5,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-0615b11e3cbb",
+      "message_id": "<1520525580.9109.114.camel@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2018-03-08T10:13:00-06:00",
+      "subject": "[R-SIG-Finance]  Minimizing tracking error with restricted number of stocks",
+      "subject_clean": "Minimizing tracking error with restricted number of stocks",
+      "in_reply_to": "<1520525051876.38986@stevens.edu>",
+      "references": [
+        "<1520474119352.56010@stevens.edu>",
+        "<ed493d3a-a7a0-4d39-c263-624387cb0b6f@braverock.com>",
+        "<1520476756408.85376@stevens.edu>",
+        "<94e03e7b-d59f-c98b-90ba-925b82e332e0@braverock.com>",
+        "<12D698AB-8BFF-4296-88A7-07E79B69E21B@icloud.com>",
+        "<1520525051876.38986@stevens.edu>"
+      ],
+      "body_plain": "Alec,\n\nI do not believe that there is a closed form optimization solution for\nwhat you are trying to do.  In other words, I am agreeing with Coleman\net. al.\n\nThat is not the same thing as saying that you can't solve it with\nPortfolioAnalytics.\n\nFirst, add a position_limit constraint setting the number of non-zero\npositions that you want in the portfolio\n\nSecond, add a tracking error objective as described in Ross'\npresentation. \n\n(along with adding any other objectives or constraints you need in your\nportfolio specification)\n\nThird, utilize one of the global numerical solvers, e.g. DEoptim,\nrandom portfolios, genSA, or pso.\n\nThe numerical solvers will not search the entire feasible space, but\nrather search a subset of the feasible space stochastically.  You\nshould get acceptably close to the global optimum portfolio using these\nmethods in finite time.\n\nRegards,\n\n- Brian\n\nOn Thu, 2018-03-08 at 16:04 +0000, Alec Schmidt wrote:\n> This is a very handy doc indeed. I'm not sure though that examples on\n> #29 - #31 address the problem I'm looking into. Namely, I need\n> minimum tracking error with explicit constraint on the number of\n> stocks that is lower than in the benchmark portfolio. Coleman, Li,\n> and Henniger (2004) state that it's NP-hard problem and review a few\n> heuristic methods. Is there one implemented in PortfolioAnalytics?\n> Thanks much! Alec\n> ________________________________________\n> From: R-SIG-Finance <r-sig-finance-bounces at r-project.org> on behalf\n> of Jason Hart <jasonhart4 at icloud.com>\n> Sent: Thursday, March 8, 2018 9:46 AM\n> To: Brian G. Peterson\n> Cc: R-SIG-Finance\n> Subject: Re: [R-SIG-Finance]  Minimizing tracking error with\n> restricted number of stocks\n> \n> Great presentation, thanks for sharing the link\n> \n> Sent from my iPad\n> \n> > On Mar 7, 2018, at 10:00 PM, Brian G. Peterson <brian at braverock.com\n> > > wrote:\n> > \n> > > On 03/07/2018 08:39 PM, Alec Schmidt wrote:\n> > > Thank you Brian. I searched PortfolioAnalytics.pdf for 'tracking'\n> > > but didn't find one. Are there any implementation examples?\n> > \n> > See Ross Bennett's tutorial from R/Finance 2017:\n> > \n> > https://rossb34.github.io/PortfolioAnalyticsPresentation2017/#1\n> > \n> > Tracking Error example starts on slide 29, though you should find\n> > the rest of the tutorial useful.\n> > \n> > - Brian\n> > \n> > > ________________________________________\n> > > From: R-SIG-Finance <r-sig-finance-bounces at r-project.org> on\n> > > behalf of Brian G. Peterson <brian at braverock.com>\n> > > Sent: Wednesday, March 7, 2018 9:14 PM\n> > > To: r-sig-finance at r-project.org\n> > > Subject: Re: [R-SIG-Finance]  Minimizing tracking error with\n> > > restricted number of stocks\n> > > > On 03/07/2018 07:55 PM, Alec Schmidt wrote:\n> > > > Say I have a portfolio of 100 stocks and want to find a subset\n> > > > of 20 stocks with minimum tracking error in respect to the\n> > > > original portfolio. I wonder if a solver to this problem is\n> > > > implemented in some R-based library.\n> > > \n> > > PortfolioAnalytics can do this.\n> > > \n> > \n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R\n> > questions should go.\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R\n> questions should go.\n>",
+      "body_snippet": "Alec,\n\nI do not believe that there is a closed form optimization solution for\nwhat you are trying to do.  In other words, I am agreeing with Coleman\net. al.\n\nThat is not the same thing as saying that ",
+      "thread_id": "thread-e2282010abc3",
+      "thread_depth": 6,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-82f85238ec81",
+      "message_id": "<1520563736760.45823@stevens.edu>",
+      "from_name": "Alec Schmidt",
+      "from_email_hash": "b5fa4f912dd5f9147e83da9e745dfaae8b7e1c2f9429d7b0112a8df5b60693cd",
+      "date": "2018-03-09T02:48:57Z",
+      "subject": "[R-SIG-Finance]  Minimizing tracking error with restricted number of stocks",
+      "subject_clean": "Minimizing tracking error with restricted number of stocks",
+      "in_reply_to": "<1520525580.9109.114.camel@braverock.com>",
+      "references": [
+        "<1520474119352.56010@stevens.edu>",
+        "<ed493d3a-a7a0-4d39-c263-624387cb0b6f@braverock.com>",
+        "<1520476756408.85376@stevens.edu>",
+        "<94e03e7b-d59f-c98b-90ba-925b82e332e0@braverock.com>",
+        "<12D698AB-8BFF-4296-88A7-07E79B69E21B@icloud.com>",
+        "<1520525051876.38986@stevens.edu>",
+        "<1520525580.9109.114.camel@braverock.com>"
+      ],
+      "body_plain": "Thank you Brian,\n position_limit constraint - that's exactly what I needed. But then I guess that's how NP-hard problem looks like: it may need lots of resampling.\nBest, Alec\n________________________________________\nFrom: Brian G. Peterson <brian at braverock.com>\nSent: Thursday, March 8, 2018 11:13 AM\nTo: Alec Schmidt; Jason Hart\nCc: R-SIG-Finance\nSubject: Re: [R-SIG-Finance]  Minimizing tracking error with restricted number of stocks\n\nAlec,\n\nI do not believe that there is a closed form optimization solution for\nwhat you are trying to do.  In other words, I am agreeing with Coleman\net. al.\n\nThat is not the same thing as saying that you can't solve it with\nPortfolioAnalytics.\n\nFirst, add a position_limit constraint setting the number of non-zero\npositions that you want in the portfolio\n\nSecond, add a tracking error objective as described in Ross'\npresentation.\n\n(along with adding any other objectives or constraints you need in your\nportfolio specification)\n\nThird, utilize one of the global numerical solvers, e.g. DEoptim,\nrandom portfolios, genSA, or pso.\n\nThe numerical solvers will not search the entire feasible space, but\nrather search a subset of the feasible space stochastically.  You\nshould get acceptably close to the global optimum portfolio using these\nmethods in finite time.\n\nRegards,\n\n- Brian\n\nOn Thu, 2018-03-08 at 16:04 +0000, Alec Schmidt wrote:\n> This is a very handy doc indeed. I'm not sure though that examples on\n> #29 - #31 address the problem I'm looking into. Namely, I need\n> minimum tracking error with explicit constraint on the number of\n> stocks that is lower than in the benchmark portfolio. Coleman, Li,\n> and Henniger (2004) state that it's NP-hard problem and review a few\n> heuristic methods. Is there one implemented in PortfolioAnalytics?\n> Thanks much! Alec\n> ________________________________________\n> From: R-SIG-Finance <r-sig-finance-bounces at r-project.org> on behalf\n> of Jason Hart <jasonhart4 at icloud.com>\n> Sent: Thursday, March 8, 2018 9:46 AM\n> To: Brian G. Peterson\n> Cc: R-SIG-Finance\n> Subject: Re: [R-SIG-Finance]  Minimizing tracking error with\n> restricted number of stocks\n>\n> Great presentation, thanks for sharing the link\n>\n> Sent from my iPad\n>\n> > On Mar 7, 2018, at 10:00 PM, Brian G. Peterson <brian at braverock.com\n> > > wrote:\n> >\n> > > On 03/07/2018 08:39 PM, Alec Schmidt wrote:\n> > > Thank you Brian. I searched PortfolioAnalytics.pdf for 'tracking'\n> > > but didn't find one. Are there any implementation examples?\n> >\n> > See Ross Bennett's tutorial from R/Finance 2017:\n> >\n> > https://rossb34.github.io/PortfolioAnalyticsPresentation2017/#1\n> >\n> > Tracking Error example starts on slide 29, though you should find\n> > the rest of the tutorial useful.\n> >\n> > - Brian\n> >\n> > > ________________________________________\n> > > From: R-SIG-Finance <r-sig-finance-bounces at r-project.org> on\n> > > behalf of Brian G. Peterson <brian at braverock.com>\n> > > Sent: Wednesday, March 7, 2018 9:14 PM\n> > > To: r-sig-finance at r-project.org\n> > > Subject: Re: [R-SIG-Finance]  Minimizing tracking error with\n> > > restricted number of stocks\n> > > > On 03/07/2018 07:55 PM, Alec Schmidt wrote:\n> > > > Say I have a portfolio of 100 stocks and want to find a subset\n> > > > of 20 stocks with minimum tracking error in respect to the\n> > > > original portfolio. I wonder if a solver to this problem is\n> > > > implemented in some R-based library.\n> > >\n> > > PortfolioAnalytics can do this.\n> > >\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R\n> > questions should go.\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R\n> questions should go.\n>",
+      "body_snippet": "Thank you Brian,\n position_limit constraint - that's exactly what I needed. But then I guess that's how NP-hard problem looks like: it may need lots of resampling.\nBest, Alec\n_________________________",
+      "thread_id": "thread-e2282010abc3",
+      "thread_depth": 7,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-923da6708571",
+      "message_id": "<1603274456.12175180.1520859139033@mail.yahoo.com>",
+      "from_name": "Pankaj K Agarwal",
+      "from_email_hash": "0cbb0f9165a5f6176569cf3596bb8d4666fe7d2828a40590fd539fc0758d58e0",
+      "date": "2018-03-12T12:52:19Z",
+      "subject": "[R-SIG-Finance] Error using Performance Analytics package",
+      "subject_clean": "Error using Performance Analytics package",
+      "in_reply_to": null,
+      "references": [
+        "<1603274456.12175180.1520859139033.ref@mail.yahoo.com>"
+      ],
+      "body_plain": "Dear all,I am using a dataset of monthly asset returns. I subset it with window() call of package zoo. When i try to compute Modified VaR on this subset, i am getting the following error:\nError in dimnames(cd) <- list(as.character(index(x)), colnames(x)) :?? 'dimnames' applied to non-array\nCan someone help? I googled it a lot but still nothing seems to be working.\nRegards,\nPankaj K Agarwal\n+91-98397-11444http://in.linkedin.com/in/pankajkagarwal/\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,I am using a dataset of monthly asset returns. I subset it with window() call of package zoo. When i try to compute Modified VaR on this subset, i am getting the following error:\nError in dim",
+      "thread_id": "thread-923da6708571",
+      "thread_depth": 0,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-a10b4c5c9e9c",
+      "message_id": "<CAPPM_gSCdbHpKdGg9h_nZP0FQUNXSUkXrNeKhMb0kQsD40Uvvg@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2018-03-12T08:00:04-05:00",
+      "subject": "[R-SIG-Finance] Error using Performance Analytics package",
+      "subject_clean": "Error using Performance Analytics package",
+      "in_reply_to": "<1603274456.12175180.1520859139033@mail.yahoo.com>",
+      "references": [
+        "<1603274456.12175180.1520859139033.ref@mail.yahoo.com>",
+        "<1603274456.12175180.1520859139033@mail.yahoo.com>"
+      ],
+      "body_plain": "It would be easier for others to help you if you provided a\nreproducible example.  Here are some tips on how to create one:\nhttps://stackoverflow.com/q/5963269/271616\n\nAlso, please follow the posting guide and send plain text emails, not\nHTML.  The latter are likely to be mangled by the list server, which\nmakes them hard to read (and is another impediment to someone trying\nto help).\n\nOn Mon, Mar 12, 2018 at 7:52 AM, Pankaj K Agarwal via R-SIG-Finance\n<r-sig-finance at r-project.org> wrote:\n> Dear all,I am using a dataset of monthly asset returns. I subset it with window() call of package zoo. When i try to compute Modified VaR on this subset, i am getting the following error:\n> Error in dimnames(cd) <- list(as.character(index(x)), colnames(x)) :   'dimnames' applied to non-array\n> Can someone help? I googled it a lot but still nothing seems to be working.\n> Regards,\n> Pankaj K Agarwal\n> +91-98397-11444http://in.linkedin.com/in/pankajkagarwal/\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2018 | www.rinfinance.com",
+      "body_snippet": "It would be easier for others to help you if you provided a\nreproducible example.  Here are some tips on how to create one:\nhttps://stackoverflow.com/q/5963269/271616\n\nAlso, please follow the posting ",
+      "thread_id": "thread-923da6708571",
+      "thread_depth": 1,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-02f5f1809393",
+      "message_id": "<CACkfrsHp9ks9Dc_Bvd=7_TsfsW9Gd4DXvfFTuDjBe330WgmWMw@mail.gmail.com>",
+      "from_name": "Gus Br",
+      "from_email_hash": "1d7a3bd6cedf5618e49a9151242640ebb6a5d247235b69cd708fccdf56c9405f",
+      "date": "2018-03-12T17:37:02+01:00",
+      "subject": "[R-SIG-Finance] SJC copula in R",
+      "subject_clean": "SJC copula in R",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear all,\n\nCould you please tell me if there is any package or code available for the\n(time-varying) Symmetrized Joe-Clayton copula in R?\nIn copula package, I think that there is only the Joe-Clayton copula.\n\nThank you in advance!\nGus\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,\n\nCould you please tell me if there is any package or code available for the\n(time-varying) Symmetrized Joe-Clayton copula in R?\nIn copula package, I think that there is only the Joe-Clayton ",
+      "thread_id": "thread-02f5f1809393",
+      "thread_depth": 0,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-5437cafd9f3f",
+      "message_id": "<CACjNfmkojGRhe04m7Wpk4ZktRuUF7_QpqC5Qp7dWp+L2jWQvwQ@mail.gmail.com>",
+      "from_name": "Erol Biceroglu",
+      "from_email_hash": "1c913c5823dc119883c6c86d1addf58a2399c9c18607f641f97847d84bb8ff29",
+      "date": "2018-03-12T16:42:39Z",
+      "subject": "[R-SIG-Finance] SJC copula in R",
+      "subject_clean": "SJC copula in R",
+      "in_reply_to": "<CACkfrsHp9ks9Dc_Bvd=7_TsfsW9Gd4DXvfFTuDjBe330WgmWMw@mail.gmail.com>",
+      "references": [
+        "<CACkfrsHp9ks9Dc_Bvd=7_TsfsW9Gd4DXvfFTuDjBe330WgmWMw@mail.gmail.com>"
+      ],
+      "body_plain": "It?s possible the ?VineCopula? package may have what you?re looking for.\n\nCheck out the ?BiCop? function documentation for a list of available\ncopulas.\n\nOn Mon, Mar 12, 2018 at 12:37 PM Gus Br <gus.br1990 at gmail.com> wrote:\n\n> Dear all,\n>\n> Could you please tell me if there is any package or code available for the\n> (time-varying) Symmetrized Joe-Clayton copula in R?\n> In copula package, I think that there is only the Joe-Clayton copula.\n>\n> Thank you in advance!\n> Gus\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n-- \n\nErol Biceroglu\n*LinkedIn <http://ca.linkedin.com/in/erolbiceroglu> | Wordpress\n<https://propfoliomanagement.wordpress.com/>*\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "It?s possible the ?VineCopula? package may have what you?re looking for.\n\nCheck out the ?BiCop? function documentation for a list of available\ncopulas.\n\nOn Mon, Mar 12, 2018 at 12:37 PM Gus Br <gus.br",
+      "thread_id": "thread-02f5f1809393",
+      "thread_depth": 1,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-43848db61c4a",
+      "message_id": "<F444620A-6A0E-447E-8275-E7B202B066AC@gmail.com>",
+      "from_name": "Sal Abbasi",
+      "from_email_hash": "21a3accba913fe2993c03e1304249b0a967aa0fac47aea2abcf202e4ecf48dda",
+      "date": "2018-03-12T12:09:47-05:00",
+      "subject": "[R-SIG-Finance] Question on highfrequency package",
+      "subject_clean": "Question on highfrequency package",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI?m trying to use the highfrequency package and I have a question on Jump detection using the ABDJumpTest function in realized.R which is called from function harModel\n\nLooking at the current code for this function, I see:\n\nABDJumptest = function(RV, BPV, TQ){ # Comput jump detection stat mentioned in roughing paper\n    mu1  = sqrt(2/pi);\n    n = length(RV);\n    zstat = ((1/n)^(-1/2))*((RV-BPV)/RV)*(  (mu1^(-4) + 2*(mu1^(-2))-5) * pmax( 1,TQ*(BPV^(-2)) )   )^(-1/2); \n    return(zstat);\n}\n\nI believe this is trying to implement Equation 18 in this paper: http://www.nber.org/papers/w11775.pdf <http://www.nber.org/papers/w11775.pdf>\n\nIf I read the paper correctly, n should be the number of observations per day.  For example if we are passing in 5 minute returns, n should be the number of 5 minute intervals during a trading day.\n\nIn the current code, n is being used as the number of days in the set of returns.\n\nDoes anybody have any thoughts on this?   I?m new to R-Sig and I?m more of a Python than a R programmer, so if this is the wrong forum, would appreciate someone pointing me to the right forum.\n\nBest,\n\nSal\n\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI?m trying to use the highfrequency package and I have a question on Jump detection using the ABDJumpTest function in realized.R which is called from function harModel\n\nLooking at the current cod",
+      "thread_id": "thread-43848db61c4a",
+      "thread_depth": 0,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-2355761edc20",
+      "message_id": "<CACkfrsGi+-9COY4v7+ch2CZL=Vh1xYxdh54f9s8VDeRx2+PCDg@mail.gmail.com>",
+      "from_name": "Gus Br",
+      "from_email_hash": "1d7a3bd6cedf5618e49a9151242640ebb6a5d247235b69cd708fccdf56c9405f",
+      "date": "2018-03-12T18:18:27+01:00",
+      "subject": "[R-SIG-Finance] SJC copula in R",
+      "subject_clean": "SJC copula in R",
+      "in_reply_to": "<CACjNfmkojGRhe04m7Wpk4ZktRuUF7_QpqC5Qp7dWp+L2jWQvwQ@mail.gmail.com>",
+      "references": [
+        "<CACkfrsHp9ks9Dc_Bvd=7_TsfsW9Gd4DXvfFTuDjBe330WgmWMw@mail.gmail.com>",
+        "<CACjNfmkojGRhe04m7Wpk4ZktRuUF7_QpqC5Qp7dWp+L2jWQvwQ@mail.gmail.com>"
+      ],
+      "body_plain": "Dear Erol,\n\nThank you for your reply. Unfortunately, in VineCopula package, I only find\nthe Joe-Clayton and the rotated Joe-Clayton copula but not the\nSymmetrized.one.\n\n\n2018-03-12 17:42 GMT+01:00 Erol Biceroglu <erol.biceroglu at alumni.utoronto.ca\n>:\n\n> It?s possible the ?VineCopula? package may have what you?re looking for.\n>\n> Check out the ?BiCop? function documentation for a list of available\n> copulas.\n>\n> On Mon, Mar 12, 2018 at 12:37 PM Gus Br <gus.br1990 at gmail.com> wrote:\n>\n>> Dear all,\n>>\n>> Could you please tell me if there is any package or code available for the\n>> (time-varying) Symmetrized Joe-Clayton copula in R?\n>> In copula package, I think that there is only the Joe-Clayton copula.\n>>\n>> Thank you in advance!\n>> Gus\n>>\n>>         [[alternative HTML version deleted]]\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n> --\n>\n> Erol Biceroglu\n> *LinkedIn <http://ca.linkedin.com/in/erolbiceroglu> | Wordpress\n> <https://propfoliomanagement.wordpress.com/>*\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear Erol,\n\nThank you for your reply. Unfortunately, in VineCopula package, I only find\nthe Joe-Clayton and the rotated Joe-Clayton copula but not the\nSymmetrized.one.\n\n\n2018-03-12 17:42 GMT+01:00 Ero",
+      "thread_id": "thread-02f5f1809393",
+      "thread_depth": 2,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-1b5dea511e30",
+      "message_id": "<975596120.583531.1520951411291@mail.yahoo.com>",
+      "from_name": "Pankaj K Agarwal",
+      "from_email_hash": "0cbb0f9165a5f6176569cf3596bb8d4666fe7d2828a40590fd539fc0758d58e0",
+      "date": "2018-03-13T14:30:11Z",
+      "subject": "[R-SIG-Finance] Error using Performance Analytics package",
+      "subject_clean": "Error using Performance Analytics package",
+      "in_reply_to": "<CAPPM_gSCdbHpKdGg9h_nZP0FQUNXSUkXrNeKhMb0kQsD40Uvvg@mail.gmail.com>",
+      "references": [
+        "<1603274456.12175180.1520859139033.ref@mail.yahoo.com>",
+        "<1603274456.12175180.1520859139033@mail.yahoo.com>",
+        "<CAPPM_gSCdbHpKdGg9h_nZP0FQUNXSUkXrNeKhMb0kQsD40Uvvg@mail.gmail.com>"
+      ],
+      "body_plain": "Dear Joshua SirHere is my data and my code:\nR Version 3.4.2\n1. Data:File:data.csvMonthly returns of 210 assets from April 2006 till March 2015\n2. Code:#Reading filedat1<-read.csv(\"data.csv\",header=TRUE,stringsAsFactors=FALSE)#Load zoolibrary(zoo)#Creating a zoo objectdat1.z<-read.zoo(dat1, header = TRUE, FUN =function(x) as.yearmon(format(x, nsmall = 2),\"%b-%y\"))#Subseting datatestdata<-window(dat1.z,start=as.yearmon(\"Apr 2006\"),end=as.yearmon(\"Mar 2010\"))#Computing VaRlibrary(PerformanceAnalytics)library(PortfolioAnalytics)VaR(as.matrix(testdata)/100,p=0.95,method=\"modified\")\nProblem:The last command gives the following output:\nError in dimnames(cd) <- list(as.character(index(x)), colnames(x)) :?? 'dimnames' applied to non-array\nKindly advise how to resolve it.?\n\nRegards,Pankaj K Agarwal\n+91-98397-11444http://in.linkedin.com/in/pankajkagarwal/ \n\n    On Monday, 12 March, 2018, 6:30:27 PM IST, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:  \n \n It would be easier for others to help you if you provided a\nreproducible example.? Here are some tips on how to create one:\nhttps://stackoverflow.com/q/5963269/271616\n\nAlso, please follow the posting guide and send plain text emails, not\nHTML.? The latter are likely to be mangled by the list server, which\nmakes them hard to read (and is another impediment to someone trying\nto help).\n\nOn Mon, Mar 12, 2018 at 7:52 AM, Pankaj K Agarwal via R-SIG-Finance\n<r-sig-finance at r-project.org> wrote:\n> Dear all,I am using a dataset of monthly asset returns. I subset it with window() call of package zoo. When i try to compute Modified VaR on this subset, i am getting the following error:\n> Error in dimnames(cd) <- list(as.character(index(x)), colnames(x)) :? 'dimnames' applied to non-array\n> Can someone help? I googled it a lot but still nothing seems to be working.\n> Regards,\n> Pankaj K Agarwal\n> +91-98397-11444http://in.linkedin.com/in/pankajkagarwal/\n>\n>? ? ? ? [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich? |? about.me/joshuaulrich\nFOSS Trading? |? www.fosstrading.com\nR/Finance 2018 | www.rinfinance.com\n  \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear Joshua SirHere is my data and my code:\nR Version 3.4.2\n1. Data:File:data.csvMonthly returns of 210 assets from April 2006 till March 2015\n2. Code:#Reading filedat1<-read.csv(\"data.csv\",header=TRU",
+      "thread_id": "thread-923da6708571",
+      "thread_depth": 2,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-a798efa6305f",
+      "message_id": "<1528613891.583868.1520951597994@mail.yahoo.com>",
+      "from_name": "Pankaj K Agarwal",
+      "from_email_hash": "0cbb0f9165a5f6176569cf3596bb8d4666fe7d2828a40590fd539fc0758d58e0",
+      "date": "2018-03-13T14:33:17Z",
+      "subject": "[R-SIG-Finance] Error in using PerformanceAnalytics package.",
+      "subject_clean": "Error in using PerformanceAnalytics package.",
+      "in_reply_to": null,
+      "references": [
+        "<1528613891.583868.1520951597994.ref@mail.yahoo.com>"
+      ],
+      "body_plain": "Apologies that data file was not attached in the previous mail\nDear Joshua SirHere is my data and my code:\nR Version 3.4.2\n1. Data:File:data.csvMonthly returns of 210 assets from April 2006 till March 2015\n2. Code:#Reading filedat1<-read.csv(\"data.csv\",header=TRUE,stringsAsFactors=FALSE)#Load zoolibrary(zoo)#Creating a zoo objectdat1.z<-read.zoo(dat1, header = TRUE, FUN =function(x) as.yearmon(format(x, nsmall = 2),\"%b-%y\"))#Subseting datatestdata<-window(dat1.z,start=as.yearmon(\"Apr 2006\"),end=as.yearmon(\"Mar 2010\"))#Computing VaRlibrary(PerformanceAnalytics)library(PortfolioAnalytics)VaR(as.matrix(testdata)/100,p=0.95,method=\"modified\")\nProblem:The last command gives the following output:\nError in dimnames(cd) <- list(as.character(index(x)), colnames(x)) :?? 'dimnames' applied to non-array\nKindly advise how to resolve it.?\n\n\nRegards,Pankaj K Agarwal\n+91-98397-11444http://in.linkedin.com/in/pankajkagarwal/\n-------------- next part --------------\nAn HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20180313/21818221/attachment.html>\n\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: data.csv\nType: application/vnd.ms-excel\nSize: 241112 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20180313/21818221/attachment.xlb>",
+      "body_snippet": "Apologies that data file was not attached in the previous mail\nDear Joshua SirHere is my data and my code:\nR Version 3.4.2\n1. Data:File:data.csvMonthly returns of 210 assets from April 2006 till March",
+      "thread_id": "thread-a798efa6305f",
+      "thread_depth": 0,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-2776261b5e6f",
+      "message_id": "<1520952563.9109.207.camel@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2018-03-13T09:49:23-05:00",
+      "subject": "[R-SIG-Finance] Error using Performance Analytics package",
+      "subject_clean": "Error using Performance Analytics package",
+      "in_reply_to": "<975596120.583531.1520951411291@mail.yahoo.com>",
+      "references": [
+        "<1603274456.12175180.1520859139033.ref@mail.yahoo.com>",
+        "<1603274456.12175180.1520859139033@mail.yahoo.com>",
+        "<CAPPM_gSCdbHpKdGg9h_nZP0FQUNXSUkXrNeKhMb0kQsD40Uvvg@mail.gmail.com>",
+        "<975596120.583531.1520951411291@mail.yahoo.com>"
+      ],
+      "body_plain": "Well, your code is completely mangled by posting in HTML, as Josh told\nyou would likely happen.\n\nIn any case, You haven't provided a reproducible example.\n\nrequire(PerformanceAnalytics)\ndata(edhec) # also monthly data\nVaR(edhec,\np=0.95, method='modified') \n# the last two parameters are defaults, and\ndidn't need to be specified\n\nworks fine, so I think you need to provide more information.\n\nYour csv data file (as text) could easily be attached to your email, or\nposted online somewhere, or added to a github issue on the\nPerformanceAnalytics repository, or something.\n\nI don't understand why you are doing as.matrix on your data when you\nalready have a time series.  You should prefer to use the time series\nwhenever possible. Just pass 'testdata' to the VaR function\n\nOne issue if you were doing component VaR is that you have a rank-\ndeficient moments matrix. You are windowing only 100-ish months of data\nfor 216 instruments.  For the univariate calculation in your example,\nthis shouldn't matter though.\n\nPerhaps you should open a github issue that actually contains all the\ninformation required to examine your problem.\n\nRegards,\n\nBrian\n\nOn Tue, 2018-03-13 at 14:30 +0000, Pankaj K Agarwal via R-SIG-Finance\nwrote:\n> Dear Joshua SirHere is my data and my code:\n> R Version 3.4.2\n> 1. Data:File:data.csvMonthly returns of 210 assets from April 2006\n> till March 2015\n> 2. Code:#Reading filedat1<-\n> read.csv(\"data.csv\",header=TRUE,stringsAsFactors=FALSE)#Load\n> zoolibrary(zoo)#Creating a zoo objectdat1.z<-read.zoo(dat1, header =\n> TRUE, FUN =function(x) as.yearmon(format(x, nsmall = 2),\"%b-\n> %y\"))#Subseting datatestdata<-window(dat1.z,start=as.yearmon(\"Apr\n> 2006\"),end=as.yearmon(\"Mar 2010\"))#Computing\n> VaRlibrary(PerformanceAnalytics)library(PortfolioAnalytics)VaR(as.mat\n> rix(testdata)/100,p=0.95,method=\"modified\")\n> Problem:The last command gives the following output:\n> Error in dimnames(cd) <- list(as.character(index(x)), colnames(x))\n> :   'dimnames' applied to non-array\n> Kindly advise how to resolve it. \n> \n> Regards,Pankaj K Agarwal\n> +91-98397-11444http://in.linkedin.com/in/pankajkagarwal/ \n> \n>     On Monday, 12 March, 2018, 6:30:27 PM IST, Joshua Ulrich <josh.m.\n> ulrich at gmail.com> wrote:  \n>  \n>  It would be easier for others to help you if you provided a\n> reproducible example.  Here are some tips on how to create one:\n> https://stackoverflow.com/q/5963269/271616\n> \n> Also, please follow the posting guide and send plain text emails, not\n> HTML.  The latter are likely to be mangled by the list server, which\n> makes them hard to read (and is another impediment to someone trying\n> to help).\n> \n> On Mon, Mar 12, 2018 at 7:52 AM, Pankaj K Agarwal via R-SIG-Finance\n> <r-sig-finance at r-project.org> wrote:\n> > Dear all,I am using a dataset of monthly asset returns. I subset it\n> > with window() call of package zoo. When i try to compute Modified\n> > VaR on this subset, i am getting the following error:\n> > Error in dimnames(cd) <- list(as.character(index(x)), colnames(x))\n> > :  'dimnames' applied to non-array\n> > Can someone help? I googled it a lot but still nothing seems to be\n> > working.\n> > Regards,\n> > Pankaj K Agarwal\n> > +91-98397-11444http://in.linkedin.com/in/pankajkagarwal/\n> > \n> >         [[alternative HTML version deleted]]\n> > \n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R\n> > questions should go.\n> \n> \n>",
+      "body_snippet": "Well, your code is completely mangled by posting in HTML, as Josh told\nyou would likely happen.\n\nIn any case, You haven't provided a reproducible example.\n\nrequire(PerformanceAnalytics)\ndata(edhec) # ",
+      "thread_id": "thread-923da6708571",
+      "thread_depth": 3,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-140cfd2e4b7e",
+      "message_id": "<DB6P190MB0565D93A255AF76A288EE7D7B7D10@DB6P190MB0565.EURP190.PROD.OUTLOOK.COM>",
+      "from_name": "Woo-Young Kang",
+      "from_email_hash": "2ae54ee577e43cc9486ea2a712b9f574a353dfff0f004e7598fa5d658a0b4fe1",
+      "date": "2018-03-14T19:15:09Z",
+      "subject": "[R-SIG-Finance] Restriction test (H0: alpha1+beta1 = 1, H1:alpha1 + beta1 ≠ 1) on GARCH model in R not working",
+      "subject_clean": "Restriction test (H0: alpha1+beta1 = 1, H1:alpha1 + beta1 ≠ 1) on GARCH model in R not working",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear R-Sig-Finance Committee,\n\n\nHi, my name is Woo-Young Kang and I would like to ask a question regarding the \"rugarch\" package in R program if you don't mind.\n\n\nThe title is \"Restriction test (H0: alpha1+beta1 = 1, H1:alpha1 + beta1 \u001b$B!b\u001b(B 1) on GARCH model in R not working\"\n\nwhich has been raised on the \"Stack Exchange - Cross Validated\" online questioning community which also deals with R programming issues.\n\n\nHowever, even the well-known site administrators were not able to solve this issue.\n\nIn the end, they suggested me to ask you which I suppose to be my last resort.\n\n\nThe question is quite long that I am sending the link that leads you to my R programming question as below:\n\nhttps://stats.stackexchange.com/questions/333256/restriction-test-h0-alpha1beta1-1-h1alpha1-beta1-%e2%89%a0-1-on-garch-model-in\n\n\nI would greatly appreciate if I can have your precious help on resolving this issue.\n\n\nThank you so much in advance.\n\n\nSincerely\n\nWoo-Young Kang\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear R-Sig-Finance Committee,\n\n\nHi, my name is Woo-Young Kang and I would like to ask a question regarding the \"rugarch\" package in R program if you don't mind.\n\n\nThe title is \"Restriction test (H0: a",
+      "thread_id": "thread-140cfd2e4b7e",
+      "thread_depth": 0,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-90b783a4d5b7",
+      "message_id": "<ac74c675-acc4-0c92-963a-fb79f6145ba1@4dscape.com>",
+      "from_name": "alexios galanos",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2018-03-15T02:05:59-07:00",
+      "subject": "[R-SIG-Finance]  Restriction test (H0: alpha1+beta1 = 1, H1:alpha1 + beta1 ≠ 1) on GARCH model in R not working",
+      "subject_clean": "Restriction test (H0: alpha1+beta1 = 1, H1:alpha1 + beta1 ≠ 1) on GARCH model in R not working",
+      "in_reply_to": "<DB6P190MB0565D93A255AF76A288EE7D7B7D10@DB6P190MB0565.EURP190.PROD.OUTLOOK.COM>",
+      "references": [
+        "<DB6P190MB0565D93A255AF76A288EE7D7B7D10@DB6P190MB0565.EURP190.PROD.OUTLOOK.COM>"
+      ],
+      "body_plain": "You posted a lot of questions/follow up questions on stack exchange, but \nyou have not taken the time to summarize what these are in this forum or \nprovide data with which we can replicate the problem. The vignette of \nthe package already addresses most of your questions as well as provide \nthe suggested forum for posting such questions (here).\n\nI will try to provide a brief summary of your questions:\n\n1. Your restricted model's log likelihood is higher than the \nunrestricted model.\n2. You are having trouble understanding how the log likelihood is \ncalculated.\n3. You do not understand why the beta coefficient in the restricted \niGARCH model is printed\nout and has NA in the standard errors.\n\nAs I do not have your dataset, the only comment I can make is that the \nsmall differences arise from the optimization not reaching an optimal. \nThis is already discussed in the vignette and in many previous posts to \nthis forum. There are many choices of solver, strategies to help out and \ntuning/tolerance parameters to use. For completeness however I will \nprovide a similar example with the package's default dataset which shows \nthat this in general works:\n\n######################\nlibrary(rugarch)\ndata(sp500ret)\nlibrary(xts)\nspx<-xts(as.numeric(sp500ret[,1]), as.Date(rownames(sp500ret)))\n# restricted iGARCH model\nspec1<-ugarchspec(mean.model=list(armaOrder=c(0,0), archm=TRUE, \narchpow=1), variance.model=list(model=\"iGARCH\"))\n# unrestricted sGARCH model\nspec2<-ugarchspec(mean.model=list(armaOrder=c(0,0), archm=TRUE, \narchpow=1), variance.model=list(model=\"sGARCH\"))\nmod1<-ugarchfit(spec1, spx, solver=\"solnp\")\nmod2<-ugarchfit(spec2, spx, solver=\"solnp\")\n\n# restricted LL < unrestricted LL\nlikelihood(mod1)<likelihood(mod2)\n >TRUE\n\nround(sum(dnorm(spx,mean = fitted(mod1), sd=sigma(mod1), log = \nTRUE)),5)==round(likelihood(mod1),5)\nround(sum(dnorm(spx,mean = fitted(mod2), sd=sigma(mod2), log = \nTRUE)),5)==round(likelihood(mod2),5)\n\nSo in reply to the 3 questions:\n1. Most likely not found the optimal in your dataset for the \nunrestricted model. Try changing the optimization tolerance.\n2. Read Section 2.3 (Conditional Distributions) of the vignette and then \ntry calculating:\n#log(dnorm(residuals(mod1,TRUE))/sigma(mod1))#\nas in equation 64 of the vignette to convince yourself that it is \nequivalent to what is shown above.\n3. Beta is returned and printed out, but since it is not calculated, the \nstandard error is NA. Perhaps it is redundant to print out what beta is \n(since it is imposed to be 1-\\alpha), but it is and should not confuse you.\n\nRegards,\n\nAlexios\n\nOn 3/14/18 12:15 PM, Woo-Young Kang wrote:\n> Dear R-Sig-Finance Committee,\n>\n>\n> Hi, my name is Woo-Young Kang and I would like to ask a question regarding the \"rugarch\" package in R program if you don't mind.\n>\n>\n> The title is \"Restriction test (H0: alpha1+beta1 = 1, H1:alpha1 + beta1 \u001b$B!b\u001b(B 1) on GARCH model in R not working\"\n>\n> which has been raised on the \"Stack Exchange - Cross Validated\" online questioning community which also deals with R programming issues.\n>\n>\n> However, even the well-known site administrators were not able to solve this issue.\n>\n> In the end, they suggested me to ask you which I suppose to be my last resort.\n>\n>\n> The question is quite long that I am sending the link that leads you to my R programming question as below:\n>\n> https://stats.stackexchange.com/questions/333256/restriction-test-h0-alpha1beta1-1-h1alpha1-beta1-%e2%89%a0-1-on-garch-model-in\n>\n>\n> I would greatly appreciate if I can have your precious help on resolving this issue.\n>\n>\n> Thank you so much in advance.\n>\n>\n> Sincerely\n>\n> Woo-Young Kang\n>\n>\n>\n> \t[[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>",
+      "body_snippet": "You posted a lot of questions/follow up questions on stack exchange, but \nyou have not taken the time to summarize what these are in this forum or \nprovide data with which we can replicate the problem",
+      "thread_id": "thread-140cfd2e4b7e",
+      "thread_depth": 1,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-47b88204ff28",
+      "message_id": "<AM0PR0102MB30599238B2BEE0F55D47D51C88D00@AM0PR0102MB3059.eurprd01.prod.exchangelabs.com>",
+      "from_name": "于 喆",
+      "from_email_hash": "c977051671d9507d10ba0849293ba56664e6b8936fd5ccdf6a780ffbd7e462bf",
+      "date": "2018-03-15T15:48:53Z",
+      "subject": "[R-SIG-Finance] Fwd: RV: replicate sigma of the function UGARCHFIT",
+      "subject_clean": "RV: replicate sigma of the function UGARCHFIT",
+      "in_reply_to": null,
+      "references": [
+        "<8514682A5F49BD449F907DE91CD26F1D011E032FAD@SMNMSX900-004.mapfre.net>"
+      ],
+      "body_plain": "Hi R-sig-finance committee?\nI am a R beginner,  wish my primary question will not bother you.\nI am using your ugarchfit function to make a garch fit, and I have got replicating the Sigma of the in.sample forecasting but the first sigma (sigma(1))\nI tried to calculate the first sigma by treating  the variance of total sample observation and average of  errors respect to mean equation as input, but not the result that the UGARCHFIT     function gives . Would you clarify the input for calculating the first sigma of the in.sample forecasting?\n\nThanks a lot!\nZhe\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi R-sig-finance committee?\nI am a R beginner,  wish my primary question will not bother you.\nI am using your ugarchfit function to make a garch fit, and I have got replicating the Sigma of the in.sam",
+      "thread_id": "thread-47b88204ff28",
+      "thread_depth": 0,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-1d95b7065d59",
+      "message_id": "<CA+BE2NNo6o189PgBwiYFzms7CsJ3JXdQME3i6iyzYB2nSbAm3Q@mail.gmail.com>",
+      "from_name": "Joe O",
+      "from_email_hash": "64f7c18f8d98955dcc8bb04b0c9f53eb6e3dc1fa38a313e6440bb7f9d8a39159",
+      "date": "2018-03-20T17:51:41-07:00",
+      "subject": "[R-SIG-Finance] Data adjustment question",
+      "subject_clean": "Data adjustment question",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nI've searched the archives and googled around and haven't found an answer\nto what seems like a basic OHLC data adjustment question.\n\nIt seems there are 5 options for adjusting data via quantmod:\n1. For splits only\n2. For non-split adjusted dividends only\n3. For split adjusted dividends only\n4. For both splits and non-split adjusted dividends\n5. For both splits and split-adjusted dividends.\n\nOption 5 makes the most intuitive sense to me, but I'm not sure. Is option\n5 the usual method used for adjusting data for backtesting? Thanks\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\nI've searched the archives and googled around and haven't found an answer\nto what seems like a basic OHLC data adjustment question.\n\nIt seems there are 5 options for adjusting data via quantmo",
+      "thread_id": "thread-1d95b7065d59",
+      "thread_depth": 0,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-f1c03fc6549f",
+      "message_id": "<1521650418588.69763@stevens.edu>",
+      "from_name": "Alec Schmidt",
+      "from_email_hash": "b5fa4f912dd5f9147e83da9e745dfaae8b7e1c2f9429d7b0112a8df5b60693cd",
+      "date": "2018-03-21T16:40:17Z",
+      "subject": "[R-SIG-Finance] input parameters for optimize.portfolio.rebalancing() in PortfolioAnalytics",
+      "subject_clean": "input parameters for optimize.portfolio.rebalancing() in PortfolioAnalytics",
+      "in_reply_to": "<1520525580.9109.114.camel@braverock.com>",
+      "references": [
+        "<1520474119352.56010@stevens.edu>",
+        "<ed493d3a-a7a0-4d39-c263-624387cb0b6f@braverock.com>",
+        "<1520476756408.85376@stevens.edu>",
+        "<94e03e7b-d59f-c98b-90ba-925b82e332e0@braverock.com>",
+        "<12D698AB-8BFF-4296-88A7-07E79B69E21B@icloud.com>",
+        "<1520525051876.38986@stevens.edu>",
+        "<1520525580.9109.114.camel@braverock.com>"
+      ],
+      "body_plain": "I have a sample of daily portfolio returns and would like to estimate the weights using 252-day periods, starting with the 1st day of the sample, and do rebalancing every 126 days. How do I define the following parameters:\n   rebalance_on,\n   training_period,\n  rolling_window \n\nThank you, Alec",
+      "body_snippet": "I have a sample of daily portfolio returns and would like to estimate the weights using 252-day periods, starting with the 1st day of the sample, and do rebalancing every 126 days. How do I define the",
+      "thread_id": "thread-e2282010abc3",
+      "thread_depth": 7,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-89cbb4447d73",
+      "message_id": "<CY1PR1101MB1193F5B6A597319AA7FA93C7AEAD0@CY1PR1101MB1193.namprd11.prod.outlook.com>",
+      "from_name": "Sillas Gonzaga",
+      "from_email_hash": "b940ff3c2d9def08f3a81e44be17de446e70aa97ec4f09945459aa43f24f18ca",
+      "date": "2018-03-26T11:38:26Z",
+      "subject": "[R-SIG-Finance] Any news about the R/Finance 2018 conference?",
+      "subject_clean": "Any news about the R/Finance 2018 conference?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "http://www.rinfinance.com/\n\n\nDoes anybody know when the registration will be available? The above webpage says it would be open in the spring in March but the month is already ending.\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "http://www.rinfinance.com/\n\n\nDoes anybody know when the registration will be available? The above webpage says it would be open in the spring in March but the month is already ending.\n\n\n\n\t[[alternativ",
+      "thread_id": "thread-89cbb4447d73",
+      "thread_depth": 0,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-b3ccc0034679",
+      "message_id": "<b09bc7db-c6be-b16a-ee66-9b267749bb08@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2018-03-26T06:41:55-05:00",
+      "subject": "[R-SIG-Finance] Any news about the R/Finance 2018 conference?",
+      "subject_clean": "Any news about the R/Finance 2018 conference?",
+      "in_reply_to": "<CY1PR1101MB1193F5B6A597319AA7FA93C7AEAD0@CY1PR1101MB1193.namprd11.prod.outlook.com>",
+      "references": [
+        "<CY1PR1101MB1193F5B6A597319AA7FA93C7AEAD0@CY1PR1101MB1193.namprd11.prod.outlook.com>"
+      ],
+      "body_plain": "On 03/26/2018 06:38 AM, Sillas Gonzaga wrote:\n> http://www.rinfinance.com/\n> \n> \n> Does anybody know when the registration will be available? The above webpage says it would be open in the spring in March but the month is already ending.\n\nSilas,\n\nWe're working on it.\n\nRegistration will open 'soon', hopefully this week.\n\nWe are looking forward to the tenth year of R/Finance, which attracts \nmore than 300 people each year. I hope you can make it.\n\nRegards,\n\nBrian\n\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
+      "body_snippet": "On 03/26/2018 06:38 AM, Sillas Gonzaga wrote:\n> http://www.rinfinance.com/\n> \n> \n> Does anybody know when the registration will be available? The above webpage says it would be open in the spring in M",
+      "thread_id": "thread-89cbb4447d73",
+      "thread_depth": 1,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-40472dddd6d6",
+      "message_id": "<CY1PR1101MB1193360C01414578CCFD93BFAEAD0@CY1PR1101MB1193.namprd11.prod.outlook.com>",
+      "from_name": "Sillas Gonzaga",
+      "from_email_hash": "b940ff3c2d9def08f3a81e44be17de446e70aa97ec4f09945459aa43f24f18ca",
+      "date": "2018-03-26T11:44:13Z",
+      "subject": "[R-SIG-Finance] Any news about the R/Finance 2018 conference?",
+      "subject_clean": "Any news about the R/Finance 2018 conference?",
+      "in_reply_to": "<b09bc7db-c6be-b16a-ee66-9b267749bb08@braverock.com>",
+      "references": [
+        "<CY1PR1101MB1193F5B6A597319AA7FA93C7AEAD0@CY1PR1101MB1193.namprd11.prod.outlook.com>",
+        "<b09bc7db-c6be-b16a-ee66-9b267749bb08@braverock.com>"
+      ],
+      "body_plain": "Brian,\n\nThank you for the reply. I'm from Brazil, so I need to plan the trip and book the flight tickets quite in advance, that's why I'm asking. Glad to know it's going to be open soon. I'm looking forward to it.\n\n-----Original Message-----\nFrom: Brian G. Peterson [mailto:brian at braverock.com] \nSent: Monday, March 26, 2018 8:42 AM\nTo: Sillas Gonzaga <Sillas.gonzaga at daemoninvestimentos.com.br>; r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] Any news about the R/Finance 2018 conference?\n\nOn 03/26/2018 06:38 AM, Sillas Gonzaga wrote:\n> http://www.rinfinance.com/\n> \n> \n> Does anybody know when the registration will be available? The above webpage says it would be open in the spring in March but the month is already ending.\n\nSilas,\n\nWe're working on it.\n\nRegistration will open 'soon', hopefully this week.\n\nWe are looking forward to the tenth year of R/Finance, which attracts more than 300 people each year. I hope you can make it.\n\nRegards,\n\nBrian\n\n\n--\nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
+      "body_snippet": "Brian,\n\nThank you for the reply. I'm from Brazil, so I need to plan the trip and book the flight tickets quite in advance, that's why I'm asking. Glad to know it's going to be open soon. I'm looking f",
+      "thread_id": "thread-89cbb4447d73",
+      "thread_depth": 2,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-6b6e3effc4db",
+      "message_id": "<01fe9c3a-257b-e843-a4c4-8afdd7cb3062@organicfoodmarkets.com.au>",
+      "from_name": "Stephen Choularton",
+      "from_email_hash": "be50afa784ca5d067902f310283ce1e85a162aa45ff41ca22e7220432c1408b1",
+      "date": "2018-03-28T07:41:41+11:00",
+      "subject": "[R-SIG-Finance] using reqHistoricalData",
+      "subject_clean": "using reqHistoricalData",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi\n\nI am using this call to obtain the historical data for the SNFE SPI \nfuture contract.? Here is the full code I am using:\n\nlibrary(\"IBrokers\")\ncloseAllConnections()\n\n# IBrokersRef()\n\ntws <- twsConnect()\nreqCurrentTime(tws)\n\n\n\n#contract <- twsFuture('SPI', exch='SNFE', expiry=\"201703\", currency=\"AUD\",|include_expired='1'|)\n\ncontract <- twsFuture('SPI', exch='SNFE', expiry=\"201803\", \ncurrency=\"AUD\", |include_expired='1'|)\n\nreqContractDetails(tws, contract)\n\n\nSys.sleep(10) # mandatory 10s between request to avoid IB pacing violation\nreqHistoricalData(tws, contract, barSize = \"1 day\", endDateTime='20180315 16:00:00', duration = \"6 M\")\n\nand I get this result:\n\nwaiting for TWS reply on SPI ...... done.\n ?????????? APH8.Open APH8.High APH8.Low APH8.Close APH8.Volume APH8.WAP \nAPH8.hasGaps APH8.Count\n2017-09-19????? 5650????? 5650???? 5650?????? 5650?????????? 2 \n5650.00??????????? 0????????? 1\n2017-10-03????? 5622????? 5622???? 5622?????? 5622?????????? 2 \n5622.00??????????? 0????????? 1\n2017-10-16????? 5774????? 5774???? 5774?????? 5772?????????? 1 \n5774.00??????????? 0????????? 1\n2017-11-28????? 5930????? 5953???? 5930?????? 5953?????????? 3 \n5937.65??????????? 0????????? 2\n2017-12-04????? 5948????? 5948???? 5948?????? 5941?????????? 1 \n5948.00??????????? 0????????? 1\n2017-12-06????? 5909????? 5909???? 5909?????? 5909?????????? 1 \n5909.00??????????? 0????????? 1\n2017-12-08????? 5960????? 5960???? 5948?????? 5948?????????? 6 \n5952.00??????????? 0????????? 3\n2017-12-11????? 5970????? 5970???? 5951?????? 5951????????? 11 \n5968.25??????????? 0????????? 7\n2017-12-12????? 5958????? 5974???? 5952?????? 5970???????? 173 \n5965.10??????????? 0??????? 108\n2017-12-13????? 5959????? 5982???? 5957?????? 5975????????? 81 \n5973.15??????????? 0???????? 49\n2017-12-14????? 5982????? 6012???? 5962?????? 5964???????? 425 \n5976.55??????????? 0??????? 234\n2017-12-15????? 5958????? 5986???? 5940?????? 5957???????? 245 \n5953.70??????????? 0??????? 184\n2017-12-16????? 5953????? 5988???? 5953?????? 5980???????? 115 \n5971.60??????????? 0???????? 82\n2017-12-18????? 5986????? 5994???? 5970?????? 5989??????? 1827 \n5988.85??????????? 0?????? 1012\n2017-12-19????? 5988????? 6042???? 5988?????? 6029??????? 7575 \n6027.75??????????? 0?????? 4799\n2017-12-20????? 6032????? 6046???? 6005?????? 6036?????? 16735 \n6030.70??????????? 0????? 10465\n2017-12-21????? 6036????? 6045???? 6007?????? 6013?????? 24219 \n6017.80??????????? 0????? 16695\n2017-12-22????? 6013????? 6045???? 6013?????? 6026?????? 18950 \n6029.10??????????? 0????? 13816\n2017-12-27????? 6019????? 6050???? 6011?????? 6022?????? 15864 \n6029.60??????????? 0????? 11133\n2017-12-28????? 6022????? 6052???? 6013?????? 6046?????? 21516 \n6034.70??????????? 0????? 15445\n2017-12-29????? 6045????? 6052???? 6008?????? 6019?????? 24757 \n6028.20??????????? 0????? 17056\n2018-01-02????? 6019????? 6033???? 5987?????? 6022?????? 19624 \n6012.05??????????? 0????? 14487\n2018-01-03????? 6023????? 6035???? 6005?????? 6031?????? 25104 \n6023.40??????????? 0????? 18833\n2018-01-04????? 6031????? 6065???? 6021?????? 6024?????? 30502 \n6037.50??????????? 0????? 22464\n2018-01-05????? 6026????? 6082???? 6024?????? 6073?????? 29123 \n6064.45??????????? 0????? 19788\n2018-01-06????? 6075????? 6101???? 6070?????? 6092??????? 6075 \n6087.55??????????? 0?????? 4696\n2018-01-08????? 6095????? 6104???? 6079?????? 6081?????? 16224 \n6086.90??????????? 0????? 12149\n2018-01-09????? 6079????? 6105???? 6072?????? 6088?????? 25272 \n6091.85??????????? 0????? 19091\n2018-01-10????? 6089????? 6114???? 6044?????? 6046?????? 39228 \n6072.60??????????? 0????? 27930\n2018-01-11????? 6050????? 6055???? 6004?????? 6012?????? 38948 \n6024.40??????????? 0????? 27751\n2018-01-12????? 6011????? 6038???? 6001?????? 6017?????? 26643 \n6021.65??????????? 0????? 19102\n2018-01-13????? 6020????? 6054???? 6017?????? 6049??????? 7186 \n6033.15??????????? 0?????? 5817\n2018-01-15????? 6059????? 6060???? 6023?????? 6026?????? 16203 \n6036.50??????????? 0????? 11591\n2018-01-16????? 6028????? 6030???? 5990?????? 5991?????? 25578 \n6007.20??????????? 0????? 18025\n2018-01-17????? 5994????? 6015???? 5945?????? 5959?????? 37579 \n5974.70??????????? 0????? 26430\n2018-01-18????? 5960????? 5985???? 5937?????? 5951?????? 31683 \n5965.85??????????? 0????? 22749\n2018-01-19????? 5948????? 5977???? 5946?????? 5949?????? 28451 \n5960.65??????????? 0????? 20903\n2018-01-20????? 5949????? 5981???? 5949?????? 5980??????? 8208 \n5964.80??????????? 0?????? 6587\n2018-01-22????? 5973????? 5973???? 5933?????? 5938?????? 23302 \n5948.30??????????? 0????? 16328\n2018-01-23????? 5942????? 5990???? 5940?????? 5986?????? 27435 \n5973.75??????????? 0????? 19193\n2018-01-24????? 5989????? 6012???? 5981?????? 6000?????? 28456 \n5998.90??????????? 0????? 20244\n2018-01-25????? 6000????? 6009???? 5962?????? 5999?????? 31679 \n5989.05??????????? 0????? 22431\n2018-01-26????? 6000????? 6007???? 5976?????? 5985??????? 8956 \n5991.10??????????? 0?????? 6967\n2018-01-27????? 5987????? 6016???? 5987?????? 6015??????? 6021 \n6003.15??????????? 0?????? 4643\n2018-01-29????? 6020????? 6033???? 5999?????? 6010?????? 20523 \n6018.10??????????? 0????? 14757\n2018-01-30????? 6008????? 6020???? 5958?????? 5960?????? 36140 \n5982.90??????????? 0????? 24692\n2018-01-31????? 5961????? 5987???? 5920?????? 5980?????? 40809 \n5960.15??????????? 0????? 28947\n2018-02-01????? 5979????? 6038???? 5968?????? 6037?????? 39409 \n6012.55??????????? 0????? 27264\n2018-02-02????? 6037????? 6072???? 5999?????? 6071?????? 39430 \n6039.40??????????? 0????? 28450\n2018-02-03????? 6064????? 6071???? 5997?????? 6006?????? 16093 \n6033.60??????????? 0????? 13032\n2018-02-05????? 6002????? 6002???? 5958?????? 5961?????? 42093 \n5976.80??????????? 0????? 27624\n2018-02-06????? 5960????? 5965???? 5732?????? 5763????? 123888 \n5810.20??????????? 0????? 89853\n2018-02-07????? 5789????? 5881???? 5732?????? 5790?????? 91626 \n5819.55??????????? 0????? 67673\n2018-02-08????? 5776????? 5851???? 5761?????? 5810?????? 55014 \n5805.05??????????? 0????? 41684\n2018-02-09????? 5814????? 5818???? 5681?????? 5749?????? 68010 \n5761.95??????????? 0????? 51281\n2018-02-10????? 5756????? 5767???? 5605?????? 5724?????? 26899 \n5701.90??????????? 0????? 21716\n2018-02-12????? 5735????? 5776???? 5724?????? 5741?????? 36295 \n5748.25??????????? 0????? 25397\n2018-02-13????? 5745????? 5805???? 5715?????? 5792?????? 48076 \n5773.95??????????? 0????? 34088\n2018-02-14????? 5794????? 5817???? 5770?????? 5790?????? 39991 \n5794.55??????????? 0????? 29662\n2018-02-15????? 5790????? 5869???? 5746?????? 5863?????? 44764 \n5829.65??????????? 0????? 32971\n2018-02-16????? 5864????? 5892???? 5845?????? 5857?????? 34515 \n5868.05??????????? 0????? 25492\n2018-02-17????? 5858????? 5878???? 5838?????? 5850?????? 10587 \n5857.30??????????? 0?????? 8843\n2018-02-19????? 5863????? 5909???? 5841?????? 5903?????? 24088 \n5888.25??????????? 0????? 17265\n2018-02-20????? 5905????? 5906???? 5855?????? 5905?????? 27148 \n5886.75??????????? 0????? 20262\n2018-02-21????? 5899????? 5919???? 5864?????? 5915?????? 36287 \n5895.35??????????? 0????? 26784\n2018-02-22????? 5916????? 5967???? 5891?????? 5914?????? 39681 \n5919.00??????????? 0????? 28694\n2018-02-23????? 5912????? 5985???? 5907?????? 5973?????? 37903 \n5955.25??????????? 0????? 27725\n2018-02-24????? 5976????? 6004???? 5967?????? 6004??????? 7494 \n5981.35??????????? 0?????? 5928\n2018-02-26????? 6005????? 6016???? 5993?????? 6015?????? 26766 \n6005.75??????????? 0????? 17412\n2018-02-27????? 6012????? 6059???? 6010?????? 6036?????? 37704 \n6041.30??????????? 0????? 25322\n2018-02-28????? 6037????? 6049???? 5991?????? 6000?????? 43430 \n6010.05??????????? 0????? 29415\n2018-03-01????? 6000????? 6017???? 5939?????? 5961?????? 42065 \n5964.65??????????? 0????? 29407\n2018-03-02????? 5966????? 5984???? 5883?????? 5911?????? 55735 \n5920.85??????????? 0????? 40967\n2018-03-03????? 5911????? 5925???? 5866?????? 5924?????? 14438 \n5894.75??????????? 0????? 11996\n2018-03-05????? 5928????? 5929???? 5866?????? 5884?????? 27914 \n5886.75??????????? 0????? 19864\n2018-03-06????? 5885????? 5969???? 5864?????? 5954?????? 42388 \n5939.05??????????? 0????? 29752\n2018-03-07????? 5958????? 5990???? 5883?????? 5897?????? 43885 \n5921.85??????????? 0????? 30871\n2018-03-08????? 5894????? 5943???? 5886?????? 5939?????? 41921 \n5925.25??????????? 0????? 29409\n2018-03-09????? 5942????? 5980???? 5927?????? 5963?????? 36634 \n5959.15??????????? 0????? 25163\n2018-03-10????? 5966????? 6020???? 5958?????? 6020?????? 11155 \n5987.10??????????? 0?????? 8263\n2018-03-12????? 6029????? 6032???? 5986?????? 5989?????? 28166 \n6007.95??????????? 0????? 17869\n2018-03-13????? 5992????? 6011???? 5948?????? 5967?????? 26778 \n5975.45??????????? 0????? 18867\n2018-03-14????? 5969????? 5990???? 5921?????? 5937?????? 17305 \n5941.85??????????? 0????? 13060\n2018-03-15????? 5940????? 5962???? 5924?????? 5924??????? 2414 \n5943.70??????????? 0?????? 1761\n\nI presume in the early period there were not transactions every day but \nas the volume picks up I notice the data seems to miss Sundays.\n\nI thought these were continuous contracts (24/7) so I'm worried I have \nsome setting wrong.? Maybe someone more familiar with the function can \nadvise.\n\nThanks.\n----------------------------------------------------------------------------------------------------------------------------------- \n\nStephen Choularton PhD, FIoD",
+      "body_snippet": "Hi\n\nI am using this call to obtain the historical data for the SNFE SPI \nfuture contract.? Here is the full code I am using:\n\nlibrary(\"IBrokers\")\ncloseAllConnections()\n\n# IBrokersRef()\n\ntws <- twsConn",
+      "thread_id": "thread-6b6e3effc4db",
+      "thread_depth": 0,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-d9fdd8b904c2",
+      "message_id": "<5ABB8814020000F80006C1F2@gwia0.itz.uni-halle.de>",
+      "from_name": "Pit Götz",
+      "from_email_hash": "1e697a971ed9cbc7dec36c189a47e03aaba1ec422daaceafb43c8dfde69eaea2",
+      "date": "2018-03-28T12:18:28+02:00",
+      "subject": "[R-SIG-Finance] CAViaR",
+      "subject_clean": "CAViaR",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello everyone,\n\nsince this is my first post here I would like to introduce myself:\n\nMy Name is Pit Goetz and I am currently working on my Ph.D. thesis in\nfinance.\nI usually do different stuff, wich is why I ask for help here:\n\n\nI want to use the CAViaR Model by Engle and Manganelli (2004) in R and I\nfound the following package for it:\n\nhttps://github.com/steinarv/quantileVaR\n\nit looks rather similar to the code provided by Manganelli on his\nwebsite:\n\nhttp://www.simonemanganelli.org/Simone/Research.html\nAt: CAViaR: Conditional Autoregressive Value at Risk by Regression\nQuantiles (with Robert Engle), 2004, Journal of Business & Economic\nStatistics, 22(4): 367-381\n\n\nUnfortunytely the R package has only a limited amount of description and\ncomments, wich is why I am here:\n\nDoes anyone have any experience with this package or with CAViaR in R in\ngeneral and can help me on how to code or use it?\n\n\nBest rgards,\nPit Goetz\n\nResearch Associate\nMartin-Luther-Universit?t Halle-Wittenberg\nChair of Finance & Banking\n \nGro?e Steinstra?e 73 | D-06108 Halle | Germany\nTel 0049 345 5523452\n\n \n\n\n-------------- next part --------------\nAn HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20180328/5aa07a70/attachment.html>",
+      "body_snippet": "Hello everyone,\n\nsince this is my first post here I would like to introduce myself:\n\nMy Name is Pit Goetz and I am currently working on my Ph.D. thesis in\nfinance.\nI usually do different stuff, wich i",
+      "thread_id": "thread-d9fdd8b904c2",
+      "thread_depth": 0,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-c948e1ea7f42",
+      "message_id": "<CAAQo5owUAxSLFGitVrEkXHYTkiKO13_xVSJ-=JQ24H1qye3WKA@mail.gmail.com>",
+      "from_name": "Pedro Albuquerque",
+      "from_email_hash": "5d66a6b89fea79ca6f91304ae6ff230e152b046ef1a92b235a9ed21fe2e7eaa3",
+      "date": "2018-03-28T10:59:58Z",
+      "subject": "[R-SIG-Finance] CAViaR",
+      "subject_clean": "CAViaR",
+      "in_reply_to": "<5ABB8814020000F80006C1F2@gwia0.itz.uni-halle.de>",
+      "references": [
+        "<5ABB8814020000F80006C1F2@gwia0.itz.uni-halle.de>"
+      ],
+      "body_plain": "Hey Pit,\nI and my lab implemented some CAViaR parametric forms in R.\nTake a look: https://github.com/PedroBSB/Caviar\nCheers.\nPedro\n\nOn Wed, Mar 28, 2018, 7:18 AM Pit G?tz <pit.goetz at wiwi.uni-halle.de> wrote:\n\n> Hello everyone,\n>\n> since this is my first post here I would like to introduce myself:\n>\n> My Name is Pit Goetz and I am currently working on my Ph.D. thesis in\n> finance.\n> I usually do different stuff, wich is why I ask for help here:\n>\n>\n> I want to use the CAViaR Model by Engle and Manganelli (2004) in R and I\n> found the following package for it:\n>\n> https://github.com/steinarv/quantileVaR\n>\n> it looks rather similar to the code provided by Manganelli on his website:\n>\n> http://www.simonemanganelli.org/Simone/Research.html\n> At: CAViaR: Conditional Autoregressive Value at Risk by Regression\n> Quantiles (with Robert Engle), 2004, Journal of Business & Economic\n> Statistics, 22(4): 367-381\n>\n>\n> Unfortunytely the R package has only a limited amount of description and\n> comments, wich is why I am here:\n>\n> Does anyone have any experience with this package or with CAViaR in R in\n> general and can help me on how to code or use it?\n>\n>\n> Best rgards,\n> Pit Goetz\n>\n> Research Associate\n>\n> *Martin-Luther-Universit?t Halle-Wittenberg*\n>\n> Chair of Finance & Banking\n>\n>\n>\n> Gro?e Steinstra?e 73 | D-06108 Halle | Germany\n> Tel 0049 345 5523452\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hey Pit,\nI and my lab implemented some CAViaR parametric forms in R.\nTake a look: https://github.com/PedroBSB/Caviar\nCheers.\nPedro\n\nOn Wed, Mar 28, 2018, 7:18 AM Pit G?tz <pit.goetz at wiwi.uni-halle.",
+      "thread_id": "thread-d9fdd8b904c2",
+      "thread_depth": 1,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-5a326f45a3ae",
+      "message_id": "<496c0663-7afe-07d2-cb37-d61e55922eb3@gmail.com>",
+      "from_name": "Siegfried Köstlmeier",
+      "from_email_hash": "6eb735f85fafe7688babe43b145e215a42d6d9ef0a8b9be49f49537517db5f3a",
+      "date": "2018-03-29T18:36:43+02:00",
+      "subject": "[R-SIG-Finance] using reqHistoricalData",
+      "subject_clean": "using reqHistoricalData",
+      "in_reply_to": "<01fe9c3a-257b-e843-a4c4-8afdd7cb3062@organicfoodmarkets.com.au>",
+      "references": [
+        "<01fe9c3a-257b-e843-a4c4-8afdd7cb3062@organicfoodmarkets.com.au>"
+      ],
+      "body_plain": "Hey Stephen,\n\nalthough the contracts themselves are continuous in time, trading hours \non a stock exchange are not. I think the function reports the right \ndata, so let me mention a possible economic reason for your results:\n\nStock data is commonly reported only on trading days. Therefore it is \ncorrect to get a time-series of only trading-day data. Think about e.g. \nclosing prices: On a non-trading day it would be the same value as the \nclosing price the previous trading day, so the return of any financial \nasset on a non-trading day would be zero. Any estimation of paramaters \n(beta-factor,...) would be biased by these data generated on non-trading \ndays. So don't worry about missing data on a sunday.\n\nBest,\n\nSiegfried\n\n\nAm 27.03.18 um 22:41 schrieb Stephen Choularton:\n> Hi\n>\n> I am using this call to obtain the historical data for the SNFE SPI \n> future contract.? Here is the full code I am using:\n>\n> library(\"IBrokers\")\n> closeAllConnections()\n>\n> # IBrokersRef()\n>\n> tws <- twsConnect()\n> reqCurrentTime(tws)\n>\n>\n>\n> #contract <- twsFuture('SPI', exch='SNFE', expiry=\"201703\", \n> currency=\"AUD\",|include_expired='1'|)\n>\n> contract <- twsFuture('SPI', exch='SNFE', expiry=\"201803\", \n> currency=\"AUD\", |include_expired='1'|)\n>\n> reqContractDetails(tws, contract)\n>\n>\n> Sys.sleep(10) # mandatory 10s between request to avoid IB pacing \n> violation\n> reqHistoricalData(tws, contract, barSize = \"1 day\", \n> endDateTime='20180315 16:00:00', duration = \"6 M\")\n>\n> and I get this result:\n>\n> waiting for TWS reply on SPI ...... done.\n> ?????????? APH8.Open APH8.High APH8.Low APH8.Close APH8.Volume \n> APH8.WAP APH8.hasGaps APH8.Count\n> 2017-09-19????? 5650????? 5650???? 5650?????? 5650?????????? 2 \n> 5650.00??????????? 0????????? 1\n> 2017-10-03????? 5622????? 5622???? 5622?????? 5622?????????? 2 \n> 5622.00??????????? 0????????? 1\n> 2017-10-16????? 5774????? 5774???? 5774?????? 5772?????????? 1 \n> 5774.00??????????? 0????????? 1\n> 2017-11-28????? 5930????? 5953???? 5930?????? 5953?????????? 3 \n> 5937.65??????????? 0????????? 2\n> 2017-12-04????? 5948????? 5948???? 5948?????? 5941?????????? 1 \n> 5948.00??????????? 0????????? 1\n> 2017-12-06????? 5909????? 5909???? 5909?????? 5909?????????? 1 \n> 5909.00??????????? 0????????? 1\n> 2017-12-08????? 5960????? 5960???? 5948?????? 5948?????????? 6 \n> 5952.00??????????? 0????????? 3\n> 2017-12-11????? 5970????? 5970???? 5951?????? 5951????????? 11 \n> 5968.25??????????? 0????????? 7\n> 2017-12-12????? 5958????? 5974???? 5952?????? 5970???????? 173 \n> 5965.10??????????? 0??????? 108\n> 2017-12-13????? 5959????? 5982???? 5957?????? 5975????????? 81 \n> 5973.15??????????? 0???????? 49\n> 2017-12-14????? 5982????? 6012???? 5962?????? 5964???????? 425 \n> 5976.55??????????? 0??????? 234\n> 2017-12-15????? 5958????? 5986???? 5940?????? 5957???????? 245 \n> 5953.70??????????? 0??????? 184\n> 2017-12-16????? 5953????? 5988???? 5953?????? 5980???????? 115 \n> 5971.60??????????? 0???????? 82\n> 2017-12-18????? 5986????? 5994???? 5970?????? 5989??????? 1827 \n> 5988.85??????????? 0?????? 1012\n> 2017-12-19????? 5988????? 6042???? 5988?????? 6029??????? 7575 \n> 6027.75??????????? 0?????? 4799\n> 2017-12-20????? 6032????? 6046???? 6005?????? 6036?????? 16735 \n> 6030.70??????????? 0????? 10465\n> 2017-12-21????? 6036????? 6045???? 6007?????? 6013?????? 24219 \n> 6017.80??????????? 0????? 16695\n> 2017-12-22????? 6013????? 6045???? 6013?????? 6026?????? 18950 \n> 6029.10??????????? 0????? 13816\n> 2017-12-27????? 6019????? 6050???? 6011?????? 6022?????? 15864 \n> 6029.60??????????? 0????? 11133\n> 2017-12-28????? 6022????? 6052???? 6013?????? 6046?????? 21516 \n> 6034.70??????????? 0????? 15445\n> 2017-12-29????? 6045????? 6052???? 6008?????? 6019?????? 24757 \n> 6028.20??????????? 0????? 17056\n> 2018-01-02????? 6019????? 6033???? 5987?????? 6022?????? 19624 \n> 6012.05??????????? 0????? 14487\n> 2018-01-03????? 6023????? 6035???? 6005?????? 6031?????? 25104 \n> 6023.40??????????? 0????? 18833\n> 2018-01-04????? 6031????? 6065???? 6021?????? 6024?????? 30502 \n> 6037.50??????????? 0????? 22464\n> 2018-01-05????? 6026????? 6082???? 6024?????? 6073?????? 29123 \n> 6064.45??????????? 0????? 19788\n> 2018-01-06????? 6075????? 6101???? 6070?????? 6092??????? 6075 \n> 6087.55??????????? 0?????? 4696\n> 2018-01-08????? 6095????? 6104???? 6079?????? 6081?????? 16224 \n> 6086.90??????????? 0????? 12149\n> 2018-01-09????? 6079????? 6105???? 6072?????? 6088?????? 25272 \n> 6091.85??????????? 0????? 19091\n> 2018-01-10????? 6089????? 6114???? 6044?????? 6046?????? 39228 \n> 6072.60??????????? 0????? 27930\n> 2018-01-11????? 6050????? 6055???? 6004?????? 6012?????? 38948 \n> 6024.40??????????? 0????? 27751\n> 2018-01-12????? 6011????? 6038???? 6001?????? 6017?????? 26643 \n> 6021.65??????????? 0????? 19102\n> 2018-01-13????? 6020????? 6054???? 6017?????? 6049??????? 7186 \n> 6033.15??????????? 0?????? 5817\n> 2018-01-15????? 6059????? 6060???? 6023?????? 6026?????? 16203 \n> 6036.50??????????? 0????? 11591\n> 2018-01-16????? 6028????? 6030???? 5990?????? 5991?????? 25578 \n> 6007.20??????????? 0????? 18025\n> 2018-01-17????? 5994????? 6015???? 5945?????? 5959?????? 37579 \n> 5974.70??????????? 0????? 26430\n> 2018-01-18????? 5960????? 5985???? 5937?????? 5951?????? 31683 \n> 5965.85??????????? 0????? 22749\n> 2018-01-19????? 5948????? 5977???? 5946?????? 5949?????? 28451 \n> 5960.65??????????? 0????? 20903\n> 2018-01-20????? 5949????? 5981???? 5949?????? 5980??????? 8208 \n> 5964.80??????????? 0?????? 6587\n> 2018-01-22????? 5973????? 5973???? 5933?????? 5938?????? 23302 \n> 5948.30??????????? 0????? 16328\n> 2018-01-23????? 5942????? 5990???? 5940?????? 5986?????? 27435 \n> 5973.75??????????? 0????? 19193\n> 2018-01-24????? 5989????? 6012???? 5981?????? 6000?????? 28456 \n> 5998.90??????????? 0????? 20244\n> 2018-01-25????? 6000????? 6009???? 5962?????? 5999?????? 31679 \n> 5989.05??????????? 0????? 22431\n> 2018-01-26????? 6000????? 6007???? 5976?????? 5985??????? 8956 \n> 5991.10??????????? 0?????? 6967\n> 2018-01-27????? 5987????? 6016???? 5987?????? 6015??????? 6021 \n> 6003.15??????????? 0?????? 4643\n> 2018-01-29????? 6020????? 6033???? 5999?????? 6010?????? 20523 \n> 6018.10??????????? 0????? 14757\n> 2018-01-30????? 6008????? 6020???? 5958?????? 5960?????? 36140 \n> 5982.90??????????? 0????? 24692\n> 2018-01-31????? 5961????? 5987???? 5920?????? 5980?????? 40809 \n> 5960.15??????????? 0????? 28947\n> 2018-02-01????? 5979????? 6038???? 5968?????? 6037?????? 39409 \n> 6012.55??????????? 0????? 27264\n> 2018-02-02????? 6037????? 6072???? 5999?????? 6071?????? 39430 \n> 6039.40??????????? 0????? 28450\n> 2018-02-03????? 6064????? 6071???? 5997?????? 6006?????? 16093 \n> 6033.60??????????? 0????? 13032\n> 2018-02-05????? 6002????? 6002???? 5958?????? 5961?????? 42093 \n> 5976.80??????????? 0????? 27624\n> 2018-02-06????? 5960????? 5965???? 5732?????? 5763????? 123888 \n> 5810.20??????????? 0????? 89853\n> 2018-02-07????? 5789????? 5881???? 5732?????? 5790?????? 91626 \n> 5819.55??????????? 0????? 67673\n> 2018-02-08????? 5776????? 5851???? 5761?????? 5810?????? 55014 \n> 5805.05??????????? 0????? 41684\n> 2018-02-09????? 5814????? 5818???? 5681?????? 5749?????? 68010 \n> 5761.95??????????? 0????? 51281\n> 2018-02-10????? 5756????? 5767???? 5605?????? 5724?????? 26899 \n> 5701.90??????????? 0????? 21716\n> 2018-02-12????? 5735????? 5776???? 5724?????? 5741?????? 36295 \n> 5748.25??????????? 0????? 25397\n> 2018-02-13????? 5745????? 5805???? 5715?????? 5792?????? 48076 \n> 5773.95??????????? 0????? 34088\n> 2018-02-14????? 5794????? 5817???? 5770?????? 5790?????? 39991 \n> 5794.55??????????? 0????? 29662\n> 2018-02-15????? 5790????? 5869???? 5746?????? 5863?????? 44764 \n> 5829.65??????????? 0????? 32971\n> 2018-02-16????? 5864????? 5892???? 5845?????? 5857?????? 34515 \n> 5868.05??????????? 0????? 25492\n> 2018-02-17????? 5858????? 5878???? 5838?????? 5850?????? 10587 \n> 5857.30??????????? 0?????? 8843\n> 2018-02-19????? 5863????? 5909???? 5841?????? 5903?????? 24088 \n> 5888.25??????????? 0????? 17265\n> 2018-02-20????? 5905????? 5906???? 5855?????? 5905?????? 27148 \n> 5886.75??????????? 0????? 20262\n> 2018-02-21????? 5899????? 5919???? 5864?????? 5915?????? 36287 \n> 5895.35??????????? 0????? 26784\n> 2018-02-22????? 5916????? 5967???? 5891?????? 5914?????? 39681 \n> 5919.00??????????? 0????? 28694\n> 2018-02-23????? 5912????? 5985???? 5907?????? 5973?????? 37903 \n> 5955.25??????????? 0????? 27725\n> 2018-02-24????? 5976????? 6004???? 5967?????? 6004??????? 7494 \n> 5981.35??????????? 0?????? 5928\n> 2018-02-26????? 6005????? 6016???? 5993?????? 6015?????? 26766 \n> 6005.75??????????? 0????? 17412\n> 2018-02-27????? 6012????? 6059???? 6010?????? 6036?????? 37704 \n> 6041.30??????????? 0????? 25322\n> 2018-02-28????? 6037????? 6049???? 5991?????? 6000?????? 43430 \n> 6010.05??????????? 0????? 29415\n> 2018-03-01????? 6000????? 6017???? 5939?????? 5961?????? 42065 \n> 5964.65??????????? 0????? 29407\n> 2018-03-02????? 5966????? 5984???? 5883?????? 5911?????? 55735 \n> 5920.85??????????? 0????? 40967\n> 2018-03-03????? 5911????? 5925???? 5866?????? 5924?????? 14438 \n> 5894.75??????????? 0????? 11996\n> 2018-03-05????? 5928????? 5929???? 5866?????? 5884?????? 27914 \n> 5886.75??????????? 0????? 19864\n> 2018-03-06????? 5885????? 5969???? 5864?????? 5954?????? 42388 \n> 5939.05??????????? 0????? 29752\n> 2018-03-07????? 5958????? 5990???? 5883?????? 5897?????? 43885 \n> 5921.85??????????? 0????? 30871\n> 2018-03-08????? 5894????? 5943???? 5886?????? 5939?????? 41921 \n> 5925.25??????????? 0????? 29409\n> 2018-03-09????? 5942????? 5980???? 5927?????? 5963?????? 36634 \n> 5959.15??????????? 0????? 25163\n> 2018-03-10????? 5966????? 6020???? 5958?????? 6020?????? 11155 \n> 5987.10??????????? 0?????? 8263\n> 2018-03-12????? 6029????? 6032???? 5986?????? 5989?????? 28166 \n> 6007.95??????????? 0????? 17869\n> 2018-03-13????? 5992????? 6011???? 5948?????? 5967?????? 26778 \n> 5975.45??????????? 0????? 18867\n> 2018-03-14????? 5969????? 5990???? 5921?????? 5937?????? 17305 \n> 5941.85??????????? 0????? 13060\n> 2018-03-15????? 5940????? 5962???? 5924?????? 5924??????? 2414 \n> 5943.70??????????? 0?????? 1761\n>\n> I presume in the early period there were not transactions every day \n> but as the volume picks up I notice the data seems to miss Sundays.\n>\n> I thought these were continuous contracts (24/7) so I'm worried I have \n> some setting wrong.? Maybe someone more familiar with the function can \n> advise.\n>\n> Thanks.\n> ----------------------------------------------------------------------------------------------------------------------------------- \n>\n> Stephen Choularton PhD, FIoD\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R \n> questions should go.",
+      "body_snippet": "Hey Stephen,\n\nalthough the contracts themselves are continuous in time, trading hours \non a stock exchange are not. I think the function reports the right \ndata, so let me mention a possible economic ",
+      "thread_id": "thread-6b6e3effc4db",
+      "thread_depth": 1,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-8de360b276d3",
+      "message_id": "<F076941E-9FA9-4ABA-BA11-BADEF5125113@gmail.com>",
+      "from_name": "Sal Abbasi",
+      "from_email_hash": "21a3accba913fe2993c03e1304249b0a967aa0fac47aea2abcf202e4ecf48dda",
+      "date": "2018-03-29T12:17:01-05:00",
+      "subject": "[R-SIG-Finance] Using quantstrat with options",
+      "subject_clean": "Using quantstrat with options",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Has anyone used quantstrat with options?  I?ve found lots of examples where people are using it with equities and one where someone is using it with futures but have not been able to find any examples of people using it with options yet.  I?m trying to backtest some index options strategies, and wanted to ask about a pragmatic way of using quantstrat when there are so many symbols involved (one per strike / maturity).   Also there is a lot of market data involved since I?m using 1 minute bars, so I was wondering whether I should create a subset of my market data for the minimum required before feeding it to quantstrat or whether people have done something where quantstrat can look up the data it needs from indexed files on disk as it runs and does not need to hold it in memory.\n\nBest,\n\nSal",
+      "body_snippet": "Has anyone used quantstrat with options?  I?ve found lots of examples where people are using it with equities and one where someone is using it with futures but have not been able to find any examples",
+      "thread_id": "thread-8de360b276d3",
+      "thread_depth": 0,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-b9f3429b3c42",
+      "message_id": "<1522344736.17100.141.camel@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2018-03-29T12:32:16-05:00",
+      "subject": "[R-SIG-Finance] Using quantstrat with options",
+      "subject_clean": "Using quantstrat with options",
+      "in_reply_to": "<F076941E-9FA9-4ABA-BA11-BADEF5125113@gmail.com>",
+      "references": [
+        "<F076941E-9FA9-4ABA-BA11-BADEF5125113@gmail.com>"
+      ],
+      "body_plain": "There should conceptually be no difficulty with lots of symbols and 1-\nminute data.  We pretty routinely use quantstrat on tick data or 1-\nsecond data.\n\nWe pretty regularly segment our backtests with a loop around the calls\nto applyStrategy that load data monthly or quarterly, add symbols to\nportfolios or create new portfolios for each segment, and then run that\nsubset of the overall backtest series.\n\nI do not trade options, so I can't help there, but you should be able\nto manage the meta-data for the contracts by adding fields to your\ninstrument definitions.  If things like tick sizes and multipliers are\nset correctly for the root symbol, then the accounting should work.\n\nRegards,\n\nBrian\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock\n\nOn Thu, 2018-03-29 at 12:17 -0500, Sal Abbasi wrote:\n> Has anyone used quantstrat with options?  I?ve found lots of examples\n> where people are using it with equities and one where someone is\n> using it with futures but have not been able to find any examples of\n> people using it with options yet.  I?m trying to backtest some index\n> options strategies, and wanted to ask about a pragmatic way of using\n> quantstrat when there are so many symbols involved (one per strike /\n> maturity).   Also there is a lot of market data involved since I?m\n> using 1 minute bars, so I was wondering whether I should create a\n> subset of my market data for the minimum required before feeding it\n> to quantstrat or whether people have done something where quantstrat\n> can look up the data it needs from indexed files on disk as it runs\n> and does not need to hold it in memory.\n> \n> Best,\n> \n> Sal\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R\n> questions should go.\n>",
+      "body_snippet": "There should conceptually be no difficulty with lots of symbols and 1-\nminute data.  We pretty routinely use quantstrat on tick data or 1-\nsecond data.\n\nWe pretty regularly segment our backtests with ",
+      "thread_id": "thread-8de360b276d3",
+      "thread_depth": 1,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-cc5c9f2a2515",
+      "message_id": "<5FE72FB1-2B83-486F-A18F-D18DA7B022C3@gmail.com>",
+      "from_name": "Sal Abbasi",
+      "from_email_hash": "21a3accba913fe2993c03e1304249b0a967aa0fac47aea2abcf202e4ecf48dda",
+      "date": "2018-03-29T15:06:26-05:00",
+      "subject": "[R-SIG-Finance] Using quantstrat with options",
+      "subject_clean": "Using quantstrat with options",
+      "in_reply_to": "<1522344736.17100.141.camel@braverock.com>",
+      "references": [
+        "<F076941E-9FA9-4ABA-BA11-BADEF5125113@gmail.com>",
+        "<1522344736.17100.141.camel@braverock.com>"
+      ],
+      "body_plain": "Thank you.  Just loaded up a few symbols and it seems to be working great so far.\n\n> On Mar 29, 2018, at 12:32 PM, Brian G. Peterson <brian at braverock.com> wrote:\n> \n> There should conceptually be no difficulty with lots of symbols and 1-\n> minute data.  We pretty routinely use quantstrat on tick data or 1-\n> second data.\n> \n> We pretty regularly segment our backtests with a loop around the calls\n> to applyStrategy that load data monthly or quarterly, add symbols to\n> portfolios or create new portfolios for each segment, and then run that\n> subset of the overall backtest series.\n> \n> I do not trade options, so I can't help there, but you should be able\n> to manage the meta-data for the contracts by adding fields to your\n> instrument definitions.  If things like tick sizes and multipliers are\n> set correctly for the root symbol, then the accounting should work.\n> \n> Regards,\n> \n> Brian\n> \n> -- \n> Brian G. Peterson\n> http://braverock.com/brian/\n> Ph: 773-459-4973\n> IM: bgpbraverock\n> \n> On Thu, 2018-03-29 at 12:17 -0500, Sal Abbasi wrote:\n>> Has anyone used quantstrat with options?  I?ve found lots of examples\n>> where people are using it with equities and one where someone is\n>> using it with futures but have not been able to find any examples of\n>> people using it with options yet.  I?m trying to backtest some index\n>> options strategies, and wanted to ask about a pragmatic way of using\n>> quantstrat when there are so many symbols involved (one per strike /\n>> maturity).   Also there is a lot of market data involved since I?m\n>> using 1 minute bars, so I was wondering whether I should create a\n>> subset of my market data for the minimum required before feeding it\n>> to quantstrat or whether people have done something where quantstrat\n>> can look up the data it needs from indexed files on disk as it runs\n>> and does not need to hold it in memory.\n>> \n>> Best,\n>> \n>> Sal\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R\n>> questions should go.\n>>",
+      "body_snippet": "Thank you.  Just loaded up a few symbols and it seems to be working great so far.\n\n> On Mar 29, 2018, at 12:32 PM, Brian G. Peterson <brian at braverock.com> wrote:\n> \n> There should conceptually be n",
+      "thread_id": "thread-8de360b276d3",
+      "thread_depth": 2,
+      "month": "2018-03"
+    },
+    {
+      "id": "msg-e73bbe0e6062",
+      "message_id": "<CA+dpOJmj5M9PD4Fx_Ax7maccp8rN8DE-hOtUeCNbR_ovB40eew@mail.gmail.com>",
+      "from_name": "Christofer Bogaso",
+      "from_email_hash": "94494191170f349151c3e1bde090e6754a900331a7aa0f79aada4c207f2bcfdf",
+      "date": "2018-03-31T00:39:23+05:30",
+      "subject": "[R-SIG-Finance] Books for FX risk management",
+      "subject_clean": "Books for FX risk management",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI am looking for some good books/materials specializing on Market risk\nmanagement for various FX products.\n\nCan you point me to some good reference?\n\nThanks in advance.",
+      "body_snippet": "Hi,\n\nI am looking for some good books/materials specializing on Market risk\nmanagement for various FX products.\n\nCan you point me to some good reference?\n\nThanks in advance.",
+      "thread_id": "thread-e73bbe0e6062",
+      "thread_depth": 0,
+      "month": "2018-03"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-62aa876d9674",
+      "subject": "Question about rugarch",
+      "message_count": 5,
+      "participants": [
+        "Alexios Ghalanos",
+        "Andreas Bregiannis",
+        "ibrahim ergen"
+      ],
+      "started": "2018-03-01T16:32:22+00:00",
+      "last_reply": "2018-03-01T19:50:11+00:00",
+      "root_message_id": "msg-62aa876d9674"
+    },
+    {
+      "id": "thread-79cd9a65549f",
+      "subject": "Question quadprogXT",
+      "message_count": 1,
+      "participants": [
+        "Robert Harlow"
+      ],
+      "started": "2018-03-06T17:21:53-05:00",
+      "last_reply": "2018-03-06T17:21:53-05:00",
+      "root_message_id": "msg-79cd9a65549f"
+    },
+    {
+      "id": "thread-e2282010abc3",
+      "subject": "Minimizing tracking error with restricted number of stocks",
+      "message_count": 10,
+      "participants": [
+        "Alec Schmidt",
+        "Brian G. Peterson",
+        "Jason Hart",
+        "Vivek Rao"
+      ],
+      "started": "2018-03-08T01:55:18+00:00",
+      "last_reply": "2018-03-21T16:40:17+00:00",
+      "root_message_id": "msg-e2282010abc3"
+    },
+    {
+      "id": "thread-43848db61c4a",
+      "subject": "Question on highfrequency package",
+      "message_count": 1,
+      "participants": [
+        "Sal Abbasi"
+      ],
+      "started": "2018-03-12T12:09:47-05:00",
+      "last_reply": "2018-03-12T12:09:47-05:00",
+      "root_message_id": "msg-43848db61c4a"
+    },
+    {
+      "id": "thread-923da6708571",
+      "subject": "Error using Performance Analytics package",
+      "message_count": 4,
+      "participants": [
+        "Brian G. Peterson",
+        "Joshua Ulrich",
+        "Pankaj K Agarwal"
+      ],
+      "started": "2018-03-12T12:52:19+00:00",
+      "last_reply": "2018-03-13T09:49:23-05:00",
+      "root_message_id": "msg-923da6708571"
+    },
+    {
+      "id": "thread-02f5f1809393",
+      "subject": "SJC copula in R",
+      "message_count": 3,
+      "participants": [
+        "Erol Biceroglu",
+        "Gus Br"
+      ],
+      "started": "2018-03-12T17:37:02+01:00",
+      "last_reply": "2018-03-12T18:18:27+01:00",
+      "root_message_id": "msg-02f5f1809393"
+    },
+    {
+      "id": "thread-a798efa6305f",
+      "subject": "Error in using PerformanceAnalytics package.",
+      "message_count": 1,
+      "participants": [
+        "Pankaj K Agarwal"
+      ],
+      "started": "2018-03-13T14:33:17+00:00",
+      "last_reply": "2018-03-13T14:33:17+00:00",
+      "root_message_id": "msg-a798efa6305f"
+    },
+    {
+      "id": "thread-140cfd2e4b7e",
+      "subject": "Restriction test (H0: alpha1+beta1 = 1, H1:alpha1 + beta1 ≠ 1) on GARCH model in R not working",
+      "message_count": 2,
+      "participants": [
+        "Woo-Young Kang",
+        "alexios galanos"
+      ],
+      "started": "2018-03-14T19:15:09+00:00",
+      "last_reply": "2018-03-15T02:05:59-07:00",
+      "root_message_id": "msg-140cfd2e4b7e"
+    },
+    {
+      "id": "thread-47b88204ff28",
+      "subject": "RV: replicate sigma of the function UGARCHFIT",
+      "message_count": 1,
+      "participants": [
+        "于 喆"
+      ],
+      "started": "2018-03-15T15:48:53+00:00",
+      "last_reply": "2018-03-15T15:48:53+00:00",
+      "root_message_id": "msg-47b88204ff28"
+    },
+    {
+      "id": "thread-1d95b7065d59",
+      "subject": "Data adjustment question",
+      "message_count": 1,
+      "participants": [
+        "Joe O"
+      ],
+      "started": "2018-03-20T17:51:41-07:00",
+      "last_reply": "2018-03-20T17:51:41-07:00",
+      "root_message_id": "msg-1d95b7065d59"
+    },
+    {
+      "id": "thread-89cbb4447d73",
+      "subject": "Any news about the R/Finance 2018 conference?",
+      "message_count": 3,
+      "participants": [
+        "Brian G. Peterson",
+        "Sillas Gonzaga"
+      ],
+      "started": "2018-03-26T11:38:26+00:00",
+      "last_reply": "2018-03-26T11:44:13+00:00",
+      "root_message_id": "msg-89cbb4447d73"
+    },
+    {
+      "id": "thread-6b6e3effc4db",
+      "subject": "using reqHistoricalData",
+      "message_count": 2,
+      "participants": [
+        "Siegfried Köstlmeier",
+        "Stephen Choularton"
+      ],
+      "started": "2018-03-28T07:41:41+11:00",
+      "last_reply": "2018-03-29T18:36:43+02:00",
+      "root_message_id": "msg-6b6e3effc4db"
+    },
+    {
+      "id": "thread-d9fdd8b904c2",
+      "subject": "CAViaR",
+      "message_count": 2,
+      "participants": [
+        "Pedro Albuquerque",
+        "Pit Götz"
+      ],
+      "started": "2018-03-28T12:18:28+02:00",
+      "last_reply": "2018-03-28T10:59:58+00:00",
+      "root_message_id": "msg-d9fdd8b904c2"
+    },
+    {
+      "id": "thread-8de360b276d3",
+      "subject": "Using quantstrat with options",
+      "message_count": 3,
+      "participants": [
+        "Brian G. Peterson",
+        "Sal Abbasi"
+      ],
+      "started": "2018-03-29T12:17:01-05:00",
+      "last_reply": "2018-03-29T15:06:26-05:00",
+      "root_message_id": "msg-8de360b276d3"
+    },
+    {
+      "id": "thread-e73bbe0e6062",
+      "subject": "Books for FX risk management",
+      "message_count": 1,
+      "participants": [
+        "Christofer Bogaso"
+      ],
+      "started": "2018-03-31T00:39:23+05:30",
+      "last_reply": "2018-03-31T00:39:23+05:30",
+      "root_message_id": "msg-e73bbe0e6062"
+    }
+  ]
+}

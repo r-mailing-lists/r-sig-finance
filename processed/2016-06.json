@@ -1,0 +1,869 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2016-06",
+  "messages": [
+    {
+      "id": "msg-29ec777b1484",
+      "message_id": "<DB4PR06MB068563F964E17ED3B5DEB64AB75B0@DB4PR06MB0685.eurprd06.prod.outlook.com>",
+      "from_name": "Sachin Kuruvithadam",
+      "from_email_hash": "af594ab7816d97547df01279ed8216e3127bc99a31770463e9a3356a419e9ae4",
+      "date": "2016-06-05T23:38:58Z",
+      "subject": "[R-SIG-Finance] Estimating gumbel copula parameter",
+      "subject_clean": "Estimating gumbel copula parameter",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi all. I'm a R newbie, so please bear with me.\n\nI'm fitting nine log losses series (log returns multiplied by -1, so that I have losses on the right and returns on the left) using copulas. My project in more detail:\n1) I've filtered the residuals using univariate ARMA-GARCH models, and standardized them dividing by sigma, so that now I have standardized residuals with mean 0 and variance 1 (rugarch package).\n2) I modeled the residuals using the generalized pareto distribution family, for all nine series I'm using upper and lower thresholds equal to 0.95 and 0.05 quantiles respectively (spd package).\n3) After turning the standardized residuals to their uniform margins using pspd, I'm fitting a Gumbel copula which has upper tail dependence since I'm focusing on losses which are on the right (copula package).\nNext part of the work: i) I want to estimate a time-varying Gumbel parameter; ii) given predicted parameter, simulate copula realizations; iii) using the inverse marginal distributions, turn these realizations into standardized residuals; iv) compute returns using ARMA-GARCH specification, convert into simple returns, compute return of equally weighted portfolio and estimate/backtest value at risk and expected shortfall.\n\nBeing done with first 2 steps, now I want to estimate a time varying Gumbel. So I'm trying to extract the parameter with a moving window of 500 observations to get an idea of how the time series looks like.\n\nMy code looks like this:\ntheta <- c()\nfor (i in 1:3345)\n{\n  theta[i]=summary(fitCopula(gumbel.cop,standardized[i:(i+499),], method=\"ml\"))$coefficients[1]\n}\n\nwhere standardized is a matrix with 9 columns, each with the uniform margin between 0 and 1. So I want to estimate 3345 theta using a window of 500 observations, from theta_1 (obs. 1 to 500) to theta_3345 (obs. 3345 to 4344). However, while running this code, I get:\n\nError in optim(start, loglikCopula, lower = lower, upper = upper, method = method,  :\n  valore iniziale in 'vmmin' non finito\n\nwhere the last sentence can be translated with \"initial value in \"vmmin\" not finite\".\n\nWhat is this error due to? How can I fix this in the command? It runs for the first 1339 estimates (which I've obtained), but from i=1340 this message shows up and I have NA as estimated value.\n\n\nAny help is appreciated. Thanks.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi all. I'm a R newbie, so please bear with me.\n\nI'm fitting nine log losses series (log returns multiplied by -1, so that I have losses on the right and returns on the left) using copulas. My project",
+      "thread_id": "thread-29ec777b1484",
+      "thread_depth": 0,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-28f470422e21",
+      "message_id": "<5758A321.9000902@stat.ubc.ca>",
+      "from_name": "Xie Yijun",
+      "from_email_hash": "7b7cabb19ac81844b1a7df857d733f4a29b707609bf00aa838292337b106bd44",
+      "date": "2016-06-08T15:58:41-07:00",
+      "subject": "[R-SIG-Finance] How are errors terms calculated in GARCH model by rugarch package?",
+      "subject_clean": "How are errors terms calculated in GARCH model by rugarch package?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI am fitting a GARCH(1,1) model to the data and want to look at the \ninnovation distribution.\n\n###################\n  #generate the data\n     set.seed(1)\n     N = 5000\n     omega = 0.5\n     alpha = 0.08\n     beta = 0.91\n     X1 = rep(0,N)\n     X2 = rep(0,N)\n     sig1 = rep(0,N)\n     sig2 = rep(0,N)\n\n     for(i in 2:N){\n       sig1[i] = sqrt(omega + alpha * X1[i-1] + beta * sig1[i-1]^2)\n       X1[i] = sig1[i] * rnorm(1)\n       sig2[i] = sqrt(omega + alpha * X2[i-1] + beta * sig2[i-1]^2)\n       X2[i] = sig2[i] * rt(1, df = 8)\n     }\n\n     X1 = X1[-c(1:1000)]\n#################\n\n\nI first generate the data and fit it to GARCH(1,1) model with t innovation.\n\n########################\n     spec = ugarchspec(mean.model=list(armaOrder=c(0,0),include.mean=F),\n                   distribution.model=\"std\") # GARCH(1,1) model\n     myfit = ugarchfit(spec, X1)\n########################\n\nSuppose the fitted model is called `myfit` then I can get the error \nterms by\n\n###################\nz1 = myfit at fit$z\n###################\n\nHowever, if I only extract the parameters omega, alpha, and beta \nestimated by the `rugarch` package and calculate the error terms manually as\n\n$\\sigma_t^2 = \\omega + \\alpha X_{t-1}^2 + \\beta \\sigma_{t-1}^2$\n\n$z_t = X_t / \\sigma_t$\n\nThe code is:\n\n###########################\n     omega1 = myfit at fit$coef[1]\n     alpha1 = myfit at fit$coef[2]\n     beta1 = myfit at fit$coef[3]\n\n     z2 = rep(0,(N-1000))\n     sighat1 = rep(0,(N-1000))\n     sighat1[2] = 1\n     sighat1[1] = 1\n     for(i in 2:(N - 1000)){\n       sighat1[i] = sqrt(omega1 + alpha1 * X1[i-1] + beta1 * sighat1[i-1]^2)\n       z2[i] = X1[i]/sighat1[i]\n     }\n###########################\n\nI got very different results between these two approaches by comparing \nthe Q-Q plot of `z1` and `z2`.\n\n###########\n     qqnorm(z1)\n     qqline(z1)\n     qqnorm(z2)\n     qqline(z2)\n###########\n\n`z1` seems to be normally distributed following the data generating \nprocess, while `z2` has a heavy tail following the model specification. \nI was wondering why they are so different? I arbitrarily chose 1 for for \nfirst two terms of $\\hat{\\sigma}$, so does the difference come from the \ninitial values?\n\nAnd more generally, how does `rugarch` package fit the GARCH model and \nchoose initial values? My understanding is that we need to find \nparameters using either QMLE or MLE and then find error terms \niteratively using my second approach. But I am not sure how is the \ninitial value chosen.\n\nThanks!\nPatrick",
+      "body_snippet": "Hi,\n\nI am fitting a GARCH(1,1) model to the data and want to look at the \ninnovation distribution.\n\n###################\n  #generate the data\n     set.seed(1)\n     N = 5000\n     omega = 0.5\n     alpha ",
+      "thread_id": "thread-28f470422e21",
+      "thread_depth": 0,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-35f583ae4447",
+      "message_id": "<3e455df8-cbc4-3eb0-95ad-93db81accc33@4dscape.com>",
+      "from_name": "alexios galanos",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2016-06-08T19:58:45-05:00",
+      "subject": "[R-SIG-Finance] How are errors terms calculated in GARCH model by rugarch package?",
+      "subject_clean": "How are errors terms calculated in GARCH model by rugarch package?",
+      "in_reply_to": "<5758A321.9000902@stat.ubc.ca>",
+      "references": [
+        "<5758A321.9000902@stat.ubc.ca>"
+      ],
+      "body_plain": "1. The initialization of the recursion (and options for doing so) is\ndescribed in the vignette...please READ IT.\n\nThe default it to use the mean of the squared residuals.\n\nMany questions have already been answered over the years on this mailing\nlist regarding\nthe estimation and related issues so you might also like to search the\narchives.\n\n2. For some reason you are multiplying alpha1 by the value of X1 rather\nthan X1^2.\nHave you pre-squared X1 somewhere and I missed it?\n\nHere is the code to get exactly the same values:\n#########################\nz2 = rep(0,(N-1000))\nsighat1 = rep(0,(N-1000))\nsighat1[1] = sqrt(mean(X1^2))\nz2[1] = X1[1]/sighat1[1]\nfor(i in 2:length(X1)){\n  sighat1[i] = sqrt(omega1 + alpha1 * X1[i-1]^2 + beta1 * sighat1[i-1]^2)\n  z2[i] = X1[i]/sighat1[i]\n}\nall.equal(z1, z2)\n>TRUE\n#########################\n\n3. You may want to revisit your use of \"rt\". This is not the\nstandardized distribution\nand hence you will not have a st.deviation of 1.\n\nIn rugarch, rdist(\"std\",mu,sigma,shape,skew) is the standardized student\ndistribution\ni.e. rt(1, df=nu)/(sqrt(nu/(nu-2)))\n\n\n-Alexios\n\n\nOn 08/06/2016 17:58, Xie Yijun wrote:\n> Hi,\n>\n> I am fitting a GARCH(1,1) model to the data and want to look at the\n> innovation distribution.\n>\n> ###################\n>  #generate the data\n>     set.seed(1)\n>     N = 5000\n>     omega = 0.5\n>     alpha = 0.08\n>     beta = 0.91\n>     X1 = rep(0,N)\n>     X2 = rep(0,N)\n>     sig1 = rep(0,N)\n>     sig2 = rep(0,N)\n>\n>     for(i in 2:N){\n>       sig1[i] = sqrt(omega + alpha * X1[i-1] + beta * sig1[i-1]^2)\n>       X1[i] = sig1[i] * rnorm(1)\n>       sig2[i] = sqrt(omega + alpha * X2[i-1] + beta * sig2[i-1]^2)\n>       X2[i] = sig2[i] * rt(1, df = 8)\n>     }\n>\n>     X1 = X1[-c(1:1000)]\n> #################\n>\n>\n> I first generate the data and fit it to GARCH(1,1) model with t\n> innovation.\n>\n> ########################\n>     spec = ugarchspec(mean.model=list(armaOrder=c(0,0),include.mean=F),\n>                   distribution.model=\"std\") # GARCH(1,1) model\n>     myfit = ugarchfit(spec, X1)\n> ########################\n>\n> Suppose the fitted model is called `myfit` then I can get the error\n> terms by\n>\n> ###################\n> z1 = myfit at fit$z\n> ###################\n>\n> However, if I only extract the parameters omega, alpha, and beta\n> estimated by the `rugarch` package and calculate the error terms\n> manually as\n>\n> $\\sigma_t^2 = \\omega + \\alpha X_{t-1}^2 + \\beta \\sigma_{t-1}^2$\n>\n> $z_t = X_t / \\sigma_t$\n>\n> The code is:\n>\n> ###########################\n>     omega1 = myfit at fit$coef[1]\n>     alpha1 = myfit at fit$coef[2]\n>     beta1 = myfit at fit$coef[3]\n>\n>     z2 = rep(0,(N-1000))\n>     sighat1 = rep(0,(N-1000))\n>     sighat1[2] = 1\n>     sighat1[1] = 1\n>     for(i in 2:(N - 1000)){\n>       sighat1[i] = sqrt(omega1 + alpha1 * X1[i-1] + beta1 *\n> sighat1[i-1]^2)\n>       z2[i] = X1[i]/sighat1[i]\n>     }\n> ###########################\n>\n> I got very different results between these two approaches by comparing\n> the Q-Q plot of `z1` and `z2`.\n>\n> ###########\n>     qqnorm(z1)\n>     qqline(z1)\n>     qqnorm(z2)\n>     qqline(z2)\n> ###########\n>\n> `z1` seems to be normally distributed following the data generating\n> process, while `z2` has a heavy tail following the model\n> specification. I was wondering why they are so different? I\n> arbitrarily chose 1 for for first two terms of $\\hat{\\sigma}$, so does\n> the difference come from the initial values?\n>\n> And more generally, how does `rugarch` package fit the GARCH model and\n> choose initial values? My understanding is that we need to find\n> parameters using either QMLE or MLE and then find error terms\n> iteratively using my second approach. But I am not sure how is the\n> initial value chosen.\n>\n> Thanks!\n> Patrick\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R\n> questions should go.\n>",
+      "body_snippet": "1. The initialization of the recursion (and options for doing so) is\ndescribed in the vignette...please READ IT.\n\nThe default it to use the mean of the squared residuals.\n\nMany questions have already ",
+      "thread_id": "thread-28f470422e21",
+      "thread_depth": 1,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-672ab366f7d0",
+      "message_id": "<7ec88c2e8ba5cb302d1cf5fe580b4852@2pimail.com>",
+      "from_name": "thp",
+      "from_email_hash": "c04da9c6c9cb9295d4155cc7b0313d7e32a563810ae45ecbc425173e653d883f",
+      "date": "2016-06-09T08:02:39+02:00",
+      "subject": "[R-SIG-Finance] Option pricing, basic question",
+      "subject_clean": "Option pricing, basic question",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nI have a question regarding option pricing. In advance:\nthank you for the patience.\n\nI am trying to replay the calculation of plain\nvanilla option prices using the Black-Scholes model\n(the one leading to the analytic solution seen for\nexample on the wikipedia page [1]).\n\nUsing numerical values as simply obtained from\nan arbitrary broker, I am surprised to see that\nthe formula values and quoted prices mismatch\na lot. (seems cannot all be explained by spread\nor dividend details)\n\nMy question: What values for r (drift) and \\sigma^2\nare usually to be used, in which units?\n\nIf numerical values are chosen to be given \"per year\",\nthen I would expect r to be chosen as \\ln(1+i),\nwhere i is the yearly interest rate of the risk-free\nportfolio and \\ln is the natural logarithm. Would the\nrisk-free rate currently be chosen as zero?\n\nThe \\sigma^2 one would accordingly have to choose\nas the variance of the underlying security over\na one year period. Should this come out equal in\nnumerical value to the implied volatility, which is\n0.2 to 0.4 for the majority of options?\n\nTom\n\n[1] https://de.wikipedia.org/wiki/Black-Scholes-Modell",
+      "body_snippet": "Hello,\n\nI have a question regarding option pricing. In advance:\nthank you for the patience.\n\nI am trying to replay the calculation of plain\nvanilla option prices using the Black-Scholes model\n(the one",
+      "thread_id": "thread-672ab366f7d0",
+      "thread_depth": 0,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-b3b69f32aa6d",
+      "message_id": "<SNT405-EAS1072C74C1B528CABCC33D35AE5F0@phx.gbl>",
+      "from_name": "Hong Yu",
+      "from_email_hash": "a91e0f93afb8a70a3fc9c60cc09997fc8a41f71ca109fbf578459b244723562e",
+      "date": "2016-06-09T14:38:51+08:00",
+      "subject": "[R-SIG-Finance] Option pricing, basic question",
+      "subject_clean": "Option pricing, basic question",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I remember John Hull?s book on option pricing should be helpful in finding some examples for your programming and modelling.  \n\nSome assumptions of the Black-Scholes model are known to be impractical.  ?Implied volatility? is one way to handle that.  Again you can find books for theoretical discussions to improve Black-Scholes.\n\nMy suggestions do not stick to your particular questions.  But hope the above may help.\n\nHong Yu\n\n\n\n\nFrom: thp \nSent: Thursday, June 09, 2016 2:03 PM\nTo: r-sig-finance at r-project.org \nSubject: [R-SIG-Finance] Option pricing, basic question\n\nHello,\n\nI have a question regarding option pricing. In advance:\nthank you for the patience.\n\nI am trying to replay the calculation of plain\nvanilla option prices using the Black-Scholes model\n(the one leading to the analytic solution seen for\nexample on the wikipedia page [1]).\n\nUsing numerical values as simply obtained from\nan arbitrary broker, I am surprised to see that\nthe formula values and quoted prices mismatch\na lot. (seems cannot all be explained by spread\nor dividend details)\n\nMy question: What values for r (drift) and \\sigma^2\nare usually to be used, in which units?\n\nIf numerical values are chosen to be given \"per year\",\nthen I would expect r to be chosen as \\ln(1+i),\nwhere i is the yearly interest rate of the risk-free\nportfolio and \\ln is the natural logarithm. Would the\nrisk-free rate currently be chosen as zero?\n\nThe \\sigma^2 one would accordingly have to choose\nas the variance of the underlying security over\na one year period. Should this come out equal in\nnumerical value to the implied volatility, which is\n0.2 to 0.4 for the majority of options?\n\nTom\n\n[1] https://de.wikipedia.org/wiki/Black-Scholes-Modell\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I remember John Hull?s book on option pricing should be helpful in finding some examples for your programming and modelling.  \n\nSome assumptions of the Black-Scholes model are known to be impractical.",
+      "thread_id": "thread-b3b69f32aa6d",
+      "thread_depth": 0,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-e51d7541a94e",
+      "message_id": "<CEDE2EA1808446C3AA719BDC6DE4CA02@Franki7PC>",
+      "from_name": "Frank",
+      "from_email_hash": "abdffc2429bfa78db9949f51e22b4e11e2e14915791103deccd563dd4d9da29e",
+      "date": "2016-06-09T08:42:11-05:00",
+      "subject": "[R-SIG-Finance] Option pricing, basic question",
+      "subject_clean": "Option pricing, basic question",
+      "in_reply_to": "<7ec88c2e8ba5cb302d1cf5fe580b4852@2pimail.com>",
+      "references": [
+        "<7ec88c2e8ba5cb302d1cf5fe580b4852@2pimail.com>"
+      ],
+      "body_plain": "I use the 3-month constant maturity Treasury bill rate from FRED (Federal\nReserve Economic ??Database??) for the risk-free rate. For options with\nsubstantially more than 3 months until expiration, I think it makes sense to\nuse a maturity that best matches the option. The R code I use is:\n\nlibrary(quantmod)\nlibrary(chron)\n\n\n##\n## Get DGS3MO Treasury yield from FRED\n##\n\ngetSymbols('DGS3MO',src='FRED')\nDGS3MO<-na.locf(DGS3MO/100.0,na.rm = TRUE)\ntail(DGS3MO)\nfile_name <- \"DGS3MO.csv\"\nwrite.zoo(DGS3MO, file = file_name, append = FALSE, quote = TRUE, sep = \",\")\nquit()\n\nI run this text from a batch file in Windows 7 Pro 64-bit. The text in the\nbatch file is:\n\nREM on Microsoft Windows (adjust the path to R.exe as needed) \nDEL *DGS3MO.csv\n\n\"C:\\Program Files\\R\\R-3.2.2\\bin\\x64\\R.exe\" CMD BATCH\n\"C:\\Users\\Frank\\Documents\\R\\Projects\\DGS3MO\\DGS3MO.txt\"\n\"C:\\Users\\Frank\\Documents\\R\\Projects\\DGS3MO\\DGS3MO.out\"\nCOPY DGS3MO.BAT DGS3MO.BAK\nCOPY DGS3MO.TXT DGS3MO.TXT.BAK\nREM PAUSE\n\nYou say \"r (drift)\". Interest rates do move around despite the constant\ninterest rate assumption of the Black-Scholes model. This could be\ncharacterized as drift. I'm not sure why else drift is in this post.\nCorrecting for interest rate drift has not mattered in calculations I've\nmade.\n\nVolatility is also assumed constant in Black-Scholes. Volatility does drift\nand this is the core problem with fitting market data to the standard\nBlack-Scholes model. Correctly correcting for drift might give you a better\nfit to market data. \n\nBest,\n\nFrank\nChicago, IL\n\n-----Original Message-----\nFrom: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On Behalf\nOf thp\nSent: Thursday, June 09, 2016 1:03 AM\nTo: r-sig-finance at r-project.org\nSubject: [R-SIG-Finance] Option pricing, basic question\n\nHello,\n\nI have a question regarding option pricing. In advance:\nthank you for the patience.\n\nI am trying to replay the calculation of plain\nvanilla option prices using the Black-Scholes model\n(the one leading to the analytic solution seen for\nexample on the wikipedia page [1]).\n\nUsing numerical values as simply obtained from\nan arbitrary broker, I am surprised to see that\nthe formula values and quoted prices mismatch\na lot. (seems cannot all be explained by spread\nor dividend details)\n\nMy question: What values for r (drift) and \\sigma^2\nare usually to be used, in which units?\n\nIf numerical values are chosen to be given \"per year\",\nthen I would expect r to be chosen as \\ln(1+i),\nwhere i is the yearly interest rate of the risk-free\nportfolio and \\ln is the natural logarithm. Would the\nrisk-free rate currently be chosen as zero?\n\nThe \\sigma^2 one would accordingly have to choose\nas the variance of the underlying security over\na one year period. Should this come out equal in\nnumerical value to the implied volatility, which is\n0.2 to 0.4 for the majority of options?\n\nTom\n\n[1] https://de.wikipedia.org/wiki/Black-Scholes-Modell\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions\nshould go.",
+      "body_snippet": "I use the 3-month constant maturity Treasury bill rate from FRED (Federal\nReserve Economic ??Database??) for the risk-free rate. For options with\nsubstantially more than 3 months until expiration, I t",
+      "thread_id": "thread-672ab366f7d0",
+      "thread_depth": 1,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-36a33fdbadcf",
+      "message_id": "<CAEEj48kJRFdK+8mRaZqrpSscqXsX6hYy4FouLsDhAYuC5JsOOQ@mail.gmail.com>",
+      "from_name": "Adam Ginensky",
+      "from_email_hash": "33138a5b6715412ac7dd1fd1173e7315077671bb2dc9510719cbab0c88697d05",
+      "date": "2016-06-09T10:07:12-05:00",
+      "subject": "[R-SIG-Finance] Option pricing, basic question",
+      "subject_clean": "Option pricing, basic question",
+      "in_reply_to": "<7ec88c2e8ba5cb302d1cf5fe580b4852@2pimail.com>",
+      "references": [
+        "<7ec88c2e8ba5cb302d1cf5fe580b4852@2pimail.com>"
+      ],
+      "body_plain": "The comments below address the issue of drift and \\sigma .  As for the\ninterest rate used, I think you will find that the difference in the\nvalues obtained by using different interest rates is on the order of\nmagnitude of rounding error.\n\nThere is a famous quote of Box - \" All models are wrong, some are\nuseful \".  This applies to Black-Scholes in spades.  The B-S model is\nalmost universally  used to price options, but there are a number of\nimportant caveats about using B-S to price options. I would summarize\nmy comment by  saying that the  volatility of the underlying is merely\na guideline as to what volatility to use in pricing options.  For at\nthe money options, the implied volatility ( the \\sigma that will give\nthe value of the option) is a market consensus of what volatility will\nbe going forward.  In times of high volatility, the implied volatility\nwill always be lower (and I say always in an informed, not theoretical\nway) than the realized volatility and similarly in times of low\nvolatility the implied volatility will typically be higher than\nrealized volatility - both situations reflecting 'regression to the\nmean' nature of market movement. When I was an active floor trader,\nthis was called 'tilt' by many people. I would sum this up by saying\nthat the implied volatility is the market consensus as to what\nrealized volatility will be going forward.\nAs another exercise, get the prices of relatively short term options\nmid-day on the Friday before a 3 day weekend.  The implied volatility\nwill typically seem absurdly low but will seem reasonable if the\nvolatility is computed with the date being 3 days forward. That is the\nimplied volatility will 'price in' the three day weekend .  This is\nalso true for most ordinary weekends.  Further, this is just a piece\nof the issue.  The Black-Scholes model  significantly underprices out\nof the money options.  This is because the real world distribution of\nlog returns has 'fat tails'.\nFinally, there is no such thing as 'the volatility'.  For a given\noption class, implied volatility is usually different at every strike.\nThis is in fundamental contradiction to the assumptions of B-S, but\nreflects the reality of what happens in the real world.  For stocks,\nvolatility of out of the money puts is almost always higher than the\nvolatility for out of the money calls.  This reflects the fact that\nmarkets usually go down faster than they go up as well as the reality\nthat people usually want insurance against stock prices going down,\nnot insurance against stock prices going up.  This volatility curve is\ndynamic.  As the market goes higher, the difference between the\nvolatility of out of the money puts and the volatility of out of the\nmoney calls will usually increase.  When the market goes back down,\nthe volatility difference usually decreases.\nThe point is that modeling implied volatility is a complicated and not\nwell understood item.  hth.\n\n\n\n\n\n\n\n\nOn Thu, Jun 9, 2016 at 1:02 AM, thp <thp at 2pimail.com> wrote:\n> Hello,\n>\n> I have a question regarding option pricing. In advance:\n> thank you for the patience.\n>\n> I am trying to replay the calculation of plain\n> vanilla option prices using the Black-Scholes model\n> (the one leading to the analytic solution seen for\n> example on the wikipedia page [1]).\n>\n> Using numerical values as simply obtained from\n> an arbitrary broker, I am surprised to see that\n> the formula values and quoted prices mismatch\n> a lot. (seems cannot all be explained by spread\n> or dividend details)\n>\n> My question: What values for r (drift) and \\sigma^2\n> are usually to be used, in which units?\n>\n> If numerical values are chosen to be given \"per year\",\n> then I would expect r to be chosen as \\ln(1+i),\n> where i is the yearly interest rate of the risk-free\n> portfolio and \\ln is the natural logarithm. Would the\n> risk-free rate currently be chosen as zero?\n>\n> The \\sigma^2 one would accordingly have to choose\n> as the variance of the underlying security over\n> a one year period. Should this come out equal in\n> numerical value to the implied volatility, which is\n> 0.2 to 0.4 for the majority of options?\n>\n> Tom\n>\n> [1] https://de.wikipedia.org/wiki/Black-Scholes-Modell\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.",
+      "body_snippet": "The comments below address the issue of drift and \\sigma .  As for the\ninterest rate used, I think you will find that the difference in the\nvalues obtained by using different interest rates is on the ",
+      "thread_id": "thread-672ab366f7d0",
+      "thread_depth": 1,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-cc4c84fde2eb",
+      "message_id": "<C66E6AF301814723B8C94EDACCAF8FEA@OLEHP>",
+      "from_name": "Oleg Mubarakshin",
+      "from_email_hash": "b6ffbde57ec694cc26b2271e1f3d4f93c0444ea85c538d02fc8b91725c1ef7b0",
+      "date": "2016-06-09T19:11:03+03:00",
+      "subject": "[R-SIG-Finance] Option pricing, basic question",
+      "subject_clean": "Option pricing, basic question",
+      "in_reply_to": "<7ec88c2e8ba5cb302d1cf5fe580b4852@2pimail.com>",
+      "references": [
+        "<7ec88c2e8ba5cb302d1cf5fe580b4852@2pimail.com>"
+      ],
+      "body_plain": "Hi Tom!\n\nI hope you do not try to get option prices with using vol calculated from \nunderlying (so called realized or historical vol).\nBSM model is a model based on GBM, that we do not see in the real markets of \ncourse.\nReal markets express skew and fat tails in log-return distributions, that \nleads to vol skew and higher implied vol of deep OTM options.\n\nFor modeling of option prices often use:\n1. Stochastic vol models\n2. Local vol models\n3. Stochastic local vol models\n\nthese models is constructed for catch the effects described by me above.\n\nI hope it will help you!\n\nKind regards,\nOleg Mubarakshin\n\n-----???????? ?????????----- \nFrom: thp\nSent: Thursday, June 09, 2016 9:02 AM\nTo: r-sig-finance at r-project.org\nSubject: [R-SIG-Finance] Option pricing, basic question\n\nHello,\n\nI have a question regarding option pricing. In advance:\nthank you for the patience.\n\nI am trying to replay the calculation of plain\nvanilla option prices using the Black-Scholes model\n(the one leading to the analytic solution seen for\nexample on the wikipedia page [1]).\n\nUsing numerical values as simply obtained from\nan arbitrary broker, I am surprised to see that\nthe formula values and quoted prices mismatch\na lot. (seems cannot all be explained by spread\nor dividend details)\n\nMy question: What values for r (drift) and \\sigma^2\nare usually to be used, in which units?\n\nIf numerical values are chosen to be given \"per year\",\nthen I would expect r to be chosen as \\ln(1+i),\nwhere i is the yearly interest rate of the risk-free\nportfolio and \\ln is the natural logarithm. Would the\nrisk-free rate currently be chosen as zero?\n\nThe \\sigma^2 one would accordingly have to choose\nas the variance of the underlying security over\na one year period. Should this come out equal in\nnumerical value to the implied volatility, which is\n0.2 to 0.4 for the majority of options?\n\nTom\n\n[1] https://de.wikipedia.org/wiki/Black-Scholes-Modell\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions \nshould go.",
+      "body_snippet": "Hi Tom!\n\nI hope you do not try to get option prices with using vol calculated from \nunderlying (so called realized or historical vol).\nBSM model is a model based on GBM, that we do not see in the real",
+      "thread_id": "thread-672ab366f7d0",
+      "thread_depth": 1,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-87f399735198",
+      "message_id": "<9f2d7f33e81b8677fdbf2b321bc2653a@2pimail.com>",
+      "from_name": "thp",
+      "from_email_hash": "c04da9c6c9cb9295d4155cc7b0313d7e32a563810ae45ecbc425173e653d883f",
+      "date": "2016-06-09T18:26:42+02:00",
+      "subject": "[R-SIG-Finance] Option pricing, basic question",
+      "subject_clean": "Option pricing, basic question",
+      "in_reply_to": "<CEDE2EA1808446C3AA719BDC6DE4CA02@Franki7PC>",
+      "references": [
+        "<7ec88c2e8ba5cb302d1cf5fe580b4852@2pimail.com>",
+        "<CEDE2EA1808446C3AA719BDC6DE4CA02@Franki7PC>"
+      ],
+      "body_plain": "Hello to all,\n\nI noticed that indeed my questions are not truly specific to R. \nNevertheless the code in Frank's post\nwas guiding to FRED which contributes to answers.\n\nWith \"drift\" I mistakenly meant \"risk-free rate\"; properly one refers to \n\"drift\" when meaning the overall movement of the _underlying_.\n\nTom\n\n\nOn 2016-06-09 15:42, Frank wrote:\n> I use the 3-month constant maturity Treasury bill rate from FRED \n> (Federal\n> Reserve Economic ??Database??) for the risk-free rate. For options with\n> substantially more than 3 months until expiration, I think it makes \n> sense to\n> use a maturity that best matches the option. The R code I use is:\n> \n> library(quantmod)\n> library(chron)\n> \n> \n> ##\n> ## Get DGS3MO Treasury yield from FRED\n> ##\n> \n> getSymbols('DGS3MO',src='FRED')\n> DGS3MO<-na.locf(DGS3MO/100.0,na.rm = TRUE)\n> tail(DGS3MO)\n> file_name <- \"DGS3MO.csv\"\n> write.zoo(DGS3MO, file = file_name, append = FALSE, quote = TRUE, sep = \n> \",\")\n> quit()\n> \n> I run this text from a batch file in Windows 7 Pro 64-bit. The text in \n> the\n> batch file is:\n> \n> REM on Microsoft Windows (adjust the path to R.exe as needed)\n> DEL *DGS3MO.csv\n> \n> \"C:\\Program Files\\R\\R-3.2.2\\bin\\x64\\R.exe\" CMD BATCH\n> \"C:\\Users\\Frank\\Documents\\R\\Projects\\DGS3MO\\DGS3MO.txt\"\n> \"C:\\Users\\Frank\\Documents\\R\\Projects\\DGS3MO\\DGS3MO.out\"\n> COPY DGS3MO.BAT DGS3MO.BAK\n> COPY DGS3MO.TXT DGS3MO.TXT.BAK\n> REM PAUSE\n> \n> You say \"r (drift)\". Interest rates do move around despite the constant\n> interest rate assumption of the Black-Scholes model. This could be\n> characterized as drift. I'm not sure why else drift is in this post.\n> Correcting for interest rate drift has not mattered in calculations \n> I've\n> made.\n> \n> Volatility is also assumed constant in Black-Scholes. Volatility does \n> drift\n> and this is the core problem with fitting market data to the standard\n> Black-Scholes model. Correctly correcting for drift might give you a \n> better\n> fit to market data.\n> \n> Best,\n> \n> Frank\n> Chicago, IL\n> \n> -----Original Message-----\n> From: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On \n> Behalf\n> Of thp\n> Sent: Thursday, June 09, 2016 1:03 AM\n> To: r-sig-finance at r-project.org\n> Subject: [R-SIG-Finance] Option pricing, basic question\n> \n> Hello,\n> \n> I have a question regarding option pricing. In advance:\n> thank you for the patience.\n> \n> I am trying to replay the calculation of plain\n> vanilla option prices using the Black-Scholes model\n> (the one leading to the analytic solution seen for\n> example on the wikipedia page [1]).\n> \n> Using numerical values as simply obtained from\n> an arbitrary broker, I am surprised to see that\n> the formula values and quoted prices mismatch\n> a lot. (seems cannot all be explained by spread\n> or dividend details)\n> \n> My question: What values for r (drift) and \\sigma^2\n> are usually to be used, in which units?\n> \n> If numerical values are chosen to be given \"per year\",\n> then I would expect r to be chosen as \\ln(1+i),\n> where i is the yearly interest rate of the risk-free\n> portfolio and \\ln is the natural logarithm. Would the\n> risk-free rate currently be chosen as zero?\n> \n> The \\sigma^2 one would accordingly have to choose\n> as the variance of the underlying security over\n> a one year period. Should this come out equal in\n> numerical value to the implied volatility, which is\n> 0.2 to 0.4 for the majority of options?\n> \n> Tom\n> \n> [1] https://de.wikipedia.org/wiki/Black-Scholes-Modell\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.",
+      "body_snippet": "Hello to all,\n\nI noticed that indeed my questions are not truly specific to R. \nNevertheless the code in Frank's post\nwas guiding to FRED which contributes to answers.\n\nWith \"drift\" I mistakenly meant",
+      "thread_id": "thread-672ab366f7d0",
+      "thread_depth": 2,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-a0f7f7a8b4ad",
+      "message_id": "<B586BE917F244B1E803F82FB9840E73A@Franki7PC>",
+      "from_name": "Frank",
+      "from_email_hash": "abdffc2429bfa78db9949f51e22b4e11e2e14915791103deccd563dd4d9da29e",
+      "date": "2016-06-09T17:27:05-05:00",
+      "subject": "[R-SIG-Finance] Option pricing, basic question",
+      "subject_clean": "Option pricing, basic question",
+      "in_reply_to": "<9f2d7f33e81b8677fdbf2b321bc2653a@2pimail.com>",
+      "references": [
+        "<7ec88c2e8ba5cb302d1cf5fe580b4852@2pimail.com>",
+        "<CEDE2EA1808446C3AA719BDC6DE4CA02@Franki7PC>",
+        "<9f2d7f33e81b8677fdbf2b321bc2653a@2pimail.com>"
+      ],
+      "body_plain": "Tom,\n\nIf you get some options data up for analysis, you might want to try 0\ninterest first and then DGS3MO second. Using DGS3MO should produce a lower\nvariance between the settlement and the B-S prices.\n\nThe CBOE sells market data for $3 per month per symbol. The data is\nvoluminous and is best loaded into a database where you can query a relevant\nsubset of data. For instance, all the DEC 2016 SPY Call options that have\ngreater than 0 volume and open interest and are out-of-the-money.\n\nBest,\n\nFrank\nChicago\n\n-----Original Message-----\nFrom: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On Behalf\nOf thp\nSent: Thursday, June 09, 2016 11:27 AM\nTo: r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] Option pricing, basic question\n\nHello to all,\n\nI noticed that indeed my questions are not truly specific to R. \nNevertheless the code in Frank's post\nwas guiding to FRED which contributes to answers.\n\nWith \"drift\" I mistakenly meant \"risk-free rate\"; properly one refers to \n\"drift\" when meaning the overall movement of the _underlying_.\n\nTom\n\n\nOn 2016-06-09 15:42, Frank wrote:\n> I use the 3-month constant maturity Treasury bill rate from FRED \n> (Federal\n> Reserve Economic ??Database??) for the risk-free rate. For options with\n> substantially more than 3 months until expiration, I think it makes \n> sense to\n> use a maturity that best matches the option. The R code I use is:\n> \n> library(quantmod)\n> library(chron)\n> \n> \n> ##\n> ## Get DGS3MO Treasury yield from FRED\n> ##\n> \n> getSymbols('DGS3MO',src='FRED')\n> DGS3MO<-na.locf(DGS3MO/100.0,na.rm = TRUE)\n> tail(DGS3MO)\n> file_name <- \"DGS3MO.csv\"\n> write.zoo(DGS3MO, file = file_name, append = FALSE, quote = TRUE, sep = \n> \",\")\n> quit()\n> \n> I run this text from a batch file in Windows 7 Pro 64-bit. The text in \n> the\n> batch file is:\n> \n> REM on Microsoft Windows (adjust the path to R.exe as needed)\n> DEL *DGS3MO.csv\n> \n> \"C:\\Program Files\\R\\R-3.2.2\\bin\\x64\\R.exe\" CMD BATCH\n> \"C:\\Users\\Frank\\Documents\\R\\Projects\\DGS3MO\\DGS3MO.txt\"\n> \"C:\\Users\\Frank\\Documents\\R\\Projects\\DGS3MO\\DGS3MO.out\"\n> COPY DGS3MO.BAT DGS3MO.BAK\n> COPY DGS3MO.TXT DGS3MO.TXT.BAK\n> REM PAUSE\n> \n> You say \"r (drift)\". Interest rates do move around despite the constant\n> interest rate assumption of the Black-Scholes model. This could be\n> characterized as drift. I'm not sure why else drift is in this post.\n> Correcting for interest rate drift has not mattered in calculations \n> I've\n> made.\n> \n> Volatility is also assumed constant in Black-Scholes. Volatility does \n> drift\n> and this is the core problem with fitting market data to the standard\n> Black-Scholes model. Correctly correcting for drift might give you a \n> better\n> fit to market data.\n> \n> Best,\n> \n> Frank\n> Chicago, IL\n> \n> -----Original Message-----\n> From: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On \n> Behalf\n> Of thp\n> Sent: Thursday, June 09, 2016 1:03 AM\n> To: r-sig-finance at r-project.org\n> Subject: [R-SIG-Finance] Option pricing, basic question\n> \n> Hello,\n> \n> I have a question regarding option pricing. In advance:\n> thank you for the patience.\n> \n> I am trying to replay the calculation of plain\n> vanilla option prices using the Black-Scholes model\n> (the one leading to the analytic solution seen for\n> example on the wikipedia page [1]).\n> \n> Using numerical values as simply obtained from\n> an arbitrary broker, I am surprised to see that\n> the formula values and quoted prices mismatch\n> a lot. (seems cannot all be explained by spread\n> or dividend details)\n> \n> My question: What values for r (drift) and \\sigma^2\n> are usually to be used, in which units?\n> \n> If numerical values are chosen to be given \"per year\",\n> then I would expect r to be chosen as \\ln(1+i),\n> where i is the yearly interest rate of the risk-free\n> portfolio and \\ln is the natural logarithm. Would the\n> risk-free rate currently be chosen as zero?\n> \n> The \\sigma^2 one would accordingly have to choose\n> as the variance of the underlying security over\n> a one year period. Should this come out equal in\n> numerical value to the implied volatility, which is\n> 0.2 to 0.4 for the majority of options?\n> \n> Tom\n> \n> [1] https://de.wikipedia.org/wiki/Black-Scholes-Modell\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions\nshould go.",
+      "body_snippet": "Tom,\n\nIf you get some options data up for analysis, you might want to try 0\ninterest first and then DGS3MO second. Using DGS3MO should produce a lower\nvariance between the settlement and the B-S price",
+      "thread_id": "thread-672ab366f7d0",
+      "thread_depth": 3,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-0de0963365af",
+      "message_id": "<DB4PR06MB0685E6D020051275B830C006B7500@DB4PR06MB0685.eurprd06.prod.outlook.com>",
+      "from_name": "Sachin Kuruvithadam",
+      "from_email_hash": "af594ab7816d97547df01279ed8216e3127bc99a31770463e9a3356a419e9ae4",
+      "date": "2016-06-10T10:44:19Z",
+      "subject": "[R-SIG-Finance] Dynamic copula simulation with 'rmgarch' package",
+      "subject_clean": "Dynamic copula simulation with 'rmgarch' package",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi, I have 2 questions about GARCH-SPD-copula fitting.\n\n\nI'm using a time-varying normal copula with DCC dynamics of the correlation structure. I use the semiparametric distribution with generalized pareto distribution, which is specified in 'cgarchspec' and controlled for in 'cgarchfit' (with thresholds at 0.05 and 0.95). After running the code similar to the example in 'rmgarch.tests' folder (adjusted for my ARMA-GARCH specification and data), 'simX[[i]]' is a Nxd matrix (N=steps ahead, d=number of assets) containing all conditional returns of the i-th simulation.\n\n\nMy questions:\n\nA) Is it possible to extract the GPD parameters in this procedure, maybe from the 'cgarchfit' object, or am I supposed to estimate xi and beta separately through the 'spd' package? In this case, are these estimates the same used in the 'rmgarch' package?\n\nB) Are the conditional returns in 'simX[[i]]' already controlled for the copula and SPD specification? i.e. are they computed following the procedure: i) given data at t, construct correlation matrix at t+1; ii) generate the (1xd) vector of correlated copula realizations m times; iii) using the inverse of the SPD obtain standardized residuals; iv) insert the latter back in the ARMA-GARCH specification and compute returns; v) repeat steps i-iv until the end of the simulation horizon?\n\n\nIntuitively I would say yes to both questions, i.e. the GPD parameters used in 'rmgarch' and 'spd' are the same if they are specified the same (thresholds at 0.05 and 0.95, mle with normal kernel) and 'simX[[i]]' already runs the whole procedure mentioned above, i.e. simulates copula realizations, converts them into original realizations using the inverse CDF and feeds them in the respective ARMA-GARCH process (otherwise why do we specify the ARMA-GARCH for each series, the copula family and the transformation in 'cgarchspec' with thresholds in 'cgarchfit'?) but I've found no \"official\" confirmation.\n\n\nThank you in advance.\n\nsacios\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi, I have 2 questions about GARCH-SPD-copula fitting.\n\n\nI'm using a time-varying normal copula with DCC dynamics of the correlation structure. I use the semiparametric distribution with generalized p",
+      "thread_id": "thread-0de0963365af",
+      "thread_depth": 0,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-f6c91f97544a",
+      "message_id": "<5b9f1123-4b71-dbfc-2a2f-b2644f5b083c@organicfoodmarkets.com.au>",
+      "from_name": "Stephen Choularton",
+      "from_email_hash": "be50afa784ca5d067902f310283ce1e85a162aa45ff41ca22e7220432c1408b1",
+      "date": "2016-06-12T19:31:22+02:00",
+      "subject": "[R-SIG-Finance] reqNewsBulletins",
+      "subject_clean": "reqNewsBulletins",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi\n\nI tried this code\n\n# newsfeed\n\ntws <- twsConnect()\n\nreqNewsBulletins(tws, allMsgs=TRUE)\n\nbut nothing was returned at all.\n\nCan anyone point me to a working example?\n-- \n----------------------------------------------------------------------------------------------------------------------------------- \n\nStephen Choularton PhD, FIoD",
+      "body_snippet": "Hi\n\nI tried this code\n\n# newsfeed\n\ntws <- twsConnect()\n\nreqNewsBulletins(tws, allMsgs=TRUE)\n\nbut nothing was returned at all.\n\nCan anyone point me to a working example?\n-- \n---------------------------",
+      "thread_id": "thread-f6c91f97544a",
+      "thread_depth": 0,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-ce1ad061ada1",
+      "message_id": "<54a92e80-18df-9f72-60f3-1f09defa13a2@organicfoodmarkets.com.au>",
+      "from_name": "Stephen Choularton",
+      "from_email_hash": "be50afa784ca5d067902f310283ce1e85a162aa45ff41ca22e7220432c1408b1",
+      "date": "2016-06-13T18:44:01+02:00",
+      "subject": "[R-SIG-Finance] Fwd: Re: This isn't base R so it must be a package -- maybe IBrokers (?)... Would be good to identify it as such",
+      "subject_clean": "This isn't base R so it must be a package -- maybe IBrokers (?)... Would be good to identify it as such",
+      "in_reply_to": "<67001a31-9717-9647-0ca5-1b123548079f@organicfoodmarkets.com.au>",
+      "references": [
+        "<67001a31-9717-9647-0ca5-1b123548079f@organicfoodmarkets.com.au>"
+      ],
+      "body_plain": "Apologies - yes the code should have started with library(IBrokers)\n\n-----------------------------------------------------------------------------------------------------------------------------------\n\nStephen Choularton PhD, FIoD\n\nOn 13/06/2016 4:07 PM, Steve Wisdom wrote:\n>\n> ----------------------------------------------------------------------\n>\n> Message: 1\n> Date: Sun, 12 Jun 2016 19:31:22 +0200\n> From: Stephen Choularton <stephen at organicfoodmarkets.com.au\n> <mailto:stephen at organicfoodmarkets.com.au>>\n> To: \"r-sig-finance at r-project.org <mailto:r-sig-finance at r-project.org>\"\n> <r-sig-finance at r-project.org <mailto:r-sig-finance at r-project.org>>\n> Subject: [R-SIG-Finance] reqNewsBulletins\n> Message-ID:\n>       <5b9f1123-4b71-dbfc-2a2f-b2644f5b083c at organicfoodmarkets.com.au\n> <mailto:5b9f1123-4b71-dbfc-2a2f-b2644f5b083c at organicfoodmarkets.com.au>>\n> Content-Type: text/plain; charset=utf-8; format=flowed\n>\n> Hi\n>\n> I tried this code\n>\n> # newsfeed\n>\n> tws <- twsConnect()\n>\n> reqNewsBulletins(tws, allMsgs=TRUE)\n>\n> but nothing was returned at all.\n>\n> Can anyone point me to a working example?\n> --\n> -----------------------------------------------------------------------------------------------------------------------------------\n>\n> Stephen Choularton PhD, FIoD\n>\n>\n>\n> ------------------------------",
+      "body_snippet": "Apologies - yes the code should have started with library(IBrokers)\n\n-----------------------------------------------------------------------------------------------------------------------------------",
+      "thread_id": "thread-ce1ad061ada1",
+      "thread_depth": 0,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-d8a46ef2b7b9",
+      "message_id": "<20160614090037.24533@web006.roc2.bluetie.com>",
+      "from_name": "ce",
+      "from_email_hash": "f69a20078ecdac076b994220ad4c1c97005d077df2b25a002bcec6f9b78297ea",
+      "date": "2016-06-14T09:00:37-04:00",
+      "subject": "[R-SIG-Finance] Fwd: Re: This isn't base R so it must be a package -- maybe IBrokers (?)... Would be good to identify it as such",
+      "subject_clean": "This isn't base R so it must be a package -- maybe IBrokers (?)... Would be good to identify it as such",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "You might get better help in TWS API yahoo group :\n\nhttps://groups.yahoo.com/neo/groups/TWSAPI\n\n-----Original Message-----\nFrom: \"Stephen Choularton\" [stephen at organicfoodmarkets.com.au]\nDate: 06/13/2016 12:44 PM\nTo: \"r-sig-finance at r-project.org\" <r-sig-finance at r-project.org>\nSubject: [R-SIG-Finance] Fwd: Re: This isn't base R so it must be a package\n -- maybe IBrokers (?)... Would be good to identify it as such\n\n\n\nApologies - yes the code should have started with library(IBrokers)\n\n-----------------------------------------------------------------------------------------------------------------------------------\n\nStephen Choularton PhD, FIoD\n\nOn 13/06/2016 4:07 PM, Steve Wisdom wrote:\n>\n> ----------------------------------------------------------------------\n>\n> Message: 1\n> Date: Sun, 12 Jun 2016 19:31:22 +0200\n> From: Stephen Choularton <stephen at organicfoodmarkets.com.au\n> <mailto:stephen at organicfoodmarkets.com.au>>\n> To: \"r-sig-finance at r-project.org <mailto:r-sig-finance at r-project.org>\"\n> <r-sig-finance at r-project.org <mailto:r-sig-finance at r-project.org>>\n> Subject: [R-SIG-Finance] reqNewsBulletins\n> Message-ID:\n>       <5b9f1123-4b71-dbfc-2a2f-b2644f5b083c at organicfoodmarkets.com.au\n> <mailto:5b9f1123-4b71-dbfc-2a2f-b2644f5b083c at organicfoodmarkets.com.au>>\n> Content-Type: text/plain; charset=utf-8; format=flowed\n>\n> Hi\n>\n> I tried this code\n>\n> # newsfeed\n>\n> tws <- twsConnect()\n>\n> reqNewsBulletins(tws, allMsgs=TRUE)\n>\n> but nothing was returned at all.\n>\n> Can anyone point me to a working example?\n> --\n> -----------------------------------------------------------------------------------------------------------------------------------\n>\n> Stephen Choularton PhD, FIoD\n>\n>\n>\n> ------------------------------\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "You might get better help in TWS API yahoo group :\n\nhttps://groups.yahoo.com/neo/groups/TWSAPI\n\n-----Original Message-----\nFrom: \"Stephen Choularton\" [stephen at organicfoodmarkets.com.au]\nDate: 06/13",
+      "thread_id": "thread-d8a46ef2b7b9",
+      "thread_depth": 0,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-e3c4cb6a6aff",
+      "message_id": "<1325f09c2ea1189957e42b4655921a98@2pimail.com>",
+      "from_name": "thp",
+      "from_email_hash": "c04da9c6c9cb9295d4155cc7b0313d7e32a563810ae45ecbc425173e653d883f",
+      "date": "2016-06-16T16:45:49+02:00",
+      "subject": "[R-SIG-Finance] Option pricing, basic question",
+      "subject_clean": "Option pricing, basic question",
+      "in_reply_to": "<CEDE2EA1808446C3AA719BDC6DE4CA02@Franki7PC>",
+      "references": [
+        "<7ec88c2e8ba5cb302d1cf5fe580b4852@2pimail.com>",
+        "<CEDE2EA1808446C3AA719BDC6DE4CA02@Franki7PC>"
+      ],
+      "body_plain": "Hello Frank / all,\n\nthe getSymbols() code written down before in relation to my option \npricing question (see citation below)\nsomehow did not work with me. I got\n\n     library(quantmod)\n\n\nVersion 0.4-0 included new data defaults. See ?getSymbols.\nWarning messages:\n1: package .quantmod. was built under R version 2.14.2\n2: package .Defaults. was built under R version 2.14.2\n\n\n     getSymbols('DGS3MO', verbose=TRUE,src='FRED')\n\n\n     As of 0.4-0, .getSymbols. uses env=parent.frame() and\n  auto.assign=TRUE by default.\n\n   ...\n\ntrying URL \n'http://research.stlouisfed.org/fred2/series/DGS3MO/downloaddata/DGS3MO.csv'\nError in download.file(paste(FRED.URL, \"/\", Symbols[[i]], \"/\", \n\"downloaddata/\",  :\n   cannot open URL \n'http://research.stlouisfed.org/fred2/series/DGS3MO/downloaddata/DGS3MO.csv'\n\n\nThis is even though I could download the data at the specified url \nmanually.\n\n~Tom\n\nOn 2016-06-09 15:42, Frank wrote:\n> I use the 3-month constant maturity Treasury bill rate from FRED \n> (Federal\n> Reserve Economic ??Database??) for the risk-free rate. For options with\n> substantially more than 3 months until expiration, I think it makes \n> sense to\n> use a maturity that best matches the option. The R code I use is:\n> \n> library(quantmod)\n> library(chron)\n> \n> \n> ##\n> ## Get DGS3MO Treasury yield from FRED\n> ##\n> \n> getSymbols('DGS3MO',src='FRED')\n> DGS3MO<-na.locf(DGS3MO/100.0,na.rm = TRUE)\n> tail(DGS3MO)\n> file_name <- \"DGS3MO.csv\"\n> write.zoo(DGS3MO, file = file_name, append = FALSE, quote = TRUE, sep = \n> \",\")\n> quit()\n> \n> I run this text from a batch file in Windows 7 Pro 64-bit. The text in \n> the\n> batch file is:\n> \n> REM on Microsoft Windows (adjust the path to R.exe as needed)\n> DEL *DGS3MO.csv\n> \n> \"C:\\Program Files\\R\\R-3.2.2\\bin\\x64\\R.exe\" CMD BATCH\n> \"C:\\Users\\Frank\\Documents\\R\\Projects\\DGS3MO\\DGS3MO.txt\"\n> \"C:\\Users\\Frank\\Documents\\R\\Projects\\DGS3MO\\DGS3MO.out\"\n> COPY DGS3MO.BAT DGS3MO.BAK\n> COPY DGS3MO.TXT DGS3MO.TXT.BAK\n> REM PAUSE\n> ...",
+      "body_snippet": "Hello Frank / all,\n\nthe getSymbols() code written down before in relation to my option \npricing question (see citation below)\nsomehow did not work with me. I got\n\n     library(quantmod)\n\n\nVersion 0.4-",
+      "thread_id": "thread-672ab366f7d0",
+      "thread_depth": 2,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-604ac59d0d5c",
+      "message_id": "<CAPPM_gTrM09VR653tnB3-PdsMAd-a6grLShYfzz+k16yytut_Q@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2016-06-16T11:10:36-05:00",
+      "subject": "[R-SIG-Finance] Option pricing, basic question",
+      "subject_clean": "Option pricing, basic question",
+      "in_reply_to": "<1325f09c2ea1189957e42b4655921a98@2pimail.com>",
+      "references": [
+        "<7ec88c2e8ba5cb302d1cf5fe580b4852@2pimail.com>",
+        "<CEDE2EA1808446C3AA719BDC6DE4CA02@Franki7PC>",
+        "<1325f09c2ea1189957e42b4655921a98@2pimail.com>"
+      ],
+      "body_plain": "On Thu, Jun 16, 2016 at 9:45 AM, thp <thp at 2pimail.com> wrote:\n> Hello Frank / all,\n>\n> the getSymbols() code written down before in relation to my option pricing\n> question (see citation below)\n> somehow did not work with me. I got\n>\n>     library(quantmod)\n>\n>\n> Version 0.4-0 included new data defaults. See ?getSymbols.\n> Warning messages:\n> 1: package .quantmod. was built under R version 2.14.2\n> 2: package .Defaults. was built under R version 2.14.2\n>\n>\n>     getSymbols('DGS3MO', verbose=TRUE,src='FRED')\n>\n>\n>     As of 0.4-0, .getSymbols. uses env=parent.frame() and\n>  auto.assign=TRUE by default.\n>\n>   ...\n>\n> trying URL\n> 'http://research.stlouisfed.org/fred2/series/DGS3MO/downloaddata/DGS3MO.csv'\n> Error in download.file(paste(FRED.URL, \"/\", Symbols[[i]], \"/\",\n> \"downloaddata/\",  :\n>   cannot open URL\n> 'http://research.stlouisfed.org/fred2/series/DGS3MO/downloaddata/DGS3MO.csv'\n>\n>\n> This is even though I could download the data at the specified url manually.\n>\nThis has been fixed for almost a year.  You need to upgrade.\nhttps://github.com/joshuaulrich/quantmod/issues/56\n\n> ~Tom\n>\n> On 2016-06-09 15:42, Frank wrote:\n>>\n>> I use the 3-month constant maturity Treasury bill rate from FRED (Federal\n>> Reserve Economic ??Database??) for the risk-free rate. For options with\n>> substantially more than 3 months until expiration, I think it makes sense\n>> to\n>> use a maturity that best matches the option. The R code I use is:\n>>\n>> library(quantmod)\n>> library(chron)\n>>\n>>\n>> ##\n>> ## Get DGS3MO Treasury yield from FRED\n>> ##\n>>\n>> getSymbols('DGS3MO',src='FRED')\n>> DGS3MO<-na.locf(DGS3MO/100.0,na.rm = TRUE)\n>> tail(DGS3MO)\n>> file_name <- \"DGS3MO.csv\"\n>> write.zoo(DGS3MO, file = file_name, append = FALSE, quote = TRUE, sep =\n>> \",\")\n>> quit()\n>>\n>> I run this text from a batch file in Windows 7 Pro 64-bit. The text in the\n>> batch file is:\n>>\n>> REM on Microsoft Windows (adjust the path to R.exe as needed)\n>> DEL *DGS3MO.csv\n>>\n>> \"C:\\Program Files\\R\\R-3.2.2\\bin\\x64\\R.exe\" CMD BATCH\n>> \"C:\\Users\\Frank\\Documents\\R\\Projects\\DGS3MO\\DGS3MO.txt\"\n>> \"C:\\Users\\Frank\\Documents\\R\\Projects\\DGS3MO\\DGS3MO.out\"\n>> COPY DGS3MO.BAT DGS3MO.BAK\n>> COPY DGS3MO.TXT DGS3MO.TXT.BAK\n>> REM PAUSE\n>> ...\n>\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2016 | www.rinfinance.com",
+      "body_snippet": "On Thu, Jun 16, 2016 at 9:45 AM, thp <thp at 2pimail.com> wrote:\n> Hello Frank / all,\n>\n> the getSymbols() code written down before in relation to my option pricing\n> question (see citation below)\n> s",
+      "thread_id": "thread-672ab366f7d0",
+      "thread_depth": 3,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-dfa42d0e0cee",
+      "message_id": "<DB4PR06MB0685B7DEF67983FC3F5B29EAB72C0@DB4PR06MB0685.eurprd06.prod.outlook.com>",
+      "from_name": "Sachin Kuruvithadam",
+      "from_email_hash": "af594ab7816d97547df01279ed8216e3127bc99a31770463e9a3356a419e9ae4",
+      "date": "2016-06-22T17:19:21Z",
+      "subject": "[R-SIG-Finance] Copula-EVT-GARCH with rmgarch package (reproducible code)",
+      "subject_clean": "Copula-EVT-GARCH with rmgarch package (reproducible code)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I'm trying to simulate 1-step ahead returns 5000 times for a portfolio of 9 variables. After specifying their GJR-GARCH specifications with SPD marginals, I use the following code (which was inspired by the examples in the 'rmgarch.tests' folder). I use the first 571x9 observations for fitting and the last 570 for out-of-sample analysis. Moreover, I use a moving-window approach, in the sense that I always use the last 571 observations in the cgarchfilter rather than [1:(T+i)] as in the example. Once the simulated returns 'simx' are stored in 'simulatedreturns', I compute the return of an equally-weighted portfolio as a 570x5000 vector, i.e. one series of return of each observation for each simulation. Last, I compute VaR (90%, 95%, 99%) as the respective quantile (0.10, 0.05, 0.01).\n\n\nMy problem is that, contrary to the literature I've found on the topic, VaR is severely underestimated, I obtain a number of violations which is way more than expected (should be 57 for 90%VaR, 28 for 95%VaR, 6 for 99%VaR). Is there any error in the code I have below? I've followed the example by the letter and cannot understand what went wrong. Anyone can help? Any hint is GREATLY appreciated!\n\n\nlibrary(rugarch)\nlibrary(rmgarch)\n\ndata(dji30retw)\nDat = dji30retw[, 1:9, drop = FALSE]\n\nmodel <- ugarchspec(variance.model=list(model=\"gjrGARCH\", garchOrder=c(1,1), variance.targeting=TRUE),\n                    mean.model=list(armaOrder=c(0,0), include.mean=F, archm=F, archpow=1),\n                    distribution.model=\"norm\")\nspec = cgarchspec(uspec = multispec(replicate(3, model)), VAR = FALSE, robust = FALSE,\n                    lag.criterion = \"AIC\", external.regressors = NULL,\n                    dccOrder = c(1,1), asymmetric = TRUE, distribution.model = list(copula = \"mvt\",\n                                                                                     method = \"ML\", time.varying = TRUE,\n                                                                                     transformation = \"spd\"))\nfit = cgarchfit(spec, data = Dat, out.sample = 570, cluster = NULL,\n                  fit.control = list(eval.se=FALSE))\nT = dim(Dat)[1]-570\nsimMu = simS = filtMu = filtS = matrix(NA, ncol = 9, nrow = 570)\nsimCor = simC = filtC = filtCor = array(NA, dim = c(9,9,570))\ncolSd = function(x) apply(x, 2, \"sd\")\nspecx = spec\nfor(i in 1:9) specx at umodel$fixed.pars[[i]] = as.list(fit at model$mpars[fit at model$midx[,i]==1,i])\nsetfixed(specx)<-as.list(fit at model$mpars[fit at model$midx[,10]==1,10])\n\nsimulatedreturns <- array(dim=c(570,9,5000))\nfor(i in 1:570){\n  if(i==1){\n    presigma = matrix(tail(sigma(fit), 1), ncol = 9)\n    prereturns = matrix(unlist(Dat[T, ]), ncol = 9, nrow = 1)\n    preresiduals = matrix(tail(residuals(fit),1), ncol = 9, nrow = 1)\n    preR = last(rcor(fit))[,,1]\n    diag(preR) = 1\n    preQ = fit at mfit$Qt[[length(fit at mfit$Qt)]]\n    preZ = tail(fit at mfit$Z, 1)\n    tmp = cgarchfilter(specx, Dat[2:(T+1), ], filter.control = list(n.old = T))\n    filtMu[i,] = tail(fitted(tmp), 1)\n    filtS[i,] = tail(sigma(tmp), 1)\n    filtC[,,i] = last(rcov(tmp))[,,1]\n    filtCor[,,i] = last(rcor(tmp))[,,1]\n  } else{\n    presigma = matrix(tail(sigma(tmp), 1), ncol = 9)\n    prereturns = matrix(unlist(Dat[(T+i-1), ]), ncol = 9, nrow = 1)\n    preresiduals = matrix(tail(residuals(tmp),1), ncol = 9, nrow = 1)\n    preR = last(rcor(tmp))[,,1]\n    diag(preR) = 1\n    preQ = tmp at mfilter$Qt[[length(tmp at mfilter$Qt)]]\n    preZ = tail(tmp at mfilter$Z, 1)\n\n    tmp = cgarchfilter(specx17, Dat[(i+1):(T+i), ], filter.control = list(n.old = T))\n    filtMu[i,] = tail(fitted(tmp), 1)\n    filtS[i,] = tail(sigma(tmp), 1)\n    filtC[,,i] = last(rcov(tmp))[,,1]\n    filtCor[,,i] = last(rcor(tmp))[,,1]\n  }\n  sim = cgarchsim(fit, n.sim = 1, m.sim = 5000, startMethod = \"sample\", preR = preR, preQ = preQ, preZ = preZ,\n                    prereturns = prereturns, presigma = presigma, preresiduals = preresiduals, cluster = NULL)\n  simx = t(sapply(sim at msim$simX, FUN = function(x) x[1,]))\n  simMu[i,] = colMeans(simx)\n  simC[,,i] = sim at msim$simH[[1]][,,1]\n  simCor[,,i] = sim at msim$simR[[1]][,,1]\n  simS[i,] = sqrt(diag(simC[,,i]))\n  simulatedreturns[i,,]=simx\n}\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I'm trying to simulate 1-step ahead returns 5000 times for a portfolio of 9 variables. After specifying their GJR-GARCH specifications with SPD marginals, I use the following code (which was inspired ",
+      "thread_id": "thread-dfa42d0e0cee",
+      "thread_depth": 0,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-2952a2c21ddd",
+      "message_id": "<DB4PR06MB068586F59ED7534C53264E64B72C0@DB4PR06MB0685.eurprd06.prod.outlook.com>",
+      "from_name": "Sachin Kuruvithadam",
+      "from_email_hash": "af594ab7816d97547df01279ed8216e3127bc99a31770463e9a3356a419e9ae4",
+      "date": "2016-06-22T19:36:20Z",
+      "subject": "[R-SIG-Finance] dynamic copula using rmgarch package (ignore previous question, don't know how to delete it)",
+      "subject_clean": "dynamic copula using rmgarch package (ignore previous question, don't know how to delete it)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "(there were some mistakes in the previous code, I've corrected it and I'm reposting)\n\n\nI'm trying to simulate 1-step ahead returns 5000 times for a portfolio of 9 variables. After specifying their GJR-GARCH specifications with SPD marginals, I use the following code (which was inspired by the examples in the 'rmgarch.tests' folder). I use the first 571x9 observations for fitting and the last 570 for out-of-sample analysis. Moreover, I use a moving-window approach, in the sense that I always use the last 571 observations in the cgarchfilter rather than [1:(T+i)] as in the example. Once the simulated returns 'simx' are stored in 'simulatedreturns', I compute the return of an equally-weighted portfolio as a 570x5000 matrix, i.e. one series of return of each observation for each simulation. Last, I compute VaR (90%, 95%, 99%) as the respective quantile (0.10, 0.05, 0.01).\n\n\nMy problem is that, contrary to the literature I've found on the topic, VaR is severely underestimated, I obtain a number of violations which is way more than expected (should be 57 for 90%VaR, 28 for 95%VaR, 6 for 99%VaR). Is there any error in the code I have below? I've followed the example by the letter and cannot understand what went wrong. Anyone can help? Any hint is GREATLY appreciated!\n\n\nlibrary(rugarch)\nlibrary(rmgarch)\n\ndata(dji30retw)\nDat = dji30retw[, 1:9, drop = FALSE]\n\nmodel <- ugarchspec(variance.model=list(model=\"gjrGARCH\", garchOrder=c(1,1), variance.targeting=TRUE),\n                    mean.model=list(armaOrder=c(0,0), include.mean=F, archm=F, archpow=1),\n                    distribution.model=\"norm\")\nspec = cgarchspec(uspec = multispec(replicate(9, model)), VAR = FALSE, robust = FALSE,\n                    lag.criterion = \"AIC\", external.regressors = NULL,\n                    dccOrder = c(1,1), asymmetric = TRUE, distribution.model = list(copula = \"mvt\",\n                                                                                     method = \"ML\", time.varying = TRUE,\n                                                                                     transformation = \"spd\"))\nfit = cgarchfit(spec, data = Dat, out.sample = 570, cluster = NULL, spd.control = list(lower = 0.1, upper = 0.9, type = \"mle\", kernel = \"normal\"),\n                  fit.control = list(eval.se=FALSE))\nT = dim(Dat)[1]-570\nsimMu = simS = filtMu = filtS = matrix(NA, ncol = 9, nrow = 570)\nsimCor = simC = filtC = filtCor = array(NA, dim = c(9,9,570))\ncolSd = function(x) apply(x, 2, \"sd\")\nspecx = spec\nfor(i in 1:9) specx at umodel$fixed.pars[[i]] = as.list(fit at model$mpars[fit at model$midx[,i]==1,i])\nsetfixed(specx)<-as.list(fit at model$mpars[fit at model$midx[,10]==1,10])\n\nsimulatedreturns <- array(dim=c(570,9,5000))\nfor(i in 1:570){\n  if(i==1){\n    presigma = matrix(tail(sigma(fit), 1), ncol = 9)\n    prereturns = matrix(unlist(Dat[T, ]), ncol = 9, nrow = 1)\n    preresiduals = matrix(tail(residuals(fit),1), ncol = 9, nrow = 1)\n    preR = last(rcor(fit))[,,1]\n    diag(preR) = 1\n    preQ = fit at mfit$Qt[[length(fit at mfit$Qt)]]\n    preZ = tail(fit at mfit$Z, 1)\n    tmp = cgarchfilter(specx, Dat[2:(T+1), ], filter.control = list(n.old = T))\n    filtMu[i,] = tail(fitted(tmp), 1)\n    filtS[i,] = tail(sigma(tmp), 1)\n    filtC[,,i] = last(rcov(tmp))[,,1]\n    filtCor[,,i] = last(rcor(tmp))[,,1]\n  } else{\n    presigma = matrix(tail(sigma(tmp), 1), ncol = 9)\n    prereturns = matrix(unlist(Dat[(T+i-1), ]), ncol = 9, nrow = 1)\n    preresiduals = matrix(tail(residuals(tmp),1), ncol = 9, nrow = 1)\n    preR = last(rcor(tmp))[,,1]\n    diag(preR) = 1\n    preQ = tmp at mfilter$Qt[[length(tmp at mfilter$Qt)]]\n    preZ = tail(tmp at mfilter$Z, 1)\n\n    tmp = cgarchfilter(specx, Dat[(i+1):(T+i), ], filter.control = list(n.old = T))\n    filtMu[i,] = tail(fitted(tmp), 1)\n    filtS[i,] = tail(sigma(tmp), 1)\n    filtC[,,i] = last(rcov(tmp))[,,1]\n    filtCor[,,i] = last(rcor(tmp))[,,1]\n  }\n  sim = cgarchsim(fit, n.sim = 1, m.sim = 5000, startMethod = \"sample\", preR = preR, preQ = preQ, preZ = preZ,\n                    prereturns = prereturns, presigma = presigma, preresiduals = preresiduals, cluster = NULL)\n  simx = t(sapply(sim at msim$simX, FUN = function(x) x[1,]))\n  simMu[i,] = colMeans(simx)\n  simC[,,i] = sim at msim$simH[[1]][,,1]\n  simCor[,,i] = sim at msim$simR[[1]][,,1]\n  simS[i,] = sqrt(diag(simC[,,i]))\n  simulatedreturns[i,,]=simx\n}\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "(there were some mistakes in the previous code, I've corrected it and I'm reposting)\n\n\nI'm trying to simulate 1-step ahead returns 5000 times for a portfolio of 9 variables. After specifying their GJR",
+      "thread_id": "thread-2952a2c21ddd",
+      "thread_depth": 0,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-7a7051b43048",
+      "message_id": "<CAKW5Cfqt5Q5aPmCAsCE+XJWB=72Xq57CAE6qcve1C0DbHfto5A@mail.gmail.com>",
+      "from_name": "Robert Iquiapaza",
+      "from_email_hash": "761bf547afd0344388de6ea43cf711f879a3521e540214e952e70ddef8d89c79",
+      "date": "2016-06-23T16:02:23-03:00",
+      "subject": "[R-SIG-Finance] dynamic copula using rmgarch package (ignore previous question, don't know how to delete it)",
+      "subject_clean": "dynamic copula using rmgarch package (ignore previous question, don't know how to delete it)",
+      "in_reply_to": "<OF5063C9DA.102B45F9-ON83257FDA.006BD8A8@grude.ufmg.br>",
+      "references": [
+        "<OF5063C9DA.102B45F9-ON83257FDA.006BD8A8@grude.ufmg.br>"
+      ],
+      "body_plain": "Could you show how are you computing the return of an equally-weighted\nportfolio and the VaR?\nRobert\n\n2016-06-22 16:36 GMT-03:00 Sachin Kuruvithadam <sacios at hotmail.it>:\n\n> (there were some mistakes in the previous code, I've corrected it and I'm\n> reposting)\n>\n>\n> I'm trying to simulate 1-step ahead returns 5000 times for a portfolio of\n> 9 variables. After specifying their GJR-GARCH specifications with SPD\n> marginals, I use the following code (which was inspired by the examples in\n> the 'rmgarch.tests' folder). I use the first 571x9 observations for fitting\n> and the last 570 for out-of-sample analysis. Moreover, I use a\n> moving-window approach, in the sense that I always use the last 571\n> observations in the cgarchfilter rather than [1:(T+i)] as in the example.\n> Once the simulated returns 'simx' are stored in 'simulatedreturns', I\n> compute the return of an equally-weighted portfolio as a 570x5000 matrix,\n> i.e. one series of return of each observation for each simulation. Last, I\n> compute VaR (90%, 95%, 99%) as the respective quantile (0.10, 0.05, 0.01).\n>\n>\n> My problem is that, contrary to the literature I've found on the topic,\n> VaR is severely underestimated, I obtain a number of violations which is\n> way more than expected (should be 57 for 90%VaR, 28 for 95%VaR, 6 for\n> 99%VaR). Is there any error in the code I have below? I've followed the\n> example by the letter and cannot understand what went wrong. Anyone can\n> help? Any hint is GREATLY appreciated!\n>\n>\n> library(rugarch)\n> library(rmgarch)\n>\n> data(dji30retw)\n> Dat = dji30retw[, 1:9, drop = FALSE]\n>\n> model <- ugarchspec(variance.model=list(model=\"gjrGARCH\",\n> garchOrder=c(1,1), variance.targeting=TRUE),\n>                     mean.model=list(armaOrder=c(0,0), include.mean=F,\n> archm=F, archpow=1),\n>                     distribution.model=\"norm\")\n> spec = cgarchspec(uspec = multispec(replicate(9, model)), VAR = FALSE,\n> robust = FALSE,\n>                     lag.criterion = \"AIC\", external.regressors = NULL,\n>                     dccOrder = c(1,1), asymmetric = TRUE,\n> distribution.model = list(copula = \"mvt\",\n>\n>            method = \"ML\", time.varying = TRUE,\n>\n>            transformation = \"spd\"))\n> fit = cgarchfit(spec, data = Dat, out.sample = 570, cluster = NULL,\n> spd.control = list(lower = 0.1, upper = 0.9, type = \"mle\", kernel =\n> \"normal\"),\n>                   fit.control = list(eval.se=FALSE))\n> T = dim(Dat)[1]-570\n> simMu = simS = filtMu = filtS = matrix(NA, ncol = 9, nrow = 570)\n> simCor = simC = filtC = filtCor = array(NA, dim = c(9,9,570))\n> colSd = function(x) apply(x, 2, \"sd\")\n> specx = spec\n> for(i in 1:9) specx at umodel$fixed.pars[[i]] = as.list(fit at model\n> $mpars[fit at model$midx[,i]==1,i])\n> setfixed(specx)<-as.list(fit at model$mpars[fit at model$midx[,10]==1,10])\n>\n> simulatedreturns <- array(dim=c(570,9,5000))\n> for(i in 1:570){\n>   if(i==1){\n>     presigma = matrix(tail(sigma(fit), 1), ncol = 9)\n>     prereturns = matrix(unlist(Dat[T, ]), ncol = 9, nrow = 1)\n>     preresiduals = matrix(tail(residuals(fit),1), ncol = 9, nrow = 1)\n>     preR = last(rcor(fit))[,,1]\n>     diag(preR) = 1\n>     preQ = fit at mfit$Qt[[length(fit at mfit$Qt)]]\n>     preZ = tail(fit at mfit$Z, 1)\n>     tmp = cgarchfilter(specx, Dat[2:(T+1), ], filter.control = list(n.old\n> = T))\n>     filtMu[i,] = tail(fitted(tmp), 1)\n>     filtS[i,] = tail(sigma(tmp), 1)\n>     filtC[,,i] = last(rcov(tmp))[,,1]\n>     filtCor[,,i] = last(rcor(tmp))[,,1]\n>   } else{\n>     presigma = matrix(tail(sigma(tmp), 1), ncol = 9)\n>     prereturns = matrix(unlist(Dat[(T+i-1), ]), ncol = 9, nrow = 1)\n>     preresiduals = matrix(tail(residuals(tmp),1), ncol = 9, nrow = 1)\n>     preR = last(rcor(tmp))[,,1]\n>     diag(preR) = 1\n>     preQ = tmp at mfilter$Qt[[length(tmp at mfilter$Qt)]]\n>     preZ = tail(tmp at mfilter$Z, 1)\n>\n>     tmp = cgarchfilter(specx, Dat[(i+1):(T+i), ], filter.control =\n> list(n.old = T))\n>     filtMu[i,] = tail(fitted(tmp), 1)\n>     filtS[i,] = tail(sigma(tmp), 1)\n>     filtC[,,i] = last(rcov(tmp))[,,1]\n>     filtCor[,,i] = last(rcor(tmp))[,,1]\n>   }\n>   sim = cgarchsim(fit, n.sim = 1, m.sim = 5000, startMethod = \"sample\",\n> preR = preR, preQ = preQ, preZ = preZ,\n>                     prereturns = prereturns, presigma = presigma,\n> preresiduals = preresiduals, cluster = NULL)\n>   simx = t(sapply(sim at msim$simX, FUN = function(x) x[1,]))\n>   simMu[i,] = colMeans(simx)\n>   simC[,,i] = sim at msim$simH[[1]][,,1]\n>   simCor[,,i] = sim at msim$simR[[1]][,,1]\n>   simS[i,] = sqrt(diag(simC[,,i]))\n>   simulatedreturns[i,,]=simx\n> }\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Could you show how are you computing the return of an equally-weighted\nportfolio and the VaR?\nRobert\n\n2016-06-22 16:36 GMT-03:00 Sachin Kuruvithadam <sacios at hotmail.it>:\n\n> (there were some mistake",
+      "thread_id": "thread-7a7051b43048",
+      "thread_depth": 0,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-3bb39b94a672",
+      "message_id": "<DB4PR06MB06853A9FDBAEAA8D863AAA45B72D0@DB4PR06MB0685.eurprd06.prod.outlook.com>",
+      "from_name": "Sachin Kuruvithadam",
+      "from_email_hash": "af594ab7816d97547df01279ed8216e3127bc99a31770463e9a3356a419e9ae4",
+      "date": "2016-06-23T21:07:39Z",
+      "subject": "[R-SIG-Finance] dynamic copula using rmgarch package (ignore previous question, don't know how to delete it)",
+      "subject_clean": "dynamic copula using rmgarch package (ignore previous question, don't know how to delete it)",
+      "in_reply_to": "<CAKW5Cfqt5Q5aPmCAsCE+XJWB=72Xq57CAE6qcve1C0DbHfto5A@mail.gmail.com>",
+      "references": [
+        "<OF5063C9DA.102B45F9-ON83257FDA.006BD8A8@grude.ufmg.br>",
+        "<CAKW5Cfqt5Q5aPmCAsCE+XJWB=72Xq57CAE6qcve1C0DbHfto5A@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Robert, thank you for your reply (I apologize in advance if this is not the proper way to respond in the thread, I'm very new at this).\n\n\ni) Portfolio return is computed as equal-weighted sum of the nine series. Since in the examples in the 'rmgarchtests' folder these are directly used in the GARCH-GPD-copula specification, I assume these are log returns, and therefore transform them into simple daily returns since log returns are time-additive but not \"portfolio\"-additive;\n\nii) In 'simulatedreturns' I have 570 predicted returns for 9 series simulated 5000 times. Like before, I first transform them in simple returns;\n\niii) the simulated portfolio returns are then computed as before, as equal-weighted sum since simple returns are additive across assets;\n\niv) for VaR estimation I don't using anything fancy, just the 'quantile' function. For each observation, I estimate the respective simulated quantile and subtract the actual return from it, and store the difference in vector 'a'. If 'a' is negative (meaning VaR is greater in absolute terms than returns) then 'b' equals 0, if 'a' is positive then 'b'=1.\n\n\nSince I haven't fixed the random number seed, it is possible that you obtain slightly different results. But the number of violations should be the approximately the same as mine, and nowhere close to the number expected.\n\n\nThis is the rest of the code, with comments reported above.\n\n\nYou have an idea what could have gone wrong?\n\n\n#comment i)\n#from log to simple returns\nSimple = exp(Dat)-1\n\n#return of equally weighted portfolio as weighted sum\nportfolioreturn <- (1/9)*rowSums(Simple)\n#since I'm only interested in returns in the testing period, I only take the last 570 observations\nportfolioreturn <- portfolioreturn[572:1141] #we're only interested in returns in the testing period\n\n#comment ii)\n#transform simulated log returns into simple returns\nsimplereturns=exp(simulatedreturns)-1\n\n#comment iii)\n#return series of simulated portfolio (for each observation from 1 to 570 I have 5000 portfolio returns)\nportfolio <- matrix(nrow=570,ncol=5000)\nfor (i in 1:570){\n  for (j in 1:5000){\n    portfolio[i,j]=(1/9)*(simplereturns[i,1,j]+simplereturns[i,2,j]+simplereturns[i,3,j]+simplereturns[i,4,j]\n                         +simplereturns[i,5,j]+simplereturns[i,6,j]+simplereturns[i,7,j]+simplereturns[i,8,j]\n                         +simplereturns[i,9,j])\n  }\n}\n\n#comment iv)\n#estimation of 90%, 95% and 99% VaR as respective 10%, 5% and 1% quantiles\n#a is a vector containing the difference between quantile and actual loss\n#b is a vector equal to 0 when a is negative (as it should) and 1 when loss is greater than VaR (thus when a is positive)\n#number of violations is then computed as sum(b), summing all ones;\na90 <- c()\nfor (i in 1:570){\n  a90[i]=quantile(portfolio[i,],0.1)-portfolioreturn[i]\n}\nb90 <- c()\nfor (i in 1:570){\n  if (a90[i]>0){b90[i]=1}\n  else {b90[i]=0}\n}\nsum(b90)#number of violations=171 (expected: 570*0.1=57)\n\na95 <- c()\nfor (i in 1:570){\n  a95[i]=quantile(portfolio[i,],0.05)-portfolioreturn[i]\n}\nb95 <- c()\nfor (i in 1:570){\n  if (a95[i]>0){b95[i]=1}\n  else {b95[i]=0}\n}\nsum(b95)#number of violations=127 (expected: 570*0.05=29)\n\na99 <- c()\nfor (i in 1:570){\n  a99[i]=quantile(portfolio[i,],0.01)-portfolioreturn[i]\n}\nb99 <- c()\nfor (i in 1:570){\n  if (a99[i]>0){b99[i]=1}\n  else {b99[i]=0}\n}\nsum(b99) #number of violations=69 (expected: 570*0.01=6)\n\n\n\n\n\n\n\n________________________________\nDa: Robert Iquiapaza <rbali at ufmg.br>\nInviato: gioved? 23 giugno 2016 21.02\nA: Sachin Kuruvithadam\nCc: r-sig-finance at r-project.org\nOggetto: Re: [R-SIG-Finance] dynamic copula using rmgarch package (ignore previous question, don't know how to delete it)\n\nCould you show how are you computing the return of an equally-weighted portfolio and the VaR?\nRobert\n\n2016-06-22 16:36 GMT-03:00 Sachin Kuruvithadam <sacios at hotmail.it<mailto:sacios at hotmail.it>>:\n(there were some mistakes in the previous code, I've corrected it and I'm reposting)\n\n\nI'm trying to simulate 1-step ahead returns 5000 times for a portfolio of 9 variables. After specifying their GJR-GARCH specifications with SPD marginals, I use the following code (which was inspired by the examples in the 'rmgarch.tests' folder). I use the first 571x9 observations for fitting and the last 570 for out-of-sample analysis. Moreover, I use a moving-window approach, in the sense that I always use the last 571 observations in the cgarchfilter rather than [1:(T+i)] as in the example. Once the simulated returns 'simx' are stored in 'simulatedreturns', I compute the return of an equally-weighted portfolio as a 570x5000 matrix, i.e. one series of return of each observation for each simulation. Last, I compute VaR (90%, 95%, 99%) as the respective quantile (0.10, 0.05, 0.01).\n\n\nMy problem is that, contrary to the literature I've found on the topic, VaR is severely underestimated, I obtain a number of violations which is way more than expected (should be 57 for 90%VaR, 28 for 95%VaR, 6 for 99%VaR). Is there any error in the code I have below? I've followed the example by the letter and cannot understand what went wrong. Anyone can help? Any hint i[[elided Hotmail spam]]\n\n\nlibrary(rugarch)\nlibrary(rmgarch)\n\ndata(dji30retw)\nDat = dji30retw[, 1:9, drop = FALSE]\n\nmodel <- ugarchspec(variance.model=list(model=\"gjrGARCH\", garchOrder=c(1,1), variance.targeting=TRUE),\n                    mean.model=list(armaOrder=c(0,0), include.mean=F, archm=F, archpow=1),\n                    distribution.model=\"norm\")\nspec = cgarchspec(uspec = multispec(replicate(9, model)), VAR = FALSE, robust = FALSE,\n                    lag.criterion = \"AIC\", external.regressors = NULL,\n                    dccOrder = c(1,1), asymmetric = TRUE, distribution.model = list(copula = \"mvt\",\n                                                                                     method = \"ML\", time.varying = TRUE,\n                                                                                     transformation = \"spd\"))\nfit = cgarchfit(spec, data = Dat, out.sample = 570, cluster = NULL, spd.control = list(lower = 0.1, upper = 0.9, type = \"mle\", kernel = \"normal\"),\n                  fit.control = list(eval.se<http://eval.se>=FALSE))\nT = dim(Dat)[1]-570\nsimMu = simS = filtMu = filtS = matrix(NA, ncol = 9, nrow = 570)\nsimCor = simC = filtC = filtCor = array(NA, dim = c(9,9,570))\ncolSd = function(x) apply(x, 2, \"sd\")\nspecx = spec\nfor(i in 1:9) specx at umodel$fixed.pars[[i]] = as.list(fit at model$mpars[fit at model$midx[,i]==1,i])\nsetfixed(specx)<-as.list(fit at model$mpars[fit at model$midx[,10]==1,10])\n\nsimulatedreturns <- array(dim=c(570,9,5000))\nfor(i in 1:570){\n  if(i==1){\n    presigma = matrix(tail(sigma(fit), 1), ncol = 9)\n    prereturns = matrix(unlist(Dat[T, ]), ncol = 9, nrow = 1)\n    preresiduals = matrix(tail(residuals(fit),1), ncol = 9, nrow = 1)\n    preR = last(rcor(fit))[,,1]\n    diag(preR) = 1\n    preQ = fit at mfit$Qt[[length(fit at mfit$Qt)]]\n    preZ = tail(fit at mfit$Z, 1)\n    tmp = cgarchfilter(specx, Dat[2:(T+1), ], filter.control = list(n.old = T))\n    filtMu[i,] = tail(fitted(tmp), 1)\n    filtS[i,] = tail(sigma(tmp), 1)\n    filtC[,,i] = last(rcov(tmp))[,,1]\n    filtCor[,,i] = last(rcor(tmp))[,,1]\n  } else{\n    presigma = matrix(tail(sigma(tmp), 1), ncol = 9)\n    prereturns = matrix(unlist(Dat[(T+i-1), ]), ncol = 9, nrow = 1)\n    preresiduals = matrix(tail(residuals(tmp),1), ncol = 9, nrow = 1)\n    preR = last(rcor(tmp))[,,1]\n    diag(preR) = 1\n    preQ = tmp at mfilter$Qt[[length(tmp at mfilter$Qt)]]\n    preZ = tail(tmp at mfilter$Z, 1)\n\n    tmp = cgarchfilter(specx, Dat[(i+1):(T+i), ], filter.control = list(n.old = T))\n    filtMu[i,] = tail(fitted(tmp), 1)\n    filtS[i,] = tail(sigma(tmp), 1)\n    filtC[,,i] = last(rcov(tmp))[,,1]\n    filtCor[,,i] = last(rcor(tmp))[,,1]\n  }\n  sim = cgarchsim(fit, n.sim = 1, m.sim = 5000, startMethod = \"sample\", preR = preR, preQ = preQ, preZ = preZ,\n                    prereturns = prereturns, presigma = presigma, preresiduals = preresiduals, cluster = NULL)\n  simx = t(sapply(sim at msim$simX, FUN = function(x) x[1,]))\n  simMu[i,] = colMeans(simx)\n  simC[,,i] = sim at msim$simH[[1]][,,1]\n  simCor[,,i] = sim at msim$simR[[1]][,,1]\n  simS[i,] = sqrt(diag(simC[,,i]))\n  simulatedreturns[i,,]=simx\n}\n\n        [[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at r-project.org<mailto:R-SIG-Finance at r-project.org> mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Robert, thank you for your reply (I apologize in advance if this is not the proper way to respond in the thread, I'm very new at this).\n\n\ni) Portfolio return is computed as equal-weighted sum of th",
+      "thread_id": "thread-7a7051b43048",
+      "thread_depth": 1,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-465aaed517cf",
+      "message_id": "<1287945331.1344273.1466945582322.JavaMail.yahoo@mail.yahoo.com>",
+      "from_name": "Pankaj K Agarwal",
+      "from_email_hash": "0cbb0f9165a5f6176569cf3596bb8d4666fe7d2828a40590fd539fc0758d58e0",
+      "date": "2016-06-26T12:53:02Z",
+      "subject": "[R-SIG-Finance] Imputing Missing Values",
+      "subject_clean": "Imputing Missing Values",
+      "in_reply_to": null,
+      "references": [
+        "<1287945331.1344273.1466945582322.JavaMail.yahoo.ref@mail.yahoo.com>"
+      ],
+      "body_plain": "This might be a very basic query for this erudite group. However, i am hopeful some help will be forthcoming nevertheless.I have a monthly time series of annualized t-bill rates on Indian markets. For some months, the values are missing randomly. I need to convert the annualized yields into daily as well as monthly yields. I have two questions:1. I am using package zoo. Which of the methods of NA imputations will be advisable for this series, viz., na.agggregate, na.locf, na.spline or na.approx etc.?2. Should the imputation be done on monthly annual yields and then the conversion to daily and monthly yields be performed or imputation be done afterwards?3. Are there better methods than above for this task?\nI will be extremely grateful for comments. Thanks a ton.?Regards,Pankaj\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "This might be a very basic query for this erudite group. However, i am hopeful some help will be forthcoming nevertheless.I have a monthly time series of annualized t-bill rates on Indian markets. For",
+      "thread_id": "thread-465aaed517cf",
+      "thread_depth": 0,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-465aaed517cf",
+      "message_id": "<1287945331.1344273.1466945582322.JavaMail.yahoo@mail.yahoo.com>",
+      "from_name": "Pankaj K Agarwal",
+      "from_email_hash": "0cbb0f9165a5f6176569cf3596bb8d4666fe7d2828a40590fd539fc0758d58e0",
+      "date": "2016-06-26T12:53:02Z",
+      "subject": "[R-SIG-Finance] Imputing Missing Values",
+      "subject_clean": "Imputing Missing Values",
+      "in_reply_to": null,
+      "references": [
+        "<1287945331.1344273.1466945582322.JavaMail.yahoo.ref@mail.yahoo.com>"
+      ],
+      "body_plain": "This might be a very basic query for this erudite group. However, i am hopeful some help will be forthcoming nevertheless.I have a monthly time series of annualized t-bill rates on Indian markets. For some months, the values are missing randomly. I need to convert the annualized yields into daily as well as monthly yields. I have two questions:1. I am using package zoo. Which of the methods of NA imputations will be advisable for this series, viz., na.agggregate, na.locf, na.spline or na.approx etc.?2. Should the imputation be done on monthly annual yields and then the conversion to daily and monthly yields be performed or imputation be done afterwards?3. Are there better methods than above for this task?\nI will be extremely grateful for comments. Thanks a ton.?Regards,Pankaj\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "This might be a very basic query for this erudite group. However, i am hopeful some help will be forthcoming nevertheless.I have a monthly time series of annualized t-bill rates on Indian markets. For",
+      "thread_id": "thread-465aaed517cf",
+      "thread_depth": 0,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-4f228ad87775",
+      "message_id": "<F1AB03BCD08A42D9A1FF87BF9C3702BE@Franki7PC>",
+      "from_name": "Frank",
+      "from_email_hash": "abdffc2429bfa78db9949f51e22b4e11e2e14915791103deccd563dd4d9da29e",
+      "date": "2016-06-26T08:09:39-05:00",
+      "subject": "[R-SIG-Finance] Imputing Missing Values",
+      "subject_clean": "Imputing Missing Values",
+      "in_reply_to": "<1287945331.1344273.1466945582322.JavaMail.yahoo@mail.yahoo.com>",
+      "references": [
+        "<1287945331.1344273.1466945582322.JavaMail.yahoo.ref@mail.yahoo.com>",
+        "<1287945331.1344273.1466945582322.JavaMail.yahoo@mail.yahoo.com>"
+      ],
+      "body_plain": "1)\n\nI use na.locf to replace NAs from FRED. I believe na.rm=TRUE means next\nobservation is carried backward: \n\nlibrary(quantmod)\nlibrary(chron)\n\n\n##\n## Get DGS3MO Treasury yield from FRED\n##\n\ngetSymbols('DGS3MO',src='FRED')\nDGS3MO<-na.locf(DGS3MO/100.0,na.rm = TRUE)\ntail(DGS3MO)\nfile_name <- \"DGS3MO.csv\"\nwrite.zoo(DGS3MO, file = file_name, append = FALSE, quote = TRUE, sep = \",\")\nquit()\n\n2)\n\nWould you be so kind as to show what you are currently using to imply\nyields? And what is your intended use for the implied daily/monthly data.\n\nThanks,\n\nFrank\nChicago\n-----Original Message-----\nFrom: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On Behalf\nOf Pankaj K Agarwal via R-SIG-Finance\nSent: Sunday, June 26, 2016 7:53 AM\nTo: R-sig-finance; R-Finance\nSubject: [R-SIG-Finance] Imputing Missing Values\n\nThis might be a very basic query for this erudite group. However, i am\nhopeful some help will be forthcoming nevertheless.I have a monthly time\nseries of annualized t-bill rates on Indian markets. For some months, the\nvalues are missing randomly. I need to convert the annualized yields into\ndaily as well as monthly yields. I have two questions:1. I am using package\nzoo. Which of the methods of NA imputations will be advisable for this\nseries, viz., na.agggregate, na.locf, na.spline or na.approx etc.?2. Should\nthe imputation be done on monthly annual yields and then the conversion to\ndaily and monthly yields be performed or imputation be done afterwards?3.\nAre there better methods than above for this task?\nI will be extremely grateful for comments. Thanks a ton.?Regards,Pankaj\n\t[[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions\nshould go.",
+      "body_snippet": "1)\n\nI use na.locf to replace NAs from FRED. I believe na.rm=TRUE means next\nobservation is carried backward: \n\nlibrary(quantmod)\nlibrary(chron)\n\n\n##\n## Get DGS3MO Treasury yield from FRED\n##\n\ngetSymbo",
+      "thread_id": "thread-465aaed517cf",
+      "thread_depth": 1,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-4db9329dfb2f",
+      "message_id": "<1466947001.16865.205.camel@brian-rcg>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2016-06-26T08:16:41-05:00",
+      "subject": "[R-SIG-Finance] Imputing Missing Values",
+      "subject_clean": "Imputing Missing Values",
+      "in_reply_to": "<1287945331.1344273.1466945582322.JavaMail.yahoo@mail.yahoo.com>",
+      "references": [
+        "<1287945331.1344273.1466945582322.JavaMail.yahoo.ref@mail.yahoo.com>",
+        "<1287945331.1344273.1466945582322.JavaMail.yahoo@mail.yahoo.com>"
+      ],
+      "body_plain": "On Sun, 2016-06-26 at 12:53 +0000, Pankaj K Agarwal via R-SIG-Finance\nwrote:\n> This might be a very basic query for this erudite group. However, i am\n> hopeful some help will be forthcoming nevertheless.I have a monthly\n> time series of annualized t-bill rates on Indian markets. For some\n> months, the values are missing randomly. I need to convert the\n> annualized yields into daily as well as monthly yields. I have two\n> questions:1. I am using package zoo. Which of the methods of NA\n> imputations will be advisable for this series, viz., na.agggregate,\n> na.locf, na.spline or na.approx etc.?2. Should the imputation be done\n> on monthly annual yields and then the conversion to daily and monthly\n> yields be performed or imputation be done afterwards?3. Are there\n> better methods than above for this task? I will be extremely grateful\n> for comments. Thanks a ton. Regards,Pankaj \t\n\nThe short answer is: Don't do it.  This is a bad idea.\n\nYou need to find a better source of data.  Daily data on Indian 3-mo\nbill yields is widely available from free sources.  See, e.g.\n\nhttp://www.investing.com/rates-bonds/india-3-month-bond-yield\n\nThere are many other sources of this data as well, I have no opinion on\nthe data quality of one over the other, but *any* of them would likely\nbe orders of magnitude better than what you're asking to do.\n\nYou can't impute from lower-frequency data to higher frequency data with\nany confidence.  \n\nThese NA imputation methods are designed to fill some occasionally\nmissing data, or to do something like Last Observation Carried Forward\non Bid/Ask spreads (which is not imputation at all, since that is the\nprevailing market). \n\nBasically, it always makes sense to start with the highest frequency\ndata available, and aggregate to lower frequencies.  In the case of your\nquery, start with the spot yield and do whatever adjustments you need.\n\nRegards,\n\nBrian",
+      "body_snippet": "On Sun, 2016-06-26 at 12:53 +0000, Pankaj K Agarwal via R-SIG-Finance\nwrote:\n> This might be a very basic query for this erudite group. However, i am\n> hopeful some help will be forthcoming neverthele",
+      "thread_id": "thread-465aaed517cf",
+      "thread_depth": 1,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-4db9329dfb2f",
+      "message_id": "<1466947001.16865.205.camel@brian-rcg>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2016-06-26T08:16:41-05:00",
+      "subject": "[R-SIG-Finance] Imputing Missing Values",
+      "subject_clean": "Imputing Missing Values",
+      "in_reply_to": "<1287945331.1344273.1466945582322.JavaMail.yahoo@mail.yahoo.com>",
+      "references": [
+        "<1287945331.1344273.1466945582322.JavaMail.yahoo.ref@mail.yahoo.com>",
+        "<1287945331.1344273.1466945582322.JavaMail.yahoo@mail.yahoo.com>"
+      ],
+      "body_plain": "On Sun, 2016-06-26 at 12:53 +0000, Pankaj K Agarwal via R-SIG-Finance\nwrote:\n> This might be a very basic query for this erudite group. However, i am\n> hopeful some help will be forthcoming nevertheless.I have a monthly\n> time series of annualized t-bill rates on Indian markets. For some\n> months, the values are missing randomly. I need to convert the\n> annualized yields into daily as well as monthly yields. I have two\n> questions:1. I am using package zoo. Which of the methods of NA\n> imputations will be advisable for this series, viz., na.agggregate,\n> na.locf, na.spline or na.approx etc.?2. Should the imputation be done\n> on monthly annual yields and then the conversion to daily and monthly\n> yields be performed or imputation be done afterwards?3. Are there\n> better methods than above for this task? I will be extremely grateful\n> for comments. Thanks a ton. Regards,Pankaj \t\n\nThe short answer is: Don't do it.  This is a bad idea.\n\nYou need to find a better source of data.  Daily data on Indian 3-mo\nbill yields is widely available from free sources.  See, e.g.\n\nhttp://www.investing.com/rates-bonds/india-3-month-bond-yield\n\nThere are many other sources of this data as well, I have no opinion on\nthe data quality of one over the other, but *any* of them would likely\nbe orders of magnitude better than what you're asking to do.\n\nYou can't impute from lower-frequency data to higher frequency data with\nany confidence.  \n\nThese NA imputation methods are designed to fill some occasionally\nmissing data, or to do something like Last Observation Carried Forward\non Bid/Ask spreads (which is not imputation at all, since that is the\nprevailing market). \n\nBasically, it always makes sense to start with the highest frequency\ndata available, and aggregate to lower frequencies.  In the case of your\nquery, start with the spot yield and do whatever adjustments you need.\n\nRegards,\n\nBrian",
+      "body_snippet": "On Sun, 2016-06-26 at 12:53 +0000, Pankaj K Agarwal via R-SIG-Finance\nwrote:\n> This might be a very basic query for this erudite group. However, i am\n> hopeful some help will be forthcoming neverthele",
+      "thread_id": "thread-465aaed517cf",
+      "thread_depth": 1,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-dba878530982",
+      "message_id": "<304720112.1361833.1466947324160.JavaMail.yahoo@mail.yahoo.com>",
+      "from_name": "Pankaj K Agarwal",
+      "from_email_hash": "0cbb0f9165a5f6176569cf3596bb8d4666fe7d2828a40590fd539fc0758d58e0",
+      "date": "2016-06-26T13:22:04Z",
+      "subject": "[R-SIG-Finance] Imputing Missing Values",
+      "subject_clean": "Imputing Missing Values",
+      "in_reply_to": "<F1AB03BCD08A42D9A1FF87BF9C3702BE@Franki7PC>",
+      "references": [
+        "<1287945331.1344273.1466945582322.JavaMail.yahoo.ref@mail.yahoo.com>",
+        "<1287945331.1344273.1466945582322.JavaMail.yahoo@mail.yahoo.com>",
+        "<F1AB03BCD08A42D9A1FF87BF9C3702BE@Franki7PC>"
+      ],
+      "body_plain": "Dear FrankSo kind of you to have replied. Thanks.I am conducting an academic research on mutual funds. I am modelling fund returns on daily as well as monthly frequencies. The model uses zero investment strategy returns (fund/portfolio returns minus risk free rate) as variables. For risk free rates i have good quality 91-day t-bill rates available. But it appeared that using 91-day risk free rate with daily fund returns is not a very good idea, and i needed to search t-bill rates of lesser maturity.?So, in India next lower maturity available is 14-day t-bill, but there are missing values for some months in the monthly series of annualized rates. For example, in some years, data for 3 months running is missing.?Hope i could convey the problem.\nWill na.locf be a good idea in this case? Also, if i use 91-day rates with daily fund returns, will it matter much?Kindly advise.\n?Regards,Pankaj\n\n \n\n    On Sunday, 26 June 2016 6:39 PM, Frank <frankm60606 at gmail.com> wrote:\n \n \n\n 1)\n\nI use na.locf to replace NAs from FRED. I believe na.rm=TRUE means next\nobservation is carried backward: \n\nlibrary(quantmod)\nlibrary(chron)\n\n\n##\n## Get DGS3MO Treasury yield from FRED\n##\n\ngetSymbols('DGS3MO',src='FRED')\nDGS3MO<-na.locf(DGS3MO/100.0,na.rm = TRUE)\ntail(DGS3MO)\nfile_name <- \"DGS3MO.csv\"\nwrite.zoo(DGS3MO, file = file_name, append = FALSE, quote = TRUE, sep = \",\")\nquit()\n\n2)\n\nWould you be so kind as to show what you are currently using to imply\nyields? And what is your intended use for the implied daily/monthly data.\n\nThanks,\n\nFrank\nChicago\n-----Original Message-----\nFrom: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On Behalf\nOf Pankaj K Agarwal via R-SIG-Finance\nSent: Sunday, June 26, 2016 7:53 AM\nTo: R-sig-finance; R-Finance\nSubject: [R-SIG-Finance] Imputing Missing Values\n\nThis might be a very basic query for this erudite group. However, i am\nhopeful some help will be forthcoming nevertheless.I have a monthly time\nseries of annualized t-bill rates on Indian markets. For some months, the\nvalues are missing randomly. I need to convert the annualized yields into\ndaily as well as monthly yields. I have two questions:1. I am using package\nzoo. Which of the methods of NA imputations will be advisable for this\nseries, viz., na.agggregate, na.locf, na.spline or na.approx etc.?2. Should\nthe imputation be done on monthly annual yields and then the conversion to\ndaily and monthly yields be performed or imputation be done afterwards?3.\nAre there better methods than above for this task?\nI will be extremely grateful for comments. Thanks a ton.?Regards,Pankaj\n??? [[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions\nshould go.\n\n\n\n  \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear FrankSo kind of you to have replied. Thanks.I am conducting an academic research on mutual funds. I am modelling fund returns on daily as well as monthly frequencies. The model uses zero investme",
+      "thread_id": "thread-465aaed517cf",
+      "thread_depth": 2,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-57321fbfd519",
+      "message_id": "<44728917.1340223.1466950312671.JavaMail.yahoo@mail.yahoo.com>",
+      "from_name": "Pankaj K Agarwal",
+      "from_email_hash": "0cbb0f9165a5f6176569cf3596bb8d4666fe7d2828a40590fd539fc0758d58e0",
+      "date": "2016-06-26T14:11:52Z",
+      "subject": "[R-SIG-Finance] Imputing Missing Values",
+      "subject_clean": "Imputing Missing Values",
+      "in_reply_to": "<1466947001.16865.205.camel@brian-rcg>",
+      "references": [
+        "<1287945331.1344273.1466945582322.JavaMail.yahoo.ref@mail.yahoo.com>",
+        "<1287945331.1344273.1466945582322.JavaMail.yahoo@mail.yahoo.com>",
+        "<1466947001.16865.205.camel@brian-rcg>"
+      ],
+      "body_plain": "Thanks so much Brian sir. Your reply is a great help.?Regards,Pankaj? \n\n    On Sunday, 26 June 2016 6:47 PM, Brian G. Peterson <brian at braverock.com> wrote:\n \n \n\n On Sun, 2016-06-26 at 12:53 +0000, Pankaj K Agarwal via R-SIG-Finance\nwrote:\n> This might be a very basic query for this erudite group. However, i am\n> hopeful some help will be forthcoming nevertheless.I have a monthly\n> time series of annualized t-bill rates on Indian markets. For some\n> months, the values are missing randomly. I need to convert the\n> annualized yields into daily as well as monthly yields. I have two\n> questions:1. I am using package zoo. Which of the methods of NA\n> imputations will be advisable for this series, viz., na.agggregate,\n> na.locf, na.spline or na.approx etc.?2. Should the imputation be done\n> on monthly annual yields and then the conversion to daily and monthly\n> yields be performed or imputation be done afterwards?3. Are there\n> better methods than above for this task? I will be extremely grateful\n> for comments. Thanks a ton. Regards,Pankaj ??? \n\nThe short answer is: Don't do it.? This is a bad idea.\n\nYou need to find a better source of data.? Daily data on Indian 3-mo\nbill yields is widely available from free sources.? See, e.g.\n\nhttp://www.investing.com/rates-bonds/india-3-month-bond-yield\n\nThere are many other sources of this data as well, I have no opinion on\nthe data quality of one over the other, but *any* of them would likely\nbe orders of magnitude better than what you're asking to do.\n\nYou can't impute from lower-frequency data to higher frequency data with\nany confidence.? \n\nThese NA imputation methods are designed to fill some occasionally\nmissing data, or to do something like Last Observation Carried Forward\non Bid/Ask spreads (which is not imputation at all, since that is the\nprevailing market). \n\nBasically, it always makes sense to start with the highest frequency\ndata available, and aggregate to lower frequencies.? In the case of your\nquery, start with the spot yield and do whatever adjustments you need.\n\nRegards,\n\nBrian\n\n\n\n \n  \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thanks so much Brian sir. Your reply is a great help.?Regards,Pankaj? \n\n    On Sunday, 26 June 2016 6:47 PM, Brian G. Peterson <brian at braverock.com> wrote:\n \n \n\n On Sun, 2016-06-26 at 12:53 +0000, ",
+      "thread_id": "thread-465aaed517cf",
+      "thread_depth": 2,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-affc4178efb7",
+      "message_id": "<416475601.1919765.1467051426633.JavaMail.yahoo@mail.yahoo.com>",
+      "from_name": "Pankaj K Agarwal",
+      "from_email_hash": "0cbb0f9165a5f6176569cf3596bb8d4666fe7d2828a40590fd539fc0758d58e0",
+      "date": "2016-06-27T18:17:06Z",
+      "subject": "[R-SIG-Finance] GMM",
+      "subject_clean": "GMM",
+      "in_reply_to": null,
+      "references": [
+        "<416475601.1919765.1467051426633.JavaMail.yahoo.ref@mail.yahoo.com>"
+      ],
+      "body_plain": "Apologies if this question is irrelevant for this group.\nDoes using HAC standard errors (Newey and West: package sandwich) in OLS regression make using GMM (package: GMM) redundant?\n?Regards,Pankaj K Agarwal\n+91-98397-11444http://in.linkedin.com/in/pankajkagarwal/\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Apologies if this question is irrelevant for this group.\nDoes using HAC standard errors (Newey and West: package sandwich) in OLS regression make using GMM (package: GMM) redundant?\n?Regards,Pankaj K ",
+      "thread_id": "thread-affc4178efb7",
+      "thread_depth": 0,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-cc4c2b2d2cd1",
+      "message_id": "<CAHz+bWZ+w0p-7KhnMRmXmsOYGdme_E4e9qDV8Mx5q1=JSzv=8g@mail.gmail.com>",
+      "from_name": "Mark Leeds",
+      "from_email_hash": "d1da32a389e2e07170d1d98116fc6c867519c23835668ff15d52be4687d1b14e",
+      "date": "2016-06-27T14:35:46-04:00",
+      "subject": "[R-SIG-Finance] GMM",
+      "subject_clean": "GMM",
+      "in_reply_to": "<416475601.1919765.1467051426633.JavaMail.yahoo@mail.yahoo.com>",
+      "references": [
+        "<416475601.1919765.1467051426633.JavaMail.yahoo.ref@mail.yahoo.com>",
+        "<416475601.1919765.1467051426633.JavaMail.yahoo@mail.yahoo.com>"
+      ],
+      "body_plain": "Hi : Yes but GMM is used more for either A) when the OLS assumptions are\nnot true ( i.e autocorrelation or heteroscedasticity. ) or B) you have a\nfunction that is not\nnecessarily linear like it is in the case of OLS.\n\nAlso, Achim could definitely say more on this but there are various\ntechniques for the construction of HAC estimators so using sandwich may not\nnecessarily give the same results as GMM even in the OLS case.\n\n\n\n\n\n\n\n\n\n\n\nOn Mon, Jun 27, 2016 at 2:17 PM, Pankaj K Agarwal via R-SIG-Finance <\nr-sig-finance at r-project.org> wrote:\n\n> Apologies if this question is irrelevant for this group.\n> Does using HAC standard errors (Newey and West: package sandwich) in OLS\n> regression make using GMM (package: GMM) redundant?\n>  Regards,Pankaj K Agarwal\n> +91-98397-11444http://in.linkedin.com/in/pankajkagarwal/\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi : Yes but GMM is used more for either A) when the OLS assumptions are\nnot true ( i.e autocorrelation or heteroscedasticity. ) or B) you have a\nfunction that is not\nnecessarily linear like it is in ",
+      "thread_id": "thread-affc4178efb7",
+      "thread_depth": 1,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-dd00157a5f34",
+      "message_id": "<022b01d1d15d$daa0ccb0$8fe26610$@uw.edu>",
+      "from_name": "Eric Zivot",
+      "from_email_hash": "9e93c7468d3a5725eadeefe0f7b6a4337fbb439e42fd4a25440d5e49060272b3",
+      "date": "2016-06-28T09:55:19-07:00",
+      "subject": "[R-SIG-Finance] GMM",
+      "subject_clean": "GMM",
+      "in_reply_to": "<416475601.1919765.1467051426633.JavaMail.yahoo@mail.yahoo.com>",
+      "references": [
+        "<416475601.1919765.1467051426633.JavaMail.yahoo.ref@mail.yahoo.com>",
+        "<416475601.1919765.1467051426633.JavaMail.yahoo@mail.yahoo.com>"
+      ],
+      "body_plain": "No\nOLS is a special case of GMM where the number of moment conditions is the same as the number of parameters. In this case the efficient weight matrix does not matter for estimation but does matter for the calculation of an estimate of the asymptotic variance matrix of the OLS parameters. This is what HAC standard errors do in the sandwich function vcovHAC()\n\n-----Original Message-----\nFrom: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On Behalf Of Pankaj K Agarwal via R-SIG-Finance\nSent: Monday, June 27, 2016 11:17 AM\nTo: R-sig-finance <r-sig-finance at r-project.org>\nCc: H.K Pradhan <pradhan at xlri.ac.in>\nSubject: [R-SIG-Finance] GMM\n\nApologies if this question is irrelevant for this group.\nDoes using HAC standard errors (Newey and West: package sandwich) in OLS regression make using GMM (package: GMM) redundant?\n Regards,Pankaj K Agarwal\n+91-98397-11444http://in.linkedin.com/in/pankajkagarwal/\n\t[[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "No\nOLS is a special case of GMM where the number of moment conditions is the same as the number of parameters. In this case the efficient weight matrix does not matter for estimation but does matter f",
+      "thread_id": "thread-affc4178efb7",
+      "thread_depth": 1,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-3410e7a6ac86",
+      "message_id": "<0000fd90ca75$5105567b$90349b71$@translucentanalytics.com>",
+      "from_name": "achievingbala at viziamail.com",
+      "from_email_hash": "02a11c79582beb610fb7d73d527af5c784afa572e4277283d5d23055dcef9dc0",
+      "date": "2016-06-28T23:20:53+03:00",
+      "subject": "[R-SIG-Finance] new experience",
+      "subject_clean": "new experience",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI've recently had absolutely new experience, you've got to see that! Just take a look here <http://sticricruza.lookamazingnaked.net/xyvuc>\n\nPardon my monkey thumbs, nelson at translucentanalytics.com\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI've recently had absolutely new experience, you've got to see that! Just take a look here <http://sticricruza.lookamazingnaked.net/xyvuc>\n\nPardon my monkey thumbs, nelson at translucentanalytics",
+      "thread_id": "thread-3410e7a6ac86",
+      "thread_depth": 0,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-6b5ae0b748cc",
+      "message_id": "<79e08bc654e34144a8b21ceeba0077bd@ex13-live-mbn1.ad.kent.ac.uk>",
+      "from_name": "T.Riedle",
+      "from_email_hash": "e052ead61f6e1433fb39824191213e9549a10562eb3c85b4b6164218d64fb718",
+      "date": "2016-06-28T21:06:50Z",
+      "subject": "[R-SIG-Finance] Calculating VaR",
+      "subject_clean": "Calculating VaR",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear all,\n\nAs I am working on Value at Risk, I am looking for an appropriate package to calculate Value at Risk using different methods beyond the historical method. In doing so, I have found the package jvnVaR which provides several methods to calculate VaR. Nevertheless, I am interested in calculating the Monte Carlo VaR and the GARCH (1,1) VaR.\n\n\n\nDoes anybody know another package which provides  functions to calculate VaR?\n\n\n\nKind regards\n\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,\n\nAs I am working on Value at Risk, I am looking for an appropriate package to calculate Value at Risk using different methods beyond the historical method. In doing so, I have found the pack",
+      "thread_id": "thread-6b5ae0b748cc",
+      "thread_depth": 0,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-91a8ca638a49",
+      "message_id": "<AC5EB50B-F023-4B4A-9CB8-08606E82D9F5@alum.northwestern.edu>",
+      "from_name": "Daniel Melendez",
+      "from_email_hash": "35a3963319baa5a53209390e95d2c8dbea5ebb938572608e2a4f62622537a451",
+      "date": "2016-06-28T16:18:16-05:00",
+      "subject": "[R-SIG-Finance] Calculating VaR",
+      "subject_clean": "Calculating VaR",
+      "in_reply_to": "<79e08bc654e34144a8b21ceeba0077bd@ex13-live-mbn1.ad.kent.ac.uk>",
+      "references": [
+        "<79e08bc654e34144a8b21ceeba0077bd@ex13-live-mbn1.ad.kent.ac.uk>"
+      ],
+      "body_plain": "Definitely should look into the rugarch/rmgarch packages \n\nRegards - Daniel\n\n> On Jun 28, 2016, at 4:06 PM, T.Riedle <tr206 at kent.ac.uk> wrote:\n> \n> Dear all,\n> \n> As I am working on Value at Risk, I am looking for an appropriate package to calculate Value at Risk using different methods beyond the historical method. In doing so, I have found the package jvnVaR which provides several methods to calculate VaR. Nevertheless, I am interested in calculating the Monte Carlo VaR and the GARCH (1,1) VaR.\n> \n> \n> \n> Does anybody know another package which provides  functions to calculate VaR?\n> \n> \n> \n> Kind regards\n> \n> \n> \n> \n>    [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Definitely should look into the rugarch/rmgarch packages \n\nRegards - Daniel\n\n> On Jun 28, 2016, at 4:06 PM, T.Riedle <tr206 at kent.ac.uk> wrote:\n> \n> Dear all,\n> \n> As I am working on Value at Risk, ",
+      "thread_id": "thread-6b5ae0b748cc",
+      "thread_depth": 1,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-0206d9e9f1cc",
+      "message_id": "<02f201d1d18f$306b9360$9142ba20$@uw.edu>",
+      "from_name": "Eric Zivot",
+      "from_email_hash": "9e93c7468d3a5725eadeefe0f7b6a4337fbb439e42fd4a25440d5e49060272b3",
+      "date": "2016-06-28T15:48:29-07:00",
+      "subject": "[R-SIG-Finance] Calculating VaR",
+      "subject_clean": "Calculating VaR",
+      "in_reply_to": "<79e08bc654e34144a8b21ceeba0077bd@ex13-live-mbn1.ad.kent.ac.uk>",
+      "references": [
+        "<79e08bc654e34144a8b21ceeba0077bd@ex13-live-mbn1.ad.kent.ac.uk>"
+      ],
+      "body_plain": "You can also look at the Dowd package on R-forge (part of ReturnAnalytics)\nand, of course, PerformanceAnalytics. rugarch has built-in functionality for\ncomputing VaR from GARCH models as well as backtesting VaR models.\n\n-----Original Message-----\nFrom: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On Behalf\nOf T.Riedle\nSent: Tuesday, June 28, 2016 2:07 PM\nTo: R-SIG-Finance at r-project.org\nSubject: [R-SIG-Finance] Calculating VaR\n\nDear all,\n\nAs I am working on Value at Risk, I am looking for an appropriate package to\ncalculate Value at Risk using different methods beyond the historical\nmethod. In doing so, I have found the package jvnVaR which provides several\nmethods to calculate VaR. Nevertheless, I am interested in calculating the\nMonte Carlo VaR and the GARCH (1,1) VaR.\n\n\n\nDoes anybody know another package which provides  functions to calculate\nVaR?\n\n\n\nKind regards\n\n\n\n\n\t[[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions\nshould go.",
+      "body_snippet": "You can also look at the Dowd package on R-forge (part of ReturnAnalytics)\nand, of course, PerformanceAnalytics. rugarch has built-in functionality for\ncomputing VaR from GARCH models as well as backt",
+      "thread_id": "thread-6b5ae0b748cc",
+      "thread_depth": 1,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-77b4a5d38e90",
+      "message_id": "<CAHz+bWZaF3VOasLxf=R38dob39MBxJ294hzG8oqX0UuYHa9jQQ@mail.gmail.com>",
+      "from_name": "Mark Leeds",
+      "from_email_hash": "d1da32a389e2e07170d1d98116fc6c867519c23835668ff15d52be4687d1b14e",
+      "date": "2016-06-28T20:41:44-04:00",
+      "subject": "[R-SIG-Finance] GMM",
+      "subject_clean": "GMM",
+      "in_reply_to": "<022b01d1d15d$daa0ccb0$8fe26610$@uw.edu>",
+      "references": [
+        "<416475601.1919765.1467051426633.JavaMail.yahoo.ref@mail.yahoo.com>",
+        "<416475601.1919765.1467051426633.JavaMail.yahoo@mail.yahoo.com>",
+        "<022b01d1d15d$daa0ccb0$8fe26610$@uw.edu>"
+      ],
+      "body_plain": "Thanks Eric for your explanation. But I'm a little confused. I understand\nthat in\nthe case of OLS, the system is perfectly identified. But are you saying that\n\nA) if he used lm and sandwich, then he won't get a correct answer\n\nB) that if he uses GMM, he won't get a correct answer  because it's not\ndesigned\nfor perfectly identfied systems. ( i.e: there is no weighting matrix ).\n\nC) if he uses both, he'll get different answers.\n\nThanks.\n\nAnd to the person who asked the question originally, below is a short but\nsweet intro to GMM.\n\nhttp://lipas.uwasa.fi/~sjp/Teaching/gmm/lectures/gmmc3.pdf\n\n\n\n\n\n\n\nOn Tue, Jun 28, 2016 at 12:55 PM, Eric Zivot <ezivot at uw.edu> wrote:\n\n> No\n> OLS is a special case of GMM where the number of moment conditions is the\n> same as the number of parameters. In this case the efficient weight matrix\n> does not matter for estimation but does matter for the calculation of an\n> estimate of the asymptotic variance matrix of the OLS parameters. This is\n> what HAC standard errors do in the sandwich function vcovHAC()\n>\n> -----Original Message-----\n> From: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On\n> Behalf Of Pankaj K Agarwal via R-SIG-Finance\n> Sent: Monday, June 27, 2016 11:17 AM\n> To: R-sig-finance <r-sig-finance at r-project.org>\n> Cc: H.K Pradhan <pradhan at xlri.ac.in>\n> Subject: [R-SIG-Finance] GMM\n>\n> Apologies if this question is irrelevant for this group.\n> Does using HAC standard errors (Newey and West: package sandwich) in OLS\n> regression make using GMM (package: GMM) redundant?\n>  Regards,Pankaj K Agarwal\n> +91-98397-11444http://in.linkedin.com/in/pankajkagarwal/\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thanks Eric for your explanation. But I'm a little confused. I understand\nthat in\nthe case of OLS, the system is perfectly identified. But are you saying that\n\nA) if he used lm and sandwich, then he w",
+      "thread_id": "thread-affc4178efb7",
+      "thread_depth": 2,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-4a4c0a89a63a",
+      "message_id": "<6AE6C8C0-664D-4520-AF3D-CFB03E562B2E@gmx.net>",
+      "from_name": "Philipp Reich",
+      "from_email_hash": "8e35b9d50f74ec702b9430190d7fa59ba85facad60fe1aa7f6f1eac18f642709",
+      "date": "2016-06-29T22:34:14+02:00",
+      "subject": "[R-SIG-Finance] Creating regression tables for objects returned from ugarchfit",
+      "subject_clean": "Creating regression tables for objects returned from ugarchfit",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi R-users,\n\nI have not been working a lot with R before so this might be basic.\nHowever, I have been using the fGarch package to estimate Garch-type models and I always used stargazer in order to create an output table. E.g.\n\nd <- read.dta(\"dataSet.dta\");\nR = d$GDAX_r;\nFGarch01 <- garchFit(data=R, cond.dist=\"std\")\nstargazer(fit01, out=\"models.txt?)\n\nNow I am trying to fit models with exogenous regressors, e.g.\n\n# import data\nd <- read.dta(\"dataSet.dta\");\n\n# create data to work with\nR = d$GDAX_r;\nRK = d$GDAX_rk;\nVDAX = d$VDAX_c/sqrt(225);\nl1_r = R[2:2676];\nl1_rk = RK[2:2676];\nl1_vdax = VDAX[2:2676]/sqrt(225);\nr = R[1:2675];\nrk = RK[1:2675];\nvdax = VDAX[1:2675]/sqrt(225);\nexVar = cbind(l1_rk, l1_vdax)\n\n# 3. model\nspec03 <- ugarchspec(variance.model=list(model=\"sGARCH\",garchOrder=c(1,1), external.regressors=exVar),mean.model=list(arfima=FALSE, armaOrder=c(0,0), include.mean=TRUE),distribution=\"ged\", fixed.pars=list( vxreg2=0))\nfit03 <- ugarchfit(spec03, r, solver=\"nlminb\", fit.control = list(stationarity = 1))\ncoef(fit03);\n\nstargazer(fit03, out=\"models.txt\")\n\nWhen I try to apply stargazer to the object returned from ugarchfit I get the following error message. \nError in objects[[i]]$zelig.call : \n  $ operator not defined for this S4 class\n\nThe question to you guys is: Did I do something wrong when using stargazer? Are there other methods for creating regression tables when using rugarch? \nIf so please share that information with me\nThank you very much for helping me,\n\nPhilipp\n\n\n\n\n\n\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi R-users,\n\nI have not been working a lot with R before so this might be basic.\nHowever, I have been using the fGarch package to estimate Garch-type models and I always used stargazer in order to cre",
+      "thread_id": "thread-4a4c0a89a63a",
+      "thread_depth": 0,
+      "month": "2016-06"
+    },
+    {
+      "id": "msg-debf24441ac9",
+      "message_id": "<acfb744a-1f03-68be-698d-53bfdb6ceac5@4dscape.com>",
+      "from_name": "alexios galanos",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2016-06-29T18:45:23-05:00",
+      "subject": "[R-SIG-Finance] Creating regression tables for objects returned from ugarchfit",
+      "subject_clean": "Creating regression tables for objects returned from ugarchfit",
+      "in_reply_to": "<6AE6C8C0-664D-4520-AF3D-CFB03E562B2E@gmx.net>",
+      "references": [
+        "<6AE6C8C0-664D-4520-AF3D-CFB03E562B2E@gmx.net>"
+      ],
+      "body_plain": "I've never heard of stargazer but will look into it to see what is\nrequired to generate\nthe output...probably some contribution of code back to the developers\nto handle\nrugarch classes.\n\nI'll let you know.\n\nRegards,\n\nAlexios\n\nOn 29/06/2016 15:34, Philipp Reich wrote:\n> Hi R-users,\n>\n> I have not been working a lot with R before so this might be basic.\n> However, I have been using the fGarch package to estimate Garch-type models and I always used stargazer in order to create an output table. E.g.\n>\n> d <- read.dta(\"dataSet.dta\");\n> R = d$GDAX_r;\n> FGarch01 <- garchFit(data=R, cond.dist=\"std\")\n> stargazer(fit01, out=\"models.txt?)\n>\n> Now I am trying to fit models with exogenous regressors, e.g.\n>\n> # import data\n> d <- read.dta(\"dataSet.dta\");\n>\n> # create data to work with\n> R = d$GDAX_r;\n> RK = d$GDAX_rk;\n> VDAX = d$VDAX_c/sqrt(225);\n> l1_r = R[2:2676];\n> l1_rk = RK[2:2676];\n> l1_vdax = VDAX[2:2676]/sqrt(225);\n> r = R[1:2675];\n> rk = RK[1:2675];\n> vdax = VDAX[1:2675]/sqrt(225);\n> exVar = cbind(l1_rk, l1_vdax)\n>\n> # 3. model\n> spec03 <- ugarchspec(variance.model=list(model=\"sGARCH\",garchOrder=c(1,1), external.regressors=exVar),mean.model=list(arfima=FALSE, armaOrder=c(0,0), include.mean=TRUE),distribution=\"ged\", fixed.pars=list( vxreg2=0))\n> fit03 <- ugarchfit(spec03, r, solver=\"nlminb\", fit.control = list(stationarity = 1))\n> coef(fit03);\n>\n> stargazer(fit03, out=\"models.txt\")\n>\n> When I try to apply stargazer to the object returned from ugarchfit I get the following error message. \n> Error in objects[[i]]$zelig.call : \n>   $ operator not defined for this S4 class\n>\n> The question to you guys is: Did I do something wrong when using stargazer? Are there other methods for creating regression tables when using rugarch? \n> If so please share that information with me\n> Thank you very much for helping me,\n>\n> Philipp\n>\n>\n>\n>\n>\n>\n>\n>\n>\n> \t[[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "I've never heard of stargazer but will look into it to see what is\nrequired to generate\nthe output...probably some contribution of code back to the developers\nto handle\nrugarch classes.\n\nI'll let you ",
+      "thread_id": "thread-4a4c0a89a63a",
+      "thread_depth": 1,
+      "month": "2016-06"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-29ec777b1484",
+      "subject": "Estimating gumbel copula parameter",
+      "message_count": 1,
+      "participants": [
+        "Sachin Kuruvithadam"
+      ],
+      "started": "2016-06-05T23:38:58+00:00",
+      "last_reply": "2016-06-05T23:38:58+00:00",
+      "root_message_id": "msg-29ec777b1484"
+    },
+    {
+      "id": "thread-28f470422e21",
+      "subject": "How are errors terms calculated in GARCH model by rugarch package?",
+      "message_count": 2,
+      "participants": [
+        "Xie Yijun",
+        "alexios galanos"
+      ],
+      "started": "2016-06-08T15:58:41-07:00",
+      "last_reply": "2016-06-08T19:58:45-05:00",
+      "root_message_id": "msg-28f470422e21"
+    },
+    {
+      "id": "thread-672ab366f7d0",
+      "subject": "Option pricing, basic question",
+      "message_count": 8,
+      "participants": [
+        "Adam Ginensky",
+        "Frank",
+        "Joshua Ulrich",
+        "Oleg Mubarakshin",
+        "thp"
+      ],
+      "started": "2016-06-09T08:02:39+02:00",
+      "last_reply": "2016-06-16T11:10:36-05:00",
+      "root_message_id": "msg-672ab366f7d0"
+    },
+    {
+      "id": "thread-b3b69f32aa6d",
+      "subject": "Option pricing, basic question",
+      "message_count": 1,
+      "participants": [
+        "Hong Yu"
+      ],
+      "started": "2016-06-09T14:38:51+08:00",
+      "last_reply": "2016-06-09T14:38:51+08:00",
+      "root_message_id": "msg-b3b69f32aa6d"
+    },
+    {
+      "id": "thread-0de0963365af",
+      "subject": "Dynamic copula simulation with 'rmgarch' package",
+      "message_count": 1,
+      "participants": [
+        "Sachin Kuruvithadam"
+      ],
+      "started": "2016-06-10T10:44:19+00:00",
+      "last_reply": "2016-06-10T10:44:19+00:00",
+      "root_message_id": "msg-0de0963365af"
+    },
+    {
+      "id": "thread-f6c91f97544a",
+      "subject": "reqNewsBulletins",
+      "message_count": 1,
+      "participants": [
+        "Stephen Choularton"
+      ],
+      "started": "2016-06-12T19:31:22+02:00",
+      "last_reply": "2016-06-12T19:31:22+02:00",
+      "root_message_id": "msg-f6c91f97544a"
+    },
+    {
+      "id": "thread-ce1ad061ada1",
+      "subject": "This isn't base R so it must be a package -- maybe IBrokers (?)... Would be good to identify it as such",
+      "message_count": 1,
+      "participants": [
+        "Stephen Choularton"
+      ],
+      "started": "2016-06-13T18:44:01+02:00",
+      "last_reply": "2016-06-13T18:44:01+02:00",
+      "root_message_id": "msg-ce1ad061ada1"
+    },
+    {
+      "id": "thread-d8a46ef2b7b9",
+      "subject": "This isn't base R so it must be a package -- maybe IBrokers (?)... Would be good to identify it as such",
+      "message_count": 1,
+      "participants": [
+        "ce"
+      ],
+      "started": "2016-06-14T09:00:37-04:00",
+      "last_reply": "2016-06-14T09:00:37-04:00",
+      "root_message_id": "msg-d8a46ef2b7b9"
+    },
+    {
+      "id": "thread-dfa42d0e0cee",
+      "subject": "Copula-EVT-GARCH with rmgarch package (reproducible code)",
+      "message_count": 1,
+      "participants": [
+        "Sachin Kuruvithadam"
+      ],
+      "started": "2016-06-22T17:19:21+00:00",
+      "last_reply": "2016-06-22T17:19:21+00:00",
+      "root_message_id": "msg-dfa42d0e0cee"
+    },
+    {
+      "id": "thread-2952a2c21ddd",
+      "subject": "dynamic copula using rmgarch package (ignore previous question, don't know how to delete it)",
+      "message_count": 1,
+      "participants": [
+        "Sachin Kuruvithadam"
+      ],
+      "started": "2016-06-22T19:36:20+00:00",
+      "last_reply": "2016-06-22T19:36:20+00:00",
+      "root_message_id": "msg-2952a2c21ddd"
+    },
+    {
+      "id": "thread-7a7051b43048",
+      "subject": "dynamic copula using rmgarch package (ignore previous question, don't know how to delete it)",
+      "message_count": 2,
+      "participants": [
+        "Robert Iquiapaza",
+        "Sachin Kuruvithadam"
+      ],
+      "started": "2016-06-23T16:02:23-03:00",
+      "last_reply": "2016-06-23T21:07:39+00:00",
+      "root_message_id": "msg-7a7051b43048"
+    },
+    {
+      "id": "thread-465aaed517cf",
+      "subject": "Imputing Missing Values",
+      "message_count": 6,
+      "participants": [
+        "Brian G. Peterson",
+        "Frank",
+        "Pankaj K Agarwal"
+      ],
+      "started": "2016-06-26T12:53:02+00:00",
+      "last_reply": "2016-06-26T14:11:52+00:00",
+      "root_message_id": "msg-465aaed517cf"
+    },
+    {
+      "id": "thread-465aaed517cf",
+      "subject": "Imputing Missing Values",
+      "message_count": 1,
+      "participants": [
+        "Pankaj K Agarwal"
+      ],
+      "started": "2016-06-26T12:53:02+00:00",
+      "last_reply": "2016-06-26T12:53:02+00:00",
+      "root_message_id": "msg-465aaed517cf"
+    },
+    {
+      "id": "thread-affc4178efb7",
+      "subject": "GMM",
+      "message_count": 4,
+      "participants": [
+        "Eric Zivot",
+        "Mark Leeds",
+        "Pankaj K Agarwal"
+      ],
+      "started": "2016-06-27T18:17:06+00:00",
+      "last_reply": "2016-06-28T20:41:44-04:00",
+      "root_message_id": "msg-affc4178efb7"
+    },
+    {
+      "id": "thread-6b5ae0b748cc",
+      "subject": "Calculating VaR",
+      "message_count": 3,
+      "participants": [
+        "Daniel Melendez",
+        "Eric Zivot",
+        "T.Riedle"
+      ],
+      "started": "2016-06-28T21:06:50+00:00",
+      "last_reply": "2016-06-28T15:48:29-07:00",
+      "root_message_id": "msg-6b5ae0b748cc"
+    },
+    {
+      "id": "thread-3410e7a6ac86",
+      "subject": "new experience",
+      "message_count": 1,
+      "participants": [
+        "achievingbala at viziamail.com"
+      ],
+      "started": "2016-06-28T23:20:53+03:00",
+      "last_reply": "2016-06-28T23:20:53+03:00",
+      "root_message_id": "msg-3410e7a6ac86"
+    },
+    {
+      "id": "thread-4a4c0a89a63a",
+      "subject": "Creating regression tables for objects returned from ugarchfit",
+      "message_count": 2,
+      "participants": [
+        "Philipp Reich",
+        "alexios galanos"
+      ],
+      "started": "2016-06-29T22:34:14+02:00",
+      "last_reply": "2016-06-29T18:45:23-05:00",
+      "root_message_id": "msg-4a4c0a89a63a"
+    }
+  ]
+}

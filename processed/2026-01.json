@@ -1,0 +1,271 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2026-01",
+  "messages": [
+    {
+      "id": "msg-eed4eb7be398",
+      "message_id": "<CAOTSzf=g6zSBhVcdnLYkf00iRtGWq1me1941ue3Yu3zEv+dALA@mail.gmail.com>",
+      "from_name": "Anatoly Schmidt",
+      "from_email_hash": "097c2920dd87375ae37269cc5aba0cea334181958197c8158732af601a3b49d2",
+      "date": "2026-01-03T17:00:25-05:00",
+      "subject": "[R-SIG-Finance] parallel rugarch run",
+      "subject_clean": "parallel rugarch run",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I implemented a parallel rugarch script by looping over 4 input parameters\nand writing some output into two files for optimal AIC and BIC,\nrespectively. My PC has 4 cores.\nI write output when the new AIC or BIC are  more negative than the current\nones (see the snippet below).  But now my question is: can the\nparallel sessions be confused about which AIC/BIC are current? And could\nihtis implementation miss some parameter combos?\nThank you, Alec\n\nresult <- foreach(ka = ka0:kaa, .packages = 'rugarch')  %:%\n  foreach(kb = kb0:kbb) %:%\n  foreach(km = km0:kmm) %:%\n  foreach(kn = kn0:knn) %dopar% {\n\n\n#    print(c(ka, kb, km, kn))\n    GARCHspec <- ugarchspec( variance.model = list(model = garchType,\ngarchOrder = c(km, kn)),\n                             mean.model = list(armaOrder = c(ka, kb),\ninclude.mean = TRUE),\n                             distribution.model = dist)\n\n\n    #fit\n    aic <- infocriteria(fit)[1]  #AIC\n    bic <- infocriteria(fit)[2]  #BIC\n    if(aic < currAIC) {\n      currAIC <- aic\n      ka_aic <- ka\n      kb_aic <-kb\n      km_aic <- km\n      kn_aic <- kn\n      aic_sigma <- sigma(fit)[L]\n      msg <- sprintf(\"%d %d %d %d %.3E %.3E\\n\",\n                      ka, kb, km, kn, currAIC, aic_sigma)\n      cat(msg, file = aic_garch_outfile, append = TRUE, sep=',')\n\n    }\n    if(bic < currBIC) {\n      currBIC <- bic\n      ka_bic <- ka\n      kb_bic <-kb\n      km_bic <- km\n      kn_bic <- kn\n      bic_sigma <- sigma(fit)[L]\n      msg <- sprintf(\"%d %d %d %d %.3E %.3E\\n\",\n                    ka, kb, km, kn, currBIC, bic_sigma)\n      cat(msg, file = bic_garch_outfile, append = TRUE, sep=',')\n    }\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I implemented a parallel rugarch script by looping over 4 input parameters\nand writing some output into two files for optimal AIC and BIC,\nrespectively. My PC has 4 cores.\nI write output when the new ",
+      "thread_id": "thread-eed4eb7be398",
+      "thread_depth": 0,
+      "month": "2026-01"
+    },
+    {
+      "id": "msg-da01b3c3f2d3",
+      "message_id": "<CABXq32vAYsmVP3zeC+R4zLthCeCbxJvqWV2hXwqknDoL15pvfw@mail.gmail.com>",
+      "from_name": "Oleg Mubarakshin",
+      "from_email_hash": "2bd633481e9caad599f1a5853d54fdb3bfa7ae0ee78fae2ffef006f062a24de3",
+      "date": "2026-01-05T10:14:27Z",
+      "subject": "[R-SIG-Finance] Rblpapi and Bloomberg Query Language support",
+      "subject_clean": "Rblpapi and Bloomberg Query Language support",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi everyone,\n\nHappy New Year!\n\nCould you please clarify whether the Rblpapi library supports the use of\nBloomberg Query Language (BQL)?\n\nIn particular, I would like to understand whether BQL queries can be\nexecuted via Rblpapi, or if the functionality is limited to standard\nBloomberg API requests.\n\nMany thanks in advance.\n\nKind regards,\nOleg\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi everyone,\n\nHappy New Year!\n\nCould you please clarify whether the Rblpapi library supports the use of\nBloomberg Query Language (BQL)?\n\nIn particular, I would like to understand whether BQL queries c",
+      "thread_id": "thread-da01b3c3f2d3",
+      "thread_depth": 0,
+      "month": "2026-01"
+    },
+    {
+      "id": "msg-37fd3907cf0b",
+      "message_id": "<26971.48678.721240.830935@paul.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "26604783910298c073ad132e77cb72b30037ddd7369ecad11e5fe08281600547",
+      "date": "2026-01-05T07:35:34-06:00",
+      "subject": "[R-SIG-Finance] Rblpapi and Bloomberg Query Language support",
+      "subject_clean": "Rblpapi and Bloomberg Query Language support",
+      "in_reply_to": "<CABXq32vAYsmVP3zeC+R4zLthCeCbxJvqWV2hXwqknDoL15pvfw@mail.gmail.com>",
+      "references": [
+        "<CABXq32vAYsmVP3zeC+R4zLthCeCbxJvqWV2hXwqknDoL15pvfw@mail.gmail.com>"
+      ],
+      "body_plain": "On 5 January 2026 at 10:14, Oleg Mubarakshin wrote:\n| Happy New Year!\n\nThanks, same to you!\n\n| Could you please clarify whether the Rblpapi library supports the use of\n| Bloomberg Query Language (BQL)?\n| \n| In particular, I would like to understand whether BQL queries can be\n| executed via Rblpapi, or if the functionality is limited to standard\n| Bloomberg API requests.\n\nQuestions for a particular package are frequently handled directly at the\npackage repository. For Rblpapi wwe can search GitHub Issues where, when\nsearching for the unique-enough string 'BQL' one finds one issue raised under\nopen queries:\n\n  https://github.com/Rblp/Rblpapi/issues?q=is%3Aissue%20state%3Aopen%20bql\n\nand three more (one clearly pertinent) under closed issues:\n\n  https://github.com/Rblp/Rblpapi/issues?q=is%3Aissue%20state%3Aclosed%20bql\n\nIn short, and now speaking for the package: No, someone would have to write\nBQL support into the package first. I have not looked at the API for it.\n\nHope this helps, regards,  Dirk\n\n| Many thanks in advance.\n| \n| Kind regards,\n| Oleg\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 5 January 2026 at 10:14, Oleg Mubarakshin wrote:\n| Happy New Year!\n\nThanks, same to you!\n\n| Could you please clarify whether the Rblpapi library supports the use of\n| Bloomberg Query Language (BQL)",
+      "thread_id": "thread-da01b3c3f2d3",
+      "thread_depth": 1,
+      "month": "2026-01"
+    },
+    {
+      "id": "msg-e281ffbf06a8",
+      "message_id": "<CAD1TdhutGwuE0hd-2oWarH1W4u1-rOv2b+8isTdaE1YJd5YLgQ@mail.gmail.com>",
+      "from_name": "David-Michael Lincke",
+      "from_email_hash": "88d85a7ff367b6237543e60f7aad712825590887459caed35040529697307927",
+      "date": "2026-01-05T15:11:09+01:00",
+      "subject": "[R-SIG-Finance] Rblpapi and Bloomberg Query Language support",
+      "subject_clean": "Rblpapi and Bloomberg Query Language support",
+      "in_reply_to": "<26971.48678.721240.830935@paul.eddelbuettel.com>",
+      "references": [
+        "<CABXq32vAYsmVP3zeC+R4zLthCeCbxJvqWV2hXwqknDoL15pvfw@mail.gmail.com>",
+        "<26971.48678.721240.830935@paul.eddelbuettel.com>"
+      ],
+      "body_plain": "The Bloomberg API does not expose access to BQL. So there is no way to add\nit, and beyond the Excel interface the only other officially supported\nprogrammatic access is via Bloomberg's proprietary BQuant python solution.\n\nRegards,\nDavid\n\n\nOn Mon, 5 Jan 2026 at 14:35, Dirk Eddelbuettel <edd at debian.org> wrote:\n\n>\n> On 5 January 2026 at 10:14, Oleg Mubarakshin wrote:\n> | Happy New Year!\n>\n> Thanks, same to you!\n>\n> | Could you please clarify whether the Rblpapi library supports the use of\n> | Bloomberg Query Language (BQL)?\n> |\n> | In particular, I would like to understand whether BQL queries can be\n> | executed via Rblpapi, or if the functionality is limited to standard\n> | Bloomberg API requests.\n>\n> Questions for a particular package are frequently handled directly at the\n> package repository. For Rblpapi wwe can search GitHub Issues where, when\n> searching for the unique-enough string 'BQL' one finds one issue raised\n> under\n> open queries:\n>\n>   https://github.com/Rblp/Rblpapi/issues?q=is%3Aissue%20state%3Aopen%20bql\n>\n> and three more (one clearly pertinent) under closed issues:\n>\n>\n> https://github.com/Rblp/Rblpapi/issues?q=is%3Aissue%20state%3Aclosed%20bql\n>\n> In short, and now speaking for the package: No, someone would have to write\n> BQL support into the package first. I have not looked at the API for it.\n>\n> Hope this helps, regards,  Dirk\n>\n> | Many thanks in advance.\n> |\n> | Kind regards,\n> | Oleg\n>\n> --\n> dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "The Bloomberg API does not expose access to BQL. So there is no way to add\nit, and beyond the Excel interface the only other officially supported\nprogrammatic access is via Bloomberg's proprietary BQu",
+      "thread_id": "thread-da01b3c3f2d3",
+      "thread_depth": 2,
+      "month": "2026-01"
+    },
+    {
+      "id": "msg-8921fcd2068b",
+      "message_id": "<CAPZA_qLQVPqmuqdpwTtTH1dnVjTHP-_P5dSQ3sc3wvXgvUYBzA@mail.gmail.com>",
+      "from_name": "Andre Luiz Tietbohl Ramos",
+      "from_email_hash": "f1ee93083eaa5e3d9542ed0100870dcc6aa41f547a0a089c66b564f768a77107",
+      "date": "2026-01-11T07:07:49-03:00",
+      "subject": "[R-SIG-Finance] Darvas Box",
+      "subject_clean": "Darvas Box",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nWould there be a Darvas Box library (or function) available for download?\n\nTIA,\n\n--\nAndre Luiz Tietbohl Ramos, PhD\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\nWould there be a Darvas Box library (or function) available for download?\n\nTIA,\n\n--\nAndre Luiz Tietbohl Ramos, PhD\n\n\t[[alternative HTML version deleted]]",
+      "thread_id": "thread-8921fcd2068b",
+      "thread_depth": 0,
+      "month": "2026-01"
+    },
+    {
+      "id": "msg-2f763f501599",
+      "message_id": "<CACxE24=f1rqrEU1kecEUSVbx-EX29e=H4NPw13=ps0Aq6xXM2Q@mail.gmail.com>",
+      "from_name": "Erin Hodgess",
+      "from_email_hash": "ac639128bb874866c754d5dc13bfc895ac4076b6eeee1c741127f9a3c34dd723",
+      "date": "2026-01-11T09:46:32-07:00",
+      "subject": "[R-SIG-Finance] Darvas Box",
+      "subject_clean": "Darvas Box",
+      "in_reply_to": "<CAPZA_qLQVPqmuqdpwTtTH1dnVjTHP-_P5dSQ3sc3wvXgvUYBzA@mail.gmail.com>",
+      "references": [
+        "<CAPZA_qLQVPqmuqdpwTtTH1dnVjTHP-_P5dSQ3sc3wvXgvUYBzA@mail.gmail.com>"
+      ],
+      "body_plain": "Hi!\n\nHere is a GitHub link:\nhttps://github.com/vakilp/darvasBox\n\n\nErin Hodgess, PhD\nmailto: erinm.hodgess at gmail.com\n\n\nOn Sun, Jan 11, 2026 at 3:08?AM Andre Luiz Tietbohl Ramos <\nandreltramos at gmail.com> wrote:\n\n> Hello,\n>\n> Would there be a Darvas Box library (or function) available for download?\n>\n> TIA,\n>\n> --\n> Andre Luiz Tietbohl Ramos, PhD\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi!\n\nHere is a GitHub link:\nhttps://github.com/vakilp/darvasBox\n\n\nErin Hodgess, PhD\nmailto: erinm.hodgess at gmail.com\n\n\nOn Sun, Jan 11, 2026 at 3:08?AM Andre Luiz Tietbohl Ramos <\nandreltramos at gma",
+      "thread_id": "thread-8921fcd2068b",
+      "thread_depth": 1,
+      "month": "2026-01"
+    },
+    {
+      "id": "msg-22861fe11db5",
+      "message_id": "<CAPZA_qLF8+gFt7QHsff+fcMQfQuqjcMExDbpF+QeRXZQd0eAew@mail.gmail.com>",
+      "from_name": "Andre Luiz Tietbohl Ramos",
+      "from_email_hash": "f1ee93083eaa5e3d9542ed0100870dcc6aa41f547a0a089c66b564f768a77107",
+      "date": "2026-01-14T14:06:10-03:00",
+      "subject": "[R-SIG-Finance] Custom theme with quantmod library",
+      "subject_clean": "Custom theme with quantmod library",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nIs there a way to customize quantmod theme colors?  This great library\nworks fine however I rather change its color theme.  So far, I have been\nable to use both white and black themes.\nI tried to use the chartSeries theme command described below to no avail.\nI tried even without a theme name, e.g. white or black. An example is below,\n\nstock.plot <- chartSeries(stock.time_interval,  ## ativo,\n                          name = stock.name,\n                          type = \"candlestick\",\n                          subset='2025-07::2026-01',\n                          theme = chartTheme(\"white\", up.col='darkgreen',\ndn.col='darkred',\n                                             bg.col='gray',\nselection.color='gray'),\n                          TA = NULL\n                          )\n\nCould anyone help, please?\n\nTIA,\n\n--\nAndre Luiz Tietbohl Ramos, PhD\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\nIs there a way to customize quantmod theme colors?  This great library\nworks fine however I rather change its color theme.  So far, I have been\nable to use both white and black themes.\nI tried",
+      "thread_id": "thread-22861fe11db5",
+      "thread_depth": 0,
+      "month": "2026-01"
+    },
+    {
+      "id": "msg-40361661a60c",
+      "message_id": "<CA+oJuEF_MHSFuEgspJvdw1Aj571qeXNCwb7Za6dPyLRTCOpEWA@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "3e375900f97169bfcb61fc4fdc48bafc91349f60a4f7a4813c93bbe535a52a19",
+      "date": "2026-01-14T12:10:46-05:00",
+      "subject": "[R-SIG-Finance] Custom theme with quantmod library",
+      "subject_clean": "Custom theme with quantmod library",
+      "in_reply_to": "<CAPZA_qLF8+gFt7QHsff+fcMQfQuqjcMExDbpF+QeRXZQd0eAew@mail.gmail.com>",
+      "references": [
+        "<CAPZA_qLF8+gFt7QHsff+fcMQfQuqjcMExDbpF+QeRXZQd0eAew@mail.gmail.com>"
+      ],
+      "body_plain": "Sounds like this might be a setting in RStudio, if you're using that.\n\nIf in RStudio: tools -> global options -> appearance -> customize.\n\nOn Wed, Jan 14, 2026 at 12:06?PM Andre Luiz Tietbohl Ramos <\nandreltramos at gmail.com> wrote:\n\n> Hello,\n>\n> Is there a way to customize quantmod theme colors?  This great library\n> works fine however I rather change its color theme.  So far, I have been\n> able to use both white and black themes.\n> I tried to use the chartSeries theme command described below to no avail.\n> I tried even without a theme name, e.g. white or black. An example is\n> below,\n>\n> stock.plot <- chartSeries(stock.time_interval,  ## ativo,\n>                           name = stock.name,\n>                           type = \"candlestick\",\n>                           subset='2025-07::2026-01',\n>                           theme = chartTheme(\"white\", up.col='darkgreen',\n> dn.col='darkred',\n>                                              bg.col='gray',\n> selection.color='gray'),\n>                           TA = NULL\n>                           )\n>\n> Could anyone help, please?\n>\n> TIA,\n>\n> --\n> Andre Luiz Tietbohl Ramos, PhD\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Sounds like this might be a setting in RStudio, if you're using that.\n\nIf in RStudio: tools -> global options -> appearance -> customize.\n\nOn Wed, Jan 14, 2026 at 12:06?PM Andre Luiz Tietbohl Ramos <\n",
+      "thread_id": "thread-22861fe11db5",
+      "thread_depth": 1,
+      "month": "2026-01"
+    },
+    {
+      "id": "msg-f045b662869c",
+      "message_id": "<CAPZA_qK2mutDNNFT_AQWic4Jj8xSr0kiiKUHwYr_KyTzfJpuXA@mail.gmail.com>",
+      "from_name": "Andre Luiz Tietbohl Ramos",
+      "from_email_hash": "f1ee93083eaa5e3d9542ed0100870dcc6aa41f547a0a089c66b564f768a77107",
+      "date": "2026-01-14T16:34:54-03:00",
+      "subject": "[R-SIG-Finance] Custom theme with quantmod library",
+      "subject_clean": "Custom theme with quantmod library",
+      "in_reply_to": "<CA+oJuEF_MHSFuEgspJvdw1Aj571qeXNCwb7Za6dPyLRTCOpEWA@mail.gmail.com>",
+      "references": [
+        "<CAPZA_qLF8+gFt7QHsff+fcMQfQuqjcMExDbpF+QeRXZQd0eAew@mail.gmail.com>",
+        "<CA+oJuEF_MHSFuEgspJvdw1Aj571qeXNCwb7Za6dPyLRTCOpEWA@mail.gmail.com>"
+      ],
+      "body_plain": "Dear Ilya,\n\nThanks for the reply!  However, I'm using emacs + ess + R in OSX.\n\n\nRegards,\n\n--\nAndr? Luiz Tietbohl Ramos, PhD.\n\n\nOn Wed, Jan 14, 2026 at 2:10?PM Ilya Kipnis <ilya.kipnis at gmail.com> wrote:\n\n> Sounds like this might be a setting in RStudio, if you're using that.\n>\n> If in RStudio: tools -> global options -> appearance -> customize.\n>\n> On Wed, Jan 14, 2026 at 12:06?PM Andre Luiz Tietbohl Ramos <\n> andreltramos at gmail.com> wrote:\n>\n>> Hello,\n>>\n>> Is there a way to customize quantmod theme colors?  This great library\n>> works fine however I rather change its color theme.  So far, I have been\n>> able to use both white and black themes.\n>> I tried to use the chartSeries theme command described below to no avail.\n>> I tried even without a theme name, e.g. white or black. An example is\n>> below,\n>>\n>> stock.plot <- chartSeries(stock.time_interval,  ## ativo,\n>>                           name = stock.name,\n>>                           type = \"candlestick\",\n>>                           subset='2025-07::2026-01',\n>>                           theme = chartTheme(\"white\", up.col='darkgreen',\n>> dn.col='darkred',\n>>                                              bg.col='gray',\n>> selection.color='gray'),\n>>                           TA = NULL\n>>                           )\n>>\n>> Could anyone help, please?\n>>\n>> TIA,\n>>\n>> --\n>> Andre Luiz Tietbohl Ramos, PhD\n>>\n>>         [[alternative HTML version deleted]]\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear Ilya,\n\nThanks for the reply!  However, I'm using emacs + ess + R in OSX.\n\n\nRegards,\n\n--\nAndr? Luiz Tietbohl Ramos, PhD.\n\n\nOn Wed, Jan 14, 2026 at 2:10?PM Ilya Kipnis <ilya.kipnis at gmail.com> wr",
+      "thread_id": "thread-22861fe11db5",
+      "thread_depth": 2,
+      "month": "2026-01"
+    },
+    {
+      "id": "msg-51efc9a111f0",
+      "message_id": "<87fr87owpg.fsf@enricoschumann.net>",
+      "from_name": "Enrico Schumann",
+      "from_email_hash": "42e3fbcaa04e968726f4c1d1a69e34143bdbc62b403d112ba1d3712256bacb88",
+      "date": "2026-01-15T14:02:35+01:00",
+      "subject": "[R-SIG-Finance] Custom theme with quantmod library",
+      "subject_clean": "Custom theme with quantmod library",
+      "in_reply_to": "<CAPZA_qLF8+gFt7QHsff+fcMQfQuqjcMExDbpF+QeRXZQd0eAew@mail.gmail.com> (Andre Luiz Tietbohl Ramos's message of \"Wed, 14 Jan 2026 14:06:10 -0300\")",
+      "references": [
+        "<CAPZA_qLF8+gFt7QHsff+fcMQfQuqjcMExDbpF+QeRXZQd0eAew@mail.gmail.com>"
+      ],
+      "body_plain": "On Wed, 14 Jan 2026, Andre Luiz Tietbohl Ramos writes:\n\n> Hello,\n>\n> Is there a way to customize quantmod theme colors?  This great library\n> works fine however I rather change its color theme.  So far, I have been\n> able to use both white and black themes.\n> I tried to use the chartSeries theme command described below to no avail.\n> I tried even without a theme name, e.g. white or black. An example is below,\n>\n> stock.plot <- chartSeries(stock.time_interval,  ## ativo,\n>                           name = stock.name,\n>                           type = \"candlestick\",\n>                           subset='2025-07::2026-01',\n>                           theme = chartTheme(\"white\", up.col='darkgreen',\n> dn.col='darkred',\n>                                              bg.col='gray',\n> selection.color='gray'),\n>                           TA = NULL\n>                           )\n>\n> Could anyone help, please?\n>\n> TIA,\n>\n> --\n> Andre Luiz Tietbohl Ramos, PhD\n>\n\nWith quantmod 0.4.28 and R 4.5.2, and ESS (but on GNU/Linux),\nI can change colours, e. g.\n\n    library(\"quantmod\")\n    getSymbols(\"AAPL\")\n    \n    chartSeries(\n        AAPL,\n        type = \"candlestick\",\n        subset = '2025-07::2026-01',\n        theme = chartTheme(\"black\",\n                           up.col = \"blue\"))\n\ngives me \"blue\" up-bars.  The same example also works\nwhen I run it from a terminal.\n\nCould this be some Apple-specific thing?\n\n-- \nEnrico Schumann\nLucerne, Switzerland\nhttps://enricoschumann.net",
+      "body_snippet": "On Wed, 14 Jan 2026, Andre Luiz Tietbohl Ramos writes:\n\n> Hello,\n>\n> Is there a way to customize quantmod theme colors?  This great library\n> works fine however I rather change its color theme.  So fa",
+      "thread_id": "thread-22861fe11db5",
+      "thread_depth": 1,
+      "month": "2026-01"
+    },
+    {
+      "id": "msg-d27a10ccf506",
+      "message_id": "<875x93owat.fsf@enricoschumann.net>",
+      "from_name": "Enrico Schumann",
+      "from_email_hash": "42e3fbcaa04e968726f4c1d1a69e34143bdbc62b403d112ba1d3712256bacb88",
+      "date": "2026-01-15T14:11:22+01:00",
+      "subject": "[R-SIG-Finance] Custom theme with quantmod library",
+      "subject_clean": "Custom theme with quantmod library",
+      "in_reply_to": "<87fr87owpg.fsf@enricoschumann.net> (Enrico Schumann's message of \"Thu, 15 Jan 2026 14:02:35 +0100\")",
+      "references": [
+        "<CAPZA_qLF8+gFt7QHsff+fcMQfQuqjcMExDbpF+QeRXZQd0eAew@mail.gmail.com>",
+        "<87fr87owpg.fsf@enricoschumann.net>"
+      ],
+      "body_plain": "On Thu, 15 Jan 2026, Enrico Schumann writes:\n\n> On Wed, 14 Jan 2026, Andre Luiz Tietbohl Ramos writes:\n>\n>> Hello,\n>>\n>> Is there a way to customize quantmod theme colors?  This great library\n>> works fine however I rather change its color theme.  So far, I have been\n>> able to use both white and black themes.\n>> I tried to use the chartSeries theme command described below to no avail.\n>> I tried even without a theme name, e.g. white or black. An example is below,\n>>\n>> stock.plot <- chartSeries(stock.time_interval,  ## ativo,\n>>                           name = stock.name,\n>>                           type = \"candlestick\",\n>>                           subset='2025-07::2026-01',\n>>                           theme = chartTheme(\"white\", up.col='darkgreen',\n>> dn.col='darkred',\n>>                                              bg.col='gray',\n>> selection.color='gray'),\n>>                           TA = NULL\n>>                           )\n>>\n>> Could anyone help, please?\n>>\n>> TIA,\n>>\n>> --\n>> Andre Luiz Tietbohl Ramos, PhD\n>>\n>\n> With quantmod 0.4.28 and R 4.5.2, and ESS (but on GNU/Linux),\n> I can change colours, e. g.\n>\n>     library(\"quantmod\")\n>     getSymbols(\"AAPL\")\n>     \n>     chartSeries(\n>         AAPL,\n>         type = \"candlestick\",\n>         subset = '2025-07::2026-01',\n>         theme = chartTheme(\"black\",\n>                            up.col = \"blue\"))\n>\n> gives me \"blue\" up-bars.  The same example also works\n> when I run it from a terminal.\n>\n> Could this be some Apple-specific thing?\n\nWhat happens when you send the graphic to a PDF, e.g.:\n\n    pdf(\"some-file-name.pdf\")\n    library(\"quantmod\")\n    getSymbols(\"AAPL\")\n    \n    chartSeries(\n        AAPL,\n        type = \"candlestick\",\n        subset = '2025-07::2026-01',\n        theme = chartTheme(\"black\",\n                           up.col = \"blue\"))\n    dev.off()\n\nDoes the colour show up?\n\n\n-- \nEnrico Schumann\nLucerne, Switzerland\nhttps://enricoschumann.net",
+      "body_snippet": "On Thu, 15 Jan 2026, Enrico Schumann writes:\n\n> On Wed, 14 Jan 2026, Andre Luiz Tietbohl Ramos writes:\n>\n>> Hello,\n>>\n>> Is there a way to customize quantmod theme colors?  This great library\n>> works",
+      "thread_id": "thread-22861fe11db5",
+      "thread_depth": 2,
+      "month": "2026-01"
+    },
+    {
+      "id": "msg-dca045e89ee8",
+      "message_id": "<CAPZA_qJkd9N_+yiBvkBq4jEbHyvw3O_UraizMmQd-vOVfTULGA@mail.gmail.com>",
+      "from_name": "Andre Luiz Tietbohl Ramos",
+      "from_email_hash": "f1ee93083eaa5e3d9542ed0100870dcc6aa41f547a0a089c66b564f768a77107",
+      "date": "2026-01-15T11:50:34-03:00",
+      "subject": "[R-SIG-Finance] Custom theme with quantmod library",
+      "subject_clean": "Custom theme with quantmod library",
+      "in_reply_to": "<875x93owat.fsf@enricoschumann.net>",
+      "references": [
+        "<CAPZA_qLF8+gFt7QHsff+fcMQfQuqjcMExDbpF+QeRXZQd0eAew@mail.gmail.com>",
+        "<87fr87owpg.fsf@enricoschumann.net>",
+        "<875x93owat.fsf@enricoschumann.net>"
+      ],
+      "body_plain": "Hello everyone,\n\nThanks for the replies received so far.\nThe answer received is none with the output below,\n\n> [1] \"AAPL\"\n>> ... ... ... ... > null device\n           1\n\nI guess it may be related to one of the several libraries loaded by default\nat startup via .Rprofile.  However,\nat the same time, I don't know which one or even if that could be the issue.\nMy main interest is only to change the inner plot area background.  I can\nchange its color in the outer region\nalong the plot itself.\n\nRegards,\n\n--\nAndr? Luiz Tietbohl Ramos, PhD\n\n\nOn Thu, Jan 15, 2026 at 10:11?AM Enrico Schumann <es at enricoschumann.net>\nwrote:\n\n> On Thu, 15 Jan 2026, Enrico Schumann writes:\n>\n> > On Wed, 14 Jan 2026, Andre Luiz Tietbohl Ramos writes:\n> >\n> >> Hello,\n> >>\n> >> Is there a way to customize quantmod theme colors?  This great library\n> >> works fine however I rather change its color theme.  So far, I have been\n> >> able to use both white and black themes.\n> >> I tried to use the chartSeries theme command described below to no\n> avail.\n> >> I tried even without a theme name, e.g. white or black. An example is\n> below,\n> >>\n> >> stock.plot <- chartSeries(stock.time_interval,  ## ativo,\n> >>                           name = stock.name,\n> >>                           type = \"candlestick\",\n> >>                           subset='2025-07::2026-01',\n> >>                           theme = chartTheme(\"white\",\n> up.col='darkgreen',\n> >> dn.col='darkred',\n> >>                                              bg.col='gray',\n> >> selection.color='gray'),\n> >>                           TA = NULL\n> >>                           )\n> >>\n> >> Could anyone help, please?\n> >>\n> >> TIA,\n> >>\n> >> --\n> >> Andre Luiz Tietbohl Ramos, PhD\n> >>\n> >\n> > With quantmod 0.4.28 and R 4.5.2, and ESS (but on GNU/Linux),\n> > I can change colours, e. g.\n> >\n> >     library(\"quantmod\")\n> >     getSymbols(\"AAPL\")\n> >\n> >     chartSeries(\n> >         AAPL,\n> >         type = \"candlestick\",\n> >         subset = '2025-07::2026-01',\n> >         theme = chartTheme(\"black\",\n> >                            up.col = \"blue\"))\n> >\n> > gives me \"blue\" up-bars.  The same example also works\n> > when I run it from a terminal.\n> >\n> > Could this be some Apple-specific thing?\n>\n> What happens when you send the graphic to a PDF, e.g.:\n>\n>     pdf(\"some-file-name.pdf\")\n>     library(\"quantmod\")\n>     getSymbols(\"AAPL\")\n>\n>     chartSeries(\n>         AAPL,\n>         type = \"candlestick\",\n>         subset = '2025-07::2026-01',\n>         theme = chartTheme(\"black\",\n>                            up.col = \"blue\"))\n>     dev.off()\n>\n> Does the colour show up?\n>\n>\n> --\n> Enrico Schumann\n> Lucerne, Switzerland\n> https://enricoschumann.net\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello everyone,\n\nThanks for the replies received so far.\nThe answer received is none with the output below,\n\n> [1] \"AAPL\"\n>> ... ... ... ... > null device\n           1\n\nI guess it may be related to on",
+      "thread_id": "thread-22861fe11db5",
+      "thread_depth": 3,
+      "month": "2026-01"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-eed4eb7be398",
+      "subject": "parallel rugarch run",
+      "message_count": 1,
+      "participants": [
+        "Anatoly Schmidt"
+      ],
+      "started": "2026-01-03T17:00:25-05:00",
+      "last_reply": "2026-01-03T17:00:25-05:00",
+      "root_message_id": "msg-eed4eb7be398"
+    },
+    {
+      "id": "thread-da01b3c3f2d3",
+      "subject": "Rblpapi and Bloomberg Query Language support",
+      "message_count": 3,
+      "participants": [
+        "David-Michael Lincke",
+        "Dirk Eddelbuettel",
+        "Oleg Mubarakshin"
+      ],
+      "started": "2026-01-05T10:14:27+00:00",
+      "last_reply": "2026-01-05T15:11:09+01:00",
+      "root_message_id": "msg-da01b3c3f2d3"
+    },
+    {
+      "id": "thread-8921fcd2068b",
+      "subject": "Darvas Box",
+      "message_count": 2,
+      "participants": [
+        "Andre Luiz Tietbohl Ramos",
+        "Erin Hodgess"
+      ],
+      "started": "2026-01-11T07:07:49-03:00",
+      "last_reply": "2026-01-11T09:46:32-07:00",
+      "root_message_id": "msg-8921fcd2068b"
+    },
+    {
+      "id": "thread-22861fe11db5",
+      "subject": "Custom theme with quantmod library",
+      "message_count": 6,
+      "participants": [
+        "Andre Luiz Tietbohl Ramos",
+        "Enrico Schumann",
+        "Ilya Kipnis"
+      ],
+      "started": "2026-01-14T14:06:10-03:00",
+      "last_reply": "2026-01-15T11:50:34-03:00",
+      "root_message_id": "msg-22861fe11db5"
+    }
+  ]
+}

@@ -1,0 +1,388 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2019-01",
+  "messages": [
+    {
+      "id": "msg-efdaf010b4df",
+      "message_id": "<BYAPR10MB3558C6C20B15581C66E904A4848A0@BYAPR10MB3558.namprd10.prod.outlook.com>",
+      "from_name": "Alec Schmidt",
+      "from_email_hash": "1fa391fdef1b6016d2966c21ceec543a25f941c9ca814a21e53361c5f912e56a",
+      "date": "2019-01-08T16:09:09Z",
+      "subject": "[R-SIG-Finance] corrections vs drawdowns",
+      "subject_clean": "corrections vs drawdowns",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I tried to use the function findDrawdowns() to compile NASDAQ (^IXIC) corrections. For the sample starting on\n\n2007-01-01, I get the following start -to-trough periods with drawdowns higher than 10%\n\n08/30/2018 - 12/24/2018 (-23.64%) [80 Days]\n07/21/2015 - 02/11/2016 (-18.24%) [143 Days]\n09/17/2012 - 11/15/2012 (-10.90%) [42 Days]\n03/27/2012 - 06/01/2012 (-12.01%) [47 Days]\n05/02/2011 - 10/03/2011 (-18.71%) [108 Days]\n11/01/2007 - 03/09/2009 (-55.63%) [339 Days]\n\n\nHowever, if the sample starts on 2000-06-01, I get\n08/30/2018 - 12/24/2018 (-23.64%) [80 Days]\n07/21/2015 - 02/11/2016 (-18.24%) [143 Days]\n07/18/2000 - 10/09/2002 (-73.94%) [559 Days]\n\ni.e. no bear market of 2008...\n\nThis is because ^IXIC didn't recover in 2007 from its fall from top in 2000. This implies that various reports on market corrections do not use the max drawdown. Is there consensus (and possibly R scripts) that address this problem?\n\nThanks! Alec\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I tried to use the function findDrawdowns() to compile NASDAQ (^IXIC) corrections. For the sample starting on\n\n2007-01-01, I get the following start -to-trough periods with drawdowns higher than 10%\n\n",
+      "thread_id": "thread-efdaf010b4df",
+      "thread_depth": 0,
+      "month": "2019-01"
+    },
+    {
+      "id": "msg-edd4ddf2092a",
+      "message_id": "<1546964270.14204.83.camel@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "5156c75393f43c5e36e55c789f6a1b909f591eb46079141f41127c3bf8ed5547",
+      "date": "2019-01-08T10:17:50-06:00",
+      "subject": "[R-SIG-Finance] corrections vs drawdowns",
+      "subject_clean": "corrections vs drawdowns",
+      "in_reply_to": "<BYAPR10MB3558C6C20B15581C66E904A4848A0@BYAPR10MB3558.namprd10.prod.outlook.com>",
+      "references": [
+        "<BYAPR10MB3558C6C20B15581C66E904A4848A0@BYAPR10MB3558.namprd10.prod.outlook.com>"
+      ],
+      "body_plain": "Alec,\n\nI suspect that you may wish to start with setting geometric=FALSE in\nyour call to findDrawdowns.\n\nCorrections are usually defined as a peak to trough difference in\n*price*, as a percentage of the peak price.\n\nSo I think you do not want to compound the *returns* in calculating\nyour drawdowns.\n\nRegards,\n\nBrian\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock\n\nOn Tue, 2019-01-08 at 16:09 +0000, Alec Schmidt wrote:\n> I tried to use the function findDrawdowns() to compile NASDAQ (^IXIC)\n> corrections. For the sample starting on\n> \n> 2007-01-01, I get the following start -to-trough periods with\n> drawdowns higher than 10%\n> \n> 08/30/2018 - 12/24/2018 (-23.64%) [80 Days]\n> 07/21/2015 - 02/11/2016 (-18.24%) [143 Days]\n> 09/17/2012 - 11/15/2012 (-10.90%) [42 Days]\n> 03/27/2012 - 06/01/2012 (-12.01%) [47 Days]\n> 05/02/2011 - 10/03/2011 (-18.71%) [108 Days]\n> 11/01/2007 - 03/09/2009 (-55.63%) [339 Days]\n> \n> \n> However, if the sample starts on 2000-06-01, I get\n> 08/30/2018 - 12/24/2018 (-23.64%) [80 Days]\n> 07/21/2015 - 02/11/2016 (-18.24%) [143 Days]\n> 07/18/2000 - 10/09/2002 (-73.94%) [559 Days]\n> \n> i.e. no bear market of 2008...\n> \n> This is because ^IXIC didn't recover in 2007 from its fall from top\n> in 2000. This implies that various reports on market corrections do\n> not use the max drawdown. Is there consensus (and possibly R scripts)\n> that address this problem?\n> \n> Thanks! Alec\n> \n> \t[[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R\n> questions should go.",
+      "body_snippet": "Alec,\n\nI suspect that you may wish to start with setting geometric=FALSE in\nyour call to findDrawdowns.\n\nCorrections are usually defined as a peak to trough difference in\n*price*, as a percentage of t",
+      "thread_id": "thread-efdaf010b4df",
+      "thread_depth": 1,
+      "month": "2019-01"
+    },
+    {
+      "id": "msg-96e66a81e938",
+      "message_id": "<BYAPR10MB3558B7641ACBE9D9015B8C2F848A0@BYAPR10MB3558.namprd10.prod.outlook.com>",
+      "from_name": "Alec Schmidt",
+      "from_email_hash": "1fa391fdef1b6016d2966c21ceec543a25f941c9ca814a21e53361c5f912e56a",
+      "date": "2019-01-08T16:36:57Z",
+      "subject": "[R-SIG-Finance] corrections vs drawdowns",
+      "subject_clean": "corrections vs drawdowns",
+      "in_reply_to": "<1546964270.14204.83.camel@braverock.com>",
+      "references": [
+        "<BYAPR10MB3558C6C20B15581C66E904A4848A0@BYAPR10MB3558.namprd10.prod.outlook.com>",
+        "<1546964270.14204.83.camel@braverock.com>"
+      ],
+      "body_plain": "Thank you Brian,\n\ngeometric=FALSE gave me additional corrections in 2011 and 2012 but still no bear market of 2008:\n\n\n\n08/30/2018 - 12/24/2018 (-11.04%) [80 Days]\n07/21/2015 - 02/11/2016 (-10.05%) [143 Days]\n09/17/2012 - 11/15/2012 (-8.42%) [42 Days]\n03/27/2012 - 06/01/2012 (-9.44%) [47 Days]\n07/08/2011 - 08/19/2011 (-15.96%) [31 Days]\n05/02/2011 - 06/17/2011 (-7.59%) [34 Days]\n02/22/2011 - 03/16/2011 (-6.54%) [17 Days]\n07/18/2000 - 10/09/2002 (-97.34%) [559 Days]\n\n\nAlec\n\n\n\n________________________________\nFrom: Brian G. Peterson <brian at braverock.com>\nSent: Tuesday, January 8, 2019 11:17 AM\nTo: Alec Schmidt; r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] corrections vs drawdowns\n\nAlec,\n\nI suspect that you may wish to start with setting geometric=FALSE in\nyour call to findDrawdowns.\n\nCorrections are usually defined as a peak to trough difference in\n*price*, as a percentage of the peak price.\n\nSo I think you do not want to compound the *returns* in calculating\nyour drawdowns.\n\nRegards,\n\nBrian\n\n--\nBrian G. Peterson\nhttps://na01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fbraverock.com%2Fbrian%2F&amp;data=02%7C01%7Caschmid1%40stevens.edu%7Ce6f064fd98b940503baf08d67584dcf1%7C8d1a69ec03b54345ae21dad112f5fb4f%7C0%7C0%7C636825610866789711&amp;sdata=CEhprRb58LDRQj0OmzZ5qzUDDYwumGGjUl9T4CoUscY%3D&amp;reserved=0\nPh: 773-459-4973\nIM: bgpbraverock\n\nOn Tue, 2019-01-08 at 16:09 +0000, Alec Schmidt wrote:\n> I tried to use the function findDrawdowns() to compile NASDAQ (^IXIC)\n> corrections. For the sample starting on\n>\n> 2007-01-01, I get the following start -to-trough periods with\n> drawdowns higher than 10%\n>\n> 08/30/2018 - 12/24/2018 (-23.64%) [80 Days]\n> 07/21/2015 - 02/11/2016 (-18.24%) [143 Days]\n> 09/17/2012 - 11/15/2012 (-10.90%) [42 Days]\n> 03/27/2012 - 06/01/2012 (-12.01%) [47 Days]\n> 05/02/2011 - 10/03/2011 (-18.71%) [108 Days]\n> 11/01/2007 - 03/09/2009 (-55.63%) [339 Days]\n>\n>\n> However, if the sample starts on 2000-06-01, I get\n> 08/30/2018 - 12/24/2018 (-23.64%) [80 Days]\n> 07/21/2015 - 02/11/2016 (-18.24%) [143 Days]\n> 07/18/2000 - 10/09/2002 (-73.94%) [559 Days]\n>\n> i.e. no bear market of 2008...\n>\n> This is because ^IXIC didn't recover in 2007 from its fall from top\n> in 2000. This implies that various reports on market corrections do\n> not use the max drawdown. Is there consensus (and possibly R scripts)\n> that address this problem?\n>\n> Thanks! Alec\n>\n>        [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://na01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fstat.ethz.ch%2Fmailman%2Flistinfo%2Fr-sig-finance&amp;data=02%7C01%7Caschmid1%40stevens.edu%7Ce6f064fd98b940503baf08d67584dcf1%7C8d1a69ec03b54345ae21dad112f5fb4f%7C0%7C0%7C636825610866789711&amp;sdata=9c8z0kRyh9uaYahELBtBfeg9np8ppq0HYswDUg3myig%3D&amp;reserved=0\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R\n> questions should go.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thank you Brian,\n\ngeometric=FALSE gave me additional corrections in 2011 and 2012 but still no bear market of 2008:\n\n\n\n08/30/2018 - 12/24/2018 (-11.04%) [80 Days]\n07/21/2015 - 02/11/2016 (-10.05%) [14",
+      "thread_id": "thread-efdaf010b4df",
+      "thread_depth": 2,
+      "month": "2019-01"
+    },
+    {
+      "id": "msg-831e185713b3",
+      "message_id": "<1546966536.14204.94.camel@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "5156c75393f43c5e36e55c789f6a1b909f591eb46079141f41127c3bf8ed5547",
+      "date": "2019-01-08T10:55:36-06:00",
+      "subject": "[R-SIG-Finance] corrections vs drawdowns",
+      "subject_clean": "corrections vs drawdowns",
+      "in_reply_to": "<BYAPR10MB3558B7641ACBE9D9015B8C2F848A0@BYAPR10MB3558.namprd10.prod.outlook.com>",
+      "references": [
+        "<BYAPR10MB3558C6C20B15581C66E904A4848A0@BYAPR10MB3558.namprd10.prod.outlook.com>",
+        "<1546964270.14204.83.camel@braverock.com>",
+        "<BYAPR10MB3558B7641ACBE9D9015B8C2F848A0@BYAPR10MB3558.namprd10.prod.outlook.com>"
+      ],
+      "body_plain": "I think that this is correct.  NASDAQ was still in a drawdown.  NASDAQ\ndidn't make new all-time highs until 2014.\n\nSome people define 'corrections' as drawdown from most recent peak. \nCharles Schwab's definition is in-line with generally accepted usage:\n\nhttps://www.schwab.com/resource-center/insights/content/market-correcti\non-what-does-it-mean\n\nThe Motley Fool uses a similar but not identical definition:\n\nhttps://www.schwab.com/resource-center/insights/content/market-correcti\non-what-does-it-mean\n\nquantmod has a 'findPeaks' function, but this is dependent on you\nsetting a threshold for what defines a peak.\n\nA related Stack Overflow question may provide something in the\ndirection of what you're looking for to look at drawdown from a recent\npeak.\n\nhttps://stackoverflow.com/questions/14737899/calculate-cumulatve-growth\n-drawdown-from-local-min-max\n\nI would certainly be happy to include a 'findCorrections' function in a\nlater version of PerformanceAnalytics if we could parameterize what\nconstitutes a 'recent high' for that purpose.\n\nRegards,\n\nBrian\n\n\nOn Tue, 2019-01-08 at 16:36 +0000, Alec Schmidt wrote:\n> Thank you Brian,\n> geometric=FALSE gave me additional corrections in 2011 and 2012 but\n> still no bear market of 2008:\n> \n>  \n>  08/30/2018 - 12/24/2018 (-11.04%) [80 Days]\n> 07/21/2015 - 02/11/2016 (-10.05%) [143 Days]\n> 09/17/2012 - 11/15/2012 (-8.42%) [42 Days]\n> 03/27/2012 - 06/01/2012 (-9.44%) [47 Days]\n> 07/08/2011 - 08/19/2011 (-15.96%) [31 Days]\n> 05/02/2011 - 06/17/2011 (-7.59%) [34 Days]\n> 02/22/2011 - 03/16/2011 (-6.54%) [17 Days]\n> 07/18/2000 - 10/09/2002 (-97.34%) [559 Days]\n> Alec\n> \n> \n> \n> From: Brian G. Peterson <brian at braverock.com>\n> Sent: Tuesday, January 8, 2019 11:17 AM\n> To: Alec Schmidt; r-sig-finance at r-project.org\n> Subject: Re: [R-SIG-Finance] corrections vs drawdowns\n>  \n> Alec,\n> \n> I suspect that you may wish to start with setting geometric=FALSE in\n> your call to findDrawdowns.\n> \n> Corrections are usually defined as a peak to trough difference in\n> *price*, as a percentage of the peak price.\n> \n> So I think you do not want to compound the *returns* in calculating\n> your drawdowns.\n> \n> Regards,\n> \n> Brian\n> \n> \n> On Tue, 2019-01-08 at 16:09 +0000, Alec Schmidt wrote:\n> > I tried to use the function findDrawdowns() to compile NASDAQ\n> > (^IXIC)\n> > corrections. For the sample starting on\n> > \n> > 2007-01-01, I get the following start -to-trough periods with\n> > drawdowns higher than 10%\n> > \n> > 08/30/2018 - 12/24/2018 (-23.64%) [80 Days]\n> > 07/21/2015 - 02/11/2016 (-18.24%) [143 Days]\n> > 09/17/2012 - 11/15/2012 (-10.90%) [42 Days]\n> > 03/27/2012 - 06/01/2012 (-12.01%) [47 Days]\n> > 05/02/2011 - 10/03/2011 (-18.71%) [108 Days]\n> > 11/01/2007 - 03/09/2009 (-55.63%) [339 Days]\n> > \n> > \n> > However, if the sample starts on 2000-06-01, I get\n> > 08/30/2018 - 12/24/2018 (-23.64%) [80 Days]\n> > 07/21/2015 - 02/11/2016 (-18.24%) [143 Days]\n> > 07/18/2000 - 10/09/2002 (-73.94%) [559 Days]\n> > \n> > i.e. no bear market of 2008...\n> > \n> > This is because ^IXIC didn't recover in 2007 from its fall from top\n> > in 2000. This implies that various reports on market corrections do\n> > not use the max drawdown. Is there consensus (and possibly R\n> > scripts)\n> > that address this problem?\n> > \n> > Thanks! Alec",
+      "body_snippet": "I think that this is correct.  NASDAQ was still in a drawdown.  NASDAQ\ndidn't make new all-time highs until 2014.\n\nSome people define 'corrections' as drawdown from most recent peak. \nCharles Schwab's",
+      "thread_id": "thread-efdaf010b4df",
+      "thread_depth": 3,
+      "month": "2019-01"
+    },
+    {
+      "id": "msg-d3f555855add",
+      "message_id": "<87wone538m.fsf@enricoschumann.net>",
+      "from_name": "Enrico Schumann",
+      "from_email_hash": "de094efe5bc92d5ed6e361a733c879b76fa6339622293a303a133871acf89539",
+      "date": "2019-01-08T21:00:25+01:00",
+      "subject": "[R-SIG-Finance] corrections vs drawdowns",
+      "subject_clean": "corrections vs drawdowns",
+      "in_reply_to": "<BYAPR10MB3558C6C20B15581C66E904A4848A0@BYAPR10MB3558.namprd10.prod.outlook.com> (Alec Schmidt's message of \"Tue, 8 Jan 2019 16:09:09 +0000\")",
+      "references": [
+        "<BYAPR10MB3558C6C20B15581C66E904A4848A0@BYAPR10MB3558.namprd10.prod.outlook.com>"
+      ],
+      "body_plain": "On Tue, 08 Jan 2019, Alec Schmidt writes:\n\n> I tried to use the function findDrawdowns() to compile NASDAQ (^IXIC)\n> corrections. For the sample starting on\n>\n> 2007-01-01, I get the following start -to-trough periods with\n> drawdowns higher than 10%\n>\n> 08/30/2018 - 12/24/2018 (-23.64%) [80 Days]\n> 07/21/2015 - 02/11/2016 (-18.24%) [143 Days]\n> 09/17/2012 - 11/15/2012 (-10.90%) [42 Days]\n> 03/27/2012 - 06/01/2012 (-12.01%) [47 Days]\n> 05/02/2011 - 10/03/2011 (-18.71%) [108 Days]\n> 11/01/2007 - 03/09/2009 (-55.63%) [339 Days]\n>\n>\n> However, if the sample starts on 2000-06-01, I get\n> 08/30/2018 - 12/24/2018 (-23.64%) [80 Days]\n> 07/21/2015 - 02/11/2016 (-18.24%) [143 Days]\n> 07/18/2000 - 10/09/2002 (-73.94%) [559 Days]\n>\n> i.e. no bear market of 2008...\n>\n> This is because ^IXIC didn't recover in 2007 from its\n> fall from top in 2000. This implies that various\n> reports on market corrections do not use the max\n> drawdown. Is there consensus (and possibly R scripts)\n> that address this problem?\n>\n> Thanks! Alec\n>\n\nPerhaps the function 'streaks' in package\n'PMwR' does what you want.\n\n  library(\"tseries\")\n  library(\"PMwR\")\n  z <- get.hist.quote(\"^IXIC\", quote = \"Close\", retclass = \"zoo\",\n                      start = as.Date(\"2007-1-1\"))\n  streaks(z)\n  ##        start        end state      return\n  ## 1 2007-01-03 2007-03-05  <NA> -0.03403819\n  ## 2 2007-03-05 2007-10-31    up  0.22149128\n  ## 3 2007-10-31 2008-11-20  down -0.53967656\n  ## 4 2008-11-20 2009-01-06    up  0.25549343\n  ## 5 2009-01-06 2009-03-09  down -0.23223471\n  ## 6 2009-03-09 2018-08-29    up  5.39242799\n  ## 7 2018-08-29 2019-01-04  down -0.16903607\n\n\n\nSee also \n\nhttps://stats.stackexchange.com/questions/354157/determining-up-down-market-trends-in-timeseries-data/373622#373622\n\nhttps://cran.r-project.org/web/packages/PMwR/vignettes/Drawdowns_streaks.pdf\n\n\n-- \nEnrico Schumann (maintainer of PMwR)\nLucerne, Switzerland\nhttp://enricoschumann.net",
+      "body_snippet": "On Tue, 08 Jan 2019, Alec Schmidt writes:\n\n> I tried to use the function findDrawdowns() to compile NASDAQ (^IXIC)\n> corrections. For the sample starting on\n>\n> 2007-01-01, I get the following start -",
+      "thread_id": "thread-efdaf010b4df",
+      "thread_depth": 1,
+      "month": "2019-01"
+    },
+    {
+      "id": "msg-ca61a6c1e9fe",
+      "message_id": "<BYAPR10MB355812B08E59B82A859FB434848A0@BYAPR10MB3558.namprd10.prod.outlook.com>",
+      "from_name": "Alec Schmidt",
+      "from_email_hash": "1fa391fdef1b6016d2966c21ceec543a25f941c9ca814a21e53361c5f912e56a",
+      "date": "2019-01-08T21:22:46Z",
+      "subject": "[R-SIG-Finance] corrections vs drawdowns",
+      "subject_clean": "corrections vs drawdowns",
+      "in_reply_to": "<1546966536.14204.94.camel@braverock.com>",
+      "references": [
+        "<BYAPR10MB3558C6C20B15581C66E904A4848A0@BYAPR10MB3558.namprd10.prod.outlook.com>",
+        "<1546964270.14204.83.camel@braverock.com>",
+        "<BYAPR10MB3558B7641ACBE9D9015B8C2F848A0@BYAPR10MB3558.namprd10.prod.outlook.com>",
+        "<1546966536.14204.94.camel@braverock.com>"
+      ],
+      "body_plain": "Brian,\n\nThanks again. It would be great if you implement findCorrections(). I think it becomes a popular topic... ?\n\nOn top of my head, the default version needs just one parameter, ie. if we're looking for corrections of 10%, let's check them after every peak of 10%+ since the last correction's trough. But of course there may be a more generic setup.\n\nAlec\n\n\n________________________________\nFrom: Brian G. Peterson <brian at braverock.com>\nSent: Tuesday, January 8, 2019 11:55 AM\nTo: Alec Schmidt; r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] corrections vs drawdowns\n\nI think that this is correct.  NASDAQ was still in a drawdown.  NASDAQ\ndidn't make new all-time highs until 2014.\n\nSome people define 'corrections' as drawdown from most recent peak.\nCharles Schwab's definition is in-line with generally accepted usage:\n\nhttps://na01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.schwab.com%2Fresource-center%2Finsights%2Fcontent%2Fmarket-correcti&amp;data=02%7C01%7Caschmid1%40stevens.edu%7C104e1f582d6242bfce0208d6758a227a%7C8d1a69ec03b54345ae21dad112f5fb4f%7C0%7C0%7C636825633496698033&amp;sdata=rkHsOOY4EdLB9LUu4bomU4%2F98T3kHidzSJY%2BGEQ4NsI%3D&amp;reserved=0\non-what-does-it-mean\n\nThe Motley Fool uses a similar but not identical definition:\n\nhttps://na01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.schwab.com%2Fresource-center%2Finsights%2Fcontent%2Fmarket-correcti&amp;data=02%7C01%7Caschmid1%40stevens.edu%7C104e1f582d6242bfce0208d6758a227a%7C8d1a69ec03b54345ae21dad112f5fb4f%7C0%7C0%7C636825633496698033&amp;sdata=rkHsOOY4EdLB9LUu4bomU4%2F98T3kHidzSJY%2BGEQ4NsI%3D&amp;reserved=0\non-what-does-it-mean\n\nquantmod has a 'findPeaks' function, but this is dependent on you\nsetting a threshold for what defines a peak.\n\nA related Stack Overflow question may provide something in the\ndirection of what you're looking for to look at drawdown from a recent\npeak.\n\nhttps://na01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fstackoverflow.com%2Fquestions%2F14737899%2Fcalculate-cumulatve-growth&amp;data=02%7C01%7Caschmid1%40stevens.edu%7C104e1f582d6242bfce0208d6758a227a%7C8d1a69ec03b54345ae21dad112f5fb4f%7C0%7C0%7C636825633496708038&amp;sdata=R9gkq2ILuqhdJQpjyijXw%2Flmogrxto8WP%2BvV05K6lgo%3D&amp;reserved=0\n-drawdown-from-local-min-max\n\nI would certainly be happy to include a 'findCorrections' function in a\nlater version of PerformanceAnalytics if we could parameterize what\nconstitutes a 'recent high' for that purpose.\n\nRegards,\n\nBrian\n\n\nOn Tue, 2019-01-08 at 16:36 +0000, Alec Schmidt wrote:\n> Thank you Brian,\n> geometric=FALSE gave me additional corrections in 2011 and 2012 but\n> still no bear market of 2008:\n>\n>\n>  08/30/2018 - 12/24/2018 (-11.04%) [80 Days]\n> 07/21/2015 - 02/11/2016 (-10.05%) [143 Days]\n> 09/17/2012 - 11/15/2012 (-8.42%) [42 Days]\n> 03/27/2012 - 06/01/2012 (-9.44%) [47 Days]\n> 07/08/2011 - 08/19/2011 (-15.96%) [31 Days]\n> 05/02/2011 - 06/17/2011 (-7.59%) [34 Days]\n> 02/22/2011 - 03/16/2011 (-6.54%) [17 Days]\n> 07/18/2000 - 10/09/2002 (-97.34%) [559 Days]\n> Alec\n>\n>\n>\n> From: Brian G. Peterson <brian at braverock.com>\n> Sent: Tuesday, January 8, 2019 11:17 AM\n> To: Alec Schmidt; r-sig-finance at r-project.org\n> Subject: Re: [R-SIG-Finance] corrections vs drawdowns\n>\n> Alec,\n>\n> I suspect that you may wish to start with setting geometric=FALSE in\n> your call to findDrawdowns.\n>\n> Corrections are usually defined as a peak to trough difference in\n> *price*, as a percentage of the peak price.\n>\n> So I think you do not want to compound the *returns* in calculating\n> your drawdowns.\n>\n> Regards,\n>\n> Brian\n>\n>\n> On Tue, 2019-01-08 at 16:09 +0000, Alec Schmidt wrote:\n> > I tried to use the function findDrawdowns() to compile NASDAQ\n> > (^IXIC)\n> > corrections. For the sample starting on\n> >\n> > 2007-01-01, I get the following start -to-trough periods with\n> > drawdowns higher than 10%\n> >\n> > 08/30/2018 - 12/24/2018 (-23.64%) [80 Days]\n> > 07/21/2015 - 02/11/2016 (-18.24%) [143 Days]\n> > 09/17/2012 - 11/15/2012 (-10.90%) [42 Days]\n> > 03/27/2012 - 06/01/2012 (-12.01%) [47 Days]\n> > 05/02/2011 - 10/03/2011 (-18.71%) [108 Days]\n> > 11/01/2007 - 03/09/2009 (-55.63%) [339 Days]\n> >\n> >\n> > However, if the sample starts on 2000-06-01, I get\n> > 08/30/2018 - 12/24/2018 (-23.64%) [80 Days]\n> > 07/21/2015 - 02/11/2016 (-18.24%) [143 Days]\n> > 07/18/2000 - 10/09/2002 (-73.94%) [559 Days]\n> >\n> > i.e. no bear market of 2008...\n> >\n> > This is because ^IXIC didn't recover in 2007 from its fall from top\n> > in 2000. This implies that various reports on market corrections do\n> > not use the max drawdown. Is there consensus (and possibly R\n> > scripts)\n> > that address this problem?\n> >\n> > Thanks! Alec\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Brian,\n\nThanks again. It would be great if you implement findCorrections(). I think it becomes a popular topic... ?\n\nOn top of my head, the default version needs just one parameter, ie. if we're looki",
+      "thread_id": "thread-efdaf010b4df",
+      "thread_depth": 4,
+      "month": "2019-01"
+    },
+    {
+      "id": "msg-8774c4563caa",
+      "message_id": "<BYAPR10MB3558B80358A74753C3FF5093848A0@BYAPR10MB3558.namprd10.prod.outlook.com>",
+      "from_name": "Alec Schmidt",
+      "from_email_hash": "1fa391fdef1b6016d2966c21ceec543a25f941c9ca814a21e53361c5f912e56a",
+      "date": "2019-01-08T21:48:30Z",
+      "subject": "[R-SIG-Finance] corrections vs drawdowns",
+      "subject_clean": "corrections vs drawdowns",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Brian,\n\nThanks again. It would be great if you implement findCorrections(). I think it becomes a popular topic... ?\n\nOn top of my head, the default version needs just one parameter, ie. if we're looking for corrections of 10%, let's check them after every peak of 10% since the last correction's trough. But of course there may be a more generic setup.\n\nAlec\n\n\n________________________________\nFrom: Brian G. Peterson <brian at braverock.com>\nSent: Tuesday, January 8, 2019 11:55 AM\nTo: Alec Schmidt; r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] corrections vs drawdowns\n\nI think that this is correct.  NASDAQ was still in a drawdown.  NASDAQ\ndidn't make new all-time highs until 2014.\n\nSome people define 'corrections' as drawdown from most recent peak.\nCharles Schwab's definition is in-line with generally accepted usage:\n\nhttps://na01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.schwab.com%2Fresource-center%2Finsights%2Fcontent%2Fmarket-correcti&amp;data=02%7C01%7Caschmid1%40stevens.edu%7C104e1f582d6242bfce0208d6758a227a%7C8d1a69ec03b54345ae21dad112f5fb4f%7C0%7C0%7C636825633496698033&amp;sdata=rkHsOOY4EdLB9LUu4bomU4%2F98T3kHidzSJY%2BGEQ4NsI%3D&amp;reserved=0\non-what-does-it-mean\n\nThe Motley Fool uses a similar but not identical definition:\n\nhttps://na01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.schwab.com%2Fresource-center%2Finsights%2Fcontent%2Fmarket-correcti&amp;data=02%7C01%7Caschmid1%40stevens.edu%7C104e1f582d6242bfce0208d6758a227a%7C8d1a69ec03b54345ae21dad112f5fb4f%7C0%7C0%7C636825633496698033&amp;sdata=rkHsOOY4EdLB9LUu4bomU4%2F98T3kHidzSJY%2BGEQ4NsI%3D&amp;reserved=0\non-what-does-it-mean\n\nquantmod has a 'findPeaks' function, but this is dependent on you\nsetting a threshold for what defines a peak.\n\nA related Stack Overflow question may provide something in the\ndirection of what you're looking for to look at drawdown from a recent\npeak.\n\nhttps://na01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fstackoverflow.com%2Fquestions%2F14737899%2Fcalculate-cumulatve-growth&amp;data=02%7C01%7Caschmid1%40stevens.edu%7C104e1f582d6242bfce0208d6758a227a%7C8d1a69ec03b54345ae21dad112f5fb4f%7C0%7C0%7C636825633496708038&amp;sdata=R9gkq2ILuqhdJQpjyijXw%2Flmogrxto8WP%2BvV05K6lgo%3D&amp;reserved=0\n-drawdown-from-local-min-max\n\nI would certainly be happy to include a 'findCorrections' function in a\nlater version of PerformanceAnalytics if we could parameterize what\nconstitutes a 'recent high' for that purpose.\n\nRegards,\n\nBrian\n\n\nOn Tue, 2019-01-08 at 16:36 +0000, Alec Schmidt wrote:\n> Thank you Brian,\n> geometric=FALSE gave me additional corrections in 2011 and 2012 but\n> still no bear market of 2008:\n>\n>\n>  08/30/2018 - 12/24/2018 (-11.04%) [80 Days]\n> 07/21/2015 - 02/11/2016 (-10.05%) [143 Days]\n> 09/17/2012 - 11/15/2012 (-8.42%) [42 Days]\n> 03/27/2012 - 06/01/2012 (-9.44%) [47 Days]\n> 07/08/2011 - 08/19/2011 (-15.96%) [31 Days]\n> 05/02/2011 - 06/17/2011 (-7.59%) [34 Days]\n> 02/22/2011 - 03/16/2011 (-6.54%) [17 Days]\n> 07/18/2000 - 10/09/2002 (-97.34%) [559 Days]\n> Alec\n>\n>\n>\n> From: Brian G. Peterson <brian at braverock.com>\n> Sent: Tuesday, January 8, 2019 11:17 AM\n> To: Alec Schmidt; r-sig-finance at r-project.org\n> Subject: Re: [R-SIG-Finance] corrections vs drawdowns\n>\n> Alec,\n>\n> I suspect that you may wish to start with setting geometric=FALSE in\n> your call to findDrawdowns.\n>\n> Corrections are usually defined as a peak to trough difference in\n> *price*, as a percentage of the peak price.\n>\n> So I think you do not want to compound the *returns* in calculating\n> your drawdowns.\n>\n> Regards,\n>\n> Brian\n>\n>\n> On Tue, 2019-01-08 at 16:09 +0000, Alec Schmidt wrote:\n> > I tried to use the function findDrawdowns() to compile NASDAQ\n> > (^IXIC)\n> > corrections. For the sample starting on\n> >\n> > 2007-01-01, I get the following start -to-trough periods with\n> > drawdowns higher than 10%\n> >\n> > 08/30/2018 - 12/24/2018 (-23.64%) [80 Days]\n> > 07/21/2015 - 02/11/2016 (-18.24%) [143 Days]\n> > 09/17/2012 - 11/15/2012 (-10.90%) [42 Days]\n> > 03/27/2012 - 06/01/2012 (-12.01%) [47 Days]\n> > 05/02/2011 - 10/03/2011 (-18.71%) [108 Days]\n> > 11/01/2007 - 03/09/2009 (-55.63%) [339 Days]\n> >\n> >\n> > However, if the sample starts on 2000-06-01, I get\n> > 08/30/2018 - 12/24/2018 (-23.64%) [80 Days]\n> > 07/21/2015 - 02/11/2016 (-18.24%) [143 Days]\n> > 07/18/2000 - 10/09/2002 (-73.94%) [559 Days]\n> >\n> > i.e. no bear market of 2008...\n> >\n> > This is because ^IXIC didn't recover in 2007 from its fall from top\n> > in 2000. This implies that various reports on market corrections do\n> > not use the max drawdown. Is there consensus (and possibly R\n> > scripts)\n> > that address this problem?\n> >\n> > Thanks! Alec\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Brian,\n\nThanks again. It would be great if you implement findCorrections(). I think it becomes a popular topic... ?\n\nOn top of my head, the default version needs just one parameter, ie. if we're looki",
+      "thread_id": "thread-8774c4563caa",
+      "thread_depth": 0,
+      "month": "2019-01"
+    },
+    {
+      "id": "msg-b61165dc85fc",
+      "message_id": "<CAC-NtZZXDczMFAEtF5UYEU509yb9Azoz11FxCTfJcXzUxYEdBA@mail.gmail.com>",
+      "from_name": "John Writer",
+      "from_email_hash": "e9f869754be98c33a5d47370a4e5d3445f9dcd7dd84b44da7f8e9eac44024ebc",
+      "date": "2019-01-21T14:57:13+05:30",
+      "subject": "[R-SIG-Finance] Query on strucchange package",
+      "subject_clean": "Query on strucchange package",
+      "in_reply_to": "<CAC-NtZZrz-sbppTBse=ukjKOKyGvF5XvGFq98To+tP=g+APG2w@mail.gmail.com>",
+      "references": [
+        "<CAC-NtZZrz-sbppTBse=ukjKOKyGvF5XvGFq98To+tP=g+APG2w@mail.gmail.com>"
+      ],
+      "body_plain": "Hi There,\n\nI have a query on the usage of breakpoints function in strucchange package.\n\nThe example on Page 14 of 69 of the reference manual\n<https://cran.r-project.org/web/packages/strucchange/strucchange.pdf> for\nstrucchange package shows this\nbreakpoints(Nile ~ 1)\nwhere Nile is the time series dataset for which breakpoints are to be\ncalculated.\n\nWhat does this command mean ? Strucchange package is based on Bai Perron\n(page 13) Structural break model using linear models. It seems to me that\nno other variable is used here.\n\nI am not sure if I have misunderstood the paper or this command.\n\nI would be grateful if someone can explain. Please advise.\n\nThanks.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi There,\n\nI have a query on the usage of breakpoints function in strucchange package.\n\nThe example on Page 14 of 69 of the reference manual\n<https://cran.r-project.org/web/packages/strucchange/strucc",
+      "thread_id": "thread-b61165dc85fc",
+      "thread_depth": 0,
+      "month": "2019-01"
+    },
+    {
+      "id": "msg-c57fce73c780",
+      "message_id": "<CAKhKCqXWZFHi=yO0aw65LRodHbkBjt6vmno6PggyY+cryeOp5A@mail.gmail.com>",
+      "from_name": "mmm ammm",
+      "from_email_hash": "f7a2cf12ed382bd972927e101ba58899af39a2d0572183448f57d1fbdd063936",
+      "date": "2019-01-26T04:25:35+02:00",
+      "subject": "[R-SIG-Finance] the package nmof",
+      "subject_clean": "the package nmof",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear all,\ni'm hoping that one of you can help me in the following code that is\nused for asset selection based on nmof package and please guide me\nwhere is the mistake:\n\nthe error message is: \"Error in colSums(x) : 'x' must be an array of\nat least two dimensions\".\n\nThe entire code is below (it works with DEopt) but does not with PSO;\nit is for asset selection exaclty from the package nmof.\n\nrequire(\"NMOF\")\nna<-31\n\nnn<- read.table(\"n.txt\") # n is the a 31*31 matrix.\nSigma <- data.matrix(nn)\n\nOF2 <- function(x, data) {\n#  res <- colSums (data$Sigma %*% x * x)\nres <- colSums (Sigma %*% x * x)\n#z<-c(x,x)\nn <- colSums (x); res <- res / n^2\n}\n#######  pso  #############\ndata <- list(\nna = na,\nmax = rep( 0.05, na),\nmin = rep(-0.05, na)\n)\nalgo <- list(nP = 31L,\nnG = 1000L,\nc1 = 0.5,\nc2 = 1.5,\n#min = data$min, max = data$max,\nmax = rep( 0.05, na), min = rep(-0.05, na),\n#repair = repair, pen = penalty,\niner = 0.7, initV = 1, maxV = 0.2\n#printBar = FALSE, printDetail = TRUE\n)\n#x<-array(x, c(2,2))\n\nsystem.time(sol <- PSopt(OF = OF2,algo = algo, data))",
+      "body_snippet": "Dear all,\ni'm hoping that one of you can help me in the following code that is\nused for asset selection based on nmof package and please guide me\nwhere is the mistake:\n\nthe error message is: \"Error in",
+      "thread_id": "thread-c57fce73c780",
+      "thread_depth": 0,
+      "month": "2019-01"
+    },
+    {
+      "id": "msg-400ebb400c0c",
+      "message_id": "<CAEcF8Z_kHXzgwhY_LcYOK5B=xrooEnB1Byu65gvRPjZk_bRiog@mail.gmail.com>",
+      "from_name": "Pedro Garcia",
+      "from_email_hash": "08e3aa82dfae0313f09a40ef7d52efe8da4402c9b43379cf409056af2d94e132",
+      "date": "2019-01-25T23:02:36-05:00",
+      "subject": "[R-SIG-Finance] the package nmof",
+      "subject_clean": "the package nmof",
+      "in_reply_to": "<CAKhKCqXWZFHi=yO0aw65LRodHbkBjt6vmno6PggyY+cryeOp5A@mail.gmail.com>",
+      "references": [
+        "<CAKhKCqXWZFHi=yO0aw65LRodHbkBjt6vmno6PggyY+cryeOp5A@mail.gmail.com>"
+      ],
+      "body_plain": "Ok, it may be that 'x' is a data structure, need to turn it into an array,\nalso you need to transpose it 'x' when multiplying.\n\nGood luck,\n\nPedro\n\n<https://www.avast.com/sig-email?utm_medium=email&utm_source=link&utm_campaign=sig-email&utm_content=webmail>\nVirus-free.\nwww.avast.com\n<https://www.avast.com/sig-email?utm_medium=email&utm_source=link&utm_campaign=sig-email&utm_content=webmail>\n<#DAB4FAD8-2DD7-40BB-A1B8-4E2AA1F9FDF2>\n\nOn Fri, 25 Jan 2019 at 21:26, mmm ammm <mmmammm1900 at gmail.com> wrote:\n\n> Dear all,\n> i'm hoping that one of you can help me in the following code that is\n> used for asset selection based on nmof package and please guide me\n> where is the mistake:\n>\n> the error message is: \"Error in colSums(x) : 'x' must be an array of\n> at least two dimensions\".\n>\n> The entire code is below (it works with DEopt) but does not with PSO;\n> it is for asset selection exaclty from the package nmof.\n>\n> require(\"NMOF\")\n> na<-31\n>\n> nn<- read.table(\"n.txt\") # n is the a 31*31 matrix.\n> Sigma <- data.matrix(nn)\n>\n> OF2 <- function(x, data) {\n> #  res <- colSums (data$Sigma %*% x * x)\n> res <- colSums (Sigma %*% x * x)\n> #z<-c(x,x)\n> n <- colSums (x); res <- res / n^2\n> }\n> #######  pso  #############\n> data <- list(\n> na = na,\n> max = rep( 0.05, na),\n> min = rep(-0.05, na)\n> )\n> algo <- list(nP = 31L,\n> nG = 1000L,\n> c1 = 0.5,\n> c2 = 1.5,\n> #min = data$min, max = data$max,\n> max = rep( 0.05, na), min = rep(-0.05, na),\n> #repair = repair, pen = penalty,\n> iner = 0.7, initV = 1, maxV = 0.2\n> #printBar = FALSE, printDetail = TRUE\n> )\n> #x<-array(x, c(2,2))\n>\n> system.time(sol <- PSopt(OF = OF2,algo = algo, data))\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Ok, it may be that 'x' is a data structure, need to turn it into an array,\nalso you need to transpose it 'x' when multiplying.\n\nGood luck,\n\nPedro\n\n<https://www.avast.com/sig-email?utm_medium=email&utm",
+      "thread_id": "thread-c57fce73c780",
+      "thread_depth": 1,
+      "month": "2019-01"
+    },
+    {
+      "id": "msg-89c51a2204d1",
+      "message_id": "<87a7jn6vwp.fsf@enricoschumann.net>",
+      "from_name": "Enrico Schumann",
+      "from_email_hash": "42e3fbcaa04e968726f4c1d1a69e34143bdbc62b403d112ba1d3712256bacb88",
+      "date": "2019-01-26T20:50:14+01:00",
+      "subject": "[R-SIG-Finance] the package nmof",
+      "subject_clean": "the package nmof",
+      "in_reply_to": "<CAKhKCqXWZFHi=yO0aw65LRodHbkBjt6vmno6PggyY+cryeOp5A@mail.gmail.com> (mmm ammm's message of \"Sat, 26 Jan 2019 04:25:35 +0200\")",
+      "references": [
+        "<CAKhKCqXWZFHi=yO0aw65LRodHbkBjt6vmno6PggyY+cryeOp5A@mail.gmail.com>"
+      ],
+      "body_plain": ">>>>> \"m\" == mmm ammm <mmmammm1900 at gmail.com> writes:\n\n    m> Dear all,\n    m> i'm hoping that one of you can help me in the following code that is\n    m> used for asset selection based on nmof package and please guide me\n    m> where is the mistake:\n\n    m> the error message is: \"Error in colSums(x) : 'x' must be an array of\n    m> at least two dimensions\".\n\n    m> The entire code is below (it works with DEopt) but does not with PSO;\n    m> it is for asset selection exaclty from the package nmof.\n\n    m> require(\"NMOF\")\n    m> na<-31\n\n    m> nn<- read.table(\"n.txt\") # n is the a 31*31 matrix.\n    m> Sigma <- data.matrix(nn)\n\n    m> OF2 <- function(x, data) {\n    m> #  res <- colSums (data$Sigma %*% x * x)\n    m> res <- colSums (Sigma %*% x * x)\n    m> #z<-c(x,x)\n    m> n <- colSums (x); res <- res / n^2\n    m> }\n    m> #######  pso  #############\n    m> data <- list(\n    m> na = na,\n    m> max = rep( 0.05, na),\n    m> min = rep(-0.05, na)\n    m> )\n    m> algo <- list(nP = 31L,\n    m> nG = 1000L,\n    m> c1 = 0.5,\n    m> c2 = 1.5,\n    m> #min = data$min, max = data$max,\n    m> max = rep( 0.05, na), min = rep(-0.05, na),\n    m> #repair = repair, pen = penalty,\n    m> iner = 0.7, initV = 1, maxV = 0.2\n    m> #printBar = FALSE, printDetail = TRUE\n    m> )\n    m> #x<-array(x, c(2,2))\n\n    m> system.time(sol <- PSopt(OF = OF2,algo = algo, data))\n\nYou could get rid of the error by setting 'loopOF' to\nFALSE (as part of the settings passed with list\n'algo'). I will explain below what this setting does.\n\nBut in any case, are you sure your objective function\ndoes what it should?  If I read it correctly, it\nassumes that 'x' is logical. But both DEopt and PSopt\nwork with numeric (i.e. real-valued) vectors.\n\nWhat 'loopOF' does: Differential Evolution and Particle\nSwarm Optimisation are multiple-solution methods, aka\npopulation-based methods. The NMOF implementations\n'DEopt' and 'PSopt' arrange the populations as\nmatrices; every column in such a matrix represents one\nsolution.  To compute the objective function of the\nsolutions, with the default settings both 'DEopt' and\n'PSopt' use a loop. The objective function should thus\nreceive a single solution as input, and should evaluate\nto a single number.\n\nSometimes an objective function may be computed for the\nwhole population (i.e. all solutions) in one step. In\nsuch a case, the objective function should expect the\npopulation matrix (i.e. all solutions) as input, and\nshould evaluate to a vector: the objective-function\nvalues corresponding to the columns of the population\nmatrix.  However, since the user specifies the\nobjective function, 'DEopt'/'PSopt' cannot know\nautomatically in what way the objective function is\nwritten; so you need to tell the functions by setting\n'loopOF' to TRUE (the default) or to FALSE.\n\nkind regards\n     Enrico\n\n\n-- \nEnrico Schumann (maintainer of package NMOF)\nLucerne, Switzerland\nhttp://enricoschumann.net",
+      "body_snippet": ">>>>> \"m\" == mmm ammm <mmmammm1900 at gmail.com> writes:\n\n    m> Dear all,\n    m> i'm hoping that one of you can help me in the following code that is\n    m> used for asset selection based on nmof pac",
+      "thread_id": "thread-c57fce73c780",
+      "thread_depth": 1,
+      "month": "2019-01"
+    },
+    {
+      "id": "msg-935dd2c19daf",
+      "message_id": "<CAKhKCqXHtRvJWAxdAxQ132s0cwFumSKjmmY58DKVMVor73xVEA@mail.gmail.com>",
+      "from_name": "mmm ammm",
+      "from_email_hash": "f7a2cf12ed382bd972927e101ba58899af39a2d0572183448f57d1fbdd063936",
+      "date": "2019-01-27T04:01:33+02:00",
+      "subject": "[R-SIG-Finance] the package nmof",
+      "subject_clean": "the package nmof",
+      "in_reply_to": "<87a7jn6vwp.fsf@enricoschumann.net>",
+      "references": [
+        "<CAKhKCqXWZFHi=yO0aw65LRodHbkBjt6vmno6PggyY+cryeOp5A@mail.gmail.com>",
+        "<87a7jn6vwp.fsf@enricoschumann.net>"
+      ],
+      "body_plain": "Dear Enrico,\nThank you so much. It works now.\nBut, the function DEopt worked without changing this setting and gave\napproximately the same result; could you please explain this for me?\n\nMany thanks\n\n\nOn 26/01/2019, Enrico Schumann <es at enricoschumann.net> wrote:\n>>>>>> \"m\" == mmm ammm <mmmammm1900 at gmail.com> writes:\n>\n>     m> Dear all,\n>     m> i'm hoping that one of you can help me in the following code that is\n>     m> used for asset selection based on nmof package and please guide me\n>     m> where is the mistake:\n>\n>     m> the error message is: \"Error in colSums(x) : 'x' must be an array of\n>     m> at least two dimensions\".\n>\n>     m> The entire code is below (it works with DEopt) but does not with\n> PSO;\n>     m> it is for asset selection exaclty from the package nmof.\n>\n>     m> require(\"NMOF\")\n>     m> na<-31\n>\n>     m> nn<- read.table(\"n.txt\") # n is the a 31*31 matrix.\n>     m> Sigma <- data.matrix(nn)\n>\n>     m> OF2 <- function(x, data) {\n>     m> #  res <- colSums (data$Sigma %*% x * x)\n>     m> res <- colSums (Sigma %*% x * x)\n>     m> #z<-c(x,x)\n>     m> n <- colSums (x); res <- res / n^2\n>     m> }\n>     m> #######  pso  #############\n>     m> data <- list(\n>     m> na = na,\n>     m> max = rep( 0.05, na),\n>     m> min = rep(-0.05, na)\n>     m> )\n>     m> algo <- list(nP = 31L,\n>     m> nG = 1000L,\n>     m> c1 = 0.5,\n>     m> c2 = 1.5,\n>     m> #min = data$min, max = data$max,\n>     m> max = rep( 0.05, na), min = rep(-0.05, na),\n>     m> #repair = repair, pen = penalty,\n>     m> iner = 0.7, initV = 1, maxV = 0.2\n>     m> #printBar = FALSE, printDetail = TRUE\n>     m> )\n>     m> #x<-array(x, c(2,2))\n>\n>     m> system.time(sol <- PSopt(OF = OF2,algo = algo, data))\n>\n> You could get rid of the error by setting 'loopOF' to\n> FALSE (as part of the settings passed with list\n> 'algo'). I will explain below what this setting does.\n>\n> But in any case, are you sure your objective function\n> does what it should?  If I read it correctly, it\n> assumes that 'x' is logical. But both DEopt and PSopt\n> work with numeric (i.e. real-valued) vectors.\n>\n> What 'loopOF' does: Differential Evolution and Particle\n> Swarm Optimisation are multiple-solution methods, aka\n> population-based methods. The NMOF implementations\n> 'DEopt' and 'PSopt' arrange the populations as\n> matrices; every column in such a matrix represents one\n> solution.  To compute the objective function of the\n> solutions, with the default settings both 'DEopt' and\n> 'PSopt' use a loop. The objective function should thus\n> receive a single solution as input, and should evaluate\n> to a single number.\n>\n> Sometimes an objective function may be computed for the\n> whole population (i.e. all solutions) in one step. In\n> such a case, the objective function should expect the\n> population matrix (i.e. all solutions) as input, and\n> should evaluate to a vector: the objective-function\n> values corresponding to the columns of the population\n> matrix.  However, since the user specifies the\n> objective function, 'DEopt'/'PSopt' cannot know\n> automatically in what way the objective function is\n> written; so you need to tell the functions by setting\n> 'loopOF' to TRUE (the default) or to FALSE.\n>\n> kind regards\n>      Enrico\n>\n>\n> --\n> Enrico Schumann (maintainer of package NMOF)\n> Lucerne, Switzerland\n> http://enricoschumann.net\n>",
+      "body_snippet": "Dear Enrico,\nThank you so much. It works now.\nBut, the function DEopt worked without changing this setting and gave\napproximately the same result; could you please explain this for me?\n\nMany thanks\n\n\n",
+      "thread_id": "thread-c57fce73c780",
+      "thread_depth": 2,
+      "month": "2019-01"
+    },
+    {
+      "id": "msg-f62c7295530e",
+      "message_id": "<871s4xdzbb.fsf@enricoschumann.net>",
+      "from_name": "Enrico Schumann",
+      "from_email_hash": "42e3fbcaa04e968726f4c1d1a69e34143bdbc62b403d112ba1d3712256bacb88",
+      "date": "2019-01-28T08:19:20+01:00",
+      "subject": "[R-SIG-Finance] the package nmof",
+      "subject_clean": "the package nmof",
+      "in_reply_to": "<CAKhKCqXHtRvJWAxdAxQ132s0cwFumSKjmmY58DKVMVor73xVEA@mail.gmail.com> (mmm ammm's message of \"Sun, 27 Jan 2019 04:01:33 +0200\")",
+      "references": [
+        "<CAKhKCqXWZFHi=yO0aw65LRodHbkBjt6vmno6PggyY+cryeOp5A@mail.gmail.com>",
+        "<87a7jn6vwp.fsf@enricoschumann.net>",
+        "<CAKhKCqXHtRvJWAxdAxQ132s0cwFumSKjmmY58DKVMVor73xVEA@mail.gmail.com>"
+      ],
+      "body_plain": ">>>>> \"m\" == mmm ammm <mmmammm1900 at gmail.com> writes:\n\n    m> Dear Enrico,\n    m> Thank you so much. It works now.\n    m> But, the function DEopt worked without changing this setting and gave\n    m> approximately the same result; could you please explain this for me?\n\n    m> Many thanks\n\nThe reason is that 'DEopt' does not drop the dimension\nwhen a solution is selected and passed to the objective\nfunction; a single solution remains a matrix (of one\ncolumn).\n\nSuch a conversion is simple to do in the objective\nfunction: use 'as.matrix()' to create a column vector;\nor 'c()' or 'drop()' to drop the dimension and create a\nvector.\n\nkind regards\n     Enrico\n\n    m> On 26/01/2019, Enrico Schumann <es at enricoschumann.net> wrote:\n    >>>>>>> \"m\" == mmm ammm <mmmammm1900 at gmail.com> writes:\n    >> \n    m> Dear all,\n    m> i'm hoping that one of you can help me in the following code that is\n    m> used for asset selection based on nmof package and please guide me\n    m> where is the mistake:\n    >> \n    m> the error message is: \"Error in colSums(x) : 'x' must be an array of\n    m> at least two dimensions\".\n    >> \n    m> The entire code is below (it works with DEopt) but does not with\n    >> PSO;\n    m> it is for asset selection exaclty from the package nmof.\n    >> \n    m> require(\"NMOF\")\n    m> na<-31\n    >> \n    m> nn<- read.table(\"n.txt\") # n is the a 31*31 matrix.\n    m> Sigma <- data.matrix(nn)\n    >> \n    m> OF2 <- function(x, data) {\n    m> #  res <- colSums (data$Sigma %*% x * x)\n    m> res <- colSums (Sigma %*% x * x)\n    m> #z<-c(x,x)\n    m> n <- colSums (x); res <- res / n^2\n    m> }\n    m> #######  pso  #############\n    m> data <- list(\n    m> na = na,\n    m> max = rep( 0.05, na),\n    m> min = rep(-0.05, na)\n    m> )\n    m> algo <- list(nP = 31L,\n    m> nG = 1000L,\n    m> c1 = 0.5,\n    m> c2 = 1.5,\n    m> #min = data$min, max = data$max,\n    m> max = rep( 0.05, na), min = rep(-0.05, na),\n    m> #repair = repair, pen = penalty,\n    m> iner = 0.7, initV = 1, maxV = 0.2\n    m> #printBar = FALSE, printDetail = TRUE\n    m> )\n    m> #x<-array(x, c(2,2))\n    >> \n    m> system.time(sol <- PSopt(OF = OF2,algo = algo, data))\n    >> \n    >> You could get rid of the error by setting 'loopOF' to\n    >> FALSE (as part of the settings passed with list\n    >> 'algo'). I will explain below what this setting does.\n    >> \n    >> But in any case, are you sure your objective function\n    >> does what it should?  If I read it correctly, it\n    >> assumes that 'x' is logical. But both DEopt and PSopt\n    >> work with numeric (i.e. real-valued) vectors.\n    >> \n    >> What 'loopOF' does: Differential Evolution and Particle\n    >> Swarm Optimisation are multiple-solution methods, aka\n    >> population-based methods. The NMOF implementations\n    >> 'DEopt' and 'PSopt' arrange the populations as\n    >> matrices; every column in such a matrix represents one\n    >> solution.  To compute the objective function of the\n    >> solutions, with the default settings both 'DEopt' and\n    >> 'PSopt' use a loop. The objective function should thus\n    >> receive a single solution as input, and should evaluate\n    >> to a single number.\n    >> \n    >> Sometimes an objective function may be computed for the\n    >> whole population (i.e. all solutions) in one step. In\n    >> such a case, the objective function should expect the\n    >> population matrix (i.e. all solutions) as input, and\n    >> should evaluate to a vector: the objective-function\n    >> values corresponding to the columns of the population\n    >> matrix.  However, since the user specifies the\n    >> objective function, 'DEopt'/'PSopt' cannot know\n    >> automatically in what way the objective function is\n    >> written; so you need to tell the functions by setting\n    >> 'loopOF' to TRUE (the default) or to FALSE.\n    >> \n    >> kind regards\n    >> Enrico\n    >> \n    >> \n    >> --\n    >> Enrico Schumann (maintainer of package NMOF)\n    >> Lucerne, Switzerland\n    >> http://enricoschumann.net\n    >> \n\n-- \nEnrico Schumann\nLucerne, Switzerland\nhttp://enricoschumann.net",
+      "body_snippet": ">>>>> \"m\" == mmm ammm <mmmammm1900 at gmail.com> writes:\n\n    m> Dear Enrico,\n    m> Thank you so much. It works now.\n    m> But, the function DEopt worked without changing this setting and gave\n    m",
+      "thread_id": "thread-c57fce73c780",
+      "thread_depth": 3,
+      "month": "2019-01"
+    },
+    {
+      "id": "msg-ac0c30902806",
+      "message_id": "<883646581.2158546.1548682542458@mail.yahoo.com>",
+      "from_name": "Pankaj K Agarwal",
+      "from_email_hash": "6e0f9d08149397a060427fc7e5ead93be1735e6421cfbb29f7c6dcd515502314",
+      "date": "2019-01-28T13:35:42Z",
+      "subject": "[R-SIG-Finance] Fama-MacBeth Procedure for multiple independent variables.",
+      "subject_clean": "Fama-MacBeth Procedure for multiple independent variables.",
+      "in_reply_to": null,
+      "references": [
+        "<883646581.2158546.1548682542458.ref@mail.yahoo.com>"
+      ],
+      "body_plain": "Dear All\nHope the question qualifies to be included here.\nSure you are aware that Fama-MacBeth (1973) two-step procedure involves:1. Regressing time series of each decile of y on time series of? each decile of x, resulting in 10 slopes.2. Regressing cross-section of decile 1-10 of y over slopes obtained in step-1, for each month.3. Obtaining time-series of slopes in step-2 and then testing for its significance.\nNow say y is return and x is VaR. Deciles of xs were created based on decreasing VaR and corresponding decile returns were ys.?\nIssue is what if i wish to add another x (say x1 and x2 now) and implement Fama-MacBeth procedure? How then the deciles will be formed, basis x1 or x2 or both? Can someone help along with R-code too?\nRegards,Pankaj K Agarwal\n+91-98397-11444\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear All\nHope the question qualifies to be included here.\nSure you are aware that Fama-MacBeth (1973) two-step procedure involves:1. Regressing time series of each decile of y on time series of? each ",
+      "thread_id": "thread-ac0c30902806",
+      "thread_depth": 0,
+      "month": "2019-01"
+    },
+    {
+      "id": "msg-e1903b5c3113",
+      "message_id": "<CY4PR16MB0087B3715750A9789B0C2433A9960@CY4PR16MB0087.namprd16.prod.outlook.com>",
+      "from_name": "Curtis Miller",
+      "from_email_hash": "ccf9423020d47b283d9651a81b559162807ad6fb456dd3e9c748ad53d5456fc2",
+      "date": "2019-01-28T16:23:09Z",
+      "subject": "[R-SIG-Finance] GARCH parameter estimation with rugarch: estimates seem inaccurate",
+      "subject_clean": "GARCH parameter estimation with rugarch: estimates seem inaccurate",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello all,\n\nOver a year ago I wrote a blog post about the problems I was having \nestimating the parameters of GARCH models via fGarch. I got a lot of \nfeedback and I've now followed up with another article taking that \nfeedback into account: \nhttps://ntguardian.wordpress.com/2019/01/28/problems-estimating-garch-parameters-r-part-2-rugarch/\n\nFirst, I switched from fGarch to rugarch, which is supposedly still \nmaintained. I also looked at other parameter combinations in simulation \nexperiments that others requested.\n\nIt seems that rugarch isn't necessarily better when it comes to \nparameter accuracy and one needs a lot of data (in the order of \nthousands) to get good estimates of the parameter values. That said, CIs \ncomputed are highly unreliable even at large sample sizes and there is \ncertainly no \"silver bullet\" optimization algorithm.\n\nI'd like feedback if I'm not doing things right. I heard once that \nothers could not replicate my results; that is, they have reliable \nestimates for GARCH parameters. But I never found out who those people \nwere and they did not give me their code to see what I was doing wrong.\n\nIf the community is aware of better approaches, I would like to hear \nthem as well.\n\nThank you all,\n\nCurtis Miller",
+      "body_snippet": "Hello all,\n\nOver a year ago I wrote a blog post about the problems I was having \nestimating the parameters of GARCH models via fGarch. I got a lot of \nfeedback and I've now followed up with another ar",
+      "thread_id": "thread-e1903b5c3113",
+      "thread_depth": 0,
+      "month": "2019-01"
+    },
+    {
+      "id": "msg-d1a607e43a72",
+      "message_id": "<CAKhKCqUnMWA1oRL-pYtVBS=OiARcveSz+R4HJNsGrkj=HokYHQ@mail.gmail.com>",
+      "from_name": "mmm ammm",
+      "from_email_hash": "f7a2cf12ed382bd972927e101ba58899af39a2d0572183448f57d1fbdd063936",
+      "date": "2019-01-28T19:49:36+02:00",
+      "subject": "[R-SIG-Finance] the package nmof",
+      "subject_clean": "the package nmof",
+      "in_reply_to": "<871s4xdzbb.fsf@enricoschumann.net>",
+      "references": [
+        "<CAKhKCqXWZFHi=yO0aw65LRodHbkBjt6vmno6PggyY+cryeOp5A@mail.gmail.com>",
+        "<87a7jn6vwp.fsf@enricoschumann.net>",
+        "<CAKhKCqXHtRvJWAxdAxQ132s0cwFumSKjmmY58DKVMVor73xVEA@mail.gmail.com>",
+        "<871s4xdzbb.fsf@enricoschumann.net>"
+      ],
+      "body_plain": "Many thanks Enrico for your help.\n\nOn 28/01/2019, Enrico Schumann <es at enricoschumann.net> wrote:\n>>>>>> \"m\" == mmm ammm <mmmammm1900 at gmail.com> writes:\n>\n>     m> Dear Enrico,\n>     m> Thank you so much. It works now.\n>     m> But, the function DEopt worked without changing this setting and\n> gave\n>     m> approximately the same result; could you please explain this for me?\n>\n>     m> Many thanks\n>\n> The reason is that 'DEopt' does not drop the dimension\n> when a solution is selected and passed to the objective\n> function; a single solution remains a matrix (of one\n> column).\n>\n> Such a conversion is simple to do in the objective\n> function: use 'as.matrix()' to create a column vector;\n> or 'c()' or 'drop()' to drop the dimension and create a\n> vector.\n>\n> kind regards\n>      Enrico\n>\n>     m> On 26/01/2019, Enrico Schumann <es at enricoschumann.net> wrote:\n>     >>>>>>> \"m\" == mmm ammm <mmmammm1900 at gmail.com> writes:\n>     >>\n>     m> Dear all,\n>     m> i'm hoping that one of you can help me in the following code that is\n>     m> used for asset selection based on nmof package and please guide me\n>     m> where is the mistake:\n>     >>\n>     m> the error message is: \"Error in colSums(x) : 'x' must be an array of\n>     m> at least two dimensions\".\n>     >>\n>     m> The entire code is below (it works with DEopt) but does not with\n>     >> PSO;\n>     m> it is for asset selection exaclty from the package nmof.\n>     >>\n>     m> require(\"NMOF\")\n>     m> na<-31\n>     >>\n>     m> nn<- read.table(\"n.txt\") # n is the a 31*31 matrix.\n>     m> Sigma <- data.matrix(nn)\n>     >>\n>     m> OF2 <- function(x, data) {\n>     m> #  res <- colSums (data$Sigma %*% x * x)\n>     m> res <- colSums (Sigma %*% x * x)\n>     m> #z<-c(x,x)\n>     m> n <- colSums (x); res <- res / n^2\n>     m> }\n>     m> #######  pso  #############\n>     m> data <- list(\n>     m> na = na,\n>     m> max = rep( 0.05, na),\n>     m> min = rep(-0.05, na)\n>     m> )\n>     m> algo <- list(nP = 31L,\n>     m> nG = 1000L,\n>     m> c1 = 0.5,\n>     m> c2 = 1.5,\n>     m> #min = data$min, max = data$max,\n>     m> max = rep( 0.05, na), min = rep(-0.05, na),\n>     m> #repair = repair, pen = penalty,\n>     m> iner = 0.7, initV = 1, maxV = 0.2\n>     m> #printBar = FALSE, printDetail = TRUE\n>     m> )\n>     m> #x<-array(x, c(2,2))\n>     >>\n>     m> system.time(sol <- PSopt(OF = OF2,algo = algo, data))\n>     >>\n>     >> You could get rid of the error by setting 'loopOF' to\n>     >> FALSE (as part of the settings passed with list\n>     >> 'algo'). I will explain below what this setting does.\n>     >>\n>     >> But in any case, are you sure your objective function\n>     >> does what it should?  If I read it correctly, it\n>     >> assumes that 'x' is logical. But both DEopt and PSopt\n>     >> work with numeric (i.e. real-valued) vectors.\n>     >>\n>     >> What 'loopOF' does: Differential Evolution and Particle\n>     >> Swarm Optimisation are multiple-solution methods, aka\n>     >> population-based methods. The NMOF implementations\n>     >> 'DEopt' and 'PSopt' arrange the populations as\n>     >> matrices; every column in such a matrix represents one\n>     >> solution.  To compute the objective function of the\n>     >> solutions, with the default settings both 'DEopt' and\n>     >> 'PSopt' use a loop. The objective function should thus\n>     >> receive a single solution as input, and should evaluate\n>     >> to a single number.\n>     >>\n>     >> Sometimes an objective function may be computed for the\n>     >> whole population (i.e. all solutions) in one step. In\n>     >> such a case, the objective function should expect the\n>     >> population matrix (i.e. all solutions) as input, and\n>     >> should evaluate to a vector: the objective-function\n>     >> values corresponding to the columns of the population\n>     >> matrix.  However, since the user specifies the\n>     >> objective function, 'DEopt'/'PSopt' cannot know\n>     >> automatically in what way the objective function is\n>     >> written; so you need to tell the functions by setting\n>     >> 'loopOF' to TRUE (the default) or to FALSE.\n>     >>\n>     >> kind regards\n>     >> Enrico\n>     >>\n>     >>\n>     >> --\n>     >> Enrico Schumann (maintainer of package NMOF)\n>     >> Lucerne, Switzerland\n>     >> http://enricoschumann.net\n>     >>\n>\n> --\n> Enrico Schumann\n> Lucerne, Switzerland\n> http://enricoschumann.net\n>",
+      "body_snippet": "Many thanks Enrico for your help.\n\nOn 28/01/2019, Enrico Schumann <es at enricoschumann.net> wrote:\n>>>>>> \"m\" == mmm ammm <mmmammm1900 at gmail.com> writes:\n>\n>     m> Dear Enrico,\n>     m> Thank you",
+      "thread_id": "thread-c57fce73c780",
+      "thread_depth": 4,
+      "month": "2019-01"
+    },
+    {
+      "id": "msg-87aa24976417",
+      "message_id": "<E1goBEl-0003Pt-2r@rmmprod05.runbox>",
+      "from_name": "alexios ghalanos",
+      "from_email_hash": "a96d1f9bc31603cc8b7738f0d9a0b72c41ec7e0b943e1806c497adc2018497a3",
+      "date": "2019-01-28T18:02:23Z",
+      "subject": "[R-SIG-Finance]  GARCH parameter estimation with rugarch: estimates seem inaccurate",
+      "subject_clean": "GARCH parameter estimation with rugarch: estimates seem inaccurate",
+      "in_reply_to": "<CY4PR16MB0087B3715750A9789B0C2433A9960@CY4PR16MB0087.namprd16.prod.outlook.com>",
+      "references": [],
+      "body_plain": "Hi Curtis,\n\nThere is a function in rugarch called ugarchdistribution for performing these types of experiments:\n\nspec1 <- ugarchspec(mean.model = list(armaOrder = c(0,0), include.mean = FALSE),\n                    fixed.pars = list(\"omega\" = 0.2, \"alpha1\" = 0.2, \"beta1\" = 0.2))\nd=ugarchdistribution(spec1, n.sim=2000, m.sim=100, recursive = TRUE, recursive.length = 6000, solver.control=list(trace=1))\n\nTry this and perhaps also read this blog post:\nhttp://www.unstarched.net/2012/12/26/garch-parameter-uncertainty-and-data-size/\n\nCould we benefit from a better nonlinear solver? Perhaps. \nCould we benefit from code contributions to make it better? Definitely.\nFeel free to contribute.\n\nBest,\n\nAlexios\n\n\n\nOn Mon, 28 Jan 2019 16:23:09 +0000, Curtis Miller <cgmil at msn.com> wrote:\n\n> Hello all,\n> \n> Over a year ago I wrote a blog post about the problems I was having \n> estimating the parameters of GARCH models via fGarch. I got a lot of \n> feedback and I've now followed up with another article taking that \n> feedback into account: \n> https://ntguardian.wordpress.com/2019/01/28/problems-estimating-garch-parameters-r-part-2-rugarch/\n> \n> First, I switched from fGarch to rugarch, which is supposedly still \n> maintained. I also looked at other parameter combinations in simulation \n> experiments that others requested.\n> \n> It seems that rugarch isn't necessarily better when it comes to \n> parameter accuracy and one needs a lot of data (in the order of \n> thousands) to get good estimates of the parameter values. That said, CIs \n> computed are highly unreliable even at large sample sizes and there is \n> certainly no \"silver bullet\" optimization algorithm.\n> \n> I'd like feedback if I'm not doing things right. I heard once that \n> others could not replicate my results; that is, they have reliable \n> estimates for GARCH parameters. But I never found out who those people \n> were and they did not give me their code to see what I was doing wrong.\n> \n> If the community is aware of better approaches, I would like to hear \n> them as well.\n> \n> Thank you all,\n> \n> Curtis Miller\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Hi Curtis,\n\nThere is a function in rugarch called ugarchdistribution for performing these types of experiments:\n\nspec1 <- ugarchspec(mean.model = list(armaOrder = c(0,0), include.mean = FALSE),\n      ",
+      "thread_id": "thread-e1903b5c3113",
+      "thread_depth": 1,
+      "month": "2019-01"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-efdaf010b4df",
+      "subject": "corrections vs drawdowns",
+      "message_count": 6,
+      "participants": [
+        "Alec Schmidt",
+        "Brian G. Peterson",
+        "Enrico Schumann"
+      ],
+      "started": "2019-01-08T16:09:09+00:00",
+      "last_reply": "2019-01-08T21:22:46+00:00",
+      "root_message_id": "msg-efdaf010b4df"
+    },
+    {
+      "id": "thread-8774c4563caa",
+      "subject": "corrections vs drawdowns",
+      "message_count": 1,
+      "participants": [
+        "Alec Schmidt"
+      ],
+      "started": "2019-01-08T21:48:30+00:00",
+      "last_reply": "2019-01-08T21:48:30+00:00",
+      "root_message_id": "msg-8774c4563caa"
+    },
+    {
+      "id": "thread-b61165dc85fc",
+      "subject": "Query on strucchange package",
+      "message_count": 1,
+      "participants": [
+        "John Writer"
+      ],
+      "started": "2019-01-21T14:57:13+05:30",
+      "last_reply": "2019-01-21T14:57:13+05:30",
+      "root_message_id": "msg-b61165dc85fc"
+    },
+    {
+      "id": "thread-c57fce73c780",
+      "subject": "the package nmof",
+      "message_count": 6,
+      "participants": [
+        "Enrico Schumann",
+        "Pedro Garcia",
+        "mmm ammm"
+      ],
+      "started": "2019-01-26T04:25:35+02:00",
+      "last_reply": "2019-01-28T19:49:36+02:00",
+      "root_message_id": "msg-c57fce73c780"
+    },
+    {
+      "id": "thread-ac0c30902806",
+      "subject": "Fama-MacBeth Procedure for multiple independent variables.",
+      "message_count": 1,
+      "participants": [
+        "Pankaj K Agarwal"
+      ],
+      "started": "2019-01-28T13:35:42+00:00",
+      "last_reply": "2019-01-28T13:35:42+00:00",
+      "root_message_id": "msg-ac0c30902806"
+    },
+    {
+      "id": "thread-e1903b5c3113",
+      "subject": "GARCH parameter estimation with rugarch: estimates seem inaccurate",
+      "message_count": 2,
+      "participants": [
+        "Curtis Miller",
+        "alexios ghalanos"
+      ],
+      "started": "2019-01-28T16:23:09+00:00",
+      "last_reply": "2019-01-28T18:02:23+00:00",
+      "root_message_id": "msg-e1903b5c3113"
+    }
+  ]
+}

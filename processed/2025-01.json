@@ -1,0 +1,75 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2025-01",
+  "messages": [
+    {
+      "id": "msg-69e1613ce6a3",
+      "message_id": "<CO6PR14MB43872B6E9FD6936D513FE0C2F1E32@CO6PR14MB4387.namprd14.prod.outlook.com>",
+      "from_name": "Manfred Alonso Esquivel Monge",
+      "from_email_hash": "2de63a6d1aad55a259ef28ba9e23907ae4b832690832ea42df0269a2b322568f",
+      "date": "2025-01-24T17:10:28Z",
+      "subject": "[R-SIG-Finance] rugarch package vs Eviews cannot get similar results from a model with GARCH errors.",
+      "subject_clean": "rugarch package vs Eviews cannot get similar results from a model with GARCH errors.",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I'm trying to replicate in R some results that I get from an Eviews estimation of a model with GARCH errors. For this, I'm using the  \"rugarch\" package. The problem is that estimated parameters differ by a lot. This is the set up I'm using in R (the data are in an xts object names \"datos\"):\n\nspec <- ugarchspec(\n  variance.model = list(model = \"sGARCH\", garchOrder = c(2, 1)),\n  mean.model = list(armaOrder = c(2, 0), include.mean = TRUE, external.regressors = as.matrix(datos[, c(\"jueves\", \"viernes\", \"sem2\", \"sem2_ene\", \"sem3_nov\", \"sem4_nov\")]))\n)\nfit_garch <- ugarchfit(spec = spec, data = datos$d_TC, solver = \"gosolnp\")\n\n\n\nThis es the set up I'm using in Eviews:\n\nequation fit_garch.arch(2,1) d_TC c ar(1) ar(2) jueves viernes sem2 sem2_ene sem3_nov sem4_nov\n\n\nAs you can see, they are supposed to be the same model, an ARMA(2,0) with constant term plus some \"external regressors\" in the mean equation, and a GARCH(2,1) models for the variance. But coefficient estimates differ by no small amount.\nI verified that data are the same (run OLS and got identical results between the softwares).  As a side note, R results does not converge easily, I tried some of the solvers and only \"gosolnp\" and  \"hybrid\" converge.\nThis is my first time using \"rugarch\", so chances are big that there is something wrong in my R set up.\n\nAny help will be greatly appreciated.\n\nRegards.\nManfred E.\n\n________________________________\n\nAVISO DE CONFIDENCIALIDAD: La informaci?n contenida en este mensaje es estrictamente confidencial, y est? destinada para uso exclusivo de su destinatario. El BANCO NACIONAL y sus subsidiarias no se hacen responsables por su copia, divulgaci?n o distribuci?n a terceros, y se reserva el derecho de interponer las acciones administrativas y/o judiciales que correspondan por los da?os y perjuicios que su difusi?n no autorizada ocasione.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I'm trying to replicate in R some results that I get from an Eviews estimation of a model with GARCH errors. For this, I'm using the  \"rugarch\" package. The problem is that estimated parameters differ",
+      "thread_id": "thread-69e1613ce6a3",
+      "thread_depth": 0,
+      "month": "2025-01"
+    },
+    {
+      "id": "msg-82de1d58186c",
+      "message_id": "<RO2P152MB5139B2836E1F8A6991112896F7E32@RO2P152MB5139.LAMP152.PROD.OUTLOOK.COM>",
+      "from_name": "matheus barroso",
+      "from_email_hash": "b6bd1416b552ee28eb47a6908aba0f94e5e0e3e082e84f46979d270ee65bde3b",
+      "date": "2025-01-24T17:30:12Z",
+      "subject": "[R-SIG-Finance] rugarch package vs Eviews cannot get similar results from a model with GARCH errors.",
+      "subject_clean": "rugarch package vs Eviews cannot get similar results from a model with GARCH errors.",
+      "in_reply_to": "<CO6PR14MB43872B6E9FD6936D513FE0C2F1E32@CO6PR14MB4387.namprd14.prod.outlook.com>",
+      "references": [
+        "<CO6PR14MB43872B6E9FD6936D513FE0C2F1E32@CO6PR14MB4387.namprd14.prod.outlook.com>"
+      ],
+      "body_plain": "Different random seeds / generators \nSent from my iPhone\n\n> On 24 Jan 2025, at 14:10, Manfred Alonso Esquivel Monge via R-SIG-Finance <r-sig-finance at r-project.org> wrote:\n> \n> ?I'm trying to replicate in R some results that I get from an Eviews estimation of a model with GARCH errors. For this, I'm using the  \"rugarch\" package. The problem is that estimated parameters differ by a lot. This is the set up I'm using in R (the data are in an xts object names \"datos\"):\n> \n> spec <- ugarchspec(\n>  variance.model = list(model = \"sGARCH\", garchOrder = c(2, 1)),\n>  mean.model = list(armaOrder = c(2, 0), include.mean = TRUE, external.regressors = as.matrix(datos[, c(\"jueves\", \"viernes\", \"sem2\", \"sem2_ene\", \"sem3_nov\", \"sem4_nov\")]))\n> )\n> fit_garch <- ugarchfit(spec = spec, data = datos$d_TC, solver = \"gosolnp\")\n> \n> \n> \n> This es the set up I'm using in Eviews:\n> \n> equation fit_garch.arch(2,1) d_TC c ar(1) ar(2) jueves viernes sem2 sem2_ene sem3_nov sem4_nov\n> \n> \n> As you can see, they are supposed to be the same model, an ARMA(2,0) with constant term plus some \"external regressors\" in the mean equation, and a GARCH(2,1) models for the variance. But coefficient estimates differ by no small amount.\n> I verified that data are the same (run OLS and got identical results between the softwares).  As a side note, R results does not converge easily, I tried some of the solvers and only \"gosolnp\" and  \"hybrid\" converge.\n> This is my first time using \"rugarch\", so chances are big that there is something wrong in my R set up.\n> \n> Any help will be greatly appreciated.\n> \n> Regards.\n> Manfred E.\n> \n> ________________________________\n> \n> AVISO DE CONFIDENCIALIDAD: La informaci?n contenida en este mensaje es estrictamente confidencial, y est? destinada para uso exclusivo de su destinatario. El BANCO NACIONAL y sus subsidiarias no se hacen responsables por su copia, divulgaci?n o distribuci?n a terceros, y se reserva el derecho de interponer las acciones administrativas y/o judiciales que correspondan por los da?os y perjuicios que su difusi?n no autorizada ocasione.\n> \n>    [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Different random seeds / generators \nSent from my iPhone\n\n> On 24 Jan 2025, at 14:10, Manfred Alonso Esquivel Monge via R-SIG-Finance <r-sig-finance at r-project.org> wrote:\n> \n> ?I'm trying to replic",
+      "thread_id": "thread-69e1613ce6a3",
+      "thread_depth": 1,
+      "month": "2025-01"
+    },
+    {
+      "id": "msg-92485160ddcc",
+      "message_id": "<E592F95D-E1A9-4437-948E-0C5D4580F82A@4dscape.com>",
+      "from_name": "alexios galanos",
+      "from_email_hash": "a96d1f9bc31603cc8b7738f0d9a0b72c41ec7e0b943e1806c497adc2018497a3",
+      "date": "2025-01-24T10:41:00-08:00",
+      "subject": "[R-SIG-Finance] rugarch package vs Eviews cannot get similar results from a model with GARCH errors.",
+      "subject_clean": "rugarch package vs Eviews cannot get similar results from a model with GARCH errors.",
+      "in_reply_to": "<RO2P152MB5139B2836E1F8A6991112896F7E32@RO2P152MB5139.LAMP152.PROD.OUTLOOK.COM>",
+      "references": [
+        "<CO6PR14MB43872B6E9FD6936D513FE0C2F1E32@CO6PR14MB4387.namprd14.prod.outlook.com>",
+        "<RO2P152MB5139B2836E1F8A6991112896F7E32@RO2P152MB5139.LAMP152.PROD.OUTLOOK.COM>"
+      ],
+      "body_plain": "Among other things, Eviews uses backcasting with decay parameter 0.7 for the variance initialization as default (if I remember correctly), whereas\nrugarch uses the unconditional variance (i.e. no exponential decay, but there is an option to do so). Then there are differences in the optimizer, bounds etc, which will be likely magnified the smaller your dataset is.\n\nI also suggest you switch to tsgarch instead. Though it does not have a joint ARMA module included (you just pass the residuals from the ARMA module), it has higher accuracy (see the official benchmark https://cran.r-project.org/web/packages/tsgarch/vignettes/benchmark.html), and is in active enhancement/maintenance mode.\n\nAlexios\n\n\n> On Jan 24, 2025, at 9:30?AM, matheus barroso <matheus_vb at hotmail.com> wrote:\n> \n> Different random seeds / generators \n> Sent from my iPhone\n> \n>> On 24 Jan 2025, at 14:10, Manfred Alonso Esquivel Monge via R-SIG-Finance <r-sig-finance at r-project.org> wrote:\n>> \n>> ?I'm trying to replicate in R some results that I get from an Eviews estimation of a model with GARCH errors. For this, I'm using the  \"rugarch\" package. The problem is that estimated parameters differ by a lot. This is the set up I'm using in R (the data are in an xts object names \"datos\"):\n>> \n>> spec <- ugarchspec(\n>> variance.model = list(model = \"sGARCH\", garchOrder = c(2, 1)),\n>> mean.model = list(armaOrder = c(2, 0), include.mean = TRUE, external.regressors = as.matrix(datos[, c(\"jueves\", \"viernes\", \"sem2\", \"sem2_ene\", \"sem3_nov\", \"sem4_nov\")]))\n>> )\n>> fit_garch <- ugarchfit(spec = spec, data = datos$d_TC, solver = \"gosolnp\")\n>> \n>> \n>> \n>> This es the set up I'm using in Eviews:\n>> \n>> equation fit_garch.arch(2,1) d_TC c ar(1) ar(2) jueves viernes sem2 sem2_ene sem3_nov sem4_nov\n>> \n>> \n>> As you can see, they are supposed to be the same model, an ARMA(2,0) with constant term plus some \"external regressors\" in the mean equation, and a GARCH(2,1) models for the variance. But coefficient estimates differ by no small amount.\n>> I verified that data are the same (run OLS and got identical results between the softwares).  As a side note, R results does not converge easily, I tried some of the solvers and only \"gosolnp\" and  \"hybrid\" converge.\n>> This is my first time using \"rugarch\", so chances are big that there is something wrong in my R set up.\n>> \n>> Any help will be greatly appreciated.\n>> \n>> Regards.\n>> Manfred E.\n>> \n>> ________________________________\n>> \n>> AVISO DE CONFIDENCIALIDAD: La informaci?n contenida en este mensaje es estrictamente confidencial, y est? destinada para uso exclusivo de su destinatario. El BANCO NACIONAL y sus subsidiarias no se hacen responsables por su copia, divulgaci?n o distribuci?n a terceros, y se reserva el derecho de interponer las acciones administrativas y/o judiciales que correspondan por los da?os y perjuicios que su difusi?n no autorizada ocasione.\n>> \n>>   [[alternative HTML version deleted]]\n>> \n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Among other things, Eviews uses backcasting with decay parameter 0.7 for the variance initialization as default (if I remember correctly), whereas\nrugarch uses the unconditional variance (i.e. no expo",
+      "thread_id": "thread-69e1613ce6a3",
+      "thread_depth": 2,
+      "month": "2025-01"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-69e1613ce6a3",
+      "subject": "rugarch package vs Eviews cannot get similar results from a model with GARCH errors.",
+      "message_count": 3,
+      "participants": [
+        "Manfred Alonso Esquivel Monge",
+        "alexios galanos",
+        "matheus barroso"
+      ],
+      "started": "2025-01-24T17:10:28+00:00",
+      "last_reply": "2025-01-24T10:41:00-08:00",
+      "root_message_id": "msg-69e1613ce6a3"
+    }
+  ]
+}

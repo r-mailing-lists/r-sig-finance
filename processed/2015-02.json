@@ -1,0 +1,1061 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2015-02",
+  "messages": [
+    {
+      "id": "msg-1cac21fb2d81",
+      "message_id": "<CAPPM_gQqEzTYasC8gDYzU2exnMSTd1m0GFcbCJvuoB-0+8koQw@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-02-01T07:48:43-06:00",
+      "subject": "[R-SIG-Finance] Signal and Rule question in Quantstrat",
+      "subject_clean": "Signal and Rule question in Quantstrat",
+      "in_reply_to": "<CAO77-6s8qvf5OMYkfATnQ_iLnC+YFTEL=52Nx-Y3HmZJyfHAmw@mail.gmail.com>",
+      "references": [
+        "<CAO77-6s8qvf5OMYkfATnQ_iLnC+YFTEL=52Nx-Y3HmZJyfHAmw@mail.gmail.com>"
+      ],
+      "body_plain": "On Fri, Jan 23, 2015 at 8:49 AM, Isak Engdahl <isak.engdahl at gmail.com> wrote:\n> Dear members,\n>\n> I have a questions how to set up the signals and rules correct for this\n> stategy in Quantstrat.\n>\n> Price must be above SMA=250 and below the 20 line in the Slow Stochastic\n> indicator.\n>\n> The trigger for a buy signal is when the signal line of the stochastic\n> indicator close above the 20 line.\n>\n> Enter trade\n> PRICE > SMA=250\n> Slow Stochastic < 20 and crossing above the 20 line\n>\n> Exit trade\n> PRICE < SMA=250\n> Slow Stoch > 80 and closes below the 80 line\n>\n> The rules and examples can be found here:\n> http://stockcharts.com/public/1107832\n>\n> Here is the code I have come up with now. Please help!\n>\nHelp with what?  You haven't stated any problem.\n\n> //Isak\n>\n> #parameters\n> nFastK <- 5\n> nSlowD <- 1\n> nSMA <- 250\n> buyThresh <- 20\n> sellThresh <- 80\n>\n> ######################################################################################\n> #indicator\n> add.indicator(strategy.st, name=\"stoch\",\n>               arguments=list(HLC=quote(HLC(mktdata)), nFastK=nFastK,\n> nSlowD=nSlowD),\n>               label=\"stoch\")\n>\n> add.indicator(strategy.st, name=\"SMA\",\n>               arguments=list(x=quote(Cl(mktdata)), n=nSMA),\n>               label=\"sma\")\n> ###############################################################################\n> #signals\n> add.signal(strategy.st, name=\"sigComparison\",\n>            arguments=list(columns=c(\"Close\", \"sma\"), relationship=\"gt\"),\n>            label=\"filter\")\n>\n> add.signal(strategy.st, name=\"sigThreshold\",\n>            arguments=list(column=\"stoch\", threshold=buyThresh,\n>                           relationship=\"lt\", cross=FALSE),\n>            label=\"stochLtThresh\")\n>\n> add.signal(strategy.st, name=\"sigAND\",\n>            arguments=list(columns=c(\"filter\", \"stochLtThresh\"), cross=TRUE),\n>            label=\"longEntry\")\n> add.signal(strategy.st, name=\"sigThreshold\",\n>            arguments=list(column=\"stoch\", threshold=sellThresh,\n>                           relationship=\"gt\", cross=TRUE),\n>            label=\"longExit\")\n> ###############################################################################\n> #rules\n>\n> #Long entry rule\n> add.rule(strategy.st, name=\"ruleSignal\",\n>          arguments=list(sigcol=\"longEntry\",\n>                         sigval=TRUE,\n>                         replace=FALSE,\n>                         orderside=\"long\",\n>                         ordertype=\"market\",\n>                         orderqty=100,\n>                         osFUN=\"osFixedDollar\",\n>                         orderset=\"ocolong\"),\n>          type=\"enter\",label=\"LE\")\n>\n> #Long exit rule\n> add.rule(strategy.st, name=\"ruleSignal\",\n>          arguments=list(sigcol=\"longExit\",\n>                         sigval=TRUE,\n>                         replace=FALSE,\n>                         orderside=\"long\",\n>                         ordertype=\"market\",\n>                         orderqty=\"all\",\n>                         orderset=\"ocolong\"),\n>          type=\"exit\",label=\"LX\")\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Fri, Jan 23, 2015 at 8:49 AM, Isak Engdahl <isak.engdahl at gmail.com> wrote:\n> Dear members,\n>\n> I have a questions how to set up the signals and rules correct for this\n> stategy in Quantstrat.\n>\n",
+      "thread_id": "thread-1cac21fb2d81",
+      "thread_depth": 0,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-aea37fdfe77a",
+      "message_id": "<CAK2H+ed_zHOQJ3=6W_2TfD1=sXZn4z5PPLjPz16w6+hquzDAxw@mail.gmail.com>",
+      "from_name": "Mark Knecht",
+      "from_email_hash": "60c26093da6ef493629140d820b18c224125bb61884589ce4143ff939051ea92",
+      "date": "2015-02-01T06:20:13-08:00",
+      "subject": "[R-SIG-Finance] Signal and Rule question in Quantstrat",
+      "subject_clean": "Signal and Rule question in Quantstrat",
+      "in_reply_to": "<CAPPM_gQqEzTYasC8gDYzU2exnMSTd1m0GFcbCJvuoB-0+8koQw@mail.gmail.com>",
+      "references": [
+        "<CAO77-6s8qvf5OMYkfATnQ_iLnC+YFTEL=52Nx-Y3HmZJyfHAmw@mail.gmail.com>",
+        "<CAPPM_gQqEzTYasC8gDYzU2exnMSTd1m0GFcbCJvuoB-0+8koQw@mail.gmail.com>"
+      ],
+      "body_plain": "On Sun, Feb 1, 2015 at 5:48 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> On Fri, Jan 23, 2015 at 8:49 AM, Isak Engdahl <isak.engdahl at gmail.com> wrote:\n>> Dear members,\n>>\n>> I have a questions how to set up the signals and rules correct for this\n>> stategy in Quantstrat.\n>>\n>> Price must be above SMA=250 and below the 20 line in the Slow Stochastic\n>> indicator.\n>>\n>> The trigger for a buy signal is when the signal line of the stochastic\n>> indicator close above the 20 line.\n>>\n>> Enter trade\n>> PRICE > SMA=250\n>> Slow Stochastic < 20 and crossing above the 20 line\n>>\n>> Exit trade\n>> PRICE < SMA=250\n>> Slow Stoch > 80 and closes below the 80 line\n>>\n>> The rules and examples can be found here:\n>> http://stockcharts.com/public/1107832\n>>\n>> Here is the code I have come up with now. Please help!\n>>\n> Help with what?  You haven't stated any problem.\n>\n\nJoshua,\n   I think Isak provided code and asked if it works, or what he has to\ndo to make it work. It didn't seem a wholly unreasonable question. (to\nme...)\nMark\n\n\n>> //Isak\n>>\n>> #parameters\n>> nFastK <- 5\n>> nSlowD <- 1\n>> nSMA <- 250\n>> buyThresh <- 20\n>> sellThresh <- 80\n>>\n>> ######################################################################################\n>> #indicator\n>> add.indicator(strategy.st, name=\"stoch\",\n>>               arguments=list(HLC=quote(HLC(mktdata)), nFastK=nFastK,\n>> nSlowD=nSlowD),\n>>               label=\"stoch\")\n>>\n>> add.indicator(strategy.st, name=\"SMA\",\n>>               arguments=list(x=quote(Cl(mktdata)), n=nSMA),\n>>               label=\"sma\")\n>> ###############################################################################\n>> #signals\n>> add.signal(strategy.st, name=\"sigComparison\",\n>>            arguments=list(columns=c(\"Close\", \"sma\"), relationship=\"gt\"),\n>>            label=\"filter\")\n>>\n>> add.signal(strategy.st, name=\"sigThreshold\",\n>>            arguments=list(column=\"stoch\", threshold=buyThresh,\n>>                           relationship=\"lt\", cross=FALSE),\n>>            label=\"stochLtThresh\")\n>>\n>> add.signal(strategy.st, name=\"sigAND\",\n>>            arguments=list(columns=c(\"filter\", \"stochLtThresh\"), cross=TRUE),\n>>            label=\"longEntry\")\n>> add.signal(strategy.st, name=\"sigThreshold\",\n>>            arguments=list(column=\"stoch\", threshold=sellThresh,\n>>                           relationship=\"gt\", cross=TRUE),\n>>            label=\"longExit\")\n>> ###############################################################################\n>> #rules\n>>\n>> #Long entry rule\n>> add.rule(strategy.st, name=\"ruleSignal\",\n>>          arguments=list(sigcol=\"longEntry\",\n>>                         sigval=TRUE,\n>>                         replace=FALSE,\n>>                         orderside=\"long\",\n>>                         ordertype=\"market\",\n>>                         orderqty=100,\n>>                         osFUN=\"osFixedDollar\",\n>>                         orderset=\"ocolong\"),\n>>          type=\"enter\",label=\"LE\")\n>>\n>> #Long exit rule\n>> add.rule(strategy.st, name=\"ruleSignal\",\n>>          arguments=list(sigcol=\"longExit\",\n>>                         sigval=TRUE,\n>>                         replace=FALSE,\n>>                         orderside=\"long\",\n>>                         ordertype=\"market\",\n>>                         orderqty=\"all\",\n>>                         orderset=\"ocolong\"),\n>>          type=\"exit\",label=\"LX\")\n>>\n>>         [[alternative HTML version deleted]]\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n>\n>\n>\n> --\n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "On Sun, Feb 1, 2015 at 5:48 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> On Fri, Jan 23, 2015 at 8:49 AM, Isak Engdahl <isak.engdahl at gmail.com> wrote:\n>> Dear members,\n>>\n>> I have a que",
+      "thread_id": "thread-1cac21fb2d81",
+      "thread_depth": 1,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-fb9b07865190",
+      "message_id": "<CAPPM_gRLJTcOMJUGUY9Bb9Ez0Yh_KPpjJRLAZc8m4eeK1yuy_w@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-02-01T08:31:55-06:00",
+      "subject": "[R-SIG-Finance] Signal and Rule question in Quantstrat",
+      "subject_clean": "Signal and Rule question in Quantstrat",
+      "in_reply_to": "<CAK2H+ed_zHOQJ3=6W_2TfD1=sXZn4z5PPLjPz16w6+hquzDAxw@mail.gmail.com>",
+      "references": [
+        "<CAO77-6s8qvf5OMYkfATnQ_iLnC+YFTEL=52Nx-Y3HmZJyfHAmw@mail.gmail.com>",
+        "<CAPPM_gQqEzTYasC8gDYzU2exnMSTd1m0GFcbCJvuoB-0+8koQw@mail.gmail.com>",
+        "<CAK2H+ed_zHOQJ3=6W_2TfD1=sXZn4z5PPLjPz16w6+hquzDAxw@mail.gmail.com>"
+      ],
+      "body_plain": "On Sun, Feb 1, 2015 at 8:20 AM, Mark Knecht <markknecht at gmail.com> wrote:\n> On Sun, Feb 1, 2015 at 5:48 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n>> On Fri, Jan 23, 2015 at 8:49 AM, Isak Engdahl <isak.engdahl at gmail.com> wrote:\n>>> Dear members,\n>>>\n>>> I have a questions how to set up the signals and rules correct for this\n>>> stategy in Quantstrat.\n>>>\n>>> Price must be above SMA=250 and below the 20 line in the Slow Stochastic\n>>> indicator.\n>>>\n>>> The trigger for a buy signal is when the signal line of the stochastic\n>>> indicator close above the 20 line.\n>>>\n>>> Enter trade\n>>> PRICE > SMA=250\n>>> Slow Stochastic < 20 and crossing above the 20 line\n>>>\n>>> Exit trade\n>>> PRICE < SMA=250\n>>> Slow Stoch > 80 and closes below the 80 line\n>>>\n>>> The rules and examples can be found here:\n>>> http://stockcharts.com/public/1107832\n>>>\n>>> Here is the code I have come up with now. Please help!\n>>>\n>> Help with what?  You haven't stated any problem.\n>>\n>\n> Joshua,\n>    I think Isak provided code and asked if it works, or what he has to\n> do to make it work. It didn't seem a wholly unreasonable question. (to\n> me...)\n> Mark\n>\nI don't know how to answer \"does this code work?\"  It doesn't do much.\nIt just defines a strategy, some indicators, signals, and rules.  I'm\nnot suggesting it's a wholly unreasonable question; but I doubt it's\ngoing to result in anyone providing help to Isak.\n\nI suspect most people are not going to take the time to run this\nstrategy, then ensure he set it up correctly, and make any necessary\nfixes.  In short, Isak needs to put in more effort and come back when\nhe has a more specific question.\n\n>\n>>> //Isak\n>>>\n>>> #parameters\n>>> nFastK <- 5\n>>> nSlowD <- 1\n>>> nSMA <- 250\n>>> buyThresh <- 20\n>>> sellThresh <- 80\n>>>\n>>> ######################################################################################\n>>> #indicator\n>>> add.indicator(strategy.st, name=\"stoch\",\n>>>               arguments=list(HLC=quote(HLC(mktdata)), nFastK=nFastK,\n>>> nSlowD=nSlowD),\n>>>               label=\"stoch\")\n>>>\n>>> add.indicator(strategy.st, name=\"SMA\",\n>>>               arguments=list(x=quote(Cl(mktdata)), n=nSMA),\n>>>               label=\"sma\")\n>>> ###############################################################################\n>>> #signals\n>>> add.signal(strategy.st, name=\"sigComparison\",\n>>>            arguments=list(columns=c(\"Close\", \"sma\"), relationship=\"gt\"),\n>>>            label=\"filter\")\n>>>\n>>> add.signal(strategy.st, name=\"sigThreshold\",\n>>>            arguments=list(column=\"stoch\", threshold=buyThresh,\n>>>                           relationship=\"lt\", cross=FALSE),\n>>>            label=\"stochLtThresh\")\n>>>\n>>> add.signal(strategy.st, name=\"sigAND\",\n>>>            arguments=list(columns=c(\"filter\", \"stochLtThresh\"), cross=TRUE),\n>>>            label=\"longEntry\")\n>>> add.signal(strategy.st, name=\"sigThreshold\",\n>>>            arguments=list(column=\"stoch\", threshold=sellThresh,\n>>>                           relationship=\"gt\", cross=TRUE),\n>>>            label=\"longExit\")\n>>> ###############################################################################\n>>> #rules\n>>>\n>>> #Long entry rule\n>>> add.rule(strategy.st, name=\"ruleSignal\",\n>>>          arguments=list(sigcol=\"longEntry\",\n>>>                         sigval=TRUE,\n>>>                         replace=FALSE,\n>>>                         orderside=\"long\",\n>>>                         ordertype=\"market\",\n>>>                         orderqty=100,\n>>>                         osFUN=\"osFixedDollar\",\n>>>                         orderset=\"ocolong\"),\n>>>          type=\"enter\",label=\"LE\")\n>>>\n>>> #Long exit rule\n>>> add.rule(strategy.st, name=\"ruleSignal\",\n>>>          arguments=list(sigcol=\"longExit\",\n>>>                         sigval=TRUE,\n>>>                         replace=FALSE,\n>>>                         orderside=\"long\",\n>>>                         ordertype=\"market\",\n>>>                         orderqty=\"all\",\n>>>                         orderset=\"ocolong\"),\n>>>          type=\"exit\",label=\"LX\")\n>>>\n>>>         [[alternative HTML version deleted]]\n>>>\n>>> _______________________________________________\n>>> R-SIG-Finance at r-project.org mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>> -- Also note that this is not the r-help list where general R questions should go.\n>>\n>>\n>>\n>> --\n>> Joshua Ulrich  |  about.me/joshuaulrich\n>> FOSS Trading  |  www.fosstrading.com\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Sun, Feb 1, 2015 at 8:20 AM, Mark Knecht <markknecht at gmail.com> wrote:\n> On Sun, Feb 1, 2015 at 5:48 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n>> On Fri, Jan 23, 2015 at 8:49 AM, Isa",
+      "thread_id": "thread-1cac21fb2d81",
+      "thread_depth": 2,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-3157122f5a50",
+      "message_id": "<CAK2H+edx=V2dpj0bY3YJTCJe81ZA+yC8wmxofjS2=doVRm3VSw@mail.gmail.com>",
+      "from_name": "Mark Knecht",
+      "from_email_hash": "60c26093da6ef493629140d820b18c224125bb61884589ce4143ff939051ea92",
+      "date": "2015-02-01T07:12:12-08:00",
+      "subject": "[R-SIG-Finance] Signal and Rule question in Quantstrat",
+      "subject_clean": "Signal and Rule question in Quantstrat",
+      "in_reply_to": "<CAPPM_gRLJTcOMJUGUY9Bb9Ez0Yh_KPpjJRLAZc8m4eeK1yuy_w@mail.gmail.com>",
+      "references": [
+        "<CAO77-6s8qvf5OMYkfATnQ_iLnC+YFTEL=52Nx-Y3HmZJyfHAmw@mail.gmail.com>",
+        "<CAPPM_gQqEzTYasC8gDYzU2exnMSTd1m0GFcbCJvuoB-0+8koQw@mail.gmail.com>",
+        "<CAK2H+ed_zHOQJ3=6W_2TfD1=sXZn4z5PPLjPz16w6+hquzDAxw@mail.gmail.com>",
+        "<CAPPM_gRLJTcOMJUGUY9Bb9Ez0Yh_KPpjJRLAZc8m4eeK1yuy_w@mail.gmail.com>"
+      ],
+      "body_plain": "On Sun, Feb 1, 2015 at 6:31 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> On Sun, Feb 1, 2015 at 8:20 AM, Mark Knecht <markknecht at gmail.com> wrote:\n>> On Sun, Feb 1, 2015 at 5:48 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n>>> On Fri, Jan 23, 2015 at 8:49 AM, Isak Engdahl <isak.engdahl at gmail.com> wrote:\n>>>> Dear members,\n>>>>\n>>>> I have a questions how to set up the signals and rules correct for this\n>>>> stategy in Quantstrat.\n>>>>\n>>>> Price must be above SMA=250 and below the 20 line in the Slow Stochastic\n>>>> indicator.\n>>>>\n>>>> The trigger for a buy signal is when the signal line of the stochastic\n>>>> indicator close above the 20 line.\n>>>>\n>>>> Enter trade\n>>>> PRICE > SMA=250\n>>>> Slow Stochastic < 20 and crossing above the 20 line\n>>>>\n>>>> Exit trade\n>>>> PRICE < SMA=250\n>>>> Slow Stoch > 80 and closes below the 80 line\n>>>>\n>>>> The rules and examples can be found here:\n>>>> http://stockcharts.com/public/1107832\n>>>>\n>>>> Here is the code I have come up with now. Please help!\n>>>>\n>>> Help with what?  You haven't stated any problem.\n>>>\n>>\n>> Joshua,\n>>    I think Isak provided code and asked if it works, or what he has to\n>> do to make it work. It didn't seem a wholly unreasonable question. (to\n>> me...)\n>> Mark\n>>\n> I don't know how to answer \"does this code work?\"  It doesn't do much.\n> It just defines a strategy, some indicators, signals, and rules.  I'm\n> not suggesting it's a wholly unreasonable question; but I doubt it's\n> going to result in anyone providing help to Isak.\n>\n> I suspect most people are not going to take the time to run this\n> strategy, then ensure he set it up correctly, and make any necessary\n> fixes.  In short, Isak needs to put in more effort and come back when\n> he has a more specific question.\n>\n\nOK, I see your point.\n\nI'll likely go away and be quiet now but without running Isak's code\nmyself I will say I've been quiet on this list for months now as I\npretty much quit trying to understand how to do what I think is at the\nroot of Isak's question. (As I read it he's saying 'How to I combine\nmultiple indicators into a singlerule?') It's not hard in quantstrat\nto write indicators, and it's not difficult to create a strategy based\non a single indicator - there are lots of provided examples. However,\nas I remember it from months and months ago (I could be wrong, it\nmight have change, I don't know as I haven't looked) it seemed quite\ndifficult to turn groups of indicators into executable rules, such as\nhis entry rule:\n\nPRICE > SMA=250\nSlow Stochastic < 20 and crossing above the 20 line\n\nso maybe you can point him to something that addresses just that issue.\n\nFor awhile I started creating custom indicator functions outside of\nquantstrat such that my 'custom indicator' was pretty much the whole\nrule so I didn't have to deal with figuring this out. To me it felt\nlike it was mostly a documentation/example file question but I got\ntired of being a squeeky wheel and stopped working with quantstrat all\ntogether. (I do this trading stuff for fun. To me it wasn't fun. I\nbought a MatLab license and I have fun but I keep coming back to R\nsaying 'Can it be more fun now?')\n\nAnyway, I totally get your point. His code won't run because (I think)\nhe cannot yet figure out how write a rule using multiple indicators\nand in the general case completely inside of quantstrat neither could\nI.\n\nFOR CLARITY: I'm not complaining. OpenSource is what it is, it\nwouldn't be there without folks like you and the other developers, and\nthen we user types all make different choices. That's really cool. I'm\nonly writing this for my own reasons to say why I haven't posted in\nmonths. That said I may be back as my TradeStation/MatLab environment\nis working pretty well and I'd like to look at using the R server to\naugment things a bit more.\n\nCheers,\nMark",
+      "body_snippet": "On Sun, Feb 1, 2015 at 6:31 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> On Sun, Feb 1, 2015 at 8:20 AM, Mark Knecht <markknecht at gmail.com> wrote:\n>> On Sun, Feb 1, 2015 at 5:48 AM, Josh",
+      "thread_id": "thread-1cac21fb2d81",
+      "thread_depth": 3,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-fa33a4f18fe3",
+      "message_id": "<CA+oJuEFk1KZkvorDKvXWaJ8F65FwnwnaJ+9kw5eGW-v=hHYqig@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "82540aa84df90b083b58f5752a77274af680540119bfecc0c0436c59ddd13e5c",
+      "date": "2015-02-01T10:25:00-05:00",
+      "subject": "[R-SIG-Finance] Signal and Rule question in Quantstrat",
+      "subject_clean": "Signal and Rule question in Quantstrat",
+      "in_reply_to": "<CAK2H+edx=V2dpj0bY3YJTCJe81ZA+yC8wmxofjS2=doVRm3VSw@mail.gmail.com>",
+      "references": [
+        "<CAO77-6s8qvf5OMYkfATnQ_iLnC+YFTEL=52Nx-Y3HmZJyfHAmw@mail.gmail.com>",
+        "<CAPPM_gQqEzTYasC8gDYzU2exnMSTd1m0GFcbCJvuoB-0+8koQw@mail.gmail.com>",
+        "<CAK2H+ed_zHOQJ3=6W_2TfD1=sXZn4z5PPLjPz16w6+hquzDAxw@mail.gmail.com>",
+        "<CAPPM_gRLJTcOMJUGUY9Bb9Ez0Yh_KPpjJRLAZc8m4eeK1yuy_w@mail.gmail.com>",
+        "<CAK2H+edx=V2dpj0bY3YJTCJe81ZA+yC8wmxofjS2=doVRm3VSw@mail.gmail.com>"
+      ],
+      "body_plain": "Have you all forgotten about my sigAND function?\n\nOn Sun, Feb 1, 2015 at 10:12 AM, Mark Knecht <markknecht at gmail.com> wrote:\n\n> On Sun, Feb 1, 2015 at 6:31 AM, Joshua Ulrich <josh.m.ulrich at gmail.com>\n> wrote:\n> > On Sun, Feb 1, 2015 at 8:20 AM, Mark Knecht <markknecht at gmail.com>\n> wrote:\n> >> On Sun, Feb 1, 2015 at 5:48 AM, Joshua Ulrich <josh.m.ulrich at gmail.com>\n> wrote:\n> >>> On Fri, Jan 23, 2015 at 8:49 AM, Isak Engdahl <isak.engdahl at gmail.com>\n> wrote:\n> >>>> Dear members,\n> >>>>\n> >>>> I have a questions how to set up the signals and rules correct for\n> this\n> >>>> stategy in Quantstrat.\n> >>>>\n> >>>> Price must be above SMA=250 and below the 20 line in the Slow\n> Stochastic\n> >>>> indicator.\n> >>>>\n> >>>> The trigger for a buy signal is when the signal line of the stochastic\n> >>>> indicator close above the 20 line.\n> >>>>\n> >>>> Enter trade\n> >>>> PRICE > SMA=250\n> >>>> Slow Stochastic < 20 and crossing above the 20 line\n> >>>>\n> >>>> Exit trade\n> >>>> PRICE < SMA=250\n> >>>> Slow Stoch > 80 and closes below the 80 line\n> >>>>\n> >>>> The rules and examples can be found here:\n> >>>> http://stockcharts.com/public/1107832\n> >>>>\n> >>>> Here is the code I have come up with now. Please help!\n> >>>>\n> >>> Help with what?  You haven't stated any problem.\n> >>>\n> >>\n> >> Joshua,\n> >>    I think Isak provided code and asked if it works, or what he has to\n> >> do to make it work. It didn't seem a wholly unreasonable question. (to\n> >> me...)\n> >> Mark\n> >>\n> > I don't know how to answer \"does this code work?\"  It doesn't do much.\n> > It just defines a strategy, some indicators, signals, and rules.  I'm\n> > not suggesting it's a wholly unreasonable question; but I doubt it's\n> > going to result in anyone providing help to Isak.\n> >\n> > I suspect most people are not going to take the time to run this\n> > strategy, then ensure he set it up correctly, and make any necessary\n> > fixes.  In short, Isak needs to put in more effort and come back when\n> > he has a more specific question.\n> >\n>\n> OK, I see your point.\n>\n> I'll likely go away and be quiet now but without running Isak's code\n> myself I will say I've been quiet on this list for months now as I\n> pretty much quit trying to understand how to do what I think is at the\n> root of Isak's question. (As I read it he's saying 'How to I combine\n> multiple indicators into a singlerule?') It's not hard in quantstrat\n> to write indicators, and it's not difficult to create a strategy based\n> on a single indicator - there are lots of provided examples. However,\n> as I remember it from months and months ago (I could be wrong, it\n> might have change, I don't know as I haven't looked) it seemed quite\n> difficult to turn groups of indicators into executable rules, such as\n> his entry rule:\n>\n> PRICE > SMA=250\n> Slow Stochastic < 20 and crossing above the 20 line\n>\n> so maybe you can point him to something that addresses just that issue.\n>\n> For awhile I started creating custom indicator functions outside of\n> quantstrat such that my 'custom indicator' was pretty much the whole\n> rule so I didn't have to deal with figuring this out. To me it felt\n> like it was mostly a documentation/example file question but I got\n> tired of being a squeeky wheel and stopped working with quantstrat all\n> together. (I do this trading stuff for fun. To me it wasn't fun. I\n> bought a MatLab license and I have fun but I keep coming back to R\n> saying 'Can it be more fun now?')\n>\n> Anyway, I totally get your point. His code won't run because (I think)\n> he cannot yet figure out how write a rule using multiple indicators\n> and in the general case completely inside of quantstrat neither could\n> I.\n>\n> FOR CLARITY: I'm not complaining. OpenSource is what it is, it\n> wouldn't be there without folks like you and the other developers, and\n> then we user types all make different choices. That's really cool. I'm\n> only writing this for my own reasons to say why I haven't posted in\n> months. That said I may be back as my TradeStation/MatLab environment\n> is working pretty well and I'd like to look at using the R server to\n> augment things a bit more.\n>\n> Cheers,\n> Mark\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Have you all forgotten about my sigAND function?\n\nOn Sun, Feb 1, 2015 at 10:12 AM, Mark Knecht <markknecht at gmail.com> wrote:\n\n> On Sun, Feb 1, 2015 at 6:31 AM, Joshua Ulrich <josh.m.ulrich at gmail",
+      "thread_id": "thread-1cac21fb2d81",
+      "thread_depth": 4,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-6022b38c1464",
+      "message_id": "<CAPPM_gQdVsP8p1_XxpT8QgOanryTwCxwRU6p_7k20jjep1ZgnA@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-02-01T09:33:12-06:00",
+      "subject": "[R-SIG-Finance] Signal and Rule question in Quantstrat",
+      "subject_clean": "Signal and Rule question in Quantstrat",
+      "in_reply_to": "<CA+oJuEFk1KZkvorDKvXWaJ8F65FwnwnaJ+9kw5eGW-v=hHYqig@mail.gmail.com>",
+      "references": [
+        "<CAO77-6s8qvf5OMYkfATnQ_iLnC+YFTEL=52Nx-Y3HmZJyfHAmw@mail.gmail.com>",
+        "<CAPPM_gQqEzTYasC8gDYzU2exnMSTd1m0GFcbCJvuoB-0+8koQw@mail.gmail.com>",
+        "<CAK2H+ed_zHOQJ3=6W_2TfD1=sXZn4z5PPLjPz16w6+hquzDAxw@mail.gmail.com>",
+        "<CAPPM_gRLJTcOMJUGUY9Bb9Ez0Yh_KPpjJRLAZc8m4eeK1yuy_w@mail.gmail.com>",
+        "<CAK2H+edx=V2dpj0bY3YJTCJe81ZA+yC8wmxofjS2=doVRm3VSw@mail.gmail.com>",
+        "<CA+oJuEFk1KZkvorDKvXWaJ8F65FwnwnaJ+9kw5eGW-v=hHYqig@mail.gmail.com>"
+      ],
+      "body_plain": "On Feb 1, 2015 9:25 AM, \"Ilya Kipnis\" <ilya.kipnis at gmail.com> wrote:\n>\n> Have you all forgotten about my sigAND function?\n>\nIsak used it. Similar functionality can be achieved with sigFormula.\n\n> On Sun, Feb 1, 2015 at 10:12 AM, Mark Knecht <markknecht at gmail.com> wrote:\n>>\n>> On Sun, Feb 1, 2015 at 6:31 AM, Joshua Ulrich <josh.m.ulrich at gmail.com>\nwrote:\n>> > On Sun, Feb 1, 2015 at 8:20 AM, Mark Knecht <markknecht at gmail.com>\nwrote:\n>> >> On Sun, Feb 1, 2015 at 5:48 AM, Joshua Ulrich <josh.m.ulrich at gmail.com>\nwrote:\n>> >>> On Fri, Jan 23, 2015 at 8:49 AM, Isak Engdahl <isak.engdahl at gmail.com>\nwrote:\n>> >>>> Dear members,\n>> >>>>\n>> >>>> I have a questions how to set up the signals and rules correct for\nthis\n>> >>>> stategy in Quantstrat.\n>> >>>>\n>> >>>> Price must be above SMA=250 and below the 20 line in the Slow\nStochastic\n>> >>>> indicator.\n>> >>>>\n>> >>>> The trigger for a buy signal is when the signal line of the\nstochastic\n>> >>>> indicator close above the 20 line.\n>> >>>>\n>> >>>> Enter trade\n>> >>>> PRICE > SMA=250\n>> >>>> Slow Stochastic < 20 and crossing above the 20 line\n>> >>>>\n>> >>>> Exit trade\n>> >>>> PRICE < SMA=250\n>> >>>> Slow Stoch > 80 and closes below the 80 line\n>> >>>>\n>> >>>> The rules and examples can be found here:\n>> >>>> http://stockcharts.com/public/1107832\n>> >>>>\n>> >>>> Here is the code I have come up with now. Please help!\n>> >>>>\n>> >>> Help with what?  You haven't stated any problem.\n>> >>>\n>> >>\n>> >> Joshua,\n>> >>    I think Isak provided code and asked if it works, or what he has to\n>> >> do to make it work. It didn't seem a wholly unreasonable question. (to\n>> >> me...)\n>> >> Mark\n>> >>\n>> > I don't know how to answer \"does this code work?\"  It doesn't do much.\n>> > It just defines a strategy, some indicators, signals, and rules.  I'm\n>> > not suggesting it's a wholly unreasonable question; but I doubt it's\n>> > going to result in anyone providing help to Isak.\n>> >\n>> > I suspect most people are not going to take the time to run this\n>> > strategy, then ensure he set it up correctly, and make any necessary\n>> > fixes.  In short, Isak needs to put in more effort and come back when\n>> > he has a more specific question.\n>> >\n>>\n>> OK, I see your point.\n>>\n>> I'll likely go away and be quiet now but without running Isak's code\n>> myself I will say I've been quiet on this list for months now as I\n>> pretty much quit trying to understand how to do what I think is at the\n>> root of Isak's question. (As I read it he's saying 'How to I combine\n>> multiple indicators into a singlerule?') It's not hard in quantstrat\n>> to write indicators, and it's not difficult to create a strategy based\n>> on a single indicator - there are lots of provided examples. However,\n>> as I remember it from months and months ago (I could be wrong, it\n>> might have change, I don't know as I haven't looked) it seemed quite\n>> difficult to turn groups of indicators into executable rules, such as\n>> his entry rule:\n>>\n>> PRICE > SMA=250\n>> Slow Stochastic < 20 and crossing above the 20 line\n>>\n>> so maybe you can point him to something that addresses just that issue.\n>>\n>> For awhile I started creating custom indicator functions outside of\n>> quantstrat such that my 'custom indicator' was pretty much the whole\n>> rule so I didn't have to deal with figuring this out. To me it felt\n>> like it was mostly a documentation/example file question but I got\n>> tired of being a squeeky wheel and stopped working with quantstrat all\n>> together. (I do this trading stuff for fun. To me it wasn't fun. I\n>> bought a MatLab license and I have fun but I keep coming back to R\n>> saying 'Can it be more fun now?')\n>>\n>> Anyway, I totally get your point. His code won't run because (I think)\n>> he cannot yet figure out how write a rule using multiple indicators\n>> and in the general case completely inside of quantstrat neither could\n>> I.\n>>\n>> FOR CLARITY: I'm not complaining. OpenSource is what it is, it\n>> wouldn't be there without folks like you and the other developers, and\n>> then we user types all make different choices. That's really cool. I'm\n>> only writing this for my own reasons to say why I haven't posted in\n>> months. That said I may be back as my TradeStation/MatLab environment\n>> is working pretty well and I'd like to look at using the R server to\n>> augment things a bit more.\n>>\n>> Cheers,\n>> Mark\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\nshould go.\n>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "On Feb 1, 2015 9:25 AM, \"Ilya Kipnis\" <ilya.kipnis at gmail.com> wrote:\n>\n> Have you all forgotten about my sigAND function?\n>\nIsak used it. Similar functionality can be achieved with sigFormula.\n\n> O",
+      "thread_id": "thread-1cac21fb2d81",
+      "thread_depth": 5,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-0a41ee0f358b",
+      "message_id": "<54CE5749.9070005@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2015-02-01T10:41:45-06:00",
+      "subject": "[R-SIG-Finance] Signal and Rule question in Quantstrat",
+      "subject_clean": "Signal and Rule question in Quantstrat",
+      "in_reply_to": "<CAK2H+edx=V2dpj0bY3YJTCJe81ZA+yC8wmxofjS2=doVRm3VSw@mail.gmail.com>",
+      "references": [
+        "<CAO77-6s8qvf5OMYkfATnQ_iLnC+YFTEL=52Nx-Y3HmZJyfHAmw@mail.gmail.com>",
+        "<CAPPM_gQqEzTYasC8gDYzU2exnMSTd1m0GFcbCJvuoB-0+8koQw@mail.gmail.com>",
+        "<CAK2H+ed_zHOQJ3=6W_2TfD1=sXZn4z5PPLjPz16w6+hquzDAxw@mail.gmail.com>",
+        "<CAPPM_gRLJTcOMJUGUY9Bb9Ez0Yh_KPpjJRLAZc8m4eeK1yuy_w@mail.gmail.com>",
+        "<CAK2H+edx=V2dpj0bY3YJTCJe81ZA+yC8wmxofjS2=doVRm3VSw@mail.gmail.com>"
+      ],
+      "body_plain": "On 02/01/2015 09:12 AM, Mark Knecht wrote:\n> (As I read it he's saying 'How to I combine\n> multiple indicators into a singlerule?') It's not hard in quantstrat\n> to write indicators, and it's not difficult to create a strategy based\n> on a single indicator - there are lots of provided examples. However,\n> as I remember it from months and months ago (I could be wrong, it\n> might have change, I don't know as I haven't looked) it seemed quite\n> difficult to turn groups of indicators into executable rules, such as\n> his entry rule:\n>\n> PRICE > SMA=250\n> Slow Stochastic < 20 and crossing above the 20 line\n>\n> so maybe you can point him to something that addresses just that issue.\n\nI think that this may make more sense if restated a bit\n\nMultiple indicators have been defined, let's say that their labels are \nset as:\n\npc.gt.sma250 # for PRICE > SMA=250\nstoch.lt.20 # Slow Stochastic < 20\nstock.cross.20 # Slow Stochastic crossing above the 20 line\n\nFirst, I'm not sure how condition Slow Stochastic < 20 and condition \nSlow Stochastic crossing above the 20 line can both be true. Let's skip \nthat for now.\n\nI believe that what you would be looking for is a sigFormula *signal*. \nThe rule will likely be ruleSignal, as usual.\n\nThe formula argument for sigFormula in the above case might be stated:\n\nformula='pc.gt.sma250 && stock.lt.20 && stoch.cross.20'\n\nThe rest of the strategy should be pretty straightforward stuff, only \nthe sigFormula bit seems to confuse people.\n\nIf I have time in the next several days, I'll try to create a demo that \ndoes this (or we would gladly accept a demo from someone else that does \nthis).\n\nRegards,\n\nBrian\n\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
+      "body_snippet": "On 02/01/2015 09:12 AM, Mark Knecht wrote:\n> (As I read it he's saying 'How to I combine\n> multiple indicators into a singlerule?') It's not hard in quantstrat\n> to write indicators, and it's not diff",
+      "thread_id": "thread-1cac21fb2d81",
+      "thread_depth": 4,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-371bdb5f26b4",
+      "message_id": "<CAO77-6u2wUdZ4uBmNosNqE0QUQBKhYsj_2kChUVA292do+QAyg@mail.gmail.com>",
+      "from_name": "Isak Engdahl",
+      "from_email_hash": "b750241ba0dea48bf309d6d5fca04249cd2c7c0f35193914a594c292680d6412",
+      "date": "2015-02-01T17:25:32-05:00",
+      "subject": "[R-SIG-Finance] Signal and Rule question in Quantstrat",
+      "subject_clean": "Signal and Rule question in Quantstrat",
+      "in_reply_to": "<CA+oJuEFk1KZkvorDKvXWaJ8F65FwnwnaJ+9kw5eGW-v=hHYqig@mail.gmail.com>",
+      "references": [
+        "<CAO77-6s8qvf5OMYkfATnQ_iLnC+YFTEL=52Nx-Y3HmZJyfHAmw@mail.gmail.com>",
+        "<CAPPM_gQqEzTYasC8gDYzU2exnMSTd1m0GFcbCJvuoB-0+8koQw@mail.gmail.com>",
+        "<CAK2H+ed_zHOQJ3=6W_2TfD1=sXZn4z5PPLjPz16w6+hquzDAxw@mail.gmail.com>",
+        "<CAPPM_gRLJTcOMJUGUY9Bb9Ez0Yh_KPpjJRLAZc8m4eeK1yuy_w@mail.gmail.com>",
+        "<CAK2H+edx=V2dpj0bY3YJTCJe81ZA+yC8wmxofjS2=doVRm3VSw@mail.gmail.com>",
+        "<CA+oJuEFk1KZkvorDKvXWaJ8F65FwnwnaJ+9kw5eGW-v=hHYqig@mail.gmail.com>"
+      ],
+      "body_plain": "Dear all,\n\nYes i'm trying to use function SigAnd, but I think I have the logic wrong...\n\nHere are the rules:\n1. Price > SMA 250\n2. Stochastic signal line must be below 20 and cross above this level. Then\nbuy.\n\nHow do I write such a rule in quantstrat?\n\nKind Regards,\nIsak Engdahl\n\n\n\nOn Sunday, February 1, 2015, Ilya Kipnis <ilya.kipnis at gmail.com> wrote:\n\n> Have you all forgotten about my sigAND function?\n>\n> On Sun, Feb 1, 2015 at 10:12 AM, Mark Knecht <markknecht at gmail.com\n> <javascript:_e(%7B%7D,'cvml','markknecht at gmail.com');>> wrote:\n>\n>> On Sun, Feb 1, 2015 at 6:31 AM, Joshua Ulrich <josh.m.ulrich at gmail.com\n>> <javascript:_e(%7B%7D,'cvml','josh.m.ulrich at gmail.com');>> wrote:\n>> > On Sun, Feb 1, 2015 at 8:20 AM, Mark Knecht <markknecht at gmail.com\n>> <javascript:_e(%7B%7D,'cvml','markknecht at gmail.com');>> wrote:\n>> >> On Sun, Feb 1, 2015 at 5:48 AM, Joshua Ulrich <josh.m.ulrich at gmail.com\n>> <javascript:_e(%7B%7D,'cvml','josh.m.ulrich at gmail.com');>> wrote:\n>> >>> On Fri, Jan 23, 2015 at 8:49 AM, Isak Engdahl <isak.engdahl at gmail.com\n>> <javascript:_e(%7B%7D,'cvml','isak.engdahl at gmail.com');>> wrote:\n>> >>>> Dear members,\n>> >>>>\n>> >>>> I have a questions how to set up the signals and rules correct for\n>> this\n>> >>>> stategy in Quantstrat.\n>> >>>>\n>> >>>> Price must be above SMA=250 and below the 20 line in the Slow\n>> Stochastic\n>> >>>> indicator.\n>> >>>>\n>> >>>> The trigger for a buy signal is when the signal line of the\n>> stochastic\n>> >>>> indicator close above the 20 line.\n>> >>>>\n>> >>>> Enter trade\n>> >>>> PRICE > SMA=250\n>> >>>> Slow Stochastic < 20 and crossing above the 20 line\n>> >>>>\n>> >>>> Exit trade\n>> >>>> PRICE < SMA=250\n>> >>>> Slow Stoch > 80 and closes below the 80 line\n>> >>>>\n>> >>>> The rules and examples can be found here:\n>> >>>> http://stockcharts.com/public/1107832\n>> >>>>\n>> >>>> Here is the code I have come up with now. Please help!\n>> >>>>\n>> >>> Help with what?  You haven't stated any problem.\n>> >>>\n>> >>\n>> >> Joshua,\n>> >>    I think Isak provided code and asked if it works, or what he has to\n>> >> do to make it work. It didn't seem a wholly unreasonable question. (to\n>> >> me...)\n>> >> Mark\n>> >>\n>> > I don't know how to answer \"does this code work?\"  It doesn't do much.\n>> > It just defines a strategy, some indicators, signals, and rules.  I'm\n>> > not suggesting it's a wholly unreasonable question; but I doubt it's\n>> > going to result in anyone providing help to Isak.\n>> >\n>> > I suspect most people are not going to take the time to run this\n>> > strategy, then ensure he set it up correctly, and make any necessary\n>> > fixes.  In short, Isak needs to put in more effort and come back when\n>> > he has a more specific question.\n>> >\n>>\n>> OK, I see your point.\n>>\n>> I'll likely go away and be quiet now but without running Isak's code\n>> myself I will say I've been quiet on this list for months now as I\n>> pretty much quit trying to understand how to do what I think is at the\n>> root of Isak's question. (As I read it he's saying 'How to I combine\n>> multiple indicators into a singlerule?') It's not hard in quantstrat\n>> to write indicators, and it's not difficult to create a strategy based\n>> on a single indicator - there are lots of provided examples. However,\n>> as I remember it from months and months ago (I could be wrong, it\n>> might have change, I don't know as I haven't looked) it seemed quite\n>> difficult to turn groups of indicators into executable rules, such as\n>> his entry rule:\n>>\n>> PRICE > SMA=250\n>> Slow Stochastic < 20 and crossing above the 20 line\n>>\n>> so maybe you can point him to something that addresses just that issue.\n>>\n>> For awhile I started creating custom indicator functions outside of\n>> quantstrat such that my 'custom indicator' was pretty much the whole\n>> rule so I didn't have to deal with figuring this out. To me it felt\n>> like it was mostly a documentation/example file question but I got\n>> tired of being a squeeky wheel and stopped working with quantstrat all\n>> together. (I do this trading stuff for fun. To me it wasn't fun. I\n>> bought a MatLab license and I have fun but I keep coming back to R\n>> saying 'Can it be more fun now?')\n>>\n>> Anyway, I totally get your point. His code won't run because (I think)\n>> he cannot yet figure out how write a rule using multiple indicators\n>> and in the general case completely inside of quantstrat neither could\n>> I.\n>>\n>> FOR CLARITY: I'm not complaining. OpenSource is what it is, it\n>> wouldn't be there without folks like you and the other developers, and\n>> then we user types all make different choices. That's really cool. I'm\n>> only writing this for my own reasons to say why I haven't posted in\n>> months. That said I may be back as my TradeStation/MatLab environment\n>> is working pretty well and I'd like to look at using the R server to\n>> augment things a bit more.\n>>\n>> Cheers,\n>> Mark\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org\n>> <javascript:_e(%7B%7D,'cvml','R-SIG-Finance at r-project.org');> mailing\n>> list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n>\n>\n\n-- \n\n\nKind Regards\nIsak Engdahl\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,\n\nYes i'm trying to use function SigAnd, but I think I have the logic wrong...\n\nHere are the rules:\n1. Price > SMA 250\n2. Stochastic signal line must be below 20 and cross above this level. T",
+      "thread_id": "thread-1cac21fb2d81",
+      "thread_depth": 5,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-5a9665f00669",
+      "message_id": "<CA+oJuEEkJmzpMV2sX+VVc=Lg69VmLX6Jc=R3QuRTeOJDQ-8ULQ@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "82540aa84df90b083b58f5752a77274af680540119bfecc0c0436c59ddd13e5c",
+      "date": "2015-02-01T17:27:08-05:00",
+      "subject": "[R-SIG-Finance] Signal and Rule question in Quantstrat",
+      "subject_clean": "Signal and Rule question in Quantstrat",
+      "in_reply_to": "<CAO77-6u2wUdZ4uBmNosNqE0QUQBKhYsj_2kChUVA292do+QAyg@mail.gmail.com>",
+      "references": [
+        "<CAO77-6s8qvf5OMYkfATnQ_iLnC+YFTEL=52Nx-Y3HmZJyfHAmw@mail.gmail.com>",
+        "<CAPPM_gQqEzTYasC8gDYzU2exnMSTd1m0GFcbCJvuoB-0+8koQw@mail.gmail.com>",
+        "<CAK2H+ed_zHOQJ3=6W_2TfD1=sXZn4z5PPLjPz16w6+hquzDAxw@mail.gmail.com>",
+        "<CAPPM_gRLJTcOMJUGUY9Bb9Ez0Yh_KPpjJRLAZc8m4eeK1yuy_w@mail.gmail.com>",
+        "<CAK2H+edx=V2dpj0bY3YJTCJe81ZA+yC8wmxofjS2=doVRm3VSw@mail.gmail.com>",
+        "<CA+oJuEFk1KZkvorDKvXWaJ8F65FwnwnaJ+9kw5eGW-v=hHYqig@mail.gmail.com>",
+        "<CAO77-6u2wUdZ4uBmNosNqE0QUQBKhYsj_2kChUVA292do+QAyg@mail.gmail.com>"
+      ],
+      "body_plain": "sigComparison for price > SMA250. sigThreshold with stochastic with cross =\nFALSE\nsigAND with cross = TRUE\n\nSee some of my old posts on my blog.\n\nOn Sun, Feb 1, 2015 at 5:25 PM, Isak Engdahl <isak.engdahl at gmail.com> wrote:\n\n> Dear all,\n>\n> Yes i'm trying to use function SigAnd, but I think I have the logic\n> wrong...\n>\n> Here are the rules:\n> 1. Price > SMA 250\n> 2. Stochastic signal line must be below 20 and cross above this level.\n> Then buy.\n>\n> How do I write such a rule in quantstrat?\n>\n> Kind Regards,\n> Isak Engdahl\n>\n>\n>\n> On Sunday, February 1, 2015, Ilya Kipnis <ilya.kipnis at gmail.com> wrote:\n>\n>> Have you all forgotten about my sigAND function?\n>>\n>> On Sun, Feb 1, 2015 at 10:12 AM, Mark Knecht <markknecht at gmail.com>\n>> wrote:\n>>\n>>> On Sun, Feb 1, 2015 at 6:31 AM, Joshua Ulrich <josh.m.ulrich at gmail.com>\n>>> wrote:\n>>> > On Sun, Feb 1, 2015 at 8:20 AM, Mark Knecht <markknecht at gmail.com>\n>>> wrote:\n>>> >> On Sun, Feb 1, 2015 at 5:48 AM, Joshua Ulrich <\n>>> josh.m.ulrich at gmail.com> wrote:\n>>> >>> On Fri, Jan 23, 2015 at 8:49 AM, Isak Engdahl <\n>>> isak.engdahl at gmail.com> wrote:\n>>> >>>> Dear members,\n>>> >>>>\n>>> >>>> I have a questions how to set up the signals and rules correct for\n>>> this\n>>> >>>> stategy in Quantstrat.\n>>> >>>>\n>>> >>>> Price must be above SMA=250 and below the 20 line in the Slow\n>>> Stochastic\n>>> >>>> indicator.\n>>> >>>>\n>>> >>>> The trigger for a buy signal is when the signal line of the\n>>> stochastic\n>>> >>>> indicator close above the 20 line.\n>>> >>>>\n>>> >>>> Enter trade\n>>> >>>> PRICE > SMA=250\n>>> >>>> Slow Stochastic < 20 and crossing above the 20 line\n>>> >>>>\n>>> >>>> Exit trade\n>>> >>>> PRICE < SMA=250\n>>> >>>> Slow Stoch > 80 and closes below the 80 line\n>>> >>>>\n>>> >>>> The rules and examples can be found here:\n>>> >>>> http://stockcharts.com/public/1107832\n>>> >>>>\n>>> >>>> Here is the code I have come up with now. Please help!\n>>> >>>>\n>>> >>> Help with what?  You haven't stated any problem.\n>>> >>>\n>>> >>\n>>> >> Joshua,\n>>> >>    I think Isak provided code and asked if it works, or what he has to\n>>> >> do to make it work. It didn't seem a wholly unreasonable question. (to\n>>> >> me...)\n>>> >> Mark\n>>> >>\n>>> > I don't know how to answer \"does this code work?\"  It doesn't do much.\n>>> > It just defines a strategy, some indicators, signals, and rules.  I'm\n>>> > not suggesting it's a wholly unreasonable question; but I doubt it's\n>>> > going to result in anyone providing help to Isak.\n>>> >\n>>> > I suspect most people are not going to take the time to run this\n>>> > strategy, then ensure he set it up correctly, and make any necessary\n>>> > fixes.  In short, Isak needs to put in more effort and come back when\n>>> > he has a more specific question.\n>>> >\n>>>\n>>> OK, I see your point.\n>>>\n>>> I'll likely go away and be quiet now but without running Isak's code\n>>> myself I will say I've been quiet on this list for months now as I\n>>> pretty much quit trying to understand how to do what I think is at the\n>>> root of Isak's question. (As I read it he's saying 'How to I combine\n>>> multiple indicators into a singlerule?') It's not hard in quantstrat\n>>> to write indicators, and it's not difficult to create a strategy based\n>>> on a single indicator - there are lots of provided examples. However,\n>>> as I remember it from months and months ago (I could be wrong, it\n>>> might have change, I don't know as I haven't looked) it seemed quite\n>>> difficult to turn groups of indicators into executable rules, such as\n>>> his entry rule:\n>>>\n>>> PRICE > SMA=250\n>>> Slow Stochastic < 20 and crossing above the 20 line\n>>>\n>>> so maybe you can point him to something that addresses just that issue.\n>>>\n>>> For awhile I started creating custom indicator functions outside of\n>>> quantstrat such that my 'custom indicator' was pretty much the whole\n>>> rule so I didn't have to deal with figuring this out. To me it felt\n>>> like it was mostly a documentation/example file question but I got\n>>> tired of being a squeeky wheel and stopped working with quantstrat all\n>>> together. (I do this trading stuff for fun. To me it wasn't fun. I\n>>> bought a MatLab license and I have fun but I keep coming back to R\n>>> saying 'Can it be more fun now?')\n>>>\n>>> Anyway, I totally get your point. His code won't run because (I think)\n>>> he cannot yet figure out how write a rule using multiple indicators\n>>> and in the general case completely inside of quantstrat neither could\n>>> I.\n>>>\n>>> FOR CLARITY: I'm not complaining. OpenSource is what it is, it\n>>> wouldn't be there without folks like you and the other developers, and\n>>> then we user types all make different choices. That's really cool. I'm\n>>> only writing this for my own reasons to say why I haven't posted in\n>>> months. That said I may be back as my TradeStation/MatLab environment\n>>> is working pretty well and I'd like to look at using the R server to\n>>> augment things a bit more.\n>>>\n>>> Cheers,\n>>> Mark\n>>>\n>>> _______________________________________________\n>>> R-SIG-Finance at r-project.org mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>> -- Also note that this is not the r-help list where general R questions\n>>> should go.\n>>>\n>>\n>>\n>\n> --\n>\n>\n> Kind Regards\n> Isak Engdahl\n>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "sigComparison for price > SMA250. sigThreshold with stochastic with cross =\nFALSE\nsigAND with cross = TRUE\n\nSee some of my old posts on my blog.\n\nOn Sun, Feb 1, 2015 at 5:25 PM, Isak Engdahl <isak.eng",
+      "thread_id": "thread-1cac21fb2d81",
+      "thread_depth": 6,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-24b0f62cb6f3",
+      "message_id": "<CAPD4hGBQ7r0vzpYX0nmq=3B9momRwFCHVDwnG=HQi8GHSOV4ww@mail.gmail.com>",
+      "from_name": "jun wang",
+      "from_email_hash": "056c426ba0106f9f83280bd14e4c5d70843736848bdf9c8518de2f5f86ac17d7",
+      "date": "2015-02-01T23:40:30-05:00",
+      "subject": "[R-SIG-Finance] rmgarch package code",
+      "subject_clean": "rmgarch package code",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear Alexios,\n\nI am looking at the source code of the rmgarch package and trying to find\nthe object \"dccCopulaStudent\" in this piece of code\n\nans = try(.Call(\"dccCopulaStudent\", Qbar = Qbar, U = Qdata, Rbar = Rbar,\ndcca = alpha, dccb = beta, tnu = nu, dccorder = c(1,1,1), dccsum = alpha +\nbeta,\nPACKAGE=\"rmgarch\"), silent = TRUE)\n\nIt seems this was wrote in C. Could you tell me how can i look at the\nsource code in R?\n\nMany Thanks!!!\nJun\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear Alexios,\n\nI am looking at the source code of the rmgarch package and trying to find\nthe object \"dccCopulaStudent\" in this piece of code\n\nans = try(.Call(\"dccCopulaStudent\", Qbar = Qbar, U = Qdata",
+      "thread_id": "thread-24b0f62cb6f3",
+      "thread_depth": 0,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-4578038c7ef2",
+      "message_id": "<54CF361B.6000600@4dscape.com>",
+      "from_name": "alexios",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2015-02-02T08:32:27Z",
+      "subject": "[R-SIG-Finance] rmgarch package code",
+      "subject_clean": "rmgarch package code",
+      "in_reply_to": "<CAPD4hGBQ7r0vzpYX0nmq=3B9momRwFCHVDwnG=HQi8GHSOV4ww@mail.gmail.com>",
+      "references": [
+        "<CAPD4hGBQ7r0vzpYX0nmq=3B9momRwFCHVDwnG=HQi8GHSOV4ww@mail.gmail.com>"
+      ],
+      "body_plain": "Dear Jun,\n\nThis is an R finance mailing list so please address the list, not me \ndirectly.\n\nThe code is written in Rcpp and the source code can be found under the \n'src' folder in the source distribution in the copulas.cpp file.\n\nAlexios\n\n\nOn 02/02/2015 04:40, jun wang wrote:\n> Dear Alexios,\n>\n> I am looking at the source code of the rmgarch package and trying to find\n> the object \"dccCopulaStudent\" in this piece of code\n>\n> ans = try(.Call(\"dccCopulaStudent\", Qbar = Qbar, U = Qdata, Rbar = Rbar,\n> dcca = alpha, dccb = beta, tnu = nu, dccorder = c(1,1,1), dccsum = alpha +\n> beta,\n> PACKAGE=\"rmgarch\"), silent = TRUE)\n>\n> It seems this was wrote in C. Could you tell me how can i look at the\n> source code in R?\n>\n> Many Thanks!!!\n> Jun\n>\n> \t[[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>\n>",
+      "body_snippet": "Dear Jun,\n\nThis is an R finance mailing list so please address the list, not me \ndirectly.\n\nThe code is written in Rcpp and the source code can be found under the \n'src' folder in the source distribut",
+      "thread_id": "thread-24b0f62cb6f3",
+      "thread_depth": 1,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-a931bda1c3c7",
+      "message_id": "<CAPPM_gR7EK3Soj3CcOLGt20N5-vKX_j-+--nE3p5egRFa_k9zA@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-02-02T11:41:37-06:00",
+      "subject": "[R-SIG-Finance] R/Finance 2015 Call for Papers",
+      "subject_clean": "R/Finance 2015 Call for Papers",
+      "in_reply_to": "<CAPPM_gS4wwCEU77BUtHf_uy01HZ-JYJ3go5hS35_z5xu_SKm6Q@mail.gmail.com>",
+      "references": [
+        "<CAPPM_gStdyAJBr8E7SygQ-5WKCaXUYcB95Xajy063Z0WFRPd4A@mail.gmail.com>",
+        "<CAPPM_gS4wwCEU77BUtHf_uy01HZ-JYJ3go5hS35_z5xu_SKm6Q@mail.gmail.com>"
+      ],
+      "body_plain": "The registration site closed earlier than expected (6pm Central on\nSaturday).  If you tried to submit but received an error that\nregistration had closed, please send your submission to\ncommittee at rinfinance.com by 5pm Central tomorrow (February 3rd).\nPlease include answers to the following questions in your email (the\nfields with a preceding asterisk are required).  This will ensure your\nsubmission is consistent with the other site-based submissions.\n\n*First Name:\n*Last Name:\n*Email Address:\n*Company:\n*Title:\nWork Address:\n\n*Are you a current student?\n*Does the submission contain a full paper?\n*Please enter the title of your submission:\nInsert link to R code:\nIf you have any additional information please enter it below:\n\n\n\nFor the committee,\nJosh\n\n\nOn Tue, Jan 20, 2015 at 9:37 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> A friendly reminder that the CFP deadline (Jan-31) is less than two weeks away!\n>\n> For the committee,\n> Josh\n>\n> On Tue, Nov 18, 2014 at 1:30 PM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n>> Call for Papers:\n>>\n>> R/Finance 2015: Applied Finance with R\n>> May 29 and 30, 2015\n>> University of Illinois at Chicago\n>>\n>> The seventh annual R/Finance conference for applied finance using R\n>> will be held on May 29 and 30, 2015 in Chicago, IL, USA at the\n>> University of Illinois at Chicago.  The conference will cover topics\n>> including portfolio management, time series analysis, advanced risk\n>> tools, high-performance computing, market microstructure, and\n>> econometrics. All will be discussed within the context of using R as a\n>> primary tool for financial risk management, portfolio construction,\n>> and trading.\n>>\n>> Over the past six years, R/Finance has included attendees from around\n>> the world. It has featured presentations from prominent academics and\n>> practitioners, and we anticipate another exciting line-up for 2015.\n>> This year will include invited keynote presentations by Emanuel\n>> Derman, Louis Marascio, Alexander McNeil, and Rishi Narang.\n>>\n>> We invite you to submit complete papers in pdf format for\n>> consideration. We will also consider one-page abstracts (in txt or pdf\n>> format) although more complete papers are preferred.  We welcome\n>> submissions for both full talks and abbreviated \"lightning talks.\"\n>> Both academic and practitioner proposals related to R are encouraged.\n>>\n>> All slides will be made publicly available at conference time.\n>> Presenters are strongly encouraged to provide working R code to\n>> accompany the slides.  Data sets should also be made public for the\n>> purposes of reproducibility (though we realize this may be limited due\n>> to contracts with data vendors). Preference may be given to presenters\n>> who have released R packages.\n>>\n>> The conference will award two (or more) $1000 prizes for best papers.\n>> A submission must be a full paper to be eligible for a best paper\n>> award. Extended abstracts, even if a full paper is provided by\n>> conference time, are not eligible for a best paper award.  Financial\n>> assistance for travel and accommodation may be available to\n>> presenters, however requests must be made at the time of submission.\n>> Assistance will be granted at the discretion of the conference\n>> committee.\n>>\n>> Please make your submission online at: http://www.cvent.com/d/t4qy73.\n>>\n>> The submission deadline is January 31, 2015. Submitters will be\n>> notified via email by February 28, 2015 of acceptance, presentation\n>> length, and financial assistance (if requested).\n>>\n>> Additional details will be announced via the conference website\n>>\n>> http://www.RinFinance.com/\n>>\n>> as they become available. Information on previous years' presenters\n>> and their presentations are also at the conference website.\n>>\n>> For the program committee:\n>> Gib Bassett, Peter Carl, Dirk Eddelbuettel, Brian Peterson, Dale\n>> Rosenthal, Jeffrey Ryan, Joshua Ulrich\n>\n>\n> --\n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "The registration site closed earlier than expected (6pm Central on\nSaturday).  If you tried to submit but received an error that\nregistration had closed, please send your submission to\ncommittee at ri",
+      "thread_id": "thread-a931bda1c3c7",
+      "thread_depth": 0,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-d3ff490f63d3",
+      "message_id": "<54D0A654.3060807@avignon.inra.fr>",
+      "from_name": "Olivier MARTIN",
+      "from_email_hash": "617f6d2e38c23ceb8c74bd6a5077dab4b29c7025a75f33fc4ee25b338d11e1ca",
+      "date": "2015-02-03T11:43:32+01:00",
+      "subject": "[R-SIG-Finance] help with quantstrat",
+      "subject_clean": "help with quantstrat",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi all,\n\nI try to program a simple strategy to learn with the package quantstrat.\nHereafter is the program, and the message I obtained when I applyed the \nstrategy\n\nError in eval(expr, envir, enclos) : objet 'rsif' introuvable\nErreur dans `colnames<-`(`*tmp*`, value = seq(ncol(tmp_val))) :\n   attempt to set 'colnames' on an object with less than two dimensions\n\n\nCould you explain me what is wrong ?\nRegards,\nOlivier.\n\n\n\n#-------------------------\ncurrency(\"EUR\")\nSys.setenv(TZ=\"UTC\")\ngetSymbols('ACA.PA')\nstock(\"ACA.PA\",currency=\"EUR\")\n\n# system settings\ninitDate <- '2007-01-01'\nendDate <-  '2014-12-30'\ninitEq <- 1\n\n#strategy\nmystrat <- \"gg\"\nrm.strat(mystrat) # remove strategy\ninitPortf(mystrat,'ACA.PA', initDate=initDate)\ninitAcct(mystrat,portfolios=mystrat, initDate=initDate, initEq=initEq)\n# initialize orders container\ninitOrders(portfolio=mystrat,initDate=initDate)\n# instantiate a new strategy object\nstrategy(mystrat,store=TRUE)\n\n\nmyRSI=function(x,nrsi=8,m=20){\n     r=SMA(RSI(x,n=nrsi),n=m)\n     return(r)\n     }\nmyCCI=function(x,ncci=8,m=20){\n     r=SMA(CCI(x,n=ncci),n=m)\n     return(r)\n     }\n\n#indicatros\nmystrat=add.indicator(strategy =mystrat, name = \"myRSI\",arguments = \nlist(x =quote(Cl(mktdata)),nrsi=8 ,m=20), label=\"rsif\")\nmystrat=add.indicator(strategy =mystrat, name = \"myRSI\",arguments = \nlist(x =quote(Cl(mktdata)),nrsi=14,m=20), label=\"rsis\")\nmystrat=add.indicator(strategy =mystrat, name = \"myCCI\",arguments = \nlist(x =quote(Cl(mktdata)),ncci=8 ,m=20), label=\"ccif\")\nmystrat=add.indicator(strategy =mystrat, name = \"myCCI\",arguments = \nlist(x =quote(Cl(mktdata)),ncci=14,m=20), label=\"ccis\")\n\n#signals\nmystrat=add.signal(mystrat,name=\"sigFormula\",arguments = \nlist(columns=c(\"rsif\",\"rsis\",\"ccif\",\"ccis\"),formula=\"rsif>rsis & \nccif>ccis\",cross=TRUE), label=\"up\")\nmystrat=add.signal(mystrat,name=\"sigFormula\",arguments = \nlist(columns=c(\"rsif\",\"rsis\",\"ccif\",\"ccis\"),formula=\"rsif<rsis & \nccif<ccis\",cross=TRUE), label=\"dn\")\nmystrat=add.signal(mystrat,name=\"sigFormula\",arguments = \nlist(columns=c(\"rsif\",\"rsis\",\"ccif\",\"ccis\"),formula=\"!(rsif>rsis & \nccif>ccis ) | !(rsif<rsis & ccif<ccis)\",cross=TRUE), label=\"ex\")\n\n# position rules\nmystrat=add.rule(mystrat, name=\"ruleSignal\",arguments = \nlist(sigcol=\"up\", sigval=TRUE, orderqty=1,ordertype='market', \norderside='long'), type='enter')\nmystrat=add.rule(mystrat, name=\"ruleSignal\",arguments = \nlist(sigcol=\"ex\", sigval=TRUE, orderqty='all',ordertype='market', \norderside='long'), type='exit')\nmystrat=add.rule(mystrat, name=\"ruleSignal\",arguments = \nlist(sigcol=\"dn\", sigval=TRUE, orderqty=1,ordertype='market', \norderside='short'), type='enter')\nmystrat=add.rule(mystrat, name=\"ruleSignal\",arguments = \nlist(sigcol=\"ex\", sigval=TRUE, orderqty='all',ordertype='market', \norderside='short'), type='exit')\n\n## apply strategy\napplyStrategy(strategy=mystrat , portfolios=mystrat)\n\n\nThis is the message I obtain :\n\nError in eval(expr, envir, enclos) : objet 'rsif' introuvable\nErreur dans `colnames<-`(`*tmp*`, value = seq(ncol(tmp_val))) :\n   attempt to set 'colnames' on an object with less than two dimensions",
+      "body_snippet": "Hi all,\n\nI try to program a simple strategy to learn with the package quantstrat.\nHereafter is the program, and the message I obtained when I applyed the \nstrategy\n\nError in eval(expr, envir, enclos) ",
+      "thread_id": "thread-d3ff490f63d3",
+      "thread_depth": 0,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-e6d8999d4489",
+      "message_id": "<CAOGDGTaxx+8f_rmKx=O_-ew-X2Np3CeiKM=ZaqYwQkm4S4Fwiw@mail.gmail.com>",
+      "from_name": "cen six",
+      "from_email_hash": "66e7b5f1ba0780b9e554ec83b3dbe3bc6320c2a08d2925e4143adc4f3bd0d33c",
+      "date": "2015-02-03T13:43:47+01:00",
+      "subject": "[R-SIG-Finance] help with quantstrat",
+      "subject_clean": "help with quantstrat",
+      "in_reply_to": "<54D0A654.3060807@avignon.inra.fr>",
+      "references": [
+        "<54D0A654.3060807@avignon.inra.fr>"
+      ],
+      "body_plain": "my guess is that your myRSI and myCCI functions probably need to explicitly\ndefine the colnames 'rsif', ...\n\nmyRSI=function(x,nrsi=8,m=20){\n    r=SMA(RSI(x,n=nrsi),n=m)\n    colnames(r) <- 'rsif'\n    return(r)\n    }\n\nCheck if  the 'label=' argument is really being used to set column labels\nin the \"add.indicator\" function definition ...\n\n\nOn Tue, Feb 3, 2015 at 11:43 AM, Olivier MARTIN <\nOlivier.Martin at avignon.inra.fr> wrote:\n\n> Hi all,\n>\n> I try to program a simple strategy to learn with the package quantstrat.\n> Hereafter is the program, and the message I obtained when I applyed the\n> strategy\n>\n> Error in eval(expr, envir, enclos) : objet 'rsif' introuvable\n> Erreur dans `colnames<-`(`*tmp*`, value = seq(ncol(tmp_val))) :\n>   attempt to set 'colnames' on an object with less than two dimensions\n>\n>\n> Could you explain me what is wrong ?\n> Regards,\n> Olivier.\n>\n>\n>\n> #-------------------------\n> currency(\"EUR\")\n> Sys.setenv(TZ=\"UTC\")\n> getSymbols('ACA.PA')\n> stock(\"ACA.PA\",currency=\"EUR\")\n>\n> # system settings\n> initDate <- '2007-01-01'\n> endDate <-  '2014-12-30'\n> initEq <- 1\n>\n> #strategy\n> mystrat <- \"gg\"\n> rm.strat(mystrat) # remove strategy\n> initPortf(mystrat,'ACA.PA', initDate=initDate)\n> initAcct(mystrat,portfolios=mystrat, initDate=initDate, initEq=initEq)\n> # initialize orders container\n> initOrders(portfolio=mystrat,initDate=initDate)\n> # instantiate a new strategy object\n> strategy(mystrat,store=TRUE)\n>\n>\n> myRSI=function(x,nrsi=8,m=20){\n>     r=SMA(RSI(x,n=nrsi),n=m)\n>     return(r)\n>     }\n> myCCI=function(x,ncci=8,m=20){\n>     r=SMA(CCI(x,n=ncci),n=m)\n>     return(r)\n>     }\n>\n> #indicatros\n> mystrat=add.indicator(strategy =mystrat, name = \"myRSI\",arguments = list(x\n> =quote(Cl(mktdata)),nrsi=8 ,m=20), label=\"rsif\")\n> mystrat=add.indicator(strategy =mystrat, name = \"myRSI\",arguments = list(x\n> =quote(Cl(mktdata)),nrsi=14,m=20), label=\"rsis\")\n> mystrat=add.indicator(strategy =mystrat, name = \"myCCI\",arguments = list(x\n> =quote(Cl(mktdata)),ncci=8 ,m=20), label=\"ccif\")\n> mystrat=add.indicator(strategy =mystrat, name = \"myCCI\",arguments = list(x\n> =quote(Cl(mktdata)),ncci=14,m=20), label=\"ccis\")\n>\n> #signals\n> mystrat=add.signal(mystrat,name=\"sigFormula\",arguments =\n> list(columns=c(\"rsif\",\"rsis\",\"ccif\",\"ccis\"),formula=\"rsif>rsis &\n> ccif>ccis\",cross=TRUE), label=\"up\")\n> mystrat=add.signal(mystrat,name=\"sigFormula\",arguments =\n> list(columns=c(\"rsif\",\"rsis\",\"ccif\",\"ccis\"),formula=\"rsif<rsis &\n> ccif<ccis\",cross=TRUE), label=\"dn\")\n> mystrat=add.signal(mystrat,name=\"sigFormula\",arguments =\n> list(columns=c(\"rsif\",\"rsis\",\"ccif\",\"ccis\"),formula=\"!(rsif>rsis &\n> ccif>ccis ) | !(rsif<rsis & ccif<ccis)\",cross=TRUE), label=\"ex\")\n>\n> # position rules\n> mystrat=add.rule(mystrat, name=\"ruleSignal\",arguments = list(sigcol=\"up\",\n> sigval=TRUE, orderqty=1,ordertype='market', orderside='long'), type='enter')\n> mystrat=add.rule(mystrat, name=\"ruleSignal\",arguments = list(sigcol=\"ex\",\n> sigval=TRUE, orderqty='all',ordertype='market', orderside='long'),\n> type='exit')\n> mystrat=add.rule(mystrat, name=\"ruleSignal\",arguments = list(sigcol=\"dn\",\n> sigval=TRUE, orderqty=1,ordertype='market', orderside='short'),\n> type='enter')\n> mystrat=add.rule(mystrat, name=\"ruleSignal\",arguments = list(sigcol=\"ex\",\n> sigval=TRUE, orderqty='all',ordertype='market', orderside='short'),\n> type='exit')\n>\n> ## apply strategy\n> applyStrategy(strategy=mystrat , portfolios=mystrat)\n>\n>\n> This is the message I obtain :\n>\n> Error in eval(expr, envir, enclos) : objet 'rsif' introuvable\n> Erreur dans `colnames<-`(`*tmp*`, value = seq(ncol(tmp_val))) :\n>   attempt to set 'colnames' on an object with less than two dimensions\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "my guess is that your myRSI and myCCI functions probably need to explicitly\ndefine the colnames 'rsif', ...\n\nmyRSI=function(x,nrsi=8,m=20){\n    r=SMA(RSI(x,n=nrsi),n=m)\n    colnames(r) <- 'rsif'\n    r",
+      "thread_id": "thread-d3ff490f63d3",
+      "thread_depth": 1,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-8e679f162f92",
+      "message_id": "<CAMLM=SDXx=bNM4Otchjdvij9YPAjrAg0LYDMztT2DgUpJDj7dQ@mail.gmail.com>",
+      "from_name": "Liu",
+      "from_email_hash": "fb18eb507ff9854f09488c890496e6853e4347711a1f28ec7722024b06a22c2a",
+      "date": "2015-02-04T20:07:42-05:00",
+      "subject": "[R-SIG-Finance] Problems with xts and plotting charts in quantmod",
+      "subject_clean": "Problems with xts and plotting charts in quantmod",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi all,\nI'm trying to plot candle charts from OHLC data frame like this:\n V1V2V3V4V5\n120150101 1801001184.131184.441184.041184.13\n220150101 1802001184.121184.411184.121184.41\n320150101 1803001184.531184.541184.321184.54\n420150101 1804001184.601184.601184.431184.51\nTried to cast it to xts by using:\n\ndata<-read.csv(file path)\nchartSeries(as.xts(data),type=\"candlesticks\")\n\nThen I have the error \"\n\nError in as.POSIXlt.character(x, tz, ...) :\n  character string is not in a standard unambiguous format\n\n\"\nI am not sure what that means. Maybe it's saying that my date and time is\nnon standard string? What should I do?\nPlease help.\n\nThanks\nCarlos\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi all,\nI'm trying to plot candle charts from OHLC data frame like this:\n V1V2V3V4V5\n120150101 1801001184.131184.441184.041184.13\n220150101 1802001184.121184.411184.121184.41\n320150101 1803001184.5311",
+      "thread_id": "thread-8e679f162f92",
+      "thread_depth": 0,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-ea6d489855ff",
+      "message_id": "<CACySJQUC9os3BK8wYRSn5SfCjke9dAMkRyxvfvFWWhc7c=C3CQ@mail.gmail.com>",
+      "from_name": "Wouter Thielen",
+      "from_email_hash": "82cee5f9770fac5a63129beae70f9e145e5edddb940c10667a8c77a831f958ab",
+      "date": "2015-02-05T01:23:46Z",
+      "subject": "[R-SIG-Finance] Problems with xts and plotting charts in quantmod",
+      "subject_clean": "Problems with xts and plotting charts in quantmod",
+      "in_reply_to": null,
+      "references": [
+        "<CAMLM=SDXx=bNM4Otchjdvij9YPAjrAg0LYDMztT2DgUpJDj7dQ@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Carlos,\n\nI can not clearly see where the columns start or stop, but I hope that the\nfirst character (1, 2, 3, 4) is a separate column, and that the date+time\nis in the second column. If that is the case, try passing\n\"index=as.POSIXct(data$V2, format='%Y%m%d %H%M%S')\" to your as.xts function:\n\nas.xts(data, index=as.POSIXct(data$V2, format='%Y%m%d %H%M%S'))\n\nYou may want to skip the first column as it is not part of the OHLC\nstructure, so as.xts(data[, -1], index=...).\n\nFor more reference, see http://www.stat.berkeley.edu/~s133/dates.html and\nhttp://stackoverflow.com/questions/18261160/convert-date-time-format-for-use-in-xts\n\nHope this helps.\n\nWouter\n\nOn Thu Feb 05 2015 at 10:09:38 AM Liu <carloslewlew at gmail.com> wrote:\n\n> Hi all,\n> I'm trying to plot candle charts from OHLC data frame like this:\n>  V1V2V3V4V5\n> 120150101 1801001184.131184.441184.041184.13\n> 220150101 1802001184.121184.411184.121184.41\n> 320150101 1803001184.531184.541184.321184.54\n> 420150101 1804001184.601184.601184.431184.51\n> Tried to cast it to xts by using:\n>\n> data<-read.csv(file path)\n> chartSeries(as.xts(data),type=\"candlesticks\")\n>\n> Then I have the error \"\n>\n> Error in as.POSIXlt.character(x, tz, ...) :\n>   character string is not in a standard unambiguous format\n>\n> \"\n> I am not sure what that means. Maybe it's saying that my date and time is\n> non standard string? What should I do?\n> Please help.\n>\n> Thanks\n> Carlos\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Carlos,\n\nI can not clearly see where the columns start or stop, but I hope that the\nfirst character (1, 2, 3, 4) is a separate column, and that the date+time\nis in the second column. If that is the",
+      "thread_id": "thread-8e679f162f92",
+      "thread_depth": 1,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-783cd7ba80d6",
+      "message_id": "<CACySJQXXiyu4v5u1qDZ-n6cmQtj25wMkXVotiA=A+u=-9m3qKg@mail.gmail.com>",
+      "from_name": "Wouter Thielen",
+      "from_email_hash": "82cee5f9770fac5a63129beae70f9e145e5edddb940c10667a8c77a831f958ab",
+      "date": "2015-02-05T04:30:58Z",
+      "subject": "[R-SIG-Finance] Problems with xts and plotting charts in quantmod",
+      "subject_clean": "Problems with xts and plotting charts in quantmod",
+      "in_reply_to": null,
+      "references": [
+        "<CAMLM=SDXx=bNM4Otchjdvij9YPAjrAg0LYDMztT2DgUpJDj7dQ@mail.gmail.com>",
+        "<CACySJQUC9os3BK8wYRSn5SfCjke9dAMkRyxvfvFWWhc7c=C3CQ@mail.gmail.com>",
+        "<CAMLM=SBhTtyWFx0jAaM29BhocK4F8VYV36Rc_NH7ig6CYfm=Xg@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Carlos,\n\nMy explanation was incomplete sorry. You need to format the data correctly\nfirst, and removing the first column is necessary. Also, naming the columns\nOpen, High, Low, Close also helps. Here is the code that should work (I\ntested it):\n\ndata <- read.csv(\"file.csv\", header=FALSE)\ndata.xts <- xts(data[, -1], order.by=as.POSIXct(data$V1, format=\"%Y%m%d\n%H%M%S\"))\ncolnames(data.xts) <- c(\"Open\", \"High\", \"Low\", \"Close\")\nchartSeries(data.xts, type=\"candlesticks\")\n\nNote, it is %Y%m%d, not %Y%h%m as in what you put in your example.\n\nIt is also good to do a head(data), head(data.xts) after each command to\nsee how the structure of the data and the xts object changes after each\ncommand, to see it does what you want it to do.\n\nOh, and please also cc the list (reply-all) so that others can follow :)\n\nWouter\n\nOn Thu Feb 05 2015 at 1:12:17 PM Liu <carloslewlew at gmail.com> wrote:\n\n> Hello Wouter,\n> Thank you for your kind response.\n> I should have pasted the data in plain text:\n> V1                        V2        V3         V4        V5\n> 20150101 180100 1184.13 1184.44 1184.04 1184.13\n> 20150101 180200 1184.12 1184.41 1184.12 1184.41\n> 20150101 180300 1184.53 1184.54 1184.32 1184.54\n> 20150101 180400 1184.60 1184.60 1184.43 1184.51\n>\n> first column is date and time, then comes OHLC value. There used to be\n> sixth column \"Volume? but I removed it since it's just 0.\n> I followed your help and casted it into an xts object:\n> data<-xts(data,as.POSIXct(data$V1,format=\"%Y%h%m %H%M%S\"))\n>\n> then I ran:\n> chartSeries(data,type=\"candlesticks\")\n> and I got error:\n> Error in na.omit.xts(x) : unsupported type\n>\n> The manual says chartSeries takes in an OHLC object, though the error\n> before said\"chartSeries requires an xtsible object\". Where do I go from\n> here, to convert the xts into an OHLC or something else?\n> Please help.\n>\n> Thank you very much,\n> Carlos\n>\n>\n> On Wed, Feb 4, 2015 at 8:23 PM, Wouter Thielen <wouter at morannon.org>\n> wrote:\n>\n>> Hi Carlos,\n>>\n>> I can not clearly see where the columns start or stop, but I hope that\n>> the first character (1, 2, 3, 4) is a separate column, and that the\n>> date+time is in the second column. If that is the case, try passing\n>> \"index=as.POSIXct(data$V2, format='%Y%m%d %H%M%S')\" to your as.xts function:\n>>\n>> as.xts(data, index=as.POSIXct(data$V2, format='%Y%m%d %H%M%S'))\n>>\n>> You may want to skip the first column as it is not part of the OHLC\n>> structure, so as.xts(data[, -1], index=...).\n>>\n>> For more reference, see http://www.stat.berkeley.edu/~s133/dates.html\n>> and\n>> http://stackoverflow.com/questions/18261160/convert-date-time-format-for-use-in-xts\n>>\n>> Hope this helps.\n>>\n>> Wouter\n>>\n>> On Thu Feb 05 2015 at 10:09:38 AM Liu <carloslewlew at gmail.com> wrote:\n>>\n>>> Hi all,\n>>> I'm trying to plot candle charts from OHLC data frame like this:\n>>>  V1V2V3V4V5\n>>> 120150101 1801001184.131184.441184.041184.13\n>>> 220150101 1802001184.121184.411184.121184.41\n>>> 320150101 1803001184.531184.541184.321184.54\n>>> 420150101 1804001184.601184.601184.431184.51\n>>> Tried to cast it to xts by using:\n>>>\n>>> data<-read.csv(file path)\n>>> chartSeries(as.xts(data),type=\"candlesticks\")\n>>>\n>>> Then I have the error \"\n>>>\n>>> Error in as.POSIXlt.character(x, tz, ...) :\n>>>   character string is not in a standard unambiguous format\n>>>\n>>> \"\n>>> I am not sure what that means. Maybe it's saying that my date and time is\n>>> non standard string? What should I do?\n>>> Please help.\n>>>\n>>> Thanks\n>>> Carlos\n>>>\n>>>         [[alternative HTML version deleted]]\n>>>\n>>> _______________________________________________\n>>> R-SIG-Finance at r-project.org mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>> -- Also note that this is not the r-help list where general R questions\n>>> should go.\n>>>\n>>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Carlos,\n\nMy explanation was incomplete sorry. You need to format the data correctly\nfirst, and removing the first column is necessary. Also, naming the columns\nOpen, High, Low, Close also helps. He",
+      "thread_id": "thread-783cd7ba80d6",
+      "thread_depth": 0,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-6c74466ab225",
+      "message_id": "<CAMLM=SCapp7L6DjR+w=onKGvEMs8hPdvBapoRdxcibH+wnuUJg@mail.gmail.com>",
+      "from_name": "Liu",
+      "from_email_hash": "fb18eb507ff9854f09488c890496e6853e4347711a1f28ec7722024b06a22c2a",
+      "date": "2015-02-05T11:44:25-05:00",
+      "subject": "[R-SIG-Finance] Problems with xts and plotting charts in quantmod",
+      "subject_clean": "Problems with xts and plotting charts in quantmod",
+      "in_reply_to": "<CACySJQXXiyu4v5u1qDZ-n6cmQtj25wMkXVotiA=A+u=-9m3qKg@mail.gmail.com>",
+      "references": [
+        "<CAMLM=SDXx=bNM4Otchjdvij9YPAjrAg0LYDMztT2DgUpJDj7dQ@mail.gmail.com>",
+        "<CACySJQUC9os3BK8wYRSn5SfCjke9dAMkRyxvfvFWWhc7c=C3CQ@mail.gmail.com>",
+        "<CAMLM=SBhTtyWFx0jAaM29BhocK4F8VYV36Rc_NH7ig6CYfm=Xg@mail.gmail.com>",
+        "<CACySJQXXiyu4v5u1qDZ-n6cmQtj25wMkXVotiA=A+u=-9m3qKg@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Wouter,\nI appreciate your help and contribution. I followed the above codes and\nencountered an error:\n*Error in na.omit.xts(x) : unsupported type*\n\nI found other's post on SO with my similar question but unfortunately no\nsolution yet:\nhttp://stackoverflow.com/questions/28255994/error-in-na-omit-xtsx-unsupported-type-with-chartseries\n\nJust post the output here to see if you can see the problem:\n\n> chartSeries(data.xts,subset=\"2015-01\",type=\"candlesticks\")\n*Error in na.omit.xts(x) : unsupported type*\n> head(data.xts)\n                    Date Time         Open      High      Low       Close\n\n2009-03-15 17:00:00 \"20090315 170000\" \" 929.60\" \" 929.60\" \" 929.60\" \"\n929.60\"\n2009-03-15 18:00:00 \"20090315 180000\" \" 925.85\" \" 927.00\" \" 925.80\" \"\n926.05\"\n2009-03-15 18:01:00 \"20090315 180100\" \" 925.80\" \" 927.30\" \" 925.80\" \"\n925.90\"\n2009-03-15 18:02:00 \"20090315 180200\" \" 925.90\" \" 926.45\" \" 925.90\" \"\n925.90\"\n2009-03-15 18:03:00 \"20090315 180300\" \" 925.85\" \" 926.95\" \" 925.85\" \"\n926.95\"\n2009-03-15 18:04:00 \"20090315 180400\" \" 927.20\" \" 927.20\" \" 925.65\" \"\n925.80\"\n\n> str(data.xts)\nAn ?xts? object on 2009-03-15 17:00:00/2015-01-30 16:57:00 containing:\n  Data: chr [1:2064753, 1:5] \"20090315 170000\" \"20090315 180000\" \"20090315\n180100\" \"20090315 180200\" ...\n - attr(*, \"dimnames\")=List of 2\n  ..$ : NULL\n  ..$ : chr [1:5] \"Date Time\" \"Open\" \"High\" \"Low\" ...\n  Indexed by objects of class: [POSIXct,POSIXt] TZ:\n  xts Attributes:\n NULL\n\n\n\nThanks,\nCarlos\n\nOn Wed, Feb 4, 2015 at 11:30 PM, Wouter Thielen <wouter at morannon.org> wrote:\n\n> Hi Carlos,\n>\n> My explanation was incomplete sorry. You need to format the data correctly\n> first, and removing the first column is necessary. Also, naming the columns\n> Open, High, Low, Close also helps. Here is the code that should work (I\n> tested it):\n>\n> data <- read.csv(\"file.csv\", header=FALSE)\n> data.xts <- xts(data[, -1], order.by=as.POSIXct(data$V1, format=\"%Y%m%d\n> %H%M%S\"))\n> colnames(data.xts) <- c(\"Open\", \"High\", \"Low\", \"Close\")\n> chartSeries(data.xts, type=\"candlesticks\")\n>\n> Note, it is %Y%m%d, not %Y%h%m as in what you put in your example.\n>\n> It is also good to do a head(data), head(data.xts) after each command to\n> see how the structure of the data and the xts object changes after each\n> command, to see it does what you want it to do.\n>\n> Oh, and please also cc the list (reply-all) so that others can follow :)\n>\n> Wouter\n>\n> On Thu Feb 05 2015 at 1:12:17 PM Liu <carloslewlew at gmail.com> wrote:\n>\n>> Hello Wouter,\n>> Thank you for your kind response.\n>> I should have pasted the data in plain text:\n>> V1                        V2        V3         V4        V5\n>> 20150101 180100 1184.13 1184.44 1184.04 1184.13\n>> 20150101 180200 1184.12 1184.41 1184.12 1184.41\n>> 20150101 180300 1184.53 1184.54 1184.32 1184.54\n>> 20150101 180400 1184.60 1184.60 1184.43 1184.51\n>>\n>> first column is date and time, then comes OHLC value. There used to be\n>> sixth column \"Volume? but I removed it since it's just 0.\n>> I followed your help and casted it into an xts object:\n>> data<-xts(data,as.POSIXct(data$V1,format=\"%Y%h%m %H%M%S\"))\n>>\n>> then I ran:\n>> chartSeries(data,type=\"candlesticks\")\n>> and I got error:\n>> Error in na.omit.xts(x) : unsupported type\n>>\n>> The manual says chartSeries takes in an OHLC object, though the error\n>> before said\"chartSeries requires an xtsible object\". Where do I go from\n>> here, to convert the xts into an OHLC or something else?\n>> Please help.\n>>\n>> Thank you very much,\n>> Carlos\n>>\n>>\n>> On Wed, Feb 4, 2015 at 8:23 PM, Wouter Thielen <wouter at morannon.org>\n>> wrote:\n>>\n>>> Hi Carlos,\n>>>\n>>> I can not clearly see where the columns start or stop, but I hope that\n>>> the first character (1, 2, 3, 4) is a separate column, and that the\n>>> date+time is in the second column. If that is the case, try passing\n>>> \"index=as.POSIXct(data$V2, format='%Y%m%d %H%M%S')\" to your as.xts function:\n>>>\n>>> as.xts(data, index=as.POSIXct(data$V2, format='%Y%m%d %H%M%S'))\n>>>\n>>> You may want to skip the first column as it is not part of the OHLC\n>>> structure, so as.xts(data[, -1], index=...).\n>>>\n>>> For more reference, see http://www.stat.berkeley.edu/~s133/dates.html\n>>> and\n>>> http://stackoverflow.com/questions/18261160/convert-date-time-format-for-use-in-xts\n>>>\n>>> Hope this helps.\n>>>\n>>> Wouter\n>>>\n>>> On Thu Feb 05 2015 at 10:09:38 AM Liu <carloslewlew at gmail.com> wrote:\n>>>\n>>>> Hi all,\n>>>> I'm trying to plot candle charts from OHLC data frame like this:\n>>>>  V1V2V3V4V5\n>>>> 120150101 1801001184.131184.441184.041184.13\n>>>> 220150101 1802001184.121184.411184.121184.41\n>>>> 320150101 1803001184.531184.541184.321184.54\n>>>> 420150101 1804001184.601184.601184.431184.51\n>>>> Tried to cast it to xts by using:\n>>>>\n>>>> data<-read.csv(file path)\n>>>> chartSeries(as.xts(data),type=\"candlesticks\")\n>>>>\n>>>> Then I have the error \"\n>>>>\n>>>> Error in as.POSIXlt.character(x, tz, ...) :\n>>>>   character string is not in a standard unambiguous format\n>>>>\n>>>> \"\n>>>> I am not sure what that means. Maybe it's saying that my date and time\n>>>> is\n>>>> non standard string? What should I do?\n>>>> Please help.\n>>>>\n>>>> Thanks\n>>>> Carlos\n>>>>\n>>>>         [[alternative HTML version deleted]]\n>>>>\n>>>> _______________________________________________\n>>>> R-SIG-Finance at r-project.org mailing list\n>>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>>> -- Also note that this is not the r-help list where general R questions\n>>>> should go.\n>>>>\n>>>\n>>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Wouter,\nI appreciate your help and contribution. I followed the above codes and\nencountered an error:\n*Error in na.omit.xts(x) : unsupported type*\n\nI found other's post on SO with my similar questi",
+      "thread_id": "thread-783cd7ba80d6",
+      "thread_depth": 1,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-086d884b90bb",
+      "message_id": "<54D3B570.5020203@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2015-02-05T12:24:48-06:00",
+      "subject": "[R-SIG-Finance] Problems with xts and plotting charts in quantmod",
+      "subject_clean": "Problems with xts and plotting charts in quantmod",
+      "in_reply_to": "<CAMLM=SCapp7L6DjR+w=onKGvEMs8hPdvBapoRdxcibH+wnuUJg@mail.gmail.com>",
+      "references": [
+        "<CAMLM=SDXx=bNM4Otchjdvij9YPAjrAg0LYDMztT2DgUpJDj7dQ@mail.gmail.com>",
+        "<CACySJQUC9os3BK8wYRSn5SfCjke9dAMkRyxvfvFWWhc7c=C3CQ@mail.gmail.com>",
+        "<CAMLM=SBhTtyWFx0jAaM29BhocK4F8VYV36Rc_NH7ig6CYfm=Xg@mail.gmail.com>",
+        "<CACySJQXXiyu4v5u1qDZ-n6cmQtj25wMkXVotiA=A+u=-9m3qKg@mail.gmail.com>",
+        "<CAMLM=SCapp7L6DjR+w=onKGvEMs8hPdvBapoRdxcibH+wnuUJg@mail.gmail.com>"
+      ],
+      "body_plain": "at least part of your problem now is that you're storing the data as \ncharacter, rather than numeric.\n\nin your as.xts call, you'll want to remove the first column in the 'x' \nargument,\n\ne.g.\n\ny <- as.xts(x[,-1], order.by=as.POSIXct(x[,1],...))\n# the above is not reproducible, it is missing the format argument at least\n\nI also see that you have spaces in your character data, so you may need \nan as.numeric in there too.\n\nAnother way to do it would be to make sure that read.csv sees the \ncolumns as numbers rather than character, which proably has to do with \nyour choice of separator.\n\nRegards,\n\nBrian\n\nOn 02/05/2015 10:44 AM, Liu wrote:\n> I appreciate your help and contribution. I followed the above codes and\n> encountered an error:\n> *Error in na.omit.xts(x) : unsupported type*\n>\n> I found other's post on SO with my similar question but unfortunately no\n> solution yet:\n> http://stackoverflow.com/questions/28255994/error-in-na-omit-xtsx-unsupported-type-with-chartseries\n>\n> Just post the output here to see if you can see the problem:\n>\n>> >chartSeries(data.xts,subset=\"2015-01\",type=\"candlesticks\")\n> *Error in na.omit.xts(x) : unsupported type*\n>> >head(data.xts)\n>                      Date Time         Open      High      Low       Close\n>\n> 2009-03-15 17:00:00 \"20090315 170000\" \" 929.60\" \" 929.60\" \" 929.60\" \"\n> 929.60\"\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
+      "body_snippet": "at least part of your problem now is that you're storing the data as \ncharacter, rather than numeric.\n\nin your as.xts call, you'll want to remove the first column in the 'x' \nargument,\n\ne.g.\n\ny <- as.",
+      "thread_id": "thread-783cd7ba80d6",
+      "thread_depth": 2,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-d9cab46ced3d",
+      "message_id": "<1199921411.127436.1423178728457.JavaMail.yahoo@mail.yahoo.com>",
+      "from_name": "Tom Clifford",
+      "from_email_hash": "96044b3db63b78ef8178aa958c0ea2e41185f1a7e868b411cd3ac76e1764ac77",
+      "date": "2015-02-05T23:25:28Z",
+      "subject": "[R-SIG-Finance] Problems with xts and plotting charts in\tquantmod",
+      "subject_clean": "Problems with xts and plotting charts in\tquantmod",
+      "in_reply_to": "<54D3B570.5020203@braverock.com>",
+      "references": [
+        "<54D3B570.5020203@braverock.com>"
+      ],
+      "body_plain": "I've been looking at this today, and I was able to get this working by using a csv file that \nI put the data into, and used the following data and code:\nused a csv file:\nDateTime,Open,High,Low,Close\n20150101 180100,1184.13,1184.44,1184.04,1184.13\n20150101 180200,1184.12,1184.41,1184.12,1184.41\n20150101 180300,1184.53,1184.54,1184.32,1184.54\n20150101 180400,1184.60,1184.60,1184.43,1184.51\n\ncode:\n\nlibrary(quantmod)\nColClasses = c(\"character\", \"numeric\", \"numeric\", \"numeric\", \"numeric\")\n\nohlcdata <- read.zoo(\"./data-file.csv\", \n???????????????????? index.column = 1, \n???????????????????? sep = \",\",\n???????????????????? tz='',\n???????????????????? format=\"%Y%m%d %H%M%S\", \n???????????????????? colClasses = ColClasses,\n???????????????????? header=TRUE)\nas.xts(ohlcdata)\n\nchartSeries(ohlcdata,type=\"candlesticks\")\n\nIt does produce the chart, and I hope it is what you're looking for.Let me know if you have trouble.\n?Tom Clifford MBA '13\nLansing, Michigan 48912\ntjclifford at yahoo.com\n \n\n     On Thursday, February 5, 2015 1:25 PM, Brian G. Peterson <brian at braverock.com> wrote:\n   \n\n at least part of your problem now is that you're storing the data as \ncharacter, rather than numeric.\n\nin your as.xts call, you'll want to remove the first column in the 'x' \nargument,\n\ne.g.\n\ny <- as.xts(x[,-1], order.by=as.POSIXct(x[,1],...))\n# the above is not reproducible, it is missing the format argument at least\n\nI also see that you have spaces in your character data, so you may need \nan as.numeric in there too.\n\nAnother way to do it would be to make sure that read.csv sees the \ncolumns as numbers rather than character, which proably has to do with \nyour choice of separator.\n\nRegards,\n\nBrian\n\nOn 02/05/2015 10:44 AM, Liu wrote:\n> I appreciate your help and contribution. I followed the above codes and\n> encountered an error:\n> *Error in na.omit.xts(x) : unsupported type*\n>\n> I found other's post on SO with my similar question but unfortunately no\n> solution yet:\n> http://stackoverflow.com/questions/28255994/error-in-na-omit-xtsx-unsupported-type-with-chartseries\n>\n> Just post the output here to see if you can see the problem:\n>\n>> >chartSeries(data.xts,subset=\"2015-01\",type=\"candlesticks\")\n> *Error in na.omit.xts(x) : unsupported type*\n>> >head(data.xts)\n>? ? ? ? ? ? ? ? ? ? ? Date Time? ? ? ? Open? ? ? High? ? ? Low? ? ? Close\n>\n> 2009-03-15 17:00:00 \"20090315 170000\" \" 929.60\" \" 929.60\" \" 929.60\" \"\n> 929.60\"\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\n   \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I've been looking at this today, and I was able to get this working by using a csv file that \nI put the data into, and used the following data and code:\nused a csv file:\nDateTime,Open,High,Low,Close\n2",
+      "thread_id": "thread-783cd7ba80d6",
+      "thread_depth": 3,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-585c0cbe9754",
+      "message_id": "<CAMLM=SAXbudcV8U6DKHZR4NqQjNdc_Txsxaiocpsr68Py6d88Q@mail.gmail.com>",
+      "from_name": "Liu",
+      "from_email_hash": "fb18eb507ff9854f09488c890496e6853e4347711a1f28ec7722024b06a22c2a",
+      "date": "2015-02-05T20:20:28-05:00",
+      "subject": "[R-SIG-Finance] Problems with xts and plotting charts in quantmod",
+      "subject_clean": "Problems with xts and plotting charts in quantmod",
+      "in_reply_to": "<1199921411.127436.1423178728457.JavaMail.yahoo@mail.yahoo.com>",
+      "references": [
+        "<54D3B570.5020203@braverock.com>",
+        "<1199921411.127436.1423178728457.JavaMail.yahoo@mail.yahoo.com>"
+      ],
+      "body_plain": "Thanks to everyone,\nI made the chart in the afternoon. In fact the xts obj is not numeric\nbecause the data has been imported and treated \"string as character\". I\ntransferred the OHLC data into 4 columns of numeric values and cbind them\ntogether. That solved the problem so I could do the as.xts cast afterwards.\n\nMuch appreciation and hope this would help someone in the future too.\n\n\n\nOn Thu, Feb 5, 2015 at 6:25 PM, Tom Clifford via R-SIG-Finance <\nr-sig-finance at r-project.org> wrote:\n\n> I've been looking at this today, and I was able to get this working by\n> using a csv file that\n> I put the data into, and used the following data and code:\n> used a csv file:\n> DateTime,Open,High,Low,Close\n> 20150101 180100,1184.13,1184.44,1184.04,1184.13\n> 20150101 180200,1184.12,1184.41,1184.12,1184.41\n> 20150101 180300,1184.53,1184.54,1184.32,1184.54\n> 20150101 180400,1184.60,1184.60,1184.43,1184.51\n>\n> code:\n>\n> library(quantmod)\n> ColClasses = c(\"character\", \"numeric\", \"numeric\", \"numeric\", \"numeric\")\n>\n> ohlcdata <- read.zoo(\"./data-file.csv\",\n>                      index.column = 1,\n>                      sep = \",\",\n>                      tz='',\n>                      format=\"%Y%m%d %H%M%S\",\n>                      colClasses = ColClasses,\n>                      header=TRUE)\n> as.xts(ohlcdata)\n>\n> chartSeries(ohlcdata,type=\"candlesticks\")\n>\n> It does produce the chart, and I hope it is what you're looking for.Let me\n> know if you have trouble.\n>  Tom Clifford MBA '13\n> Lansing, Michigan 48912\n> tjclifford at yahoo.com\n>\n>\n>      On Thursday, February 5, 2015 1:25 PM, Brian G. Peterson <\n> brian at braverock.com> wrote:\n>\n>\n>  at least part of your problem now is that you're storing the data as\n> character, rather than numeric.\n>\n> in your as.xts call, you'll want to remove the first column in the 'x'\n> argument,\n>\n> e.g.\n>\n> y <- as.xts(x[,-1], order.by=as.POSIXct(x[,1],...))\n> # the above is not reproducible, it is missing the format argument at least\n>\n> I also see that you have spaces in your character data, so you may need\n> an as.numeric in there too.\n>\n> Another way to do it would be to make sure that read.csv sees the\n> columns as numbers rather than character, which proably has to do with\n> your choice of separator.\n>\n> Regards,\n>\n> Brian\n>\n> On 02/05/2015 10:44 AM, Liu wrote:\n> > I appreciate your help and contribution. I followed the above codes and\n> > encountered an error:\n> > *Error in na.omit.xts(x) : unsupported type*\n> >\n> > I found other's post on SO with my similar question but unfortunately no\n> > solution yet:\n> >\n> http://stackoverflow.com/questions/28255994/error-in-na-omit-xtsx-unsupported-type-with-chartseries\n> >\n> > Just post the output here to see if you can see the problem:\n> >\n> >> >chartSeries(data.xts,subset=\"2015-01\",type=\"candlesticks\")\n> > *Error in na.omit.xts(x) : unsupported type*\n> >> >head(data.xts)\n> >                      Date Time        Open      High      Low      Close\n> >\n> > 2009-03-15 17:00:00 \"20090315 170000\" \" 929.60\" \" 929.60\" \" 929.60\" \"\n> > 929.60\"\n>\n> --\n> Brian G. Peterson\n> http://braverock.com/brian/\n> Ph: 773-459-4973\n> IM: bgpbraverock\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n>\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thanks to everyone,\nI made the chart in the afternoon. In fact the xts obj is not numeric\nbecause the data has been imported and treated \"string as character\". I\ntransferred the OHLC data into 4 colum",
+      "thread_id": "thread-783cd7ba80d6",
+      "thread_depth": 4,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-eca5fdc985d6",
+      "message_id": "<d1b23c4536829d7a87e0164cf837be2b@considine.net>",
+      "from_name": "matt at considine.net",
+      "from_email_hash": "2cc8bd9d28bc161b5daff5fc0a3fc80cd17fe3fc6cdf726876f9143459c63ed3",
+      "date": "2015-02-06T09:33:50-06:00",
+      "subject": "[R-SIG-Finance] Backing out a portfolio snapshot?",
+      "subject_clean": "Backing out a portfolio snapshot?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\nLet's say I have a snapshot of a portfolio's holdings on a given day, as \nwell as the trades covering the two years up to that date.  Does anyone \nknow of an already-made module or toolchain that would allow me to back \nout the portfolio's holdings on any given day up to that point (but that \nis obviously covered by the trading data)?  While it is a pretty \nstraightforward - and tedious - mechanical exercise, I can see that \nthere might be a twist in that one needs to create the implied cash \nbalance, as all the cash positions are not included (just the ending \nbalance).\n\nSo I recognize that the result might only be a close approximation.  But \nunder the assumption that the portfolio was always effectively fully \ninvested I think the results would be robust.\n\nIf anyone is aware of a solution out there that is based in R, I'd be \nappreciative.\n\nRegards,\nMatt Considine",
+      "body_snippet": "Hi,\nLet's say I have a snapshot of a portfolio's holdings on a given day, as \nwell as the trades covering the two years up to that date.  Does anyone \nknow of an already-made module or toolchain that ",
+      "thread_id": "thread-eca5fdc985d6",
+      "thread_depth": 0,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-da3bead60925",
+      "message_id": "<CA+oJuEE7deTCT+hKOS5qiXpE7pLXU+VezyQBSSuE34fLsMEODg@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "82540aa84df90b083b58f5752a77274af680540119bfecc0c0436c59ddd13e5c",
+      "date": "2015-02-06T10:41:43-05:00",
+      "subject": "[R-SIG-Finance] Backing out a portfolio snapshot?",
+      "subject_clean": "Backing out a portfolio snapshot?",
+      "in_reply_to": "<d1b23c4536829d7a87e0164cf837be2b@considine.net>",
+      "references": [
+        "<d1b23c4536829d7a87e0164cf837be2b@considine.net>"
+      ],
+      "body_plain": "If it's a rebalancing date, then that's just the weights you have assigned\nto it. Beyond that, I would suggest to take the cumulative product of the\nreturns of your holdings up to the day you're interested in, multiply by\nyour last allocation, and normalize. In regards to cash, shouldn't you be\nusing a separate security for that (EG SHY, TLT, some sort of futures from\nQuandl, etc.), or at the least, just a column of zeroes in addition to the\nrest of your assets to denote cash on the sidelines?\n\nOn Fri, Feb 6, 2015 at 10:33 AM, <matt at considine.net> wrote:\n\n> Hi,\n> Let's say I have a snapshot of a portfolio's holdings on a given day, as\n> well as the trades covering the two years up to that date.  Does anyone\n> know of an already-made module or toolchain that would allow me to back out\n> the portfolio's holdings on any given day up to that point (but that is\n> obviously covered by the trading data)?  While it is a pretty\n> straightforward - and tedious - mechanical exercise, I can see that there\n> might be a twist in that one needs to create the implied cash balance, as\n> all the cash positions are not included (just the ending balance).\n>\n> So I recognize that the result might only be a close approximation.  But\n> under the assumption that the portfolio was always effectively fully\n> invested I think the results would be robust.\n>\n> If anyone is aware of a solution out there that is based in R, I'd be\n> appreciative.\n>\n> Regards,\n> Matt Considine\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "If it's a rebalancing date, then that's just the weights you have assigned\nto it. Beyond that, I would suggest to take the cumulative product of the\nreturns of your holdings up to the day you're inter",
+      "thread_id": "thread-eca5fdc985d6",
+      "thread_depth": 1,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-66c1d1e15f39",
+      "message_id": "<54D52097.5030509@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2015-02-06T14:14:15-06:00",
+      "subject": "[R-SIG-Finance] Backing out a portfolio snapshot?",
+      "subject_clean": "Backing out a portfolio snapshot?",
+      "in_reply_to": "<d1b23c4536829d7a87e0164cf837be2b@considine.net>",
+      "references": [
+        "<d1b23c4536829d7a87e0164cf837be2b@considine.net>"
+      ],
+      "body_plain": "Matt,\n\nIf you have all the trades, or at least the starting position and cost \nbasis, and all the trades after that point, then blotter can do what you \nwant.\n\nsee\n\n?addTxns #loading everything in in one go\n\nand\n\n?getPos # for looking up positions as of a certain time\n\nIf you don't have the starting position and average cost, you can back \ninto the starting position (but not average cost) by entering all the \ntrades as though you started flat, and taking the difference to your \nending position.\n\nAs to whether you could back out average cost, you'd have to tell us \nmore about your inputs.\n\nRegards,\n\nBrian\n\nOn 02/06/2015 09:33 AM, matt at considine.net wrote:\n> Hi,\n> Let's say I have a snapshot of a portfolio's holdings on a given day, as\n> well as the trades covering the two years up to that date.  Does anyone\n> know of an already-made module or toolchain that would allow me to back\n> out the portfolio's holdings on any given day up to that point (but that\n> is obviously covered by the trading data)?  While it is a pretty\n> straightforward - and tedious - mechanical exercise, I can see that\n> there might be a twist in that one needs to create the implied cash\n> balance, as all the cash positions are not included (just the ending\n> balance).\n>\n> So I recognize that the result might only be a close approximation.  But\n> under the assumption that the portfolio was always effectively fully\n> invested I think the results would be robust.\n>\n> If anyone is aware of a solution out there that is based in R, I'd be\n> appreciative.\n>\n> Regards,\n> Matt Considine\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
+      "body_snippet": "Matt,\n\nIf you have all the trades, or at least the starting position and cost \nbasis, and all the trades after that point, then blotter can do what you \nwant.\n\nsee\n\n?addTxns #loading everything in in ",
+      "thread_id": "thread-eca5fdc985d6",
+      "thread_depth": 1,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-8803b05dbc3b",
+      "message_id": "<e6590d1515f73e3c568837791659da1f@considine.net>",
+      "from_name": "matt at considine.net",
+      "from_email_hash": "2cc8bd9d28bc161b5daff5fc0a3fc80cd17fe3fc6cdf726876f9143459c63ed3",
+      "date": "2015-02-06T14:53:34-06:00",
+      "subject": "[R-SIG-Finance] Backing out a portfolio snapshot?",
+      "subject_clean": "Backing out a portfolio snapshot?",
+      "in_reply_to": "<54D52097.5030509@braverock.com>",
+      "references": [
+        "<d1b23c4536829d7a87e0164cf837be2b@considine.net>",
+        "<54D52097.5030509@braverock.com>"
+      ],
+      "body_plain": "Thanks for the replies everyone.  I'm thinking blotter is what I want to \nlook into.  What I have is ending portfolio positions with cash balance \nand trades for the two years up to that point.  What I'm trying to find \nis an easy way to either create a portfolio \"snapshot\" for any date \ngiven within those two years.  Or create a dataset that has all the \nportfolos in it from which I can select dates.  I'm indifferent as to \nthe approach - just looking to leverage what's already there.\nThanks,\nMatt\n\nOn 2015-02-06 14:14, Brian G. Peterson wrote:\n> Matt,\n> \n> If you have all the trades, or at least the starting position and cost\n> basis, and all the trades after that point, then blotter can do what\n> you want.\n> \n> see\n> \n> ?addTxns #loading everything in in one go\n> \n> and\n> \n> ?getPos # for looking up positions as of a certain time\n> \n> If you don't have the starting position and average cost, you can back\n> into the starting position (but not average cost) by entering all the\n> trades as though you started flat, and taking the difference to your\n> ending position.\n> \n> As to whether you could back out average cost, you'd have to tell us\n> more about your inputs.\n> \n> Regards,\n> \n> Brian\n> \n> On 02/06/2015 09:33 AM, matt at considine.net wrote:\n>> Hi,\n>> Let's say I have a snapshot of a portfolio's holdings on a given day, \n>> as\n>> well as the trades covering the two years up to that date.  Does \n>> anyone\n>> know of an already-made module or toolchain that would allow me to \n>> back\n>> out the portfolio's holdings on any given day up to that point (but \n>> that\n>> is obviously covered by the trading data)?  While it is a pretty\n>> straightforward - and tedious - mechanical exercise, I can see that\n>> there might be a twist in that one needs to create the implied cash\n>> balance, as all the cash positions are not included (just the ending\n>> balance).\n>> \n>> So I recognize that the result might only be a close approximation.  \n>> But\n>> under the assumption that the portfolio was always effectively fully\n>> invested I think the results would be robust.\n>> \n>> If anyone is aware of a solution out there that is based in R, I'd be\n>> appreciative.\n>> \n>> Regards,\n>> Matt Considine\n>> \n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R \n>> questions\n>> should go.",
+      "body_snippet": "Thanks for the replies everyone.  I'm thinking blotter is what I want to \nlook into.  What I have is ending portfolio positions with cash balance \nand trades for the two years up to that point.  What ",
+      "thread_id": "thread-eca5fdc985d6",
+      "thread_depth": 2,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-d9c0c9edc720",
+      "message_id": "<CAPD4hGD3inNJKQ8GAG4o80D7WfR1bV8c_uTnTjSnjeM336Df5g@mail.gmail.com>",
+      "from_name": "jun wang",
+      "from_email_hash": "056c426ba0106f9f83280bd14e4c5d70843736848bdf9c8518de2f5f86ac17d7",
+      "date": "2015-02-08T22:29:17-05:00",
+      "subject": "[R-SIG-Finance] dccfit funtion in rmgarch",
+      "subject_clean": "dccfit funtion in rmgarch",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear R users,\n\nI am using the dccfit function for my analysis, but keeping get the\nfollowing error:\n\nError in .sgarchfilter(spec = spec, data = data, out.sample = out.sample,\n :\n  unused argument (realizedVol = NULL)\n\nHere is my sample code:\n\nlibrary(rmgarch)\ndata(dji30retw)\ndata=dji30retw[,2:3]\n\nxspec = ugarchspec(variance.model=list(model=\"sGARCH\", garchOrder=c(1,1)),\n                   mean.model=list(armaOrder=c(0,0), include.mean=FALSE),\n                   distribution.model=\"norm\")\n\nuspec = multispec(replicate(2, xspec))\n\nspec1 = dccspec(uspec = uspec, dccOrder = c(1, 1), distribution = 'mvnorm')\n\nfit1 = dccfit(spec=spec1, data = data)\n\n\nCan anyone help me figure it out? Thanks in advance.\n\nJun\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear R users,\n\nI am using the dccfit function for my analysis, but keeping get the\nfollowing error:\n\nError in .sgarchfilter(spec = spec, data = data, out.sample = out.sample,\n :\n  unused argument (rea",
+      "thread_id": "thread-d9c0c9edc720",
+      "thread_depth": 0,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-eb20c1df1a10",
+      "message_id": "<54D8A1F1.3010708@4dscape.com>",
+      "from_name": "alexios",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2015-02-09T12:02:57Z",
+      "subject": "[R-SIG-Finance] dccfit funtion in rmgarch",
+      "subject_clean": "dccfit funtion in rmgarch",
+      "in_reply_to": "<CAPD4hGD3inNJKQ8GAG4o80D7WfR1bV8c_uTnTjSnjeM336Df5g@mail.gmail.com>",
+      "references": [
+        "<CAPD4hGD3inNJKQ8GAG4o80D7WfR1bV8c_uTnTjSnjeM336Df5g@mail.gmail.com>"
+      ],
+      "body_plain": "Please provide the output of sessionInfo(), or just update \nrugarch&rmgarch to their latest versions with R 3.1.2\n\n\nAlexios\n\nOn 09/02/2015 03:29, jun wang wrote:\n> Dear R users,\n>\n> I am using the dccfit function for my analysis, but keeping get the\n> following error:\n>\n> Error in .sgarchfilter(spec = spec, data = data, out.sample = out.sample,\n>   :\n>    unused argument (realizedVol = NULL)\n>\n> Here is my sample code:\n>\n> library(rmgarch)\n> data(dji30retw)\n> data=dji30retw[,2:3]\n>\n> xspec = ugarchspec(variance.model=list(model=\"sGARCH\", garchOrder=c(1,1)),\n>                     mean.model=list(armaOrder=c(0,0), include.mean=FALSE),\n>                     distribution.model=\"norm\")\n>\n> uspec = multispec(replicate(2, xspec))\n>\n> spec1 = dccspec(uspec = uspec, dccOrder = c(1, 1), distribution = 'mvnorm')\n>\n> fit1 = dccfit(spec=spec1, data = data)\n>\n>\n> Can anyone help me figure it out? Thanks in advance.\n>\n> Jun\n>\n> \t[[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>\n>",
+      "body_snippet": "Please provide the output of sessionInfo(), or just update \nrugarch&rmgarch to their latest versions with R 3.1.2\n\n\nAlexios\n\nOn 09/02/2015 03:29, jun wang wrote:\n> Dear R users,\n>\n> I am using the dcc",
+      "thread_id": "thread-d9c0c9edc720",
+      "thread_depth": 1,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-88cb9e9bbdc1",
+      "message_id": "<20150209135250.26585@web007.roc2.bluetie.com>",
+      "from_name": "ce",
+      "from_email_hash": "f69a20078ecdac076b994220ad4c1c97005d077df2b25a002bcec6f9b78297ea",
+      "date": "2015-02-09T13:52:50-05:00",
+      "subject": "[R-SIG-Finance] quantmod can't get fx currencies ?",
+      "subject_clean": "quantmod can't get fx currencies ?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear all,\n\nRecently quantmod package can't get FX curries any more . I use R 3.1.2 , updated quantmod to latest. \n\n> library(quantmod)\nLoading required package: xts\nLoading required package: zoo\n\nAttaching package: ?zoo?\n\nThe following objects are masked from ?package:base?:\n\n    as.Date, as.Date.numeric\n\nLoading required package: TTR\nVersion 0.4-0 included new data defaults. See ?getSymbols.\n\n> getFX(\"EUR/USD\",from=\"2015-01-01\")\nError in download.file(paste(oanda.URL, from.date, to.date, \"exch=\", currency.pair[1],  :\n  cannot open URL 'http://www.oanda.com/convert/fxhistory?lang=en&date1=01%2F01%2F15&date=02%2F09%2F15&date_fmt=us&exch=EUR&expr2=USD&margin_fixed=0&SUBMIT=Get+Table&format=CSV&redirected=1'\n\nFor stocks still works though :\n\n> getSymbols('F')\n[1] \"F\"",
+      "body_snippet": "Dear all,\n\nRecently quantmod package can't get FX curries any more . I use R 3.1.2 , updated quantmod to latest. \n\n> library(quantmod)\nLoading required package: xts\nLoading required package: zoo\n\nAtta",
+      "thread_id": "thread-88cb9e9bbdc1",
+      "thread_depth": 0,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-003218920e0a",
+      "message_id": "<CAPPM_gRwgz1SLNspRW1RiL+Yj5jsxAXRW597Yr+6=BaBwuu7yA@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-02-09T13:08:04-06:00",
+      "subject": "[R-SIG-Finance] quantmod can't get fx currencies ?",
+      "subject_clean": "quantmod can't get fx currencies ?",
+      "in_reply_to": "<20150209135250.26585@web007.roc2.bluetie.com>",
+      "references": [
+        "<20150209135250.26585@web007.roc2.bluetie.com>"
+      ],
+      "body_plain": "Oanda changed their URL structure and file format. I fixed this over\nthe weekend:\nhttps://github.com/joshuaulrich/quantmod/issues/36\n\nOn Mon, Feb 9, 2015 at 12:52 PM, ce <zadig_1 at excite.com> wrote:\n>\n> Dear all,\n>\n> Recently quantmod package can't get FX curries any more . I use R 3.1.2 , updated quantmod to latest.\n>\n>> library(quantmod)\n> Loading required package: xts\n> Loading required package: zoo\n>\n> Attaching package: ?zoo?\n>\n> The following objects are masked from ?package:base?:\n>\n>     as.Date, as.Date.numeric\n>\n> Loading required package: TTR\n> Version 0.4-0 included new data defaults. See ?getSymbols.\n>\n>> getFX(\"EUR/USD\",from=\"2015-01-01\")\n> Error in download.file(paste(oanda.URL, from.date, to.date, \"exch=\", currency.pair[1],  :\n>   cannot open URL 'http://www.oanda.com/convert/fxhistory?lang=en&date1=01%2F01%2F15&date=02%2F09%2F15&date_fmt=us&exch=EUR&expr2=USD&margin_fixed=0&SUBMIT=Get+Table&format=CSV&redirected=1'\n>\n> For stocks still works though :\n>\n>> getSymbols('F')\n> [1] \"F\"\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "Oanda changed their URL structure and file format. I fixed this over\nthe weekend:\nhttps://github.com/joshuaulrich/quantmod/issues/36\n\nOn Mon, Feb 9, 2015 at 12:52 PM, ce <zadig_1 at excite.com> wrote:",
+      "thread_id": "thread-88cb9e9bbdc1",
+      "thread_depth": 1,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-97ebb1f63f6b",
+      "message_id": "<54E123BE.1060908@comcast.net>",
+      "from_name": "Robert Sherry",
+      "from_email_hash": "aa1836dc0994d699d644290606d4b6d9eff5cc8dc84143f655cce662228ec2a7",
+      "date": "2015-02-15T17:54:54-05:00",
+      "subject": "[R-SIG-Finance] Gold",
+      "subject_clean": "Gold",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "How do I get the current price of Gold using R?\n\nI thank the group in advance for their responses.\n\nBob",
+      "body_snippet": "How do I get the current price of Gold using R?\n\nI thank the group in advance for their responses.\n\nBob",
+      "thread_id": "thread-97ebb1f63f6b",
+      "thread_depth": 0,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-ad8170fcdd51",
+      "message_id": "<CA+oJuEE7_bEbP4pCNwYs10_LxQAfLKxq3nPaOqYhEfT3Ooyt8g@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "82540aa84df90b083b58f5752a77274af680540119bfecc0c0436c59ddd13e5c",
+      "date": "2015-02-15T18:11:47-05:00",
+      "subject": "[R-SIG-Finance] Gold",
+      "subject_clean": "Gold",
+      "in_reply_to": "<54E123BE.1060908@comcast.net>",
+      "references": [
+        "<54E123BE.1060908@comcast.net>"
+      ],
+      "body_plain": "Robert,\n\nYou can get the GLD data from Yahoo Finance with:\n\nrequire(quantmod)\ngetSymbols(\"GLD\", from=\"1990-01-01\")\n\nOr, for the open-interest cross from quandl,\n\nrequire(IKTrading)\nCME_GC <- quandClean(\"CHRIS/CME_GC\", start_date=from, end_date=to,\nverbose=verbose) #Gold\nHope this helps.\n\n-Ilya\n\nOn Sun, Feb 15, 2015 at 5:54 PM, Robert Sherry <rsherry8 at comcast.net> wrote:\n\n>\n> How do I get the current price of Gold using R?\n>\n> I thank the group in advance for their responses.\n>\n> Bob\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Robert,\n\nYou can get the GLD data from Yahoo Finance with:\n\nrequire(quantmod)\ngetSymbols(\"GLD\", from=\"1990-01-01\")\n\nOr, for the open-interest cross from quandl,\n\nrequire(IKTrading)\nCME_GC <- quandClea",
+      "thread_id": "thread-97ebb1f63f6b",
+      "thread_depth": 1,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-c79d3af2ab7b",
+      "message_id": "<54E13A89.8080208@comcast.net>",
+      "from_name": "Robert Sherry",
+      "from_email_hash": "aa1836dc0994d699d644290606d4b6d9eff5cc8dc84143f655cce662228ec2a7",
+      "date": "2015-02-15T19:32:09-05:00",
+      "subject": "[R-SIG-Finance] Gold",
+      "subject_clean": "Gold",
+      "in_reply_to": "<CA+oJuEE7_bEbP4pCNwYs10_LxQAfLKxq3nPaOqYhEfT3Ooyt8g@mail.gmail.com>",
+      "references": [
+        "<54E123BE.1060908@comcast.net>",
+        "<CA+oJuEE7_bEbP4pCNwYs10_LxQAfLKxq3nPaOqYhEfT3Ooyt8g@mail.gmail.com>"
+      ],
+      "body_plain": "Thank you for your response. The symbol GLD is not really going to work \nfor me because it is my understanding how much gold GLF represents \nvaries over time. Therefore,\nI thought I would use IKTrading. However, when I try installing it, I \nrun into the following problem:\n\ndevtools::install_github(\"IlyaKipnis/IKTrading\")\nDownloading github repo IlyaKipnis/IKTrading at master\nInstalling IKTrading\nInstalling dependencies for IKTrading:\nquantstrat, quantstrat\nInstalling packages into ?C:/Users/Bob/Documents/R/win-library/3.1?\n(as ?lib? is unspecified)\n\"C:/PROGRA~1/R/R-31~1.2/bin/x64/R\" --vanilla CMD INSTALL  \\\n\"C:/Users/Bob/AppData/Local/Temp/Rtmp0OTNpS/devtools1710548f5fb4/IlyaKipnis-IKTrading-0b4e0e5\" \n\\\n   --library=\"C:/Users/Bob/Documents/R/win-library/3.1\" --install-tests\n\nERROR: dependency 'quantstrat' is not available for package 'IKTrading'\n* removing 'C:/Users/Bob/Documents/R/win-library/3.1/IKTrading'\nError: Command failed (1)\nIn addition: Warning message:\npackage ?quantstrat? is not available (for R version 3.1.2)\n\nSo, I thought I would install the package quantstrat. However, that does \nnot work either.\n > install.packages(\"quantstrat\")\nInstalling package into ?C:/Users/Bob/Documents/R/win-library/3.1?\n(as ?lib? is unspecified)\nWarning message:\npackage ?quantstrat? is not available (for R version 3.1.2)\n\nI am using version 3.1.2 of R. What am I doing wrong?\n\nBob\n\nOn 2/15/2015 6:11 PM, Ilya Kipnis wrote:\n> Robert,\n>\n> You can get the GLD data from Yahoo Finance with:\n>\n> require(quantmod)\n> getSymbols(\"GLD\", from=\"1990-01-01\")\n>\n> Or, for the open-interest cross from quandl,\n>\n> require(IKTrading)\n> |CME_GC <- ||quandClean||(||\"CHRIS/CME_GC\"||, start_date=from, \n> end_date=to, verbose=verbose) ||#Gold |\n> Hope this helps.\n>\n> -Ilya\n>\n> On Sun, Feb 15, 2015 at 5:54 PM, Robert Sherry <rsherry8 at comcast.net \n> <mailto:rsherry8 at comcast.net>> wrote:\n>\n>\n>     How do I get the current price of Gold using R?\n>\n>     I thank the group in advance for their responses.\n>\n>     Bob\n>\n>     _______________________________________________\n>     R-SIG-Finance at r-project.org <mailto:R-SIG-Finance at r-project.org>\n>     mailing list\n>     https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>     -- Subscriber-posting only. If you want to post, subscribe first.\n>     -- Also note that this is not the r-help list where general R\n>     questions should go.\n>\n>\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thank you for your response. The symbol GLD is not really going to work \nfor me because it is my understanding how much gold GLF represents \nvaries over time. Therefore,\nI thought I would use IKTradin",
+      "thread_id": "thread-97ebb1f63f6b",
+      "thread_depth": 2,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-d719344435be",
+      "message_id": "<92C8457E-E5BF-4503-968F-66A6242589F9@gmail.com>",
+      "from_name": "Michael Weylandt",
+      "from_email_hash": "44e8775a589b9ef81880469e200f3cce307c7180b4289ca1696a578afb772b3a",
+      "date": "2015-02-15T19:47:23-05:00",
+      "subject": "[R-SIG-Finance] Gold",
+      "subject_clean": "Gold",
+      "in_reply_to": "<54E13A89.8080208@comcast.net>",
+      "references": [
+        "<54E123BE.1060908@comcast.net>",
+        "<CA+oJuEE7_bEbP4pCNwYs10_LxQAfLKxq3nPaOqYhEfT3Ooyt8g@mail.gmail.com>",
+        "<54E13A89.8080208@comcast.net>"
+      ],
+      "body_plain": "> On Feb 15, 2015, at 7:32 PM, Robert Sherry <rsherry8 at comcast.net> wrote:\n> \n> Thank you for your response. The symbol GLD is not really going to work \n> for me because it is my understanding how much gold GLF represents \n> varies over time. Therefore,\n> I thought I would use IKTrading. However, when I try installing it, I \n> run into the following problem:\n> \n> devtools::install_github(\"IlyaKipnis/IKTrading\")\n> Downloading github repo IlyaKipnis/IKTrading at master\n> Installing IKTrading\n> Installing dependencies for IKTrading:\n> quantstrat, quantstrat\n> Installing packages into ?C:/Users/Bob/Documents/R/win-library/3.1?\n> (as ?lib? is unspecified)\n> \"C:/PROGRA~1/R/R-31~1.2/bin/x64/R\" --vanilla CMD INSTALL  \\\n> \"C:/Users/Bob/AppData/Local/Temp/Rtmp0OTNpS/devtools1710548f5fb4/IlyaKipnis-IKTrading-0b4e0e5\" \n> \\\n>   --library=\"C:/Users/Bob/Documents/R/win-library/3.1\" --install-tests\n> \n> ERROR: dependency 'quantstrat' is not available for package 'IKTrading'\n> * removing 'C:/Users/Bob/Documents/R/win-library/3.1/IKTrading'\n> Error: Command failed (1)\n> In addition: Warning message:\n> package ?quantstrat? is not available (for R version 3.1.2)\n> \n> So, I thought I would install the package quantstrat. However, that does \n> not work either.\n>> install.packages(\"quantstrat\")\n> Installing package into ?C:/Users/Bob/Documents/R/win-library/3.1?\n> (as ?lib? is unspecified)\n> Warning message:\n> package ?quantstrat? is not available (for R version 3.1.2)\n> \n> I am using version 3.1.2 of R. What am I doing wrong?\n\nNot on CRAN. See https://r-forge.r-project.org/R/?group_id=316\n\n\n> \n> Bob\n> \n>> On 2/15/2015 6:11 PM, Ilya Kipnis wrote:\n>> Robert,\n>> \n>> You can get the GLD data from Yahoo Finance with:\n>> \n>> require(quantmod)\n>> getSymbols(\"GLD\", from=\"1990-01-01\")\n>> \n>> Or, for the open-interest cross from quandl,\n>> \n>> require(IKTrading)\n>> |CME_GC <- ||quandClean||(||\"CHRIS/CME_GC\"||, start_date=from, \n>> end_date=to, verbose=verbose) ||#Gold |\n>> Hope this helps.\n>> \n>> -Ilya\n>> \n>> On Sun, Feb 15, 2015 at 5:54 PM, Robert Sherry <rsherry8 at comcast.net \n>> <mailto:rsherry8 at comcast.net>> wrote:\n>> \n>> \n>>    How do I get the current price of Gold using R?\n>> \n>>    I thank the group in advance for their responses.\n>> \n>>    Bob\n>> \n>>    _______________________________________________\n>>    R-SIG-Finance at r-project.org <mailto:R-SIG-Finance at r-project.org>\n>>    mailing list\n>>    https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>    -- Subscriber-posting only. If you want to post, subscribe first.\n>>    -- Also note that this is not the r-help list where general R\n>>    questions should go.\n> \n> \n>    [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "> On Feb 15, 2015, at 7:32 PM, Robert Sherry <rsherry8 at comcast.net> wrote:\n> \n> Thank you for your response. The symbol GLD is not really going to work \n> for me because it is my understanding how ",
+      "thread_id": "thread-97ebb1f63f6b",
+      "thread_depth": 3,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-75d5abecc7c8",
+      "message_id": "<54E1EA5A.7040209@considine.net>",
+      "from_name": "Matt Considine",
+      "from_email_hash": "2cc8bd9d28bc161b5daff5fc0a3fc80cd17fe3fc6cdf726876f9143459c63ed3",
+      "date": "2015-02-16T08:02:18-05:00",
+      "subject": "[R-SIG-Finance] Gold",
+      "subject_clean": "Gold",
+      "in_reply_to": "<mailman.6.1424084404.7886.r-sig-finance@r-project.org>",
+      "references": [
+        "<mailman.6.1424084404.7886.r-sig-finance@r-project.org>"
+      ],
+      "body_plain": "Do this first\n   **|install.packages(\"quantstrat\", repos=\"http://R-Forge.R-project.org\")\n\nThe code provided before worked fine for me on R 3.1.2 on Vista\nMatt\n|**\n\n\n\n---\nThis email has been checked for viruses by Avast antivirus software.\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Do this first\n   **|install.packages(\"quantstrat\", repos=\"http://R-Forge.R-project.org\")\n\nThe code provided before worked fine for me on R 3.1.2 on Vista\nMatt\n|**\n\n\n\n---\nThis email has been checked fo",
+      "thread_id": "thread-75d5abecc7c8",
+      "thread_depth": 0,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-a58ea74600e3",
+      "message_id": "<CAA7_VSinWGpbWU=t24LNmGiLSbewT4o2En3+3rt7YCPBd8ognw@mail.gmail.com>",
+      "from_name": "Gerald Morrison",
+      "from_email_hash": "e8defbdf34e11dee756565b27b591b89fd2183559fa01e589c267d4fa200298a",
+      "date": "2015-02-16T09:04:07-07:00",
+      "subject": "[R-SIG-Finance] How to install IKTrading and Quantstrat",
+      "subject_clean": "How to install IKTrading and Quantstrat",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "In response to previous post on retrieving gold futures data, I thought I\nwould provide details on installing IKTrading and Quantstrat which are both\nexcellent resources. This is for the newbies to R (like myself) who find it\na bit confusing to get all the dependencies in place for packages not on\nCRAN. Here are the steps:\n\ninstall.packages(\"devtools\")\nrequire(devtools)\ninstall.packages(\"FinancialInstrument\", repos=\"http://R-Forge.R-project.org\n<http://r-forge.r-project.org/>\")\ninstall.packages(\"blotter\", repos=\"http://R-Forge.R-project.org\n<http://r-forge.r-project.org/>\")\ninstall.packages(\"quantstrat\", repos=\"http://R-Forge.R-project.org\n<http://r-forge.r-project.org/>\")\ninstall.packages(\"foreach\")\ninstall_github(\"IlyaKipnis/IKTrading\")\n\nAs a side note, quandClean is excellent for getting Quandl futures data -\nincluding gold. Ilya Kipnis has kindly provided this functionality in his\nIKTrading package and you see examples and code for retrieving daily\nfutures data from Ilya's blog post here:\nhttps://quantstrattrader.wordpress.com/2014/07/22/intermission-a-data-file-for-futures-data-from-quandl/\n\nFor those working with ETF's like GLD who wish to extend the\ndata further back then the ETF's inception date (Gold and Bonds back to\n1978!), Ilya also provides examples and code here:\nhttps://quantstrattrader.wordpress.com/2014/11/02/its-amazing-how-well-dumb-things-get-marketed/\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "In response to previous post on retrieving gold futures data, I thought I\nwould provide details on installing IKTrading and Quantstrat which are both\nexcellent resources. This is for the newbies to R ",
+      "thread_id": "thread-a58ea74600e3",
+      "thread_depth": 0,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-e33e9463d1fc",
+      "message_id": "<CAO77-6vJ+3geDZDTGodFxP-+nq51mAo+R-rZ7MksvwBstYuvmg@mail.gmail.com>",
+      "from_name": "Isak Engdahl",
+      "from_email_hash": "b750241ba0dea48bf309d6d5fca04249cd2c7c0f35193914a594c292680d6412",
+      "date": "2015-02-24T13:33:45+01:00",
+      "subject": "[R-SIG-Finance] Quantmod Yahoo ticker download error",
+      "subject_clean": "Quantmod Yahoo ticker download error",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nTickers with - get error when trying to download ZB-PA but not ZBK.\n\nWhen I manually download it from Yahoo I get this link, that works.\n\nhttp://real-chart.finance.yahoo.com/table.csv?s=ZB-PA&a=00&b=2&c=2015&d=01&e=23&f=2015&g=d&ignore=.csv\n\nThe Quantmod tried to download from this link, which does not exist.\nhttp://ichart.finance.yahoo.com/table.csv?s=ZB-PA&a=0&b=01&c=2015&d=1&e=24&f=2015&g=d&\n*q=q&y=0&z=ZB-PA&x*=.csv\n\nIf this part could be replaced \"q=q&y=0&z=ZB-PA&x\" with \"d&ignore\" and it\nwill work both with ZB-PA and ZBK.\n\nMaybe this forum is not the correct place to suggest this improvement,\nplease point me in right direction.\n\nMaybe someone can help me out to fix this script error?\nMy script stop writing to the database if one of these tickers get this\nerror described above (no data exist for symbol ZB-PA to be stored in the\ndatabase. Anyone know how to ignore tickers that get this error so the\nscript can continue to load all tickers that has downloaded data?\n\nPlease find attached scripts.\n\nError when trying to download ticker data from Yahoo Finance for ZB-PA.\n\n=================================\n*\"Downloading ZB-PA*\n*Error in download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,\n : *\n*  cannot open URL\n'http://ichart.finance.yahoo.com/table.csv?s=ZB-PA&a=0&b=01&c=2015&d=1&e=24&f=2015&g=d&q=q&y=0&z=ZB-PA&x=.csv\n<http://ichart.finance.yahoo.com/table.csv?s=ZB-PA&a=0&b=01&c=2015&d=1&e=24&f=2015&g=d&q=q&y=0&z=ZB-PA&x=.csv>'*\n*In addition: Warning message:*\n*In download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :*\n*  InternetOpenUrl failed: 'The operation timed out'*\n*, error - did not download (likely due to rate limiting*\n*Downloading ZBK*\n*Warning message:*\n*In download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :*\n*  downloaded length 1653 != reported length 200*\n*> View(clean.symbols)*\n*> \"*\n=============================\n\n========================================\n> # Save data to MySQL\n>\n> library(RMySQL)\n>\n> con <- dbConnect(RMySQL::MySQL(), host=\"localhost\",\nuser=\"donedge\",password=\"p at ssw0rd\", dbname= \"daily\")\n>\n> # Loop through each symbol\n>\n> for (i in 1:nrow(clean.symbols)){\n+   symbol <- clean.symbols[i,]$Symbol\n+   df = data.frame(Date=index(get(symbol)), coredata(get(symbol)))\n+   setNames(df,c(\"Date\",\"Open\",\"High\",\"Low\",\"Close\",\"Volume\",\"Adjusted\"))\n+\n+   cat(\"Storing\",symbol,\"\\n\")\n+\n+   if(dbExistsTable(con, symbol)){\n+     dbRemoveTable(con, symbol)\n+   }\n+\n+   dbWriteTable(con, name=symbol, value=df, row.names=FALSE, overwrite =\nTRUE)\n+\n+ }\n*Error in get(symbol) : object 'ZB-PA' not found*\n>\n========================================\n\nKind Regards\nIsak\n-------------- next part --------------\nAn HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20150224/2923030c/attachment.html>\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: downloadData.R\nType: application/octet-stream\nSize: 862 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20150224/2923030c/attachment.obj>\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: mysqlData.R\nType: application/octet-stream\nSize: 593 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20150224/2923030c/attachment-0001.obj>\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: init.R\nType: application/octet-stream\nSize: 72 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20150224/2923030c/attachment-0002.obj>",
+      "body_snippet": "Hello,\n\nTickers with - get error when trying to download ZB-PA but not ZBK.\n\nWhen I manually download it from Yahoo I get this link, that works.\n\nhttp://real-chart.finance.yahoo.com/table.csv?s=ZB-PA&",
+      "thread_id": "thread-e33e9463d1fc",
+      "thread_depth": 0,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-edf595950394",
+      "message_id": "<BE4A6A4C-1626-4BD0-B07A-020A31EB96F6@my.bristol.ac.uk>",
+      "from_name": "Marco Sun",
+      "from_email_hash": "b4df5e5874029fe68ef3e5fee11dc782e9f9a316d9bbe24b2aacfb21362fc9e9",
+      "date": "2015-02-24T21:55:22+08:00",
+      "subject": "[R-SIG-Finance] Quantmod Yahoo ticker download error",
+      "subject_clean": "Quantmod Yahoo ticker download error",
+      "in_reply_to": "<CAO77-6vJ+3geDZDTGodFxP-+nq51mAo+R-rZ7MksvwBstYuvmg@mail.gmail.com>",
+      "references": [
+        "<CAO77-6vJ+3geDZDTGodFxP-+nq51mAo+R-rZ7MksvwBstYuvmg@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Isak,\n\nI have checked your scripts and there is no error reported on my platform. getSymbols correctly downloads historical prices for `ZB-PA`\n> library(quantstrat)\n> all.symbols <- stockSymbols(c(\"NYSE\"),sort.by=c(\"MarketCap\",\"Exchange\"),quiet=TRUE)\n> biggest.symbols <- tail(all.symbols,n=5)\n> clean.symbols <- subset(biggest.symbols, select = c(\"Symbol\",\"Name\",\"LastSale\",\"MarketCap\",\"Sector\"))\n> row.names(clean.symbols) <- NULL\n> i=1 #trying i=1 instead of doing the entire loop\n> symbol <- clean.symbols[i,]$Symbol\n> try (getSymbols(symbol, verbose=FALSE, warnings=FALSE, from='2015-01-01'))\n[1] \"ZB-PA?\nAnd a dataframe named `df` can also be constructed via your script\n> df = data.frame(Date=index(get(symbol)), coredata(get(symbol)))\n\nI would recommend you to update `quantmod` package if it is not the latest released version on your console.\n\nBest,\nMarco\n\nOn 24 Feb 2015, at 08:33 pm, Isak Engdahl <isak.engdahl at gmail.com> wrote:\n\n> Hello,\n> \n> Tickers with - get error when trying to download ZB-PA but not ZBK.\n> \n> When I manually download it from Yahoo I get this link, that works.\n> \n> http://real-chart.finance.yahoo.com/table.csv?s=ZB-PA&a=00&b=2&c=2015&d=01&e=23&f=2015&g=d&ignore=.csv\n> \n> The Quantmod tried to download from this link, which does not exist.\n> http://ichart.finance.yahoo.com/table.csv?s=ZB-PA&a=0&b=01&c=2015&d=1&e=24&f=2015&g=d&q=q&y=0&z=ZB-PA&x=.csv\n> \n> If this part could be replaced \"q=q&y=0&z=ZB-PA&x\" with \"d&ignore\" and it will work both with ZB-PA and ZBK.\n> \n> Maybe this forum is not the correct place to suggest this improvement, please point me in right direction.\n> \n> Maybe someone can help me out to fix this script error?\n> My script stop writing to the database if one of these tickers get this error described above (no data exist for symbol ZB-PA to be stored in the database. Anyone know how to ignore tickers that get this error so the script can continue to load all tickers that has downloaded data?\n> \n> Please find attached scripts.\n> \n> Error when trying to download ticker data from Yahoo Finance for ZB-PA.\n> \n> =================================\n> \"Downloading ZB-PA\n> Error in download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  : \n>   cannot open URL 'http://ichart.finance.yahoo.com/table.csv?s=ZB-PA&a=0&b=01&c=2015&d=1&e=24&f=2015&g=d&q=q&y=0&z=ZB-PA&x=.csv'\n> In addition: Warning message:\n> In download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :\n>   InternetOpenUrl failed: 'The operation timed out'\n> , error - did not download (likely due to rate limiting\n> Downloading ZBK\n> Warning message:\n> In download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :\n>   downloaded length 1653 != reported length 200\n> > View(clean.symbols)\n> > \"\n> =============================\n> \n> ========================================\n> > # Save data to MySQL\n> > \n> > library(RMySQL)\n> > \n> > con <- dbConnect(RMySQL::MySQL(), host=\"localhost\", user=\"donedge\",password=\"p at ssw0rd\", dbname= \"daily\")\n> > \n> > # Loop through each symbol\n> > \n> > for (i in 1:nrow(clean.symbols)){\n> +   symbol <- clean.symbols[i,]$Symbol\n> +   df = data.frame(Date=index(get(symbol)), coredata(get(symbol)))\n> +   setNames(df,c(\"Date\",\"Open\",\"High\",\"Low\",\"Close\",\"Volume\",\"Adjusted\"))\n> +   \n> +   cat(\"Storing\",symbol,\"\\n\")\n> +   \n> +   if(dbExistsTable(con, symbol)){\n> +     dbRemoveTable(con, symbol)\n> +   }\n> +   \n> +   dbWriteTable(con, name=symbol, value=df, row.names=FALSE, overwrite = TRUE)\n> +   \n> + }\n> Error in get(symbol) : object 'ZB-PA' not found\n> > \n> ========================================\n> \n> Kind Regards\n> Isak\n> <downloadData.R><mysqlData.R><init.R>_______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Isak,\n\nI have checked your scripts and there is no error reported on my platform. getSymbols correctly downloads historical prices for `ZB-PA`\n> library(quantstrat)\n> all.symbols <- stockSymbols(c(",
+      "thread_id": "thread-e33e9463d1fc",
+      "thread_depth": 1,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-fb2540ce460e",
+      "message_id": "<D96444E0-E1D1-4CDF-9625-04F42A5E3BB0@my.bristol.ac.uk>",
+      "from_name": "Marco Sun",
+      "from_email_hash": "b4df5e5874029fe68ef3e5fee11dc782e9f9a316d9bbe24b2aacfb21362fc9e9",
+      "date": "2015-02-24T21:56:46+08:00",
+      "subject": "[R-SIG-Finance] Quantmod Yahoo ticker download error",
+      "subject_clean": "Quantmod Yahoo ticker download error",
+      "in_reply_to": "<CAO77-6vJ+3geDZDTGodFxP-+nq51mAo+R-rZ7MksvwBstYuvmg@mail.gmail.com>",
+      "references": [
+        "<CAO77-6vJ+3geDZDTGodFxP-+nq51mAo+R-rZ7MksvwBstYuvmg@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Isak,\n\nI have checked your scripts and there is no error reported on my platform. getSymbols correctly downloads historical prices for `ZB-PA`\n> library(quantstrat)\n> all.symbols <- stockSymbols(c(\"NYSE\"),sort.by=c(\"MarketCap\",\"Exchange\"),quiet=TRUE)\n> biggest.symbols <- tail(all.symbols,n=5)\n> clean.symbols <- subset(biggest.symbols, select = c(\"Symbol\",\"Name\",\"LastSale\",\"MarketCap\",\"Sector\"))\n> row.names(clean.symbols) <- NULL\n> i=1 #trying i=1 instead of doing the entire loop\n> symbol <- clean.symbols[i,]$Symbol\n> try (getSymbols(symbol, verbose=FALSE, warnings=FALSE, from='2015-01-01'))\n[1] \"ZB-PA?\nAnd a dataframe named `df` can also be constructed via your script\n> df = data.frame(Date=index(get(symbol)), coredata(get(symbol)))\n\nI would recommend you to update `quantmod` package if it is not the latest released version on your console.\n\nBest,\nMarco\n\nOn 24 Feb 2015, at 08:33 pm, Isak Engdahl <isak.engdahl at gmail.com> wrote:\n\n> Hello,\n> \n> Tickers with - get error when trying to download ZB-PA but not ZBK.\n> \n> When I manually download it from Yahoo I get this link, that works.\n> \n> http://real-chart.finance.yahoo.com/table.csv?s=ZB-PA&a=00&b=2&c=2015&d=01&e=23&f=2015&g=d&ignore=.csv\n> \n> The Quantmod tried to download from this link, which does not exist.\n> http://ichart.finance.yahoo.com/table.csv?s=ZB-PA&a=0&b=01&c=2015&d=1&e=24&f=2015&g=d&q=q&y=0&z=ZB-PA&x=.csv\n> \n> If this part could be replaced \"q=q&y=0&z=ZB-PA&x\" with \"d&ignore\" and it will work both with ZB-PA and ZBK.\n> \n> Maybe this forum is not the correct place to suggest this improvement, please point me in right direction.\n> \n> Maybe someone can help me out to fix this script error?\n> My script stop writing to the database if one of these tickers get this error described above (no data exist for symbol ZB-PA to be stored in the database. Anyone know how to ignore tickers that get this error so the script can continue to load all tickers that has downloaded data?\n> \n> Please find attached scripts.\n> \n> Error when trying to download ticker data from Yahoo Finance for ZB-PA.\n> \n> =================================\n> \"Downloading ZB-PA\n> Error in download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  : \n>   cannot open URL 'http://ichart.finance.yahoo.com/table.csv?s=ZB-PA&a=0&b=01&c=2015&d=1&e=24&f=2015&g=d&q=q&y=0&z=ZB-PA&x=.csv'\n> In addition: Warning message:\n> In download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :\n>   InternetOpenUrl failed: 'The operation timed out'\n> , error - did not download (likely due to rate limiting\n> Downloading ZBK\n> Warning message:\n> In download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :\n>   downloaded length 1653 != reported length 200\n> > View(clean.symbols)\n> > \"\n> =============================\n> \n> ========================================\n> > # Save data to MySQL\n> > \n> > library(RMySQL)\n> > \n> > con <- dbConnect(RMySQL::MySQL(), host=\"localhost\", user=\"donedge\",password=\"p at ssw0rd\", dbname= \"daily\")\n> > \n> > # Loop through each symbol\n> > \n> > for (i in 1:nrow(clean.symbols)){\n> +   symbol <- clean.symbols[i,]$Symbol\n> +   df = data.frame(Date=index(get(symbol)), coredata(get(symbol)))\n> +   setNames(df,c(\"Date\",\"Open\",\"High\",\"Low\",\"Close\",\"Volume\",\"Adjusted\"))\n> +   \n> +   cat(\"Storing\",symbol,\"\\n\")\n> +   \n> +   if(dbExistsTable(con, symbol)){\n> +     dbRemoveTable(con, symbol)\n> +   }\n> +   \n> +   dbWriteTable(con, name=symbol, value=df, row.names=FALSE, overwrite = TRUE)\n> +   \n> + }\n> Error in get(symbol) : object 'ZB-PA' not found\n> > \n> ========================================\n> \n> Kind Regards\n> Isak\n> <downloadData.R><mysqlData.R><init.R>_______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Isak,\n\nI have checked your scripts and there is no error reported on my platform. getSymbols correctly downloads historical prices for `ZB-PA`\n> library(quantstrat)\n> all.symbols <- stockSymbols(c(",
+      "thread_id": "thread-e33e9463d1fc",
+      "thread_depth": 1,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-0f0684230f81",
+      "message_id": "<000901d0503a$9213a2b0$b63ae810$@org>",
+      "from_name": "Pierre Org",
+      "from_email_hash": "6ef70de6846aa0baa4d5ae4c63c1ef4c9e0d59ed5793c8d7710925cc0ccab1d3",
+      "date": "2015-02-24T14:02:47Z",
+      "subject": "[R-SIG-Finance] Quantmod Yahoo ticker download error",
+      "subject_clean": "Quantmod Yahoo ticker download error",
+      "in_reply_to": "<BE4A6A4C-1626-4BD0-B07A-020A31EB96F6@my.bristol.ac.uk>",
+      "references": [
+        "<CAO77-6vJ+3geDZDTGodFxP-+nq51mAo+R-rZ7MksvwBstYuvmg@mail.gmail.com>",
+        "<BE4A6A4C-1626-4BD0-B07A-020A31EB96F6@my.bristol.ac.uk>"
+      ],
+      "body_plain": "Hi \n\nThank you all for a great and very useful thread. Do you know if there is a package that can help to access the same type of information than stockSymbols fort the London stock exchange ? i.e download of price and market caps ? I am working on a Black & Litterman project and would like to somehow automatise a reverse optimisation of the expected returns for each sectors For this, I  need to download the market caps per stock/sector as well as the closing price...any help / pointer would be appreciated.\n\n\nThks\n\nPierre\n\n-----Original Message-----\nFrom: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On Behalf Of Marco Sun\nSent: 24 February 2015 13:55\nTo: Isak Engdahl\nCc: r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] Quantmod Yahoo ticker download error\n\nHi Isak,\n\nI have checked your scripts and there is no error reported on my platform. getSymbols correctly downloads historical prices for `ZB-PA`\n> library(quantstrat)\n> all.symbols <- \n> stockSymbols(c(\"NYSE\"),sort.by=c(\"MarketCap\",\"Exchange\"),quiet=TRUE)\n> biggest.symbols <- tail(all.symbols,n=5) clean.symbols <- \n> subset(biggest.symbols, select = \n> c(\"Symbol\",\"Name\",\"LastSale\",\"MarketCap\",\"Sector\"))\n> row.names(clean.symbols) <- NULL\n> i=1 #trying i=1 instead of doing the entire loop symbol <- \n> clean.symbols[i,]$Symbol try (getSymbols(symbol, verbose=FALSE, \n> warnings=FALSE, from='2015-01-01'))\n[1] \"ZB-PA \nAnd a dataframe named `df` can also be constructed via your script\n> df = data.frame(Date=index(get(symbol)), coredata(get(symbol)))\n\nI would recommend you to update `quantmod` package if it is not the latest released version on your console.\n\nBest,\nMarco\n\nOn 24 Feb 2015, at 08:33 pm, Isak Engdahl <isak.engdahl at gmail.com> wrote:\n\n> Hello,\n> \n> Tickers with - get error when trying to download ZB-PA but not ZBK.\n> \n> When I manually download it from Yahoo I get this link, that works.\n> \n> http://real-chart.finance.yahoo.com/table.csv?s=ZB-PA&a=00&b=2&c=2015&\n> d=01&e=23&f=2015&g=d&ignore=.csv\n> \n> The Quantmod tried to download from this link, which does not exist.\n> http://ichart.finance.yahoo.com/table.csv?s=ZB-PA&a=0&b=01&c=2015&d=1&\n> e=24&f=2015&g=d&q=q&y=0&z=ZB-PA&x=.csv\n> \n> If this part could be replaced \"q=q&y=0&z=ZB-PA&x\" with \"d&ignore\" and it will work both with ZB-PA and ZBK.\n> \n> Maybe this forum is not the correct place to suggest this improvement, please point me in right direction.\n> \n> Maybe someone can help me out to fix this script error?\n> My script stop writing to the database if one of these tickers get this error described above (no data exist for symbol ZB-PA to be stored in the database. Anyone know how to ignore tickers that get this error so the script can continue to load all tickers that has downloaded data?\n> \n> Please find attached scripts.\n> \n> Error when trying to download ticker data from Yahoo Finance for ZB-PA.\n> \n> =================================\n> \"Downloading ZB-PA\n> Error in download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  : \n>   cannot open URL 'http://ichart.finance.yahoo.com/table.csv?s=ZB-PA&a=0&b=01&c=2015&d=1&e=24&f=2015&g=d&q=q&y=0&z=ZB-PA&x=.csv'\n> In addition: Warning message:\n> In download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :\n>   InternetOpenUrl failed: 'The operation timed out'\n> , error - did not download (likely due to rate limiting Downloading \n> ZBK Warning message:\n> In download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :\n>   downloaded length 1653 != reported length 200\n> > View(clean.symbols)\n> > \"\n> =============================\n> \n> ========================================\n> > # Save data to MySQL\n> > \n> > library(RMySQL)\n> > \n> > con <- dbConnect(RMySQL::MySQL(), host=\"localhost\", \n> > user=\"donedge\",password=\"p at ssw0rd\", dbname= \"daily\")\n> > \n> > # Loop through each symbol\n> > \n> > for (i in 1:nrow(clean.symbols)){\n> +   symbol <- clean.symbols[i,]$Symbol\n> +   df = data.frame(Date=index(get(symbol)), coredata(get(symbol)))\n> +   \n> + setNames(df,c(\"Date\",\"Open\",\"High\",\"Low\",\"Close\",\"Volume\",\"Adjusted\"\n> + ))\n> +   \n> +   cat(\"Storing\",symbol,\"\\n\")\n> +   \n> +   if(dbExistsTable(con, symbol)){\n> +     dbRemoveTable(con, symbol)\n> +   }\n> +   \n> +   dbWriteTable(con, name=symbol, value=df, row.names=FALSE, \n> + overwrite = TRUE)\n> +   \n> + }\n> Error in get(symbol) : object 'ZB-PA' not found\n> > \n> ========================================\n> \n> Kind Regards\n> Isak\n> <downloadData.R><mysqlData.R><init.R>_________________________________\n> ______________ R-SIG-Finance at r-project.org mailing list \n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi \n\nThank you all for a great and very useful thread. Do you know if there is a package that can help to access the same type of information than stockSymbols fort the London stock exchange ? i.e dow",
+      "thread_id": "thread-e33e9463d1fc",
+      "thread_depth": 2,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-94f5bba416f5",
+      "message_id": "<CAO77-6utH1mc5pEtkcANNKsLPW3epnt_BYEvUXrX+3vtW9c3aw@mail.gmail.com>",
+      "from_name": "Isak Engdahl",
+      "from_email_hash": "b750241ba0dea48bf309d6d5fca04249cd2c7c0f35193914a594c292680d6412",
+      "date": "2015-02-24T16:02:11+01:00",
+      "subject": "[R-SIG-Finance] Quantmod Yahoo ticker download error",
+      "subject_clean": "Quantmod Yahoo ticker download error",
+      "in_reply_to": "<D96444E0-E1D1-4CDF-9625-04F42A5E3BB0@my.bristol.ac.uk>",
+      "references": [
+        "<CAO77-6vJ+3geDZDTGodFxP-+nq51mAo+R-rZ7MksvwBstYuvmg@mail.gmail.com>",
+        "<D96444E0-E1D1-4CDF-9625-04F42A5E3BB0@my.bristol.ac.uk>"
+      ],
+      "body_plain": "Hi Marco,\n\nVery Strange! I update quantmod, still get this error...\n\nInstead of downloading a lots of tickers, I tried to limit the list to\nthose tickers and tired to simplify the code. I get this error on the code\nbelow:\n\n*Error in 1:nrow(symbols) : argument of length 0*\n\nI runned nrow(symbols) and get\nnrow(symbols)\nNULL\n\nThe symbols should not have any rows, right?\n\nThe For should look at the datasets for the tickers and store in to the\ndatabase, right?\n\n\n*#Initialization*\n*library(quantstrat)*\n*library(TTR)*\n*startDate <- \"2010-01-01\"*\n*endDate <- \"2013-07-31\"*\n*symbols = c(\"XLF\",\"XLP\",\"XLE\",\"XLY\",\"XLV\",\"XLI\",\"XLB\",\"XLK\",\"XLU\")*\n*Sys.setenv(TZ=\"UTC\")*\n*getSymbols(symbols, src=\"yahoo\", from=startDate, to=endDate, adjust=TRUE)*\n\n*# Save data to MySQL*\n\n*library(RMySQL)*\n\n*con <- dbConnect(RMySQL::MySQL(), host=\"localhost\",\nuser=\"donedge\",password=\"p at ssw0rd\", dbname= \"daily\")*\n\n*# Loop through each symbol*\n*for (i in 1:nrow(symbols)){*\n*  symbol <- symbols[i,]$Symbol*\n*  df = data.frame(Date=index(get(symbol)), coredata(get(symbol)))*\n*  setNames(df,c(\"Date\",\"Open\",\"High\",\"Low\",\"Close\",\"Volume\",\"Adjusted\"))*\n\n*  if(dbExistsTable(con, symbol)){*\n*    dbRemoveTable(con, symbol)*\n*  }*\n*  dbWriteTable(con, name=symbol, value=df, row.names=FALSE, overwrite =\nTRUE)*\n*}*\n\nOn Tue, Feb 24, 2015 at 2:56 PM, Marco Sun <hs13322 at my.bristol.ac.uk> wrote:\n\n> Hi Isak,\n>\n> I have checked your scripts and there is no error reported on my platform.\n> getSymbols correctly downloads historical prices for `ZB-PA`\n> > library(quantstrat)\n> > all.symbols <- stockSymbols(c(\"NYSE\"),sort.by\n> =c(\"MarketCap\",\"Exchange\"),quiet=TRUE)\n> > biggest.symbols <- tail(all.symbols,n=5)\n> > clean.symbols <- subset(biggest.symbols, select =\n> c(\"Symbol\",\"Name\",\"LastSale\",\"MarketCap\",\"Sector\"))\n> > row.names(clean.symbols) <- NULL\n> > i=1 #trying i=1 instead of doing the entire loop\n> > symbol <- clean.symbols[i,]$Symbol\n> > try (getSymbols(symbol, verbose=FALSE, warnings=FALSE,\n> from='2015-01-01'))\n> [1] \"ZB-PA?\n> And a dataframe named `df` can also be constructed via your script\n> > df = data.frame(Date=index(get(symbol)), coredata(get(symbol)))\n>\n> I would recommend you to update `quantmod` package if it is not the latest\n> released version on your console.\n>\n> Best,\n> Marco\n>\n> On 24 Feb 2015, at 08:33 pm, Isak Engdahl <isak.engdahl at gmail.com> wrote:\n>\n> Hello,\n>\n> Tickers with - get error when trying to download ZB-PA but not ZBK.\n>\n> When I manually download it from Yahoo I get this link, that works.\n>\n>\n> http://real-chart.finance.yahoo.com/table.csv?s=ZB-PA&a=00&b=2&c=2015&d=01&e=23&f=2015&g=d&ignore=.csv\n>\n> The Quantmod tried to download from this link, which does not exist.\n>\n> http://ichart.finance.yahoo.com/table.csv?s=ZB-PA&a=0&b=01&c=2015&d=1&e=24&f=2015&g=d&\n> *q=q&y=0&z=ZB-PA&x*=.csv\n>\n> If this part could be replaced \"q=q&y=0&z=ZB-PA&x\" with \"d&ignore\" and it\n> will work both with ZB-PA and ZBK.\n>\n> Maybe this forum is not the correct place to suggest this improvement,\n> please point me in right direction.\n>\n> Maybe someone can help me out to fix this script error?\n> My script stop writing to the database if one of these tickers get this\n> error described above (no data exist for symbol ZB-PA to be stored in the\n> database. Anyone know how to ignore tickers that get this error so the\n> script can continue to load all tickers that has downloaded data?\n>\n> Please find attached scripts.\n>\n> Error when trying to download ticker data from Yahoo Finance for ZB-PA.\n>\n> =================================\n> *\"Downloading ZB-PA*\n> *Error in download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\",\n> from.m,  : *\n> *  cannot open URL\n> 'http://ichart.finance.yahoo.com/table.csv?s=ZB-PA&a=0&b=01&c=2015&d=1&e=24&f=2015&g=d&q=q&y=0&z=ZB-PA&x=.csv\n> <http://ichart.finance.yahoo.com/table.csv?s=ZB-PA&a=0&b=01&c=2015&d=1&e=24&f=2015&g=d&q=q&y=0&z=ZB-PA&x=.csv>'*\n> *In addition: Warning message:*\n> *In download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :*\n> *  InternetOpenUrl failed: 'The operation timed out'*\n> *, error - did not download (likely due to rate limiting*\n> *Downloading ZBK*\n> *Warning message:*\n> *In download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :*\n> *  downloaded length 1653 != reported length 200*\n> *> View(clean.symbols)*\n> *> \"*\n> =============================\n>\n> ========================================\n> > # Save data to MySQL\n> >\n> > library(RMySQL)\n> >\n> > con <- dbConnect(RMySQL::MySQL(), host=\"localhost\",\n> user=\"donedge\",password=\"p at ssw0rd\", dbname= \"daily\")\n> >\n> > # Loop through each symbol\n> >\n> > for (i in 1:nrow(clean.symbols)){\n> +   symbol <- clean.symbols[i,]$Symbol\n> +   df = data.frame(Date=index(get(symbol)), coredata(get(symbol)))\n> +   setNames(df,c(\"Date\",\"Open\",\"High\",\"Low\",\"Close\",\"Volume\",\"Adjusted\"))\n> +\n> +   cat(\"Storing\",symbol,\"\\n\")\n> +\n> +   if(dbExistsTable(con, symbol)){\n> +     dbRemoveTable(con, symbol)\n> +   }\n> +\n> +   dbWriteTable(con, name=symbol, value=df, row.names=FALSE, overwrite =\n> TRUE)\n> +\n> + }\n> *Error in get(symbol) : object 'ZB-PA' not found*\n> >\n> ========================================\n>\n> Kind Regards\n> Isak\n> <downloadData.R><mysqlData.R><init.R>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n>\n>\n\n\n-- \n\n\nKind Regards\nIsak Engdahl\n-------------- next part --------------\nAn HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20150224/dbb24ada/attachment.html>\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: load-data-mysql.R\nType: application/octet-stream\nSize: 810 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20150224/dbb24ada/attachment.obj>\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: error.png\nType: image/png\nSize: 147866 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20150224/dbb24ada/attachment.png>",
+      "body_snippet": "Hi Marco,\n\nVery Strange! I update quantmod, still get this error...\n\nInstead of downloading a lots of tickers, I tried to limit the list to\nthose tickers and tired to simplify the code. I get this err",
+      "thread_id": "thread-e33e9463d1fc",
+      "thread_depth": 2,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-807098fcefdd",
+      "message_id": "<CAO77-6tWzAbmSxXvVjEY2isX+TgxwAyvjQ7B8j48Eu_SSXagyA@mail.gmail.com>",
+      "from_name": "Isak Engdahl",
+      "from_email_hash": "b750241ba0dea48bf309d6d5fca04249cd2c7c0f35193914a594c292680d6412",
+      "date": "2015-02-24T16:11:49+01:00",
+      "subject": "[R-SIG-Finance] Quantmod Yahoo ticker download error",
+      "subject_clean": "Quantmod Yahoo ticker download error",
+      "in_reply_to": "<000901d0503a$9213a2b0$b63ae810$@org>",
+      "references": [
+        "<CAO77-6vJ+3geDZDTGodFxP-+nq51mAo+R-rZ7MksvwBstYuvmg@mail.gmail.com>",
+        "<BE4A6A4C-1626-4BD0-B07A-020A31EB96F6@my.bristol.ac.uk>",
+        "<000901d0503a$9213a2b0$b63ae810$@org>"
+      ],
+      "body_plain": "Hello Pierre,\n\nhttps://github.com/cran/quantmod/blob/master/R/getSymbols.R\n\nThey have interface for Yahoo data and Yahoo have LSE Equity information so\nI think you can query the symbols.\n\nhttp://finance.yahoo.com/q;_ylt=AkquhlMP8R.OHhWpokxU7WvdgvME;_ylc=X1MDMjE0MjQ3ODk0OARfcgMyBGZyA3VoM19maW5hbmNlX3dlYl9ncwRmcjIDc2EtZ3AEZ3ByaWQDBG5fZ3BzAzEwBG9yaWdpbgNmaW5hbmNlLnlhaG9vLmNvbQRwb3MDMwRwcXN0cgMEcXVlcnkDQU1FQy5MLARzYWMDMQRzYW8DMQ--?p=http%3A%2F%2Ffinance.yahoo.com%2Fq%3Fs%3DAMEC.L%26ql%3D0&uhb=uhb2&fr=uh3_finance_vert_gs&s=AMEC.L\n\n\nI still get this error\n\nError in download.file(paste(yahoo.URL, Symbol.name, \"&a=\", from.m, \"&b=\",\n :\n  cannot open URL '\nhttp://ichart.finance.yahoo.com/table.csv?s=AMEC.L&a=0&b=01&c=1900&d=1&e=24&f=2015&g=v&ignore=.csv\n'\nIn addition: Warning messages:\n1: In download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :\n  downloaded length 51965 != reported length 200\n2: In download.file(paste(yahoo.URL, Symbol.name, \"&a=\", from.m, \"&b=\",  :\n  cannot open: HTTP status was '404 Not Found'\n\nIf I add AMEC.L in my vector in: symbols =\nc(\"AMEC.L\",\"XLF\",\"XLP\",\"XLE\",\"XLY\",\"XLV\",\"XLI\",\"XLB\",\"XLK\",\"XLU\")\n\nBut I think this is something with my installation as Marco did not have\nthis issue.\n\nPlease let me know it works.\n\n//Isak\n\n\n\n\n\nOn Tue, Feb 24, 2015 at 3:02 PM, Pierre Org <pierre at lequeux.org> wrote:\n\n> Hi\n>\n> Thank you all for a great and very useful thread. Do you know if there is\n> a package that can help to access the same type of information than\n> stockSymbols fort the London stock exchange ? i.e download of price and\n> market caps ? I am working on a Black & Litterman project and would like to\n> somehow automatise a reverse optimisation of the expected returns for each\n> sectors For this, I  need to download the market caps per stock/sector as\n> well as the closing price...any help / pointer would be appreciated.\n>\n>\n> Thks\n>\n> Pierre\n>\n> -----Original Message-----\n> From: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On\n> Behalf Of Marco Sun\n> Sent: 24 February 2015 13:55\n> To: Isak Engdahl\n> Cc: r-sig-finance at r-project.org\n> Subject: Re: [R-SIG-Finance] Quantmod Yahoo ticker download error\n>\n> Hi Isak,\n>\n> I have checked your scripts and there is no error reported on my platform.\n> getSymbols correctly downloads historical prices for `ZB-PA`\n> > library(quantstrat)\n> > all.symbols <-\n> > stockSymbols(c(\"NYSE\"),sort.by=c(\"MarketCap\",\"Exchange\"),quiet=TRUE)\n> > biggest.symbols <- tail(all.symbols,n=5) clean.symbols <-\n> > subset(biggest.symbols, select =\n> > c(\"Symbol\",\"Name\",\"LastSale\",\"MarketCap\",\"Sector\"))\n> > row.names(clean.symbols) <- NULL\n> > i=1 #trying i=1 instead of doing the entire loop symbol <-\n> > clean.symbols[i,]$Symbol try (getSymbols(symbol, verbose=FALSE,\n> > warnings=FALSE, from='2015-01-01'))\n> [1] \"ZB-PA\n> And a dataframe named `df` can also be constructed via your script\n> > df = data.frame(Date=index(get(symbol)), coredata(get(symbol)))\n>\n> I would recommend you to update `quantmod` package if it is not the latest\n> released version on your console.\n>\n> Best,\n> Marco\n>\n> On 24 Feb 2015, at 08:33 pm, Isak Engdahl <isak.engdahl at gmail.com> wrote:\n>\n> > Hello,\n> >\n> > Tickers with - get error when trying to download ZB-PA but not ZBK.\n> >\n> > When I manually download it from Yahoo I get this link, that works.\n> >\n> > http://real-chart.finance.yahoo.com/table.csv?s=ZB-PA&a=00&b=2&c=2015&\n> > d=01&e=23&f=2015&g=d&ignore=.csv\n> >\n> > The Quantmod tried to download from this link, which does not exist.\n> > http://ichart.finance.yahoo.com/table.csv?s=ZB-PA&a=0&b=01&c=2015&d=1&\n> > e=24&f=2015&g=d&q=q&y=0&z=ZB-PA&x=.csv\n> >\n> > If this part could be replaced \"q=q&y=0&z=ZB-PA&x\" with \"d&ignore\" and\n> it will work both with ZB-PA and ZBK.\n> >\n> > Maybe this forum is not the correct place to suggest this improvement,\n> please point me in right direction.\n> >\n> > Maybe someone can help me out to fix this script error?\n> > My script stop writing to the database if one of these tickers get this\n> error described above (no data exist for symbol ZB-PA to be stored in the\n> database. Anyone know how to ignore tickers that get this error so the\n> script can continue to load all tickers that has downloaded data?\n> >\n> > Please find attached scripts.\n> >\n> > Error when trying to download ticker data from Yahoo Finance for ZB-PA.\n> >\n> > =================================\n> > \"Downloading ZB-PA\n> > Error in download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\",\n> from.m,  :\n> >   cannot open URL '\n> http://ichart.finance.yahoo.com/table.csv?s=ZB-PA&a=0&b=01&c=2015&d=1&e=24&f=2015&g=d&q=q&y=0&z=ZB-PA&x=.csv\n> '\n> > In addition: Warning message:\n> > In download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :\n> >   InternetOpenUrl failed: 'The operation timed out'\n> > , error - did not download (likely due to rate limiting Downloading\n> > ZBK Warning message:\n> > In download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :\n> >   downloaded length 1653 != reported length 200\n> > > View(clean.symbols)\n> > > \"\n> > =============================\n> >\n> > ========================================\n> > > # Save data to MySQL\n> > >\n> > > library(RMySQL)\n> > >\n> > > con <- dbConnect(RMySQL::MySQL(), host=\"localhost\",\n> > > user=\"donedge\",password=\"p at ssw0rd\", dbname= \"daily\")\n> > >\n> > > # Loop through each symbol\n> > >\n> > > for (i in 1:nrow(clean.symbols)){\n> > +   symbol <- clean.symbols[i,]$Symbol\n> > +   df = data.frame(Date=index(get(symbol)), coredata(get(symbol)))\n> > +\n> > + setNames(df,c(\"Date\",\"Open\",\"High\",\"Low\",\"Close\",\"Volume\",\"Adjusted\"\n> > + ))\n> > +\n> > +   cat(\"Storing\",symbol,\"\\n\")\n> > +\n> > +   if(dbExistsTable(con, symbol)){\n> > +     dbRemoveTable(con, symbol)\n> > +   }\n> > +\n> > +   dbWriteTable(con, name=symbol, value=df, row.names=FALSE,\n> > + overwrite = TRUE)\n> > +\n> > + }\n> > Error in get(symbol) : object 'ZB-PA' not found\n> > >\n> > ========================================\n> >\n> > Kind Regards\n> > Isak\n> > <downloadData.R><mysqlData.R><init.R>_________________________________\n> > ______________ R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n>\n>         [[alternative HTML version deleted]]\n>\n>\n>\n\n\n-- \n\n\nKind Regards\nIsak Engdahl\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello Pierre,\n\nhttps://github.com/cran/quantmod/blob/master/R/getSymbols.R\n\nThey have interface for Yahoo data and Yahoo have LSE Equity information so\nI think you can query the symbols.\n\nhttp://finan",
+      "thread_id": "thread-e33e9463d1fc",
+      "thread_depth": 3,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-a4c6e02fb953",
+      "message_id": "<CAO77-6tMkhAm5VK9Q=3LfXNViYSpWaBFMJZTUSFkScPeFWd-CA@mail.gmail.com>",
+      "from_name": "Isak Engdahl",
+      "from_email_hash": "b750241ba0dea48bf309d6d5fca04249cd2c7c0f35193914a594c292680d6412",
+      "date": "2015-02-24T16:16:30+01:00",
+      "subject": "[R-SIG-Finance] Quantmod Yahoo ticker download error",
+      "subject_clean": "Quantmod Yahoo ticker download error",
+      "in_reply_to": "<70C28E80655BFC46978030281154E85803CDC145@EXCHMBOX001P.optrust.local>",
+      "references": [
+        "<CAO77-6vJ+3geDZDTGodFxP-+nq51mAo+R-rZ7MksvwBstYuvmg@mail.gmail.com>",
+        "<D96444E0-E1D1-4CDF-9625-04F42A5E3BB0@my.bristol.ac.uk>",
+        "<CAO77-6utH1mc5pEtkcANNKsLPW3epnt_BYEvUXrX+3vtW9c3aw@mail.gmail.com>",
+        "<70C28E80655BFC46978030281154E85803CDC145@EXCHMBOX001P.optrust.local>"
+      ],
+      "body_plain": "Hello Erol,\n\nThank your for your help!\n\nWhen I run it with lenght I get the below error:\n\n*Error in symbols[i, ] : incorrect number of dimensions*\n*> *\n\nAny ideas?\n\n//Isak\n\n# Loop through each symbol\nnrow(symbols)\nfor (i in 1:length(symbols)){\n  symbol <- symbols[i,]$Symbol\n  df = data.frame(Date=index(get(symbol)), coredata(get(symbol)))\n  setNames(df,c(\"Date\",\"Open\",\"High\",\"Low\",\"Close\",\"Volume\",\"Adjusted\"))\n\n  if(dbExistsTable(con, symbol)){\n    dbRemoveTable(con, symbol)\n  }\n  dbWriteTable(con, name=symbol, value=df, row.names=FALSE, overwrite =\nTRUE)\n}\n\n\n\nOn Tue, Feb 24, 2015 at 4:10 PM, Erol Biceroglu <EBiceroglu at optrust.com>\nwrote:\n\n>  I don?t think you can use ?nrow()? since it?s a character vector, you\n> need ?length()?\n>\n>\n>\n> *Erol Biceroglu, MFin*\n>\n> Senior Risk Analyst\n>\n> *OPSEU Pension Trust*\n>\n> P: 416-681-2707   F: 416-681-6175\n>\n> e: EBiceroglu at OPTrust.com\n>\n>\n>\n> *From:* R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] *On\n> Behalf Of *Isak Engdahl\n> *Sent:* Tuesday, February 24, 2015 10:02 AM\n> *To:* Marco Sun\n> *Cc:* r-sig-finance\n> *Subject:* Re: [R-SIG-Finance] Quantmod Yahoo ticker download error\n>\n>\n>\n> Hi Marco,\n>\n>\n>\n> Very Strange! I update quantmod, still get this error...\n>\n>\n>\n> Instead of downloading a lots of tickers, I tried to limit the list to\n> those tickers and tired to simplify the code. I get this error on the code\n> below:\n>\n>\n>\n> *Error in 1:nrow(symbols) : argument of length 0*\n>\n>\n>\n> I runned nrow(symbols) and get\n>\n> nrow(symbols)\n>\n> NULL\n>\n>\n>\n> The symbols should not have any rows, right?\n>\n>\n>\n> The For should look at the datasets for the tickers and store in to the\n> database, right?\n>\n>\n>\n>\n>\n> *#Initialization*\n>\n> *library(quantstrat)*\n>\n> *library(TTR)*\n>\n> *startDate <- \"2010-01-01\"*\n>\n> *endDate <- \"2013-07-31\"*\n>\n> *symbols = c(\"XLF\",\"XLP\",\"XLE\",\"XLY\",\"XLV\",\"XLI\",\"XLB\",\"XLK\",\"XLU\")*\n>\n> *Sys.setenv(TZ=\"UTC\")*\n>\n> *getSymbols(symbols, src=\"yahoo\", from=startDate, to=endDate, adjust=TRUE)*\n>\n>\n>\n> *# Save data to MySQL*\n>\n>\n>\n> *library(RMySQL)*\n>\n>\n>\n> *con <- dbConnect(RMySQL::MySQL(), host=\"localhost\",\n> user=\"donedge\",password=\"p at ssw0rd\", dbname= \"daily\")*\n>\n>\n>\n> *# Loop through each symbol*\n>\n> *for (i in 1:nrow(symbols)){*\n>\n> *  symbol <- symbols[i,]$Symbol*\n>\n> *  df = data.frame(Date=index(get(symbol)), coredata(get(symbol)))*\n>\n> *  setNames(df,c(\"Date\",\"Open\",\"High\",\"Low\",\"Close\",\"Volume\",\"Adjusted\"))*\n>\n>\n>\n> *  if(dbExistsTable(con, symbol)){*\n>\n> *    dbRemoveTable(con, symbol)*\n>\n> *  }*\n>\n> *  dbWriteTable(con, name=symbol, value=df, row.names=FALSE, overwrite =\n> TRUE)*\n>\n> *}*\n>\n>\n>\n> On Tue, Feb 24, 2015 at 2:56 PM, Marco Sun <hs13322 at my.bristol.ac.uk>\n> wrote:\n>\n> Hi Isak,\n>\n>\n>\n> I have checked your scripts and there is no error reported on my platform.\n> getSymbols correctly downloads historical prices for `ZB-PA`\n>\n> > library(quantstrat)\n>\n> > all.symbols <- stockSymbols(c(\"NYSE\"),sort.by\n> =c(\"MarketCap\",\"Exchange\"),quiet=TRUE)\n>\n> > biggest.symbols <- tail(all.symbols,n=5)\n>\n> > clean.symbols <- subset(biggest.symbols, select =\n> c(\"Symbol\",\"Name\",\"LastSale\",\"MarketCap\",\"Sector\"))\n>\n> > row.names(clean.symbols) <- NULL\n>\n> > i=1 #trying i=1 instead of doing the entire loop\n>\n> > symbol <- clean.symbols[i,]$Symbol\n>\n> > try (getSymbols(symbol, verbose=FALSE, warnings=FALSE,\n> from='2015-01-01'))\n>\n> [1] \"ZB-PA?\n>\n> And a dataframe named `df` can also be constructed via your script\n>\n> > df = data.frame(Date=index(get(symbol)), coredata(get(symbol)))\n>\n>\n>\n> I would recommend you to update `quantmod` package if it is not the latest\n> released version on your console.\n>\n>\n>\n> Best,\n>\n> Marco\n>\n>\n>\n> On 24 Feb 2015, at 08:33 pm, Isak Engdahl <isak.engdahl at gmail.com> wrote:\n>\n>\n>\n>   Hello,\n>\n>\n>\n> Tickers with - get error when trying to download ZB-PA but not ZBK.\n>\n>\n>\n> When I manually download it from Yahoo I get this link, that works.\n>\n>\n>\n>\n> http://real-chart.finance.yahoo.com/table.csv?s=ZB-PA&a=00&b=2&c=2015&d=01&e=23&f=2015&g=d&ignore=.csv\n>\n>\n>\n> The Quantmod tried to download from this link, which does not exist.\n>\n>\n> http://ichart.finance.yahoo.com/table.csv?s=ZB-PA&a=0&b=01&c=2015&d=1&e=24&f=2015&g=d&\n> *q=q&y=0&z=ZB-PA&x*=.csv\n>\n>\n>\n> If this part could be replaced \"q=q&y=0&z=ZB-PA&x\" with \"d&ignore\" and it\n> will work both with ZB-PA and ZBK.\n>\n>\n>\n> Maybe this forum is not the correct place to suggest this improvement,\n> please point me in right direction.\n>\n>\n>\n> Maybe someone can help me out to fix this script error?\n>\n> My script stop writing to the database if one of these tickers get this\n> error described above (no data exist for symbol ZB-PA to be stored in the\n> database. Anyone know how to ignore tickers that get this error so the\n> script can continue to load all tickers that has downloaded data?\n>\n>\n>\n> Please find attached scripts.\n>\n>\n>\n> Error when trying to download ticker data from Yahoo Finance for ZB-PA.\n>\n>\n>\n> =================================\n>\n> *\"Downloading ZB-PA*\n>\n> *Error in download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\",\n> from.m,  : *\n>\n> *  cannot open URL\n> 'http://ichart.finance.yahoo.com/table.csv?s=ZB-PA&a=0&b=01&c=2015&d=1&e=24&f=2015&g=d&q=q&y=0&z=ZB-PA&x=.csv\n> <http://ichart.finance.yahoo.com/table.csv?s=ZB-PA&a=0&b=01&c=2015&d=1&e=24&f=2015&g=d&q=q&y=0&z=ZB-PA&x=.csv>'*\n>\n> *In addition: Warning message:*\n>\n> *In download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :*\n>\n> *  InternetOpenUrl failed: 'The operation timed out'*\n>\n> *, error - did not download (likely due to rate limiting*\n>\n> *Downloading ZBK*\n>\n> *Warning message:*\n>\n> *In download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :*\n>\n> *  downloaded length 1653 != reported length 200*\n>\n> *> View(clean.symbols)*\n>\n> *> \"*\n>\n> =============================\n>\n>\n>\n> ========================================\n>\n> > # Save data to MySQL\n>\n> >\n>\n> > library(RMySQL)\n>\n> >\n>\n> > con <- dbConnect(RMySQL::MySQL(), host=\"localhost\",\n> user=\"donedge\",password=\"p at ssw0rd\", dbname= \"daily\")\n>\n> >\n>\n> > # Loop through each symbol\n>\n> >\n>\n> > for (i in 1:nrow(clean.symbols)){\n>\n> +   symbol <- clean.symbols[i,]$Symbol\n>\n> +   df = data.frame(Date=index(get(symbol)), coredata(get(symbol)))\n>\n> +   setNames(df,c(\"Date\",\"Open\",\"High\",\"Low\",\"Close\",\"Volume\",\"Adjusted\"))\n>\n> +\n>\n> +   cat(\"Storing\",symbol,\"\\n\")\n>\n> +\n>\n> +   if(dbExistsTable(con, symbol)){\n>\n> +     dbRemoveTable(con, symbol)\n>\n> +   }\n>\n> +\n>\n> +   dbWriteTable(con, name=symbol, value=df, row.names=FALSE, overwrite =\n> TRUE)\n>\n> +\n>\n> + }\n>\n> *Error in get(symbol) : object 'ZB-PA' not found*\n>\n> >\n>\n> ========================================\n>\n>\n>\n> Kind Regards\n>\n> Isak\n>\n>\n> <downloadData.R><mysqlData.R><init.R>_______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n>\n>\n>\n>\n>\n>\n> --\n>\n>\n>\n>\n>\n> Kind Regards\n>\n> Isak Engdahl\n>\n> ------------------------------\n> Disclaimer\n> ---------------\n> This e-mail and files transmitted with it are confidential and intended\n> solely for the use of the individual or entity to whom they are addressed.\n> If you have received this in error, contact OPTrust by telephone toll free\n> at 1-800-906-7738 and delete the email without making a paper or electronic\n> copy. The recipient should check this e-mail and attachments for the\n> presence of viruses. OPTrust accepts no liability for any damage caused by\n> any virus transmitted by e-mail.\n> Please consider the environment before printing this e-mail message.\n>\n> Avis de non-responsabilit?\n> --------------------------------------\n> Ce message et toutes les pi?ces jointes sont ?tablis ? l'intention\n> exclusive de leur destinataire et sont confidentiels. Si vous recevez ce\n> message par erreur, veuillez le d?truire sans produire de copie papier ou\n> ?lectronique, et avertir imm?diatement OPTrust par t?l?phone ou sans frais\n> au 1-800-906-7738. Le destinataire doit s?assurer que ce message et toutes\n> les pi?ces jointes ne contiennent pas de virus. OPTrust n?accepte aucune\n> responsabilit? pour les dommages caus?s par d??ventuels virus transmis par\n> courriel.\n> Pensez ? l?environnement avant d?imprimer ce message.\n>\n>\n\n\n-- \n\n\nKind Regards\nIsak Engdahl\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello Erol,\n\nThank your for your help!\n\nWhen I run it with lenght I get the below error:\n\n*Error in symbols[i, ] : incorrect number of dimensions*\n*> *\n\nAny ideas?\n\n//Isak\n\n# Loop through each symbol\n",
+      "thread_id": "thread-a4c6e02fb953",
+      "thread_depth": 0,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-f439088b0d44",
+      "message_id": "<CAPPM_gSjKppb1GKpnWXz6Vy4RF20d9KKVo26T1D_MwdOxrOq-w@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-02-24T09:21:40-06:00",
+      "subject": "[R-SIG-Finance] Quantmod Yahoo ticker download error",
+      "subject_clean": "Quantmod Yahoo ticker download error",
+      "in_reply_to": "<CAO77-6tMkhAm5VK9Q=3LfXNViYSpWaBFMJZTUSFkScPeFWd-CA@mail.gmail.com>",
+      "references": [
+        "<CAO77-6vJ+3geDZDTGodFxP-+nq51mAo+R-rZ7MksvwBstYuvmg@mail.gmail.com>",
+        "<D96444E0-E1D1-4CDF-9625-04F42A5E3BB0@my.bristol.ac.uk>",
+        "<CAO77-6utH1mc5pEtkcANNKsLPW3epnt_BYEvUXrX+3vtW9c3aw@mail.gmail.com>",
+        "<70C28E80655BFC46978030281154E85803CDC145@EXCHMBOX001P.optrust.local>",
+        "<CAO77-6tMkhAm5VK9Q=3LfXNViYSpWaBFMJZTUSFkScPeFWd-CA@mail.gmail.com>"
+      ],
+      "body_plain": "On Tue, Feb 24, 2015 at 9:16 AM, Isak Engdahl <isak.engdahl at gmail.com> wrote:\n> Hello Erol,\n>\n> Thank your for your help!\n>\n> When I run it with lenght I get the below error:\n>\n> *Error in symbols[i, ] : incorrect number of dimensions*\n> *> *\n>\n> Any ideas?\n>\nRead \"An Introduction to R\".  Your issue is the lack of a basic\nunderstanding of core R data structures.  This is not the correct\nforum to ask for help with this type of issue.  As the footer on every\nmessage sent to this list says, in part, \"Also note that this is not\nthe r-help list where general R questions should go.\"\n\n> //Isak\n>\n> # Loop through each symbol\n> nrow(symbols)\n> for (i in 1:length(symbols)){\n>   symbol <- symbols[i,]$Symbol\n>   df = data.frame(Date=index(get(symbol)), coredata(get(symbol)))\n>   setNames(df,c(\"Date\",\"Open\",\"High\",\"Low\",\"Close\",\"Volume\",\"Adjusted\"))\n>\n>   if(dbExistsTable(con, symbol)){\n>     dbRemoveTable(con, symbol)\n>   }\n>   dbWriteTable(con, name=symbol, value=df, row.names=FALSE, overwrite =\n> TRUE)\n> }\n>\n>\n>\n> On Tue, Feb 24, 2015 at 4:10 PM, Erol Biceroglu <EBiceroglu at optrust.com>\n> wrote:\n>\n>>  I don?t think you can use ?nrow()? since it?s a character vector, you\n>> need ?length()?\n>>\n>>\n>>\n>> *Erol Biceroglu, MFin*\n>>\n>> Senior Risk Analyst\n>>\n>> *OPSEU Pension Trust*\n>>\n>> P: 416-681-2707   F: 416-681-6175\n>>\n>> e: EBiceroglu at OPTrust.com\n>>\n<snip>\n>\n>\n> --\n>\n>\n> Kind Regards\n> Isak Engdahl\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Tue, Feb 24, 2015 at 9:16 AM, Isak Engdahl <isak.engdahl at gmail.com> wrote:\n> Hello Erol,\n>\n> Thank your for your help!\n>\n> When I run it with lenght I get the below error:\n>\n> *Error in symbols[",
+      "thread_id": "thread-a4c6e02fb953",
+      "thread_depth": 1,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-46da778894b6",
+      "message_id": "<000601d05045$9df59fb0$d9e0df10$@org>",
+      "from_name": "Pierre Org",
+      "from_email_hash": "6ef70de6846aa0baa4d5ae4c63c1ef4c9e0d59ed5793c8d7710925cc0ccab1d3",
+      "date": "2015-02-24T15:21:51Z",
+      "subject": "[R-SIG-Finance] Quantmod Yahoo ticker download error",
+      "subject_clean": "Quantmod Yahoo ticker download error",
+      "in_reply_to": "<CAO77-6tWzAbmSxXvVjEY2isX+TgxwAyvjQ7B8j48Eu_SSXagyA@mail.gmail.com>",
+      "references": [
+        "<CAO77-6vJ+3geDZDTGodFxP-+nq51mAo+R-rZ7MksvwBstYuvmg@mail.gmail.com>",
+        "<BE4A6A4C-1626-4BD0-B07A-020A31EB96F6@my.bristol.ac.uk>",
+        "<000901d0503a$9213a2b0$b63ae810$@org>",
+        "<CAO77-6tWzAbmSxXvVjEY2isX+TgxwAyvjQ7B8j48Eu_SSXagyA@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Isak,\n\n \n\nMany thanks for this, it   should be  really useful  for my project\n\n \n\n \n\nKind regards\n\n \n\nPierre\n\n                    \n\nFrom: Isak Engdahl [mailto:isak.engdahl at gmail.com] \nSent: 24 February 2015 15:12\nTo: Pierre Org\nCc: r-sig-finance\nSubject: Re: [R-SIG-Finance] Quantmod Yahoo ticker download error\n\n \n\nHello Pierre,\n\n \n\nhttps://github.com/cran/quantmod/blob/master/R/getSymbols.R\n\n \n\nThey have interface for Yahoo data and Yahoo have LSE Equity information so I think you can query the symbols.\n\n \n\nhttp://finance.yahoo.com/q;_ylt=AkquhlMP8R.OHhWpokxU7WvdgvME;_ylc=X1MDMjE0MjQ3ODk0OARfcgMyBGZyA3VoM19maW5hbmNlX3dlYl9ncwRmcjIDc2EtZ3AEZ3ByaWQDBG5fZ3BzAzEwBG9yaWdpbgNmaW5hbmNlLnlhaG9vLmNvbQRwb3MDMwRwcXN0cgMEcXVlcnkDQU1FQy5MLARzYWMDMQRzYW8DMQ--?p=http%3A%2F%2Ffinance.yahoo.com%2Fq%3Fs%3DAMEC.L%26ql%3D0 <http://finance.yahoo.com/q;_ylt=AkquhlMP8R.OHhWpokxU7WvdgvME;_ylc=X1MDMjE0MjQ3ODk0OARfcgMyBGZyA3VoM19maW5hbmNlX3dlYl9ncwRmcjIDc2EtZ3AEZ3ByaWQDBG5fZ3BzAzEwBG9yaWdpbgNmaW5hbmNlLnlhaG9vLmNvbQRwb3MDMwRwcXN0cgMEcXVlcnkDQU1FQy5MLARzYWMDMQRzYW8DMQ--?p=http%3A%2F%2Ffinance.yahoo.com%2Fq%3Fs%3DAMEC.L%26ql%3D0&uhb=uhb2&fr=uh3_finance_vert_gs&s=AMEC.L> &uhb=uhb2&fr=uh3_finance_vert_gs&s=AMEC.L\n\n \n\n \n\nI still get this error\n\n \n\nError in download.file(paste(yahoo.URL, Symbol.name, \"&a=\", from.m, \"&b=\",  : \n\n  cannot open URL 'http://ichart.finance.yahoo.com/table.csv?s=AMEC.L <http://ichart.finance.yahoo.com/table.csv?s=AMEC.L&a=0&b=01&c=1900&d=1&e=24&f=2015&g=v&ignore=.csv> &a=0&b=01&c=1900&d=1&e=24&f=2015&g=v&ignore=.csv'\n\nIn addition: Warning messages:\n\n1: In download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :\n\n  downloaded length 51965 != reported length 200\n\n2: In download.file(paste(yahoo.URL, Symbol.name, \"&a=\", from.m, \"&b=\",  :\n\n  cannot open: HTTP status was '404 Not Found'\n\n \n\nIf I add AMEC.L in my vector in: symbols = c(\"AMEC.L\",\"XLF\",\"XLP\",\"XLE\",\"XLY\",\"XLV\",\"XLI\",\"XLB\",\"XLK\",\"XLU\")\n\n \n\nBut I think this is something with my installation as Marco did not have this issue.\n\n \n\nPlease let me know it works.\n\n \n\n//Isak\n\n \n\n \n\n \n\n \n\n \n\nOn Tue, Feb 24, 2015 at 3:02 PM, Pierre Org <pierre at lequeux.org> wrote:\n\nHi\n\nThank you all for a great and very useful thread. Do you know if there is a package that can help to access the same type of information than stockSymbols fort the London stock exchange ? i.e download of price and market caps ? I am working on a Black & Litterman project and would like to somehow automatise a reverse optimisation of the expected returns for each sectors For this, I  need to download the market caps per stock/sector as well as the closing price...any help / pointer would be appreciated.\n\n\nThks\n\nPierre\n\n\n-----Original Message-----\nFrom: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On Behalf Of Marco Sun\nSent: 24 February 2015 13:55\nTo: Isak Engdahl\nCc: r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] Quantmod Yahoo ticker download error\n\nHi Isak,\n\nI have checked your scripts and there is no error reported on my platform. getSymbols correctly downloads historical prices for `ZB-PA`\n> library(quantstrat)\n> all.symbols <-\n> stockSymbols(c(\"NYSE\"),sort.by=c(\"MarketCap\",\"Exchange\"),quiet=TRUE)\n> biggest.symbols <- tail(all.symbols,n=5) clean.symbols <-\n> subset(biggest.symbols, select =\n> c(\"Symbol\",\"Name\",\"LastSale\",\"MarketCap\",\"Sector\"))\n> row.names(clean.symbols) <- NULL\n> i=1 #trying i=1 instead of doing the entire loop symbol <-\n> clean.symbols[i,]$Symbol try (getSymbols(symbol, verbose=FALSE,\n> warnings=FALSE, from='2015-01-01'))\n[1] \"ZB-PA\nAnd a dataframe named `df` can also be constructed via your script\n> df = data.frame(Date=index(get(symbol)), coredata(get(symbol)))\n\nI would recommend you to update `quantmod` package if it is not the latest released version on your console.\n\nBest,\nMarco\n\nOn 24 Feb 2015, at 08:33 pm, Isak Engdahl <isak.engdahl at gmail.com> wrote:\n\n> Hello,\n>\n> Tickers with - get error when trying to download ZB-PA but not ZBK.\n>\n> When I manually download it from Yahoo I get this link, that works.\n>\n> http://real-chart.finance.yahoo.com/table.csv?s=ZB-PA <http://real-chart.finance.yahoo.com/table.csv?s=ZB-PA&a=00&b=2&c=2015&> &a=00&b=2&c=2015&\n> d=01&e=23&f=2015&g=d&ignore=.csv\n>\n> The Quantmod tried to download from this link, which does not exist.\n> http://ichart.finance.yahoo.com/table.csv?s=ZB-PA <http://ichart.finance.yahoo.com/table.csv?s=ZB-PA&a=0&b=01&c=2015&d=1&> &a=0&b=01&c=2015&d=1&\n> e=24&f=2015&g=d&q=q&y=0&z=ZB-PA&x=.csv\n>\n> If this part could be replaced \"q=q&y=0&z=ZB-PA&x\" with \"d&ignore\" and it will work both with ZB-PA and ZBK.\n>\n> Maybe this forum is not the correct place to suggest this improvement, please point me in right direction.\n>\n> Maybe someone can help me out to fix this script error?\n> My script stop writing to the database if one of these tickers get this error described above (no data exist for symbol ZB-PA to be stored in the database. Anyone know how to ignore tickers that get this error so the script can continue to load all tickers that has downloaded data?\n>\n> Please find attached scripts.\n>\n> Error when trying to download ticker data from Yahoo Finance for ZB-PA.\n>\n> =================================\n> \"Downloading ZB-PA\n> Error in download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :\n>   cannot open URL 'http://ichart.finance.yahoo.com/table.csv?s=ZB-PA <http://ichart.finance.yahoo.com/table.csv?s=ZB-PA&a=0&b=01&c=2015&d=1&e=24&f=2015&g=d&q=q&y=0&z=ZB-PA&x=.csv> &a=0&b=01&c=2015&d=1&e=24&f=2015&g=d&q=q&y=0&z=ZB-PA&x=.csv'\n> In addition: Warning message:\n> In download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :\n>   InternetOpenUrl failed: 'The operation timed out'\n> , error - did not download (likely due to rate limiting Downloading\n> ZBK Warning message:\n> In download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :\n>   downloaded length 1653 != reported length 200\n> > View(clean.symbols)\n> > \"\n> =============================\n>\n> ========================================\n> > # Save data to MySQL\n> >\n> > library(RMySQL)\n> >\n> > con <- dbConnect(RMySQL::MySQL(), host=\"localhost\",\n> > user=\"donedge\",password=\"p at ssw0rd\", dbname= \"daily\")\n> >\n> > # Loop through each symbol\n> >\n> > for (i in 1:nrow(clean.symbols)){\n> +   symbol <- clean.symbols[i,]$Symbol\n> +   df = data.frame(Date=index(get(symbol)), coredata(get(symbol)))\n> +\n> + setNames(df,c(\"Date\",\"Open\",\"High\",\"Low\",\"Close\",\"Volume\",\"Adjusted\"\n\n> + ))\n> +\n> +   cat(\"Storing\",symbol,\"\\n\")\n> +\n> +   if(dbExistsTable(con, symbol)){\n> +     dbRemoveTable(con, symbol)\n> +   }\n> +\n> +   dbWriteTable(con, name=symbol, value=df, row.names=FALSE,\n> + overwrite = TRUE)\n> +\n> + }\n> Error in get(symbol) : object 'ZB-PA' not found\n> >\n> ========================================\n>\n> Kind Regards\n> Isak\n> <downloadData.R><mysqlData.R><init.R>_________________________________\n> ______________ R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n        [[alternative HTML version deleted]]\n\n\n\n\n\n\n\n \n\n-- \n\n \n\n \n\nKind Regards\n\nIsak Engdahl\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Isak,\n\n \n\nMany thanks for this, it   should be  really useful  for my project\n\n \n\n \n\nKind regards\n\n \n\nPierre\n\n                    \n\nFrom: Isak Engdahl [mailto:isak.engdahl at gmail.com] \nSent: 24 F",
+      "thread_id": "thread-e33e9463d1fc",
+      "thread_depth": 4,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-6a9d2e7c93e4",
+      "message_id": "<CALGfFMYsrCu7Pd5C4sj2Kr0ffXrwHWF_eEoVHNoCYze5iB5-gQ@mail.gmail.com>",
+      "from_name": "Gareth McEwan",
+      "from_email_hash": "cfa0172017ac0e8052b596af0b2b8efec1c345e8c6449002f5db383bf074048e",
+      "date": "2015-02-25T20:28:19+02:00",
+      "subject": "[R-SIG-Finance] help with ugarchsim error",
+      "subject_clean": "help with ugarchsim error",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi there\n\nI was wondering if anyone can help me with an error that is thrown from the\nugarchsim() function in the rugarch package. I have used this function a\nnumber of times in the past with success, so I am unsure of why it is\nthrowing an error now.\n\nThe error is:\n\n\"Error in .sgarchsim1(fit = fit, n.sim = n.sim, n.start = n.start, m.sim =\nm.sim,  :\nugarchsim-->error: error in calling C function....\"\n\nI have loaded in:\nlibrary(rugarch)\nlibrary(Rcpp)\nlibrary(RcppArmadillo)\n\nMy code is:\n\nsim.ALSI.SPD = ugarchsim(garchfit.ALSI, n.sim=1000000, m.sim=1,\nstartMethod=\"sample\", n.start=0,\n                         custom.dist=list(name=\"sample\",\ndistfit=matrix(SPD.sim.1, ncol=1)))\n\nwhere:\n\"garchfit.ALSI\" is my variable from the ugarchfit(...) function;\nSPD.sim.1 = qspd(u.SPD.1, fit.ALSI) - a set of standardized residuals;\nwith u.SPD.1 = pt(x.SPD.1, df=7.2137167865) - a set of uniform variates;\n\"x.SPD.1\" a column of simulated data from a previous copula fit;\n\"fit.ALSI\" is my fitted object from \"spdfit( standardized GARCH residuals,\n... )\"\n\nAny ideas for a solution, or why the function is now throwing an error?\n\nMany thanks\nGareth\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi there\n\nI was wondering if anyone can help me with an error that is thrown from the\nugarchsim() function in the rugarch package. I have used this function a\nnumber of times in the past with success,",
+      "thread_id": "thread-6a9d2e7c93e4",
+      "thread_depth": 0,
+      "month": "2015-02"
+    },
+    {
+      "id": "msg-01ab86bfdcf8",
+      "message_id": "<54EE2FF3.1080906@4dscape.com>",
+      "from_name": "alexios",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2015-02-25T20:26:27Z",
+      "subject": "[R-SIG-Finance] help with ugarchsim error",
+      "subject_clean": "help with ugarchsim error",
+      "in_reply_to": "<CALGfFMYsrCu7Pd5C4sj2Kr0ffXrwHWF_eEoVHNoCYze5iB5-gQ@mail.gmail.com>",
+      "references": [
+        "<CALGfFMYsrCu7Pd5C4sj2Kr0ffXrwHWF_eEoVHNoCYze5iB5-gQ@mail.gmail.com>"
+      ],
+      "body_plain": "This is likely related to the standardized data you are passing to the \nsimulation function.\n\nFor instance, this _minimally reproducible example_ produces no problems:\n\ndata(sp500ret)\nfit = ugarchfit(ugarchspec(), sp500ret)\nsimz = rnorm(1000000)\n\nsim = ugarchsim(fit, n.sim=1000000, m.sim=1,\nstartMethod=\"sample\", n.start=0, custom.dist=list(name=\"sample\",\ndistfit=matrix(simz, ncol=1)))\n\nSo you need to check the values of your \"SPD.sim.1\" i.e. that they \ncontain no NA's, Inf etc.\n\nAlexios\n\nOn 25/02/2015 18:28, Gareth McEwan wrote:\n> Hi there\n>\n> I was wondering if anyone can help me with an error that is thrown from the\n> ugarchsim() function in the rugarch package. I have used this function a\n> number of times in the past with success, so I am unsure of why it is\n> throwing an error now.\n>\n> The error is:\n>\n> \"Error in .sgarchsim1(fit = fit, n.sim = n.sim, n.start = n.start, m.sim =\n> m.sim,  :\n> ugarchsim-->error: error in calling C function....\"\n>\n> I have loaded in:\n> library(rugarch)\n> library(Rcpp)\n> library(RcppArmadillo)\n>\n> My code is:\n>\n> sim.ALSI.SPD = ugarchsim(garchfit.ALSI, n.sim=1000000, m.sim=1,\n> startMethod=\"sample\", n.start=0,\n>                           custom.dist=list(name=\"sample\",\n> distfit=matrix(SPD.sim.1, ncol=1)))\n>\n> where:\n> \"garchfit.ALSI\" is my variable from the ugarchfit(...) function;\n> SPD.sim.1 = qspd(u.SPD.1, fit.ALSI) - a set of standardized residuals;\n> with u.SPD.1 = pt(x.SPD.1, df=7.2137167865) - a set of uniform variates;\n> \"x.SPD.1\" a column of simulated data from a previous copula fit;\n> \"fit.ALSI\" is my fitted object from \"spdfit( standardized GARCH residuals,\n> ... )\"\n>\n> Any ideas for a solution, or why the function is now throwing an error?\n>\n> Many thanks\n> Gareth\n>\n> \t[[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>\n>",
+      "body_snippet": "This is likely related to the standardized data you are passing to the \nsimulation function.\n\nFor instance, this _minimally reproducible example_ produces no problems:\n\ndata(sp500ret)\nfit = ugarchfit(",
+      "thread_id": "thread-6a9d2e7c93e4",
+      "thread_depth": 1,
+      "month": "2015-02"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-1cac21fb2d81",
+      "subject": "Signal and Rule question in Quantstrat",
+      "message_count": 9,
+      "participants": [
+        "Brian G. Peterson",
+        "Ilya Kipnis",
+        "Isak Engdahl",
+        "Joshua Ulrich",
+        "Mark Knecht"
+      ],
+      "started": "2015-02-01T07:48:43-06:00",
+      "last_reply": "2015-02-01T17:27:08-05:00",
+      "root_message_id": "msg-1cac21fb2d81"
+    },
+    {
+      "id": "thread-24b0f62cb6f3",
+      "subject": "rmgarch package code",
+      "message_count": 2,
+      "participants": [
+        "alexios",
+        "jun wang"
+      ],
+      "started": "2015-02-01T23:40:30-05:00",
+      "last_reply": "2015-02-02T08:32:27+00:00",
+      "root_message_id": "msg-24b0f62cb6f3"
+    },
+    {
+      "id": "thread-a931bda1c3c7",
+      "subject": "R/Finance 2015 Call for Papers",
+      "message_count": 1,
+      "participants": [
+        "Joshua Ulrich"
+      ],
+      "started": "2015-02-02T11:41:37-06:00",
+      "last_reply": "2015-02-02T11:41:37-06:00",
+      "root_message_id": "msg-a931bda1c3c7"
+    },
+    {
+      "id": "thread-d3ff490f63d3",
+      "subject": "help with quantstrat",
+      "message_count": 2,
+      "participants": [
+        "Olivier MARTIN",
+        "cen six"
+      ],
+      "started": "2015-02-03T11:43:32+01:00",
+      "last_reply": "2015-02-03T13:43:47+01:00",
+      "root_message_id": "msg-d3ff490f63d3"
+    },
+    {
+      "id": "thread-8e679f162f92",
+      "subject": "Problems with xts and plotting charts in quantmod",
+      "message_count": 2,
+      "participants": [
+        "Liu",
+        "Wouter Thielen"
+      ],
+      "started": "2015-02-04T20:07:42-05:00",
+      "last_reply": "2015-02-05T01:23:46+00:00",
+      "root_message_id": "msg-8e679f162f92"
+    },
+    {
+      "id": "thread-783cd7ba80d6",
+      "subject": "Problems with xts and plotting charts in quantmod",
+      "message_count": 5,
+      "participants": [
+        "Brian G. Peterson",
+        "Liu",
+        "Tom Clifford",
+        "Wouter Thielen"
+      ],
+      "started": "2015-02-05T04:30:58+00:00",
+      "last_reply": "2015-02-05T20:20:28-05:00",
+      "root_message_id": "msg-783cd7ba80d6"
+    },
+    {
+      "id": "thread-eca5fdc985d6",
+      "subject": "Backing out a portfolio snapshot?",
+      "message_count": 4,
+      "participants": [
+        "Brian G. Peterson",
+        "Ilya Kipnis",
+        "matt at considine.net"
+      ],
+      "started": "2015-02-06T09:33:50-06:00",
+      "last_reply": "2015-02-06T14:53:34-06:00",
+      "root_message_id": "msg-eca5fdc985d6"
+    },
+    {
+      "id": "thread-d9c0c9edc720",
+      "subject": "dccfit funtion in rmgarch",
+      "message_count": 2,
+      "participants": [
+        "alexios",
+        "jun wang"
+      ],
+      "started": "2015-02-08T22:29:17-05:00",
+      "last_reply": "2015-02-09T12:02:57+00:00",
+      "root_message_id": "msg-d9c0c9edc720"
+    },
+    {
+      "id": "thread-88cb9e9bbdc1",
+      "subject": "quantmod can't get fx currencies ?",
+      "message_count": 2,
+      "participants": [
+        "Joshua Ulrich",
+        "ce"
+      ],
+      "started": "2015-02-09T13:52:50-05:00",
+      "last_reply": "2015-02-09T13:08:04-06:00",
+      "root_message_id": "msg-88cb9e9bbdc1"
+    },
+    {
+      "id": "thread-97ebb1f63f6b",
+      "subject": "Gold",
+      "message_count": 4,
+      "participants": [
+        "Ilya Kipnis",
+        "Michael Weylandt",
+        "Robert Sherry"
+      ],
+      "started": "2015-02-15T17:54:54-05:00",
+      "last_reply": "2015-02-15T19:47:23-05:00",
+      "root_message_id": "msg-97ebb1f63f6b"
+    },
+    {
+      "id": "thread-75d5abecc7c8",
+      "subject": "Gold",
+      "message_count": 1,
+      "participants": [
+        "Matt Considine"
+      ],
+      "started": "2015-02-16T08:02:18-05:00",
+      "last_reply": "2015-02-16T08:02:18-05:00",
+      "root_message_id": "msg-75d5abecc7c8"
+    },
+    {
+      "id": "thread-a58ea74600e3",
+      "subject": "How to install IKTrading and Quantstrat",
+      "message_count": 1,
+      "participants": [
+        "Gerald Morrison"
+      ],
+      "started": "2015-02-16T09:04:07-07:00",
+      "last_reply": "2015-02-16T09:04:07-07:00",
+      "root_message_id": "msg-a58ea74600e3"
+    },
+    {
+      "id": "thread-e33e9463d1fc",
+      "subject": "Quantmod Yahoo ticker download error",
+      "message_count": 7,
+      "participants": [
+        "Isak Engdahl",
+        "Marco Sun",
+        "Pierre Org"
+      ],
+      "started": "2015-02-24T13:33:45+01:00",
+      "last_reply": "2015-02-24T15:21:51+00:00",
+      "root_message_id": "msg-e33e9463d1fc"
+    },
+    {
+      "id": "thread-a4c6e02fb953",
+      "subject": "Quantmod Yahoo ticker download error",
+      "message_count": 2,
+      "participants": [
+        "Isak Engdahl",
+        "Joshua Ulrich"
+      ],
+      "started": "2015-02-24T16:16:30+01:00",
+      "last_reply": "2015-02-24T09:21:40-06:00",
+      "root_message_id": "msg-a4c6e02fb953"
+    },
+    {
+      "id": "thread-6a9d2e7c93e4",
+      "subject": "help with ugarchsim error",
+      "message_count": 2,
+      "participants": [
+        "Gareth McEwan",
+        "alexios"
+      ],
+      "started": "2015-02-25T20:28:19+02:00",
+      "last_reply": "2015-02-25T20:26:27+00:00",
+      "root_message_id": "msg-6a9d2e7c93e4"
+    }
+  ]
+}

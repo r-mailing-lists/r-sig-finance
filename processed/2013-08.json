@@ -1,0 +1,1422 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2013-08",
+  "messages": [
+    {
+      "id": "msg-035cd186a2c6",
+      "message_id": "<CAK3uqFT6YZJgGvWT+pQGD7SepLE=N-ah2PW6HgRVrTNLv=rixQ@mail.gmail.com>",
+      "from_name": "Maxim Odulero",
+      "from_email_hash": "e782b9f2844c8bf67b17d6ea7fb769c0e4acd72e0cfb4890a50b52ade09e7c7f",
+      "date": "2013-08-01T14:57:18+02:00",
+      "subject": "[R-SIG-Finance] Parameterization of the GED distribution in rugarch package - second try",
+      "subject_clean": "Parameterization of the GED distribution in rugarch package - second try",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Ok,\nI was told to post under my real name I hereby do this from my gmail account.\n\nI have the second mail adress (copulaguy at yahoo.de), because I\nsometimes post in (german & non-german) forums/q&a sites questions\nconcerning the topic copula. I ask this specific question to this R\nlist, since it is a specific one (no, I did not post this somewhere\nelse). Once again my post, an answer would be appreciated! Thanks!\n\n-----------------------------------------------------------------------------\nI am wondering about the following:\n\nWhen I use the rugarch package I can get the ugarchroll output,\nshowing me the mean, sigma, shape, skew shape(GIG) and realized\nvalues. I understand, that these are the 1 step ahead forecasted\nvalues. So I can then apply the plot function applied to it and choose\nthe first plot, which shows me the one step ahead forecasted\ndensities. The forecasted density is determined by the values give in\nthe output, i.e. it uses the mean, the variance and the other\nestimates (shape parameter and so) to draw the different densities.\n\n\nI used the generalized error distribution in my model specification.\nAccording to the rugarch manual page 15 you an see, that this\ndistribution is determined by three parameters: The location, scale\nand shape parameter. So I need three values to draw the density. Now\nmy question is the following:\n\n>From the output table (of ugrachroll) I can see, that I have estimates\nfor the mu sigma and shape. I think, that the mu estimate is exactly\nthe location parameter. The shape parameter is also clear to me. Now I\nam not getting the following: What is the sigma?\n\nIs this the estimate for the scale parameter beta or is it an estimate\nof the standard deviation?\n\nIf it is an estimate of the standard deviation, that would mean\naccording to fomula 55, that I have to plug in the squared value to\nthe left and the shape esimtate to the right and then solve for the\nbeta parameter to get the right parameter and to be able to draw the\ndensity? Is this right?\n\n------------------------------------------------------------------------------\nMaxim",
+      "body_snippet": "Ok,\nI was told to post under my real name I hereby do this from my gmail account.\n\nI have the second mail adress (copulaguy at yahoo.de), because I\nsometimes post in (german & non-german) forums/q&a s",
+      "thread_id": "thread-035cd186a2c6",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-57371f4f9aa1",
+      "message_id": "<1375432399571-4672880.post@n4.nabble.com>",
+      "from_name": "veepsirtt",
+      "from_email_hash": "608884ceb756f54a188306d22942de1df7185cd987b3cde970dddfdb1e6605aa",
+      "date": "2013-08-02T01:33:19-07:00",
+      "subject": "[R-SIG-Finance] Finding price difference of a time series",
+      "subject_clean": "Finding price difference of a time series",
+      "in_reply_to": "<CAPPM_gRhM8fNX8a9R7omB3L2YHK=51dpfz=ZkaQksJyEvb97ew@mail.gmail.com>",
+      "references": [
+        "<1374561073191-4672099.post@n4.nabble.com>",
+        "<CAPPM_gRhM8fNX8a9R7omB3L2YHK=51dpfz=ZkaQksJyEvb97ew@mail.gmail.com>"
+      ],
+      "body_plain": "Hi,\n                   I couldnot find cointegration coefficient  while using\nadf.test.\n\nError in ht$p - value : non-numeric argument to binary operator\nIn addition: Warning message:\nsd(<matrix>) is deprecated.\n Use apply(*, 2, sd) instead. \n\n--------------------------------------------- The\ncode----------------------------------------------\nif (!require(quantmod)) {\n  stop(\"This app requires the quantmod package. To install it, run\n'install.packages(\\\"quantmod\\\")'.\\n\")\n}\n\n# Download data for a stock if needed, and return the data\nrequire_symbol <- function(symbol, envir = parent.frame()) {\n  if (is.null(envir[[symbol]])) {\n    envir[[symbol]] <- getSymbols(symbol, auto.assign = FALSE)\n  }\n  \n  envir[[symbol]]\n}\n \n  # Create an environment for storing data\n  symbol_env <- new.env()\n      \n    #Utilize quantmod to load the security symbols\n    require(quantmod)\n    library(zoo)\n    library(tseries)\n\n    s1=\"SPY\" \n    s2=\"GOOG\" \n    \n    a <- require_symbol(s1, symbol_env)              \n    b <- require_symbol(s2, symbol_env)\n    \n    #remove NAs       \n    c=cbind(a,b)\n    final=na.omit(c)\n    row.has.na <- apply(final, 1, function(x){any(is.na(x))})\n    sum(row.has.na)\n    \n    A<- c[, c(1,2,3,4,5,6)]\n    B<- c[, c(7,8,9,10,11,12)]  \n        \n    #define training set\n    startT  <- \"2007-01-02\"\n    endT    <- \"2009-01-01\"\n    rangeT  <- paste(startT,\"::\",endT,sep =\"\")\n    tA   <- A[,6][rangeT]\n    tB   <- B[,6][rangeT]\n    \n    #define out of sample set\n    startO  <- \"2013-02-01\"\n    endO <-Sys.Date()\n    rangeO  <- paste(startO,\"::\",endO,sep =\"\")\n    oA   <- A[,6][rangeO]\n    oB   <- B[,6][rangeO]\n\n    #compute price differences on in-sample data\n    pdtA <- diff(tA)[-1]\n    pdtB <- diff(tB)[-1]\n    \n    #build the model\n    model  <- lm(pdtA ~ pdtB - 1)\n    \n    #extract the hedge ratio\n    hr     <- as.numeric(model$coefficients[1])\n    #spread price (in-sample)\n    spreadT <- oA - hr * oB\n    \n    days=length(spreadT)\n\n    #compute statistics of the spread\n    meanT    <- as.numeric(mean(spreadT,na.rm=TRUE))\n    sdT      <- as.numeric(sd(spreadT,na.rm=TRUE))\n\n    #find correlation coefficient\n    cr=   cor(oA, oB, method=\"spearman\") \n\n    #find cointegration coefficient\n    ht <- adf.test(spreadT, alternative=\"stationary\", k=0)\n    cat(\"ADF p-value is\", ht$p-value, \"\\n\")\n    -----------------------------------------------the\ncode--------------------------------------------------------\n\n\nThanks\nveepsirtt\n\n\n\n--\nView this message in context: http://r.789695.n4.nabble.com/Finding-price-difference-of-a-time-series-tp4672099p4672880.html\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "Hi,\n                   I couldnot find cointegration coefficient  while using\nadf.test.\n\nError in ht$p - value : non-numeric argument to binary operator\nIn addition: Warning message:\nsd(<matrix>) is d",
+      "thread_id": "thread-57371f4f9aa1",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-87eb9204eca2",
+      "message_id": "<CAP0TLd-Bzc1ynjQnT+Q3QjVYR=q3rz7KOLa6-g=FevB27UfjRA@mail.gmail.com>",
+      "from_name": "veepsirtt",
+      "from_email_hash": "608884ceb756f54a188306d22942de1df7185cd987b3cde970dddfdb1e6605aa",
+      "date": "2013-08-02T03:18:28-07:00",
+      "subject": "[R-SIG-Finance] Finding price difference of a time series",
+      "subject_clean": "Finding price difference of a time series",
+      "in_reply_to": "<1375432399571-4672880.post@n4.nabble.com>",
+      "references": [
+        "<1374561073191-4672099.post@n4.nabble.com>",
+        "<CAPPM_gRhM8fNX8a9R7omB3L2YHK=51dpfz=ZkaQksJyEvb97ew@mail.gmail.com>",
+        "<1375432399571-4672880.post@n4.nabble.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130802/0b471141/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130802/0b471141/attachment.pl>",
+      "thread_id": "thread-57371f4f9aa1",
+      "thread_depth": 1,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-683f81fa0b9c",
+      "message_id": "<1375447567.2757.YahooMailNeo@web160906.mail.bf1.yahoo.com>",
+      "from_name": "Paul Teetor",
+      "from_email_hash": "6fa4faa7139b35464db018980690d5e8330c540ba8aeac463379643bb42d8fd2",
+      "date": "2013-08-02T05:46:07-07:00",
+      "subject": "[R-SIG-Finance] Finding price difference of a time series",
+      "subject_clean": "Finding price difference of a time series",
+      "in_reply_to": "<CAP0TLd-Bzc1ynjQnT+Q3QjVYR=q3rz7KOLa6-g=FevB27UfjRA@mail.gmail.com>",
+      "references": [
+        "<1374561073191-4672099.post@n4.nabble.com>",
+        "<CAPPM_gRhM8fNX8a9R7omB3L2YHK=51dpfz=ZkaQksJyEvb97ew@mail.gmail.com>",
+        "<1375432399571-4672880.post@n4.nabble.com>",
+        "<CAP0TLd-Bzc1ynjQnT+Q3QjVYR=q3rz7KOLa6-g=FevB27UfjRA@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130802/98602b6d/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130802/98602b6d/attachment.pl>",
+      "thread_id": "thread-57371f4f9aa1",
+      "thread_depth": 2,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-27f7a373460b",
+      "message_id": "<CAPznTYURUSWxhMtiKxd0DCOBZLYT1gTmENFpOb9+ph5LYTMoYA@mail.gmail.com>",
+      "from_name": "George Jordan",
+      "from_email_hash": "6971a3d88bfb84d1af687d85b37cebb90aebdeb833daa0bc52045e5c6ce6d5d2",
+      "date": "2013-08-02T16:13:28-05:00",
+      "subject": "[R-SIG-Finance] Imposing constraints on garch parameters with ugarchfit",
+      "subject_clean": "Imposing constraints on garch parameters with ugarchfit",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130802/ac83ed12/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130802/ac83ed12/attachment.pl>",
+      "thread_id": "thread-27f7a373460b",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-332f9af394af",
+      "message_id": "<922D0B8D-D7AC-45D4-9256-3DDAE7985007@4dscape.com>",
+      "from_name": "Alexios Ghalanos",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2013-08-03T00:12:03+01:00",
+      "subject": "[R-SIG-Finance] Imposing constraints on garch parameters with ugarchfit",
+      "subject_clean": "Imposing constraints on garch parameters with ugarchfit",
+      "in_reply_to": "<CAPznTYURUSWxhMtiKxd0DCOBZLYT1gTmENFpOb9+ph5LYTMoYA@mail.gmail.com>",
+      "references": [
+        "<CAPznTYURUSWxhMtiKxd0DCOBZLYT1gTmENFpOb9+ph5LYTMoYA@mail.gmail.com>"
+      ],
+      "body_plain": "See the 'setbounds' method, or search the archives of this mailing list for examples as this question has been asked before.\n\nRegards,\n\nAlexios\n\nOn 2 Aug 2013, at 10:13 PM, George Jordan <george.c.jordan.iv.research at gmail.com> wrote:\n\n> Hi,\n>     Is it possible to impose constraints on the fitted parameters using\n> ugarchfit, (or other fitting procedure available in the rugarch)? For\n> example suppose I want to run:\n> \n> myspec=ugarchspec(variance.model=list(garchOrder(c(1,1),\n> variance.targeting=TRUE),\n>                                   distribution.model=\"std\",\n> fixed.pars=list(shape=4),\n>                                    mean.model=list(armaOrder=c(0,0)))\n> gfit=ugarchfit(spec=myspec, data=mydata, solver=\"nlminb\")\n> \n> But somehow impose that 0 < \\alpha < 0.2 and 0.5 < \\beta < 1.0 (where\n> \\alpha and \\beta have their usual definitions).\n> \n> Thanks in advance,\n> George\n> \n>    [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "See the 'setbounds' method, or search the archives of this mailing list for examples as this question has been asked before.\n\nRegards,\n\nAlexios\n\nOn 2 Aug 2013, at 10:13 PM, George Jordan <george.c.jor",
+      "thread_id": "thread-27f7a373460b",
+      "thread_depth": 1,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-dc876511fedf",
+      "message_id": "<CAP0TLd_1gKKcm4LxKMh8U_5-1Q5g-NS00XxvMAoBXLg2dtXt=w@mail.gmail.com>",
+      "from_name": "veepsirtt",
+      "from_email_hash": "608884ceb756f54a188306d22942de1df7185cd987b3cde970dddfdb1e6605aa",
+      "date": "2013-08-02T23:00:53-07:00",
+      "subject": "[R-SIG-Finance] Finding price difference of a time series",
+      "subject_clean": "Finding price difference of a time series",
+      "in_reply_to": "<1375447567.2757.YahooMailNeo@web160906.mail.bf1.yahoo.com>",
+      "references": [
+        "<1374561073191-4672099.post@n4.nabble.com>",
+        "<CAPPM_gRhM8fNX8a9R7omB3L2YHK=51dpfz=ZkaQksJyEvb97ew@mail.gmail.com>",
+        "<1375432399571-4672880.post@n4.nabble.com>",
+        "<CAP0TLd-Bzc1ynjQnT+Q3QjVYR=q3rz7KOLa6-g=FevB27UfjRA@mail.gmail.com>",
+        "<1375447567.2757.YahooMailNeo@web160906.mail.bf1.yahoo.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130802/24bebb46/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130802/24bebb46/attachment.pl>",
+      "thread_id": "thread-57371f4f9aa1",
+      "thread_depth": 3,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-896796a43448",
+      "message_id": "<1375535213.83551.YahooMailNeo@web28705.mail.ir2.yahoo.com>",
+      "from_name": "Copula Guy",
+      "from_email_hash": "8899e26c06a2e8c07320462a174788dd22a44daa7c3d531ede113a9990ec0b80",
+      "date": "2013-08-03T14:06:53+01:00",
+      "subject": "[R-SIG-Finance] Capital requirements as a cushion against risks, why?",
+      "subject_clean": "Capital requirements as a cushion against risks, why?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I am currently programming different VaR models with R and I often read about the Basel framework. There the capital requirements are determinded by a fomula which uses the VaR. Now I am wondering, why a bank needs to hold a certain amount of capital? \n\n\nIn general, it says, the minimum capital requirements are used, to \ndetermine the capital that banks must hold as an insurance against risk.\nE.g. if a Bank has invested in one equity asset, e.g. Microsoft stock (long). If now the stock drops, the bank's asset looses value - so the \nbank has a loss, but it does not have to actually PAY something? Why \nshould the bank hold extra money as an insurance against this drop in \nthe assets value?\n\nAlthough this is not directly a question about R programming in finance I was wondering about this, when I did my R project.\n\nThanks a lot in advance!",
+      "body_snippet": "I am currently programming different VaR models with R and I often read about the Basel framework. There the capital requirements are determinded by a fomula which uses the VaR. Now I am wondering, wh",
+      "thread_id": "thread-896796a43448",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-602833ef672c",
+      "message_id": "<12C8231F-0E38-4C23-8F65-51F3845A79BB@gmail.com>",
+      "from_name": "michael.weylandt at gmail.com (R. Michael Weylandt",
+      "from_email_hash": "302378f35d16399c7239457e040a11ee7483a70b012a7a6bc3d0de49cf0a2b8a",
+      "date": "2013-08-03T11:06:15-04:00",
+      "subject": "[R-SIG-Finance] Capital requirements as a cushion against risks, why?",
+      "subject_clean": "Capital requirements as a cushion against risks, why?",
+      "in_reply_to": "<1375535213.83551.YahooMailNeo@web28705.mail.ir2.yahoo.com>",
+      "references": [
+        "<1375535213.83551.YahooMailNeo@web28705.mail.ir2.yahoo.com>"
+      ],
+      "body_plain": "On Aug 3, 2013, at 9:06, Copula Guy <copulaguy at yahoo.de> wrote:\n\nDidn't Dirk ask you to use your real name?\n\n> I am currently programming different VaR models with R and I often read about the Basel framework. There the capital requirements are determinded by a fomula which uses the VaR. Now I am wondering, why a bank needs to hold a certain amount of capital? \n> \n> \n> In general, it says, the minimum capital requirements are used, to \n> determine the capital that banks must hold as an insurance against risk.\n> E.g. if a Bank has invested in one equity asset, e.g. Microsoft stock (long). If now the stock drops, the bank's asset looses value - so the \n> bank has a loss, but it does not have to actually PAY something? Why \n> should the bank hold extra money as an insurance against this drop in \n> the assets value?\n> \n\nBut you're ignoring the bank's other side: where did the initial cash come from? In the simplest scenario, it originated in someone's deposit account and they can ask for it back. In normal times, the bank can sell part of their investment and give the cash back to the depositor.  If the bank has lost the cash on a failed investment, they can't fulfill their obligation to a customer which is considered, not surprisingly, a very bad thing. How would you feel if your bank lost the money in your savings account? \n\nIn practice, this all gets more complicated when you look a modern financing and leverage techniques, but that's a bit of intuition. \n\n> Although this is not directly a question about R programming in finance I was wondering about this, when I did my R project.\n> \n\nIndeed it isn't so direct your follow up questions to 1) some sort of financial discussion forum (money.stackexchange.com perhapd) or 2) me offlist if you must but 3) only after reading and making a valiant attempt to understand this on your own (perhaps by reading the Basel docs) -- it's certainly well explained across the net. \n\nIf you're a 'real book' kind of guy check out Peter Bernstein's books. He's done some nice histories of finance. \n\nMichael\n\n> Thanks a lot in advance!\n> \n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "On Aug 3, 2013, at 9:06, Copula Guy <copulaguy at yahoo.de> wrote:\n\nDidn't Dirk ask you to use your real name?\n\n> I am currently programming different VaR models with R and I often read about the Base",
+      "thread_id": "thread-896796a43448",
+      "thread_depth": 1,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-9e8e66ebb91c",
+      "message_id": "<CAPPM_gTmwjnMs8TUa952QTivY83yOhuq=5Rha3_JOE+=7mFZWg@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2013-08-04T07:31:13-05:00",
+      "subject": "[R-SIG-Finance] Capital requirements as a cushion against risks, why?",
+      "subject_clean": "Capital requirements as a cushion against risks, why?",
+      "in_reply_to": "<1375535213.83551.YahooMailNeo@web28705.mail.ir2.yahoo.com>",
+      "references": [
+        "<1375535213.83551.YahooMailNeo@web28705.mail.ir2.yahoo.com>"
+      ],
+      "body_plain": "Please don't cross-post: http://quant.stackexchange.com/q/8636/56\n\nIt's rude because it fragments information and you waste people's time\nif they answer in one forum when the question's already been answered\nin another forum.\n--\nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\n\n\nOn Sat, Aug 3, 2013 at 8:06 AM, Copula Guy <copulaguy at yahoo.de> wrote:\n> I am currently programming different VaR models with R and I often read about the Basel framework. There the capital requirements are determinded by a fomula which uses the VaR. Now I am wondering, why a bank needs to hold a certain amount of capital?\n>\n>\n> In general, it says, the minimum capital requirements are used, to\n> determine the capital that banks must hold as an insurance against risk.\n> E.g. if a Bank has invested in one equity asset, e.g. Microsoft stock (long). If now the stock drops, the bank's asset looses value - so the\n> bank has a loss, but it does not have to actually PAY something? Why\n> should the bank hold extra money as an insurance against this drop in\n> the assets value?\n>\n> Although this is not directly a question about R programming in finance I was wondering about this, when I did my R project.\n>\n> Thanks a lot in advance!\n>\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Please don't cross-post: http://quant.stackexchange.com/q/8636/56\n\nIt's rude because it fragments information and you waste people's time\nif they answer in one forum when the question's already been a",
+      "thread_id": "thread-896796a43448",
+      "thread_depth": 1,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-c8f0461e0cc9",
+      "message_id": "<CAPLrYETBDnDSbE8UkkyEMZ1f0OrvfwFgt7MFpjCbfXjVhBNbMQ@mail.gmail.com>",
+      "from_name": "Daniel Cegiełka",
+      "from_email_hash": "a53c7f1be3d7b89cbf62e91b70b96a3ed4a6d3306db4e0a96cdd8e340115b214",
+      "date": "2013-08-04T16:17:37+02:00",
+      "subject": "[R-SIG-Finance] Finding price difference of a time series",
+      "subject_clean": "Finding price difference of a time series",
+      "in_reply_to": "<CAP0TLd_1gKKcm4LxKMh8U_5-1Q5g-NS00XxvMAoBXLg2dtXt=w@mail.gmail.com>",
+      "references": [
+        "<1374561073191-4672099.post@n4.nabble.com>",
+        "<CAPPM_gRhM8fNX8a9R7omB3L2YHK=51dpfz=ZkaQksJyEvb97ew@mail.gmail.com>",
+        "<1375432399571-4672880.post@n4.nabble.com>",
+        "<CAP0TLd-Bzc1ynjQnT+Q3QjVYR=q3rz7KOLa6-g=FevB27UfjRA@mail.gmail.com>",
+        "<1375447567.2757.YahooMailNeo@web160906.mail.bf1.yahoo.com>",
+        "<CAP0TLd_1gKKcm4LxKMh8U_5-1Q5g-NS00XxvMAoBXLg2dtXt=w@mail.gmail.com>"
+      ],
+      "body_plain": "2013/8/3 veepsirtt <veepsirtt at gmail.com>:\n> Hello Paul Teetor,\n>\n> p-value  is correct,still getting error.\n>\n>> ht\n>         Augmented Dickey-Fuller Test\n>\n> data:  spreadT\n> Dickey-Fuller = -2.2872, Lag order = 0, p-value = 0.4572\n> alternative hypothesis: stationary\n>> ht$p-valueError in ht$p - value : non-numeric argument to binary operator\n\n\nHi Veepsirtt,\n\nI think Paul is right. Take this example:\n\n> a<-list()\n> a$p_value = 123\n> a$p_value\n[1] 123\n>\n> a$p-value = 456\nError in a$p - value = 456 : could not find function \"-<-\"\n> a\n$p_value\n[1] 123\n\nSo with \"p-value\" variable you have a lot of potential to generate errors.\n\nBest regards,\nDaniel",
+      "body_snippet": "2013/8/3 veepsirtt <veepsirtt at gmail.com>:\n> Hello Paul Teetor,\n>\n> p-value  is correct,still getting error.\n>\n>> ht\n>         Augmented Dickey-Fuller Test\n>\n> data:  spreadT\n> Dickey-Fuller = -2.28",
+      "thread_id": "thread-57371f4f9aa1",
+      "thread_depth": 4,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-d4bc3697cc4d",
+      "message_id": "<CAJ-23aSohF26JsDZrVjdK90LS0fw3qiExRU1yp2k7yqdmSkYVw@mail.gmail.com>",
+      "from_name": "Ryan Christopher",
+      "from_email_hash": "4c0ccb782cf8ed2a27694cb0a3f680095d8835c3c4352a268f9fc8567ef8dec3",
+      "date": "2013-08-04T12:48:19-04:00",
+      "subject": "[R-SIG-Finance] QUANTMOD package: retrieving the rolling front month price when using the \"getSymbols\" function",
+      "subject_clean": "QUANTMOD package: retrieving the rolling front month price when using the \"getSymbols\" function",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130804/71c1d57a/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130804/71c1d57a/attachment.pl>",
+      "thread_id": "thread-d4bc3697cc4d",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-86a311f3b0e3",
+      "message_id": "<CAPPM_gT5HQ7R4_gZQQmdNT84u5wTRvLomVyqJ+Fi-ANXdL1u_A@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2013-08-04T12:13:14-05:00",
+      "subject": "[R-SIG-Finance] QUANTMOD package: retrieving the rolling front month price when using the \"getSymbols\" function",
+      "subject_clean": "QUANTMOD package: retrieving the rolling front month price when using the \"getSymbols\" function",
+      "in_reply_to": "<CAJ-23aSohF26JsDZrVjdK90LS0fw3qiExRU1yp2k7yqdmSkYVw@mail.gmail.com>",
+      "references": [
+        "<CAJ-23aSohF26JsDZrVjdK90LS0fw3qiExRU1yp2k7yqdmSkYVw@mail.gmail.com>"
+      ],
+      "body_plain": "On Sun, Aug 4, 2013 at 11:48 AM, Ryan Christopher <ryanc023 at gmail.com> wrote:\n> Hello,\n>\n> I'm working on a project that requires me to retrieve the prices of NYMEX\n> WTI oil futures over a 5-year period of time.  I'm interested in retrieving\n> the rolling 'front month' price, rather than a particular contract\n> expiration.\n>\n> I'm using the \"getSymbols\" function in the Quantmod package to retrieve the\n> data from Yahoo.\n>\nNo you're not, because Yahoo doesn't provide historical data for NYMEX\ncrude oil futures.\n\nGo to the page for the symbol you want and you'll see there is no\n\"Historical Data\" link:\nhttp://finance.yahoo.com/q?s=CLU13.NYM\n\n> At this point, I can't even seem to retrieve My code is:\n>\n> ************************************************************\n> initDate <- \"2008-07-31\"\n> endDate <- \"2013-07-31\"\n> symbols <- c(\"CLU13.NYM\")\n> getSymbols(symbols, src=\"yahoo\",from=initDate, to=endDate,\n> index.class=c(\"POSIXt\",\"POSIXct\"))\n>\n> Which returns this error message:\n>\n> Error in download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,\n>  :\n>   cannot open URL '\n> http://chart.yahoo.com/table.csv?s=CLU13.NYM&a=6&b=31&c=2009&d=6&e=19&f=2013&g=d&q=q&y=0&z=CLU13.NYM&x=.csv\n> '\n> In addition: Warning message:\n> In download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :\n>   cannot open: HTTP status was '404 Not Found'\n> ************************************************************\n>\n> Does anyone know if it's possible to retrieve the rolling front month price\n> (instead of a particular contract expiration)?\n>\nGoogle knows.  The first page of results from searching \"wti futures\nhistorical prices\" has many candidates.  One is the Open Financial\nData Project, which is available via Quandl:\nhttp://www.quandl.com/OFDP-Open-Financial-Data-Project/FUTURE_CL1-NYMEX-Crude-Oil-Futures-Continuous-Contract-1-CL1-Front-Month\n\n> Thanks,\n> Ryan\n>\n\nBest,\n--\nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Sun, Aug 4, 2013 at 11:48 AM, Ryan Christopher <ryanc023 at gmail.com> wrote:\n> Hello,\n>\n> I'm working on a project that requires me to retrieve the prices of NYMEX\n> WTI oil futures over a 5-year ",
+      "thread_id": "thread-d4bc3697cc4d",
+      "thread_depth": 1,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-606cf98bed3f",
+      "message_id": "<6D21E112777B4D62830424CD11123640@Franki7PC>",
+      "from_name": "Frank",
+      "from_email_hash": "abdffc2429bfa78db9949f51e22b4e11e2e14915791103deccd563dd4d9da29e",
+      "date": "2013-08-04T12:36:03-05:00",
+      "subject": "[R-SIG-Finance] QUANTMOD package: retrieving the rolling front month price when using the \"getSymbols\" function",
+      "subject_clean": "QUANTMOD package: retrieving the rolling front month price when using the \"getSymbols\" function",
+      "in_reply_to": "<CAJ-23aSohF26JsDZrVjdK90LS0fw3qiExRU1yp2k7yqdmSkYVw@mail.gmail.com>",
+      "references": [
+        "<CAJ-23aSohF26JsDZrVjdK90LS0fw3qiExRU1yp2k7yqdmSkYVw@mail.gmail.com>"
+      ],
+      "body_plain": "WTI crude prices are available, I use:\n\ngetSymbols('DCOILWTICO',src='FRED')\nDCOILWTICO <- na.locf(DCOILWTICO)\ntail(DCOILWTICO)\nfile_name <- \"DCOILWTICO.csv\"\nwrite.zoo(DCOILWTICO, file = file_name, append = FALSE, quote = TRUE, sep =\n\",\")\nquit()\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at r-project.org\n[mailto:r-sig-finance-bounces at r-project.org] On Behalf Of Ryan Christopher\nSent: Sunday, August 04, 2013 11:48 AM\nTo: r-sig-finance at r-project.org\nSubject: [R-SIG-Finance] QUANTMOD package: retrieving the rolling front\nmonth price when using the \"getSymbols\" function\n\nHello,\n\nI'm working on a project that requires me to retrieve the prices of NYMEX\nWTI oil futures over a 5-year period of time.  I'm interested in retrieving\nthe rolling 'front month' price, rather than a particular contract\nexpiration.\n\nI'm using the \"getSymbols\" function in the Quantmod package to retrieve the\ndata from Yahoo.\n\nAt this point, I can't even seem to retrieve My code is:\n\n************************************************************\ninitDate <- \"2008-07-31\"\nendDate <- \"2013-07-31\"\nsymbols <- c(\"CLU13.NYM\")\ngetSymbols(symbols, src=\"yahoo\",from=initDate, to=endDate,\nindex.class=c(\"POSIXt\",\"POSIXct\"))\n\nWhich returns this error message:\n\nError in download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,\n :\n  cannot open URL '\nhttp://chart.yahoo.com/table.csv?s=CLU13.NYM&a=6&b=31&c=2009&d=6&e=19&f=2013\n&g=d&q=q&y=0&z=CLU13.NYM&x=.csv\n'\nIn addition: Warning message:\nIn download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :\n  cannot open: HTTP status was '404 Not Found'\n************************************************************\n\nDoes anyone know if it's possible to retrieve the rolling front month price\n(instead of a particular contract expiration)?\n\nThanks,\nRyan\n\n\t[[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions\nshould go.",
+      "body_snippet": "WTI crude prices are available, I use:\n\ngetSymbols('DCOILWTICO',src='FRED')\nDCOILWTICO <- na.locf(DCOILWTICO)\ntail(DCOILWTICO)\nfile_name <- \"DCOILWTICO.csv\"\nwrite.zoo(DCOILWTICO, file = file_name, app",
+      "thread_id": "thread-d4bc3697cc4d",
+      "thread_depth": 1,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-6b6175920257",
+      "message_id": "<589D8826-B955-4456-8BD9-060E187158AC@gutmark.net>",
+      "from_name": "Hans Radtke",
+      "from_email_hash": "f649b9aa9d70a7caa56cd01e7c06a00f8932dd7b15d3d6aad44ea11033b256da",
+      "date": "2013-08-05T10:27:06Z",
+      "subject": "[R-SIG-Finance] Capital requirements as a cushion against risks, why?",
+      "subject_clean": "Capital requirements as a cushion against risks, why?",
+      "in_reply_to": "<mailman.1.1375696801.20960.r-sig-finance@r-project.org>",
+      "references": [
+        "<mailman.1.1375696801.20960.r-sig-finance@r-project.org>"
+      ],
+      "body_plain": "I agree with Joshua's comment on this one. Also, this clearly isn't an R question. Which means there are other forums for this type of question, e.g. Wilmott. Also, what whith VaR already being a bit long in the tooth, conceptually, there are copious papers around explaining the genesis of this metric. Just check gloriamundis.\n\nBut actually, I'd rather rant about something entirely different: How come you're developing a flock of VaR models and don't know what they're for?! That's exactly the sort of mindset that got us into our current predicament: Modelling without any common sense! Aaaargh!\n\nSo. Anyway. *takes a deep breath*\n\nThe answer to the question is so straightforward that we might bear spelling it out: The money the bank in your example bets on a particular stock has got to come from somewhere. Let's say:\n\n- the bankers themselves (or any other shareholders) put up $10 in equity\n- deposit holders place another $90 with the bank into their (!) savings accounts\n- the bank then invests the total of $100 in a single stock\n- the stock drops $40, so the value of the banks assets is now $60\n- sure, the bank hasn't got to pay anything just yet, but...\n- the deposit holders come knocking and want to get their $90 out, as is their right\n- the bankers (shareholders) are wiped out, as their $10 are gone with the wind\n- the bank is broke and has to be bailed out to the tune of the remaining $30\n- the deposit holders receive $60 + $30 and wonder what happened to their interest\n\nClearly, the equity ($10) held against what turned out to be a high-risk position wasn't quite appropriate and someone (say, both the trader and the risk manager) should be tarred and feathered.\n\nBest regards\nHans",
+      "body_snippet": "I agree with Joshua's comment on this one. Also, this clearly isn't an R question. Which means there are other forums for this type of question, e.g. Wilmott. Also, what whith VaR already being a bit ",
+      "thread_id": "thread-6b6175920257",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-2b0f5aa3a720",
+      "message_id": "<CAPPM_gSN7SemHuKWCK0HY7LaDHqgu1MH3P8QOCu6pjQOP=eShA@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2013-08-05T06:02:13-05:00",
+      "subject": "[R-SIG-Finance] QUANTMOD package: retrieving the rolling front month price when using the \"getSymbols\" function",
+      "subject_clean": "QUANTMOD package: retrieving the rolling front month price when using the \"getSymbols\" function",
+      "in_reply_to": "<6D21E112777B4D62830424CD11123640@Franki7PC>",
+      "references": [
+        "<CAJ-23aSohF26JsDZrVjdK90LS0fw3qiExRU1yp2k7yqdmSkYVw@mail.gmail.com>",
+        "<6D21E112777B4D62830424CD11123640@Franki7PC>"
+      ],
+      "body_plain": "On Sun, Aug 4, 2013 at 12:36 PM, Frank <frankm60606 at gmail.com> wrote:\n> WTI crude prices are available, I use:\n>\n> getSymbols('DCOILWTICO',src='FRED')\n> DCOILWTICO <- na.locf(DCOILWTICO)\n> tail(DCOILWTICO)\n> file_name <- \"DCOILWTICO.csv\"\n> write.zoo(DCOILWTICO, file = file_name, append = FALSE, quote = TRUE, sep =\n> \",\")\n> quit()\n>\nThose are spot prices, not the price of the front-month future, so it\ndoesn't answer Ryan's question.\n\nBest,\n--\nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\n\n\n> -----Original Message-----\n> From: r-sig-finance-bounces at r-project.org\n> [mailto:r-sig-finance-bounces at r-project.org] On Behalf Of Ryan Christopher\n> Sent: Sunday, August 04, 2013 11:48 AM\n> To: r-sig-finance at r-project.org\n> Subject: [R-SIG-Finance] QUANTMOD package: retrieving the rolling front\n> month price when using the \"getSymbols\" function\n>\n> Hello,\n>\n> I'm working on a project that requires me to retrieve the prices of NYMEX\n> WTI oil futures over a 5-year period of time.  I'm interested in retrieving\n> the rolling 'front month' price, rather than a particular contract\n> expiration.\n>\n> I'm using the \"getSymbols\" function in the Quantmod package to retrieve the\n> data from Yahoo.\n>\n> At this point, I can't even seem to retrieve My code is:\n>\n> ************************************************************\n> initDate <- \"2008-07-31\"\n> endDate <- \"2013-07-31\"\n> symbols <- c(\"CLU13.NYM\")\n> getSymbols(symbols, src=\"yahoo\",from=initDate, to=endDate,\n> index.class=c(\"POSIXt\",\"POSIXct\"))\n>\n> Which returns this error message:\n>\n> Error in download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,\n>  :\n>   cannot open URL '\n> http://chart.yahoo.com/table.csv?s=CLU13.NYM&a=6&b=31&c=2009&d=6&e=19&f=2013\n> &g=d&q=q&y=0&z=CLU13.NYM&x=.csv\n> '\n> In addition: Warning message:\n> In download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,  :\n>   cannot open: HTTP status was '404 Not Found'\n> ************************************************************\n>\n> Does anyone know if it's possible to retrieve the rolling front month price\n> (instead of a particular contract expiration)?\n>\n> Thanks,\n> Ryan\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "On Sun, Aug 4, 2013 at 12:36 PM, Frank <frankm60606 at gmail.com> wrote:\n> WTI crude prices are available, I use:\n>\n> getSymbols('DCOILWTICO',src='FRED')\n> DCOILWTICO <- na.locf(DCOILWTICO)\n> tail(DCO",
+      "thread_id": "thread-d4bc3697cc4d",
+      "thread_depth": 2,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-7cbffe6f051d",
+      "message_id": "<CAHG7xcdbOAuaGo0yBoxn+nmQDJx+HJS-3dFJCSKgptrMg+0q4A@mail.gmail.com>",
+      "from_name": "Helmuth Vollmeier",
+      "from_email_hash": "a4b5d5f568561b0bd655f6986d27f5bca0eeadf6022d0b9bdf3f8f6d47c7d1a2",
+      "date": "2013-08-05T13:11:59+02:00",
+      "subject": "[R-SIG-Finance] QUANTMOD package: retrieving the rolling front month price when using the \"getSymbols\" function",
+      "subject_clean": "QUANTMOD package: retrieving the rolling front month price when using the \"getSymbols\" function",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130805/a0db5300/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130805/a0db5300/attachment.pl>",
+      "thread_id": "thread-7cbffe6f051d",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-c4dcaeabeeb2",
+      "message_id": "<CAHLA0zLUSAJqqsp0r3gpVwRy0Vc4ZQX2ZUO26oK6c+YrPRp+XA@mail.gmail.com>",
+      "from_name": "Shuo Wang",
+      "from_email_hash": "c84da3e3fbfe77019a0fa519d35ef0661fefce1d6590f67f38d7e9b4208d1f73",
+      "date": "2013-08-05T19:18:46+08:00",
+      "subject": "[R-SIG-Finance] Question regarding ugarchroll in rugarch package.",
+      "subject_clean": "Question regarding ugarchroll in rugarch package.",
+      "in_reply_to": "<51F917AF.5060705@4dscape.com>",
+      "references": [
+        "<CAHLA0z+=UuuiOBAZ+xz06nz2enf-vaDVtB3LCBV-7OSjh5d+OA@mail.gmail.com>",
+        "<51F917AF.5060705@4dscape.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130805/2ed41705/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130805/2ed41705/attachment.pl>",
+      "thread_id": "thread-c4dcaeabeeb2",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-34ebbdee414e",
+      "message_id": "<12D8BC31-8B9D-4137-AB8F-4CA24DF32292@4dscape.com>",
+      "from_name": "Alexios Ghalanos",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2013-08-05T12:31:03+01:00",
+      "subject": "[R-SIG-Finance] Question regarding ugarchroll in rugarch package.",
+      "subject_clean": "Question regarding ugarchroll in rugarch package.",
+      "in_reply_to": "<CAHLA0zLUSAJqqsp0r3gpVwRy0Vc4ZQX2ZUO26oK6c+YrPRp+XA@mail.gmail.com>",
+      "references": [
+        "<CAHLA0z+=UuuiOBAZ+xz06nz2enf-vaDVtB3LCBV-7OSjh5d+OA@mail.gmail.com>",
+        "<51F917AF.5060705@4dscape.com>",
+        "<CAHLA0zLUSAJqqsp0r3gpVwRy0Vc4ZQX2ZUO26oK6c+YrPRp+XA@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130805/dd4041d0/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130805/dd4041d0/attachment.pl>",
+      "thread_id": "thread-c4dcaeabeeb2",
+      "thread_depth": 1,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-33f0ed24874d",
+      "message_id": "<D603B8CA9A18844FB6D4BE02C5C764C31ADE6CA8@EXCHMBOXA01.pc.factset.com>",
+      "from_name": "Steve Greiner",
+      "from_email_hash": "c5b064b6cb779f2088880afbffb0a3de8f1b68f2a7c9689a11ab5b9db7ca1b7f",
+      "date": "2013-08-05T16:09:51Z",
+      "subject": "[R-SIG-Finance] Alexxios Ghalanos Parma Package",
+      "subject_clean": "Alexxios Ghalanos Parma Package",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130805/f61001db/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130805/f61001db/attachment.pl>",
+      "thread_id": "thread-33f0ed24874d",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-c4a6333181eb",
+      "message_id": "<51FFD287.6020000@4dscape.com>",
+      "from_name": "alexios ghalanos",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2013-08-05T17:27:51+01:00",
+      "subject": "[R-SIG-Finance] Alexxios Ghalanos Parma Package",
+      "subject_clean": "Alexxios Ghalanos Parma Package",
+      "in_reply_to": "<D603B8CA9A18844FB6D4BE02C5C764C31ADE6CA8@EXCHMBOXA01.pc.factset.com>",
+      "references": [
+        "<D603B8CA9A18844FB6D4BE02C5C764C31ADE6CA8@EXCHMBOXA01.pc.factset.com>"
+      ],
+      "body_plain": "Hi Steve,\n\nThe fractional method directly solves the optimal risk to reward problem \nusing fractional programming without having to calculate the whole \nfrontier and then 'discover' the optimal. For linear problems (LP) the \ntheory goes back to Charnes & Cooper (1962), whilst for nonlinear convex \nsee Dinkelbach (1967)...references are in the manual.\n\nHope that clarifies.\n\nRegards,\n\nAlexios\n\n\nOn 05/08/2013 17:09, Steve Greiner wrote:\n> Hello,\n> In using this package to run some portfolio optimizations, I cannot figure out what the difference is between the Frontier Optimal solution and the Fractional Optimal solution?  I know they're both minimizing (risk/reward) but cannot determine their explicit difference.  Can somebody clarify? Thank you\n> Steve Greiner\n>\n>\n>\n> \t[[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>",
+      "body_snippet": "Hi Steve,\n\nThe fractional method directly solves the optimal risk to reward problem \nusing fractional programming without having to calculate the whole \nfrontier and then 'discover' the optimal. For l",
+      "thread_id": "thread-33f0ed24874d",
+      "thread_depth": 1,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-23faa5f4c5f0",
+      "message_id": "<136616b.2da4b63c.51ffff93.8ede6@10g.pl>",
+      "from_name": "Suzie",
+      "from_email_hash": "2fe4717de0ee49ba1cfc46ce9658391e04a8315b0e1c125caacfa6ee5919e89b",
+      "date": "2013-08-05T21:40:03+02:00",
+      "subject": "[R-SIG-Finance] ARCH test (rugarch package)",
+      "subject_clean": "ARCH test (rugarch package)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello! \n\nDoes anybody know if there is a possibility for extracting the results of ARCH LM tests (especially I need the p-value column) from show() function in the rugarch package? Like for example there is signbias() for extracting the results of sign bias test or nyblom() for extracting the Hansen-Nyblom test results. \n\nIf there is none such method for extracting the results from show(), I know that I can use: \nfit = ugarchfit(...) \nlibrary(FinTS) \nx = residuals(fit, standardize=TRUE) \nArchTest(x, lags=2) \nArchTest(x, lags=5) \nArchTest(x, lags=10)\nand get the same results as presented in the show(fit), but I still don't know how to extract only the \"p-value\" values from these results. \n\nI will be gratefull for any help. \nRegards, \nSuzie",
+      "body_snippet": "Hello! \n\nDoes anybody know if there is a possibility for extracting the results of ARCH LM tests (especially I need the p-value column) from show() function in the rugarch package? Like for example th",
+      "thread_id": "thread-23faa5f4c5f0",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-f0c6263dd067",
+      "message_id": "<52000E25.8080908@4dscape.com>",
+      "from_name": "alexios ghalanos",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2013-08-05T21:42:13+01:00",
+      "subject": "[R-SIG-Finance] ARCH test (rugarch package)",
+      "subject_clean": "ARCH test (rugarch package)",
+      "in_reply_to": "<136616b.2da4b63c.51ffff93.8ede6@10g.pl>",
+      "references": [
+        "<136616b.2da4b63c.51ffff93.8ede6@10g.pl>"
+      ],
+      "body_plain": "Have a look at the unexported function:\n\nrugarch:::.archlmtest\n\nIt returns a list, with one of the constituents being 'p.value'.\n\nRegards,\n\nAlexios\n\nOn 05/08/2013 20:40, Suzie wrote:\n> Hello!\n>\n> Does anybody know if there is a possibility for extracting the results of ARCH LM tests (especially I need the p-value column) from show() function in the rugarch package? Like for example there is signbias() for extracting the results of sign bias test or nyblom() for extracting the Hansen-Nyblom test results.\n>\n> If there is none such method for extracting the results from show(), I know that I can use:\n> fit = ugarchfit(...)\n> library(FinTS)\n> x = residuals(fit, standardize=TRUE)\n> ArchTest(x, lags=2)\n> ArchTest(x, lags=5)\n> ArchTest(x, lags=10)\n> and get the same results as presented in the show(fit), but I still don't know how to extract only the \"p-value\" values from these results.\n>\n> I will be gratefull for any help.\n> Regards,\n> Suzie\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>",
+      "body_snippet": "Have a look at the unexported function:\n\nrugarch:::.archlmtest\n\nIt returns a list, with one of the constituents being 'p.value'.\n\nRegards,\n\nAlexios\n\nOn 05/08/2013 20:40, Suzie wrote:\n> Hello!\n>\n> Does",
+      "thread_id": "thread-23faa5f4c5f0",
+      "thread_depth": 1,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-006ba9da3d01",
+      "message_id": "<DUB105-W25E61D4779674B33C28013995E0@phx.gbl>",
+      "from_name": "Josef Jauk",
+      "from_email_hash": "360cb1727df37a94dd02490e0dc7c41ede9da0ae1b70fe8c7c504a591b6717b9",
+      "date": "2013-08-07T20:19:12+02:00",
+      "subject": "[R-SIG-Finance] Cointegration",
+      "subject_clean": "Cointegration",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130807/0be8d729/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130807/0be8d729/attachment.pl>",
+      "thread_id": "thread-006ba9da3d01",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-5a0aba421754",
+      "message_id": "<CAPPM_gQLM3S9tg=VA-3ex+Oa7_umV6QSZAe+0jdh3iZiLgBP3A@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2013-08-07T15:00:02-05:00",
+      "subject": "[R-SIG-Finance] Cointegration",
+      "subject_clean": "Cointegration",
+      "in_reply_to": "<DUB105-W25E61D4779674B33C28013995E0@phx.gbl>",
+      "references": [
+        "<DUB105-W25E61D4779674B33C28013995E0@phx.gbl>"
+      ],
+      "body_plain": "coef(m)[1] is the intercept in your model. coef(m)[2] is the slope.\nIf you wanted to run a regression with no intercept, include \"+0\" or\n\"-1\" in your formula (as it says in ?lm).\n--\nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\n\n\nOn Wed, Aug 7, 2013 at 1:19 PM, Josef Jauk <josef.jauk at live.at> wrote:\n> I have build a cointegration model to select stocks for pairs trading. My problem with it is to refer within a loop to a list of symbols. While the code runs without generating any warnings I get the wrong results:\n>\n> e.g. for the combination BP ~ AMD I get beta=36.45182 and p-value=0.241386 while it should be beta=5.153268 and p-value=0.1557386\n>\n> Thanks for every help to solve the problem.\n>\n> the code is:\n>\n> #Cointegration Combinations\n> require(quantmod)\n> require(zoo)\n> require(quadprog)\n> require(tseries)\n>\n> setInternet2()\n>\n> symList <- c('MSN','GOOG','YHOO', 'BA', 'SI', 'BP', 'AMD')\n>\n> xtsStock <- xts()\n> xtsFinalPrice <- xts()\n>\n> for (i in 1:length(symList)) {\n>    xtsStock <- getSymbols(symList[i], auto.assign=FALSE)\n>    xtsFinalPrice <- merge(xtsFinalPrice, xtsStock[,6]) #get the adjusted close price\n> }\n>\n> colnames(xtsFinalPrice) <- symList\n> t <- as.data.frame(xtsFinalPrice)\n> comb <- combn(symList, 2, FUN=NULL, simplify=TRUE)\n> ergebnis <- cbind(t(comb), 0, 0)\n> colnames(ergebnis) <- c(\"St.Y\", \"St.X\", \"BETA\", \"p-value\")\n>\n> for (i in 1:((length(symList) * (length(symList)-1)) / 2)) {\n>    #m <- lm(MSN ~ AMD + 0, data=t)\n>    m <- lm(paste(comb[1,i],\"~\",comb[2,i],sep=\" \") , data=t)\n>    beta <- coef(m)[1]\n>    #sprd <- t$MSN - beta * t$AMD\n>    sprd <- get(comb[1,i], pos=t) - beta * get(comb[2,i], pos=t)\n>    ht <- adf.test(sprd, alternative=\"stationary\", k=trunc((length(sprd)-1)^(1/3)))\n>    ergebnis[i,3] <- as.numeric(beta)\n>    ergebnis[i,4] <- as.numeric(ht$p.value)\n> }\n>\n> Josef\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "coef(m)[1] is the intercept in your model. coef(m)[2] is the slope.\nIf you wanted to run a regression with no intercept, include \"+0\" or\n\"-1\" in your formula (as it says in ?lm).\n--\nJoshua Ulrich  |  ",
+      "thread_id": "thread-006ba9da3d01",
+      "thread_depth": 1,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-fddcb205eca9",
+      "message_id": "<D603B8CA9A18844FB6D4BE02C5C764C31ADE849C@EXCHMBOXA01.pc.factset.com>",
+      "from_name": "Steve Greiner",
+      "from_email_hash": "c5b064b6cb779f2088880afbffb0a3de8f1b68f2a7c9689a11ab5b9db7ca1b7f",
+      "date": "2013-08-08T17:23:28Z",
+      "subject": "[R-SIG-Finance] Parma Package specifically, parmaspec",
+      "subject_clean": "Parma Package specifically, parmaspec",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130808/16cda1f1/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130808/16cda1f1/attachment.pl>",
+      "thread_id": "thread-fddcb205eca9",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-000d4f25357a",
+      "message_id": "<D2D9C105-1B26-4DE5-97FE-B28EC3A185AC@4dscape.com>",
+      "from_name": "Alexios Ghalanos",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2013-08-08T18:41:44+01:00",
+      "subject": "[R-SIG-Finance] Parma Package specifically, parmaspec",
+      "subject_clean": "Parma Package specifically, parmaspec",
+      "in_reply_to": "<D603B8CA9A18844FB6D4BE02C5C764C31ADE849C@EXCHMBOXA01.pc.factset.com>",
+      "references": [
+        "<D603B8CA9A18844FB6D4BE02C5C764C31ADE849C@EXCHMBOXA01.pc.factset.com>"
+      ],
+      "body_plain": "Hi Steve,\n\n'parmaspec' only defines the setup/specification. It is the 'parmasolve' function which does the optimization....look at the 'solver.control' option with which you can pass additional options to the nloptr or cmaes solvers (for NLP and GNLP type problems respectively)...for GLPK (LP and MILP) there are no options.\n\nHope that helps.\n\nRegards,\n\nAlexios\n\nSent from my iPhone\n\nOn Aug 8, 2013, at 18:23, Steve Greiner <sgreiner at factset.com> wrote:\n\n> This package is pretty amazing, I have to say.  However I have a question on limiting the optimization searching by either time or by\n> Iterations.  Unfortunately, I cannot find any option in the Parma Package doc on the method \"parmaspec\" to limit by either.  In my usage,\n> there's an occasion  where perhaps I set infeasible constraints or some such and it goes into a seemingly infinite loop that I have to use\n> task manage to interrupt the process.  Is there some way to stop \"parmaspec\" after so many iterations or time limits?  Preferably it would\n> best solution at found out to that point.  Thoughts?\n> Steve\n> \n> Steven P. Greiner, Ph.D.\n> Director of Portfolio Risk\n> www.FactSet.com/risk\n> \n> FactSet Research Systems, Inc.\n> sgreiner at factset.com<mailto:sgreiner at factset.com>\n> (312) 566 5109 (W)\n> (585) 261 7138 (C)\n> \n> \n>    [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Hi Steve,\n\n'parmaspec' only defines the setup/specification. It is the 'parmasolve' function which does the optimization....look at the 'solver.control' option with which you can pass additional optio",
+      "thread_id": "thread-fddcb205eca9",
+      "thread_depth": 1,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-42226b0a73b8",
+      "message_id": "<-7156580960633437167@unknownmsgid>",
+      "from_name": "Adam B",
+      "from_email_hash": "e861f44ab80822e5842b7a0a7be2909299f59d8d031a3989f9e423fac65153b6",
+      "date": "2013-08-09T13:04:20+01:00",
+      "subject": "[R-SIG-Finance] Get Index Constituents",
+      "subject_clean": "Get Index Constituents",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nIs there an R library with a function that would return a list of\nstocks in an index at a particular time? E.g.\ngetIndexConstituents(\"^FTSE\",\"1995-01-01\") would give me the list of\nstocks that composed the FTSE as of January 1995.\n\nThanks,\nAdam",
+      "body_snippet": "Hi,\n\nIs there an R library with a function that would return a list of\nstocks in an index at a particular time? E.g.\ngetIndexConstituents(\"^FTSE\",\"1995-01-01\") would give me the list of\nstocks that co",
+      "thread_id": "thread-42226b0a73b8",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-18d7082afc4a",
+      "message_id": "<1C561614-1680-4E20-908F-9DF58C1713F3@muxspace.com>",
+      "from_name": "Brian Lee Yung Rowe",
+      "from_email_hash": "9bac401501175f8e5f58a68494a778fda4c9e165446648ca3c36d0f863e74446",
+      "date": "2013-08-09T08:33:31-04:00",
+      "subject": "[R-SIG-Finance] Get Index Constituents",
+      "subject_clean": "Get Index Constituents",
+      "in_reply_to": "<-7156580960633437167@unknownmsgid>",
+      "references": [
+        "<-7156580960633437167@unknownmsgid>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130809/ecbafb46/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130809/ecbafb46/attachment.pl>",
+      "thread_id": "thread-42226b0a73b8",
+      "thread_depth": 1,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-28590fbf40c2",
+      "message_id": "<CAETKVBUtOnJHxA69TORXbY4A2z3J-Lx_hEg4cMkw6vVbfAfjKw@mail.gmail.com>",
+      "from_name": "Paolo Cavatore",
+      "from_email_hash": "39b50908214fb073634c85705837d7cd3d564e82ad7ce48d985683bf5894345a",
+      "date": "2013-08-09T18:32:04+02:00",
+      "subject": "[R-SIG-Finance] error with Return.rebalancing after upgrading to latest stable PerformanceAnalytics v1.1.0",
+      "subject_clean": "error with Return.rebalancing after upgrading to latest stable PerformanceAnalytics v1.1.0",
+      "in_reply_to": "<52050119.5090704@braverock.com>",
+      "references": [
+        "<CAETKVBXcxLqc0qAR_tqOF9xxFa4o7qFyE-KpQrABvsYwAQ+Jjg@mail.gmail.com>",
+        "<52050119.5090704@braverock.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130809/75ab36b8/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130809/75ab36b8/attachment.pl>",
+      "thread_id": "thread-28590fbf40c2",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-500d3fe3e811",
+      "message_id": "<CAPPM_gTcfJaMK3heQ4YOi+-qh_soLuWAy2J5TZrYeJrrmL7tbQ@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2013-08-09T11:41:34-05:00",
+      "subject": "[R-SIG-Finance] error with Return.rebalancing after upgrading to latest stable PerformanceAnalytics v1.1.0",
+      "subject_clean": "error with Return.rebalancing after upgrading to latest stable PerformanceAnalytics v1.1.0",
+      "in_reply_to": "<CAETKVBUtOnJHxA69TORXbY4A2z3J-Lx_hEg4cMkw6vVbfAfjKw@mail.gmail.com>",
+      "references": [
+        "<CAETKVBXcxLqc0qAR_tqOF9xxFa4o7qFyE-KpQrABvsYwAQ+Jjg@mail.gmail.com>",
+        "<52050119.5090704@braverock.com>",
+        "<CAETKVBUtOnJHxA69TORXbY4A2z3J-Lx_hEg4cMkw6vVbfAfjKw@mail.gmail.com>"
+      ],
+      "body_plain": "Your example doesn't run because you sent HTML mail even though you're\nexplicitly told not to in the posting guide:\nhttp://www.r-project.org/posting-guide.html\n\nPlease send a reproducible example in *plain text*.\n\nAlso, please do not cross-post:\nhttp://lists.r-forge.r-project.org/pipermail/returnanalytics-commits/2013-August/000849.html\n\n--\nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\n\n\nOn Fri, Aug 9, 2013 at 11:32 AM, Paolo Cavatore <pcavatore at gmail.com> wrote:\n> I have a problem with Return.rebalancing() from PerformanceAnalytics after\n> upgrading to the latest stable release v1.1.0.\n>\n> The below simple example was working wth previous versions but now returns\n> the following error message...\n>\n>\n> require(PerformanceAnalytics)\n>\n> testRet <- xts(cbind(c(0.10,-0.08,0.15), c(0.02,0.01,-0.01)), order.by\n> =as.Date(c(\"2013-07-**19\",\"2013-07-26\",\"2013-08-02\")**) )\n> names(testRet) <- c(\"equity\", \"bond\")\n>\n> testWeights <- xts(cbind(c(0.2,0.3), c(0.8,0.7)), order.by\n> =as.Date(c(\"2013-07-**19\",\"2013-07-26\")) )\n> names(testWeights) <- c(\"equity\", \"bond\")\n>\n> Return.rebalancing(testRet,**testWeights)\n> sessionInfo()\n>\n> ####################\n>> require(PerformanceAnalytics)\n>>\n>> testRet <- xts(cbind(c(0.10,-0.08,0.15), c(0.02,0.01,-0.01)), order.by=as.Date(c(\"2013-07-19\",\"2013-07-26\",\"2013-08-02\"))\n> )\n>> names(testRet) <- c(\"equity\", \"bond\")\n>>\n>> testWeights <- xts(cbind(c(0.2,0.3), c(0.8,0.7)), order.by=as.Date(c(\"2013-07-19\",\"2013-07-26\"))\n> )\n>> names(testWeights) <- c(\"equity\", \"bond\")\n>>\n>> Return.rebalancing(testRet,testWeights)\n> Error in `[.xts`(result, 2:length(result)) : subscript out of bounds\n>>\n>> sessionInfo()\n> R version 3.0.1 (2013-05-16)\n> Platform: i386-w64-mingw32/i386 (32-bit)\n> locale:\n> [1] LC_COLLATE=Italian_Switzerland.1252\n> LC_CTYPE=Italian_Switzerland.1252    LC_MONETARY=Italian_Switzerland.1252\n> [4] LC_NUMERIC=C\n> LC_TIME=Italian_Switzerland.1252\n> attached base packages:\n> [1] stats     graphics  grDevices datasets  utils     methods   base\n> other attached packages:\n> [1] PerformanceAnalytics_1.1.0 xts_0.9-5\n> zoo_1.7-10                 rcom_3.1-2\n> rscproxy_2.0-5\n> loaded via a namespace (and not attached):\n> [1] grid_3.0.1      lattice_0.20-15 tools_3.0.1\n>\n> #######################\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Your example doesn't run because you sent HTML mail even though you're\nexplicitly told not to in the posting guide:\nhttp://www.r-project.org/posting-guide.html\n\nPlease send a reproducible example in *",
+      "thread_id": "thread-28590fbf40c2",
+      "thread_depth": 1,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-8aee8ddb2a26",
+      "message_id": "<9DE405308A6AA24AA794B76282C6C00F4A58C00F99@HQ-POST1>",
+      "from_name": "David Reiner",
+      "from_email_hash": "5e67dbcf5971ea159b92493cc24577d7d5e4fc915f49ff03951f2fc786043a77",
+      "date": "2013-08-09T15:53:41-05:00",
+      "subject": "[R-SIG-Finance] Rbbg::bdp cannot return TIME type?",
+      "subject_clean": "Rbbg::bdp cannot return TIME type?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I was hoping to retrieve a field called \"ACT_TIME_LAST_SETTLE_RECEIVED_RT\",\nbut I got an error: \"Error in convert.to.type(df.data, data_types) : unknown type TIME\"\n\nAny chance of getting Rbbg extended to handle this type?\nOr did I do something wrong? (I can got other fields OK.)\n\nThanks,\nDavid L. Reiner\n\n-------------\n\n> require('Rbbg')\nLoading required package: Rbbg\nLoading required package: rJava\n> conn <- blpConnect()\nR version 3.0.0 (2013-04-03)\nrJava Version 0.9-4\nRbbg Version 0.4-155\nJava environment initialized successfully.\nLooking for most recent blpapi3.jar file...\nAdding C:\\blp\\API\\APIv3\\JavaAPI\\v3.4.3.2\\lib\\blpapi3.jar to Java classpath\nBloomberg API Version 3.4.3.2\n> bdp(conn, \"ESU3 Index\", \"ACT_TIME_LAST_SETTLE_RECEIVED_RT\")\nError in convert.to.type(df.data, data_types) : unknown type TIME\n> sessionInfo()\nR version 3.0.0 (2013-04-03)\nPlatform: i386-w64-mingw32/i386 (32-bit)\n\nlocale:\n[1] LC_COLLATE=English_United States.1252  LC_CTYPE=English_United States.1252    LC_MONETARY=English_United States.1252\n[4] LC_NUMERIC=C                           LC_TIME=English_United States.1252\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base\n\nother attached packages:\n[1] sos_1.3-5    brew_1.0-6   Rbbg_0.4-155 rJava_0.9-4\n\n\n\nThis e-mail and any materials attached hereto, including, without limitation, all content hereof and thereof (collectively, \"XR Content\") are confidential and proprietary to XR Trading, LLC (\"XR\") and/or its affiliates, and are protected by intellectual property laws.  Without the prior written consent of XR, the XR Content may not (i) be disclosed to any third party or (ii) be reproduced or otherwise used by anyone other than current employees of XR or its affiliates, on behalf of XR or its affiliates.\n\nTHE XR CONTENT IS PROVIDED AS IS, WITHOUT REPRESENTATIONS OR WARRANTIES OF ANY KIND.  TO THE MAXIMUM EXTENT PERMISSIBLE UNDER APPLICABLE LAW, XR HEREBY DISCLAIMS ANY AND ALL WARRANTIES, EXPRESS AND IMPLIED, RELATING TO THE XR CONTENT, AND NEITHER XR NOR ANY OF ITS AFFILIATES SHALL IN ANY EVENT BE LIABLE FOR ANY DAMAGES OF ANY NATURE WHATSOEVER, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, CONSEQUENTIAL, SPECIAL AND PUNITIVE DAMAGES, LOSS OF PROFITS AND TRADING LOSSES, RESULTING FROM ANY PERSON'S USE OR RELIANCE UPON, OR INABILITY TO USE, ANY XR CONTENT, EVEN IF XR IS ADVISED OF THE POSSIBILITY OF SUCH DAMAGES OR IF SUCH DAMAGES WERE FORESEEABLE.",
+      "body_snippet": "I was hoping to retrieve a field called \"ACT_TIME_LAST_SETTLE_RECEIVED_RT\",\nbut I got an error: \"Error in convert.to.type(df.data, data_types) : unknown type TIME\"\n\nAny chance of getting Rbbg extended",
+      "thread_id": "thread-8aee8ddb2a26",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-20af6024f208",
+      "message_id": "<1376142895756-4673488.post@n4.nabble.com>",
+      "from_name": "nserdar",
+      "from_email_hash": "eeb23005cb6662599f3d084e9e909be3e04f8df2ecb743834232e357775f2c70",
+      "date": "2013-08-10T06:54:55-07:00",
+      "subject": "[R-SIG-Finance] \"rugarch\" package output help",
+      "subject_clean": "\"rugarch\" package output help",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nI do not know how to extract \" standardized residual\"  and \" R^2\" following \ncode:\n\nspec<-ugarchspec(variance.model = list(model = \"sGARCH\", garchOrder= c(1,\n1), submodel = NULL, external.regressors = NULL, variance.targeting =FALSE),\nmean.model=list(armaOrder=c(0,0),include.mean = FALSE, archm = FALSE,archpow\n= 1, arfima = FALSE, external.regressors = NULL, archex =\nFALSE),distribution.model = \"norm\", start.pars = list(), fixed.pars =\nlist())\n\nm<-ugarchfit(spec, X2, out.sample = 0, solver = \"solnp\", solver.control =\nlist(1), fit.control = list(stationarity = 1, fixed.se = 0, scale=0))\n\n\n\nI do not understand the following explanation for std residuals as well:\n\n\"residuals signature(object = \"uGARCHfit\"): Extracts the residuals. Optional\nlogical argument\nstandardize (default is FALSE) allows to extract the standardized\nresiduals.\"\n\n\nPlease let me give any examples to extract std. residual and R^2\"\n\nRegards,\nSer \n\n\n\n--\nView this message in context: http://r.789695.n4.nabble.com/rugarch-package-output-help-tp4673488.html\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "Hello,\n\nI do not know how to extract \" standardized residual\"  and \" R^2\" following \ncode:\n\nspec<-ugarchspec(variance.model = list(model = \"sGARCH\", garchOrder= c(1,\n1), submodel = NULL, external.regr",
+      "thread_id": "thread-20af6024f208",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-bbeb9d41defb",
+      "message_id": "<CAEXmNQAYB_95Nusuro741v=O7xZ5V-tNnTd8Ung_UExxNTZxow@mail.gmail.com>",
+      "from_name": "jaimie villanueva",
+      "from_email_hash": "89710ff6f806b34caf52bf14f83044d7494659c65ac6fcc6f8c306affffd14e1",
+      "date": "2013-08-11T17:56:07+02:00",
+      "subject": "[R-SIG-Finance] YieldCurve package",
+      "subject_clean": "YieldCurve package",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130811/80c4e4ea/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130811/80c4e4ea/attachment.pl>",
+      "thread_id": "thread-bbeb9d41defb",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-60e7f324feca",
+      "message_id": "<7EAC1B23-AC3A-41AF-884B-A9E834D27D57@gmail.com>",
+      "from_name": "Jeff Ryan",
+      "from_email_hash": "4c11198e12fc267ae3e3c06487930e8e9dd8ef89399ad783a1835a1dd01ce593",
+      "date": "2013-08-11T22:33:37-05:00",
+      "subject": "[R-SIG-Finance] YieldCurve package",
+      "subject_clean": "YieldCurve package",
+      "in_reply_to": "<CAEXmNQAYB_95Nusuro741v=O7xZ5V-tNnTd8Ung_UExxNTZxow@mail.gmail.com>",
+      "references": [
+        "<CAEXmNQAYB_95Nusuro741v=O7xZ5V-tNnTd8Ung_UExxNTZxow@mail.gmail.com>"
+      ],
+      "body_plain": "Try posting sessionInfo(). Your packages matter far more than your system in 99.99% of cases. \n\nAlso, providing the result of traceback() immediately after the failed call can be illustrative. \n\nBest,\nJeff\n\nJeffrey Ryan    |    Founder    |    jeffrey.ryan at lemnica.com\n\nwww.lemnica.com\n\nOn Aug 11, 2013, at 10:56 AM, jaimie villanueva <jaimie.villanueva at gmail.com> wrote:\n\n> Hi there,\n> \n> I'm facing some problems since I've updated  the YieldCurve package from <<\n> YieldCurve_4.0 >> to << YieldCurve_4.1 >>\n> \n> I would like to get Nelson Siegel rates. To do so, I'm using\n> \"Nelson.Siegel\" function in order to compute beta and lambda parameters and\n> \"NSrates\" function to compute Nelson Siegel rates. The thing is that the\n> following code I'm about to show You, did work in the past with my older\n> version of the package, but It doesn't work now.\n> \n> The problem occurs when setting up Nelson Siegel function:\n> \n> This is the code:\n> \n>> Sys.info()\n>                     sysname                      release\n>   version\n>                   \"Windows\"                      \"7 x64\" \"build 7601,\n> Service Pack 1\"\n>                    nodename                      machine\n>     login\n>                    \"JVC-PC\"                     \"x86-64\"\n>     \"JVC\"\n>                        user               effective_user\n>                       \"JVC\"                        \"JVC\"\n> \n>  library(RODBC)\n>> library(TSA)\n>> library(grDevices)\n>> library(YieldCurve)\n>> library(xts)\n>> \n>> \n>> #########  CONFIGURACI?N INICIAL\n>> #\n>> \n>> plazos.NG=array(c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,\n> + 21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,\n> + 42,43,44,45,46,47,48,49,50))\n>> \n>> \n> CURVA.EUR=array(c(1.415943,1.302205,1.380278,1.533634,1.725201,1.920058,2.083162,2.214956,\n> +   2.32518,2.422087,2.591747,2.735049,2.739023,2.644585,2.543769))\n>> \n>> m=length(plazos.NG)\n>> CURVA.EUR.NG=array(NA,c(m))\n>> plazos.EUR=array(c(1,2,3,4,5,6,7,8,9,10,12,15,20,25,30))\n>> \n>> #\n>> #########\n>> \n>> NEW.VECT.1=cbind(plazos.NG,CURVA.EUR.NG)\n>> NEW.VECT.2=cbind(plazos.EUR,CURVA.EUR)\n>> \n>> \n>> # CREAMOS EL VECTOR CON TIPOS\n>> \n>> l= length(plazos.EUR)\n>> posicX=1\n>> posicY=1\n>> \n>> for(k in 1:l)\n> +  {\n> + # BUSCAMOS LA POSICION DE CADA PUNTO DE LA CURVA.\n> +\n> + while(NEW.VECT.1[posicY,1]!= NEW.VECT.2[posicX,1]){posicY=posicY+1}\n> + NEW.VECT.1[posicY,2]=NEW.VECT.2[posicX,2]\n> + posicX=posicX+1\n> + posicY=posicY+1\n> +\n> +  }\n>> \n>> NSParameters= Nelson.Siegel(rate=NEW.VECT.1[,2],maturity=NEW.VECT.1[,1])\n>> fitted.rates= NSrates(NSParameters, NEW.VECT.1[,1])\n> \n> *Error in xts(matrix(0, nrow(Coeff), length(maturity)), order.by =\n> time(Coeff)) : *\n> *  order.by requires an appropriate time-based object*\n> *\n> *\n> Any help would be kindly appreciated.\n> Thanks in advance.\n> \n> -- \n> *Jaimie.*\n> \n>    [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Try posting sessionInfo(). Your packages matter far more than your system in 99.99% of cases. \n\nAlso, providing the result of traceback() immediately after the failed call can be illustrative. \n\nBest,",
+      "thread_id": "thread-bbeb9d41defb",
+      "thread_depth": 1,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-8cdbd9fd889c",
+      "message_id": "<CAEXmNQDn9m-KEooRanN6Ba32GmTOso1K6AM36eb-8XqpawnX_A@mail.gmail.com>",
+      "from_name": "jaimie villanueva",
+      "from_email_hash": "89710ff6f806b34caf52bf14f83044d7494659c65ac6fcc6f8c306affffd14e1",
+      "date": "2013-08-12T08:47:43+02:00",
+      "subject": "[R-SIG-Finance] YieldCurve package",
+      "subject_clean": "YieldCurve package",
+      "in_reply_to": "<CAEXmNQCVW4Qa+caBN9Eu_pKCYPy+okyDLCO_7j+GsnKODF7S7Q@mail.gmail.com>",
+      "references": [
+        "<CAEXmNQAYB_95Nusuro741v=O7xZ5V-tNnTd8Ung_UExxNTZxow@mail.gmail.com>",
+        "<7EAC1B23-AC3A-41AF-884B-A9E834D27D57@gmail.com>",
+        "<CAEXmNQCVW4Qa+caBN9Eu_pKCYPy+okyDLCO_7j+GsnKODF7S7Q@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130812/a6cf9213/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130812/a6cf9213/attachment.pl>",
+      "thread_id": "thread-8cdbd9fd889c",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-29400e574226",
+      "message_id": "<CAPPM_gT_JgASUcJrn+-hzJNr5SqgQ=AMmO_D4tuH63K1HeR_Aw@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2013-08-12T11:37:30-05:00",
+      "subject": "[R-SIG-Finance] YieldCurve package",
+      "subject_clean": "YieldCurve package",
+      "in_reply_to": "<CAEXmNQAYB_95Nusuro741v=O7xZ5V-tNnTd8Ung_UExxNTZxow@mail.gmail.com>",
+      "references": [
+        "<CAEXmNQAYB_95Nusuro741v=O7xZ5V-tNnTd8Ung_UExxNTZxow@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Jaimie,\n\nThe YieldCurve package works much better if you use a time-series of\nrates/maturities.  For example, using xts:\n\n# create xts object with a custom \"maturity\" attribute\nx <- xts(t(NEW.VECT.1[,2]), Sys.Date(), maturity=NEW.VECT.1[,1],\n  dimnames=list(NULL, paste(\"X\", NEW.VECT.1[,1], sep=\"\")))\nxNSParam <- Nelson.Siegel(rate=x, maturity=attr(x,'maturity'))\nxFitted <- NSrates(xNSParam, attr(x,'maturity'))\n\nIf you just want your code to work, convert NSParameters to xts before\nyou call NSrates:\nfitted.rates= NSrates(xts(NSParameters,Sys.Date()), NEW.VECT.1[,1])\n\nBest,\n--\nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\n\n\nOn Sun, Aug 11, 2013 at 10:56 AM, jaimie villanueva\n<jaimie.villanueva at gmail.com> wrote:\n> Hi there,\n>\n> I'm facing some problems since I've updated  the YieldCurve package from <<\n> YieldCurve_4.0 >> to << YieldCurve_4.1 >>\n>\n> I would like to get Nelson Siegel rates. To do so, I'm using\n> \"Nelson.Siegel\" function in order to compute beta and lambda parameters and\n> \"NSrates\" function to compute Nelson Siegel rates. The thing is that the\n> following code I'm about to show You, did work in the past with my older\n> version of the package, but It doesn't work now.\n>\n> The problem occurs when setting up Nelson Siegel function:\n>\n> This is the code:\n>\n>> Sys.info()\n>                      sysname                      release\n>    version\n>                    \"Windows\"                      \"7 x64\" \"build 7601,\n> Service Pack 1\"\n>                     nodename                      machine\n>      login\n>                     \"JVC-PC\"                     \"x86-64\"\n>      \"JVC\"\n>                         user               effective_user\n>                        \"JVC\"                        \"JVC\"\n>\n>   library(RODBC)\n>>  library(TSA)\n>>  library(grDevices)\n>>  library(YieldCurve)\n>>  library(xts)\n>>\n>>\n>>  #########  CONFIGURACI?N INICIAL\n>>  #\n>>\n>>  plazos.NG=array(c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,\n> + 21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,\n> + 42,43,44,45,46,47,48,49,50))\n>>\n>>\n>  CURVA.EUR=array(c(1.415943,1.302205,1.380278,1.533634,1.725201,1.920058,2.083162,2.214956,\n> +   2.32518,2.422087,2.591747,2.735049,2.739023,2.644585,2.543769))\n>>\n>>  m=length(plazos.NG)\n>>  CURVA.EUR.NG=array(NA,c(m))\n>>  plazos.EUR=array(c(1,2,3,4,5,6,7,8,9,10,12,15,20,25,30))\n>>\n>>  #\n>>  #########\n>>\n>>  NEW.VECT.1=cbind(plazos.NG,CURVA.EUR.NG)\n>>  NEW.VECT.2=cbind(plazos.EUR,CURVA.EUR)\n>>\n>>\n>>  # CREAMOS EL VECTOR CON TIPOS\n>>\n>>  l= length(plazos.EUR)\n>>  posicX=1\n>>  posicY=1\n>>\n>>  for(k in 1:l)\n> +  {\n> + # BUSCAMOS LA POSICION DE CADA PUNTO DE LA CURVA.\n> +\n> + while(NEW.VECT.1[posicY,1]!= NEW.VECT.2[posicX,1]){posicY=posicY+1}\n> + NEW.VECT.1[posicY,2]=NEW.VECT.2[posicX,2]\n> + posicX=posicX+1\n> + posicY=posicY+1\n> +\n> +  }\n>>\n>>  NSParameters= Nelson.Siegel(rate=NEW.VECT.1[,2],maturity=NEW.VECT.1[,1])\n>>  fitted.rates= NSrates(NSParameters, NEW.VECT.1[,1])\n>\n> *Error in xts(matrix(0, nrow(Coeff), length(maturity)), order.by =\n> time(Coeff)) : *\n> *  order.by requires an appropriate time-based object*\n> *\n> *\n> Any help would be kindly appreciated.\n> Thanks in advance.\n>\n> --\n> *Jaimie.*\n>\n>         [[alternative HTML version deleted]]\n>\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Hi Jaimie,\n\nThe YieldCurve package works much better if you use a time-series of\nrates/maturities.  For example, using xts:\n\n# create xts object with a custom \"maturity\" attribute\nx <- xts(t(NEW.VECT.",
+      "thread_id": "thread-bbeb9d41defb",
+      "thread_depth": 1,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-effb53ff858b",
+      "message_id": "<CAK2H+ecXiJ2QOzHhFJGV1_P8sVu+in6Y_wUWqLEiWJXW4vN3CQ@mail.gmail.com>",
+      "from_name": "Mark Knecht",
+      "from_email_hash": "60c26093da6ef493629140d820b18c224125bb61884589ce4143ff939051ea92",
+      "date": "2013-08-12T12:55:28-07:00",
+      "subject": "[R-SIG-Finance] Creating trading reports in pdf?",
+      "subject_clean": "Creating trading reports in pdf?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n   Very generic question. I've developed some R code that trades\nstocks on daily bars. The R code takes about 10-15 minutes to run on 5\nyears of data, generates a few charts, a few data.frames, a few\nmatrices, etc.\n\n   I'd like to find a way to get this stuff into a single,\nesthetically readable PDF file. To this end I've been fiddling with\nthe pdf command but not making much headway.\n\n   Is there by chance a good link for info/examples/etc. on this subject?\n\nThanks,\nMark",
+      "body_snippet": "Hi,\n   Very generic question. I've developed some R code that trades\nstocks on daily bars. The R code takes about 10-15 minutes to run on 5\nyears of data, generates a few charts, a few data.frames, a ",
+      "thread_id": "thread-effb53ff858b",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-e3f938062924",
+      "message_id": "<CAPLrYESLdQtVdgxA45SXvyqCvoVCeBsDkmhS45fDQUYku+NMvw@mail.gmail.com>",
+      "from_name": "Daniel Cegiełka",
+      "from_email_hash": "a53c7f1be3d7b89cbf62e91b70b96a3ed4a6d3306db4e0a96cdd8e340115b214",
+      "date": "2013-08-12T22:07:16+02:00",
+      "subject": "[R-SIG-Finance] Creating trading reports in pdf?",
+      "subject_clean": "Creating trading reports in pdf?",
+      "in_reply_to": "<CAK2H+ecXiJ2QOzHhFJGV1_P8sVu+in6Y_wUWqLEiWJXW4vN3CQ@mail.gmail.com>",
+      "references": [
+        "<CAK2H+ecXiJ2QOzHhFJGV1_P8sVu+in6Y_wUWqLEiWJXW4vN3CQ@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Mark,\n\nhttp://timelyportfolio.blogspot.com/2013/03/one-pager-performance-report-with-knitr.html\n\nhttp://timelyportfolio.blogspot.com/2013/03/production-quality-report-with-r-and.html\n\nBest regards,\nDaniel",
+      "body_snippet": "Hi Mark,\n\nhttp://timelyportfolio.blogspot.com/2013/03/one-pager-performance-report-with-knitr.html\n\nhttp://timelyportfolio.blogspot.com/2013/03/production-quality-report-with-r-and.html\n\nBest regards,",
+      "thread_id": "thread-effb53ff858b",
+      "thread_depth": 1,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-9aa271ffe1e5",
+      "message_id": "<CAEXmNQDRJFNJgZWa-D-6EpmT3fZzjoK1uhRrECS7ybAP4q8uXg@mail.gmail.com>",
+      "from_name": "jaimie villanueva",
+      "from_email_hash": "89710ff6f806b34caf52bf14f83044d7494659c65ac6fcc6f8c306affffd14e1",
+      "date": "2013-08-13T13:59:18+02:00",
+      "subject": "[R-SIG-Finance] YieldCurve package",
+      "subject_clean": "YieldCurve package",
+      "in_reply_to": "<CAPPM_gT_JgASUcJrn+-hzJNr5SqgQ=AMmO_D4tuH63K1HeR_Aw@mail.gmail.com>",
+      "references": [
+        "<CAEXmNQAYB_95Nusuro741v=O7xZ5V-tNnTd8Ung_UExxNTZxow@mail.gmail.com>",
+        "<CAPPM_gT_JgASUcJrn+-hzJNr5SqgQ=AMmO_D4tuH63K1HeR_Aw@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130813/a6e40fc2/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130813/a6e40fc2/attachment.pl>",
+      "thread_id": "thread-bbeb9d41defb",
+      "thread_depth": 2,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-965f6fd1b5af",
+      "message_id": "<CAHdfS95Mz5ayXzcZyEF=5+12h5Ki54gs3Vycj-NTYnzpDivbKg@mail.gmail.com>",
+      "from_name": "Robert Harlow",
+      "from_email_hash": "2c96b632dc73a771c658ad5cde557091e78e2b62dff2172cb47f752aebbc29ed",
+      "date": "2013-08-13T10:04:20-04:00",
+      "subject": "[R-SIG-Finance] Embarassingly Simple Questions on rmgarch",
+      "subject_clean": "Embarassingly Simple Questions on rmgarch",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130813/1161a53d/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130813/1161a53d/attachment.pl>",
+      "thread_id": "thread-965f6fd1b5af",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-a28dc4bf6608",
+      "message_id": "<520A48AC.1030909@4dscape.com>",
+      "from_name": "alexios ghalanos",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2013-08-13T15:54:36+01:00",
+      "subject": "[R-SIG-Finance] Embarassingly Simple Questions on rmgarch",
+      "subject_clean": "Embarassingly Simple Questions on rmgarch",
+      "in_reply_to": "<CAHdfS95Mz5ayXzcZyEF=5+12h5Ki54gs3Vycj-NTYnzpDivbKg@mail.gmail.com>",
+      "references": [
+        "<CAHdfS95Mz5ayXzcZyEF=5+12h5Ki54gs3Vycj-NTYnzpDivbKg@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Bob,\n\nThe rmgarch.tests folder is in the src distribution (tarball). Just \ndownload it from CRAN and unpack/extract.\n\nI've installed it on Fedora 19 without problem...you do need to follow \nthe instructions of Rmpfr/Bessel/fftw on installing the required \ndependencies first (see their readme files in the src installation).\n\nRegards,\nAlexios\n\nOn 13/08/2013 15:04, Robert Harlow wrote:\n> Hi,\n>     I was wondering where the rmgarch.tests folder is.  In the vignette, it\n> says that examples are in the \"rmgarch.tests folder of the source,\" but I\n> do not know exactly what that means and cannot find it in the directory\n> where the library is installed (on windows).\n>\n> Also, I wanted to ask if anyone else has had success building rmgarch on\n> redhat linux.  rugarch builds perfectly, but some of the dependencies of\n> rmgarch (Rmpfr, Bessel, ff, fftw) are not building correctly.\n>   Unfortunately, I am pretty incapable of debugging results, though it looks\n> like there is a \"make\" issue.  I am guessing this is not the best place to\n> debug the issue, so I won't post info on the compiler errors, but is\n> stackoverflow more appropriate?\n>\n> Thanks,\n> -Bob\n>\n> \t[[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>",
+      "body_snippet": "Hi Bob,\n\nThe rmgarch.tests folder is in the src distribution (tarball). Just \ndownload it from CRAN and unpack/extract.\n\nI've installed it on Fedora 19 without problem...you do need to follow \nthe ins",
+      "thread_id": "thread-965f6fd1b5af",
+      "thread_depth": 1,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-cf29efc42fae",
+      "message_id": "<CAK2H+edKS87B3XJM-occuNHCqdd4mBf3bPBacV0SsaH0RhB6UQ@mail.gmail.com>",
+      "from_name": "Mark Knecht",
+      "from_email_hash": "60c26093da6ef493629140d820b18c224125bb61884589ce4143ff939051ea92",
+      "date": "2013-08-13T08:14:47-07:00",
+      "subject": "[R-SIG-Finance] Creating trading reports in pdf?",
+      "subject_clean": "Creating trading reports in pdf?",
+      "in_reply_to": "<CAPLrYESLdQtVdgxA45SXvyqCvoVCeBsDkmhS45fDQUYku+NMvw@mail.gmail.com>",
+      "references": [
+        "<CAK2H+ecXiJ2QOzHhFJGV1_P8sVu+in6Y_wUWqLEiWJXW4vN3CQ@mail.gmail.com>",
+        "<CAPLrYESLdQtVdgxA45SXvyqCvoVCeBsDkmhS45fDQUYku+NMvw@mail.gmail.com>"
+      ],
+      "body_plain": "On Mon, Aug 12, 2013 at 1:07 PM, Daniel Cegie?ka\n<daniel.cegielka at gmail.com> wrote:\n> Hi Mark,\n>\n> http://timelyportfolio.blogspot.com/2013/03/one-pager-performance-report-with-knitr.html\n>\n> http://timelyportfolio.blogspot.com/2013/03/production-quality-report-with-r-and.html\n>\n> Best regards,\n> Daniel\n\nDaniel,\n   Thanks for a very nice intro to a sort of high-end version of what\nI wanted to do. This does appear to have a pretty high learning curve\nthough. Anyway, very nice example of what can be done.\n\nThanks,\nMark",
+      "body_snippet": "On Mon, Aug 12, 2013 at 1:07 PM, Daniel Cegie?ka\n<daniel.cegielka at gmail.com> wrote:\n> Hi Mark,\n>\n> http://timelyportfolio.blogspot.com/2013/03/one-pager-performance-report-with-knitr.html\n>\n> http:",
+      "thread_id": "thread-effb53ff858b",
+      "thread_depth": 2,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-fb84e01301b8",
+      "message_id": "<CAHdfS97KUofWQoTy8gADn-Mbp+OA+AM2bY3Tm6mJq3z6zn5M7A@mail.gmail.com>",
+      "from_name": "Robert Harlow",
+      "from_email_hash": "2c96b632dc73a771c658ad5cde557091e78e2b62dff2172cb47f752aebbc29ed",
+      "date": "2013-08-13T14:52:18-04:00",
+      "subject": "[R-SIG-Finance] Embarassingly Simple Questions on rmgarch",
+      "subject_clean": "Embarassingly Simple Questions on rmgarch",
+      "in_reply_to": "<520A48AC.1030909@4dscape.com>",
+      "references": [
+        "<CAHdfS95Mz5ayXzcZyEF=5+12h5Ki54gs3Vycj-NTYnzpDivbKg@mail.gmail.com>",
+        "<520A48AC.1030909@4dscape.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130813/c841adb4/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130813/c841adb4/attachment.pl>",
+      "thread_id": "thread-965f6fd1b5af",
+      "thread_depth": 2,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-8480d20886ec",
+      "message_id": "<1376443094.83718.YahooMailNeo@web161005.mail.bf1.yahoo.com>",
+      "from_name": "Alex Bennett",
+      "from_email_hash": "d536571e5db2320d2c8a47631078057e57bb9f1f2ceeb1e4459a648ab9f57749",
+      "date": "2013-08-13T18:18:14-07:00",
+      "subject": "[R-SIG-Finance] Pulling minute bar data with bar() function in Rbbg (RBloomberg) package in R",
+      "subject_clean": "Pulling minute bar data with bar() function in Rbbg (RBloomberg) package in R",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130813/90309e10/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130813/90309e10/attachment.pl>",
+      "thread_id": "thread-8480d20886ec",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-d3bab41f0943",
+      "message_id": "<CAKd8xcmzDuXCWRQ3X7ymp6z6kf1CGfNuQncT9d1kCYwWGOK9QQ@mail.gmail.com>",
+      "from_name": "zeljko krizek",
+      "from_email_hash": "21cb7f780c987c126eb8d4558918593a1df6f7b9e22d908035426e03df94db46",
+      "date": "2013-08-14T13:32:33+02:00",
+      "subject": "[R-SIG-Finance] Multi-Period Mean Variance Optimization (MVO) implementation in R",
+      "subject_clean": "Multi-Period Mean Variance Optimization (MVO) implementation in R",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130814/e79f567a/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130814/e79f567a/attachment.pl>",
+      "thread_id": "thread-d3bab41f0943",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-47d00d3b2501",
+      "message_id": "<9DE405308A6AA24AA794B76282C6C00F4A58C010C9@HQ-POST1>",
+      "from_name": "David Reiner",
+      "from_email_hash": "5e67dbcf5971ea159b92493cc24577d7d5e4fc915f49ff03951f2fc786043a77",
+      "date": "2013-08-14T09:38:22-05:00",
+      "subject": "[R-SIG-Finance] [SPAM] - Pulling minute bar data with bar() function in Rbbg(RBloomberg) package in R - Email found in subject",
+      "subject_clean": "[SPAM] - Pulling minute bar data with bar() function in Rbbg(RBloomberg) package in R - Email found in subject",
+      "in_reply_to": "<50db2c19-c6ce-4553-be82-ff176cc662f1@r-project.org>",
+      "references": [
+        "<50db2c19-c6ce-4553-be82-ff176cc662f1@r-project.org>"
+      ],
+      "body_plain": "Alex,\nSending your message in text instead of html will help you get an answer - see below for what we received.\nBut, no, you can go back further, but you must omit holidays the way you are doing it, since the empty\nreturn from July 4 messes up your logic. The timeSequence function does take a FinCenter argument,\nwhich may help you.\n\n> start.date <- localToUTC('2013-04-01 08:30') # I'm in Chicago\n> end.date <- localToUTC('2013-04-01 15:00')\n> raw=bar(conn,\"GOOG US Equity\",\"TRADE\",start.date,end.date,\"60\")\n> head(raw)\n                                           time    open    high     low   close numEvents volume\n2013-04-01T13:30:00.000 2013-04-01T13:30:00.000 795.010 801.800 793.250 801.380      3650 512342\n2013-04-01T14:30:00.000 2013-04-01T14:30:00.000 801.380 801.380 796.600 798.850      2323 320520\n2013-04-01T15:30:00.000 2013-04-01T15:30:00.000 798.940 800.980 798.063 798.414      1063 152294\n2013-04-01T16:30:00.000 2013-04-01T16:30:00.000 798.450 801.350 798.070 800.777       815 119642\n2013-04-01T17:30:00.000 2013-04-01T17:30:00.000 800.860 802.209 800.500 801.280      1061 145566\n2013-04-01T18:30:00.000 2013-04-01T18:30:00.000 801.155 801.330 799.550 799.750      1299 185598\n\nHTH,\n-- David Reiner\nPS:\nlocalToUTC <- function(x) {\n  if (class(x)[1] == \"character\") {\n    x <- as.POSIXct(x) # Assume strings are in the correct format\n  }\n  format(x, \"%Y-%m-%d %H:%M:%OS3\",tz=\"UTC\")\n}\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at r-project.org [mailto:r-sig-finance-bounces at r-project.org] On Behalf Of Alex Bennett\nSent: Tuesday, August 13, 2013 8:18 PM\nTo: r-sig-finance at r-project.org\nSubject: [SPAM] - [R-SIG-Finance] Pulling minute bar data with bar() function in Rbbg(RBloomberg) package in R - Email found in subject\n\nI am fairly new to the Rbbg package, so please excuse any ignorance on my part, however I am wondering if it is possible to pull more than ~25 days of minute bar data using the bar() function. I've found I can't pull more than 25 or 26 days worth of data and am wondering if I am doing something wrong, or if it is just not possible.\nHere is the code I am using:\n#install.packages(\"rJava\")#install.packages(\"Rbbg\", repos=\"http://r.findata.org\")#install.packages(\"timeDate\")library(rJava)library(Rbbg)library(timeDate)conn <-blpConnect()weekdays =timeSequence(from=(Sys.Date()-38),to =(Sys.Date()-1),by=\"day\")[isWeekday(timeSequence(from=(Sys.Date()-38),to =(Sys.Date()-1),by=\"day\"))]date_time=numeric()volume=numeric()for(i in1:length(weekdays)){start.date <-paste(weekdays[i],\"13:30:00.000\")end.date <-paste(weekdays[i],\"20:00:00.000\")raw=bar(conn,\"GOOG US Equity\",\"TRADE\",start.date,end.date,\"1\")date_time=append(date_time,raw$time)volume=append(volume,raw$volume)}date.time <-data.frame(do.call('rbind',strsplit(as.character(date_time),'T',fixed=TRUE)))use=data.frame(\"date\"=format(as.Date(date.time$X1),\"%m/%d/%Y\"),\"time\"=date.time$X2,\"volume\"=raw$volume)blpDisconnect(conn)\nThis works fine and pulls data from the trading days in the past 3.5 weeks. Now, if I try to change the 38 to a greater number in the line weekdays = timeSequence(from = (Sys.Date()-38), to = (Sys.Date()-1), by = \"day\")[isWeekday(timeSequence(from = (Sys.Date()-38), to = (Sys.Date()-1), by = \"day\"))], I get the following error: Error in matrix.data[, 1] : subscript out of bounds when I try running the above script.\nIs it the case that the API can only pull about 3.5 weeks of minute bar data? Or am I doing something incorrect? Ideally, I would like to have at least 100 trading days worth of data.\nThank you all for your help.\n        [[alternative HTML version deleted]]\n\n\n\nThis e-mail and any materials attached hereto, including, without limitation, all content hereof and thereof (collectively, \"XR Content\") are confidential and proprietary to XR Trading, LLC (\"XR\") and/or its affiliates, and are protected by intellectual property laws.  Without the prior written consent of XR, the XR Content may not (i) be disclosed to any third party or (ii) be reproduced or otherwise used by anyone other than current employees of XR or its affiliates, on behalf of XR or its affiliates.\n\nTHE XR CONTENT IS PROVIDED AS IS, WITHOUT REPRESENTATIONS OR WARRANTIES OF ANY KIND.  TO THE MAXIMUM EXTENT PERMISSIBLE UNDER APPLICABLE LAW, XR HEREBY DISCLAIMS ANY AND ALL WARRANTIES, EXPRESS AND IMPLIED, RELATING TO THE XR CONTENT, AND NEITHER XR NOR ANY OF ITS AFFILIATES SHALL IN ANY EVENT BE LIABLE FOR ANY DAMAGES OF ANY NATURE WHATSOEVER, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, CONSEQUENTIAL, SPECIAL AND PUNITIVE DAMAGES, LOSS OF PROFITS AND TRADING LOSSES, RESULTING FROM ANY PERSON'S USE OR RELIANCE UPON, OR INABILITY TO USE, ANY XR CONTENT, EVEN IF XR IS ADVISED OF THE POSSIBILITY OF SUCH DAMAGES OR IF SUCH DAMAGES WERE FORESEEABLE.",
+      "body_snippet": "Alex,\nSending your message in text instead of html will help you get an answer - see below for what we received.\nBut, no, you can go back further, but you must omit holidays the way you are doing it, ",
+      "thread_id": "thread-47d00d3b2501",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-aad2b3dc7893",
+      "message_id": "<20130814160002.7B36AA7C@resin13.mta.everyone.net>",
+      "from_name": "HAKAN KAYA",
+      "from_email_hash": "33f6c9aa48dc366a1e03f73633a014742cc23006c9ef8c10ce086559da27edb5",
+      "date": "2013-08-14T16:00:02-07:00",
+      "subject": "[R-SIG-Finance] digits and as.perc arguments in table.Arbitrary in PerformanceAnalytics",
+      "subject_clean": "digits and as.perc arguments in table.Arbitrary in PerformanceAnalytics",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130814/1900d9c5/attachment.html>",
+      "body_snippet": "An HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130814/1900d9c5/attachment.html>",
+      "thread_id": "thread-aad2b3dc7893",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-8b054d882f70",
+      "message_id": "<2a24492736e5de09878fc30fa5074b9c.squirrel@mail.braverock.com>",
+      "from_name": "Peter Carl",
+      "from_email_hash": "1e650586f3b88a796073ac676ae34d7a5367febd527471fdeb70e957b34309a7",
+      "date": "2013-08-14T18:16:04-05:00",
+      "subject": "[R-SIG-Finance] digits and as.perc arguments in table.Arbitrary in PerformanceAnalytics",
+      "subject_clean": "digits and as.perc arguments in table.Arbitrary in PerformanceAnalytics",
+      "in_reply_to": "<20130814160002.7B36AA7C@resin13.mta.everyone.net>",
+      "references": [
+        "<20130814160002.7B36AA7C@resin13.mta.everyone.net>"
+      ],
+      "body_plain": "Text-only emails are preferred on this list.  In fact, I'm not sure R code\nwill run if it's typed in comic sans.\n\nBut to get to the core question, no.  There's no way to anticipate which\nnumbers need to be formatted which way in that particular function.  You\ncan take a look at Hmisc::format.df, which does the job once you know what\nyou want.  There's probably an example in textplot or one of the other\ntable.* functions.\n\npcc\n-- \nPeter Carl\nhttp://www.braverock.com/peter\n\n> <DIV style=\"font-family:Comic Sans MS, cursive; font-size:12pt;\"><FONT\n> face=\"Comic Sans MS, cursive\">Hi,</FONT><DIV><FONT face=\"Comic Sans MS,\n> cursive\"><BR></FONT></DIV><DIV><FONT face=\"Comic Sans MS, cursive\">Is\n> there anyway to pass through digits and as.perc in the function\n> table.Arbitrary?</FONT></DIV><DIV><FONT face=\"Comic Sans MS, cursive\">For\n> example, when I run the below line, the output by default gives lots of\n> digits.</FONT></DIV><DIV><FONT face=\"Comic Sans MS,\n> cursive\"><BR></FONT></DIV><DIV><FONT face=\"Comic Sans MS,\n> cursive\"><DIV>table.Arbitrary(Ret,metrics=c(\"Return.annualized\",\"StdDev.annualized\",\"SharpeRatio.annualized\",\"maxDrawdown\"),metricsNames=c(\"Return\n> (Annualized)\",\"StDev (Annualized)\",\"Sharpe Ratio\n> (Annualized)\",\"MaxDrawdown\"))</DIV><DIV>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;\n> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;\n> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;SPY &nbsp; &nbsp; &nbsp;\n> &nbsp;IEF</DIV><DIV>Return (Annualized) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;\n> 0.04949007 0.06293099</DIV><DIV>StDev (Annualized) &nbsp; &nbsp; &nbsp;\n> &nbsp; &nbsp; &nbsp;0.23882840 0.07807295</DIV><DIV>Sharpe Ratio\n> (Annualized) &nbsp;0.20722021 0.80605368</DIV><DIV>MaxDrawdown &nbsp;\n> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.55193114\n> 0.10404821</DIV><DIV><BR></DIV><DIV>It would be nice if we could round the\n> numbers and show some of them as percentages and some of them as\n> numbers.</DIV><DIV>A desired output for example can\n> be</DIV><DIV><DIV>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;\n> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;\n> &nbsp; SPY &nbsp; &nbsp; &nbsp; &nbsp;IEF</DIV><DIV>Return (Annualized)\n> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.9 &nbsp; &nbsp;6.3</DIV><DIV>StDev\n> (Annualized) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 23.9\n> &nbsp;7.8</DIV><DIV>Sharpe Ratio (Annualized) 0.21\n> 0.81</DIV><DIV>MaxDrawdown &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;\n> &nbsp; &nbsp; &nbsp;55.2\n> &nbsp;10.4</DIV></DIV><DIV><BR></DIV><DIV>Thanks,</DIV><DIV>Hakan</DIV><DIV><BR></DIV><DIV><BR></DIV></FONT></DIV><BR>&nbsp;<BR><HR>daimi\n> e-posta adresiniz ---&gt;\n> http://www.postamatik.com</DIV>_______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.",
+      "body_snippet": "Text-only emails are preferred on this list.  In fact, I'm not sure R code\nwill run if it's typed in comic sans.\n\nBut to get to the core question, no.  There's no way to anticipate which\nnumbers need ",
+      "thread_id": "thread-aad2b3dc7893",
+      "thread_depth": 1,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-9fa78fd49f2a",
+      "message_id": "<A946BA1A857E4459AD1C62B72EFFF2C6@Franki7PC>",
+      "from_name": "Frank",
+      "from_email_hash": "abdffc2429bfa78db9949f51e22b4e11e2e14915791103deccd563dd4d9da29e",
+      "date": "2013-08-14T19:06:31-05:00",
+      "subject": "[R-SIG-Finance] digits and as.perc arguments in table.Arbitrary inPerformanceAnalytics",
+      "subject_clean": "digits and as.perc arguments in table.Arbitrary inPerformanceAnalytics",
+      "in_reply_to": "<20130814160002.7B36AA7C@resin13.mta.everyone.net>",
+      "references": [
+        "<20130814160002.7B36AA7C@resin13.mta.everyone.net>"
+      ],
+      "body_plain": "Maybe you need round()? Your post seems to be all character strings, not\nsure what I am missing. Assume that the first argument to round() is a\nnumber:\n\nround((Return_annualized,1))\n\nwill round Return_annualized to one digit. You can then paste that with a\nlabel if you want.\n\nround(100*Max_Draw_down,1)\n\nIf your MaxDrawdown is actually 0.552 and you want 55.2.\n\nThanks,\nFrank\nChicago\n________________________________________\nFrom: r-sig-finance-bounces at r-project.org\n[mailto:r-sig-finance-bounces at r-project.org] On Behalf Of HAKAN KAYA\nSent: Wednesday, August 14, 2013 6:00 PM\nTo: r-sig-finance at r-project.org\nSubject: [R-SIG-Finance] digits and as.perc arguments in table.Arbitrary\ninPerformanceAnalytics\n\nHi,\n\nIs there anyway to pass through digits and as.perc in the function\ntable.Arbitrary?\nFor example, when I run the below line, the output by default gives lots of\ndigits.\n\ntable.Arbitrary(Ret,metrics=c(\"Return.annualized\",\"StdDev.annualized\",\"Sharp\neRatio.annualized\",\"maxDrawdown\"),metricsNames=c(\"Return\n(Annualized)\",\"StDev (Annualized)\",\"Sharpe Ratio\n(Annualized)\",\"MaxDrawdown\"))\n? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?SPY ? ? ? ?IEF\nReturn (Annualized) ? ? ? ? ? 0.04949007 0.06293099\nStDev (Annualized) ? ? ? ? ? ?0.23882840 0.07807295\nSharpe Ratio (Annualized) ?0.20722021 0.80605368\nMaxDrawdown ? ? ? ? ? ? ? ? ? 0.55193114 0.10404821\n\nIt would be nice if we could round the numbers and show some of them as\npercentages and some of them as numbers.\nA desired output for example can be\n? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? SPY ? ? ? ?IEF\nReturn (Annualized) ? ? ? ? ?4.9 ? ?6.3\nStDev (Annualized) ? ? ? ? ? 23.9 ?7.8\nSharpe Ratio (Annualized) 0.21 0.81\nMaxDrawdown ? ? ? ? ? ? ? ? ?55.2 ?10.4\n\nThanks,\nHakan\n\n\n\n?\n________________________________________\ndaimi e-posta adresiniz ---> http://www.postamatik.com",
+      "body_snippet": "Maybe you need round()? Your post seems to be all character strings, not\nsure what I am missing. Assume that the first argument to round() is a\nnumber:\n\nround((Return_annualized,1))\n\nwill round Return",
+      "thread_id": "thread-aad2b3dc7893",
+      "thread_depth": 1,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-3e7aa96b078b",
+      "message_id": "<9DE405308A6AA24AA794B76282C6C00F4A58C011F5@HQ-POST1>",
+      "from_name": "David Reiner",
+      "from_email_hash": "5e67dbcf5971ea159b92493cc24577d7d5e4fc915f49ff03951f2fc786043a77",
+      "date": "2013-08-19T08:27:36-05:00",
+      "subject": "[R-SIG-Finance] Pulling minute bar data with bar() function in Rbbg(RBloomberg) package in R",
+      "subject_clean": "Pulling minute bar data with bar() function in Rbbg(RBloomberg) package in R",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Sorry for the late reply - I was out for a few days.\n(It's generally better to go to the list so you have more chances of getting a reply.)\n\nI follow the last example under ?merge.xts to align my incomplete series:\njust generate a sequence of date-times you want and merge the zero-width xts object with your other xts object.\nYou'll get NA's where there's no data, and you can leave them or use locf from zoo.\nHTH,\n-- David\n\n\n-----Original Message-----\nFrom: Alex Bennett [mailto:ppminers11 at yahoo.com] \nSent: Wednesday, August 14, 2013 4:04 PM\nTo: David Reiner\nSubject: Re: [SPAM] - [R-SIG-Finance] Pulling minute bar data with bar() function in Rbbg(RBloomberg) package in R - Email found in subject\n\nHi David,\n\nThank you so much for the help - this worked perfectly! \n\nUsing the \"isBizday()\" function at the start of the for loop circumvents the 4th and stops the error I was getting. \n\nOne more quick question regarding this: Right now the code only returns lines from minutes there was volume moved, and I am wondering if it is possible to add something (either code or a parameter) that will cause the bar() function to return a line for every minute instead of just minutes in which there were trades. For example, for a liquid name, like SPY, there will be 390 lines (one for every minute since there is volume moving every minute); however, for more illiquid names there could only be 100 lines returned because there are several minutes with no volume.  What I would like is for there to always be 390 lines returned, and, in the event there was no volume moved, have a zero on the line corresponding to those minutes. This would cause the \"use\" data frame to have 390*n rows. \n\nUltimately I would like a column with a number, 1-390, corresponding to each minute bar for a given day, and I cannot think of a way to efficiently add this column without having 390 rows per day from the start. \n\nDoes this make sense? Do you have any insights as to how to achieve this goal? \n\nThanks for your help!\n\nBest, \nAlex Bennett\n\n\n\n\nOn Aug 14, 2013, at 10:38 AM, David Reiner <David.Reiner at xrtrading.com> wrote:\n\n> Alex,\n> Sending your message in text instead of html will help you get an answer - see below for what we received.\n> But, no, you can go back further, but you must omit holidays the way you are doing it, since the empty\n> return from July 4 messes up your logic. The timeSequence function does take a FinCenter argument,\n> which may help you.\n> \n>> start.date <- localToUTC('2013-04-01 08:30') # I'm in Chicago\n>> end.date <- localToUTC('2013-04-01 15:00')\n>> raw=bar(conn,\"GOOG US Equity\",\"TRADE\",start.date,end.date,\"60\")\n>> head(raw)\n>                                           time    open    high     low   close numEvents volume\n> 2013-04-01T13:30:00.000 2013-04-01T13:30:00.000 795.010 801.800 793.250 801.380      3650 512342\n> 2013-04-01T14:30:00.000 2013-04-01T14:30:00.000 801.380 801.380 796.600 798.850      2323 320520\n> 2013-04-01T15:30:00.000 2013-04-01T15:30:00.000 798.940 800.980 798.063 798.414      1063 152294\n> 2013-04-01T16:30:00.000 2013-04-01T16:30:00.000 798.450 801.350 798.070 800.777       815 119642\n> 2013-04-01T17:30:00.000 2013-04-01T17:30:00.000 800.860 802.209 800.500 801.280      1061 145566\n> 2013-04-01T18:30:00.000 2013-04-01T18:30:00.000 801.155 801.330 799.550 799.750      1299 185598\n> \n> HTH,\n> -- David Reiner\n> PS:\n> localToUTC <- function(x) {\n>  if (class(x)[1] == \"character\") {\n>    x <- as.POSIXct(x) # Assume strings are in the correct format\n>  }\n>  format(x, \"%Y-%m-%d %H:%M:%OS3\",tz=\"UTC\")\n> }\n> \n> -----Original Message-----\n> From: r-sig-finance-bounces at r-project.org [mailto:r-sig-finance-bounces at r-project.org] On Behalf Of Alex Bennett\n> Sent: Tuesday, August 13, 2013 8:18 PM\n> To: r-sig-finance at r-project.org\n> Subject: [SPAM] - [R-SIG-Finance] Pulling minute bar data with bar() function in Rbbg(RBloomberg) package in R - Email found in subject\n> \n> I am fairly new to the Rbbg package, so please excuse any ignorance on my part, however I am wondering if it is possible to pull more than ~25 days of minute bar data using the bar() function. I've found I can't pull more than 25 or 26 days worth of data and am wondering if I am doing something wrong, or if it is just not possible.\n> Here is the code I am using:\n> #install.packages(\"rJava\")#install.packages(\"Rbbg\", repos=\"http://r.findata.org\")#install.packages(\"timeDate\")library(rJava)library(Rbbg)library(timeDate)conn <-blpConnect()weekdays =timeSequence(from=(Sys.Date()-38),to =(Sys.Date()-1),by=\"day\")[isWeekday(timeSequence(from=(Sys.Date()-38),to =(Sys.Date()-1),by=\"day\"))]date_time=numeric()volume=numeric()for(i in1:length(weekdays)){start.date <-paste(weekdays[i],\"13:30:00.000\")end.date <-paste(weekdays[i],\"20:00:00.000\")raw=bar(conn,\"GOOG US Equity\",\"TRADE\",start.date,end.date,\"1\")date_time=append(date_time,raw$time)volume=append(volume,raw$volume)}date.time <-data.frame(do.call('rbind',strsplit(as.character(date_time),'T',fixed=TRUE)))use=data.frame(\"date\"=format(as.Date(date.time$X1),\"%m/%d/%Y\"),\"time\"=date.time$X2,\"volume\"=raw$volume)blpDisconnect(conn)\n> This works fine and pulls data from the trading days in the past 3.5 weeks. Now, if I try to change the 38 to a greater number in the line weekdays = timeSequence(from = (Sys.Date()-38), to = (Sys.Date()-1), by = \"day\")[isWeekday(timeSequence(from = (Sys.Date()-38), to = (Sys.Date()-1), by = \"day\"))], I get the following error: Error in matrix.data[, 1] : subscript out of bounds when I try running the above script.\n> Is it the case that the API can only pull about 3.5 weeks of minute bar data? Or am I doing something incorrect? Ideally, I would like to have at least 100 trading days worth of data.\n> Thank you all for your help.\n>        [[alternative HTML version deleted]]\n> \n> \n> \n> This e-mail and any materials attached hereto, including, without limitation, all content hereof and thereof (collectively, \"XR Content\") are confidential and proprietary to XR Trading, LLC (\"XR\") and/or its affiliates, and are protected by intellectual property laws.  Without the prior written consent of XR, the XR Content may not (i) be disclosed to any third party or (ii) be reproduced or otherwise used by anyone other than current employees of XR or its affiliates, on behalf of XR or its affiliates.\n> \n> THE XR CONTENT IS PROVIDED AS IS, WITHOUT REPRESENTATIONS OR WARRANTIES OF ANY KIND.  TO THE MAXIMUM EXTENT PERMISSIBLE UNDER APPLICABLE LAW, XR HEREBY DISCLAIMS ANY AND ALL WARRANTIES, EXPRESS AND IMPLIED, RELATING TO THE XR CONTENT, AND NEITHER XR NOR ANY OF ITS AFFILIATES SHALL IN ANY EVENT BE LIABLE FOR ANY DAMAGES OF ANY NATURE WHATSOEVER, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, CONSEQUENTIAL, SPECIAL AND PUNITIVE DAMAGES, LOSS OF PROFITS AND TRADING LOSSES, RESULTING FROM ANY PERSON'S USE OR RELIANCE UPON, OR INABILITY TO USE, ANY XR CONTENT, EVEN IF XR IS ADVISED OF THE POSSIBILITY OF SUCH DAMAGES OR IF SUCH DAMAGES WERE FORESEEABLE.",
+      "body_snippet": "Sorry for the late reply - I was out for a few days.\n(It's generally better to go to the list so you have more chances of getting a reply.)\n\nI follow the last example under ?merge.xts to align my inco",
+      "thread_id": "thread-3e7aa96b078b",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-dcce56865034",
+      "message_id": "<1376931669.63914.YahooMailNeo@web2802.biz.mail.ne1.yahoo.com>",
+      "from_name": "Thomas Fuller",
+      "from_email_hash": "3b021161fd989322bc154aa1ec05003531fe2816e6e657e0af3d1cbc6bbe2eed",
+      "date": "2013-08-19T10:01:09-07:00",
+      "subject": "[R-SIG-Finance] Coherent Datafeed: Thomson Reuters Edition v 0.9.3 available",
+      "subject_clean": "Coherent Datafeed: Thomson Reuters Edition v 0.9.3 available",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130819/f2794d28/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130819/f2794d28/attachment.pl>",
+      "thread_id": "thread-dcce56865034",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-ac06eeb369a7",
+      "message_id": "<CADEYtz6nXB6rRhSrq9SzfR4VmUSv2Tq+9JFfF7VN5kDQxH79hQ@mail.gmail.com>",
+      "from_name": "John Kaprich",
+      "from_email_hash": "fa86f8886071c41ac595cb1dab5f07c17a9a473c24ae894f259cab51829dfb1d",
+      "date": "2013-08-21T10:52:16-05:00",
+      "subject": "[R-SIG-Finance] Help with stepAIC function",
+      "subject_clean": "Help with stepAIC function",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130821/db500199/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130821/db500199/attachment.pl>",
+      "thread_id": "thread-ac06eeb369a7",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-17b833620dcc",
+      "message_id": "<CAC2_zRrds+4HFex81g=GtZf5jJ7Ufd41dH0MdeZe8Ozu=r-UrA@mail.gmail.com>",
+      "from_name": "Etty Sekhon",
+      "from_email_hash": "ad96ded13e48c9a4b057cd2b61b0e2f6567477f233ffe285f1249607ab8e4f47",
+      "date": "2013-08-22T11:07:58+01:00",
+      "subject": "[R-SIG-Finance] Help",
+      "subject_clean": "Help",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130822/67616d77/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130822/67616d77/attachment.pl>",
+      "thread_id": "thread-17b833620dcc",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-c7d2d785ffa4",
+      "message_id": "<CAGS5yBUsRa3ZGwZENqGLXN+dC7LJWsytLoJ1nvstsJMkaA22Yg@mail.gmail.com>",
+      "from_name": "BBands",
+      "from_email_hash": "0f7f8073f0acceeb16c5cb0f1e87bc3b6c563391b2d7d349176cfb0b1ec4f070",
+      "date": "2013-08-23T14:32:07-07:00",
+      "subject": "[R-SIG-Finance] Options solution?",
+      "subject_clean": "Options solution?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "The options solution I have used forever no longer works well, so I am\nlooking for a new option analysis solution. My needs are rather\nsimple, really all I want are nice P&L graphs for option positions\nwith a number of legs. Flexibility is key. I was thinking about\nHoadley, which I have used on and off, but I am no longer a fan of\nanalytics in Excel. So I thought that this might be a chance to expand\nmy R skills. I've seen a couple of ideas and there must be a ton of R\nsolutions that I am not aware of. This is one that I have found:\nhttp://www.r-bloggers.com/scenario-analysis-and-trading-options-using-r/\nDo you know of any that are particularly elegant or that you like well?\n\nThanks,\n\n    John\n-- \nJohn Bollinger\nwww.BollingerBands.com",
+      "body_snippet": "The options solution I have used forever no longer works well, so I am\nlooking for a new option analysis solution. My needs are rather\nsimple, really all I want are nice P&L graphs for option position",
+      "thread_id": "thread-c7d2d785ffa4",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-b4f9d370c695",
+      "message_id": "<CABDUZc-CCmKm1wEfDgxgvA5ewyYA66tAqSsqn2VcbEAxJZ4jbg@mail.gmail.com>",
+      "from_name": "Jeff Ryan",
+      "from_email_hash": "4c11198e12fc267ae3e3c06487930e8e9dd8ef89399ad783a1835a1dd01ce593",
+      "date": "2013-08-25T10:14:21-05:00",
+      "subject": "[R-SIG-Finance] Options solution?",
+      "subject_clean": "Options solution?",
+      "in_reply_to": "<CAGS5yBUsRa3ZGwZENqGLXN+dC7LJWsytLoJ1nvstsJMkaA22Yg@mail.gmail.com>",
+      "references": [
+        "<CAGS5yBUsRa3ZGwZENqGLXN+dC7LJWsytLoJ1nvstsJMkaA22Yg@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130825/45edb5a8/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130825/45edb5a8/attachment.pl>",
+      "thread_id": "thread-c7d2d785ffa4",
+      "thread_depth": 1,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-1dfdffa27f27",
+      "message_id": "<CAGS5yBV61Q-mJz=QkyLrbOOamtqoBk=JcXNY2N3q5zSv9oTBAA@mail.gmail.com>",
+      "from_name": "BBands",
+      "from_email_hash": "0f7f8073f0acceeb16c5cb0f1e87bc3b6c563391b2d7d349176cfb0b1ec4f070",
+      "date": "2013-08-27T08:14:55-07:00",
+      "subject": "[R-SIG-Finance] Options solution?",
+      "subject_clean": "Options solution?",
+      "in_reply_to": "<CABDUZc-CCmKm1wEfDgxgvA5ewyYA66tAqSsqn2VcbEAxJZ4jbg@mail.gmail.com>",
+      "references": [
+        "<CAGS5yBUsRa3ZGwZENqGLXN+dC7LJWsytLoJ1nvstsJMkaA22Yg@mail.gmail.com>",
+        "<CABDUZc-CCmKm1wEfDgxgvA5ewyYA66tAqSsqn2VcbEAxJZ4jbg@mail.gmail.com>"
+      ],
+      "body_plain": "Thanks Jeff, that looks interesting. I'll dig in soon.\n\nWas the lightning talk recorded?\n\n     John\n\nOn Sun, Aug 25, 2013 at 8:14 AM, Jeff Ryan <jeff.a.ryan at gmail.com> wrote:\n> Hi John,\n>\n> I have a package that isn't quite 'complete' that might be of use.\n>\n> https://code.google.com/p/rgreeks/",
+      "body_snippet": "Thanks Jeff, that looks interesting. I'll dig in soon.\n\nWas the lightning talk recorded?\n\n     John\n\nOn Sun, Aug 25, 2013 at 8:14 AM, Jeff Ryan <jeff.a.ryan at gmail.com> wrote:\n> Hi John,\n>\n> I have ",
+      "thread_id": "thread-c7d2d785ffa4",
+      "thread_depth": 2,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-cdd3cb0b7e1b",
+      "message_id": "<CAF6gDEWnFdJ337zc8=7A0XRrXuTYCxscvqSNbJ=rQdZM8feb4A@mail.gmail.com>",
+      "from_name": "pu chen",
+      "from_email_hash": "3a1dd6998813b7c9cac55f36dd73f968692d8a84bc34c4bb8ab2170275ced00c",
+      "date": "2013-08-29T09:10:49+08:00",
+      "subject": "[R-SIG-Finance] rcppbugs and markov switching model",
+      "subject_clean": "rcppbugs and markov switching model",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130829/9334ec66/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130829/9334ec66/attachment.pl>",
+      "thread_id": "thread-cdd3cb0b7e1b",
+      "thread_depth": 0,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-c483e9cfb598",
+      "message_id": "<CAMi=pg7hYX7KM_1wXEpOYE4phuzmnCGuEn4Fs5cj1R+hkG2pLQ@mail.gmail.com>",
+      "from_name": "Whit Armstrong",
+      "from_email_hash": "9f0af921ac5e402b55cb0593a435b87162faa6caa4eef5ccb3498c95d81634d0",
+      "date": "2013-08-28T21:42:29-04:00",
+      "subject": "[R-SIG-Finance] rcppbugs and markov switching model",
+      "subject_clean": "rcppbugs and markov switching model",
+      "in_reply_to": "<CAF6gDEWnFdJ337zc8=7A0XRrXuTYCxscvqSNbJ=rQdZM8feb4A@mail.gmail.com>",
+      "references": [
+        "<CAF6gDEWnFdJ337zc8=7A0XRrXuTYCxscvqSNbJ=rQdZM8feb4A@mail.gmail.com>"
+      ],
+      "body_plain": "Have you thought about trying viterbi first?\n\nThere is an example here:\nhttp://www.r-bloggers.com/regime-detection/\n\nIf you don't want to use that you can try the example here on about\npage page 29:\nhttp://www.rinfinance.com/agenda/2012/talk/WhitArmstrong.pdf\n\nIf you decide you want to use mcmc, I think the way to go is to write\nthe model in c++ and call it with Rcpp.\n\nYou should override the random walk classes for bernoulli and use\ngibbs within metropolis.\n\nThere is an example of that here (for a linear model):\nhttps://github.com/armstrtw/CppBugs/tree/master/test/r.inline.example\n\nIf you need some help then feel free to contact me off list.\n\n-Whit\n\n\nOn Wed, Aug 28, 2013 at 9:10 PM, pu chen <chenpuias at gmail.com> wrote:\n> Anyone know how to use rcppbugs to estimate markov switching model? Thanks.\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Have you thought about trying viterbi first?\n\nThere is an example here:\nhttp://www.r-bloggers.com/regime-detection/\n\nIf you don't want to use that you can try the example here on about\npage page 29:\nh",
+      "thread_id": "thread-cdd3cb0b7e1b",
+      "thread_depth": 1,
+      "month": "2013-08"
+    },
+    {
+      "id": "msg-ec7e72682abd",
+      "message_id": "<CAEYvigLfS4QW4yGPmymfRBh7ocdxipW-YpoGsy3G_U9NuSBVyw@mail.gmail.com>",
+      "from_name": "Matthieu Stigler",
+      "from_email_hash": "8be7d9af3aa05df3cb73327099ca82a1e00b62ae5b6e52d77e9d9908c4ad6d37",
+      "date": "2013-08-30T12:42:36+02:00",
+      "subject": "[R-SIG-Finance] Help with stepAIC function",
+      "subject_clean": "Help with stepAIC function",
+      "in_reply_to": "<CADEYtz6nXB6rRhSrq9SzfR4VmUSv2Tq+9JFfF7VN5kDQxH79hQ@mail.gmail.com>",
+      "references": [
+        "<CADEYtz6nXB6rRhSrq9SzfR4VmUSv2Tq+9JFfF7VN5kDQxH79hQ@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130830/744712ce/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130830/744712ce/attachment.pl>",
+      "thread_id": "thread-ac06eeb369a7",
+      "thread_depth": 1,
+      "month": "2013-08"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-035cd186a2c6",
+      "subject": "Parameterization of the GED distribution in rugarch package - second try",
+      "message_count": 1,
+      "participants": [
+        "Maxim Odulero"
+      ],
+      "started": "2013-08-01T14:57:18+02:00",
+      "last_reply": "2013-08-01T14:57:18+02:00",
+      "root_message_id": "msg-035cd186a2c6"
+    },
+    {
+      "id": "thread-57371f4f9aa1",
+      "subject": "Finding price difference of a time series",
+      "message_count": 5,
+      "participants": [
+        "Daniel Cegiełka",
+        "Paul Teetor",
+        "veepsirtt"
+      ],
+      "started": "2013-08-02T01:33:19-07:00",
+      "last_reply": "2013-08-04T16:17:37+02:00",
+      "root_message_id": "msg-57371f4f9aa1"
+    },
+    {
+      "id": "thread-27f7a373460b",
+      "subject": "Imposing constraints on garch parameters with ugarchfit",
+      "message_count": 2,
+      "participants": [
+        "Alexios Ghalanos",
+        "George Jordan"
+      ],
+      "started": "2013-08-02T16:13:28-05:00",
+      "last_reply": "2013-08-03T00:12:03+01:00",
+      "root_message_id": "msg-27f7a373460b"
+    },
+    {
+      "id": "thread-896796a43448",
+      "subject": "Capital requirements as a cushion against risks, why?",
+      "message_count": 3,
+      "participants": [
+        "Copula Guy",
+        "Joshua Ulrich",
+        "michael.weylandt at gmail.com (R. Michael Weylandt"
+      ],
+      "started": "2013-08-03T14:06:53+01:00",
+      "last_reply": "2013-08-04T07:31:13-05:00",
+      "root_message_id": "msg-896796a43448"
+    },
+    {
+      "id": "thread-d4bc3697cc4d",
+      "subject": "QUANTMOD package: retrieving the rolling front month price when using the \"getSymbols\" function",
+      "message_count": 4,
+      "participants": [
+        "Frank",
+        "Joshua Ulrich",
+        "Ryan Christopher"
+      ],
+      "started": "2013-08-04T12:48:19-04:00",
+      "last_reply": "2013-08-05T06:02:13-05:00",
+      "root_message_id": "msg-d4bc3697cc4d"
+    },
+    {
+      "id": "thread-6b6175920257",
+      "subject": "Capital requirements as a cushion against risks, why?",
+      "message_count": 1,
+      "participants": [
+        "Hans Radtke"
+      ],
+      "started": "2013-08-05T10:27:06+00:00",
+      "last_reply": "2013-08-05T10:27:06+00:00",
+      "root_message_id": "msg-6b6175920257"
+    },
+    {
+      "id": "thread-7cbffe6f051d",
+      "subject": "QUANTMOD package: retrieving the rolling front month price when using the \"getSymbols\" function",
+      "message_count": 1,
+      "participants": [
+        "Helmuth Vollmeier"
+      ],
+      "started": "2013-08-05T13:11:59+02:00",
+      "last_reply": "2013-08-05T13:11:59+02:00",
+      "root_message_id": "msg-7cbffe6f051d"
+    },
+    {
+      "id": "thread-33f0ed24874d",
+      "subject": "Alexxios Ghalanos Parma Package",
+      "message_count": 2,
+      "participants": [
+        "Steve Greiner",
+        "alexios ghalanos"
+      ],
+      "started": "2013-08-05T16:09:51+00:00",
+      "last_reply": "2013-08-05T17:27:51+01:00",
+      "root_message_id": "msg-33f0ed24874d"
+    },
+    {
+      "id": "thread-c4dcaeabeeb2",
+      "subject": "Question regarding ugarchroll in rugarch package.",
+      "message_count": 2,
+      "participants": [
+        "Alexios Ghalanos",
+        "Shuo Wang"
+      ],
+      "started": "2013-08-05T19:18:46+08:00",
+      "last_reply": "2013-08-05T12:31:03+01:00",
+      "root_message_id": "msg-c4dcaeabeeb2"
+    },
+    {
+      "id": "thread-23faa5f4c5f0",
+      "subject": "ARCH test (rugarch package)",
+      "message_count": 2,
+      "participants": [
+        "Suzie",
+        "alexios ghalanos"
+      ],
+      "started": "2013-08-05T21:40:03+02:00",
+      "last_reply": "2013-08-05T21:42:13+01:00",
+      "root_message_id": "msg-23faa5f4c5f0"
+    },
+    {
+      "id": "thread-006ba9da3d01",
+      "subject": "Cointegration",
+      "message_count": 2,
+      "participants": [
+        "Josef Jauk",
+        "Joshua Ulrich"
+      ],
+      "started": "2013-08-07T20:19:12+02:00",
+      "last_reply": "2013-08-07T15:00:02-05:00",
+      "root_message_id": "msg-006ba9da3d01"
+    },
+    {
+      "id": "thread-fddcb205eca9",
+      "subject": "Parma Package specifically, parmaspec",
+      "message_count": 2,
+      "participants": [
+        "Alexios Ghalanos",
+        "Steve Greiner"
+      ],
+      "started": "2013-08-08T17:23:28+00:00",
+      "last_reply": "2013-08-08T18:41:44+01:00",
+      "root_message_id": "msg-fddcb205eca9"
+    },
+    {
+      "id": "thread-42226b0a73b8",
+      "subject": "Get Index Constituents",
+      "message_count": 2,
+      "participants": [
+        "Adam B",
+        "Brian Lee Yung Rowe"
+      ],
+      "started": "2013-08-09T13:04:20+01:00",
+      "last_reply": "2013-08-09T08:33:31-04:00",
+      "root_message_id": "msg-42226b0a73b8"
+    },
+    {
+      "id": "thread-8aee8ddb2a26",
+      "subject": "Rbbg::bdp cannot return TIME type?",
+      "message_count": 1,
+      "participants": [
+        "David Reiner"
+      ],
+      "started": "2013-08-09T15:53:41-05:00",
+      "last_reply": "2013-08-09T15:53:41-05:00",
+      "root_message_id": "msg-8aee8ddb2a26"
+    },
+    {
+      "id": "thread-28590fbf40c2",
+      "subject": "error with Return.rebalancing after upgrading to latest stable PerformanceAnalytics v1.1.0",
+      "message_count": 2,
+      "participants": [
+        "Joshua Ulrich",
+        "Paolo Cavatore"
+      ],
+      "started": "2013-08-09T18:32:04+02:00",
+      "last_reply": "2013-08-09T11:41:34-05:00",
+      "root_message_id": "msg-28590fbf40c2"
+    },
+    {
+      "id": "thread-20af6024f208",
+      "subject": "\"rugarch\" package output help",
+      "message_count": 1,
+      "participants": [
+        "nserdar"
+      ],
+      "started": "2013-08-10T06:54:55-07:00",
+      "last_reply": "2013-08-10T06:54:55-07:00",
+      "root_message_id": "msg-20af6024f208"
+    },
+    {
+      "id": "thread-bbeb9d41defb",
+      "subject": "YieldCurve package",
+      "message_count": 4,
+      "participants": [
+        "Jeff Ryan",
+        "Joshua Ulrich",
+        "jaimie villanueva"
+      ],
+      "started": "2013-08-11T17:56:07+02:00",
+      "last_reply": "2013-08-13T13:59:18+02:00",
+      "root_message_id": "msg-bbeb9d41defb"
+    },
+    {
+      "id": "thread-8cdbd9fd889c",
+      "subject": "YieldCurve package",
+      "message_count": 1,
+      "participants": [
+        "jaimie villanueva"
+      ],
+      "started": "2013-08-12T08:47:43+02:00",
+      "last_reply": "2013-08-12T08:47:43+02:00",
+      "root_message_id": "msg-8cdbd9fd889c"
+    },
+    {
+      "id": "thread-effb53ff858b",
+      "subject": "Creating trading reports in pdf?",
+      "message_count": 3,
+      "participants": [
+        "Daniel Cegiełka",
+        "Mark Knecht"
+      ],
+      "started": "2013-08-12T12:55:28-07:00",
+      "last_reply": "2013-08-13T08:14:47-07:00",
+      "root_message_id": "msg-effb53ff858b"
+    },
+    {
+      "id": "thread-965f6fd1b5af",
+      "subject": "Embarassingly Simple Questions on rmgarch",
+      "message_count": 3,
+      "participants": [
+        "Robert Harlow",
+        "alexios ghalanos"
+      ],
+      "started": "2013-08-13T10:04:20-04:00",
+      "last_reply": "2013-08-13T14:52:18-04:00",
+      "root_message_id": "msg-965f6fd1b5af"
+    },
+    {
+      "id": "thread-8480d20886ec",
+      "subject": "Pulling minute bar data with bar() function in Rbbg (RBloomberg) package in R",
+      "message_count": 1,
+      "participants": [
+        "Alex Bennett"
+      ],
+      "started": "2013-08-13T18:18:14-07:00",
+      "last_reply": "2013-08-13T18:18:14-07:00",
+      "root_message_id": "msg-8480d20886ec"
+    },
+    {
+      "id": "thread-47d00d3b2501",
+      "subject": "[SPAM] - Pulling minute bar data with bar() function in Rbbg(RBloomberg) package in R - Email found in subject",
+      "message_count": 1,
+      "participants": [
+        "David Reiner"
+      ],
+      "started": "2013-08-14T09:38:22-05:00",
+      "last_reply": "2013-08-14T09:38:22-05:00",
+      "root_message_id": "msg-47d00d3b2501"
+    },
+    {
+      "id": "thread-d3bab41f0943",
+      "subject": "Multi-Period Mean Variance Optimization (MVO) implementation in R",
+      "message_count": 1,
+      "participants": [
+        "zeljko krizek"
+      ],
+      "started": "2013-08-14T13:32:33+02:00",
+      "last_reply": "2013-08-14T13:32:33+02:00",
+      "root_message_id": "msg-d3bab41f0943"
+    },
+    {
+      "id": "thread-aad2b3dc7893",
+      "subject": "digits and as.perc arguments in table.Arbitrary in PerformanceAnalytics",
+      "message_count": 3,
+      "participants": [
+        "Frank",
+        "HAKAN KAYA",
+        "Peter Carl"
+      ],
+      "started": "2013-08-14T16:00:02-07:00",
+      "last_reply": "2013-08-14T19:06:31-05:00",
+      "root_message_id": "msg-aad2b3dc7893"
+    },
+    {
+      "id": "thread-3e7aa96b078b",
+      "subject": "Pulling minute bar data with bar() function in Rbbg(RBloomberg) package in R",
+      "message_count": 1,
+      "participants": [
+        "David Reiner"
+      ],
+      "started": "2013-08-19T08:27:36-05:00",
+      "last_reply": "2013-08-19T08:27:36-05:00",
+      "root_message_id": "msg-3e7aa96b078b"
+    },
+    {
+      "id": "thread-dcce56865034",
+      "subject": "Coherent Datafeed: Thomson Reuters Edition v 0.9.3 available",
+      "message_count": 1,
+      "participants": [
+        "Thomas Fuller"
+      ],
+      "started": "2013-08-19T10:01:09-07:00",
+      "last_reply": "2013-08-19T10:01:09-07:00",
+      "root_message_id": "msg-dcce56865034"
+    },
+    {
+      "id": "thread-ac06eeb369a7",
+      "subject": "Help with stepAIC function",
+      "message_count": 2,
+      "participants": [
+        "John Kaprich",
+        "Matthieu Stigler"
+      ],
+      "started": "2013-08-21T10:52:16-05:00",
+      "last_reply": "2013-08-30T12:42:36+02:00",
+      "root_message_id": "msg-ac06eeb369a7"
+    },
+    {
+      "id": "thread-17b833620dcc",
+      "subject": "Help",
+      "message_count": 1,
+      "participants": [
+        "Etty Sekhon"
+      ],
+      "started": "2013-08-22T11:07:58+01:00",
+      "last_reply": "2013-08-22T11:07:58+01:00",
+      "root_message_id": "msg-17b833620dcc"
+    },
+    {
+      "id": "thread-c7d2d785ffa4",
+      "subject": "Options solution?",
+      "message_count": 3,
+      "participants": [
+        "BBands",
+        "Jeff Ryan"
+      ],
+      "started": "2013-08-23T14:32:07-07:00",
+      "last_reply": "2013-08-27T08:14:55-07:00",
+      "root_message_id": "msg-c7d2d785ffa4"
+    },
+    {
+      "id": "thread-cdd3cb0b7e1b",
+      "subject": "rcppbugs and markov switching model",
+      "message_count": 2,
+      "participants": [
+        "Whit Armstrong",
+        "pu chen"
+      ],
+      "started": "2013-08-29T09:10:49+08:00",
+      "last_reply": "2013-08-28T21:42:29-04:00",
+      "root_message_id": "msg-cdd3cb0b7e1b"
+    }
+  ]
+}

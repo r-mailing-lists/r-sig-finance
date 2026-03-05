@@ -1,0 +1,286 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2025-03",
+  "messages": [
+    {
+      "id": "msg-ca453479b3ad",
+      "message_id": "<1cfce8c24a770a67b6890c6b4c9b1343bc9ef87a.camel@gmail.com>",
+      "from_name": "Arnaud Gaboury",
+      "from_email_hash": "8d66b3010463ba4609c087a2aec53210a2c80004ddc8ee34092b23f175a5a8d2",
+      "date": "2025-03-05T08:57:17+01:00",
+      "subject": "[R-SIG-Finance] apply a function to a data.frame column with condition",
+      "subject_clean": "apply a function to a data.frame column with condition",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I work with Binancer [1] and PMwR [2] packages to write a trading\njournal.\nHere is a sample of my data frame:\nportfolio <- data.frame(\n  symbol = c(\"BTCUSDT\", \"BTCUSDT\", \"ETHUBTC\", \"AAVEBTC\", \"ENAUSDT\"),\n  time = c(\"2024-12-17 10:01:30\", \"2024-12-18 21:32:53\", \"2025-01-02\n10:34:49\", \"2025-01-02 11:14:43\", \"2025-01-02 11:15:22\")\n)\n\nI want to fetch the 'BTCUSDT' price for a specific time if the symbol\nof same row end with these 3 letters : 'BTC'. In my sample, it will be\nrows 3 and 4.\nHere is how I find BTCUSDT price for date 2025-01-02 10:34:49:\n\nget_btc_price <- function(time) {\n  klines <- binance_klines('BTCUSDT', start_time = '2025-01-02\n10:34:49', end_time = '2025-01-02 10:34:49')\n}\n\nI was thinking of this code to write my new column BTCUSDT_price:\n\ndf <- portfolio %>%\n  mutate(\n    BTCUSDT_price = ifelse(str_detect(symbol, \"BTC$\"), map_dbl(time,\nget_btc_price), NA_real_)\n  )}\n\nBut the code returns:\nError in `mutate()`:\n? In argument: `BTCUSDT_price = ifelse(...)`.\nCaused by error in `map_dbl()`:\n? In index: 1.\nCaused by error in `[.data.table`:\n! Item 1 of j is 12 which is outside the column number range [1,ncol=0]\n\nI have tried other workarounds but all give me errors.\n\nThank you for help\n\n\n[1]https://cran.r-project.org/web/packages/binancer\n[2]https://cran.r-project.org/web/packages/PMwR\n\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: signature.asc\nType: application/pgp-signature\nSize: 488 bytes\nDesc: This is a digitally signed message part\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20250305/b2d7a372/attachment.sig>",
+      "body_snippet": "I work with Binancer [1] and PMwR [2] packages to write a trading\njournal.\nHere is a sample of my data frame:\nportfolio <- data.frame(\n  symbol = c(\"BTCUSDT\", \"BTCUSDT\", \"ETHUBTC\", \"AAVEBTC\", \"ENAUSDT",
+      "thread_id": "thread-ca453479b3ad",
+      "thread_depth": 0,
+      "month": "2025-03"
+    },
+    {
+      "id": "msg-380ac1c8fa98",
+      "message_id": "<87pliu1xl6.fsf@enricoschumann.net>",
+      "from_name": "Enrico Schumann",
+      "from_email_hash": "42e3fbcaa04e968726f4c1d1a69e34143bdbc62b403d112ba1d3712256bacb88",
+      "date": "2025-03-06T07:29:09+01:00",
+      "subject": "[R-SIG-Finance] apply a function to a data.frame column with condition",
+      "subject_clean": "apply a function to a data.frame column with condition",
+      "in_reply_to": "<1cfce8c24a770a67b6890c6b4c9b1343bc9ef87a.camel@gmail.com> (Arnaud Gaboury's message of \"Wed, 05 Mar 2025 08:57:17 +0100\")",
+      "references": [
+        "<1cfce8c24a770a67b6890c6b4c9b1343bc9ef87a.camel@gmail.com>"
+      ],
+      "body_plain": "On Wed, 05 Mar 2025, Arnaud Gaboury writes:\n\n> I work with Binancer [1] and PMwR [2] packages to write a trading\n> journal.\n> Here is a sample of my data frame:\n> portfolio <- data.frame(\n>   symbol = c(\"BTCUSDT\", \"BTCUSDT\", \"ETHUBTC\", \"AAVEBTC\", \"ENAUSDT\"),\n>   time = c(\"2024-12-17 10:01:30\", \"2024-12-18 21:32:53\", \"2025-01-02\n> 10:34:49\", \"2025-01-02 11:14:43\", \"2025-01-02 11:15:22\")\n> )\n>\n> I want to fetch the 'BTCUSDT' price for a specific time if the symbol\n> of same row end with these 3 letters : 'BTC'. In my sample, it will be\n> rows 3 and 4.\n> Here is how I find BTCUSDT price for date 2025-01-02 10:34:49:\n>\n> get_btc_price <- function(time) {\n>   klines <- binance_klines('BTCUSDT', start_time = '2025-01-02\n> 10:34:49', end_time = '2025-01-02 10:34:49')\n> }\n>\n> I was thinking of this code to write my new column BTCUSDT_price:\n>\n> df <- portfolio %>%\n>   mutate(\n>     BTCUSDT_price = ifelse(str_detect(symbol, \"BTC$\"), map_dbl(time,\n> get_btc_price), NA_real_)\n>   )}\n>\n> But the code returns:\n> Error in `mutate()`:\n> ? In argument: `BTCUSDT_price = ifelse(...)`.\n> Caused by error in `map_dbl()`:\n> ? In index: 1.\n> Caused by error in `[.data.table`:\n> ! Item 1 of j is 12 which is outside the column number range [1,ncol=0]\n>\n> I have tried other workarounds but all give me errors.\n>\n> Thank you for help\n>\n>\n> [1]https://cran.r-project.org/web/packages/binancer\n> [2]https://cran.r-project.org/web/packages/PMwR\n>\n\nYou want to compute a new column for your data.frame as\na function of two existing columns.\n\nIn base R, if you don't want to use a loop (and there\nwould be nothing wrong with a loop), you could use\n'mapply'; and then cbind the column to your data.frame:\n\n    new.column <- mapply(\n        function(symbol, time) {\n            if (grepl(\"BTC$\", symbol)) {\n                ## your get_price computation, using\n                ## 'symbol' and 'time'\n                paste(\"do something with\", symbol, time)\n                \n            } else\n                NA\n        },\n        portfolio$symbol,\n        portfolio$time\n    )\n\n    ## new.column\n    ##                                         BTCUSDT \n    ##                                              NA \n    ##                                         BTCUSDT \n    ##                                              NA \n    ##                                         ETHUBTC \n    ## \"do something with ETHUBTC 2025-01-02 10:34:49\" \n    ##                                         AAVEBTC \n    ## \"do something with AAVEBTC 2025-01-02 11:14:43\" \n    ##                                         ENAUSDT \n    ##                                              NA \n    ##\n\n\n-- \nEnrico Schumann\nLucerne, Switzerland\nhttps://enricoschumann.net",
+      "body_snippet": "On Wed, 05 Mar 2025, Arnaud Gaboury writes:\n\n> I work with Binancer [1] and PMwR [2] packages to write a trading\n> journal.\n> Here is a sample of my data frame:\n> portfolio <- data.frame(\n>   symbol =",
+      "thread_id": "thread-ca453479b3ad",
+      "thread_depth": 1,
+      "month": "2025-03"
+    },
+    {
+      "id": "msg-73a985daf676",
+      "message_id": "<e0aa67a0fef7f21ce6556a94241d021af1a9c78c.camel@gmail.com>",
+      "from_name": "Arnaud Gaboury",
+      "from_email_hash": "8d66b3010463ba4609c087a2aec53210a2c80004ddc8ee34092b23f175a5a8d2",
+      "date": "2025-03-06T09:09:14+01:00",
+      "subject": "[R-SIG-Finance] apply a function to a data.frame column with condition",
+      "subject_clean": "apply a function to a data.frame column with condition",
+      "in_reply_to": "<87pliu1xl6.fsf@enricoschumann.net>",
+      "references": [
+        "<1cfce8c24a770a67b6890c6b4c9b1343bc9ef87a.camel@gmail.com>",
+        "<87pliu1xl6.fsf@enricoschumann.net>"
+      ],
+      "body_plain": "On Thu, 2025-03-06 at 07:29 +0100, Enrico Schumann wrote:\n> On Wed, 05 Mar 2025, Arnaud Gaboury writes:\n> \n> > I work with Binancer [1] and PMwR [2] packages to write a trading\n> > journal.\n> > Here is a sample of my data frame:\n> > portfolio <- data.frame(\n> > ? symbol = c(\"BTCUSDT\", \"BTCUSDT\", \"ETHUBTC\", \"AAVEBTC\",\n> > \"ENAUSDT\"),\n> > ? time = c(\"2024-12-17 10:01:30\", \"2024-12-18 21:32:53\", \"2025-01-\n> > 02\n> > 10:34:49\", \"2025-01-02 11:14:43\", \"2025-01-02 11:15:22\")\n> > )\n> > \n> > I want to fetch the 'BTCUSDT' price for a specific time if the\n> > symbol\n> > of same row end with these 3 letters : 'BTC'. In my sample, it will\n> > be\n> > rows 3 and 4.\n> > Here is how I find BTCUSDT price for date 2025-01-02 10:34:49:\n> > \n> > get_btc_price <- function(time) {\n> > ? klines <- binance_klines('BTCUSDT', start_time = '2025-01-02\n> > 10:34:49', end_time = '2025-01-02 10:34:49')\n> > }\n> > \n> > I was thinking of this code to write my new column BTCUSDT_price:\n> > \n> > df <- portfolio %>%\n> > ? mutate(\n> > ??? BTCUSDT_price = ifelse(str_detect(symbol, \"BTC$\"),\n> > map_dbl(time,\n> > get_btc_price), NA_real_)\n> > ? )}\n> > \n> > But the code returns:\n> > Error in `mutate()`:\n> > ? In argument: `BTCUSDT_price = ifelse(...)`.\n> > Caused by error in `map_dbl()`:\n> > ? In index: 1.\n> > Caused by error in `[.data.table`:\n> > ! Item 1 of j is 12 which is outside the column number range\n> > [1,ncol=0]\n> > \n> > I have tried other workarounds but all give me errors.\n> > \n> > Thank you for help\n> > \n> > \n> > [1]https://cran.r-project.org/web/packages/binancer\n> > [2]https://cran.r-project.org/web/packages/PMwR\n> > \n> \n> You want to compute a new column for your data.frame as\n> a function of two existing columns.\n> \n> In base R, if you don't want to use a loop (and there\n> would be nothing wrong with a loop), you could use\n> 'mapply'; and then cbind the column to your data.frame:\n> \n> ??? new.column <- mapply(\n> ??????? function(symbol, time) {\n> ??????????? if (grepl(\"BTC$\", symbol)) {\n> ??????????????? ## your get_price computation, using\n> ??????????????? ## 'symbol' and 'time'\n> ??????????????? paste(\"do something with\", symbol, time)\n> ??????????????? \n> ??????????? } else\n> ??????????????? NA\n> ??????? },\n> ??????? portfolio$symbol,\n> ??????? portfolio$time\n> ??? )\n> \n> ??? ## new.column\n> ??? ##???????????????????????????????????????? BTCUSDT \n> ??? ##????????????????????????????????????????????? NA \n> ??? ##???????????????????????????????????????? BTCUSDT \n> ??? ##????????????????????????????????????????????? NA \n> ??? ##???????????????????????????????????????? ETHUBTC \n> ??? ## \"do something with ETHUBTC 2025-01-02 10:34:49\" \n> ??? ##???????????????????????????????????????? AAVEBTC \n> ??? ## \"do something with AAVEBTC 2025-01-02 11:14:43\" \n> ??? ##???????????????????????????????????????? ENAUSDT \n> ??? ##????????????????????????????????????????????? NA \n\nThank you for your answer.\nA very warm thanks for your PMwR package. It helps me managing my\nportfolio in a professional way. Unfortunately there isn't so much\nmaterial to manage, follow, compute ratio etc. \nBy any chance, do you have any cool build-in functions to cook monthly\ndata (PL, valuation etc) as we compute every month always the same data\n?\n\n> ??? ##\n> \n> \n\n\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: signature.asc\nType: application/pgp-signature\nSize: 488 bytes\nDesc: This is a digitally signed message part\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20250306/b177c458/attachment.sig>",
+      "body_snippet": "On Thu, 2025-03-06 at 07:29 +0100, Enrico Schumann wrote:\n> On Wed, 05 Mar 2025, Arnaud Gaboury writes:\n> \n> > I work with Binancer [1] and PMwR [2] packages to write a trading\n> > journal.\n> > Here i",
+      "thread_id": "thread-ca453479b3ad",
+      "thread_depth": 2,
+      "month": "2025-03"
+    },
+    {
+      "id": "msg-55c0e2f46960",
+      "message_id": "<2954e4905995f8d9060e4f271406655d1654972a.camel@gmail.com>",
+      "from_name": "Arnaud Gaboury",
+      "from_email_hash": "8d66b3010463ba4609c087a2aec53210a2c80004ddc8ee34092b23f175a5a8d2",
+      "date": "2025-03-06T18:24:33+01:00",
+      "subject": "[R-SIG-Finance] apply a function to a data.frame column with condition",
+      "subject_clean": "apply a function to a data.frame column with condition",
+      "in_reply_to": "<87pliu1xl6.fsf@enricoschumann.net>",
+      "references": [
+        "<1cfce8c24a770a67b6890c6b4c9b1343bc9ef87a.camel@gmail.com>",
+        "<87pliu1xl6.fsf@enricoschumann.net>"
+      ],
+      "body_plain": "On Thu, 2025-03-06 at 07:29 +0100, Enrico Schumann wrote:\n> On Wed, 05 Mar 2025, Arnaud Gaboury writes:\n> \n> > I work with Binancer [1] and PMwR [2] packages to write a trading\n> > journal.\n> > Here is a sample of my data frame:\n> > portfolio <- data.frame(\n> > ? symbol = c(\"BTCUSDT\", \"BTCUSDT\", \"ETHUBTC\", \"AAVEBTC\",\n> > \"ENAUSDT\"),\n> > ? time = c(\"2024-12-17 10:01:30\", \"2024-12-18 21:32:53\", \"2025-01-\n> > 02\n> > 10:34:49\", \"2025-01-02 11:14:43\", \"2025-01-02 11:15:22\")\n> > )\n> > \n> > I want to fetch the 'BTCUSDT' price for a specific time if the\n> > symbol\n> > of same row end with these 3 letters : 'BTC'. In my sample, it will\n> > be\n> > rows 3 and 4.\n> > Here is how I find BTCUSDT price for date 2025-01-02 10:34:49:\n> > \n> > get_btc_price <- function(time) {\n> > ? klines <- binance_klines('BTCUSDT', start_time = '2025-01-02\n> > 10:34:49', end_time = '2025-01-02 10:34:49')\n> > }\n> > \n> > I was thinking of this code to write my new column BTCUSDT_price:\n> > \n> > df <- portfolio %>%\n> > ? mutate(\n> > ??? BTCUSDT_price = ifelse(str_detect(symbol, \"BTC$\"),\n> > map_dbl(time,\n> > get_btc_price), NA_real_)\n> > ? )}\n> > \n> > But the code returns:\n> > Error in `mutate()`:\n> > ? In argument: `BTCUSDT_price = ifelse(...)`.\n> > Caused by error in `map_dbl()`:\n> > ? In index: 1.\n> > Caused by error in `[.data.table`:\n> > ! Item 1 of j is 12 which is outside the column number range\n> > [1,ncol=0]\n> > \n> > I have tried other workarounds but all give me errors.\n> > \n> > Thank you for help\n> > \n> > \n> > [1]https://cran.r-project.org/web/packages/binancer\n> > [2]https://cran.r-project.org/web/packages/PMwR\n> > \n> \n> You want to compute a new column for your data.frame as\n> a function of two existing columns.\n> \n> In base R, if you don't want to use a loop (and there\n> would be nothing wrong with a loop), you could use\n> 'mapply'; and then cbind the column to your data.frame:\n> \n> ??? new.column <- mapply(\n> ??????? function(symbol, time) {\n> ??????????? if (grepl(\"BTC$\", symbol)) {\n> ??????????????? ## your get_price computation, using\n> ??????????????? ## 'symbol' and 'time'\n> ??????????????? paste(\"do something with\", symbol, time)\n> ??????????????? \n> ??????????? } else\n> ??????????????? NA\n> ??????? },\n> ??????? portfolio$symbol,\n> ??????? portfolio$time\n> ??? )\n\nI am sorry but I can't see where I shall put my df ? And my function to\nget BTC price:\nget_btc_price <- function(my_time) {\n    # my_time_ms <- as.integer(as.numeric(my_time) * 1000)\n    klines <- binance_klines(\"BTCUSDT\", interval = '1h', start_time =\nas.Date(my_time), end_time = as.Date(my_time) + 1)\n    return(as.numeric(klines$close[[18]]))\n}\n\nThank you for your help\n> \n> ??? ## new.column\n> ??? ##???????????????????????????????????????? BTCUSDT \n> ??? ##????????????????????????????????????????????? NA \n> ??? ##???????????????????????????????????????? BTCUSDT \n> ??? ##????????????????????????????????????????????? NA \n> ??? ##???????????????????????????????????????? ETHUBTC \n> ??? ## \"do something with ETHUBTC 2025-01-02 10:34:49\" \n> ??? ##???????????????????????????????????????? AAVEBTC \n> ??? ## \"do something with AAVEBTC 2025-01-02 11:14:43\" \n> ??? ##???????????????????????????????????????? ENAUSDT \n> ??? ##????????????????????????????????????????????? NA \n> ??? ##\n> \n> \n\n\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: signature.asc\nType: application/pgp-signature\nSize: 488 bytes\nDesc: This is a digitally signed message part\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20250306/f65e0a36/attachment.sig>",
+      "body_snippet": "On Thu, 2025-03-06 at 07:29 +0100, Enrico Schumann wrote:\n> On Wed, 05 Mar 2025, Arnaud Gaboury writes:\n> \n> > I work with Binancer [1] and PMwR [2] packages to write a trading\n> > journal.\n> > Here i",
+      "thread_id": "thread-ca453479b3ad",
+      "thread_depth": 2,
+      "month": "2025-03"
+    },
+    {
+      "id": "msg-3bcab94b76b5",
+      "message_id": "<8734fp1dij.fsf@enricoschumann.net>",
+      "from_name": "Enrico Schumann",
+      "from_email_hash": "42e3fbcaa04e968726f4c1d1a69e34143bdbc62b403d112ba1d3712256bacb88",
+      "date": "2025-03-07T08:55:00+01:00",
+      "subject": "[R-SIG-Finance] apply a function to a data.frame column with condition",
+      "subject_clean": "apply a function to a data.frame column with condition",
+      "in_reply_to": "<2954e4905995f8d9060e4f271406655d1654972a.camel@gmail.com> (Arnaud Gaboury's message of \"Thu, 06 Mar 2025 18:24:33 +0100\")",
+      "references": [
+        "<1cfce8c24a770a67b6890c6b4c9b1343bc9ef87a.camel@gmail.com>",
+        "<87pliu1xl6.fsf@enricoschumann.net>",
+        "<2954e4905995f8d9060e4f271406655d1654972a.camel@gmail.com>"
+      ],
+      "body_plain": "On Thu, 06 Mar 2025, Arnaud Gaboury writes:\n\n> \tOn Thu, 2025-03-06 at 07:29 +0100, Enrico Schumann wrote:\n>> On Wed, 05 Mar 2025, Arnaud Gaboury writes:\n>> \n>> > I work with Binancer [1] and PMwR [2] packages to write a trading\n>> > journal.\n>> > Here is a sample of my data frame:\n>> > portfolio <- data.frame(\n>> > ? symbol = c(\"BTCUSDT\", \"BTCUSDT\", \"ETHUBTC\", \"AAVEBTC\",\n>> > \"ENAUSDT\"),\n>> > ? time = c(\"2024-12-17 10:01:30\", \"2024-12-18 21:32:53\", \"2025-01-\n>> > 02\n>> > 10:34:49\", \"2025-01-02 11:14:43\", \"2025-01-02 11:15:22\")\n>> > )\n>> > \n>> > I want to fetch the 'BTCUSDT' price for a specific time if the\n>> > symbol\n>> > of same row end with these 3 letters : 'BTC'. In my sample, it will\n>> > be\n>> > rows 3 and 4.\n>> > Here is how I find BTCUSDT price for date 2025-01-02 10:34:49:\n>> > \n>> > get_btc_price <- function(time) {\n>> > ? klines <- binance_klines('BTCUSDT', start_time = '2025-01-02\n>> > 10:34:49', end_time = '2025-01-02 10:34:49')\n>> > }\n>> > \n>> > I was thinking of this code to write my new column BTCUSDT_price:\n>> > \n>> > df <- portfolio %>%\n>> > ? mutate(\n>> > ??? BTCUSDT_price = ifelse(str_detect(symbol, \"BTC$\"),\n>> > map_dbl(time,\n>> > get_btc_price), NA_real_)\n>> > ? )}\n>> > \n>> > But the code returns:\n>> > Error in `mutate()`:\n>> > ? In argument: `BTCUSDT_price = ifelse(...)`.\n>> > Caused by error in `map_dbl()`:\n>> > ? In index: 1.\n>> > Caused by error in `[.data.table`:\n>> > ! Item 1 of j is 12 which is outside the column number range\n>> > [1,ncol=0]\n>> > \n>> > I have tried other workarounds but all give me errors.\n>> > \n>> > Thank you for help\n>> > \n>> > \n>> > [1]https://cran.r-project.org/web/packages/binancer\n>> > [2]https://cran.r-project.org/web/packages/PMwR\n>> > \n>> \n>> You want to compute a new column for your data.frame as\n>> a function of two existing columns.\n>> \n>> In base R, if you don't want to use a loop (and there\n>> would be nothing wrong with a loop), you could use\n>> 'mapply'; and then cbind the column to your data.frame:\n>> \n>> ??? new.column <- mapply(\n>> ??????? function(symbol, time) {\n>> ??????????? if (grepl(\"BTC$\", symbol)) {\n>> ??????????????? ## your get_price computation, using\n>> ??????????????? ## 'symbol' and 'time'\n>> ??????????????? paste(\"do something with\", symbol, time)\n>> ??????????????? \n>> ??????????? } else\n>> ??????????????? NA\n>> ??????? },\n>> ??????? portfolio$symbol,\n>> ??????? portfolio$time\n>> ??? )\n>\n> I am sorry but I can't see where I shall put my df ? And my function to\n> get BTC price:\n> get_btc_price <- function(my_time) {\n>     # my_time_ms <- as.integer(as.numeric(my_time) * 1000)\n>     klines <- binance_klines(\"BTCUSDT\", interval = '1h', start_time =\n> as.Date(my_time), end_time = as.Date(my_time) + 1)\n>     return(as.numeric(klines$close[[18]]))\n> }\n>\n> Thank you for your help\n\nIs the ticker you want to fetch data for always the\nsame?  If yes, then something like this could be\nused. [I don't know/use binance, so with a 'dummy' of\nyour function.]\n\n    get_btc_price <- function(my_time) {\n        paste(42, my_time)\n    }\n    \n    new.column <- mapply(\n        function(symbol, mytime) {\n            if (grepl(\"BTC$\", symbol)) {\n                get_btc_price(mytime)\n            } else\n                NA\n        },\n        portfolio$symbol,\n        portfolio$time\n    )\n\n    ##                 BTCUSDT                  BTCUSDT \n    ##                      NA                       NA \n    ##                 ETHUBTC                  AAVEBTC \n    ##\"42 2025-01-02 10:34:49\" \"42 2025-01-02 11:14:43\" \n    ##                 ENAUSDT \n    ##                      NA \n\n\n-- \nEnrico Schumann\nLucerne, Switzerland\nhttps://enricoschumann.net",
+      "body_snippet": "On Thu, 06 Mar 2025, Arnaud Gaboury writes:\n\n> \tOn Thu, 2025-03-06 at 07:29 +0100, Enrico Schumann wrote:\n>> On Wed, 05 Mar 2025, Arnaud Gaboury writes:\n>> \n>> > I work with Binancer [1] and PMwR [2] ",
+      "thread_id": "thread-ca453479b3ad",
+      "thread_depth": 3,
+      "month": "2025-03"
+    },
+    {
+      "id": "msg-850d078b3876",
+      "message_id": "<87wmd1nnc2.fsf@enricoschumann.net>",
+      "from_name": "Enrico Schumann",
+      "from_email_hash": "42e3fbcaa04e968726f4c1d1a69e34143bdbc62b403d112ba1d3712256bacb88",
+      "date": "2025-03-07T11:31:57+01:00",
+      "subject": "[R-SIG-Finance] apply a function to a data.frame column with condition",
+      "subject_clean": "apply a function to a data.frame column with condition",
+      "in_reply_to": "<e0aa67a0fef7f21ce6556a94241d021af1a9c78c.camel@gmail.com> (Arnaud Gaboury's message of \"Thu, 06 Mar 2025 09:09:14 +0100\")",
+      "references": [
+        "<1cfce8c24a770a67b6890c6b4c9b1343bc9ef87a.camel@gmail.com>",
+        "<87pliu1xl6.fsf@enricoschumann.net>",
+        "<e0aa67a0fef7f21ce6556a94241d021af1a9c78c.camel@gmail.com>"
+      ],
+      "body_plain": "On Thu, 06 Mar 2025, Arnaud Gaboury writes:\n\n> On Thu, 2025-03-06 at 07:29 +0100, Enrico Schumann wrote:\n>> On Wed, 05 Mar 2025, Arnaud Gaboury writes:\n>> \n>> > I work with Binancer [1] and PMwR [2] packages to write a trading\n>> > journal.\n>> > Here is a sample of my data frame:\n>> > portfolio <- data.frame(\n>> > ? symbol = c(\"BTCUSDT\", \"BTCUSDT\", \"ETHUBTC\", \"AAVEBTC\",\n>> > \"ENAUSDT\"),\n>> > ? time = c(\"2024-12-17 10:01:30\", \"2024-12-18 21:32:53\", \"2025-01-\n>> > 02\n>> > 10:34:49\", \"2025-01-02 11:14:43\", \"2025-01-02 11:15:22\")\n>> > )\n>> > \n>> > I want to fetch the 'BTCUSDT' price for a specific time if the\n>> > symbol\n>> > of same row end with these 3 letters : 'BTC'. In my sample, it will\n>> > be\n>> > rows 3 and 4.\n>> > Here is how I find BTCUSDT price for date 2025-01-02 10:34:49:\n>> > \n>> > get_btc_price <- function(time) {\n>> > ? klines <- binance_klines('BTCUSDT', start_time = '2025-01-02\n>> > 10:34:49', end_time = '2025-01-02 10:34:49')\n>> > }\n>> > \n>> > I was thinking of this code to write my new column BTCUSDT_price:\n>> > \n>> > df <- portfolio %>%\n>> > ? mutate(\n>> > ??? BTCUSDT_price = ifelse(str_detect(symbol, \"BTC$\"),\n>> > map_dbl(time,\n>> > get_btc_price), NA_real_)\n>> > ? )}\n>> > \n>> > But the code returns:\n>> > Error in `mutate()`:\n>> > ? In argument: `BTCUSDT_price = ifelse(...)`.\n>> > Caused by error in `map_dbl()`:\n>> > ? In index: 1.\n>> > Caused by error in `[.data.table`:\n>> > ! Item 1 of j is 12 which is outside the column number range\n>> > [1,ncol=0]\n>> > \n>> > I have tried other workarounds but all give me errors.\n>> > \n>> > Thank you for help\n>> > \n>> > \n>> > [1]https://cran.r-project.org/web/packages/binancer\n>> > [2]https://cran.r-project.org/web/packages/PMwR\n>> > \n>> \n>> You want to compute a new column for your data.frame as\n>> a function of two existing columns.\n>> \n>> In base R, if you don't want to use a loop (and there\n>> would be nothing wrong with a loop), you could use\n>> 'mapply'; and then cbind the column to your data.frame:\n>> \n>> ??? new.column <- mapply(\n>> ??????? function(symbol, time) {\n>> ??????????? if (grepl(\"BTC$\", symbol)) {\n>> ??????????????? ## your get_price computation, using\n>> ??????????????? ## 'symbol' and 'time'\n>> ??????????????? paste(\"do something with\", symbol, time)\n>> ??????????????? \n>> ??????????? } else\n>> ??????????????? NA\n>> ??????? },\n>> ??????? portfolio$symbol,\n>> ??????? portfolio$time\n>> ??? )\n>> \n>> ??? ## new.column\n>> ??? ##???????????????????????????????????????? BTCUSDT \n>> ??? ##????????????????????????????????????????????? NA \n>> ??? ##???????????????????????????????????????? BTCUSDT \n>> ??? ##????????????????????????????????????????????? NA \n>> ??? ##???????????????????????????????????????? ETHUBTC \n>> ??? ## \"do something with ETHUBTC 2025-01-02 10:34:49\" \n>> ??? ##???????????????????????????????????????? AAVEBTC \n>> ??? ## \"do something with AAVEBTC 2025-01-02 11:14:43\" \n>> ??? ##???????????????????????????????????????? ENAUSDT \n>> ??? ##????????????????????????????????????????????? NA \n>\n> Thank you for your answer.\n> A very warm thanks for your PMwR package. It helps me managing my\n> portfolio in a professional way. Unfortunately there isn't so much\n> material to manage, follow, compute ratio etc. \n> By any chance, do you have any cool build-in functions to cook monthly\n> data (PL, valuation etc) as we compute every month always the same data\n> ?\n\nThank you.\n\nI am afraid there are no built-in, ready-to-use reports in\nPMwR.  That was a deliberate choice: PMwR should only\nprovide simple tools for computing P/L, returns, or for\nbacktesting, say. For analyzing the results of such\ncomputations, you have all of R for analysis and summarizing\n:-)\n\nFor my reporting needs, I typically prepare templates in\nplain text, HTML or LaTeX and then fill in stats such as\nreturns etc. See e.g.\nhttps://cran.r-project.org/web/packages/PMwR/vignettes/FinTeX.pdf\n\nFor equity series, i.e. total value of a portfolio, using\nNAVseries and its summary method might be a start, see e.g.\nhttps://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#NAVseries-summaries\nThere are handful of functions for analyzing such series,\ne. g. `drawdowns` or `streaks`.  But as I said, most\nanalysis I do with basic R functions.\n\n\n-- \nEnrico Schumann\nLucerne, Switzerland\nhttps://enricoschumann.net",
+      "body_snippet": "On Thu, 06 Mar 2025, Arnaud Gaboury writes:\n\n> On Thu, 2025-03-06 at 07:29 +0100, Enrico Schumann wrote:\n>> On Wed, 05 Mar 2025, Arnaud Gaboury writes:\n>> \n>> > I work with Binancer [1] and PMwR [2] p",
+      "thread_id": "thread-ca453479b3ad",
+      "thread_depth": 3,
+      "month": "2025-03"
+    },
+    {
+      "id": "msg-504ed72f2a22",
+      "message_id": "<44f4531cce91b8a32eca169ded7d1639b4431fef.camel@gmail.com>",
+      "from_name": "Arnaud Gaboury",
+      "from_email_hash": "8d66b3010463ba4609c087a2aec53210a2c80004ddc8ee34092b23f175a5a8d2",
+      "date": "2025-03-07T14:20:17+01:00",
+      "subject": "[R-SIG-Finance] apply a function to a data.frame column with condition",
+      "subject_clean": "apply a function to a data.frame column with condition",
+      "in_reply_to": "<8734fp1dij.fsf@enricoschumann.net>",
+      "references": [
+        "<1cfce8c24a770a67b6890c6b4c9b1343bc9ef87a.camel@gmail.com>",
+        "<87pliu1xl6.fsf@enricoschumann.net>",
+        "<2954e4905995f8d9060e4f271406655d1654972a.camel@gmail.com>",
+        "<8734fp1dij.fsf@enricoschumann.net>"
+      ],
+      "body_plain": "On Fri, 2025-03-07 at 08:55 +0100, Enrico Schumann wrote:\n> On Thu, 06 Mar 2025, Arnaud Gaboury writes:\n> \n> > \tOn Thu, 2025-03-06 at 07:29 +0100, Enrico Schumann wrote:\n> > > On Wed, 05 Mar 2025, Arnaud Gaboury writes:\n> > > \n> > > > I work with Binancer [1] and PMwR [2] packages to write a\n> > > > trading\n> > > > journal.\n> > > > Here is a sample of my data frame:\n> > > > portfolio <- data.frame(\n> > > > ? symbol = c(\"BTCUSDT\", \"BTCUSDT\", \"ETHUBTC\", \"AAVEBTC\",\n> > > > \"ENAUSDT\"),\n> > > > ? time = c(\"2024-12-17 10:01:30\", \"2024-12-18 21:32:53\", \"2025-\n> > > > 01-\n> > > > 02\n> > > > 10:34:49\", \"2025-01-02 11:14:43\", \"2025-01-02 11:15:22\")\n> > > > )\n> > > > \n> > > > I want to fetch the 'BTCUSDT' price for a specific time if the\n> > > > symbol\n> > > > of same row end with these 3 letters : 'BTC'. In my sample, it\n> > > > will\n> > > > be\n> > > > rows 3 and 4.\n> > > > Here is how I find BTCUSDT price for date 2025-01-02 10:34:49:\n> > > > \n> > > > get_btc_price <- function(time) {\n> > > > ? klines <- binance_klines('BTCUSDT', start_time = '2025-01-02\n> > > > 10:34:49', end_time = '2025-01-02 10:34:49')\n> > > > }\n> > > > \n> > > > I was thinking of this code to write my new column\n> > > > BTCUSDT_price:\n> > > > \n> > > > df <- portfolio %>%\n> > > > ? mutate(\n> > > > ??? BTCUSDT_price = ifelse(str_detect(symbol, \"BTC$\"),\n> > > > map_dbl(time,\n> > > > get_btc_price), NA_real_)\n> > > > ? )}\n> > > > \n> > > > But the code returns:\n> > > > Error in `mutate()`:\n> > > > ? In argument: `BTCUSDT_price = ifelse(...)`.\n> > > > Caused by error in `map_dbl()`:\n> > > > ? In index: 1.\n> > > > Caused by error in `[.data.table`:\n> > > > ! Item 1 of j is 12 which is outside the column number range\n> > > > [1,ncol=0]\n> > > > \n> > > > I have tried other workarounds but all give me errors.\n> > > > \n> > > > Thank you for help\n> > > > \n> > > > \n> > > > [1]https://cran.r-project.org/web/packages/binancer\n> > > > [2]https://cran.r-project.org/web/packages/PMwR\n> > > > \n> > > \n> > > You want to compute a new column for your data.frame as\n> > > a function of two existing columns.\n> > > \n> > > In base R, if you don't want to use a loop (and there\n> > > would be nothing wrong with a loop), you could use\n> > > 'mapply'; and then cbind the column to your data.frame:\n> > > \n> > > ??? new.column <- mapply(\n> > > ??????? function(symbol, time) {\n> > > ??????????? if (grepl(\"BTC$\", symbol)) {\n> > > ??????????????? ## your get_price computation, using\n> > > ??????????????? ## 'symbol' and 'time'\n> > > ??????????????? paste(\"do something with\", symbol, time)\n> > > ??????????????? \n> > > ??????????? } else\n> > > ??????????????? NA\n> > > ??????? },\n> > > ??????? portfolio$symbol,\n> > > ??????? portfolio$time\n> > > ??? )\n> > \n> > I am sorry but I can't see where I shall put my df ? And my\n> > function to\n> > get BTC price:\n> > get_btc_price <- function(my_time) {\n> > ??? # my_time_ms <- as.integer(as.numeric(my_time) * 1000)\n> > ??? klines <- binance_klines(\"BTCUSDT\", interval = '1h', start_time\n> > =\n> > as.Date(my_time), end_time = as.Date(my_time) + 1)\n> > ??? return(as.numeric(klines$close[[18]]))\n> > }\n> > \n> > Thank you for your help\n> \n> Is the ticker you want to fetch data for always the\n> same?? If yes, then something like this could be\n> used. [I don't know/use binance, so with a 'dummy' of\n> your function.]\n\nYes, in this cas I only fecth BTCUSD price, thus my get_btc_price().\nFor generic, I created get_price().\n\nYour function gives me exactly what I wanted.\n\nQuestion: why do you paste 42 here ?\n    get_btc_price <- function(my_time) {\n        paste(42, my_time)\n    }\n\n\n> \n> ??? get_btc_price <- function(my_time) {\n> ??????? paste(42, my_time)\n> ??? }\n> ??? \n> ??? new.column <- mapply(\n> ??????? function(symbol, mytime) {\n> ??????????? if (grepl(\"BTC$\", symbol)) {\n> ??????????????? get_btc_price(mytime)\n> ??????????? } else\n> ??????????????? NA\n> ??????? },\n> ??????? portfolio$symbol,\n> ??????? portfolio$time\n> ??? )\n> \n> ??? ##???????????????? BTCUSDT????????????????? BTCUSDT \n> ??? ##????????????????????? NA?????????????????????? NA \n> ??? ##???????????????? ETHUBTC????????????????? AAVEBTC \n> ??? ##\"42 2025-01-02 10:34:49\" \"42 2025-01-02 11:14:43\" \n> ??? ##???????????????? ENAUSDT \n> ??? ##????????????????????? NA \n> \n> \n\n\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: signature.asc\nType: application/pgp-signature\nSize: 488 bytes\nDesc: This is a digitally signed message part\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20250307/ff8354f9/attachment.sig>",
+      "body_snippet": "On Fri, 2025-03-07 at 08:55 +0100, Enrico Schumann wrote:\n> On Thu, 06 Mar 2025, Arnaud Gaboury writes:\n> \n> > \tOn Thu, 2025-03-06 at 07:29 +0100, Enrico Schumann wrote:\n> > > On Wed, 05 Mar 2025, Arn",
+      "thread_id": "thread-ca453479b3ad",
+      "thread_depth": 4,
+      "month": "2025-03"
+    },
+    {
+      "id": "msg-8d2e03612c76",
+      "message_id": "<4635125a4c8d371e3c9ad0e2ce49964d1fa0e669.camel@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "8f7d7863b98c36f594dc0b3ee1ea66fe80f3c655487f1e98dd55606a26ed6070",
+      "date": "2025-03-07T07:40:13-06:00",
+      "subject": "[R-SIG-Finance] apply a function to a data.frame column with condition",
+      "subject_clean": "apply a function to a data.frame column with condition",
+      "in_reply_to": "<87wmd1nnc2.fsf@enricoschumann.net>",
+      "references": [
+        "<1cfce8c24a770a67b6890c6b4c9b1343bc9ef87a.camel@gmail.com>",
+        "<87pliu1xl6.fsf@enricoschumann.net>",
+        "<e0aa67a0fef7f21ce6556a94241d021af1a9c78c.camel@gmail.com>",
+        "<87wmd1nnc2.fsf@enricoschumann.net>"
+      ],
+      "body_plain": "Arnaud,\n\nYou may want to look at 'PerformanceAnalytics' for a large number of\nperformance and risk functions for financial time series, including a\nlarge number of standard tables and charts.\n\nI can also recommend Bernhard Pfaff's excellent book 'Financial Risk\nModeling and Portfolio Optimization with R, 2nd ed.'\n\nRegards,\n\nBrian\n\n-- \nBrian G. Peterson\nph: +1.773.459.4973\nim: bgpbraverock\n\nOn Fri, 2025-03-07 at 11:31 +0100, Enrico Schumann wrote:\n> On Thu, 06 Mar 2025, Arnaud Gaboury writes:\n> \n> > On Thu, 2025-03-06 at 07:29 +0100, Enrico Schumann wrote:\n> > > On Wed, 05 Mar 2025, Arnaud Gaboury writes:\n> > > \n> > > > I work with Binancer [1] and PMwR [2] packages to write a\n> > > > trading\n> > > > journal.\n> > > > Here is a sample of my data frame:\n> > > > portfolio <- data.frame(\n> > > > ? symbol = c(\"BTCUSDT\", \"BTCUSDT\", \"ETHUBTC\", \"AAVEBTC\",\n> > > > \"ENAUSDT\"),\n> > > > ? time = c(\"2024-12-17 10:01:30\", \"2024-12-18 21:32:53\", \"2025-\n> > > > 01-\n> > > > 02\n> > > > 10:34:49\", \"2025-01-02 11:14:43\", \"2025-01-02 11:15:22\")\n> > > > )\n> > > > \n> > > > I want to fetch the 'BTCUSDT' price for a specific time if the\n> > > > symbol\n> > > > of same row end with these 3 letters : 'BTC'. In my sample, it\n> > > > will\n> > > > be\n> > > > rows 3 and 4.\n> > > > Here is how I find BTCUSDT price for date 2025-01-02 10:34:49:\n> > > > \n> > > > get_btc_price <- function(time) {\n> > > > ? klines <- binance_klines('BTCUSDT', start_time = '2025-01-02\n> > > > 10:34:49', end_time = '2025-01-02 10:34:49')\n> > > > }\n> > > > \n> > > > I was thinking of this code to write my new column\n> > > > BTCUSDT_price:\n> > > > \n> > > > df <- portfolio %>%\n> > > > ? mutate(\n> > > > ??? BTCUSDT_price = ifelse(str_detect(symbol, \"BTC$\"),\n> > > > map_dbl(time,\n> > > > get_btc_price), NA_real_)\n> > > > ? )}\n> > > > \n> > > > But the code returns:\n> > > > Error in `mutate()`:\n> > > > ? In argument: `BTCUSDT_price = ifelse(...)`.\n> > > > Caused by error in `map_dbl()`:\n> > > > ? In index: 1.\n> > > > Caused by error in `[.data.table`:\n> > > > ! Item 1 of j is 12 which is outside the column number range\n> > > > [1,ncol=0]\n> > > > \n> > > > I have tried other workarounds but all give me errors.\n> > > > \n> > > > Thank you for help\n> > > > \n> > > > \n> > > > [1]https://cran.r-project.org/web/packages/binancer\n> > > > [2]https://cran.r-project.org/web/packages/PMwR\n> > > > \n> > > \n> > > You want to compute a new column for your data.frame as\n> > > a function of two existing columns.\n> > > \n> > > In base R, if you don't want to use a loop (and there\n> > > would be nothing wrong with a loop), you could use\n> > > 'mapply'; and then cbind the column to your data.frame:\n> > > \n> > > ??? new.column <- mapply(\n> > > ??????? function(symbol, time) {\n> > > ??????????? if (grepl(\"BTC$\", symbol)) {\n> > > ??????????????? ## your get_price computation, using\n> > > ??????????????? ## 'symbol' and 'time'\n> > > ??????????????? paste(\"do something with\", symbol, time)\n> > > ??????????????? \n> > > ??????????? } else\n> > > ??????????????? NA\n> > > ??????? },\n> > > ??????? portfolio$symbol,\n> > > ??????? portfolio$time\n> > > ??? )\n> > > \n> > > ??? ## new.column\n> > > ??? ##???????????????????????????????????????? BTCUSDT \n> > > ??? ##????????????????????????????????????????????? NA \n> > > ??? ##???????????????????????????????????????? BTCUSDT \n> > > ??? ##????????????????????????????????????????????? NA \n> > > ??? ##???????????????????????????????????????? ETHUBTC \n> > > ??? ## \"do something with ETHUBTC 2025-01-02 10:34:49\" \n> > > ??? ##???????????????????????????????????????? AAVEBTC \n> > > ??? ## \"do something with AAVEBTC 2025-01-02 11:14:43\" \n> > > ??? ##???????????????????????????????????????? ENAUSDT \n> > > ??? ##????????????????????????????????????????????? NA \n> > \n> > Thank you for your answer.\n> > A very warm thanks for your PMwR package. It helps me managing my\n> > portfolio in a professional way. Unfortunately there isn't so much\n> > material to manage, follow, compute ratio etc. \n> > By any chance, do you have any cool build-in functions to cook\n> > monthly\n> > data (PL, valuation etc) as we compute every month always the same\n> > data\n> > ?\n> \n> Thank you.\n> \n> I am afraid there are no built-in, ready-to-use reports in\n> PMwR.? That was a deliberate choice: PMwR should only\n> provide simple tools for computing P/L, returns, or for\n> backtesting, say. For analyzing the results of such\n> computations, you have all of R for analysis and summarizing\n> :-)\n> \n> For my reporting needs, I typically prepare templates in\n> plain text, HTML or LaTeX and then fill in stats such as\n> returns etc. See e.g.\n> https://cran.r-project.org/web/packages/PMwR/vignettes/FinTeX.pdf\n> \n> For equity series, i.e. total value of a portfolio, using\n> NAVseries and its summary method might be a start, see e.g.\n> https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#NAVseries-summaries\n> There are handful of functions for analyzing such series,\n> e. g. `drawdowns` or `streaks`.? But as I said, most\n> analysis I do with basic R functions.\n> \n> \n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Arnaud,\n\nYou may want to look at 'PerformanceAnalytics' for a large number of\nperformance and risk functions for financial time series, including a\nlarge number of standard tables and charts.\n\nI can a",
+      "thread_id": "thread-ca453479b3ad",
+      "thread_depth": 4,
+      "month": "2025-03"
+    },
+    {
+      "id": "msg-bc365236b7d6",
+      "message_id": "<87jz91ndtd.fsf@enricoschumann.net>",
+      "from_name": "Enrico Schumann",
+      "from_email_hash": "42e3fbcaa04e968726f4c1d1a69e34143bdbc62b403d112ba1d3712256bacb88",
+      "date": "2025-03-07T14:57:34+01:00",
+      "subject": "[R-SIG-Finance] apply a function to a data.frame column with condition",
+      "subject_clean": "apply a function to a data.frame column with condition",
+      "in_reply_to": "<44f4531cce91b8a32eca169ded7d1639b4431fef.camel@gmail.com> (Arnaud Gaboury's message of \"Fri, 07 Mar 2025 14:20:17 +0100\")",
+      "references": [
+        "<1cfce8c24a770a67b6890c6b4c9b1343bc9ef87a.camel@gmail.com>",
+        "<87pliu1xl6.fsf@enricoschumann.net>",
+        "<2954e4905995f8d9060e4f271406655d1654972a.camel@gmail.com>",
+        "<8734fp1dij.fsf@enricoschumann.net>",
+        "<44f4531cce91b8a32eca169ded7d1639b4431fef.camel@gmail.com>"
+      ],
+      "body_plain": "On Fri, 07 Mar 2025, Arnaud Gaboury writes:\n\n[...]\n\n> Question: why do you paste 42 here ?\n>     get_btc_price <- function(my_time) {\n>         paste(42, my_time)\n>     }\n\nOh, just some random computation with 'my_time' :-)\n\n\n\n-- \nEnrico Schumann\nLucerne, Switzerland\nhttps://enricoschumann.net",
+      "body_snippet": "On Fri, 07 Mar 2025, Arnaud Gaboury writes:\n\n[...]\n\n> Question: why do you paste 42 here ?\n>     get_btc_price <- function(my_time) {\n>         paste(42, my_time)\n>     }\n\nOh, just some random computa",
+      "thread_id": "thread-ca453479b3ad",
+      "thread_depth": 5,
+      "month": "2025-03"
+    },
+    {
+      "id": "msg-b91b6286f40c",
+      "message_id": "<a378d51ac31f91d4433adf835dceae9137977c75.camel@gmail.com>",
+      "from_name": "Arnaud Gaboury",
+      "from_email_hash": "8d66b3010463ba4609c087a2aec53210a2c80004ddc8ee34092b23f175a5a8d2",
+      "date": "2025-03-07T14:57:39+01:00",
+      "subject": "[R-SIG-Finance] apply a function to a data.frame column with condition",
+      "subject_clean": "apply a function to a data.frame column with condition",
+      "in_reply_to": "<4635125a4c8d371e3c9ad0e2ce49964d1fa0e669.camel@braverock.com>",
+      "references": [
+        "<1cfce8c24a770a67b6890c6b4c9b1343bc9ef87a.camel@gmail.com>",
+        "<87pliu1xl6.fsf@enricoschumann.net>",
+        "<e0aa67a0fef7f21ce6556a94241d021af1a9c78c.camel@gmail.com>",
+        "<87wmd1nnc2.fsf@enricoschumann.net>",
+        "<4635125a4c8d371e3c9ad0e2ce49964d1fa0e669.camel@braverock.com>"
+      ],
+      "body_plain": "On Fri, 2025-03-07 at 07:40 -0600, Brian G. Peterson wrote:\n> Arnaud,\n> \n> You may want to look at 'PerformanceAnalytics' for a large number of\n> performance and risk functions for financial time series, including a\n> large number of standard tables and charts.\n\nYes, I know a little bit the 'PerformanceAnalytics' package. I will\ncertainly have a close look and do different work with it , but first I\nwanted to test Enrico package as it is simple and very straightforward.\nMy portfolio is very simple, thus its management too.\n> \n> I can also recommend Bernhard Pfaff's excellent book 'Financial Risk\n> Modeling and Portfolio Optimization with R, 2nd ed.'\n> \n> Regards,\n> \n> Brian\n> \n\n\n-------------- next part --------------\nAn HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20250307/165970f1/attachment.html>\n\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: signature.asc\nType: application/pgp-signature\nSize: 488 bytes\nDesc: This is a digitally signed message part\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20250307/165970f1/attachment.sig>",
+      "body_snippet": "On Fri, 2025-03-07 at 07:40 -0600, Brian G. Peterson wrote:\n> Arnaud,\n> \n> You may want to look at 'PerformanceAnalytics' for a large number of\n> performance and risk functions for financial time seri",
+      "thread_id": "thread-ca453479b3ad",
+      "thread_depth": 5,
+      "month": "2025-03"
+    },
+    {
+      "id": "msg-f6df65c30fb2",
+      "message_id": "<0600a74e1ff59e2c94cc8a26887a7f64443bb4bb.camel@gmail.com>",
+      "from_name": "Arnaud Gaboury",
+      "from_email_hash": "8d66b3010463ba4609c087a2aec53210a2c80004ddc8ee34092b23f175a5a8d2",
+      "date": "2025-03-07T16:00:52+01:00",
+      "subject": "[R-SIG-Finance] from tibble to journal",
+      "subject_clean": "from tibble to journal",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I have one tibble 'journal_tb' with this structure:\n\ngabx at magnolia [R] str(journal_tb)\ntibble [72 ? 4] (S3: tbl_df/tbl/data.frame)\n $ timestamp : POSIXct[1:72], format: \"2024-12-16 18:00:00\" \"2024-12-16\n18:00:00\" \"2024-12-16 18:00:00\" \"2024-12-16 18:00:00\" ...\n $ instrument: chr [1:72] \"FTMUSDT\" \"SUIUSDT\" \"ETHUSDT\" \"ENAUSDT\" ...\n $ amount    : num [1:72] 284270 80024 91.9 207836 9.34 ...\n $ price     : num [1:72] 1.38 4.73 4038 1.19 107012 ...\n\nWhen transforming to a PMwR journal:\n\ngabx at magnolia [R] my_journal <- as.journal(my_journal_tb)\n\nI have this error: Error in names[[i]] : subscript out of bounds\n\nI have double checked my columns but everything looks fine.\n\nHow can I solve this out of bounds error?\n\nThnak you for help\n\n\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: signature.asc\nType: application/pgp-signature\nSize: 488 bytes\nDesc: This is a digitally signed message part\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20250307/610bc538/attachment.sig>",
+      "body_snippet": "I have one tibble 'journal_tb' with this structure:\n\ngabx at magnolia [R] str(journal_tb)\ntibble [72 ? 4] (S3: tbl_df/tbl/data.frame)\n $ timestamp : POSIXct[1:72], format: \"2024-12-16 18:00:00\" \"2024-",
+      "thread_id": "thread-f6df65c30fb2",
+      "thread_depth": 0,
+      "month": "2025-03"
+    },
+    {
+      "id": "msg-309bd52e5ef6",
+      "message_id": "<8734fosum1.fsf@enricoschumann.net>",
+      "from_name": "Enrico Schumann",
+      "from_email_hash": "42e3fbcaa04e968726f4c1d1a69e34143bdbc62b403d112ba1d3712256bacb88",
+      "date": "2025-03-07T16:55:50+01:00",
+      "subject": "[R-SIG-Finance] from tibble to journal",
+      "subject_clean": "from tibble to journal",
+      "in_reply_to": "<0600a74e1ff59e2c94cc8a26887a7f64443bb4bb.camel@gmail.com> (Arnaud Gaboury's message of \"Fri, 07 Mar 2025 16:00:52 +0100\")",
+      "references": [
+        "<0600a74e1ff59e2c94cc8a26887a7f64443bb4bb.camel@gmail.com>"
+      ],
+      "body_plain": "On Fri, 07 Mar 2025, Arnaud Gaboury writes:\n\n> I have one tibble 'journal_tb' with this structure:\n>\n> gabx at magnolia [R] str(journal_tb)\n> tibble [72 ? 4] (S3: tbl_df/tbl/data.frame)\n>  $ timestamp : POSIXct[1:72], format: \"2024-12-16 18:00:00\" \"2024-12-16\n> 18:00:00\" \"2024-12-16 18:00:00\" \"2024-12-16 18:00:00\" ...\n>  $ instrument: chr [1:72] \"FTMUSDT\" \"SUIUSDT\" \"ETHUSDT\" \"ENAUSDT\" ...\n>  $ amount    : num [1:72] 284270 80024 91.9 207836 9.34 ...\n>  $ price     : num [1:72] 1.38 4.73 4038 1.19 107012 ...\n>\n> When transforming to a PMwR journal:\n>\n> gabx at magnolia [R] my_journal <- as.journal(my_journal_tb)\n>\n> I have this error: Error in names[[i]] : subscript out of bounds\n>\n> I have double checked my columns but everything looks fine.\n>\n> How can I solve this out of bounds error?\n>\n> Thnak you for help\n\nHm, the 'str' output is for 'journal_tb', but below you\ntry to coerce 'my_journal_tb'. Is this simply a typo?\n\nIn any case, we would need a small reproducible example to\nsee why it does not work, e. g. by using\ndput(my_journal_tb).    [Ideally only a few rows.]\n\nI can do this, for instance, without problems:\n\n    library(\"PMwR\")\n    d <- data.frame(timestamp = c(\"2024-12-16 18:00:00\",\n                                  \"2024-12-16 18:00:00\"),\n                    instrument= c( \"FTMUSDT\", \"SUIUSDT\"),\n                    amount  = c(284270, 80024),\n                    price  = c(1.38, 4.73))\n    as.journal(d)\n    ## 1     FTMUSDT  2024-12-16 18:00:00  284270   1.38\n    ## 2     SUIUSDT  2024-12-16 18:00:00   80024   4.73\n    ## \n    ## 2 transactions  \n    \n    library(\"tibble\")\n    d <- as_tibble(d)\n    as.journal(d)\n    ## 1     FTMUSDT  2024-12-16 18:00:00  284270   1.38\n    ## 2     SUIUSDT  2024-12-16 18:00:00   80024   4.73\n    ## \n    ## 2 transactions  \n\n\n\n-- \nEnrico Schumann\nLucerne, Switzerland\nhttps://enricoschumann.net",
+      "body_snippet": "On Fri, 07 Mar 2025, Arnaud Gaboury writes:\n\n> I have one tibble 'journal_tb' with this structure:\n>\n> gabx at magnolia [R] str(journal_tb)\n> tibble [72 ? 4] (S3: tbl_df/tbl/data.frame)\n>  $ timestamp",
+      "thread_id": "thread-f6df65c30fb2",
+      "thread_depth": 1,
+      "month": "2025-03"
+    },
+    {
+      "id": "msg-bcad2022c502",
+      "message_id": "<CAK1hC9uXP1vm1Lg2_vj8GRxxF_qz4CBFrnz1iXogeA4NgBJwqw@mail.gmail.com>",
+      "from_name": "arnaud gaboury",
+      "from_email_hash": "8d66b3010463ba4609c087a2aec53210a2c80004ddc8ee34092b23f175a5a8d2",
+      "date": "2025-03-07T17:05:41+01:00",
+      "subject": "[R-SIG-Finance] from tibble to journal",
+      "subject_clean": "from tibble to journal",
+      "in_reply_to": "<8734fosum1.fsf@enricoschumann.net>",
+      "references": [
+        "<0600a74e1ff59e2c94cc8a26887a7f64443bb4bb.camel@gmail.com>",
+        "<8734fosum1.fsf@enricoschumann.net>"
+      ],
+      "body_plain": "I managed to remove the error by ordering the columns in the correct order,\nas indicated in the pdf\n\nOn Fri, Mar 7, 2025, 4:55?PM Enrico Schumann <es at enricoschumann.net> wrote:\n\n> On Fri, 07 Mar 2025, Arnaud Gaboury writes:\n>\n> > I have one tibble 'journal_tb' with this structure:\n> >\n> > gabx at magnolia [R] str(journal_tb)\n> > tibble [72 ? 4] (S3: tbl_df/tbl/data.frame)\n> >  $ timestamp : POSIXct[1:72], format: \"2024-12-16 18:00:00\" \"2024-12-16\n> > 18:00:00\" \"2024-12-16 18:00:00\" \"2024-12-16 18:00:00\" ...\n> >  $ instrument: chr [1:72] \"FTMUSDT\" \"SUIUSDT\" \"ETHUSDT\" \"ENAUSDT\" ...\n> >  $ amount    : num [1:72] 284270 80024 91.9 207836 9.34 ...\n> >  $ price     : num [1:72] 1.38 4.73 4038 1.19 107012 ...\n> >\n> > When transforming to a PMwR journal:\n> >\n> > gabx at magnolia [R] my_journal <- as.journal(my_journal_tb)\n> >\n> > I have this error: Error in names[[i]] : subscript out of bounds\n> >\n> > I have double checked my columns but everything looks fine.\n> >\n> > How can I solve this out of bounds error?\n> >\n> > Thnak you for help\n>\n> Hm, the 'str' output is for 'journal_tb', but below you\n> try to coerce 'my_journal_tb'. Is this simply a typo?\n>\n> In any case, we would need a small reproducible example to\n> see why it does not work, e. g. by using\n> dput(my_journal_tb).    [Ideally only a few rows.]\n>\n> I can do this, for instance, without problems:\n>\n>     library(\"PMwR\")\n>     d <- data.frame(timestamp = c(\"2024-12-16 18:00:00\",\n>                                   \"2024-12-16 18:00:00\"),\n>                     instrument= c( \"FTMUSDT\", \"SUIUSDT\"),\n>                     amount  = c(284270, 80024),\n>                     price  = c(1.38, 4.73))\n>     as.journal(d)\n>     ## 1     FTMUSDT  2024-12-16 18:00:00  284270   1.38\n>     ## 2     SUIUSDT  2024-12-16 18:00:00   80024   4.73\n>     ##\n>     ## 2 transactions\n>\n>     library(\"tibble\")\n>     d <- as_tibble(d)\n>     as.journal(d)\n>     ## 1     FTMUSDT  2024-12-16 18:00:00  284270   1.38\n>     ## 2     SUIUSDT  2024-12-16 18:00:00   80024   4.73\n>     ##\n>     ## 2 transactions\n>\n>\n>\n> --\n> Enrico Schumann\n> Lucerne, Switzerland\n> https://enricoschumann.net\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I managed to remove the error by ordering the columns in the correct order,\nas indicated in the pdf\n\nOn Fri, Mar 7, 2025, 4:55?PM Enrico Schumann <es at enricoschumann.net> wrote:\n\n> On Fri, 07 Mar 20",
+      "thread_id": "thread-f6df65c30fb2",
+      "thread_depth": 2,
+      "month": "2025-03"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-ca453479b3ad",
+      "subject": "apply a function to a data.frame column with condition",
+      "message_count": 10,
+      "participants": [
+        "Arnaud Gaboury",
+        "Brian G. Peterson",
+        "Enrico Schumann"
+      ],
+      "started": "2025-03-05T08:57:17+01:00",
+      "last_reply": "2025-03-07T14:57:39+01:00",
+      "root_message_id": "msg-ca453479b3ad"
+    },
+    {
+      "id": "thread-f6df65c30fb2",
+      "subject": "from tibble to journal",
+      "message_count": 3,
+      "participants": [
+        "Arnaud Gaboury",
+        "Enrico Schumann",
+        "arnaud gaboury"
+      ],
+      "started": "2025-03-07T16:00:52+01:00",
+      "last_reply": "2025-03-07T17:05:41+01:00",
+      "root_message_id": "msg-f6df65c30fb2"
+    }
+  ]
+}

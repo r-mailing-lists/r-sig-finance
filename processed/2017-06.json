@@ -1,0 +1,434 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2017-06",
+  "messages": [
+    {
+      "id": "msg-8830a2885f67",
+      "message_id": "<1849013260.516829.1496414719906@mail.yahoo.com>",
+      "from_name": "Vivek Rao",
+      "from_email_hash": "a81066339c2197ad565d503ef095b8cd2372aa49d2203f8967ae094a261e3f8b",
+      "date": "2017-06-02T14:45:19Z",
+      "subject": "[R-SIG-Finance] does quantmod::adjustOHLC adust for dividends?",
+      "subject_clean": "does quantmod::adjustOHLC adust for dividends?",
+      "in_reply_to": null,
+      "references": [
+        "<1849013260.516829.1496414719906.ref@mail.yahoo.com>"
+      ],
+      "body_plain": "(I tried sending this message before joining the group, but it was held for moderation.)\n\nIt appears that the adjustOHLC function of the quantmod package does not create an .Adjusted field \nthat reflects dividends. \n\nThe code \n\nlibrary(\"quantmod\") \nsym <- \"IBM\" \nSTART.DATE = \"2016-01-01\" \ndiv <- getDividends(sym,auto.assign=FALSE,from=START.DATE) \nxx <- getSymbols(sym, from=START.DATE, src=\"yahoo\", auto.assign=FALSE) \nxx.a <- adjustOHLC(xx) \nxx.uA <- adjustOHLC(xx, use.Adjusted=TRUE) \ncat(\"\\ndiv\\n\") \nprint(head(div)) \ncat(\"\\nxx\\n\") \nprint(head(xx)) \ncat(\"\\nxx.a\\n\") \nprint(head(xx.a)) \ncat(\"\\nxx.uA\\n\") \nprint(head(xx.uA)) \n\nproduces the output below. I'd expect that IBM.Adjusted field to have different values \nat the beginning of the period, depending on whether one adjusts for dividends. \n\ndiv \nIBM.div \n2016-02-08     1.3 \n2016-05-06     1.4 \n2016-08-08     1.4 \n2016-11-08     1.4 \n2017-02-08     1.4 \n2017-05-08     1.5 \n\nxx \nIBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted \n2016-01-04   135.60   135.97  134.24    135.95    5229400       135.95 \n2016-01-05   136.76   136.89  134.85    135.85    3924800       135.85 \n2016-01-06   134.38   135.58  133.62    135.17    4310900       135.17 \n2016-01-07   133.70   135.02  132.43    132.86    7025800       132.86 \n2016-01-08   133.18   133.82  131.32    131.63    4762700       131.63 \n2016-01-11   131.81   133.82  131.76    133.23    4974400       133.23 \n\nxx.a \nIBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted \n2016-01-04   135.60   135.97  134.24    135.95    5229400       135.95 \n2016-01-05   136.76   136.89  134.85    135.85    3924800       135.85 \n2016-01-06   134.38   135.58  133.62    135.17    4310900       135.17 \n2016-01-07   133.70   135.02  132.43    132.86    7025800       132.86 \n2016-01-08   133.18   133.82  131.32    131.63    4762700       131.63 \n2016-01-11   131.81   133.82  131.76    133.23    4974400       133.23 \n\nxx.uA \nIBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted \n2016-01-04   135.60   135.97  134.24    135.95    5229400       135.95 \n2016-01-05   136.76   136.89  134.85    135.85    3924800       135.85 \n2016-01-06   134.38   135.58  133.62    135.17    4310900       135.17 \n2016-01-07   133.70   135.02  132.43    132.86    7025800       132.86 \n2016-01-08   133.18   133.82  131.32    131.63    4762700       131.63 \n2016-01-11   131.81   133.82  131.76    133.23    4974400       133.23 \n\nVivek Rao",
+      "body_snippet": "(I tried sending this message before joining the group, but it was held for moderation.)\n\nIt appears that the adjustOHLC function of the quantmod package does not create an .Adjusted field \nthat refle",
+      "thread_id": "thread-8830a2885f67",
+      "thread_depth": 0,
+      "month": "2017-06"
+    },
+    {
+      "id": "msg-4a7c46e6bd60",
+      "message_id": "<CA+oJuEE6imCJByGBqCDN6oUitvw32X_mDKWYYNUc6iyeXLM02g@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "82540aa84df90b083b58f5752a77274af680540119bfecc0c0436c59ddd13e5c",
+      "date": "2017-06-02T10:47:20-04:00",
+      "subject": "[R-SIG-Finance] does quantmod::adjustOHLC adust for dividends?",
+      "subject_clean": "does quantmod::adjustOHLC adust for dividends?",
+      "in_reply_to": "<1849013260.516829.1496414719906@mail.yahoo.com>",
+      "references": [
+        "<1849013260.516829.1496414719906.ref@mail.yahoo.com>",
+        "<1849013260.516829.1496414719906@mail.yahoo.com>"
+      ],
+      "body_plain": "That's a function of yahoo data no longer adjusting for dividends.\n\nOn Fri, Jun 2, 2017 at 10:45 AM, Vivek Rao via R-SIG-Finance <\nr-sig-finance at r-project.org> wrote:\n\n> (I tried sending this message before joining the group, but it was held\n> for moderation.)\n>\n> It appears that the adjustOHLC function of the quantmod package does not\n> create an .Adjusted field\n> that reflects dividends.\n>\n> The code\n>\n> library(\"quantmod\")\n> sym <- \"IBM\"\n> START.DATE = \"2016-01-01\"\n> div <- getDividends(sym,auto.assign=FALSE,from=START.DATE)\n> xx <- getSymbols(sym, from=START.DATE, src=\"yahoo\", auto.assign=FALSE)\n> xx.a <- adjustOHLC(xx)\n> xx.uA <- adjustOHLC(xx, use.Adjusted=TRUE)\n> cat(\"\\ndiv\\n\")\n> print(head(div))\n> cat(\"\\nxx\\n\")\n> print(head(xx))\n> cat(\"\\nxx.a\\n\")\n> print(head(xx.a))\n> cat(\"\\nxx.uA\\n\")\n> print(head(xx.uA))\n>\n> produces the output below. I'd expect that IBM.Adjusted field to have\n> different values\n> at the beginning of the period, depending on whether one adjusts for\n> dividends.\n>\n> div\n> IBM.div\n> 2016-02-08     1.3\n> 2016-05-06     1.4\n> 2016-08-08     1.4\n> 2016-11-08     1.4\n> 2017-02-08     1.4\n> 2017-05-08     1.5\n>\n> xx\n> IBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n> 2016-01-04   135.60   135.97  134.24    135.95    5229400       135.95\n> 2016-01-05   136.76   136.89  134.85    135.85    3924800       135.85\n> 2016-01-06   134.38   135.58  133.62    135.17    4310900       135.17\n> 2016-01-07   133.70   135.02  132.43    132.86    7025800       132.86\n> 2016-01-08   133.18   133.82  131.32    131.63    4762700       131.63\n> 2016-01-11   131.81   133.82  131.76    133.23    4974400       133.23\n>\n> xx.a\n> IBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n> 2016-01-04   135.60   135.97  134.24    135.95    5229400       135.95\n> 2016-01-05   136.76   136.89  134.85    135.85    3924800       135.85\n> 2016-01-06   134.38   135.58  133.62    135.17    4310900       135.17\n> 2016-01-07   133.70   135.02  132.43    132.86    7025800       132.86\n> 2016-01-08   133.18   133.82  131.32    131.63    4762700       131.63\n> 2016-01-11   131.81   133.82  131.76    133.23    4974400       133.23\n>\n> xx.uA\n> IBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n> 2016-01-04   135.60   135.97  134.24    135.95    5229400       135.95\n> 2016-01-05   136.76   136.89  134.85    135.85    3924800       135.85\n> 2016-01-06   134.38   135.58  133.62    135.17    4310900       135.17\n> 2016-01-07   133.70   135.02  132.43    132.86    7025800       132.86\n> 2016-01-08   133.18   133.82  131.32    131.63    4762700       131.63\n> 2016-01-11   131.81   133.82  131.76    133.23    4974400       133.23\n>\n> Vivek Rao\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "That's a function of yahoo data no longer adjusting for dividends.\n\nOn Fri, Jun 2, 2017 at 10:45 AM, Vivek Rao via R-SIG-Finance <\nr-sig-finance at r-project.org> wrote:\n\n> (I tried sending this messa",
+      "thread_id": "thread-8830a2885f67",
+      "thread_depth": 1,
+      "month": "2017-06"
+    },
+    {
+      "id": "msg-60a357cab54a",
+      "message_id": "<CAPPM_gSDAFqxiq3dKiDPTTN-KriCsJC=8SkwMA3CdpMahiqJ+A@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2017-06-02T09:51:22-05:00",
+      "subject": "[R-SIG-Finance] does quantmod::adjustOHLC adust for dividends?",
+      "subject_clean": "does quantmod::adjustOHLC adust for dividends?",
+      "in_reply_to": "<CA+oJuEE6imCJByGBqCDN6oUitvw32X_mDKWYYNUc6iyeXLM02g@mail.gmail.com>",
+      "references": [
+        "<1849013260.516829.1496414719906.ref@mail.yahoo.com>",
+        "<1849013260.516829.1496414719906@mail.yahoo.com>",
+        "<CA+oJuEE6imCJByGBqCDN6oUitvw32X_mDKWYYNUc6iyeXLM02g@mail.gmail.com>"
+      ],
+      "body_plain": "On Fri, Jun 2, 2017 at 9:47 AM, Ilya Kipnis <ilya.kipnis at gmail.com> wrote:\n> That's a function of yahoo data no longer adjusting for dividends.\n>\nNo, it isn't.\n\n> On Fri, Jun 2, 2017 at 10:45 AM, Vivek Rao via R-SIG-Finance <\n> r-sig-finance at r-project.org> wrote:\n>\n>> (I tried sending this message before joining the group, but it was held\n>> for moderation.)\n>>\n>> It appears that the adjustOHLC function of the quantmod package does not\n>> create an .Adjusted field\n>> that reflects dividends.\n>>\n>> The code\n>>\n>> library(\"quantmod\")\n>> sym <- \"IBM\"\n>> START.DATE = \"2016-01-01\"\n>> div <- getDividends(sym,auto.assign=FALSE,from=START.DATE)\n>> xx <- getSymbols(sym, from=START.DATE, src=\"yahoo\", auto.assign=FALSE)\n>> xx.a <- adjustOHLC(xx)\n>> xx.uA <- adjustOHLC(xx, use.Adjusted=TRUE)\n\nThe issue is that you must set the symbol.name argument if the first\nargument to adjustOHLC() is not named the same as the symbol being\nadjusted.\n\nThis works:\n\nxx.a2 <- adjustOHLC(xx, symbol.name = sym)\nhead(xx.a2)\n           IBM.Open IBM.High  IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n2016-01-04 128.3440 128.6942 127.0568  128.6753    5229400       135.95\n2016-01-05 129.4420 129.5650 127.6342  128.5807    3924800       135.85\n2016-01-06 127.1893 128.3251 126.4700  127.9371    4310900       135.17\n2016-01-07 126.5457 127.7951 125.3437  125.7507    7025800       132.86\n2016-01-08 126.0535 126.6593 124.2931  124.5865    4762700       131.63\n2016-01-11 124.7568 126.6593 124.7095  126.1009    4974400       133.23\n\n>> cat(\"\\ndiv\\n\")\n>> print(head(div))\n>> cat(\"\\nxx\\n\")\n>> print(head(xx))\n>> cat(\"\\nxx.a\\n\")\n>> print(head(xx.a))\n>> cat(\"\\nxx.uA\\n\")\n>> print(head(xx.uA))\n>>\n>> produces the output below. I'd expect that IBM.Adjusted field to have\n>> different values\n>> at the beginning of the period, depending on whether one adjusts for\n>> dividends.\n>>\n>> div\n>> IBM.div\n>> 2016-02-08     1.3\n>> 2016-05-06     1.4\n>> 2016-08-08     1.4\n>> 2016-11-08     1.4\n>> 2017-02-08     1.4\n>> 2017-05-08     1.5\n>>\n>> xx\n>> IBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n>> 2016-01-04   135.60   135.97  134.24    135.95    5229400       135.95\n>> 2016-01-05   136.76   136.89  134.85    135.85    3924800       135.85\n>> 2016-01-06   134.38   135.58  133.62    135.17    4310900       135.17\n>> 2016-01-07   133.70   135.02  132.43    132.86    7025800       132.86\n>> 2016-01-08   133.18   133.82  131.32    131.63    4762700       131.63\n>> 2016-01-11   131.81   133.82  131.76    133.23    4974400       133.23\n>>\n>> xx.a\n>> IBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n>> 2016-01-04   135.60   135.97  134.24    135.95    5229400       135.95\n>> 2016-01-05   136.76   136.89  134.85    135.85    3924800       135.85\n>> 2016-01-06   134.38   135.58  133.62    135.17    4310900       135.17\n>> 2016-01-07   133.70   135.02  132.43    132.86    7025800       132.86\n>> 2016-01-08   133.18   133.82  131.32    131.63    4762700       131.63\n>> 2016-01-11   131.81   133.82  131.76    133.23    4974400       133.23\n>>\n>> xx.uA\n>> IBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n>> 2016-01-04   135.60   135.97  134.24    135.95    5229400       135.95\n>> 2016-01-05   136.76   136.89  134.85    135.85    3924800       135.85\n>> 2016-01-06   134.38   135.58  133.62    135.17    4310900       135.17\n>> 2016-01-07   133.70   135.02  132.43    132.86    7025800       132.86\n>> 2016-01-08   133.18   133.82  131.32    131.63    4762700       131.63\n>> 2016-01-11   131.81   133.82  131.76    133.23    4974400       133.23\n>>\n>> Vivek Rao\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2017 | www.rinfinance.com",
+      "body_snippet": "On Fri, Jun 2, 2017 at 9:47 AM, Ilya Kipnis <ilya.kipnis at gmail.com> wrote:\n> That's a function of yahoo data no longer adjusting for dividends.\n>\nNo, it isn't.\n\n> On Fri, Jun 2, 2017 at 10:45 AM, V",
+      "thread_id": "thread-8830a2885f67",
+      "thread_depth": 2,
+      "month": "2017-06"
+    },
+    {
+      "id": "msg-dcad7e988328",
+      "message_id": "<CAPPM_gRdjcRX3k17CVmTVLCVa5gy8QqPnwNZUR6utX3fUXSitA@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2017-06-02T09:53:05-05:00",
+      "subject": "[R-SIG-Finance] does quantmod::adjustOHLC adust for dividends?",
+      "subject_clean": "does quantmod::adjustOHLC adust for dividends?",
+      "in_reply_to": "<CAPPM_gSDAFqxiq3dKiDPTTN-KriCsJC=8SkwMA3CdpMahiqJ+A@mail.gmail.com>",
+      "references": [
+        "<1849013260.516829.1496414719906.ref@mail.yahoo.com>",
+        "<1849013260.516829.1496414719906@mail.yahoo.com>",
+        "<CA+oJuEE6imCJByGBqCDN6oUitvw32X_mDKWYYNUc6iyeXLM02g@mail.gmail.com>",
+        "<CAPPM_gSDAFqxiq3dKiDPTTN-KriCsJC=8SkwMA3CdpMahiqJ+A@mail.gmail.com>"
+      ],
+      "body_plain": "Also note that this issue is discussed here:\nhttps://github.com/joshuaulrich/quantmod/issues/152\n\nComments welcome!\n\nOn Fri, Jun 2, 2017 at 9:51 AM, Joshua Ulrich <josh.m.ulrich at gmail.com>\nwrote:\n\n> On Fri, Jun 2, 2017 at 9:47 AM, Ilya Kipnis <ilya.kipnis at gmail.com> wrote:\n> > That's a function of yahoo data no longer adjusting for dividends.\n> >\n> No, it isn't.\n>\n> > On Fri, Jun 2, 2017 at 10:45 AM, Vivek Rao via R-SIG-Finance <\n> > r-sig-finance at r-project.org> wrote:\n> >\n> >> (I tried sending this message before joining the group, but it was held\n> >> for moderation.)\n> >>\n> >> It appears that the adjustOHLC function of the quantmod package does not\n> >> create an .Adjusted field\n> >> that reflects dividends.\n> >>\n> >> The code\n> >>\n> >> library(\"quantmod\")\n> >> sym <- \"IBM\"\n> >> START.DATE = \"2016-01-01\"\n> >> div <- getDividends(sym,auto.assign=FALSE,from=START.DATE)\n> >> xx <- getSymbols(sym, from=START.DATE, src=\"yahoo\", auto.assign=FALSE)\n> >> xx.a <- adjustOHLC(xx)\n> >> xx.uA <- adjustOHLC(xx, use.Adjusted=TRUE)\n>\n> The issue is that you must set the symbol.name argument if the first\n> argument to adjustOHLC() is not named the same as the symbol being\n> adjusted.\n>\n> This works:\n>\n> xx.a2 <- adjustOHLC(xx, symbol.name = sym)\n> head(xx.a2)\n>            IBM.Open IBM.High  IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n> 2016-01-04 128.3440 128.6942 127.0568  128.6753    5229400       135.95\n> 2016-01-05 129.4420 129.5650 127.6342  128.5807    3924800       135.85\n> 2016-01-06 127.1893 128.3251 126.4700  127.9371    4310900       135.17\n> 2016-01-07 126.5457 127.7951 125.3437  125.7507    7025800       132.86\n> 2016-01-08 126.0535 126.6593 124.2931  124.5865    4762700       131.63\n> 2016-01-11 124.7568 126.6593 124.7095  126.1009    4974400       133.23\n>\n> >> cat(\"\\ndiv\\n\")\n> >> print(head(div))\n> >> cat(\"\\nxx\\n\")\n> >> print(head(xx))\n> >> cat(\"\\nxx.a\\n\")\n> >> print(head(xx.a))\n> >> cat(\"\\nxx.uA\\n\")\n> >> print(head(xx.uA))\n> >>\n> >> produces the output below. I'd expect that IBM.Adjusted field to have\n> >> different values\n> >> at the beginning of the period, depending on whether one adjusts for\n> >> dividends.\n> >>\n> >> div\n> >> IBM.div\n> >> 2016-02-08     1.3\n> >> 2016-05-06     1.4\n> >> 2016-08-08     1.4\n> >> 2016-11-08     1.4\n> >> 2017-02-08     1.4\n> >> 2017-05-08     1.5\n> >>\n> >> xx\n> >> IBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n> >> 2016-01-04   135.60   135.97  134.24    135.95    5229400       135.95\n> >> 2016-01-05   136.76   136.89  134.85    135.85    3924800       135.85\n> >> 2016-01-06   134.38   135.58  133.62    135.17    4310900       135.17\n> >> 2016-01-07   133.70   135.02  132.43    132.86    7025800       132.86\n> >> 2016-01-08   133.18   133.82  131.32    131.63    4762700       131.63\n> >> 2016-01-11   131.81   133.82  131.76    133.23    4974400       133.23\n> >>\n> >> xx.a\n> >> IBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n> >> 2016-01-04   135.60   135.97  134.24    135.95    5229400       135.95\n> >> 2016-01-05   136.76   136.89  134.85    135.85    3924800       135.85\n> >> 2016-01-06   134.38   135.58  133.62    135.17    4310900       135.17\n> >> 2016-01-07   133.70   135.02  132.43    132.86    7025800       132.86\n> >> 2016-01-08   133.18   133.82  131.32    131.63    4762700       131.63\n> >> 2016-01-11   131.81   133.82  131.76    133.23    4974400       133.23\n> >>\n> >> xx.uA\n> >> IBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n> >> 2016-01-04   135.60   135.97  134.24    135.95    5229400       135.95\n> >> 2016-01-05   136.76   136.89  134.85    135.85    3924800       135.85\n> >> 2016-01-06   134.38   135.58  133.62    135.17    4310900       135.17\n> >> 2016-01-07   133.70   135.02  132.43    132.86    7025800       132.86\n> >> 2016-01-08   133.18   133.82  131.32    131.63    4762700       131.63\n> >> 2016-01-11   131.81   133.82  131.76    133.23    4974400       133.23\n> >>\n> >> Vivek Rao\n> >>\n> >> _______________________________________________\n> >> R-SIG-Finance at r-project.org mailing list\n> >> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> >> -- Subscriber-posting only. If you want to post, subscribe first.\n> >> -- Also note that this is not the r-help list where general R questions\n> >> should go.\n> >>\n> >\n> >         [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n>\n>\n> --\n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com\n> R/Finance 2017 | www.rinfinance.com\n>\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2017 | www.rinfinance.com\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Also note that this issue is discussed here:\nhttps://github.com/joshuaulrich/quantmod/issues/152\n\nComments welcome!\n\nOn Fri, Jun 2, 2017 at 9:51 AM, Joshua Ulrich <josh.m.ulrich at gmail.com>\nwrote:\n\n",
+      "thread_id": "thread-8830a2885f67",
+      "thread_depth": 3,
+      "month": "2017-06"
+    },
+    {
+      "id": "msg-93501f163fd4",
+      "message_id": "<1432050375.538110.1496417342892@mail.yahoo.com>",
+      "from_name": "Vivek Rao",
+      "from_email_hash": "a81066339c2197ad565d503ef095b8cd2372aa49d2203f8967ae094a261e3f8b",
+      "date": "2017-06-02T15:29:02Z",
+      "subject": "[R-SIG-Finance] does quantmod::adjustOHLC adust for dividends?",
+      "subject_clean": "does quantmod::adjustOHLC adust for dividends?",
+      "in_reply_to": "<CAPPM_gSDAFqxiq3dKiDPTTN-KriCsJC=8SkwMA3CdpMahiqJ+A@mail.gmail.com>",
+      "references": [
+        "<1849013260.516829.1496414719906.ref@mail.yahoo.com>",
+        "<1849013260.516829.1496414719906@mail.yahoo.com>",
+        "<CA+oJuEE6imCJByGBqCDN6oUitvw32X_mDKWYYNUc6iyeXLM02g@mail.gmail.com>",
+        "<CAPPM_gSDAFqxiq3dKiDPTTN-KriCsJC=8SkwMA3CdpMahiqJ+A@mail.gmail.com>"
+      ],
+      "body_plain": "Thank you. I see that the IBM.Open, IBM.High, IBM.Low, and IBM.Close columnsare adjusted for dividends, and IBM.Adjusted column actually contains the raw close.This is fine as long the user knows this -- the naming of the columns could suggestthe reverse.\nBefore Yahoo changed its data format, when I used?getYahooData from package TTR to get data, the fields returned wereOpen,High,Low,Close,Volume,Unadj.Close,Div,Split,Adj.Div . I think the label \"Unadj.Close\" for the raw close\nis more descriptive.\nVivek Rao\n      From: Joshua Ulrich <josh.m.ulrich at gmail.com>\n To: Ilya Kipnis <ilya.kipnis at gmail.com> \nCc: Vivek Rao <vivekrao4 at yahoo.com>; \"r-sig-finance at r-project.org\" <r-sig-finance at r-project.org>\n Sent: Friday, June 2, 2017 10:51 AM\n Subject: Re: [R-SIG-Finance] does quantmod::adjustOHLC adust for dividends?\n   \nOn Fri, Jun 2, 2017 at 9:47 AM, Ilya Kipnis <ilya.kipnis at gmail.com> wrote:\n> That's a function of yahoo data no longer adjusting for dividends.\n>\nNo, it isn't.\n\n> On Fri, Jun 2, 2017 at 10:45 AM, Vivek Rao via R-SIG-Finance <\n> r-sig-finance at r-project.org> wrote:\n>\n>> (I tried sending this message before joining the group, but it was held\n>> for moderation.)\n>>\n>> It appears that the adjustOHLC function of the quantmod package does not\n>> create an .Adjusted field\n>> that reflects dividends.\n>>\n>> The code\n>>\n>> library(\"quantmod\")\n>> sym <- \"IBM\"\n>> START.DATE = \"2016-01-01\"\n>> div <- getDividends(sym,auto.assign=FALSE,from=START.DATE)\n>> xx <- getSymbols(sym, from=START.DATE, src=\"yahoo\", auto.assign=FALSE)\n>> xx.a <- adjustOHLC(xx)\n>> xx.uA <- adjustOHLC(xx, use.Adjusted=TRUE)\n\nThe issue is that you must set the symbol.name argument if the first\nargument to adjustOHLC() is not named the same as the symbol being\nadjusted.\n\nThis works:\n\nxx.a2 <- adjustOHLC(xx, symbol.name = sym)\nhead(xx.a2)\n? ? ? ? ? IBM.Open IBM.High? IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n2016-01-04 128.3440 128.6942 127.0568? 128.6753? ? 5229400? ? ? 135.95\n2016-01-05 129.4420 129.5650 127.6342? 128.5807? ? 3924800? ? ? 135.85\n2016-01-06 127.1893 128.3251 126.4700? 127.9371? ? 4310900? ? ? 135.17\n2016-01-07 126.5457 127.7951 125.3437? 125.7507? ? 7025800? ? ? 132.86\n2016-01-08 126.0535 126.6593 124.2931? 124.5865? ? 4762700? ? ? 131.63\n2016-01-11 124.7568 126.6593 124.7095? 126.1009? ? 4974400? ? ? 133.23\n\n>> cat(\"\\ndiv\\n\")\n>> print(head(div))\n>> cat(\"\\nxx\\n\")\n>> print(head(xx))\n>> cat(\"\\nxx.a\\n\")\n>> print(head(xx.a))\n>> cat(\"\\nxx.uA\\n\")\n>> print(head(xx.uA))\n>>\n>> produces the output below. I'd expect that IBM.Adjusted field to have\n>> different values\n>> at the beginning of the period, depending on whether one adjusts for\n>> dividends.\n>>\n>> div\n>> IBM.div\n>> 2016-02-08? ? 1.3\n>> 2016-05-06? ? 1.4\n>> 2016-08-08? ? 1.4\n>> 2016-11-08? ? 1.4\n>> 2017-02-08? ? 1.4\n>> 2017-05-08? ? 1.5\n>>\n>> xx\n>> IBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n>> 2016-01-04? 135.60? 135.97? 134.24? ? 135.95? ? 5229400? ? ? 135.95\n>> 2016-01-05? 136.76? 136.89? 134.85? ? 135.85? ? 3924800? ? ? 135.85\n>> 2016-01-06? 134.38? 135.58? 133.62? ? 135.17? ? 4310900? ? ? 135.17\n>> 2016-01-07? 133.70? 135.02? 132.43? ? 132.86? ? 7025800? ? ? 132.86\n>> 2016-01-08? 133.18? 133.82? 131.32? ? 131.63? ? 4762700? ? ? 131.63\n>> 2016-01-11? 131.81? 133.82? 131.76? ? 133.23? ? 4974400? ? ? 133.23\n>>\n>> xx.a\n>> IBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n>> 2016-01-04? 135.60? 135.97? 134.24? ? 135.95? ? 5229400? ? ? 135.95\n>> 2016-01-05? 136.76? 136.89? 134.85? ? 135.85? ? 3924800? ? ? 135.85\n>> 2016-01-06? 134.38? 135.58? 133.62? ? 135.17? ? 4310900? ? ? 135.17\n>> 2016-01-07? 133.70? 135.02? 132.43? ? 132.86? ? 7025800? ? ? 132.86\n>> 2016-01-08? 133.18? 133.82? 131.32? ? 131.63? ? 4762700? ? ? 131.63\n>> 2016-01-11? 131.81? 133.82? 131.76? ? 133.23? ? 4974400? ? ? 133.23\n>>\n>> xx.uA\n>> IBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n>> 2016-01-04? 135.60? 135.97? 134.24? ? 135.95? ? 5229400? ? ? 135.95\n>> 2016-01-05? 136.76? 136.89? 134.85? ? 135.85? ? 3924800? ? ? 135.85\n>> 2016-01-06? 134.38? 135.58? 133.62? ? 135.17? ? 4310900? ? ? 135.17\n>> 2016-01-07? 133.70? 135.02? 132.43? ? 132.86? ? 7025800? ? ? 132.86\n>> 2016-01-08? 133.18? 133.82? 131.32? ? 131.63? ? 4762700? ? ? 131.63\n>> 2016-01-11? 131.81? 133.82? 131.76? ? 133.23? ? 4974400? ? ? 133.23\n>>\n>> Vivek Rao\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n>\n>? ? ? ? [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich? |? about.me/joshuaulrich\nFOSS Trading? |? www.fosstrading.com\nR/Finance 2017 | www.rinfinance.com\n\n\n   \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thank you. I see that the IBM.Open, IBM.High, IBM.Low, and IBM.Close columnsare adjusted for dividends, and IBM.Adjusted column actually contains the raw close.This is fine as long the user knows this",
+      "thread_id": "thread-8830a2885f67",
+      "thread_depth": 3,
+      "month": "2017-06"
+    },
+    {
+      "id": "msg-8cfac717d478",
+      "message_id": "<CAPPM_gT-fSe7f+oUQ+6di+bZeM-J-HAjvM2mp8Gj8yiM=C9bew@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2017-06-02T10:34:41-05:00",
+      "subject": "[R-SIG-Finance] does quantmod::adjustOHLC adust for dividends?",
+      "subject_clean": "does quantmod::adjustOHLC adust for dividends?",
+      "in_reply_to": "<1432050375.538110.1496417342892@mail.yahoo.com>",
+      "references": [
+        "<1849013260.516829.1496414719906.ref@mail.yahoo.com>",
+        "<1849013260.516829.1496414719906@mail.yahoo.com>",
+        "<CA+oJuEE6imCJByGBqCDN6oUitvw32X_mDKWYYNUc6iyeXLM02g@mail.gmail.com>",
+        "<CAPPM_gSDAFqxiq3dKiDPTTN-KriCsJC=8SkwMA3CdpMahiqJ+A@mail.gmail.com>",
+        "<1432050375.538110.1496417342892@mail.yahoo.com>"
+      ],
+      "body_plain": "On Fri, Jun 2, 2017 at 10:29 AM, Vivek Rao <vivekrao4 at yahoo.com> wrote:\n> Thank you. I see that the IBM.Open, IBM.High, IBM.Low, and IBM.Close columns\n> are adjusted for dividends, and IBM.Adjusted column actually contains the\n> raw close.\n\nThis is not true.  The IBM.Adjusted column contains the split-adjusted\nclose.  It's the same as the raw close for this time period though,\nbecause IBM has not had a split since mid-1999.\n\ngetSymbols(\"IBM\", from =\"1900-01-01\")\nhead(IBM)\n           IBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n1962-01-02    578.5    578.5     572  572.0000     387200     7.626667\n1962-01-03    572.0    577.0     572  577.0000     288000     7.693333\n1962-01-04    577.0    577.0     571  571.2501     256000     7.616667\n1962-01-05    570.5    570.5     559  560.0000     363200     7.466667\n1962-01-08    559.5    559.5     545  549.5001     544000     7.326667\n1962-01-09    552.0    563.0     552  556.0000     491200     7.413333\ntail(IBM[\"1999-05\"])\n           IBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n1999-05-21  232.750  233.375 229.188  230.3750    6899800     115.1875\n1999-05-24  230.312  230.688 221.750  223.7500    8598200     111.8750\n1999-05-25  222.500  226.000 221.000  221.1875    9405000     110.5938\n1999-05-26  223.000  236.625 221.438  236.2500   16628000     118.1250\n1999-05-27  116.688  116.875 112.625  116.0000   10552500     116.0000\n1999-05-28  116.000  116.750 114.188  116.0000    6379500     116.0000\n\n\n> This is fine as long the user knows this -- the naming of the columns could\n> suggest\n> the reverse.\n>\n> Before Yahoo changed its data format, when I used getYahooData from package\n> TTR to get data, the fields returned were\n> Open,High,Low,Close,Volume,Unadj.Close,Div,Split,Adj.Div . I think the label\n> \"Unadj.Close\" for the raw close\n> is more descriptive.\n>\n> Vivek Rao\n>\n> ________________________________\n> From: Joshua Ulrich <josh.m.ulrich at gmail.com>\n> To: Ilya Kipnis <ilya.kipnis at gmail.com>\n> Cc: Vivek Rao <vivekrao4 at yahoo.com>; \"r-sig-finance at r-project.org\"\n> <r-sig-finance at r-project.org>\n> Sent: Friday, June 2, 2017 10:51 AM\n> Subject: Re: [R-SIG-Finance] does quantmod::adjustOHLC adust for dividends?\n>\n> On Fri, Jun 2, 2017 at 9:47 AM, Ilya Kipnis <ilya.kipnis at gmail.com> wrote:\n>> That's a function of yahoo data no longer adjusting for dividends.\n>>\n> No, it isn't.\n>\n>> On Fri, Jun 2, 2017 at 10:45 AM, Vivek Rao via R-SIG-Finance <\n>> r-sig-finance at r-project.org> wrote:\n>>\n>>> (I tried sending this message before joining the group, but it was held\n>>> for moderation.)\n>>>\n>>> It appears that the adjustOHLC function of the quantmod package does not\n>>> create an .Adjusted field\n>>> that reflects dividends.\n>>>\n>>> The code\n>>>\n>>> library(\"quantmod\")\n>>> sym <- \"IBM\"\n>>> START.DATE = \"2016-01-01\"\n>>> div <- getDividends(sym,auto.assign=FALSE,from=START.DATE)\n>>> xx <- getSymbols(sym, from=START.DATE, src=\"yahoo\", auto.assign=FALSE)\n>>> xx.a <- adjustOHLC(xx)\n>>> xx.uA <- adjustOHLC(xx, use.Adjusted=TRUE)\n>\n> The issue is that you must set the symbol.name argument if the first\n> argument to adjustOHLC() is not named the same as the symbol being\n> adjusted.\n>\n> This works:\n>\n> xx.a2 <- adjustOHLC(xx, symbol.name = sym)\n> head(xx.a2)\n>           IBM.Open IBM.High  IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n> 2016-01-04 128.3440 128.6942 127.0568  128.6753    5229400      135.95\n> 2016-01-05 129.4420 129.5650 127.6342  128.5807    3924800      135.85\n> 2016-01-06 127.1893 128.3251 126.4700  127.9371    4310900      135.17\n> 2016-01-07 126.5457 127.7951 125.3437  125.7507    7025800      132.86\n> 2016-01-08 126.0535 126.6593 124.2931  124.5865    4762700      131.63\n> 2016-01-11 124.7568 126.6593 124.7095  126.1009    4974400      133.23\n>\n>>> cat(\"\\ndiv\\n\")\n>>> print(head(div))\n>>> cat(\"\\nxx\\n\")\n>>> print(head(xx))\n>>> cat(\"\\nxx.a\\n\")\n>>> print(head(xx.a))\n>>> cat(\"\\nxx.uA\\n\")\n>>> print(head(xx.uA))\n>>>\n>>> produces the output below. I'd expect that IBM.Adjusted field to have\n>>> different values\n>>> at the beginning of the period, depending on whether one adjusts for\n>>> dividends.\n>>>\n>>> div\n>>> IBM.div\n>>> 2016-02-08    1.3\n>>> 2016-05-06    1.4\n>>> 2016-08-08    1.4\n>>> 2016-11-08    1.4\n>>> 2017-02-08    1.4\n>>> 2017-05-08    1.5\n>>>\n>>> xx\n>>> IBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n>>> 2016-01-04  135.60  135.97  134.24    135.95    5229400      135.95\n>>> 2016-01-05  136.76  136.89  134.85    135.85    3924800      135.85\n>>> 2016-01-06  134.38  135.58  133.62    135.17    4310900      135.17\n>>> 2016-01-07  133.70  135.02  132.43    132.86    7025800      132.86\n>>> 2016-01-08  133.18  133.82  131.32    131.63    4762700      131.63\n>>> 2016-01-11  131.81  133.82  131.76    133.23    4974400      133.23\n>>>\n>>> xx.a\n>>> IBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n>>> 2016-01-04  135.60  135.97  134.24    135.95    5229400      135.95\n>>> 2016-01-05  136.76  136.89  134.85    135.85    3924800      135.85\n>>> 2016-01-06  134.38  135.58  133.62    135.17    4310900      135.17\n>>> 2016-01-07  133.70  135.02  132.43    132.86    7025800      132.86\n>>> 2016-01-08  133.18  133.82  131.32    131.63    4762700      131.63\n>>> 2016-01-11  131.81  133.82  131.76    133.23    4974400      133.23\n>>>\n>>> xx.uA\n>>> IBM.Open IBM.High IBM.Low IBM.Close IBM.Volume IBM.Adjusted\n>>> 2016-01-04  135.60  135.97  134.24    135.95    5229400      135.95\n>>> 2016-01-05  136.76  136.89  134.85    135.85    3924800      135.85\n>>> 2016-01-06  134.38  135.58  133.62    135.17    4310900      135.17\n>>> 2016-01-07  133.70  135.02  132.43    132.86    7025800      132.86\n>>> 2016-01-08  133.18  133.82  131.32    131.63    4762700      131.63\n>>> 2016-01-11  131.81  133.82  131.76    133.23    4974400      133.23\n>>>\n>>> Vivek Rao\n>>>\n>>> _______________________________________________\n>>> R-SIG-Finance at r-project.org mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>> -- Also note that this is not the r-help list where general R questions\n>>> should go.\n>>>\n>>\n>>        [[alternative HTML version deleted]]\n>\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>\n>\n>\n>\n> --\n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com\n> R/Finance 2017 | www.rinfinance.com\n>\n>\n>\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2017 | www.rinfinance.com",
+      "body_snippet": "On Fri, Jun 2, 2017 at 10:29 AM, Vivek Rao <vivekrao4 at yahoo.com> wrote:\n> Thank you. I see that the IBM.Open, IBM.High, IBM.Low, and IBM.Close columns\n> are adjusted for dividends, and IBM.Adjusted",
+      "thread_id": "thread-8830a2885f67",
+      "thread_depth": 4,
+      "month": "2017-06"
+    },
+    {
+      "id": "msg-d82b0bd8f302",
+      "message_id": "<CACOcrKaALMkTmWHnCGzxNOC0bXCe2pR5DYi=65wCYNBiE3mXOw@mail.gmail.com>",
+      "from_name": "Keith Sabol",
+      "from_email_hash": "cc9e0d7026f628a20aeda1a6297e459ec82462f6360d8065d8995e19e46d0abc",
+      "date": "2017-06-03T11:10:23-06:00",
+      "subject": "[R-SIG-Finance] Quantmod: Problem with Lo(LOW)",
+      "subject_clean": "Quantmod: Problem with Lo(LOW)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "There appears to be a problem with Lo() when used with ticker \"LOW\".\n\nlibrary(quantmod)\n\ngetSymbols(\"LOW\")\n[1] \"LOW\"\n> adjustOHLC(LOW)\nError in `-.default`(Lo(x), Cl(x)) : non-conformable arrays\n> head(LOW)\n           LOW.Open LOW.High LOW.Low LOW.Close LOW.Volume LOW.Adjusted\n2007-01-03    31.21    32.31   31.15     32.04   14143200        32.04\n2007-01-04    32.40    32.50   31.61     32.18    8351900        32.18\n2007-01-05    32.16    32.41   31.59     31.79    8295600        31.79\n2007-01-08    31.62    31.82   31.13     31.70    6423400        31.70\n2007-01-09    31.76    32.05   31.69     31.87    5053300        31.87\n2007-01-10    31.71    32.59   31.70     32.47    8741800        32.47\n> Lo\nfunction (x)\n{\n    if (has.Lo(x))\n        return(x[, grep(\"Low\", colnames(x), ignore.case = TRUE)])\n    stop(\"subscript out of bounds: no column name containing \\\"Low\\\"\")\n}\n<environment: namespace:quantmod>\n>\n\nhead(LOW[, grep(\"Low\", colnames(LOW), ignore.case = TRUE)])\n           LOW.Open LOW.High LOW.Low LOW.Close LOW.Volume LOW.Adjusted\n2007-01-03    31.21    32.31   31.15     32.04   14143200        32.04\n2007-01-04    32.40    32.50   31.61     32.18    8351900        32.18\n2007-01-05    32.16    32.41   31.59     31.79    8295600        31.79\n2007-01-08    31.62    31.82   31.13     31.70    6423400        31.70\n2007-01-09    31.76    32.05   31.69     31.87    5053300        31.87\n2007-01-10    31.71    32.59   31.70     32.47    8741800        32.47\n\nOne viable remedy appears to be adding a period before \"Low\" in the grep\nline:\n\n\nhead(LOW[, grep(\".Low\", colnames(LOW), ignore.case = TRUE)])\n           LOW.Low\n2007-01-03   31.15\n2007-01-04   31.61\n2007-01-05   31.59\n2007-01-08   31.13\n2007-01-09   31.69\n2007-01-10   31.70\n>\n\nHope this helps.\n\nThanks for your great work on this package Josh.\n\nKeith\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "There appears to be a problem with Lo() when used with ticker \"LOW\".\n\nlibrary(quantmod)\n\ngetSymbols(\"LOW\")\n[1] \"LOW\"\n> adjustOHLC(LOW)\nError in `-.default`(Lo(x), Cl(x)) : non-conformable arrays\n> hea",
+      "thread_id": "thread-d82b0bd8f302",
+      "thread_depth": 0,
+      "month": "2017-06"
+    },
+    {
+      "id": "msg-283bdcf97d4f",
+      "message_id": "<CAPPM_gQcEERFGGqj4GaLHbeGnsrLD4TJ+aTrsZu4-tVhocY61w@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2017-06-03T12:15:41-05:00",
+      "subject": "[R-SIG-Finance] Quantmod: Problem with Lo(LOW)",
+      "subject_clean": "Quantmod: Problem with Lo(LOW)",
+      "in_reply_to": "<CACOcrKaALMkTmWHnCGzxNOC0bXCe2pR5DYi=65wCYNBiE3mXOw@mail.gmail.com>",
+      "references": [
+        "<CACOcrKaALMkTmWHnCGzxNOC0bXCe2pR5DYi=65wCYNBiE3mXOw@mail.gmail.com>"
+      ],
+      "body_plain": "On Sat, Jun 3, 2017 at 12:10 PM, Keith Sabol <sabolkj at gmail.com> wrote:\n> There appears to be a problem with Lo() when used with ticker \"LOW\".\n>\n> library(quantmod)\n>\n> getSymbols(\"LOW\")\n> [1] \"LOW\"\n>> adjustOHLC(LOW)\n> Error in `-.default`(Lo(x), Cl(x)) : non-conformable arrays\n>> head(LOW)\n>            LOW.Open LOW.High LOW.Low LOW.Close LOW.Volume LOW.Adjusted\n> 2007-01-03    31.21    32.31   31.15     32.04   14143200        32.04\n> 2007-01-04    32.40    32.50   31.61     32.18    8351900        32.18\n> 2007-01-05    32.16    32.41   31.59     31.79    8295600        31.79\n> 2007-01-08    31.62    31.82   31.13     31.70    6423400        31.70\n> 2007-01-09    31.76    32.05   31.69     31.87    5053300        31.87\n> 2007-01-10    31.71    32.59   31.70     32.47    8741800        32.47\n>> Lo\n> function (x)\n> {\n>     if (has.Lo(x))\n>         return(x[, grep(\"Low\", colnames(x), ignore.case = TRUE)])\n>     stop(\"subscript out of bounds: no column name containing \\\"Low\\\"\")\n> }\n> <environment: namespace:quantmod>\n>>\n>\n> head(LOW[, grep(\"Low\", colnames(LOW), ignore.case = TRUE)])\n>            LOW.Open LOW.High LOW.Low LOW.Close LOW.Volume LOW.Adjusted\n> 2007-01-03    31.21    32.31   31.15     32.04   14143200        32.04\n> 2007-01-04    32.40    32.50   31.61     32.18    8351900        32.18\n> 2007-01-05    32.16    32.41   31.59     31.79    8295600        31.79\n> 2007-01-08    31.62    31.82   31.13     31.70    6423400        31.70\n> 2007-01-09    31.76    32.05   31.69     31.87    5053300        31.87\n> 2007-01-10    31.71    32.59   31.70     32.47    8741800        32.47\n>\n> One viable remedy appears to be adding a period before \"Low\" in the grep\n> line:\n>\nThis has been suggested before, and does not work:\nhttps://github.com/joshuaulrich/quantmod/issues/24\n\n>\n> head(LOW[, grep(\".Low\", colnames(LOW), ignore.case = TRUE)])\n>            LOW.Low\n> 2007-01-03   31.15\n> 2007-01-04   31.61\n> 2007-01-05   31.59\n> 2007-01-08   31.13\n> 2007-01-09   31.69\n> 2007-01-10   31.70\n>>\n>\n> Hope this helps.\n>\n> Thanks for your great work on this package Josh.\n>\n> Keith\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2017 | www.rinfinance.com",
+      "body_snippet": "On Sat, Jun 3, 2017 at 12:10 PM, Keith Sabol <sabolkj at gmail.com> wrote:\n> There appears to be a problem with Lo() when used with ticker \"LOW\".\n>\n> library(quantmod)\n>\n> getSymbols(\"LOW\")\n> [1] \"LOW",
+      "thread_id": "thread-d82b0bd8f302",
+      "thread_depth": 1,
+      "month": "2017-06"
+    },
+    {
+      "id": "msg-550c41cce8e0",
+      "message_id": "<CAHdfS96OB_JEf0pZnL7LKW7f-mSNO6fixJo6xUzPZ1B89YXXbg@mail.gmail.com>",
+      "from_name": "Robert Harlow",
+      "from_email_hash": "2c96b632dc73a771c658ad5cde557091e78e2b62dff2172cb47f752aebbc29ed",
+      "date": "2017-06-04T13:19:19-04:00",
+      "subject": "[R-SIG-Finance] quadprogXT package",
+      "subject_clean": "quadprogXT package",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "All,\n  I put out a package on CRAN last weekend that extends quadprog so that\nconstraints involving absolute values (e.g. book size and turnover in a\nfinancial context) are handled in addition to allowing absolute value (L1)\nconsiderations in the objective function, which can handle linear\ntransaction costs or when the expected return for being long is different\nthan that of being short due to borrowing costs.  Since problems are\nultimately solved by the Fortran code of quadprog, convergence happens\nquite quickly for up to hundreds of assets.\n\nI view this as a \"beta\" release and feedback is very welcome.  I already\nneed to improve documentation and plan to in the next release.\n\nBob\n\n\nhttps://cran.r-project.org/web/packages/quadprogXT/index.html\n\nhttps://github.com/rharlow86/quadprogXT\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "All,\n  I put out a package on CRAN last weekend that extends quadprog so that\nconstraints involving absolute values (e.g. book size and turnover in a\nfinancial context) are handled in addition to allo",
+      "thread_id": "thread-550c41cce8e0",
+      "thread_depth": 0,
+      "month": "2017-06"
+    },
+    {
+      "id": "msg-6f3e37719403",
+      "message_id": "<09d4cc34-a2f9-49df-b401-c5b3804be733@me.com>",
+      "from_name": "Glenn Schultz",
+      "from_email_hash": "c9945efe9f9e4a62f4f31e8b2030602702aa667142f0edcbd362fbceb98450c9",
+      "date": "2017-06-08T01:52:14Z",
+      "subject": "[R-SIG-Finance] termstrc package",
+      "subject_clean": "termstrc package",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "All,\n\nI have set-up the the termstrc list to fit UST curves. ?I have succefully used the package to fit agency mortgage backed security curves. ?However, for some reason I am running into problem with the UST. ?I have dput the list below. ?Obviously, I have something wrong here but I gone over the list for quite awhile and compared to govbonds data. ?At this point I just cannot see what I am have wrong. ?Any help is appreciated.\n\nGlenn\n\nstructure(list(OTR = structure(list(ISIN = c(\"912828S68\", \"912828XS4\", \n\"912828S76\", \"9128282A7\", \"912810RT7\"), MATURITYDATE = structure(c(17378, \n18047, 18808, 20680, 27985), class = \"Date\"), ISSUEDATE = structure(c(17014, \n17317, 16982, 17028, 17028), class = \"Date\"), COUPONRATE = c(0.0075, \n0.01125, 0.01125, 0.015, 0.0225), PRICE = c(100, 100, 100, 100, \n100), ACCRUED = c(607.523148148148, 2859.375, 424.21875, 1529.28240740741, \n2293.92361111111), TODAY = logical(0), CASHFLOWS = structure(list(\nISIN = c(\"912828S68\", \"912828XS4\", \"912828XS4\", \"912828XS4\", \n\"912828XS4\", \"912828S76\", \"912828S76\", \"912828S76\", \"912828S76\", \n\"912828S76\", \"912828S76\", \"912828S76\", \"912828S76\", \"912828S76\", \n\"9128282A7\", \"9128282A7\", \"9128282A7\", \"9128282A7\", \"9128282A7\", \n\"9128282A7\", \"9128282A7\", \"9128282A7\", \"9128282A7\", \"9128282A7\", \n\"9128282A7\", \"9128282A7\", \"9128282A7\", \"9128282A7\", \"9128282A7\", \n\"9128282A7\", \"9128282A7\", \"9128282A7\", \"9128282A7\", \"912810RT7\", \n\"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \n\"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \n\"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \n\"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \n\"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \n\"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \n\"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \n\"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \n\"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \n\"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \n\"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \"912810RT7\", \n\"912810RT7\", \"912810RT7\", \"912810RT7\"), CF = c(1003770.83333333, \n5718.75, 5687.5, 5718.75, 1005687.5, 5656.25, 5750, 5656.25, \n5750, 5656.25, 5750, 5687.5, 5750, 1005656.25, 7541.66666666667, \n7666.66666666667, 7541.66666666667, 7666.66666666667, 7541.66666666667, \n7666.66666666667, 7583.33333333333, 7666.66666666667, 7541.66666666667, \n7666.66666666667, 7541.66666666667, 7666.66666666667, 7541.66666666667, \n7666.66666666667, 7583.33333333333, 7666.66666666667, 7541.66666666667, \n7666.66666666667, 1007541.66666667, 11312.5, 11500, 11312.5, \n11500, 11312.5, 11500, 11375, 11500, 11312.5, 11500, 11312.5, \n11500, 11312.5, 11500, 11375, 11500, 11312.5, 11500, 11312.5, \n11500, 11312.5, 11500, 11375, 11500, 11312.5, 11500, 11312.5, \n11500, 11312.5, 11500, 11375, 11500, 11312.5, 11500, 11312.5, \n11500, 11312.5, 11500, 11375, 11500, 11312.5, 11500, 11312.5, \n11500, 11312.5, 11500, 11375, 11500, 11312.5, 11500, 11312.5, \n11500, 11312.5, 11500, 11375, 11500, 11312.5, 11500, 1011312.5\n), DATE = structure(c(17378, 17500, 17682, 17865, 18047, \n17347, 17531, 17712, 17896, 18077, 18261, 18443, 18627, 18808, \n17393, 17577, 17758, 17942, 18123, 18307, 18489, 18673, 18854, \n19038, 19219, 19403, 19584, 19768, 19950, 20134, 20315, 20499, \n20680, 17393, 17577, 17758, 17942, 18123, 18307, 18489, 18673, \n18854, 19038, 19219, 19403, 19584, 19768, 19950, 20134, 20315, \n20499, 20680, 20864, 21045, 21229, 21411, 21595, 21776, 21960, \n22141, 22325, 22506, 22690, 22872, 23056, 23237, 23421, 23602, \n23786, 23967, 24151, 24333, 24517, 24698, 24882, 25063, 25247, \n25428, 25612, 25794, 25978, 26159, 26343, 26524, 26708, 26889, \n27073, 27255, 27439, 27620, 27804, 27985), class = \"Date\")), .Names = c(\"ISIN\", \n\"CF\", \"DATE\"))), .Names = c(\"ISIN\", \"MATURITYDATE\", \"ISSUEDATE\", \n\"COUPONRATE\", \"PRICE\", \"ACCRUED\", \"TODAY\", \"CASHFLOWS\"))), .Names = \"OTR\", class = \"couponbonds\")\n-------------- next part --------------\nAn HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20170608/2b6b216b/attachment.html>",
+      "body_snippet": "All,\n\nI have set-up the the termstrc list to fit UST curves. ?I have succefully used the package to fit agency mortgage backed security curves. ?However, for some reason I am running into problem with",
+      "thread_id": "thread-6f3e37719403",
+      "thread_depth": 0,
+      "month": "2017-06"
+    },
+    {
+      "id": "msg-6cd1f1c4f55c",
+      "message_id": "<CAO7kh0Erq09A---+LkCWXdAxeFWZiMNnQJqa0EXpLRdxTzQp+Q@mail.gmail.com>",
+      "from_name": "amol gupta",
+      "from_email_hash": "8f47f3a3a52fe90284b2effd82ffac6526209190bf919ee76e75fb9a02a511bf",
+      "date": "2017-06-25T13:39:43+05:30",
+      "subject": "[R-SIG-Finance] Fteching options data using package IBrokers and interactivebrokers",
+      "subject_clean": "Fteching options data using package IBrokers and interactivebrokers",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nI have been trying to fetch contract details and finally fetch contract\nhistorical data. I have been able to do it with stock futures but I have\nbeen failing with options. Here is a very small snippet.\n\n\nc<-twsOPT(local = 'HDFC17JUN1780CE',strike = 1780, right = 'C',\n          currency = 'INR',primary = 'NSE',multiplier = 1,\n          conId = 271618757)\nd<-reqContractDetails(tws,c)\n\nWarning message:\nIn reqContractDetails(tws, c) : error in contract details\n\n\nhere\n<https://misc.interactivebrokers.com/cstools/contract_info/v3.9/index.php?action=Conid%20Info&wlId=IB&conid=271618719&lang=en>\nare the contract details. Please help me figure out what am I doing wrong.\n\n\n-- \nRegards\nAmol\n+91-9897860992\n+91-8889676918\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\nI have been trying to fetch contract details and finally fetch contract\nhistorical data. I have been able to do it with stock futures but I have\nbeen failing with options. Here is a very small",
+      "thread_id": "thread-6cd1f1c4f55c",
+      "thread_depth": 0,
+      "month": "2017-06"
+    },
+    {
+      "id": "msg-75f453a15cfc",
+      "message_id": "<87k23zg8ad.fsf@enricoschumann.net>",
+      "from_name": "Enrico Schumann",
+      "from_email_hash": "6e2b07dfece9903edd38ae5f89516e6019180d40f61f8bc93b0510f5f6c6ba17",
+      "date": "2017-06-25T21:46:18+02:00",
+      "subject": "[R-SIG-Finance] Fteching options data using package IBrokers and interactivebrokers",
+      "subject_clean": "Fteching options data using package IBrokers and interactivebrokers",
+      "in_reply_to": "<CAO7kh0Erq09A---+LkCWXdAxeFWZiMNnQJqa0EXpLRdxTzQp+Q@mail.gmail.com> (amol gupta's message of \"Sun, 25 Jun 2017 13:39:43 +0530\")",
+      "references": [
+        "<CAO7kh0Erq09A---+LkCWXdAxeFWZiMNnQJqa0EXpLRdxTzQp+Q@mail.gmail.com>"
+      ],
+      "body_plain": "On Sun, 25 Jun 2017, amol gupta writes:\n\n> Hello,\n>\n> I have been trying to fetch contract details and finally fetch contract\n> historical data. I have been able to do it with stock futures but I have\n> been failing with options. Here is a very small snippet.\n>\n>\n> c<-twsOPT(local = 'HDFC17JUN1780CE',strike = 1780, right = 'C',\n>           currency = 'INR',primary = 'NSE',multiplier = 1,\n>           conId = 271618757)\n> d<-reqContractDetails(tws,c)\n>\n> Warning message:\n> In reqContractDetails(tws, c) : error in contract details\n>\n>\n> here\n> <https://misc.interactivebrokers.com/cstools/contract_info/v3.9/index.php?action=Conid%20Info&wlId=IB&conid=271618719&lang=en>\n> are the contract details. Please help me figure out what am I doing wrong.\n\nUse 'twsContract' and specify only the local symbol, the\nexchange, the currency and the security type:\n\n   require(\"IBrokers\")\n   c <- twsContract(local = 'HDFC17JUN1780CE', sectype = \"OPT\",\n                    currency = 'INR', exch = 'NSE',\n                    include_expired = 1,\n                    conId = \"\", symbol = \"\", primary = \"\", expiry = \"\", \n                    strike = \"\", right = \"\", multiplier = \"\",\n                    combo_legs_desc = \"\", comboleg = \"\", secIdType = \"\",\n                    secId = \"\")\n   \n   tws <- twsConnect()\n   reqContractDetails(tws, c)\n\n   ## List of 18\n   ##  $ version       : chr \"8\"\n   ##  $ contract      :List of 16\n   ##   ..$ conId          : chr \"271618757\"\n   ##   ..$ symbol         : chr \"HDFC\"\n   ##   ..$ sectype        : chr \"OPT\"\n   ##   ..$ exch           : chr \"NSE\"\n   ## [....]\n\nSee also\nhttps://github.com/enricoschumann/IButils#finding-the-contract-specification\n\n-- \nEnrico Schumann\nLucerne, Switzerland\nhttp://enricoschumann.net",
+      "body_snippet": "On Sun, 25 Jun 2017, amol gupta writes:\n\n> Hello,\n>\n> I have been trying to fetch contract details and finally fetch contract\n> historical data. I have been able to do it with stock futures but I have",
+      "thread_id": "thread-6cd1f1c4f55c",
+      "thread_depth": 1,
+      "month": "2017-06"
+    },
+    {
+      "id": "msg-0e74826ecfb2",
+      "message_id": "<CAO7kh0Gtyfsj0HvrRV4qBv+-o5=Vgfk+fmbK9UoDz79SbJRj0w@mail.gmail.com>",
+      "from_name": "amol gupta",
+      "from_email_hash": "8f47f3a3a52fe90284b2effd82ffac6526209190bf919ee76e75fb9a02a511bf",
+      "date": "2017-06-26T11:23:39+05:30",
+      "subject": "[R-SIG-Finance] Fteching options data using package IBrokers and interactivebrokers",
+      "subject_clean": "Fteching options data using package IBrokers and interactivebrokers",
+      "in_reply_to": "<87k23zg8ad.fsf@enricoschumann.net>",
+      "references": [
+        "<CAO7kh0Erq09A---+LkCWXdAxeFWZiMNnQJqa0EXpLRdxTzQp+Q@mail.gmail.com>",
+        "<87k23zg8ad.fsf@enricoschumann.net>"
+      ],
+      "body_plain": "Thanks .That worked. :-)\n\nOn Mon, Jun 26, 2017 at 1:16 AM, Enrico Schumann <es at enricoschumann.net>\nwrote:\n\n> On Sun, 25 Jun 2017, amol gupta writes:\n>\n> > Hello,\n> >\n> > I have been trying to fetch contract details and finally fetch contract\n> > historical data. I have been able to do it with stock futures but I have\n> > been failing with options. Here is a very small snippet.\n> >\n> >\n> > c<-twsOPT(local = 'HDFC17JUN1780CE',strike = 1780, right = 'C',\n> >           currency = 'INR',primary = 'NSE',multiplier = 1,\n> >           conId = 271618757)\n> > d<-reqContractDetails(tws,c)\n> >\n> > Warning message:\n> > In reqContractDetails(tws, c) : error in contract details\n> >\n> >\n> > here\n> > <https://misc.interactivebrokers.com/cstools/contract_info/v3.9/\n> index.php?action=Conid%20Info&wlId=IB&conid=271618719&lang=en>\n> > are the contract details. Please help me figure out what am I doing\n> wrong.\n>\n> Use 'twsContract' and specify only the local symbol, the\n> exchange, the currency and the security type:\n>\n>    require(\"IBrokers\")\n>    c <- twsContract(local = 'HDFC17JUN1780CE', sectype = \"OPT\",\n>                     currency = 'INR', exch = 'NSE',\n>                     include_expired = 1,\n>                     conId = \"\", symbol = \"\", primary = \"\", expiry = \"\",\n>                     strike = \"\", right = \"\", multiplier = \"\",\n>                     combo_legs_desc = \"\", comboleg = \"\", secIdType = \"\",\n>                     secId = \"\")\n>\n>    tws <- twsConnect()\n>    reqContractDetails(tws, c)\n>\n>    ## List of 18\n>    ##  $ version       : chr \"8\"\n>    ##  $ contract      :List of 16\n>    ##   ..$ conId          : chr \"271618757\"\n>    ##   ..$ symbol         : chr \"HDFC\"\n>    ##   ..$ sectype        : chr \"OPT\"\n>    ##   ..$ exch           : chr \"NSE\"\n>    ## [....]\n>\n> See also\n> https://github.com/enricoschumann/IButils#finding-the-contract-\n> specification\n>\n> --\n> Enrico Schumann\n> Lucerne, Switzerland\n> http://enricoschumann.net\n>\n\n\n\n-- \nRegards\nAmol\n+91-9897860992\n+91-8889676918\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thanks .That worked. :-)\n\nOn Mon, Jun 26, 2017 at 1:16 AM, Enrico Schumann <es at enricoschumann.net>\nwrote:\n\n> On Sun, 25 Jun 2017, amol gupta writes:\n>\n> > Hello,\n> >\n> > I have been trying to fetch",
+      "thread_id": "thread-6cd1f1c4f55c",
+      "thread_depth": 2,
+      "month": "2017-06"
+    },
+    {
+      "id": "msg-1fc8d0f2cd4b",
+      "message_id": "<595115b7.cb7e1c0a.98438.077e@mx.google.com>",
+      "from_name": "francesco.citta at gmail.com",
+      "from_email_hash": "c3bad1b5cfd724fc9307e11449e781c50e09df82263b7763114b15699f856de1",
+      "date": "2017-06-26T16:09:58+02:00",
+      "subject": "[R-SIG-Finance] (no subject)",
+      "subject_clean": "(no subject)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\nI found a problem when I tried to use the \"maxreturnPortfolio\" function of fPortfolio's package (3011.78 version) after setting a target risk.\nThis is my code:\ndefaultSpec=portfolioSpec()\nsetOptimize(defaultSpec)=\"risk\"\nsetTargetRisk(defaultSpec)=0.3\nlppData=100*LPP2005.RET\ndefaultData=portfolioData(lppData,spec=defaultSpec)\nmaxReturn=maxreturnPortfolio(defaultData,spec = defaultSpec,constraints = \"LongOnly\")\nprint(maxReturn)\n\nThe output is:\nTitle:\n MV Return Maximized Efficient Portfolio \n Estimator:         covEstimator \n Solver:            solveRquadprog \n Optimize:          maxReturn \n Constraints:       LongOnly \nPortfolio Weights:\n   SBI    SPI    SII    LMI    MPI    ALT \n0.3555 0.0000 0.0890 0.4893 0.0026 0.0636 \nCovariance Risk Budgets:\n   SBI    SPI    SII    LMI    MPI    ALT \n0.3555 0.0000 0.0890 0.4893 0.0026 0.0636 \nTarget Returns and Risks:\n  mean    Cov   CVaR    VaR \n0.0105 0.0986 0.2020 0.1558 \n\nThe Target Risk (0.3) is different than optimized risk (0.0986) and the portfolio weitghts are the same of the min risk problem. For this target volatility I will expect a return near 0.05.\nI tried to change the solver (setSolver(defaultSpec)=\"solveRsocp\") but I obtained this error message: Error in as.vector(data) : no method for coercing this S4 class to a vector\nCan you help me?\nThanks\nFrancesco Citta\n\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\nI found a problem when I tried to use the \"maxreturnPortfolio\" function of fPortfolio's package (3011.78 version) after setting a target risk.\nThis is my code:\ndefaultSpec=portfolioSpec()\nsetOp",
+      "thread_id": "thread-1fc8d0f2cd4b",
+      "thread_depth": 0,
+      "month": "2017-06"
+    },
+    {
+      "id": "msg-67ea078dfbaf",
+      "message_id": "<CAMnpynQwdwjAp2xjrbFVC53yjrdOdy4ZJCoWSo5vbk+KO9aiew@mail.gmail.com>",
+      "from_name": "Paul Maural",
+      "from_email_hash": "4844b57b7f873a16cc2c2c563a51c19d9eedc938b47a0f2628a16a824ab726de",
+      "date": "2017-06-26T21:13:28+05:30",
+      "subject": "[R-SIG-Finance] Estimate conditional SD with rugarch package for different series than what used for model estimation",
+      "subject_clean": "Estimate conditional SD with rugarch package for different series than what used for model estimation",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI am trying to find a way where I estimate a Garch moel parameters\nusing rugrach package based on some data set, and use those estimate\nto estimate conditional SD and predict for some different series.\n\nTo demonstrate, say I have below data set which to be used for\nparameter estimation :\n\nrequire(rugarch)\ndata(sp500ret)\n\nEstimationData = sp500ret[1000:2000, ,drop = FALSE]; head(EstimationData)\n\nfit = ugarchfit(ugarchspec(), EstimationData, solver = 'hybrid')\n\nNow I want to estimate conditional SD of ***full dataset** based on\nthe parameters available with 'fit'. I used below :\n\nsigma(fit)\n\nHowever it is giving consitional SD for EstimationData only.\n\nCan anyone please point me how to achieve that with rugarch?\n\nThanks for your time.",
+      "body_snippet": "Hi,\n\nI am trying to find a way where I estimate a Garch moel parameters\nusing rugrach package based on some data set, and use those estimate\nto estimate conditional SD and predict for some different s",
+      "thread_id": "thread-67ea078dfbaf",
+      "thread_depth": 0,
+      "month": "2017-06"
+    },
+    {
+      "id": "msg-01b9f2f5ed15",
+      "message_id": "<1498593698195.51634@stevens.edu>",
+      "from_name": "Alec Schmidt",
+      "from_email_hash": "b5fa4f912dd5f9147e83da9e745dfaae8b7e1c2f9429d7b0112a8df5b60693cd",
+      "date": "2017-06-27T20:01:33Z",
+      "subject": "[R-SIG-Finance] Yahoo Finance API change",
+      "subject_clean": "Yahoo Finance API change",
+      "in_reply_to": "<CAPPM_gQGOt9s1cbKQKpMapaQcezEMV_R0d7hMy_fX4jGVddrJQ@mail.gmail.com>",
+      "references": [
+        "<CAPPM_gREZFa4bNjTUXe0q9-_Qd7uyHkUX+2hwbCxMPDC+zkhaA@mail.gmail.com>",
+        "<CAPPM_gQGOt9s1cbKQKpMapaQcezEMV_R0d7hMy_fX4jGVddrJQ@mail.gmail.com>"
+      ],
+      "body_plain": "It is possible now to download long time series of prices from Yahoo manually. However, the 'old' APIs for quantmod and tseries do not work.  Is there chance new APIs will be implemented?\nAlec \n________________________________________\nFrom: R-SIG-Finance <r-sig-finance-bounces at r-project.org> on behalf of Joshua Ulrich <josh.m.ulrich at gmail.com>\nSent: Wednesday, May 17, 2017 5:45 PM\nTo: r-sig-finance\nSubject: Re: [R-SIG-Finance] Yahoo Finance API change\n\nSome notes from tinkering with a potential fix:\n\n- You need an established session with cookies to download data\n- The URL requires a 'crumb'\n- The columns of the CSV are in OHLCAV order (vs OHLCVA)\n- The OHL columns are already split-adjusted; the Close columns is not\n- Observations for some dates may be \"null\" in the CSV\n- The format of the CSV for split data changed\n\nThe the commit messages and diffs for details:\nhttps://github.com/joshuaulrich/quantmod/compare/157_yahoo_502\n\nOn Tue, May 16, 2017 at 8:11 PM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> Hi all,\n>\n> Just wanted to let the list know that Yahoo Finance changed their API\n> and most download functions will no longer work.  It looks like\n> getting it working will require creating and tracking a session with\n> the Yahoo Finance servers.\n>\n> If you're interested in quantmod::getSymbols.yahoo, you can track\n> progress on the fix on the GitHub issue I created:\n> https://github.com/joshuaulrich/quantmod/issues/157\n>\n> Best,\n> Josh\n>\n>\n> --\n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com\n> R/Finance 2017 | www.rinfinance.com\n\n\n\n--\nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2017 | www.rinfinance.com\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "It is possible now to download long time series of prices from Yahoo manually. However, the 'old' APIs for quantmod and tseries do not work.  Is there chance new APIs will be implemented?\nAlec \n______",
+      "thread_id": "thread-01b9f2f5ed15",
+      "thread_depth": 0,
+      "month": "2017-06"
+    },
+    {
+      "id": "msg-aa19731c75df",
+      "message_id": "<CAPPM_gTUZKaPdViALmosO6v9iR1VJhVTJg2cddKU0hrt9ELdGw@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2017-06-27T16:00:23-05:00",
+      "subject": "[R-SIG-Finance] Yahoo Finance API change",
+      "subject_clean": "Yahoo Finance API change",
+      "in_reply_to": "<1498593698195.51634@stevens.edu>",
+      "references": [
+        "<CAPPM_gREZFa4bNjTUXe0q9-_Qd7uyHkUX+2hwbCxMPDC+zkhaA@mail.gmail.com>",
+        "<CAPPM_gQGOt9s1cbKQKpMapaQcezEMV_R0d7hMy_fX4jGVddrJQ@mail.gmail.com>",
+        "<1498593698195.51634@stevens.edu>"
+      ],
+      "body_plain": "What versions are you referring to as \"old\"?  This was fixed in\nquantmod 0.4-9 and tseries 0.10-41.\n\nOr are you referring to this issue?\nhttps://github.com/joshuaulrich/quantmod/issues/174\n\nOn Tue, Jun 27, 2017 at 3:01 PM, Alec Schmidt <aschmid1 at stevens.edu> wrote:\n> It is possible now to download long time series of prices from Yahoo manually. However, the 'old' APIs for quantmod and tseries do not work.  Is there chance new APIs will be implemented?\n> Alec\n> ________________________________________\n> From: R-SIG-Finance <r-sig-finance-bounces at r-project.org> on behalf of Joshua Ulrich <josh.m.ulrich at gmail.com>\n> Sent: Wednesday, May 17, 2017 5:45 PM\n> To: r-sig-finance\n> Subject: Re: [R-SIG-Finance] Yahoo Finance API change\n>\n> Some notes from tinkering with a potential fix:\n>\n> - You need an established session with cookies to download data\n> - The URL requires a 'crumb'\n> - The columns of the CSV are in OHLCAV order (vs OHLCVA)\n> - The OHL columns are already split-adjusted; the Close columns is not\n> - Observations for some dates may be \"null\" in the CSV\n> - The format of the CSV for split data changed\n>\n> The the commit messages and diffs for details:\n> https://github.com/joshuaulrich/quantmod/compare/157_yahoo_502\n>\n> On Tue, May 16, 2017 at 8:11 PM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n>> Hi all,\n>>\n>> Just wanted to let the list know that Yahoo Finance changed their API\n>> and most download functions will no longer work.  It looks like\n>> getting it working will require creating and tracking a session with\n>> the Yahoo Finance servers.\n>>\n>> If you're interested in quantmod::getSymbols.yahoo, you can track\n>> progress on the fix on the GitHub issue I created:\n>> https://github.com/joshuaulrich/quantmod/issues/157\n>>\n>> Best,\n>> Josh\n>>\n>>\n>> --\n>> Joshua Ulrich  |  about.me/joshuaulrich\n>> FOSS Trading  |  www.fosstrading.com\n>> R/Finance 2017 | www.rinfinance.com\n>\n>\n>\n> --\n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com\n> R/Finance 2017 | www.rinfinance.com\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2017 | www.rinfinance.com",
+      "body_snippet": "What versions are you referring to as \"old\"?  This was fixed in\nquantmod 0.4-9 and tseries 0.10-41.\n\nOr are you referring to this issue?\nhttps://github.com/joshuaulrich/quantmod/issues/174\n\nOn Tue, Ju",
+      "thread_id": "thread-01b9f2f5ed15",
+      "thread_depth": 1,
+      "month": "2017-06"
+    },
+    {
+      "id": "msg-e5c8f6dce17e",
+      "message_id": "<1498598222539.84116@stevens.edu>",
+      "from_name": "Alec Schmidt",
+      "from_email_hash": "b5fa4f912dd5f9147e83da9e745dfaae8b7e1c2f9429d7b0112a8df5b60693cd",
+      "date": "2017-06-27T21:16:57Z",
+      "subject": "[R-SIG-Finance] Yahoo Finance API change",
+      "subject_clean": "Yahoo Finance API change",
+      "in_reply_to": "<CAPPM_gTUZKaPdViALmosO6v9iR1VJhVTJg2cddKU0hrt9ELdGw@mail.gmail.com>",
+      "references": [
+        "<CAPPM_gREZFa4bNjTUXe0q9-_Qd7uyHkUX+2hwbCxMPDC+zkhaA@mail.gmail.com>",
+        "<CAPPM_gQGOt9s1cbKQKpMapaQcezEMV_R0d7hMy_fX4jGVddrJQ@mail.gmail.com>",
+        "<1498593698195.51634@stevens.edu>",
+        "<CAPPM_gTUZKaPdViALmosO6v9iR1VJhVTJg2cddKU0hrt9ELdGw@mail.gmail.com>"
+      ],
+      "body_plain": "Thank you Josh. I did not know about quantmod 0.4-9.\n________________________________________\nFrom: Joshua Ulrich <josh.m.ulrich at gmail.com>\nSent: Tuesday, June 27, 2017 5:00 PM\nTo: Alec Schmidt\nCc: r-sig-finance\nSubject: Re: [R-SIG-Finance] Yahoo Finance API change\n\nWhat versions are you referring to as \"old\"?  This was fixed in\nquantmod 0.4-9 and tseries 0.10-41.\n\nOr are you referring to this issue?\nhttps://github.com/joshuaulrich/quantmod/issues/174\n\nOn Tue, Jun 27, 2017 at 3:01 PM, Alec Schmidt <aschmid1 at stevens.edu> wrote:\n> It is possible now to download long time series of prices from Yahoo manually. However, the 'old' APIs for quantmod and tseries do not work.  Is there chance new APIs will be implemented?\n> Alec\n> ________________________________________\n> From: R-SIG-Finance <r-sig-finance-bounces at r-project.org> on behalf of Joshua Ulrich <josh.m.ulrich at gmail.com>\n> Sent: Wednesday, May 17, 2017 5:45 PM\n> To: r-sig-finance\n> Subject: Re: [R-SIG-Finance] Yahoo Finance API change\n>\n> Some notes from tinkering with a potential fix:\n>\n> - You need an established session with cookies to download data\n> - The URL requires a 'crumb'\n> - The columns of the CSV are in OHLCAV order (vs OHLCVA)\n> - The OHL columns are already split-adjusted; the Close columns is not\n> - Observations for some dates may be \"null\" in the CSV\n> - The format of the CSV for split data changed\n>\n> The the commit messages and diffs for details:\n> https://github.com/joshuaulrich/quantmod/compare/157_yahoo_502\n>\n> On Tue, May 16, 2017 at 8:11 PM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n>> Hi all,\n>>\n>> Just wanted to let the list know that Yahoo Finance changed their API\n>> and most download functions will no longer work.  It looks like\n>> getting it working will require creating and tracking a session with\n>> the Yahoo Finance servers.\n>>\n>> If you're interested in quantmod::getSymbols.yahoo, you can track\n>> progress on the fix on the GitHub issue I created:\n>> https://github.com/joshuaulrich/quantmod/issues/157\n>>\n>> Best,\n>> Josh\n>>\n>>\n>> --\n>> Joshua Ulrich  |  about.me/joshuaulrich\n>> FOSS Trading  |  www.fosstrading.com\n>> R/Finance 2017 | www.rinfinance.com\n>\n>\n>\n> --\n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com\n> R/Finance 2017 | www.rinfinance.com\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n--\nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2017 | www.rinfinance.com",
+      "body_snippet": "Thank you Josh. I did not know about quantmod 0.4-9.\n________________________________________\nFrom: Joshua Ulrich <josh.m.ulrich at gmail.com>\nSent: Tuesday, June 27, 2017 5:00 PM\nTo: Alec Schmidt\nCc:",
+      "thread_id": "thread-01b9f2f5ed15",
+      "thread_depth": 2,
+      "month": "2017-06"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-8830a2885f67",
+      "subject": "does quantmod::adjustOHLC adust for dividends?",
+      "message_count": 6,
+      "participants": [
+        "Ilya Kipnis",
+        "Joshua Ulrich",
+        "Vivek Rao"
+      ],
+      "started": "2017-06-02T14:45:19+00:00",
+      "last_reply": "2017-06-02T10:34:41-05:00",
+      "root_message_id": "msg-8830a2885f67"
+    },
+    {
+      "id": "thread-d82b0bd8f302",
+      "subject": "Quantmod: Problem with Lo(LOW)",
+      "message_count": 2,
+      "participants": [
+        "Joshua Ulrich",
+        "Keith Sabol"
+      ],
+      "started": "2017-06-03T11:10:23-06:00",
+      "last_reply": "2017-06-03T12:15:41-05:00",
+      "root_message_id": "msg-d82b0bd8f302"
+    },
+    {
+      "id": "thread-550c41cce8e0",
+      "subject": "quadprogXT package",
+      "message_count": 1,
+      "participants": [
+        "Robert Harlow"
+      ],
+      "started": "2017-06-04T13:19:19-04:00",
+      "last_reply": "2017-06-04T13:19:19-04:00",
+      "root_message_id": "msg-550c41cce8e0"
+    },
+    {
+      "id": "thread-6f3e37719403",
+      "subject": "termstrc package",
+      "message_count": 1,
+      "participants": [
+        "Glenn Schultz"
+      ],
+      "started": "2017-06-08T01:52:14+00:00",
+      "last_reply": "2017-06-08T01:52:14+00:00",
+      "root_message_id": "msg-6f3e37719403"
+    },
+    {
+      "id": "thread-6cd1f1c4f55c",
+      "subject": "Fteching options data using package IBrokers and interactivebrokers",
+      "message_count": 3,
+      "participants": [
+        "Enrico Schumann",
+        "amol gupta"
+      ],
+      "started": "2017-06-25T13:39:43+05:30",
+      "last_reply": "2017-06-26T11:23:39+05:30",
+      "root_message_id": "msg-6cd1f1c4f55c"
+    },
+    {
+      "id": "thread-1fc8d0f2cd4b",
+      "subject": "(no subject)",
+      "message_count": 1,
+      "participants": [
+        "francesco.citta at gmail.com"
+      ],
+      "started": "2017-06-26T16:09:58+02:00",
+      "last_reply": "2017-06-26T16:09:58+02:00",
+      "root_message_id": "msg-1fc8d0f2cd4b"
+    },
+    {
+      "id": "thread-67ea078dfbaf",
+      "subject": "Estimate conditional SD with rugarch package for different series than what used for model estimation",
+      "message_count": 1,
+      "participants": [
+        "Paul Maural"
+      ],
+      "started": "2017-06-26T21:13:28+05:30",
+      "last_reply": "2017-06-26T21:13:28+05:30",
+      "root_message_id": "msg-67ea078dfbaf"
+    },
+    {
+      "id": "thread-01b9f2f5ed15",
+      "subject": "Yahoo Finance API change",
+      "message_count": 3,
+      "participants": [
+        "Alec Schmidt",
+        "Joshua Ulrich"
+      ],
+      "started": "2017-06-27T20:01:33+00:00",
+      "last_reply": "2017-06-27T21:16:57+00:00",
+      "root_message_id": "msg-01b9f2f5ed15"
+    }
+  ]
+}

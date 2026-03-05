@@ -1,0 +1,349 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2025-12",
+  "messages": [
+    {
+      "id": "msg-28f24e7e02f2",
+      "message_id": "<CAPZA_q+U5ObHY-2GyHKNAjbHOJYPRvX6r0QRxkHN1NeskuHOfA@mail.gmail.com>",
+      "from_name": "Andre Luiz Tietbohl Ramos",
+      "from_email_hash": "f1ee93083eaa5e3d9542ed0100870dcc6aa41f547a0a089c66b564f768a77107",
+      "date": "2025-12-08T08:36:35-03:00",
+      "subject": "[R-SIG-Finance] Custom colour on the plot background using chartSeries()",
+      "subject_clean": "Custom colour on the plot background using chartSeries()",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nI'm trying to get a custom colour on a plot background to no avail.\nI also tried via custom theme and via the rect function described below.\n\nmyTheme <- chart_theme()\nmyTheme$col$bg <- \"#6C7B8B\"   ## \"slategray4\" or\nmyTheme$panel.background$fill <- \"slategray4\"\n\n## Via set plot region color\nrect(\n    par(\"usr\")[1],\n    par(\"usr\")[3],\n    par(\"usr\")[2],\n    par(\"usr\")[4],\n    col = \"slategray4\"\n)\n\nThe solution below keeps the actual plot with white background for only its\nborders have the desired colour,\n\n chartSeries(PETR4.SA,\n                          theme = chartTheme('white', up.col = 'darkgreen',\nbg.col = \"darkgray\"),\n                          par(lwd = 2),\n                          type = \"line\",\n                          bar.type = \"hlc\",\n                          major.ticks='months',\n                          minor.ticks=TRUE,\n                          show.grid = TRUE,\n                          TA = NULL\n                          ) + theme(plot.background = element_rect(fill =\n\"darkgray\", color = \"darkgray\", size = 2))\n\nSuggestions?  Any help greatly appreciated.\n\nBest,\n\n--\nAndre Luiz Tietbohl Ramos, PhD\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\nI'm trying to get a custom colour on a plot background to no avail.\nI also tried via custom theme and via the rect function described below.\n\nmyTheme <- chart_theme()\nmyTheme$col$bg <- \"#6C7B8",
+      "thread_id": "thread-28f24e7e02f2",
+      "thread_depth": 0,
+      "month": "2025-12"
+    },
+    {
+      "id": "msg-f8adcc28f4b6",
+      "message_id": "<CAOTSzfm+JqSxVSNvh0XwaizniLUQe1_jC1HwA6xszdFSNyVjEQ@mail.gmail.com>",
+      "from_name": "Anatoly Schmidt",
+      "from_email_hash": "097c2920dd87375ae37269cc5aba0cea334181958197c8158732af601a3b49d2",
+      "date": "2025-12-17T17:16:34-05:00",
+      "subject": "[R-SIG-Finance] Skipping non-convergent GARCH run within a loop",
+      "subject_clean": "Skipping non-convergent GARCH run within a loop",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I'm wondering if there is an option to skip a non-convergent combo of garch\ninput parameters within the loop upon different parameter values.\nI thought something like\nif(convergence(ugarchfit(GARCHspec, solver=\"hybrid\", returns)) != \"0\") {\n      print(\"NA\")\n      next\n}\nIt did not give an error for the runs with 'good' parameters. But in case\nof a 'bad' parameter combo, I got the following:\n\nerror in evaluating the argument 'object' in selecting a method for\nfunction 'convergence': object 'B' not found\n\nThanks much, Alec\n\n-- \nAnatoly Schmidt\nAdjunct Professor, Finance and Risk Engineering, NYU Tandon School\nhttps://www.linkedin.com/in/alec-schmidt-9a761716/\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I'm wondering if there is an option to skip a non-convergent combo of garch\ninput parameters within the loop upon different parameter values.\nI thought something like\nif(convergence(ugarchfit(GARCHspe",
+      "thread_id": "thread-f8adcc28f4b6",
+      "thread_depth": 0,
+      "month": "2025-12"
+    },
+    {
+      "id": "msg-541c87a141fe",
+      "message_id": "<EFA60067-0F99-41BD-B9AA-43E4D16FE74D@4dscape.com>",
+      "from_name": "Alexios Galanos",
+      "from_email_hash": "a96d1f9bc31603cc8b7738f0d9a0b72c41ec7e0b943e1806c497adc2018497a3",
+      "date": "2025-12-18T09:28:13+09:00",
+      "subject": "[R-SIG-Finance] Skipping non-convergent GARCH run within a loop",
+      "subject_clean": "Skipping non-convergent GARCH run within a loop",
+      "in_reply_to": "<CAOTSzfm+JqSxVSNvh0XwaizniLUQe1_jC1HwA6xszdFSNyVjEQ@mail.gmail.com>",
+      "references": [
+        "<CAOTSzfm+JqSxVSNvh0XwaizniLUQe1_jC1HwA6xszdFSNyVjEQ@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Anatoly, try wrapping it in a ?try/catch? function. Additionally, I suggest you switch to tsgarch. rugarch is in minimal maintenance mode it?s the intention to slowly transition everyone to use the new package. With the exception of a few models/features, there is little missing from tsgarch and it is a more robust/modern GARCH package.\n\nAlexios\n\n> On Dec 18, 2025, at 07:17, Anatoly Schmidt <as8098 at nyu.edu> wrote:\n> \n> ?I'm wondering if there is an option to skip a non-convergent combo of garch\n> input parameters within the loop upon different parameter values.\n> I thought something like\n> if(convergence(ugarchfit(GARCHspec, solver=\"hybrid\", returns)) != \"0\") {\n>      print(\"NA\")\n>      next\n> }\n> It did not give an error for the runs with 'good' parameters. But in case\n> of a 'bad' parameter combo, I got the following:\n> \n> error in evaluating the argument 'object' in selecting a method for\n> function 'convergence': object 'B' not found\n> \n> Thanks much, Alec\n> \n> --\n> Anatoly Schmidt\n> Adjunct Professor, Finance and Risk Engineering, NYU Tandon School\n> https://www.linkedin.com/in/alec-schmidt-9a761716/\n> \n>    [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Hi Anatoly, try wrapping it in a ?try/catch? function. Additionally, I suggest you switch to tsgarch. rugarch is in minimal maintenance mode it?s the intention to slowly transition everyone to use the",
+      "thread_id": "thread-f8adcc28f4b6",
+      "thread_depth": 1,
+      "month": "2025-12"
+    },
+    {
+      "id": "msg-73b152484ac9",
+      "message_id": "<CAOTSzfkAyh_GxEqRKBMEYFLERsJFG+NQTzVfeED-7uM7cS7FcA@mail.gmail.com>",
+      "from_name": "Anatoly Schmidt",
+      "from_email_hash": "097c2920dd87375ae37269cc5aba0cea334181958197c8158732af601a3b49d2",
+      "date": "2025-12-17T20:33:12-05:00",
+      "subject": "[R-SIG-Finance] Skipping non-convergent GARCH run within a loop",
+      "subject_clean": "Skipping non-convergent GARCH run within a loop",
+      "in_reply_to": "<EFA60067-0F99-41BD-B9AA-43E4D16FE74D@4dscape.com>",
+      "references": [
+        "<CAOTSzfm+JqSxVSNvh0XwaizniLUQe1_jC1HwA6xszdFSNyVjEQ@mail.gmail.com>",
+        "<EFA60067-0F99-41BD-B9AA-43E4D16FE74D@4dscape.com>"
+      ],
+      "body_plain": "Thank you Alexios.\nBefore I got your reply, I checked ChatGPT. One of its solutions was the\none I tried and reported below its failure. But another was:\n\ntry(fit <- ugarchfit(GARCHspec, solver=\"hybrid\", returns))\n    if(inherits(fit, \"try-error\")){\n      message(\"  --> fit failed (error). Skipping.\")\n      next\n    }\nAnd it works! Surprisingly, I never get the message \"fit failed (error).\nSkipping\".\nInstead, I have the system message\nError in robustvcv(fun = f, pars = ipars[estidx, 1], nlag = nlag, hess =\nfit$hessian, : object 'B' not found\n\n(which I guess points at switching to another solver)\n\nor\nError : $ operator is invalid for atomic vectors\n\nbut then the process continued with other parameters.\n\nCheers, Alec\n\n\nOn Wed, Dec 17, 2025 at 7:28?PM Alexios Galanos <alexios at 4dscape.com> wrote:\n\n> Hi Anatoly, try wrapping it in a ?try/catch? function. Additionally, I\n> suggest you switch to tsgarch. rugarch is in minimal maintenance mode it?s\n> the intention to slowly transition everyone to use the new package. With\n> the exception of a few models/features, there is little missing from\n> tsgarch and it is a more robust/modern GARCH package.\n>\n> Alexios\n>\n> > On Dec 18, 2025, at 07:17, Anatoly Schmidt <as8098 at nyu.edu> wrote:\n> >\n> > ?I'm wondering if there is an option to skip a non-convergent combo of\n> garch\n> > input parameters within the loop upon different parameter values.\n> > I thought something like\n> > if(convergence(ugarchfit(GARCHspec, solver=\"hybrid\", returns)) != \"0\") {\n> >      print(\"NA\")\n> >      next\n> > }\n> > It did not give an error for the runs with 'good' parameters. But in case\n> > of a 'bad' parameter combo, I got the following:\n> >\n> > error in evaluating the argument 'object' in selecting a method for\n> > function 'convergence': object 'B' not found\n> >\n> > Thanks much, Alec\n> >\n> > --\n> > Anatoly Schmidt\n> > Adjunct Professor, Finance and Risk Engineering, NYU Tandon School\n> >\n> https://urldefense.proofpoint.com/v2/url?u=https-3A__www.linkedin.com_in_alec-2Dschmidt-2D9a761716_&d=DwIFaQ&c=slrrB7dE8n7gBJbeO0g-IQ&r=CPekRlIiK6v83hOL1MBVGQ&m=z7JjOM861jrHuHRwto8z69jfs02lutlHGQzgMwPUXXJxJaNXKUmFwvLnTfS4HCRs&s=v3bFfvL5vv7OGPOY8aI2-gvB5C0EY9kSZMkdwgAAi9A&e=\n> >\n> >    [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> >\n> https://urldefense.proofpoint.com/v2/url?u=https-3A__stat.ethz.ch_mailman_listinfo_r-2Dsig-2Dfinance&d=DwIFaQ&c=slrrB7dE8n7gBJbeO0g-IQ&r=CPekRlIiK6v83hOL1MBVGQ&m=z7JjOM861jrHuHRwto8z69jfs02lutlHGQzgMwPUXXJxJaNXKUmFwvLnTfS4HCRs&s=3B4nRdRsIxyJWDtSQUmiyJyUmDBmG1wuoWPxNQqSMV0&e=\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thank you Alexios.\nBefore I got your reply, I checked ChatGPT. One of its solutions was the\none I tried and reported below its failure. But another was:\n\ntry(fit <- ugarchfit(GARCHspec, solver=\"hybrid",
+      "thread_id": "thread-f8adcc28f4b6",
+      "thread_depth": 2,
+      "month": "2025-12"
+    },
+    {
+      "id": "msg-d479909d860c",
+      "message_id": "<CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>",
+      "from_name": "Andre Luiz Tietbohl Ramos",
+      "from_email_hash": "f1ee93083eaa5e3d9542ed0100870dcc6aa41f547a0a089c66b564f768a77107",
+      "date": "2025-12-28T18:51:24-03:00",
+      "subject": "[R-SIG-Finance] getSymbols() quantmod library doubt",
+      "subject_clean": "getSymbols() quantmod library doubt",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nI'm downloading quote data using the getSymbols() function.  It works very\nwell but downloads two additional columns for a few symbols,\nnamely _mean_log and _sd_log.\nTherefore, the traditional 5 column OHLCV data frame has two more columns\nin some symbols.\n\nI move all downloaded symbols to a list in order to ease some required\ncomputation.  At the same time, my routine depends on OHLCV data only.\nThus, I need to have a new list discarding the additional columns that\nexist in some symbols on the current list.  The symbols with the \"extra\"\ncolumns must be kept. However their additional columns must be removed.\n\nCould anyone suggest a solution to this problem, please?\n\nThanks in advance for any help,\n\n--\nAndre Luiz Tietbohl Ramos, PhD\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\nI'm downloading quote data using the getSymbols() function.  It works very\nwell but downloads two additional columns for a few symbols,\nnamely _mean_log and _sd_log.\nTherefore, the traditional",
+      "thread_id": "thread-d479909d860c",
+      "thread_depth": 0,
+      "month": "2025-12"
+    },
+    {
+      "id": "msg-020808e82b02",
+      "message_id": "<CAPZA_qK_eJ9NFTEyB53Vy1bJkuusL610QRJNTXV9Nek1Zio59Q@mail.gmail.com>",
+      "from_name": "Andre Luiz Tietbohl Ramos",
+      "from_email_hash": "f1ee93083eaa5e3d9542ed0100870dcc6aa41f547a0a089c66b564f768a77107",
+      "date": "2025-12-28T19:33:03-03:00",
+      "subject": "[R-SIG-Finance] getSymbols() quantmod library doubt - correct post",
+      "subject_clean": "getSymbols() quantmod library doubt - correct post",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nPlease disregard my previous message for it was wrong.  The correct one is\nbelow.\n\nI'm downloading quote data using the getSymbols() function.  It works very\nwell but it downloads two additional data frames with just one column for a\nfew of the symbols, namely _mean_log and _sd_log.\nThe traditional 5 column OHLCV data frames for each symbol remain ok.\nHowever there are more two data frames downloaded with one column in some\nsymbols.\n\nI move all downloaded symbols to a list in order to ease some required\ncomputation.  At the same time, my routine depends on OHLCV data only.\nThus, I need to have a new list discarding the new data frames with a\nsingle column that exist in some symbols on the current list.  These\nsymbols with the \"extra\" column must be removed from the list.\n\nCould anyone suggest a solution to this problem, please?\nI thought about using the ncol() function for each element on the list and\nkeep only the list elements with 5 columns.\n\nThanks in advance for any help,\n\n--\nAndre Luiz Tietbohl Ramos, PhD\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\nPlease disregard my previous message for it was wrong.  The correct one is\nbelow.\n\nI'm downloading quote data using the getSymbols() function.  It works very\nwell but it downloads two addition",
+      "thread_id": "thread-020808e82b02",
+      "thread_depth": 0,
+      "month": "2025-12"
+    },
+    {
+      "id": "msg-82026affb699",
+      "message_id": "<CAGgJW76xkM9x6jUAdfm2GLq06Y0GWd91YmJP8NqfmQ5Gikst8A@mail.gmail.com>",
+      "from_name": "Eric Berger",
+      "from_email_hash": "a8cbad1cbe12dc6d9a41580554fe01865e8d2a9c03c4539b810415f906f48958",
+      "date": "2025-12-29T08:17:36+02:00",
+      "subject": "[R-SIG-Finance] getSymbols() quantmod library doubt",
+      "subject_clean": "getSymbols() quantmod library doubt",
+      "in_reply_to": "<CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>",
+      "references": [
+        "<CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>"
+      ],
+      "body_plain": "library(quantmod)\n\nkeepohlc <- function(x) {\n    ohlc <- c(\".Open\",\".High\",\".Low\",\".Close\")\n    iV <- sapply(ohlc, \\(s) {grep(s,colnames(x))})\n    x[,iV]\n}\n\ngetSymbols(\"MSFT\")\n\nhead(MSFT)\n\n           MSFT.Open MSFT.High MSFT.Low MSFT.Close MSFT.Volume MSFT.Adjusted\n2007-01-03     29.91     30.25    29.40      29.86    76935100      21.12207\n2007-01-04     29.70     29.97    29.44      29.81    45774500      21.08670\n2007-01-05     29.63     29.75    29.45      29.64    44607200      20.96644\n2007-01-08     29.65     30.10    29.53      29.93    50220200      21.17159\n2007-01-09     30.00     30.18    29.73      29.96    44636600      21.19280\n2007-01-10     29.80     29.89    29.43      29.66    55017400      20.98060\n\nMSFT <- keepohlc(MSFT)\n\nhead(MSFT)\n\n           MSFT.Open MSFT.High MSFT.Low MSFT.Close\n2007-01-03     29.91     30.25    29.40      29.86\n2007-01-04     29.70     29.97    29.44      29.81\n2007-01-05     29.63     29.75    29.45      29.64\n2007-01-08     29.65     30.10    29.53      29.93\n2007-01-09     30.00     30.18    29.73      29.96\n2007-01-10     29.80     29.89    29.43      29.66\n\n\nOn Sun, Dec 28, 2025 at 11:51?PM Andre Luiz Tietbohl Ramos\n<andreltramos at gmail.com> wrote:\n>\n> Hello,\n>\n> I'm downloading quote data using the getSymbols() function.  It works very\n> well but downloads two additional columns for a few symbols,\n> namely _mean_log and _sd_log.\n> Therefore, the traditional 5 column OHLCV data frame has two more columns\n> in some symbols.\n>\n> I move all downloaded symbols to a list in order to ease some required\n> computation.  At the same time, my routine depends on OHLCV data only.\n> Thus, I need to have a new list discarding the additional columns that\n> exist in some symbols on the current list.  The symbols with the \"extra\"\n> columns must be kept. However their additional columns must be removed.\n>\n> Could anyone suggest a solution to this problem, please?\n>\n> Thanks in advance for any help,\n>\n> --\n> Andre Luiz Tietbohl Ramos, PhD\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "library(quantmod)\n\nkeepohlc <- function(x) {\n    ohlc <- c(\".Open\",\".High\",\".Low\",\".Close\")\n    iV <- sapply(ohlc, \\(s) {grep(s,colnames(x))})\n    x[,iV]\n}\n\ngetSymbols(\"MSFT\")\n\nhead(MSFT)\n\n           ",
+      "thread_id": "thread-d479909d860c",
+      "thread_depth": 1,
+      "month": "2025-12"
+    },
+    {
+      "id": "msg-767ef78f4861",
+      "message_id": "<CAPZA_q+Q_ues9NkLaKefG5LgcAv=6m6rr7VxdK5r+zqN+NEtog@mail.gmail.com>",
+      "from_name": "Andre Luiz Tietbohl Ramos",
+      "from_email_hash": "f1ee93083eaa5e3d9542ed0100870dcc6aa41f547a0a089c66b564f768a77107",
+      "date": "2025-12-29T09:38:20-03:00",
+      "subject": "[R-SIG-Finance] getSymbols() quantmod library doubt",
+      "subject_clean": "getSymbols() quantmod library doubt",
+      "in_reply_to": "<CAGgJW76xkM9x6jUAdfm2GLq06Y0GWd91YmJP8NqfmQ5Gikst8A@mail.gmail.com>",
+      "references": [
+        "<CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>",
+        "<CAGgJW76xkM9x6jUAdfm2GLq06Y0GWd91YmJP8NqfmQ5Gikst8A@mail.gmail.com>"
+      ],
+      "body_plain": "Hello Eric,\n\nThanks for the reply!  Your answer was correct however the my problem was\nnot explained correctly, my apologies to everyone.\nThe issue is that once a list is built from the symbols that were download\na mixed type list is formed, see below.\n\nR> class(tickers$VALE3.SA_sd_log)\n[1] \"numeric\"\nR> class(tickers$VALE3.SA)\n[1] \"xts\" \"zoo\"\nR> R>\n\nThe VALE3 ticker has another list element as well: VALE3.SA_mean_log.\nThis happens with a few of the symbols only thus the issue at hand seems to\nbe removing the list \"numeric\" type elements.\n\nTIA,\n\n--\nAndr? Luiz Tietbohl Ramos, PhD.\n\n\nEm seg., 29 de dez. de 2025 ?s 03:18, Eric Berger <ericjberger at gmail.com>\nescreveu:\n\n> library(quantmod)\n>\n> keepohlc <- function(x) {\n>     ohlc <- c(\".Open\",\".High\",\".Low\",\".Close\")\n>     iV <- sapply(ohlc, \\(s) {grep(s,colnames(x))})\n>     x[,iV]\n> }\n>\n> getSymbols(\"MSFT\")\n>\n> head(MSFT)\n>\n>            MSFT.Open MSFT.High MSFT.Low MSFT.Close MSFT.Volume\n> MSFT.Adjusted\n> 2007-01-03     29.91     30.25    29.40      29.86    76935100\n> 21.12207\n> 2007-01-04     29.70     29.97    29.44      29.81    45774500\n> 21.08670\n> 2007-01-05     29.63     29.75    29.45      29.64    44607200\n> 20.96644\n> 2007-01-08     29.65     30.10    29.53      29.93    50220200\n> 21.17159\n> 2007-01-09     30.00     30.18    29.73      29.96    44636600\n> 21.19280\n> 2007-01-10     29.80     29.89    29.43      29.66    55017400\n> 20.98060\n>\n> MSFT <- keepohlc(MSFT)\n>\n> head(MSFT)\n>\n>            MSFT.Open MSFT.High MSFT.Low MSFT.Close\n> 2007-01-03     29.91     30.25    29.40      29.86\n> 2007-01-04     29.70     29.97    29.44      29.81\n> 2007-01-05     29.63     29.75    29.45      29.64\n> 2007-01-08     29.65     30.10    29.53      29.93\n> 2007-01-09     30.00     30.18    29.73      29.96\n> 2007-01-10     29.80     29.89    29.43      29.66\n>\n>\n> On Sun, Dec 28, 2025 at 11:51?PM Andre Luiz Tietbohl Ramos\n> <andreltramos at gmail.com> wrote:\n> >\n> > Hello,\n> >\n> > I'm downloading quote data using the getSymbols() function.  It works\n> very\n> > well but downloads two additional columns for a few symbols,\n> > namely _mean_log and _sd_log.\n> > Therefore, the traditional 5 column OHLCV data frame has two more columns\n> > in some symbols.\n> >\n> > I move all downloaded symbols to a list in order to ease some required\n> > computation.  At the same time, my routine depends on OHLCV data only.\n> > Thus, I need to have a new list discarding the additional columns that\n> > exist in some symbols on the current list.  The symbols with the \"extra\"\n> > columns must be kept. However their additional columns must be removed.\n> >\n> > Could anyone suggest a solution to this problem, please?\n> >\n> > Thanks in advance for any help,\n> >\n> > --\n> > Andre Luiz Tietbohl Ramos, PhD\n> >\n> >         [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello Eric,\n\nThanks for the reply!  Your answer was correct however the my problem was\nnot explained correctly, my apologies to everyone.\nThe issue is that once a list is built from the symbols that w",
+      "thread_id": "thread-d479909d860c",
+      "thread_depth": 2,
+      "month": "2025-12"
+    },
+    {
+      "id": "msg-8055ecdcd14b",
+      "message_id": "<87tsx9ifn9.fsf@enricoschumann.net>",
+      "from_name": "Enrico Schumann",
+      "from_email_hash": "42e3fbcaa04e968726f4c1d1a69e34143bdbc62b403d112ba1d3712256bacb88",
+      "date": "2025-12-29T14:25:30+01:00",
+      "subject": "[R-SIG-Finance] getSymbols() quantmod library doubt",
+      "subject_clean": "getSymbols() quantmod library doubt",
+      "in_reply_to": "<CAPZA_q+Q_ues9NkLaKefG5LgcAv=6m6rr7VxdK5r+zqN+NEtog@mail.gmail.com> (Andre Luiz Tietbohl Ramos's message of \"Mon, 29 Dec 2025 09:38:20 -0300\")",
+      "references": [
+        "<CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>",
+        "<CAGgJW76xkM9x6jUAdfm2GLq06Y0GWd91YmJP8NqfmQ5Gikst8A@mail.gmail.com>",
+        "<CAPZA_q+Q_ues9NkLaKefG5LgcAv=6m6rr7VxdK5r+zqN+NEtog@mail.gmail.com>"
+      ],
+      "body_plain": "On Mon, 29 Dec 2025, Andre Luiz Tietbohl Ramos writes:\n\n> Hello Eric,\n>\n> Thanks for the reply!  Your answer was correct however the my problem was\n> not explained correctly, my apologies to everyone.\n> The issue is that once a list is built from the symbols that were download\n> a mixed type list is formed, see below.\n>\n> R> class(tickers$VALE3.SA_sd_log)\n> [1] \"numeric\"\n> R> class(tickers$VALE3.SA)\n> [1] \"xts\" \"zoo\"\n> R> R>\n>\n> The VALE3 ticker has another list element as well: VALE3.SA_mean_log.\n> This happens with a few of the symbols only thus the issue at hand seems to\n> be removing the list \"numeric\" type elements.\n>\n> TIA,\n>\n> --\n> Andr? Luiz Tietbohl Ramos, PhD.\n>\n\nCould you please post a small, reproducible example (in plain\ntext)?  Otherwise, it will be hard so see where your problem\nlies.\n\n\nkind regards\n    Enrico\n\n\n> Em seg., 29 de dez. de 2025 ?s 03:18, Eric Berger <ericjberger at gmail.com>\n> escreveu:\n>\n>> library(quantmod)\n>>\n>> keepohlc <- function(x) {\n>>     ohlc <- c(\".Open\",\".High\",\".Low\",\".Close\")\n>>     iV <- sapply(ohlc, \\(s) {grep(s,colnames(x))})\n>>     x[,iV]\n>> }\n>>\n>> getSymbols(\"MSFT\")\n>>\n>> head(MSFT)\n>>\n>>            MSFT.Open MSFT.High MSFT.Low MSFT.Close MSFT.Volume\n>> MSFT.Adjusted\n>> 2007-01-03     29.91     30.25    29.40      29.86    76935100\n>> 21.12207\n>> 2007-01-04     29.70     29.97    29.44      29.81    45774500\n>> 21.08670\n>> 2007-01-05     29.63     29.75    29.45      29.64    44607200\n>> 20.96644\n>> 2007-01-08     29.65     30.10    29.53      29.93    50220200\n>> 21.17159\n>> 2007-01-09     30.00     30.18    29.73      29.96    44636600\n>> 21.19280\n>> 2007-01-10     29.80     29.89    29.43      29.66    55017400\n>> 20.98060\n>>\n>> MSFT <- keepohlc(MSFT)\n>>\n>> head(MSFT)\n>>\n>>            MSFT.Open MSFT.High MSFT.Low MSFT.Close\n>> 2007-01-03     29.91     30.25    29.40      29.86\n>> 2007-01-04     29.70     29.97    29.44      29.81\n>> 2007-01-05     29.63     29.75    29.45      29.64\n>> 2007-01-08     29.65     30.10    29.53      29.93\n>> 2007-01-09     30.00     30.18    29.73      29.96\n>> 2007-01-10     29.80     29.89    29.43      29.66\n>>\n>>\n>> On Sun, Dec 28, 2025 at 11:51?PM Andre Luiz Tietbohl Ramos\n>> <andreltramos at gmail.com> wrote:\n>> >\n>> > Hello,\n>> >\n>> > I'm downloading quote data using the getSymbols() function.  It works\n>> very\n>> > well but downloads two additional columns for a few symbols,\n>> > namely _mean_log and _sd_log.\n>> > Therefore, the traditional 5 column OHLCV data frame has two more columns\n>> > in some symbols.\n>> >\n>> > I move all downloaded symbols to a list in order to ease some required\n>> > computation.  At the same time, my routine depends on OHLCV data only.\n>> > Thus, I need to have a new list discarding the additional columns that\n>> > exist in some symbols on the current list.  The symbols with the \"extra\"\n>> > columns must be kept. However their additional columns must be removed.\n>> >\n>> > Could anyone suggest a solution to this problem, please?\n>> >\n>> > Thanks in advance for any help,\n>> >\n>> > --\n>> > Andre Luiz Tietbohl Ramos, PhD\n>> >\n\n-- \nEnrico Schumann\nLucerne, Switzerland\nhttps://enricoschumann.net",
+      "body_snippet": "On Mon, 29 Dec 2025, Andre Luiz Tietbohl Ramos writes:\n\n> Hello Eric,\n>\n> Thanks for the reply!  Your answer was correct however the my problem was\n> not explained correctly, my apologies to everyone.",
+      "thread_id": "thread-d479909d860c",
+      "thread_depth": 3,
+      "month": "2025-12"
+    },
+    {
+      "id": "msg-440d0e7a3f24",
+      "message_id": "<CAPZA_qLBVwRgjx6a2VvdNSX+af8KCDpFxTiFhhNrPKTNMg1kpA@mail.gmail.com>",
+      "from_name": "Andre Luiz Tietbohl Ramos",
+      "from_email_hash": "f1ee93083eaa5e3d9542ed0100870dcc6aa41f547a0a089c66b564f768a77107",
+      "date": "2025-12-29T11:23:22-03:00",
+      "subject": "[R-SIG-Finance] getSymbols() quantmod library doubt",
+      "subject_clean": "getSymbols() quantmod library doubt",
+      "in_reply_to": "<87tsx9ifn9.fsf@enricoschumann.net>",
+      "references": [
+        "<CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>",
+        "<CAGgJW76xkM9x6jUAdfm2GLq06Y0GWd91YmJP8NqfmQ5Gikst8A@mail.gmail.com>",
+        "<CAPZA_q+Q_ues9NkLaKefG5LgcAv=6m6rr7VxdK5r+zqN+NEtog@mail.gmail.com>",
+        "<87tsx9ifn9.fsf@enricoschumann.net>"
+      ],
+      "body_plain": "Hello,\n\nThanks for the interest, Enrico. It is below.\nR> R> tickers\n \"AALR3.SA\"  \"AGRO3.SA\"  \"ALPA3.SA\"  \"ALPA4.SA\"  \"ALUP11.SA\" \"AMER3.SA\"  \"\nAMOB3.SA\"  \"ANIM3.SA\"  \"ASAI3.SA\"  \"AURE3.SA\"  \"AZUL4.SA\"  \"B3SA3.SA\" \"\nBAUH4.SA\"  \"BAZA3.SA\"  \"BBAS3.SA\"  \"BBDC4.SA\"  \"BBSE3.SA\"  \"BDLL4.SA\"  \"\nBEES3.SA\"  \"BIDU34.SA\" \"BLAU3.SA\"  \"BMOB3.SA\"  \"BPAC11.SA\" \"BPAN4.SA\" \"\nBRAP4.SA\"  \"BRFS3.SA\"  \"BRKM5.SA\"  \"BRSR6.SA\"  \"BRST3.SA\"  \"BSLI3.SA\"  \"\nCBAV3.SA\"  \"CEAB3.SA\"  \"CEBR3.SA\"  \"CMIG3.SA\"  \"CMIG4.SA\"  \"CMIN3.SA\" \"\nCOPH34.SA\" \"CPFE3.SA\"  \"CPLE6.SA\"  \"CRPG5.SA\"  \"CSAN3.SA\"  \"CSED3.SA\"  \"\nCSMG3.SA\"  \"CSNA3.SA\"  \"CSUD3.SA\"  \"CXSE3.SA\"  \"CYRE3.SA\"\n...\nR>\nR> getSymbols(tickers, src = \"yahoo\", from = start, to = end, maxgap = 10,\nauto.asign = TRUE)\nR>\nR> tickers <- mget(ls(pattern = paste(tickers, collapse = \"|\")))\nR>\nR> names(tickers)\n  [1] \"AALR3.SA\"              \"AFHI11.SA\"             \"AGRO3.SA\"\n   \"ALPA3.SA\"              \"ALPA4.SA\"              \"ALUP11.SA\"\n  [7] \"AMER3.SA\"              \"AMOB3.SA\"              \"ANIM3.SA\"\n   \"ASAI3.SA\"              \"AURE3.SA\"              \"AZUL4.SA\"\n [13] \"B3SA3.SA\"              \"BAUH4.SA\"              \"BAZA3.SA\"\n   *\"BBAS3.SA <http://BBAS3.SA>\"              \"BBAS3.SA_log_returns\"\n \"BBAS3.SA_mean_log\"   *\n [19] \"BBAS3.SA_sd_log\"       \"BBDC4.SA\"              \"BBSE3.SA\"\n \"BBSE3.SA_log_returns\"  \"BBSE3.SA_mean_log\"     \"BBSE3.SA_sd_log\"\n [25] \"BDLL4.SA\"              \"BEES3.SA\"              \"BIDU34.SA\"\n  \"BLAU3.SA\"              \"BMOB3.SA\"              \"BPAC11.SA\"\n [31] \"BPAN4.SA\"              \"BRAP4.SA\"              \"BRFS3.SA\"\n   \"BRKM5.SA\"              \"BRSR6.SA\"              \"BRST3.SA\"\n...\nR> class(tickers$BBAS3.SA)\n[1] \"xts\" \"zoo\"\nR> colnames(tickers$BBAS3.SA)\n[1] \"BBAS3.SA.Open\"     \"BBAS3.SA.High\"     \"BBAS3.SA.Low\"\n \"BBAS3.SA.Close\"    \"BBAS3.SA.Volume\"   \"BBAS3.SA.Adjusted\"\nR> class(tickers$BBAS3.SA_log_returns)\n[1] \"xts\" \"zoo\"\nR>  colnames(tickers$BBAS3.SA_log_returns)\n[1] \"daily.returns\"\nR> class(tickers$BBAS3.SA_mean_log)\n[1] \"numeric\"\nR> R> colnames(tickers$BBAS3.SA_mean_log)\nNULL  (as expected)\nR>\n\nTherefore the list I get from the mget operation above contains several\nelements with different types, which may include even _sd_ columns as well.\nMy objective is to get rid of the .SA suffix used for Brazilian stocks in\nall elements downloaded as well as their columns.  I chose to put\neverything in a list and operate on it.\n\nTIA,\n\n--\nAndr? Luiz Tietbohl Ramos, PhD.\n\n\nEm seg., 29 de dez. de 2025 ?s 10:25, Enrico Schumann <es at enricoschumann.net>\nescreveu:\n\n> On Mon, 29 Dec 2025, Andre Luiz Tietbohl Ramos writes:\n>\n> > Hello Eric,\n> >\n> > Thanks for the reply!  Your answer was correct however the my problem was\n> > not explained correctly, my apologies to everyone.\n> > The issue is that once a list is built from the symbols that were\n> download\n> > a mixed type list is formed, see below.\n> >\n> > R> class(tickers$VALE3.SA_sd_log)\n> > [1] \"numeric\"\n> > R> class(tickers$VALE3.SA)\n> > [1] \"xts\" \"zoo\"\n> > R> R>\n> >\n> > The VALE3 ticker has another list element as well: VALE3.SA_mean_log.\n> > This happens with a few of the symbols only thus the issue at hand seems\n> to\n> > be removing the list \"numeric\" type elements.\n> >\n> > TIA,\n> >\n> > --\n> > Andr? Luiz Tietbohl Ramos, PhD.\n> >\n>\n> Could you please post a small, reproducible example (in plain\n> text)?  Otherwise, it will be hard so see where your problem\n> lies.\n>\n>\n> kind regards\n>     Enrico\n>\n>\n> > Em seg., 29 de dez. de 2025 ?s 03:18, Eric Berger <ericjberger at gmail.com\n> >\n> > escreveu:\n> >\n> >> library(quantmod)\n> >>\n> >> keepohlc <- function(x) {\n> >>     ohlc <- c(\".Open\",\".High\",\".Low\",\".Close\")\n> >>     iV <- sapply(ohlc, \\(s) {grep(s,colnames(x))})\n> >>     x[,iV]\n> >> }\n> >>\n> >> getSymbols(\"MSFT\")\n> >>\n> >> head(MSFT)\n> >>\n> >>            MSFT.Open MSFT.High MSFT.Low MSFT.Close MSFT.Volume\n> >> MSFT.Adjusted\n> >> 2007-01-03     29.91     30.25    29.40      29.86    76935100\n> >> 21.12207\n> >> 2007-01-04     29.70     29.97    29.44      29.81    45774500\n> >> 21.08670\n> >> 2007-01-05     29.63     29.75    29.45      29.64    44607200\n> >> 20.96644\n> >> 2007-01-08     29.65     30.10    29.53      29.93    50220200\n> >> 21.17159\n> >> 2007-01-09     30.00     30.18    29.73      29.96    44636600\n> >> 21.19280\n> >> 2007-01-10     29.80     29.89    29.43      29.66    55017400\n> >> 20.98060\n> >>\n> >> MSFT <- keepohlc(MSFT)\n> >>\n> >> head(MSFT)\n> >>\n> >>            MSFT.Open MSFT.High MSFT.Low MSFT.Close\n> >> 2007-01-03     29.91     30.25    29.40      29.86\n> >> 2007-01-04     29.70     29.97    29.44      29.81\n> >> 2007-01-05     29.63     29.75    29.45      29.64\n> >> 2007-01-08     29.65     30.10    29.53      29.93\n> >> 2007-01-09     30.00     30.18    29.73      29.96\n> >> 2007-01-10     29.80     29.89    29.43      29.66\n> >>\n> >>\n> >> On Sun, Dec 28, 2025 at 11:51?PM Andre Luiz Tietbohl Ramos\n> >> <andreltramos at gmail.com> wrote:\n> >> >\n> >> > Hello,\n> >> >\n> >> > I'm downloading quote data using the getSymbols() function.  It works\n> >> very\n> >> > well but downloads two additional columns for a few symbols,\n> >> > namely _mean_log and _sd_log.\n> >> > Therefore, the traditional 5 column OHLCV data frame has two more\n> columns\n> >> > in some symbols.\n> >> >\n> >> > I move all downloaded symbols to a list in order to ease some required\n> >> > computation.  At the same time, my routine depends on OHLCV data only.\n> >> > Thus, I need to have a new list discarding the additional columns that\n> >> > exist in some symbols on the current list.  The symbols with the\n> \"extra\"\n> >> > columns must be kept. However their additional columns must be\n> removed.\n> >> >\n> >> > Could anyone suggest a solution to this problem, please?\n> >> >\n> >> > Thanks in advance for any help,\n> >> >\n> >> > --\n> >> > Andre Luiz Tietbohl Ramos, PhD\n> >> >\n>\n> --\n> Enrico Schumann\n> Lucerne, Switzerland\n> https://enricoschumann.net\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\nThanks for the interest, Enrico. It is below.\nR> R> tickers\n \"AALR3.SA\"  \"AGRO3.SA\"  \"ALPA3.SA\"  \"ALPA4.SA\"  \"ALUP11.SA\" \"AMER3.SA\"  \"\nAMOB3.SA\"  \"ANIM3.SA\"  \"ASAI3.SA\"  \"AURE3.SA\"  \"AZUL4.SA\"",
+      "thread_id": "thread-d479909d860c",
+      "thread_depth": 4,
+      "month": "2025-12"
+    },
+    {
+      "id": "msg-6fb55c68c4ea",
+      "message_id": "<CAGgJW76vTXhx27u5xEkWoHEf4AxX0qpsZ+gFkJydj4Yb2H6uNw@mail.gmail.com>",
+      "from_name": "Eric Berger",
+      "from_email_hash": "a8cbad1cbe12dc6d9a41580554fe01865e8d2a9c03c4539b810415f906f48958",
+      "date": "2025-12-29T17:05:37+02:00",
+      "subject": "[R-SIG-Finance] getSymbols() quantmod library doubt",
+      "subject_clean": "getSymbols() quantmod library doubt",
+      "in_reply_to": "<CAPZA_qLBVwRgjx6a2VvdNSX+af8KCDpFxTiFhhNrPKTNMg1kpA@mail.gmail.com>",
+      "references": [
+        "<CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>",
+        "<CAGgJW76xkM9x6jUAdfm2GLq06Y0GWd91YmJP8NqfmQ5Gikst8A@mail.gmail.com>",
+        "<CAPZA_q+Q_ues9NkLaKefG5LgcAv=6m6rr7VxdK5r+zqN+NEtog@mail.gmail.com>",
+        "<87tsx9ifn9.fsf@enricoschumann.net>",
+        "<CAPZA_qLBVwRgjx6a2VvdNSX+af8KCDpFxTiFhhNrPKTNMg1kpA@mail.gmail.com>"
+      ],
+      "body_plain": "I am not able to reproduce your problem but I may have a solution that\nwill help.\nThe result of my\nnames(tickers)\ndoesn't have those strange objects.\nIn any case, try this workaround. Replace\n\ntickers <- mget(ls(pattern = paste(tickers, collapse = \"|\")))\n\nby\n\ntickers <- mget(ls(pattern = paste(paste(tickers,\"$\",sep=\"\"), collapse=\"|\")))\n\nHTH,\nEric\n\nOn Mon, Dec 29, 2025 at 4:23?PM Andre Luiz Tietbohl Ramos\n<andreltramos at gmail.com> wrote:\n>\n> Hello,\n>\n> Thanks for the interest, Enrico. It is below.\n> R> R> tickers\n>  \"AALR3.SA\"  \"AGRO3.SA\"  \"ALPA3.SA\"  \"ALPA4.SA\"  \"ALUP11.SA\" \"AMER3.SA\"  \"AMOB3.SA\"  \"ANIM3.SA\"  \"ASAI3.SA\"  \"AURE3.SA\"  \"AZUL4.SA\"  \"B3SA3.SA\" \"BAUH4.SA\"  \"BAZA3.SA\"  \"BBAS3.SA\"  \"BBDC4.SA\"  \"BBSE3.SA\"  \"BDLL4.SA\"  \"BEES3.SA\"  \"BIDU34.SA\" \"BLAU3.SA\"  \"BMOB3.SA\"  \"BPAC11.SA\" \"BPAN4.SA\" \"BRAP4.SA\"  \"BRFS3.SA\"  \"BRKM5.SA\"  \"BRSR6.SA\"  \"BRST3.SA\"  \"BSLI3.SA\"  \"CBAV3.SA\"  \"CEAB3.SA\"  \"CEBR3.SA\"  \"CMIG3.SA\"  \"CMIG4.SA\"  \"CMIN3.SA\" \"COPH34.SA\" \"CPFE3.SA\"  \"CPLE6.SA\"  \"CRPG5.SA\"  \"CSAN3.SA\"  \"CSED3.SA\"  \"CSMG3.SA\"  \"CSNA3.SA\"  \"CSUD3.SA\"  \"CXSE3.SA\"  \"CYRE3.SA\"\n> ...\n> R>\n> R> getSymbols(tickers, src = \"yahoo\", from = start, to = end, maxgap = 10, auto.asign = TRUE)\n> R>\n> R> tickers <- mget(ls(pattern = paste(tickers, collapse = \"|\")))\n> R>\n> R> names(tickers)\n>   [1] \"AALR3.SA\"              \"AFHI11.SA\"             \"AGRO3.SA\"              \"ALPA3.SA\"              \"ALPA4.SA\"              \"ALUP11.SA\"\n>   [7] \"AMER3.SA\"              \"AMOB3.SA\"              \"ANIM3.SA\"              \"ASAI3.SA\"              \"AURE3.SA\"              \"AZUL4.SA\"\n>  [13] \"B3SA3.SA\"              \"BAUH4.SA\"              \"BAZA3.SA\"              \"BBAS3.SA\"              \"BBAS3.SA_log_returns\"  \"BBAS3.SA_mean_log\"\n>  [19] \"BBAS3.SA_sd_log\"       \"BBDC4.SA\"              \"BBSE3.SA\"        \"BBSE3.SA_log_returns\"  \"BBSE3.SA_mean_log\"     \"BBSE3.SA_sd_log\"\n>  [25] \"BDLL4.SA\"              \"BEES3.SA\"              \"BIDU34.SA\"             \"BLAU3.SA\"              \"BMOB3.SA\"              \"BPAC11.SA\"\n>  [31] \"BPAN4.SA\"              \"BRAP4.SA\"              \"BRFS3.SA\"              \"BRKM5.SA\"              \"BRSR6.SA\"              \"BRST3.SA\"\n> ...\n> R> class(tickers$BBAS3.SA)\n> [1] \"xts\" \"zoo\"\n> R> colnames(tickers$BBAS3.SA)\n> [1] \"BBAS3.SA.Open\"     \"BBAS3.SA.High\"     \"BBAS3.SA.Low\"      \"BBAS3.SA.Close\"    \"BBAS3.SA.Volume\"   \"BBAS3.SA.Adjusted\"\n> R> class(tickers$BBAS3.SA_log_returns)\n> [1] \"xts\" \"zoo\"\n> R>  colnames(tickers$BBAS3.SA_log_returns)\n> [1] \"daily.returns\"\n> R> class(tickers$BBAS3.SA_mean_log)\n> [1] \"numeric\"\n> R> R> colnames(tickers$BBAS3.SA_mean_log)\n> NULL  (as expected)\n> R>\n>\n> Therefore the list I get from the mget operation above contains several elements with different types, which may include even _sd_ columns as well.\n> My objective is to get rid of the .SA suffix used for Brazilian stocks in all elements downloaded as well as their columns.  I chose to put everything in a list and operate on it.\n>\n> TIA,\n>\n> --\n> Andr? Luiz Tietbohl Ramos, PhD.\n>\n>\n> Em seg., 29 de dez. de 2025 ?s 10:25, Enrico Schumann <es at enricoschumann.net> escreveu:\n>>\n>> On Mon, 29 Dec 2025, Andre Luiz Tietbohl Ramos writes:\n>>\n>> > Hello Eric,\n>> >\n>> > Thanks for the reply!  Your answer was correct however the my problem was\n>> > not explained correctly, my apologies to everyone.\n>> > The issue is that once a list is built from the symbols that were download\n>> > a mixed type list is formed, see below.\n>> >\n>> > R> class(tickers$VALE3.SA_sd_log)\n>> > [1] \"numeric\"\n>> > R> class(tickers$VALE3.SA)\n>> > [1] \"xts\" \"zoo\"\n>> > R> R>\n>> >\n>> > The VALE3 ticker has another list element as well: VALE3.SA_mean_log.\n>> > This happens with a few of the symbols only thus the issue at hand seems to\n>> > be removing the list \"numeric\" type elements.\n>> >\n>> > TIA,\n>> >\n>> > --\n>> > Andr? Luiz Tietbohl Ramos, PhD.\n>> >\n>>\n>> Could you please post a small, reproducible example (in plain\n>> text)?  Otherwise, it will be hard so see where your problem\n>> lies.\n>>\n>>\n>> kind regards\n>>     Enrico\n>>\n>>\n>> > Em seg., 29 de dez. de 2025 ?s 03:18, Eric Berger <ericjberger at gmail.com>\n>> > escreveu:\n>> >\n>> >> library(quantmod)\n>> >>\n>> >> keepohlc <- function(x) {\n>> >>     ohlc <- c(\".Open\",\".High\",\".Low\",\".Close\")\n>> >>     iV <- sapply(ohlc, \\(s) {grep(s,colnames(x))})\n>> >>     x[,iV]\n>> >> }\n>> >>\n>> >> getSymbols(\"MSFT\")\n>> >>\n>> >> head(MSFT)\n>> >>\n>> >>            MSFT.Open MSFT.High MSFT.Low MSFT.Close MSFT.Volume\n>> >> MSFT.Adjusted\n>> >> 2007-01-03     29.91     30.25    29.40      29.86    76935100\n>> >> 21.12207\n>> >> 2007-01-04     29.70     29.97    29.44      29.81    45774500\n>> >> 21.08670\n>> >> 2007-01-05     29.63     29.75    29.45      29.64    44607200\n>> >> 20.96644\n>> >> 2007-01-08     29.65     30.10    29.53      29.93    50220200\n>> >> 21.17159\n>> >> 2007-01-09     30.00     30.18    29.73      29.96    44636600\n>> >> 21.19280\n>> >> 2007-01-10     29.80     29.89    29.43      29.66    55017400\n>> >> 20.98060\n>> >>\n>> >> MSFT <- keepohlc(MSFT)\n>> >>\n>> >> head(MSFT)\n>> >>\n>> >>            MSFT.Open MSFT.High MSFT.Low MSFT.Close\n>> >> 2007-01-03     29.91     30.25    29.40      29.86\n>> >> 2007-01-04     29.70     29.97    29.44      29.81\n>> >> 2007-01-05     29.63     29.75    29.45      29.64\n>> >> 2007-01-08     29.65     30.10    29.53      29.93\n>> >> 2007-01-09     30.00     30.18    29.73      29.96\n>> >> 2007-01-10     29.80     29.89    29.43      29.66\n>> >>\n>> >>\n>> >> On Sun, Dec 28, 2025 at 11:51?PM Andre Luiz Tietbohl Ramos\n>> >> <andreltramos at gmail.com> wrote:\n>> >> >\n>> >> > Hello,\n>> >> >\n>> >> > I'm downloading quote data using the getSymbols() function.  It works\n>> >> very\n>> >> > well but downloads two additional columns for a few symbols,\n>> >> > namely _mean_log and _sd_log.\n>> >> > Therefore, the traditional 5 column OHLCV data frame has two more columns\n>> >> > in some symbols.\n>> >> >\n>> >> > I move all downloaded symbols to a list in order to ease some required\n>> >> > computation.  At the same time, my routine depends on OHLCV data only.\n>> >> > Thus, I need to have a new list discarding the additional columns that\n>> >> > exist in some symbols on the current list.  The symbols with the \"extra\"\n>> >> > columns must be kept. However their additional columns must be removed.\n>> >> >\n>> >> > Could anyone suggest a solution to this problem, please?\n>> >> >\n>> >> > Thanks in advance for any help,\n>> >> >\n>> >> > --\n>> >> > Andre Luiz Tietbohl Ramos, PhD\n>> >> >\n>>\n>> --\n>> Enrico Schumann\n>> Lucerne, Switzerland\n>> https://enricoschumann.net",
+      "body_snippet": "I am not able to reproduce your problem but I may have a solution that\nwill help.\nThe result of my\nnames(tickers)\ndoesn't have those strange objects.\nIn any case, try this workaround. Replace\n\ntickers",
+      "thread_id": "thread-d479909d860c",
+      "thread_depth": 5,
+      "month": "2025-12"
+    },
+    {
+      "id": "msg-45968165bb60",
+      "message_id": "<26962.39299.36795.894611@paul.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "26604783910298c073ad132e77cb72b30037ddd7369ecad11e5fe08281600547",
+      "date": "2025-12-29T09:08:51-06:00",
+      "subject": "[R-SIG-Finance] getSymbols() quantmod library doubt",
+      "subject_clean": "getSymbols() quantmod library doubt",
+      "in_reply_to": "<CAPZA_qLBVwRgjx6a2VvdNSX+af8KCDpFxTiFhhNrPKTNMg1kpA@mail.gmail.com>",
+      "references": [
+        "<CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>",
+        "<CAGgJW76xkM9x6jUAdfm2GLq06Y0GWd91YmJP8NqfmQ5Gikst8A@mail.gmail.com>",
+        "<CAPZA_q+Q_ues9NkLaKefG5LgcAv=6m6rr7VxdK5r+zqN+NEtog@mail.gmail.com>",
+        "<87tsx9ifn9.fsf@enricoschumann.net>",
+        "<CAPZA_qLBVwRgjx6a2VvdNSX+af8KCDpFxTiFhhNrPKTNMg1kpA@mail.gmail.com>"
+      ],
+      "body_plain": "On 29 December 2025 at 11:23, Andre Luiz Tietbohl Ramos wrote:\n| I chose to put everything in a list and operate on it.\n\nWelcome to programming, and debugging. In your list processing, fundamentally\nprocessing of each symbol is still one distinct call.  You can either modify\nyour copy of the data getter (hey, it is open source ...) or wrap its use in\nanother helper function that ensures the correct / expected data format is\npassed along.  Such post-processing is very common when dealing with open or\nfree APIs such as this one ... which after all is non-official. There is even\na (half-joking ?) theorem for this. [1]\n\nDirk\n\n[1] https://en.wikipedia.org/wiki/Fundamental_theorem_of_software_engineering\n \n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 29 December 2025 at 11:23, Andre Luiz Tietbohl Ramos wrote:\n| I chose to put everything in a list and operate on it.\n\nWelcome to programming, and debugging. In your list processing, fundamentally\np",
+      "thread_id": "thread-d479909d860c",
+      "thread_depth": 5,
+      "month": "2025-12"
+    },
+    {
+      "id": "msg-2d9c42156f77",
+      "message_id": "<87wm25vwdg.fsf@enricoschumann.net>",
+      "from_name": "Enrico Schumann",
+      "from_email_hash": "42e3fbcaa04e968726f4c1d1a69e34143bdbc62b403d112ba1d3712256bacb88",
+      "date": "2025-12-29T21:58:03+01:00",
+      "subject": "[R-SIG-Finance] getSymbols() quantmod library doubt",
+      "subject_clean": "getSymbols() quantmod library doubt",
+      "in_reply_to": "<CAPZA_qLBVwRgjx6a2VvdNSX+af8KCDpFxTiFhhNrPKTNMg1kpA@mail.gmail.com> (Andre Luiz Tietbohl Ramos's message of \"Mon, 29 Dec 2025 11:23:22 -0300\")",
+      "references": [
+        "<CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>",
+        "<CAGgJW76xkM9x6jUAdfm2GLq06Y0GWd91YmJP8NqfmQ5Gikst8A@mail.gmail.com>",
+        "<CAPZA_q+Q_ues9NkLaKefG5LgcAv=6m6rr7VxdK5r+zqN+NEtog@mail.gmail.com>",
+        "<87tsx9ifn9.fsf@enricoschumann.net>",
+        "<CAPZA_qLBVwRgjx6a2VvdNSX+af8KCDpFxTiFhhNrPKTNMg1kpA@mail.gmail.com>"
+      ],
+      "body_plain": "On Mon, 29 Dec 2025, Andre Luiz Tietbohl Ramos writes:\n\n> Em seg., 29 de dez. de 2025 ?s 10:25, Enrico Schumann <es at enricoschumann.net>\n> escreveu:\n>>\n>> Could you please post a small, reproducible example (in plain\n>> text)?  Otherwise, it will be hard so see where your problem\n>> lies.\n>>\n>>\n>> kind regards\n>>     Enrico\n>>\n>\n> Hello,\n>\n> Thanks for the interest, Enrico. It is below.\n> R> tickers\n>  \"AALR3.SA\"  \"AGRO3.SA\"  \"ALPA3.SA\"  \"ALPA4.SA\"  \"ALUP11.SA\" \"AMER3.SA\"  \"\n> AMOB3.SA\"  \"ANIM3.SA\"  \"ASAI3.SA\"  \"AURE3.SA\"  \"AZUL4.SA\"  \"B3SA3.SA\" \"\n> BAUH4.SA\"  \"BAZA3.SA\"  \"BBAS3.SA\"  \"BBDC4.SA\"  \"BBSE3.SA\"  \"BDLL4.SA\"  \"\n> BEES3.SA\"  \"BIDU34.SA\" \"BLAU3.SA\"  \"BMOB3.SA\"  \"BPAC11.SA\" \"BPAN4.SA\" \"\n> BRAP4.SA\"  \"BRFS3.SA\"  \"BRKM5.SA\"  \"BRSR6.SA\"  \"BRST3.SA\"  \"BSLI3.SA\"  \"\n> CBAV3.SA\"  \"CEAB3.SA\"  \"CEBR3.SA\"  \"CMIG3.SA\"  \"CMIG4.SA\"  \"CMIN3.SA\" \"\n> COPH34.SA\" \"CPFE3.SA\"  \"CPLE6.SA\"  \"CRPG5.SA\"  \"CSAN3.SA\"  \"CSED3.SA\"  \"\n> CSMG3.SA\"  \"CSNA3.SA\"  \"CSUD3.SA\"  \"CXSE3.SA\"  \"CYRE3.SA\"\n> ...\n> R>\n> R> getSymbols(tickers, src = \"yahoo\", from = start, to = end, maxgap = 10,\n> auto.asign = TRUE)\n> R>\n> R> tickers <- mget(ls(pattern = paste(tickers, collapse = \"|\")))\n> R>\n> R> names(tickers)\n>   [1] \"AALR3.SA\"              \"AFHI11.SA\"             \"AGRO3.SA\"\n>    \"ALPA3.SA\"              \"ALPA4.SA\"              \"ALUP11.SA\"\n>   [7] \"AMER3.SA\"              \"AMOB3.SA\"              \"ANIM3.SA\"\n>    \"ASAI3.SA\"              \"AURE3.SA\"              \"AZUL4.SA\"\n>  [13] \"B3SA3.SA\"              \"BAUH4.SA\"              \"BAZA3.SA\"\n>    *\"BBAS3.SA <http://BBAS3.SA>\"              \"BBAS3.SA_log_returns\"\n>  \"BBAS3.SA_mean_log\"   *\n>  [19] \"BBAS3.SA_sd_log\"       \"BBDC4.SA\"              \"BBSE3.SA\"\n>  \"BBSE3.SA_log_returns\"  \"BBSE3.SA_mean_log\"     \"BBSE3.SA_sd_log\"\n>  [25] \"BDLL4.SA\"              \"BEES3.SA\"              \"BIDU34.SA\"\n>   \"BLAU3.SA\"              \"BMOB3.SA\"              \"BPAC11.SA\"\n>  [31] \"BPAN4.SA\"              \"BRAP4.SA\"              \"BRFS3.SA\"\n>    \"BRKM5.SA\"              \"BRSR6.SA\"              \"BRST3.SA\"\n> ...\n> R> class(tickers$BBAS3.SA)\n> [1] \"xts\" \"zoo\"\n> R> colnames(tickers$BBAS3.SA)\n> [1] \"BBAS3.SA.Open\"     \"BBAS3.SA.High\"     \"BBAS3.SA.Low\"\n>  \"BBAS3.SA.Close\"    \"BBAS3.SA.Volume\"   \"BBAS3.SA.Adjusted\"\n> R> class(tickers$BBAS3.SA_log_returns)\n> [1] \"xts\" \"zoo\"\n> R>  colnames(tickers$BBAS3.SA_log_returns)\n> [1] \"daily.returns\"\n> R> class(tickers$BBAS3.SA_mean_log)\n> [1] \"numeric\"\n> R> R> colnames(tickers$BBAS3.SA_mean_log)\n> NULL  (as expected)\n> R>\n>\n> Therefore the list I get from the mget operation above contains several\n> elements with different types, which may include even _sd_ columns as well.\n> My objective is to get rid of the .SA suffix used for Brazilian stocks in\n> all elements downloaded as well as their columns.  I chose to put\n> everything in a list and operate on it.\n>\n\n[...]\n\nLike Eric, I cannot reproduce your result. In addition\nto Dirk's suggestions for debugging:\n\n i) start from a clean session (no workspace-loading);\n\nii) since your column 'tickers$BBAS3.SA_log_returns' is named\n    \"daily.returns\" -- any chance you are (accidentally) calling\n    'quantmod::dailyReturn' in your code?\n\n\n\n\n-- \nEnrico Schumann\nLucerne, Switzerland\nhttps://enricoschumann.net",
+      "body_snippet": "On Mon, 29 Dec 2025, Andre Luiz Tietbohl Ramos writes:\n\n> Em seg., 29 de dez. de 2025 ?s 10:25, Enrico Schumann <es at enricoschumann.net>\n> escreveu:\n>>\n>> Could you please post a small, reproducible",
+      "thread_id": "thread-d479909d860c",
+      "thread_depth": 5,
+      "month": "2025-12"
+    },
+    {
+      "id": "msg-70d58a5affe8",
+      "message_id": "<CAPZA_qJ4LESzrObm4ZiWOYRyfEe9EXZXQ-mvRdPVVpArLq=OBQ@mail.gmail.com>",
+      "from_name": "Andre Luiz Tietbohl Ramos",
+      "from_email_hash": "f1ee93083eaa5e3d9542ed0100870dcc6aa41f547a0a089c66b564f768a77107",
+      "date": "2025-12-30T18:45:10-03:00",
+      "subject": "[R-SIG-Finance] getSymbols() quantmod library doubt",
+      "subject_clean": "getSymbols() quantmod library doubt",
+      "in_reply_to": "<87wm25vwdg.fsf@enricoschumann.net>",
+      "references": [
+        "<CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>",
+        "<CAGgJW76xkM9x6jUAdfm2GLq06Y0GWd91YmJP8NqfmQ5Gikst8A@mail.gmail.com>",
+        "<CAPZA_q+Q_ues9NkLaKefG5LgcAv=6m6rr7VxdK5r+zqN+NEtog@mail.gmail.com>",
+        "<87tsx9ifn9.fsf@enricoschumann.net>",
+        "<CAPZA_qLBVwRgjx6a2VvdNSX+af8KCDpFxTiFhhNrPKTNMg1kpA@mail.gmail.com>",
+        "<87wm25vwdg.fsf@enricoschumann.net>"
+      ],
+      "body_plain": "Hello everyone,\n\nI solved the problem! I had nothing to do with any of the aspects\nexplained.  It might seem even funny to some...\nMy lack of in depth knowledge about the R platform was the culprit.  I\ndidn't know R kept all the workspace symbols between sessions if saved.\nThus, there was some kind of mess with them. My apologies.\n\nThe solution was very simple: rm(list = ls()).  Everything works fine just\na before with the functions I developed originally.  In order to guarantee\nit doesn't happen again I put this command first in the startup\nconfiguration and in the .Last function of the .Rprofile.\n\nRegards,\n\n--\nAndr? Luiz Tietbohl Ramos, PhD.\n\n\nEm seg., 29 de dez. de 2025 ?s 17:58, Enrico Schumann <es at enricoschumann.net>\nescreveu:\n\n> On Mon, 29 Dec 2025, Andre Luiz Tietbohl Ramos writes:\n>\n> > Em seg., 29 de dez. de 2025 ?s 10:25, Enrico Schumann <\n> es at enricoschumann.net>\n> > escreveu:\n> >>\n> >> Could you please post a small, reproducible example (in plain\n> >> text)?  Otherwise, it will be hard so see where your problem\n> >> lies.\n> >>\n> >>\n> >> kind regards\n> >>     Enrico\n> >>\n> >\n> > Hello,\n> >\n> > Thanks for the interest, Enrico. It is below.\n> > R> tickers\n> >  \"AALR3.SA\"  \"AGRO3.SA\"  \"ALPA3.SA\"  \"ALPA4.SA\"  \"ALUP11.SA\" \"AMER3.SA\"\n> \"\n> > AMOB3.SA\"  \"ANIM3.SA\"  \"ASAI3.SA\"  \"AURE3.SA\"  \"AZUL4.SA\"  \"B3SA3.SA\" \"\n> > BAUH4.SA\"  \"BAZA3.SA\"  \"BBAS3.SA\"  \"BBDC4.SA\"  \"BBSE3.SA\"  \"BDLL4.SA\"  \"\n> > BEES3.SA\"  \"BIDU34.SA\" \"BLAU3.SA\"  \"BMOB3.SA\"  \"BPAC11.SA\" \"BPAN4.SA\" \"\n> > BRAP4.SA\"  \"BRFS3.SA\"  \"BRKM5.SA\"  \"BRSR6.SA\"  \"BRST3.SA\"  \"BSLI3.SA\"  \"\n> > CBAV3.SA\"  \"CEAB3.SA\"  \"CEBR3.SA\"  \"CMIG3.SA\"  \"CMIG4.SA\"  \"CMIN3.SA\" \"\n> > COPH34.SA\" \"CPFE3.SA\"  \"CPLE6.SA\"  \"CRPG5.SA\"  \"CSAN3.SA\"  \"CSED3.SA\"  \"\n> > CSMG3.SA\"  \"CSNA3.SA\"  \"CSUD3.SA\"  \"CXSE3.SA\"  \"CYRE3.SA\"\n> > ...\n> > R>\n> > R> getSymbols(tickers, src = \"yahoo\", from = start, to = end, maxgap =\n> 10,\n> > auto.asign = TRUE)\n> > R>\n> > R> tickers <- mget(ls(pattern = paste(tickers, collapse = \"|\")))\n> > R>\n> > R> names(tickers)\n> >   [1] \"AALR3.SA\"              \"AFHI11.SA\"             \"AGRO3.SA\"\n> >    \"ALPA3.SA\"              \"ALPA4.SA\"              \"ALUP11.SA\"\n> >   [7] \"AMER3.SA\"              \"AMOB3.SA\"              \"ANIM3.SA\"\n> >    \"ASAI3.SA\"              \"AURE3.SA\"              \"AZUL4.SA\"\n> >  [13] \"B3SA3.SA\"              \"BAUH4.SA\"              \"BAZA3.SA\"\n> >    *\"BBAS3.SA <http://BBAS3.SA>\"              \"BBAS3.SA_log_returns\"\n> >  \"BBAS3.SA_mean_log\"   *\n> >  [19] \"BBAS3.SA_sd_log\"       \"BBDC4.SA\"              \"BBSE3.SA\"\n> >  \"BBSE3.SA_log_returns\"  \"BBSE3.SA_mean_log\"     \"BBSE3.SA_sd_log\"\n> >  [25] \"BDLL4.SA\"              \"BEES3.SA\"              \"BIDU34.SA\"\n> >   \"BLAU3.SA\"              \"BMOB3.SA\"              \"BPAC11.SA\"\n> >  [31] \"BPAN4.SA\"              \"BRAP4.SA\"              \"BRFS3.SA\"\n> >    \"BRKM5.SA\"              \"BRSR6.SA\"              \"BRST3.SA\"\n> > ...\n> > R> class(tickers$BBAS3.SA)\n> > [1] \"xts\" \"zoo\"\n> > R> colnames(tickers$BBAS3.SA)\n> > [1] \"BBAS3.SA.Open\"     \"BBAS3.SA.High\"     \"BBAS3.SA.Low\"\n> >  \"BBAS3.SA.Close\"    \"BBAS3.SA.Volume\"   \"BBAS3.SA.Adjusted\"\n> > R> class(tickers$BBAS3.SA_log_returns)\n> > [1] \"xts\" \"zoo\"\n> > R>  colnames(tickers$BBAS3.SA_log_returns)\n> > [1] \"daily.returns\"\n> > R> class(tickers$BBAS3.SA_mean_log)\n> > [1] \"numeric\"\n> > R> R> colnames(tickers$BBAS3.SA_mean_log)\n> > NULL  (as expected)\n> > R>\n> >\n> > Therefore the list I get from the mget operation above contains several\n> > elements with different types, which may include even _sd_ columns as\n> well.\n> > My objective is to get rid of the .SA suffix used for Brazilian stocks in\n> > all elements downloaded as well as their columns.  I chose to put\n> > everything in a list and operate on it.\n> >\n>\n> [...]\n>\n> Like Eric, I cannot reproduce your result. In addition\n> to Dirk's suggestions for debugging:\n>\n>  i) start from a clean session (no workspace-loading);\n>\n> ii) since your column 'tickers$BBAS3.SA_log_returns' is named\n>     \"daily.returns\" -- any chance you are (accidentally) calling\n>     'quantmod::dailyReturn' in your code?\n>\n>\n>\n>\n> --\n> Enrico Schumann\n> Lucerne, Switzerland\n> https://enricoschumann.net\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello everyone,\n\nI solved the problem! I had nothing to do with any of the aspects\nexplained.  It might seem even funny to some...\nMy lack of in depth knowledge about the R platform was the culprit.  ",
+      "thread_id": "thread-d479909d860c",
+      "thread_depth": 6,
+      "month": "2025-12"
+    },
+    {
+      "id": "msg-76e545612f8e",
+      "message_id": "<87wm23otes.fsf@enricoschumann.net>",
+      "from_name": "Enrico Schumann",
+      "from_email_hash": "42e3fbcaa04e968726f4c1d1a69e34143bdbc62b403d112ba1d3712256bacb88",
+      "date": "2025-12-31T11:08:27+01:00",
+      "subject": "[R-SIG-Finance] getSymbols() quantmod library doubt",
+      "subject_clean": "getSymbols() quantmod library doubt",
+      "in_reply_to": "<CAPZA_qJ4LESzrObm4ZiWOYRyfEe9EXZXQ-mvRdPVVpArLq=OBQ@mail.gmail.com> (Andre Luiz Tietbohl Ramos's message of \"Tue, 30 Dec 2025 18:45:10 -0300\")",
+      "references": [
+        "<CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>",
+        "<CAGgJW76xkM9x6jUAdfm2GLq06Y0GWd91YmJP8NqfmQ5Gikst8A@mail.gmail.com>",
+        "<CAPZA_q+Q_ues9NkLaKefG5LgcAv=6m6rr7VxdK5r+zqN+NEtog@mail.gmail.com>",
+        "<87tsx9ifn9.fsf@enricoschumann.net>",
+        "<CAPZA_qLBVwRgjx6a2VvdNSX+af8KCDpFxTiFhhNrPKTNMg1kpA@mail.gmail.com>",
+        "<87wm25vwdg.fsf@enricoschumann.net>",
+        "<CAPZA_qJ4LESzrObm4ZiWOYRyfEe9EXZXQ-mvRdPVVpArLq=OBQ@mail.gmail.com>"
+      ],
+      "body_plain": "On Tue, 30 Dec 2025, Andre Luiz Tietbohl Ramos writes:\n\n> Hello everyone,\n>\n> I solved the problem! I had nothing to do with any of the aspects\n> explained.  It might seem even funny to some...\n> My lack of in depth knowledge about the R platform was the culprit.  I\n> didn't know R kept all the workspace symbols between sessions if saved.\n> Thus, there was some kind of mess with them. My apologies.\n>\n> The solution was very simple: rm(list = ls()).  Everything works fine just\n> a before with the functions I developed originally.  In order to guarantee\n> it doesn't happen again I put this command first in the startup\n> configuration and in the .Last function of the .Rprofile.\n>\n> Regards,\n>\n> --\n> Andr? Luiz Tietbohl Ramos, PhD.\n>\n\n\nR has commandline options for not saving/restoring the\nworkspace; decent editors allow you to put such options into\nyour configuration:\n\n   --no-save\n          Don't save [workspace at the end of the session]\n\n   --no-restore-data\n          Don't restore previously saved objects\n\n   --no-restore-history\n          Don't restore the R history file\n\n   --no-restore\n          Don't restore anything\n\n\nkind regards\n  Enrico\n\n>\n> Em seg., 29 de dez. de 2025 ?s 17:58, Enrico Schumann <es at enricoschumann.net>\n> escreveu:\n>\n>> On Mon, 29 Dec 2025, Andre Luiz Tietbohl Ramos writes:\n>>\n>> > Em seg., 29 de dez. de 2025 ?s 10:25, Enrico Schumann <es at enricoschumann.net>\n>> > escreveu:\n>> >>\n>> >> Could you please post a small, reproducible example (in plain\n>> >> text)?  Otherwise, it will be hard so see where your problem\n>> >> lies.\n>> >>\n>> >>\n>> >> kind regards\n>> >>     Enrico\n>> >>\n>> >\n>> > Hello,\n>> >\n>> > Thanks for the interest, Enrico. It is below.\n>> > R> tickers\n>> >  \"AALR3.SA\"  \"AGRO3.SA\"  \"ALPA3.SA\"  \"ALPA4.SA\"  \"ALUP11.SA\" \"AMER3.SA\"\n>> \"\n>> > AMOB3.SA\"  \"ANIM3.SA\"  \"ASAI3.SA\"  \"AURE3.SA\"  \"AZUL4.SA\"  \"B3SA3.SA\" \"\n>> > BAUH4.SA\"  \"BAZA3.SA\"  \"BBAS3.SA\"  \"BBDC4.SA\"  \"BBSE3.SA\"  \"BDLL4.SA\"  \"\n>> > BEES3.SA\"  \"BIDU34.SA\" \"BLAU3.SA\"  \"BMOB3.SA\"  \"BPAC11.SA\" \"BPAN4.SA\" \"\n>> > BRAP4.SA\"  \"BRFS3.SA\"  \"BRKM5.SA\"  \"BRSR6.SA\"  \"BRST3.SA\"  \"BSLI3.SA\"  \"\n>> > CBAV3.SA\"  \"CEAB3.SA\"  \"CEBR3.SA\"  \"CMIG3.SA\"  \"CMIG4.SA\"  \"CMIN3.SA\" \"\n>> > COPH34.SA\" \"CPFE3.SA\"  \"CPLE6.SA\"  \"CRPG5.SA\"  \"CSAN3.SA\"  \"CSED3.SA\"  \"\n>> > CSMG3.SA\"  \"CSNA3.SA\"  \"CSUD3.SA\"  \"CXSE3.SA\"  \"CYRE3.SA\"\n>> > ...\n>> > R>\n>> > R> getSymbols(tickers, src = \"yahoo\", from = start, to = end, maxgap =\n>> 10,\n>> > auto.asign = TRUE)\n>> > R>\n>> > R> tickers <- mget(ls(pattern = paste(tickers, collapse = \"|\")))\n>> > R>\n>> > R> names(tickers)\n>> >   [1] \"AALR3.SA\"              \"AFHI11.SA\"             \"AGRO3.SA\"\n>> >    \"ALPA3.SA\"              \"ALPA4.SA\"              \"ALUP11.SA\"\n>> >   [7] \"AMER3.SA\"              \"AMOB3.SA\"              \"ANIM3.SA\"\n>> >    \"ASAI3.SA\"              \"AURE3.SA\"              \"AZUL4.SA\"\n>> >  [13] \"B3SA3.SA\"              \"BAUH4.SA\"              \"BAZA3.SA\"\n>> >    *\"BBAS3.SA <http://BBAS3.SA>\"              \"BBAS3.SA_log_returns\"\n>> >  \"BBAS3.SA_mean_log\"   *\n>> >  [19] \"BBAS3.SA_sd_log\"       \"BBDC4.SA\"              \"BBSE3.SA\"\n>> >  \"BBSE3.SA_log_returns\"  \"BBSE3.SA_mean_log\"     \"BBSE3.SA_sd_log\"\n>> >  [25] \"BDLL4.SA\"              \"BEES3.SA\"              \"BIDU34.SA\"\n>> >   \"BLAU3.SA\"              \"BMOB3.SA\"              \"BPAC11.SA\"\n>> >  [31] \"BPAN4.SA\"              \"BRAP4.SA\"              \"BRFS3.SA\"\n>> >    \"BRKM5.SA\"              \"BRSR6.SA\"              \"BRST3.SA\"\n>> > ...\n>> > R> class(tickers$BBAS3.SA)\n>> > [1] \"xts\" \"zoo\"\n>> > R> colnames(tickers$BBAS3.SA)\n>> > [1] \"BBAS3.SA.Open\"     \"BBAS3.SA.High\"     \"BBAS3.SA.Low\"\n>> >  \"BBAS3.SA.Close\"    \"BBAS3.SA.Volume\"   \"BBAS3.SA.Adjusted\"\n>> > R> class(tickers$BBAS3.SA_log_returns)\n>> > [1] \"xts\" \"zoo\"\n>> > R>  colnames(tickers$BBAS3.SA_log_returns)\n>> > [1] \"daily.returns\"\n>> > R> class(tickers$BBAS3.SA_mean_log)\n>> > [1] \"numeric\"\n>> > R> R> colnames(tickers$BBAS3.SA_mean_log)\n>> > NULL  (as expected)\n>> > R>\n>> >\n>> > Therefore the list I get from the mget operation above contains several\n>> > elements with different types, which may include even _sd_ columns as\n>> well.\n>> > My objective is to get rid of the .SA suffix used for Brazilian stocks in\n>> > all elements downloaded as well as their columns.  I chose to put\n>> > everything in a list and operate on it.\n>> >\n>>\n>> [...]\n>>\n>> Like Eric, I cannot reproduce your result. In addition\n>> to Dirk's suggestions for debugging:\n>>\n>>  i) start from a clean session (no workspace-loading);\n>>\n>> ii) since your column 'tickers$BBAS3.SA_log_returns' is named\n>>     \"daily.returns\" -- any chance you are (accidentally) calling\n>>     'quantmod::dailyReturn' in your code?\n>>\n>> --\n>> Enrico Schumann\n>> Lucerne, Switzerland\n>> https://enricoschumann.net\n\n-- \nEnrico Schumann\nLucerne, Switzerland\nhttps://enricoschumann.net",
+      "body_snippet": "On Tue, 30 Dec 2025, Andre Luiz Tietbohl Ramos writes:\n\n> Hello everyone,\n>\n> I solved the problem! I had nothing to do with any of the aspects\n> explained.  It might seem even funny to some...\n> My l",
+      "thread_id": "thread-d479909d860c",
+      "thread_depth": 7,
+      "month": "2025-12"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-28f24e7e02f2",
+      "subject": "Custom colour on the plot background using chartSeries()",
+      "message_count": 1,
+      "participants": [
+        "Andre Luiz Tietbohl Ramos"
+      ],
+      "started": "2025-12-08T08:36:35-03:00",
+      "last_reply": "2025-12-08T08:36:35-03:00",
+      "root_message_id": "msg-28f24e7e02f2"
+    },
+    {
+      "id": "thread-f8adcc28f4b6",
+      "subject": "Skipping non-convergent GARCH run within a loop",
+      "message_count": 3,
+      "participants": [
+        "Alexios Galanos",
+        "Anatoly Schmidt"
+      ],
+      "started": "2025-12-17T17:16:34-05:00",
+      "last_reply": "2025-12-17T20:33:12-05:00",
+      "root_message_id": "msg-f8adcc28f4b6"
+    },
+    {
+      "id": "thread-d479909d860c",
+      "subject": "getSymbols() quantmod library doubt",
+      "message_count": 10,
+      "participants": [
+        "Andre Luiz Tietbohl Ramos",
+        "Dirk Eddelbuettel",
+        "Enrico Schumann",
+        "Eric Berger"
+      ],
+      "started": "2025-12-28T18:51:24-03:00",
+      "last_reply": "2025-12-31T11:08:27+01:00",
+      "root_message_id": "msg-d479909d860c"
+    },
+    {
+      "id": "thread-020808e82b02",
+      "subject": "getSymbols() quantmod library doubt - correct post",
+      "message_count": 1,
+      "participants": [
+        "Andre Luiz Tietbohl Ramos"
+      ],
+      "started": "2025-12-28T19:33:03-03:00",
+      "last_reply": "2025-12-28T19:33:03-03:00",
+      "root_message_id": "msg-020808e82b02"
+    }
+  ]
+}

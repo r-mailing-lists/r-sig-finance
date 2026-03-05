@@ -1,0 +1,1325 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2007-06",
+  "messages": [
+    {
+      "id": "msg-e8254914f517",
+      "message_id": "<10910434.post@talk.nabble.com>",
+      "from_name": "jeam",
+      "from_email_hash": "5b0766b53dcecccc2dd4815c829f0884712970217d642df34d29694a1bef1c30",
+      "date": "2007-06-01T03:34:38-07:00",
+      "subject": "[R-SIG-Finance] [R-sig-finance] ISO-8601 with time zone designator, format handling with fCalendar/chron",
+      "subject_clean": "ISO-8601 with time zone designator, format handling with fCalendar/chron",
+      "in_reply_to": "<971536df0705311849n4e51066amdb83406a4fab6c99@mail.gmail.com>",
+      "references": [
+        "<10903450.post@talk.nabble.com>",
+        "<971536df0705311807x5b32b47fk9e9d7a7c1de0f5af@mail.gmail.com>",
+        "<971536df0705311849n4e51066amdb83406a4fab6c99@mail.gmail.com>"
+      ],
+      "body_plain": "Thanks Gabor, actually I  try to handle it as it is, but substring() solve\nthe problem, brilliantly...\n\nRegards..\n\n\n\nGabor Grothendieck wrote:\n> \n> Here is one improvement.  The sgn line is changed to make the entire\n> calculation vectorized:\n> \n> library(chron)\n> x <- \"2005-12-05T00:00:00+02:00\"\n> x <- c(x, x)\n> datetime <- chron(as.Date(x), substring(x, 12, 19))\n> sgn <- substring(x, 20, 20)\n> sgn <- (sgn == \"+\") - (sgn == \"-\")\n> offset <- as.numeric(times(paste(substring(x, 21), \"00\", sep = \":\")))\n> # or should + be - in next line?\n> datetime + sgn * offset\n> \n> \n> On 5/31/07, Gabor Grothendieck <ggrothendieck at gmail.com> wrote:\n>> Try this:\n>>\n>> library(chron)\n>> x <- \"2005-12-05T00:00:00+02:00\"\n>> datetime <- chron(as.Date(x), substring(x, 12, 19))\n>> sgn <- switch(substring(x, 20, 20), \"+\" = +1, \"-\" = -1)\n>> offset <- as.numeric(times(paste(substring(x, 21), \"00\", sep = \":\")))\n>> datetime + sgn * offset\n>>\n>> # or perhaps the last line should be:\n>> datetime - sgn * offset\n>>\n>> On 5/31/07, jeam <eraslan.cem at gmail.com> wrote:\n>> >\n>> > Dear All;\n>> >\n>> > I have searched the forum but couldn't find a similar problem.\n>> > Currently I am working with a very large set of XML files and the date\n>> is\n>> > formatted something like that\n>> > (YYYY-MM-DDThh:mm:ss+TZD)\n>> >\n>> > Ex: \"2005-12-05T00:00:00+02:00\"\n>> >\n>> > Previously, I've tried chron and fCalendar but couldn't find a way to\n>> import\n>> > this data as a time object.\n>> >\n>> > I think somehow, timeDate may handle it, i tried almost all variations\n>> > formats, but couldn't make it work.\n>> >\n>> > Any help appreciated...\n>> >\n>> > Regards\n>> >\n>> > --\n>> > View this message in context:\n>> http://www.nabble.com/ISO-8601-with-time-zone-designator%2C-format-handling-with-fCalendar-chron-tf3849304.html#a10903450\n>> > Sent from the Rmetrics mailing list archive at Nabble.com.\n>> >\n>> > _______________________________________________\n>> > R-SIG-Finance at stat.math.ethz.ch mailing list\n>> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> > -- Subscriber-posting only.\n>> > -- If you want to post, subscribe first.\n>> >\n>>\n> \n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.\n> \n> \n\n-- \nView this message in context: http://www.nabble.com/ISO-8601-with-time-zone-designator%2C-format-handling-with-fCalendar-chron-tf3849304.html#a10910434\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "Thanks Gabor, actually I  try to handle it as it is, but substring() solve\nthe problem, brilliantly...\n\nRegards..\n\n\n\nGabor Grothendieck wrote:\n> \n> Here is one improvement.  The sgn line is changed to",
+      "thread_id": "thread-e8254914f517",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-a246b2bde830",
+      "message_id": "<18022.3449.952906.95353@basebud.nulle.part>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2007-06-05T20:27:21-05:00",
+      "subject": "[R-SIG-Finance] fix for Package: r-cran-fcalendar (240.10068-2)",
+      "subject_clean": "fix for Package: r-cran-fcalendar (240.10068-2)",
+      "in_reply_to": "<200706052303.59369.alain.peteut@gmx.ch>",
+      "references": [
+        "<200706052303.59369.alain.peteut@gmx.ch>"
+      ],
+      "body_plain": "Alain,\n\nOn 5 June 2007 at 23:03, Alain P?teut wrote:\n| Hello Dirk Eddelbuettel,\n| \n| Since I'm not quite sure where to post any fixes for fcalendar, \n\nTwo choices would be the author, or the designated mailing list. I will\nforward my reply to both, I hope you don't mind.  If you want to follow-up on\nr-sig-finance, you need to be subscribed in order to post.\n\n| I decided to forward this fix to you also. Thanks alot.\n| \n| Best regards\n| Alain P?teut\n| \n| diff for \"fcalendar-240.10068/R/6A-TimeSeriesImport.R\"\n| \n| 300c300\n| <         x2 = strsplit(x1[regexpr(\"-...-..,\", x1) > 0], \",\")\n| ---\n| \n| >         x2 = strsplit(x1[regexpr(\"-..-..,\", x1) > 0], \",\")\n| \n| 310c310\n| <         rowNames =  as.character(as.Date(x1[, 1], format = \"%d-%b-%y\"))\n| ---\n| \n| >         rowNames =  as.character(as.Date(x1[, 1], format = \"%Y-%m-%d\"))\n| \n\nThese look fine to me -- and I could indeed run the 'IBM' example from the\nhelp page after applying the change to a local copy of yahooImport().\n\nThanks for the patch,  Dirk\n\n| Best regards\n| Alain P?teut\n\n-- \nHell, there are no rules here - we're trying to accomplish something. \n                                                  -- Thomas A. Edison",
+      "body_snippet": "Alain,\n\nOn 5 June 2007 at 23:03, Alain P?teut wrote:\n| Hello Dirk Eddelbuettel,\n| \n| Since I'm not quite sure where to post any fixes for fcalendar, \n\nTwo choices would be the author, or the designate",
+      "thread_id": "thread-a246b2bde830",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-22803540a24c",
+      "message_id": "<BAY129-W224326945F2E2D449BA04ECB270@phx.gbl>",
+      "from_name": "Fabrice McShort",
+      "from_email_hash": "622b38f6b97a05abf98401ac43561640f10afac227d0acf207090d9019f1086c",
+      "date": "2007-06-06T10:04:10+02:00",
+      "subject": "[R-SIG-Finance] FW: Welcome to the \"R-SIG-Finance\" mailing list (Digest mode)",
+      "subject_clean": "Welcome to the \"R-SIG-Finance\" mailing list (Digest mode)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070606/38839f22/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070606/38839f22/attachment.pl",
+      "thread_id": "thread-22803540a24c",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-e88939da5f18",
+      "message_id": "<BAY129-W2214E43ABF93A7A62BE244CB270@phx.gbl>",
+      "from_name": "Fabrice McShort",
+      "from_email_hash": "622b38f6b97a05abf98401ac43561640f10afac227d0acf207090d9019f1086c",
+      "date": "2007-06-06T10:24:16+02:00",
+      "subject": "[R-SIG-Finance] R-project and the risk measurement for mutual and hedge funds",
+      "subject_clean": "R-project and the risk measurement for mutual and hedge funds",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070606/808abd77/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070606/808abd77/attachment.pl",
+      "thread_id": "thread-e88939da5f18",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-28cf272e6a64",
+      "message_id": "<008901c7a815$da1f1c40$8e5d54c0$@com>",
+      "from_name": "Sylvain BARTHELEMY",
+      "from_email_hash": "6269d4704746af1637c45553827c0855b4600c0b85fed212ce0906917ec5632c",
+      "date": "2007-06-06T10:36:59+02:00",
+      "subject": "[R-SIG-Finance] R-project and the risk measurement for mutual and\thedge funds",
+      "subject_clean": "R-project and the risk measurement for mutual and\thedge funds",
+      "in_reply_to": "<BAY129-W2214E43ABF93A7A62BE244CB270@phx.gbl>",
+      "references": [
+        "<BAY129-W2214E43ABF93A7A62BE244CB270@phx.gbl>"
+      ],
+      "body_plain": "Hi Fabrice,\n\nAs a risk and performance analyst, I think that PerformanceAnalytics is a\nmust have, as it provides wrappers for many usefull functions for portfolio\nrisk management.\n\nRegards.\n\n---\nSylvain Barth?l?my\nHead of Quantitative Research, TAC\nwww.tac-financial.com | www.sylbarth.com\n\n\n-----Message d'origine-----\nDe?: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] De la part de Fabrice\nMcShort\nEnvoy??: mercredi 6 juin 2007 10:24\n??: r-sig-finance at stat.math.ethz.ch\nObjet?: [R-SIG-Finance] R-project and the risk measurement for mutual and\nhedge funds\n\nHi,\n \nI am a new user of R project!\n \nAs Risk and Performance Analyst, I would like to know the packages I must\ndownload. Could somebody kindly tell me if R project is very easy and\nappropriate in the risk measurement of mutual and hedge funds?\n \nThanks in advance!\n \nFabrice Mcshort\n_________________________________________________________________\n\n gagnez du temps avec l'interface ` la Outlook !\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Fabrice,\n\nAs a risk and performance analyst, I think that PerformanceAnalytics is a\nmust have, as it provides wrappers for many usefull functions for portfolio\nrisk management.\n\nRegards.\n\n---\nSylva",
+      "thread_id": "thread-e88939da5f18",
+      "thread_depth": 1,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-1f9b9cee93fc",
+      "message_id": "<E204F7F6-D11A-4548-87F7-700059BE403B@unimi.it>",
+      "from_name": "stefano iacus",
+      "from_email_hash": "01be6412e8f757040268a7a1e0493160e362e221b339410d4861d3d4189ad837",
+      "date": "2007-06-06T12:34:21+02:00",
+      "subject": "[R-SIG-Finance] R-project and the risk measurement for mutual\tand hedge funds",
+      "subject_clean": "R-project and the risk measurement for mutual\tand hedge funds",
+      "in_reply_to": "<008901c7a815$da1f1c40$8e5d54c0$@com>",
+      "references": [
+        "<BAY129-W2214E43ABF93A7A62BE244CB270@phx.gbl>",
+        "<008901c7a815$da1f1c40$8e5d54c0$@com>"
+      ],
+      "body_plain": "You can also have a look here\n\nhttp://cran.r-project.org/src/contrib/Views/Finance.html\n\nstefano\nOn 06/giu/07, at 10:36, Sylvain BARTHELEMY wrote:\n\n> Hi Fabrice,\n>\n> As a risk and performance analyst, I think that  \n> PerformanceAnalytics is a\n> must have, as it provides wrappers for many usefull functions for  \n> portfolio\n> risk management.\n>\n> Regards.\n>\n> ---\n> Sylvain Barth?l?my\n> Head of Quantitative Research, TAC\n> www.tac-financial.com | www.sylbarth.com\n>\n>\n> -----Message d'origine-----\n> De : r-sig-finance-bounces at stat.math.ethz.ch\n> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] De la part de Fabrice\n> McShort\n> Envoy? : mercredi 6 juin 2007 10:24\n> ? : r-sig-finance at stat.math.ethz.ch\n> Objet : [R-SIG-Finance] R-project and the risk measurement for  \n> mutual and\n> hedge funds\n>\n> Hi,\n>\n> I am a new user of R project!\n>\n> As Risk and Performance Analyst, I would like to know the packages  \n> I must\n> download. Could somebody kindly tell me if R project is very easy and\n> appropriate in the risk measurement of mutual and hedge funds?\n>\n> Thanks in advance!\n>\n> Fabrice Mcshort\n> _________________________________________________________________\n>\n>  gagnez du temps avec l'interface ` la Outlook !\n>\n> \t[[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.-- If you want to post, subscribe first.",
+      "body_snippet": "You can also have a look here\n\nhttp://cran.r-project.org/src/contrib/Views/Finance.html\n\nstefano\nOn 06/giu/07, at 10:36, Sylvain BARTHELEMY wrote:\n\n> Hi Fabrice,\n>\n> As a risk and performance analyst,",
+      "thread_id": "thread-e88939da5f18",
+      "thread_depth": 2,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-4f756a27afed",
+      "message_id": "<BAY129-W909F389A3B500ECF3058FCB260@phx.gbl>",
+      "from_name": "Fabrice McShort",
+      "from_email_hash": "622b38f6b97a05abf98401ac43561640f10afac227d0acf207090d9019f1086c",
+      "date": "2007-06-07T12:36:39+02:00",
+      "subject": "[R-SIG-Finance] R-project and the risk measurement for mutual and hedge funds",
+      "subject_clean": "R-project and the risk measurement for mutual and hedge funds",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070607/8e5798cb/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070607/8e5798cb/attachment.pl",
+      "thread_id": "thread-4f756a27afed",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-c41f99f46b00",
+      "message_id": "<OF99677CA3.8EE1244E-ONC12572F3.003F4664-C12572F3.003FD1F1@hsbc.fr>",
+      "from_name": "guillaume.nicoulaud at halbis.com",
+      "from_email_hash": "7f9255d1786515332e92a75b628650265b8fae654111549ff0b48dcf88f53949",
+      "date": "2007-06-07T13:37:05+02:00",
+      "subject": "[R-SIG-Finance] Réf. : Re:  R-project and the risk measurement for mutual and hedge funds",
+      "subject_clean": "Réf. : Re:  R-project and the risk measurement for mutual and hedge funds",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "One convenient way to do that is to build a R - TeX architecture. If your raw data is stored in a database you may build pdf reports for as many funds you want in just one click.\nG\n\n\n\n                                                                                                                                   \n                                                                                                                                   \n                                                        Pour :   \"r-sig-finance at stat.math.ethz.ch\"                                 \n                                                           <r-sig-finance at stat.math.ethz.ch>                                       \n                                                        cc :                                                                       \n             Fabrice McShort                            Objet :  Re: [R-SIG-Finance] R-project and the risk measurement for mutual \n             <fabricemcshort at hotmail.com>                  and hedge funds                                                         \n             Envoy? par :                                                                                                          \n             r-sig-finance-bounces at stat.math.ethz.                                                                                 \n             ch                                                                                                                    \n                                                                                                                                   \n                                                                                                                                   \n             07/06/2007 12:36                                                                                                      \n                                                                                                                                   \n                                                                                                                                   \n\n\n\n\nThanks for your help!\n\nR project will enable me to have CVaR, Modified Sharpe Ratio, etc. But, I guess that I cannot use R project to produce \"automatically\" Risk management report and performance attribution for the funds. Is it true? I will be happy to know\nwhat software is appropriated for this task?\n\nPS: I need to produce 500 risk management reports per month!!!\n\nThanks!\n\nFabrice\n_________________________________________________________________\nLe blog Messenger de Michel, candidat de la Nouvelle Star : analyse, news, coulisses? A d?couvrir !\n\n             [[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only.\n-- If you want to post, subscribe first.\n\nLes informations contenues dans ce message sont confidentielles et peuvent constituer des informations privilegiees. Si vous n etes pas le destinataire de ce message, il vous est interdit de le copier, de le faire suivre, de le divulguer ou d en utiliser tout ou partie. Si vous avez recu ce message par erreur, merci de le supprimer de votre systeme, ainsi que toutes ses copies, et d en avertir immediatement l expediteur par message de retour.\nIl est impossible de garantir que les communications par messagerie electronique arrivent en temps utile, sont securisees ou denuees de toute erreur ou virus. En consequence, l expediteur n accepte aucune responsabilite du fait des erreurs ou omissions qui pourraient en resulter.\n--- ----------------------------------------------------- ---\nThe information contained in this e-mail is confidential. It...{{dropped}}",
+      "body_snippet": "One convenient way to do that is to build a R - TeX architecture. If your raw data is stored in a database you may build pdf reports for as many funds you want in just one click.\nG\n\n\n\n                ",
+      "thread_id": "thread-c41f99f46b00",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-0ca3ebe9b152",
+      "message_id": "<4667F2C1.8090904@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2007-06-07T06:57:53-05:00",
+      "subject": "[R-SIG-Finance] Réf. : Re:  R-project and the risk measurement for mutual and hedge funds",
+      "subject_clean": "Réf. : Re:  R-project and the risk measurement for mutual and hedge funds",
+      "in_reply_to": "<OF99677CA3.8EE1244E-ONC12572F3.003F4664-C12572F3.003FD1F1@hsbc.fr>",
+      "references": [
+        "<OF99677CA3.8EE1244E-ONC12572F3.003F4664-C12572F3.003FD1F1@hsbc.fr>"
+      ],
+      "body_plain": "Fabrice McShort writes:\n> Thanks for your help!\n> \n> R project will enable me to have CVaR, Modified Sharpe Ratio, etc. \n> But, I guess that I cannot use R project to produce \"automatically\" \n> Risk management report and performance attribution for the funds. \n> Is it true? I will be happy to know what software is appropriated \n > for this task?\n> \n> PS: I need to produce 500 risk management reports per month!!!\n> \n> Thanks!\n\nguillaume.nicoulaud at halbis.com wrote:\n > One convenient way to do that is to build a R - TeX architecture.\n > If your raw data is stored in a database you may build pdf reports\n > for as many funds you want in just one click.\n > G\n\n\nGiullaume is correct.  I'll provide a little more context.\n\nThe primary tool that you want is Sweave, which allows you to run R code \nfrom inside a LaTeX document.  This is straightforward, but I wouldn't \ncall it simple if you're not familiar with LaTeX and as a newcomer to R.\n\nI would recommend starting by choosing a LaTeX editor that can be used \nwith Sweave, such as Lyx.  There are HOWTO's available online describing \nhow to configure Lyx for use with Sweave.\n\nThen, you'll construct your risk report.  Basically, I'd look at the \ncharts and tables in the PerformanceAnalytics package for ideas on how \nyou might build R functions to compile statistics you need for your \nreport into tabular data and for charts that you may wish to display. \nMany of the charts and tables in PerformanceAnalytics may be appropriate \nstarting places for your mutual fund reports because many of them were \ndeveloped for analysis of portfolios of hedge funds. I also mention it \nbecause as one of the authors, I'm most familiar with it.\n\nYou'll probably want to use Lyx or some other LaTeX editor to help you \nlay out your Sweave document into a nice printable report structure.  As \nGuillaume mentioned, if your historical data is stored in a database, \nyou can automate the task of loading the data and generating one report \nper fund.  If your historical data is in files or available via a web \ndownload interface, this could be automated also.  Ask the list if you \nrun into specific problems on this that you are having trouble sorting \nthrough yourself.\n\nOnce you have a layout that works, running Sweave in an automated or \nsemiautomated fashion for producing the reports is pretty \nstraightforward.  There was an R News article specifically on this topic \na while back that I'm sure a little Google searching could help you locate.\n\nHopefully this adds a little more context to Guillaume's suggestion. \nThe list will be happy to help with specifics as you get closer.  Please \nconsider sharing the LaTeX/noweb document that you develop with the \ncommunity.  I'm sure others would benefit from your experience.\n\nRegards,\n\n    - Brian",
+      "body_snippet": "Fabrice McShort writes:\n> Thanks for your help!\n> \n> R project will enable me to have CVaR, Modified Sharpe Ratio, etc. \n> But, I guess that I cannot use R project to produce \"automatically\" \n> Risk m",
+      "thread_id": "thread-c41f99f46b00",
+      "thread_depth": 1,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-d757d2f6e334",
+      "message_id": "<00b201c7a901$03d969f0$0b8c3dd0$@com>",
+      "from_name": "Sylvain BARTHELEMY",
+      "from_email_hash": "6269d4704746af1637c45553827c0855b4600c0b85fed212ce0906917ec5632c",
+      "date": "2007-06-07T14:40:21+02:00",
+      "subject": "[R-SIG-Finance] Réf. : Re:  R-project and the risk measurement for mutual and hedge funds",
+      "subject_clean": "Réf. : Re:  R-project and the risk measurement for mutual and hedge funds",
+      "in_reply_to": "<4667F2C1.8090904@braverock.com>",
+      "references": [
+        "<OF99677CA3.8EE1244E-ONC12572F3.003F4664-C12572F3.003FD1F1@hsbc.fr>",
+        "<4667F2C1.8090904@braverock.com>"
+      ],
+      "body_plain": "A didn't know about this Sweave pack and it is a really interesting topic.\n\nAnother simple way to produce the report would be to store the quantitative\nresults of your risk analysis in an Microsoft Access database (using the\nexcellent RODBC package) and to create as many Access Reports as you need.\nIt is less 'elegant' than what explains Brian, but it can be done easily and\nit is very flexible.\n\n---\nSylvain Barth?l?my\nHead of Quantitative Research, TAC\nwww.tac-financial.com | www.sylbarth.com\n\n\n-----Message d'origine-----\nDe?: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] De la part de Brian G.\nPeterson\nEnvoy??: jeudi 7 juin 2007 13:58\n??: Fabrice McShort\nCc?: R-SIG-Finance\nObjet?: Re: [R-SIG-Finance] R?f. : Re: R-project and the risk measurement\nfor mutual and hedge funds\n\nFabrice McShort writes:\n> Thanks for your help!\n> \n> R project will enable me to have CVaR, Modified Sharpe Ratio, etc. \n> But, I guess that I cannot use R project to produce \"automatically\" \n> Risk management report and performance attribution for the funds. \n> Is it true? I will be happy to know what software is appropriated \n > for this task?\n> \n> PS: I need to produce 500 risk management reports per month!!!\n> \n> Thanks!\n\nguillaume.nicoulaud at halbis.com wrote:\n > One convenient way to do that is to build a R - TeX architecture.\n > If your raw data is stored in a database you may build pdf reports\n > for as many funds you want in just one click.\n > G\n\n\nGiullaume is correct.  I'll provide a little more context.\n\nThe primary tool that you want is Sweave, which allows you to run R code \nfrom inside a LaTeX document.  This is straightforward, but I wouldn't \ncall it simple if you're not familiar with LaTeX and as a newcomer to R.\n\nI would recommend starting by choosing a LaTeX editor that can be used \nwith Sweave, such as Lyx.  There are HOWTO's available online describing \nhow to configure Lyx for use with Sweave.\n\nThen, you'll construct your risk report.  Basically, I'd look at the \ncharts and tables in the PerformanceAnalytics package for ideas on how \nyou might build R functions to compile statistics you need for your \nreport into tabular data and for charts that you may wish to display. \nMany of the charts and tables in PerformanceAnalytics may be appropriate \nstarting places for your mutual fund reports because many of them were \ndeveloped for analysis of portfolios of hedge funds. I also mention it \nbecause as one of the authors, I'm most familiar with it.\n\nYou'll probably want to use Lyx or some other LaTeX editor to help you \nlay out your Sweave document into a nice printable report structure.  As \nGuillaume mentioned, if your historical data is stored in a database, \nyou can automate the task of loading the data and generating one report \nper fund.  If your historical data is in files or available via a web \ndownload interface, this could be automated also.  Ask the list if you \nrun into specific problems on this that you are having trouble sorting \nthrough yourself.\n\nOnce you have a layout that works, running Sweave in an automated or \nsemiautomated fashion for producing the reports is pretty \nstraightforward.  There was an R News article specifically on this topic \na while back that I'm sure a little Google searching could help you locate.\n\nHopefully this adds a little more context to Guillaume's suggestion. \nThe list will be happy to help with specifics as you get closer.  Please \nconsider sharing the LaTeX/noweb document that you develop with the \ncommunity.  I'm sure others would benefit from your experience.\n\nRegards,\n\n    - Brian\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.",
+      "body_snippet": "A didn't know about this Sweave pack and it is a really interesting topic.\n\nAnother simple way to produce the report would be to store the quantitative\nresults of your risk analysis in an Microsoft Ac",
+      "thread_id": "thread-c41f99f46b00",
+      "thread_depth": 2,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-e7036577f0c1",
+      "message_id": "<C20EA84D76C94F4E999DC041E81C0D110256E71B@exchange2k3.ny.gghc.com>",
+      "from_name": "Joshua Reich",
+      "from_email_hash": "1973e89b28f61535b4b19f5bd4a5c529d989a20a6587c5b81805e481cc200bcb",
+      "date": "2007-06-07T08:51:37-04:00",
+      "subject": "[R-SIG-Finance] Réf. : Re:  R-project and the risk measurement for mutual and hedge funds",
+      "subject_clean": "Réf. : Re:  R-project and the risk measurement for mutual and hedge funds",
+      "in_reply_to": "<00b201c7a901$03d969f0$0b8c3dd0$@com>",
+      "references": [
+        "<OF99677CA3.8EE1244E-ONC12572F3.003F4664-C12572F3.003FD1F1@hsbc.fr>",
+        "<4667F2C1.8090904@braverock.com>",
+        "<00b201c7a901$03d969f0$0b8c3dd0$@com>"
+      ],
+      "body_plain": "The approach I take is somewhat similar. I am a big fan of PL/R (http://www.joeconway.com/plr/) which allows you to embed R code within SQL stored procedures in the Postgres database. This means I can do my analysis within the same database that stores our data. One can then use either R's charting packages or any other package that can talk to an ODBC datasource to make your charts.\n\nJosh \n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Sylvain BARTHELEMY\nSent: Thursday, June 07, 2007 8:40 AM\nTo: 'R-SIG-Finance'\nSubject: Re: [R-SIG-Finance]R?f. : Re: R-project and the risk measurement for mutual and hedge funds\n\n\nA didn't know about this Sweave pack and it is a really interesting topic.\n\nAnother simple way to produce the report would be to store the quantitative results of your risk analysis in an Microsoft Access database (using the excellent RODBC package) and to create as many Access Reports as you need.\nIt is less 'elegant' than what explains Brian, but it can be done easily and it is very flexible.\n\n---\nSylvain Barth?l?my\nHead of Quantitative Research, TAC\nwww.tac-financial.com | www.sylbarth.com\n\n\n-----Message d'origine-----\nDe?: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] De la part de Brian G.\nPeterson\nEnvoy??: jeudi 7 juin 2007 13:58\n??: Fabrice McShort\nCc?: R-SIG-Finance\nObjet?: Re: [R-SIG-Finance] R?f. : Re: R-project and the risk measurement for mutual and hedge funds\n\nFabrice McShort writes:\n> Thanks for your help!\n> \n> R project will enable me to have CVaR, Modified Sharpe Ratio, etc. \n> But, I guess that I cannot use R project to produce \"automatically\" \n> Risk management report and performance attribution for the funds. \n> Is it true? I will be happy to know what software is appropriated\n > for this task?\n> \n> PS: I need to produce 500 risk management reports per month!!!\n> \n> Thanks!\n\nguillaume.nicoulaud at halbis.com wrote:\n > One convenient way to do that is to build a R - TeX architecture.\n > If your raw data is stored in a database you may build pdf reports  > for as many funds you want in just one click.\n > G\n\n\nGiullaume is correct.  I'll provide a little more context.\n\nThe primary tool that you want is Sweave, which allows you to run R code from inside a LaTeX document.  This is straightforward, but I wouldn't call it simple if you're not familiar with LaTeX and as a newcomer to R.\n\nI would recommend starting by choosing a LaTeX editor that can be used with Sweave, such as Lyx.  There are HOWTO's available online describing how to configure Lyx for use with Sweave.\n\nThen, you'll construct your risk report.  Basically, I'd look at the charts and tables in the PerformanceAnalytics package for ideas on how you might build R functions to compile statistics you need for your report into tabular data and for charts that you may wish to display. \nMany of the charts and tables in PerformanceAnalytics may be appropriate starting places for your mutual fund reports because many of them were developed for analysis of portfolios of hedge funds. I also mention it because as one of the authors, I'm most familiar with it.\n\nYou'll probably want to use Lyx or some other LaTeX editor to help you lay out your Sweave document into a nice printable report structure.  As Guillaume mentioned, if your historical data is stored in a database, you can automate the task of loading the data and generating one report per fund.  If your historical data is in files or available via a web download interface, this could be automated also.  Ask the list if you run into specific problems on this that you are having trouble sorting through yourself.\n\nOnce you have a layout that works, running Sweave in an automated or semiautomated fashion for producing the reports is pretty straightforward.  There was an R News article specifically on this topic a while back that I'm sure a little Google searching could help you locate.\n\nHopefully this adds a little more context to Guillaume's suggestion. \nThe list will be happy to help with specifics as you get closer.  Please consider sharing the LaTeX/noweb document that you develop with the community.  I'm sure others would benefit from your experience.\n\nRegards,\n\n    - Brian\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.",
+      "body_snippet": "The approach I take is somewhat similar. I am a big fan of PL/R (http://www.joeconway.com/plr/) which allows you to embed R code within SQL stored procedures in the Postgres database. This means I can",
+      "thread_id": "thread-c41f99f46b00",
+      "thread_depth": 3,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-e6d2bd9b0f34",
+      "message_id": "<0946E293C7C22A45A0E33BA14FAA8D88F387F4@500MAIL.goldbox.com>",
+      "from_name": "ngottlieb at marinercapital.com",
+      "from_email_hash": "5575da06d2fa5cb800e4817f76d2e771e21e0a4a88f6085e998984ccce4302a1",
+      "date": "2007-06-07T09:42:02-04:00",
+      "subject": "[R-SIG-Finance] Réf. : Re:  R-project and the risk measurement for mutual and hedge funds",
+      "subject_clean": "Réf. : Re:  R-project and the risk measurement for mutual and hedge funds",
+      "in_reply_to": "<4667F2C1.8090904@braverock.com>",
+      "references": [
+        "<OF99677CA3.8EE1244E-ONC12572F3.003F4664-C12572F3.003FD1F1@hsbc.fr>",
+        "<4667F2C1.8090904@braverock.com>"
+      ],
+      "body_plain": "Fabrice:\n\nI am jumping into the middle of this thread but your issue of Performance\nAttribution for Funds caught my attention.\n\nNot sure what type of performance attribution you need\nbut you can do Style Analysis on funds And good results.\n\nSuggest looking at William Sharpe's 19992 paper on Style Analysis.\nIf you web search you will find it.\n\nIn essence, and I am VERY new to R myself but:\n\nYou would want to build a factor model of return series\nfor each fund along with proxies such as S&P Industry Indexes\nor FTSE sect/industry classes (this helps for international stuff).\n\n>From what I can tell with R, there is Principal Components(PCA)\ncapability. Build a correlation matrix, decompose the matrix\nvia PCA or Single Value Decomposition(SVD) to get eigenvectors.\n\n>From experience rotate them so they are orthogonal. That would be \nusing a promax technique if R has such.\n\nThe last step is to load your factor model with an optimizer\nwith the benchmark, objective function, the fund itself and the\nTableau containing the underlying factors for the indices you use.\n\nSee the Sharpe Paper 1992, it's good explanation\nbut his categories for style analysis is not perfect.\n\nHope this helps as my first contribution to R threads\nAnd being TOTALLY new to using R. \n\nfrom a former SPSS and IMSL programmer!\nNeil\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Brian G. Peterson\nSent: Thursday, June 07, 2007 7:58 AM\nTo: Fabrice McShort\nCc: R-SIG-Finance\nSubject: Re: [R-SIG-Finance] R?f. : Re: R-project and the risk measurement for mutual and hedge funds\n\nFabrice McShort writes:\n> Thanks for your help!\n> \n> R project will enable me to have CVaR, Modified Sharpe Ratio, etc. \n> But, I guess that I cannot use R project to produce \"automatically\" \n> Risk management report and performance attribution for the funds. \n> Is it true? I will be happy to know what software is appropriated\n > for this task?\n> \n> PS: I need to produce 500 risk management reports per month!!!\n> \n> Thanks!\n\nguillaume.nicoulaud at halbis.com wrote:\n > One convenient way to do that is to build a R - TeX architecture.\n > If your raw data is stored in a database you may build pdf reports  > for as many funds you want in just one click.\n > G\n\n\nGiullaume is correct.  I'll provide a little more context.\n\nThe primary tool that you want is Sweave, which allows you to run R code from inside a LaTeX document.  This is straightforward, but I wouldn't call it simple if you're not familiar with LaTeX and as a newcomer to R.\n\nI would recommend starting by choosing a LaTeX editor that can be used with Sweave, such as Lyx.  There are HOWTO's available online describing how to configure Lyx for use with Sweave.\n\nThen, you'll construct your risk report.  Basically, I'd look at the charts and tables in the PerformanceAnalytics package for ideas on how you might build R functions to compile statistics you need for your report into tabular data and for charts that you may wish to display. \nMany of the charts and tables in PerformanceAnalytics may be appropriate starting places for your mutual fund reports because many of them were developed for analysis of portfolios of hedge funds. I also mention it because as one of the authors, I'm most familiar with it.\n\nYou'll probably want to use Lyx or some other LaTeX editor to help you lay out your Sweave document into a nice printable report structure.  As Guillaume mentioned, if your historical data is stored in a database, you can automate the task of loading the data and generating one report per fund.  If your historical data is in files or available via a web download interface, this could be automated also.  Ask the list if you run into specific problems on this that you are having trouble sorting through yourself.\n\nOnce you have a layout that works, running Sweave in an automated or semiautomated fashion for producing the reports is pretty straightforward.  There was an R News article specifically on this topic a while back that I'm sure a little Google searching could help you locate.\n\nHopefully this adds a little more context to Guillaume's suggestion. \nThe list will be happy to help with specifics as you get closer.  Please consider sharing the LaTeX/noweb document that you develop with the community.  I'm sure others would benefit from your experience.\n\nRegards,\n\n    - Brian\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.\n--------------------------------------------------------\n\n \n \nThis information is being sent at the recipient's request or with their specific understanding. The recipient acknowledges that by sending this information via electronic means, there is no absolute assurance that the information will be free from third party access, use, or further dissemination. This e-mail contains information that is privileged and/or confidential and may be subject to legal restrictions and penalties regarding its unauthorized disclosure or other use. You are prohibited from copying, distributing or otherwise using this information if you are not the intended recipient. Past performance is not necessarily indicative of future results. This is not an offer of or the solicitation for any security which will be made only by private placement memorandum that may be obtained from the applicable hedge fund. If you have received this e-mail in error, please notify us immediately by return e-mail and delete this e-mail and all attachments from your system. Thank You.",
+      "body_snippet": "Fabrice:\n\nI am jumping into the middle of this thread but your issue of Performance\nAttribution for Funds caught my attention.\n\nNot sure what type of performance attribution you need\nbut you can do St",
+      "thread_id": "thread-c41f99f46b00",
+      "thread_depth": 2,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-71fceb6cd8ad",
+      "message_id": "<551c2c780706072248n2b93e9c0l328aab3b1744a9e4@mail.gmail.com>",
+      "from_name": "Liu Zhigang",
+      "from_email_hash": "635150d9a1f31623737ef7658ae43256b2483742cbb53222a78319082d585052",
+      "date": "2007-06-08T13:48:51+08:00",
+      "subject": "[R-SIG-Finance] hedge funds data",
+      "subject_clean": "hedge funds data",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070608/30b75e1c/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070608/30b75e1c/attachment.pl",
+      "thread_id": "thread-71fceb6cd8ad",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-5ea5f054627d",
+      "message_id": "<OF2277598A.98D4FD4B-ONC12572F4.0020362D-C12572F4.0020668C@hsbc.fr>",
+      "from_name": "guillaume.nicoulaud at halbis.com",
+      "from_email_hash": "7f9255d1786515332e92a75b628650265b8fae654111549ff0b48dcf88f53949",
+      "date": "2007-06-08T07:53:54+02:00",
+      "subject": "[R-SIG-Finance] Réf. :  hedge funds data",
+      "subject_clean": "Réf. :  hedge funds data",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Liu\nhttps://www.hedgefundresearch.com/ would be my personal choice (registration is -- or at least used to be -- free)\nRgds,\nG\n\n\n\n                                                                                                                                   \n                                                                                                                                   \n                                                        Pour :   r-sig-finance at stat.math.ethz.ch                                   \n                                                        cc :                                                                       \n                                                        Objet :  [R-SIG-Finance] hedge funds data                                  \n             \"Liu Zhigang\" <email.lzg at gmail.com>                                                                                   \n             Envoy? par :                                                                                                          \n             r-sig-finance-bounces at stat.math.ethz.                                                                                 \n             ch                                                                                                                    \n                                                                                                                                   \n                                                                                                                                   \n             08/06/2007 07:48                                                                                                      \n                                                                                                                                   \n                                                                                                                                   \n\n\n\n\nHello,\nanyone can tell me where I can find and download  hedge funds data, such as\nreturn rate and performance ratios.\nThanks.\n\nLiu Zhigang\nJilin Univeristy, China\n\n             [[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only.\n-- If you want to post, subscribe first.\n\n\n\n\nLes informations contenues dans ce message sont confidentielles et peuvent constituer des informations privilegiees. Si vous n etes pas le destinataire de ce message, il vous est interdit de le copier, de le faire suivre, de le divulguer ou d en utiliser tout ou partie. Si vous avez recu ce message par erreur, merci de le supprimer de votre systeme, ainsi que toutes ses copies, et d en avertir immediatement l expediteur par message de retour.\nIl est impossible de garantir que les communications par messagerie electronique arrivent en temps utile, sont securisees ou denuees de toute erreur ou virus. En consequence, l expediteur n accepte aucune responsabilite du fait des erreurs ou omissions qui pourraient en resulter.\n--- ----------------------------------------------------- ---\nThe information contained in this e-mail is confidential. It...{{dropped}}",
+      "body_snippet": "Hi Liu\nhttps://www.hedgefundresearch.com/ would be my personal choice (registration is -- or at least used to be -- free)\nRgds,\nG\n\n\n\n                                                                   ",
+      "thread_id": "thread-5ea5f054627d",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-0fec565c19fb",
+      "message_id": "<19811401A1D8174CB3EAD7F6072E9B50994641@chsa1025.share.beluni.net>",
+      "from_name": "Bengoechea Bartolomé Enrique (SIES 73)",
+      "from_email_hash": "867c96515f3a620c9951603a510be56a57f731c55dd06a62929d63c3ceec7a59",
+      "date": "2007-06-08T12:36:00+02:00",
+      "subject": "[R-SIG-Finance] R-project and the risk measurement for mutual and hedge funds",
+      "subject_clean": "R-project and the risk measurement for mutual and hedge funds",
+      "in_reply_to": "<mailman.11.1181296804.2770.r-sig-finance@stat.math.ethz.ch>",
+      "references": [
+        "<mailman.11.1181296804.2770.r-sig-finance@stat.math.ethz.ch>"
+      ],
+      "body_plain": "Hi Fabrice,\n\n> PS: I need to produce 500 risk management reports per month!!!\n\nNot an issue, you can perfectly do that with R. \n\n> R project will enable me to have CVaR, Modified Sharpe Ratio, \n> etc. But, I guess that I cannot use R project to produce \n> \"automatically\" Risk management report and performance \n> attribution for the funds. Is it true? I will be happy to \n> know what software is appropriated for this task?\n\nYou can create a fully automated system with R. But, even if many libraries will simplify it, you will have to program a good part of the system yourself, at least for integration. This takes time and requires programming skills but will give you a lot of flexibility.\n\nIf (very high) speed is an issue, e.g. if you need to produce the 500 reports in half an hour, R may not be the tool of choice. But you can probably end up creating your 500 reports in one day...\n\nOther people has mentioned Sweave for creating the reports. It's likely the best and fastest-generation tool, but I also use extensively R(D)COM to build a good number of Excel and Powerpoint reports on the fly.\n\nGood luck,\n\nEnrique",
+      "body_snippet": "Hi Fabrice,\n\n> PS: I need to produce 500 risk management reports per month!!!\n\nNot an issue, you can perfectly do that with R. \n\n> R project will enable me to have CVaR, Modified Sharpe Ratio, \n> etc.",
+      "thread_id": "thread-0fec565c19fb",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-92775e622ddb",
+      "message_id": "<466941FB.1010502@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2007-06-08T06:48:11-05:00",
+      "subject": "[R-SIG-Finance] hedge funds data",
+      "subject_clean": "hedge funds data",
+      "in_reply_to": "<551c2c780706072248n2b93e9c0l328aab3b1744a9e4@mail.gmail.com>",
+      "references": [
+        "<551c2c780706072248n2b93e9c0l328aab3b1744a9e4@mail.gmail.com>"
+      ],
+      "body_plain": "Liu Zhigang wrote:\n> Hello,\n> anyone can tell me where I can find and download  hedge funds data, such as\n> return rate and performance ratios.\n> Thanks.\n\nThere are no free sources for individual fund returns.  All of the Fund \ndatabases are paid subscription services.  Research is hampered by the \nfact that none of the data providers are complete, and all the databases \nhave different biases.  There are many academic papers on selection and \nsample bias in hedge fund databases that you may wish to review.\n\nIn general, the various hedge fund databases do publish their index data \nfor free, but not the individual fund data. Since it looks like you are \nat a university, you *may* be able to get access to their data for a \nreduced rate (or maybe free if you inquire and are persistent) to use it \nin publications.\n\nHere are some of the major hedge fund database/index providers:\n\nGuillaume has mentioned HFR:\nhttps://www.hedgefundresearch.com/\nTheir indexes are widely quoted.  Academic use of their database is \navailable at reduced subscription rates.\n\nThere is also EDHEC:\nhttp://www.edhec-risk.com/\nI believe that EDHEC has the most authoritative Hedge Fund Indices \nbecause they publish a factor-based (PCA) meta-index of all/most of the \npublished hedge fund data sources.  The EDHEC indices have the best \ncorrelations to actual fund data that I have reviewed.  EDHEC, as a \nsemi-academic institution, is also very friendly about using their \ninformation in publication (they readily granted permission to \ndistribute some of their data with PerformanceAnalytics for R, for example).\n\nMorningstar/Altvest:\nhttp://www.investorforce.com/av/index/index_rets.asp\nMorningstar purchased Altvest a while back.  Their database used to be \none of the least expensive.\n\nCSFB/Tremont:\nhttp://www.hedgeindex.com/hedgeindex/en/default.aspx?cy=USD\nThis database is one of the most complete.\n\nMSCI/Barra:\nhttp://www.mscibarra.com/products/indices/hf/\nA relatively small database.\n\nEurekaHedge:\nhttp://www.eurekahedge.com/indices/hedgefundindices.asp\n\nBarclays:\nhttp://www.barclaygrp.com/indices/ghs/Hedge_Fund_Index.html\nThese are the Barclays index data.  I have seen academic papers \nutilizing fund return data from their database, so it may be worthwhile \nto inquire about academic use.\n\nhttp://www.hedgefund-index.com/\nPublishes some individual fund data (although not historical returns) \nlicensed from Barclays as I recall.\n\nThere are a number of smaller players, but I think I've accurately \ncovered the majority of the major databases and their published indexes.\n\nRegards,\n\n    - Brian",
+      "body_snippet": "Liu Zhigang wrote:\n> Hello,\n> anyone can tell me where I can find and download  hedge funds data, such as\n> return rate and performance ratios.\n> Thanks.\n\nThere are no free sources for individual fund",
+      "thread_id": "thread-71fceb6cd8ad",
+      "thread_depth": 1,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-2d6905d9bc64",
+      "message_id": "<BAY129-W20EC34D80014EE4321208FCB250@phx.gbl>",
+      "from_name": "Fabrice McShort",
+      "from_email_hash": "622b38f6b97a05abf98401ac43561640f10afac227d0acf207090d9019f1086c",
+      "date": "2007-06-08T15:27:41+02:00",
+      "subject": "[R-SIG-Finance] R-project and the risk measurement for mutual and hedge funds",
+      "subject_clean": "R-project and the risk measurement for mutual and hedge funds",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070608/0d556932/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070608/0d556932/attachment.pl",
+      "thread_id": "thread-2d6905d9bc64",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-80df830084ca",
+      "message_id": "<466975DA.9080208@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2007-06-08T10:29:30-05:00",
+      "subject": "[R-SIG-Finance] R-project and the risk measurement for mutual and hedge funds",
+      "subject_clean": "R-project and the risk measurement for mutual and hedge funds",
+      "in_reply_to": "<BAY129-W20EC34D80014EE4321208FCB250@phx.gbl>",
+      "references": [
+        "<BAY129-W20EC34D80014EE4321208FCB250@phx.gbl>"
+      ],
+      "body_plain": "Fabrice McShort wrote:\n> I am hyper motivated to explore your propositions. \n > But, I am sure that I will need your help\n > (we will see how in the future).\n> Can you give me an idea of the cost for implementing this solution? \n\n\nOn the Sweave approach, here's a quick outline of possible times:\n\n- Install and Configure Lyx editor to talk to R\n1-2 hours\n\n- modify the simple Sweave/Lyx examples to do something more interesting\n1 hour\n\n- build a report using existing functions,tables, and graphs with \nfile-based data\n1-2 days (assuming a Pertrac or Morningstar style report)\n\n- database linkage\ntime will vary based on your data and database\n\n- web download of data\ntime will vary, but usually ~1-2 hours to write and test new download \nfunction\n\n- additional tables/graphs\ntime will vary based on what you need, obviously\n\nIf you need to give these times to your boss, double or triple them ;).\n\nI'd recommend starting with analytical functions that are already \nwritten, as in PerformanceAnalytics or RMetrics.  Since you're just \ngetting started with R, it probably makes sense to use other functions \nfirst before trying to modify them to fit your more specific requirements.\n\nRegards,\n\n   - Brian",
+      "body_snippet": "Fabrice McShort wrote:\n> I am hyper motivated to explore your propositions. \n > But, I am sure that I will need your help\n > (we will see how in the future).\n> Can you give me an idea of the cost for ",
+      "thread_id": "thread-2d6905d9bc64",
+      "thread_depth": 1,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-12eb5f8b4d9f",
+      "message_id": "<434a8fc00706081000o241aef3cp5e00782f3a7e9600@mail.gmail.com>",
+      "from_name": "Matteo Fornasier",
+      "from_email_hash": "a6d7d9a3748b918987f2dfb7fae4df1740c3f851f5ab06d71050c1cd9a9a3b86",
+      "date": "2007-06-08T19:00:03+02:00",
+      "subject": "[R-SIG-Finance] R-project and the risk measurement for mutual and hedge funds",
+      "subject_clean": "R-project and the risk measurement for mutual and hedge funds",
+      "in_reply_to": "<466975DA.9080208@braverock.com>",
+      "references": [
+        "<BAY129-W20EC34D80014EE4321208FCB250@phx.gbl>",
+        "<466975DA.9080208@braverock.com>"
+      ],
+      "body_plain": "Hi all,\nEvery day I generate 300 report of 30 pages every one in PDF format,\nusing R to import data from a MySQL database and to generate graph and\ncompute a lot of indicator (about 15-20 minutes), then R automatically\nsaved graph in a folder and indicators in a MySQL table. So I generate\nreports using php and FPDF php's library. Php extract from the folder\nthe graphs and from MySQL the indicators (about 10 minutes).\nR run via CMD in the web server that have php, so every morning I have\nonly to click a button in my intranet.\n\nI hope my information can be usefoul to your aim.\nRegards,\n\nMatteo Fornasier\nmatteo.fornasier at gmail.com",
+      "body_snippet": "Hi all,\nEvery day I generate 300 report of 30 pages every one in PDF format,\nusing R to import data from a MySQL database and to generate graph and\ncompute a lot of indicator (about 15-20 minutes), th",
+      "thread_id": "thread-2d6905d9bc64",
+      "thread_depth": 2,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-7591638d465d",
+      "message_id": "<0946E293C7C22A45A0E33BA14FAA8D88F38812@500MAIL.goldbox.com>",
+      "from_name": "ngottlieb at marinercapital.com",
+      "from_email_hash": "5575da06d2fa5cb800e4817f76d2e771e21e0a4a88f6085e998984ccce4302a1",
+      "date": "2007-06-08T13:41:31-04:00",
+      "subject": "[R-SIG-Finance] hedge funds data",
+      "subject_clean": "hedge funds data",
+      "in_reply_to": "<551c2c780706072248n2b93e9c0l328aab3b1744a9e4@mail.gmail.com>",
+      "references": [
+        "<551c2c780706072248n2b93e9c0l328aab3b1744a9e4@mail.gmail.com>"
+      ],
+      "body_plain": "Liu:\n\nYou can get return series for various Hedge fund types from CSFB Tremont\nOr EdHEC-Risk, thin the website is www.edhec-risk.com \n\nNeil\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Liu\nZhigang\nSent: Friday, June 08, 2007 1:49 AM\nTo: r-sig-finance at stat.math.ethz.ch\nSubject: [R-SIG-Finance] hedge funds data\n\nHello,\nanyone can tell me where I can find and download  hedge funds data, such\nas return rate and performance ratios.\nThanks.\n\nLiu Zhigang\nJilin Univeristy, China\n\n\t[[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.\n--------------------------------------------------------\n\n \n \nThis information is being sent at the recipient's request or with their specific understanding. The recipient acknowledges that by sending this information via electronic means, there is no absolute assurance that the information will be free from third party access, use, or further dissemination. This e-mail contains information that is privileged and/or confidential and may be subject to legal restrictions and penalties regarding its unauthorized disclosure or other use. You are prohibited from copying, distributing or otherwise using this information if you are not the intended recipient. Past performance is not necessarily indicative of future results. This is not an offer of or the solicitation for any security which will be made only by private placement memorandum that may be obtained from the applicable hedge fund. If you have received this e-mail in error, please notify us immediately by return e-mail and delete this e-mail and all attachments from your system. Thank You.",
+      "body_snippet": "Liu:\n\nYou can get return series for various Hedge fund types from CSFB Tremont\nOr EdHEC-Risk, thin the website is www.edhec-risk.com \n\nNeil\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at s",
+      "thread_id": "thread-71fceb6cd8ad",
+      "thread_depth": 1,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-18c78df22c3a",
+      "message_id": "<6.2.1.2.2.20070608134441.047a3b40@pop.pipeline.com>",
+      "from_name": "Frederick Novomestky",
+      "from_email_hash": "832e7e2b7f6e597e48404048397acadd75de80f0df1aeb61e3cfc14798ea3a44",
+      "date": "2007-06-08T13:45:24-04:00",
+      "subject": "[R-SIG-Finance] Réf. :  hedge funds data",
+      "subject_clean": "Réf. :  hedge funds data",
+      "in_reply_to": "<OF2277598A.98D4FD4B-ONC12572F4.0020362D-C12572F4.0020668C@hsbc.fr>",
+      "references": [
+        "<OF2277598A.98D4FD4B-ONC12572F4.0020362D-C12572F4.0020668C@hsbc.fr>"
+      ],
+      "body_plain": "The source I use for hedge fund data is www.hedgefund.net.  Great attention \nto quality and coverage.  You will have to pay for a subscription.\n\nBest regards,\n\nFred Novomestky\n\nAt 01:53 AM 6/8/2007, guillaume.nicoulaud at halbis.com wrote:\n>Hi Liu\n>https://www.hedgefundresearch.com/ would be my personal choice \n>(registration is -- or at least used to be -- free)\n>Rgds,\n>G\n>\n>\n>\n> \n>\n> \n>\n>                                                         Pour \n> :   r-sig-finance at stat.math.ethz.ch\n>                                                         cc \n> :\n>                                                         Objet \n> :  [R-SIG-Finance] hedge funds data\n>              \"Liu Zhigang\" \n> <email.lzg at gmail.com> \n>\n>              Envoy? par \n> : \n>\n>              r-sig-finance-bounces at stat.math.ethz. \n>\n>              ch \n>\n> \n>\n> \n>\n>              08/06/2007 \n> 07:48 \n>\n> \n>\n> \n>\n>\n>\n>\n>\n>Hello,\n>anyone can tell me where I can find and download  hedge funds data, such as\n>return rate and performance ratios.\n>Thanks.\n>\n>Liu Zhigang\n>Jilin Univeristy, China\n>\n>              [[alternative HTML version deleted]]\n>\n>_______________________________________________\n>R-SIG-Finance at stat.math.ethz.ch mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>-- Subscriber-posting only.\n>-- If you want to post, subscribe first.\n>\n>\n>\n>\n>Les informations contenues dans ce message sont confidentielles et peuvent \n>constituer des informations privilegiees. Si vous n etes pas le \n>destinataire de ce message, il vous est interdit de le copier, de le faire \n>suivre, de le divulguer ou d en utiliser tout ou partie. Si vous avez recu \n>ce message par erreur, merci de le supprimer de votre systeme, ainsi que \n>toutes ses copies, et d en avertir immediatement l expediteur par message \n>de retour.\n>Il est impossible de garantir que les communications par messagerie \n>electronique arrivent en temps utile, sont securisees ou denuees de toute \n>erreur ou virus. En consequence, l expediteur n accepte aucune \n>responsabilite du fait des erreurs ou omissions qui pourraient en resulter.\n>--- ----------------------------------------------------- ---\n>The information contained in this e-mail is confidential. It...{{dropped}}\n>\n>_______________________________________________\n>R-SIG-Finance at stat.math.ethz.ch mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>-- Subscriber-posting only.\n>-- If you want to post, subscribe first.\n\nFrederick Novomestky, Ph.D.\nNovomestky Associates LLC\n41 Eastover Drive\nEast Northport, NY 11731-4330\nVox: 1.631.368.0701\nFax: 1.631.368.1696\n\nConfidentiality Notice: This electronic mail transmission, i...{{dropped}}",
+      "body_snippet": "The source I use for hedge fund data is www.hedgefund.net.  Great attention \nto quality and coverage.  You will have to pay for a subscription.\n\nBest regards,\n\nFred Novomestky\n\nAt 01:53 AM 6/8/2007, g",
+      "thread_id": "thread-5ea5f054627d",
+      "thread_depth": 1,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-54509b4a2c77",
+      "message_id": "<f4i171$93t$1@sea.gmane.org>",
+      "from_name": "Rob Steele",
+      "from_email_hash": "81430ecd9b8493500afe3da63cea41799b5fe8a0a807d7d6813d4cddefd70f25",
+      "date": "2007-06-10T19:24:17-04:00",
+      "subject": "[R-SIG-Finance] Small Hedge Fund Seeks Data Deity",
+      "subject_clean": "Small Hedge Fund Seeks Data Deity",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Our small startup quant fund near Boston is looking for a kick-ass \narchitect/programmer to take over our data infrastructure.  The ideal \ncandidate would be expert in Linux, MySQL and Python, know R and MATLAB \nand have experience managing real-time and end-of-day financial data feeds.\n\nPlease contact Rob Steele, R O B at F A T K A T dot C O M.",
+      "body_snippet": "Our small startup quant fund near Boston is looking for a kick-ass \narchitect/programmer to take over our data infrastructure.  The ideal \ncandidate would be expert in Linux, MySQL and Python, know R ",
+      "thread_id": "thread-54509b4a2c77",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-75e66f497f46",
+      "message_id": "<BAY129-W9E8338A56A0913A3214A7CB1A0@phx.gbl>",
+      "from_name": "Fabrice McShort",
+      "from_email_hash": "622b38f6b97a05abf98401ac43561640f10afac227d0acf207090d9019f1086c",
+      "date": "2007-06-12T00:22:04+02:00",
+      "subject": "[R-SIG-Finance] R-project and the risk measurement for mutual and hedge funds",
+      "subject_clean": "R-project and the risk measurement for mutual and hedge funds",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070612/d050da98/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070612/d050da98/attachment.pl",
+      "thread_id": "thread-75e66f497f46",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-b2aa1290a841",
+      "message_id": "<4671019B.2010003@aol.com>",
+      "from_name": "JOSH CHIEN",
+      "from_email_hash": "31d5327a9bec577beec34b994bc3d8300a50c2c76f2ea0952a191d90d8a47fd8",
+      "date": "2007-06-14T16:51:39+08:00",
+      "subject": "[R-SIG-Finance] How to solve DP from KMV model ?",
+      "subject_clean": "How to solve DP from KMV model ?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070614/63995467/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070614/63995467/attachment.pl",
+      "thread_id": "thread-b2aa1290a841",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-6a486bfdced8",
+      "message_id": "<SANCTUMFISERVERutJL00000282@sanctumfi.com>",
+      "from_name": "Robert Sams",
+      "from_email_hash": "67252a45820598ec41cf5f10749a914db54058236b66f8a0728ab05064f156e1",
+      "date": "2007-06-14T16:53:47+01:00",
+      "subject": "[R-SIG-Finance] option model for interest rate future",
+      "subject_clean": "option model for interest rate future",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nDoes anyone have R code to calculate implied vol and greeks of an option\non an interest rate future (e.g., CME's eurodollar contract)?\n\nThanks,\nRobert",
+      "body_snippet": "Hi,\n\nDoes anyone have R code to calculate implied vol and greeks of an option\non an interest rate future (e.g., CME's eurodollar contract)?\n\nThanks,\nRobert",
+      "thread_id": "thread-6a486bfdced8",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-96d19f10cbd7",
+      "message_id": "<46716DD8.1070102@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2007-06-14T11:33:28-05:00",
+      "subject": "[R-SIG-Finance] option model for interest rate future",
+      "subject_clean": "option model for interest rate future",
+      "in_reply_to": "<SANCTUMFISERVERutJL00000282@sanctumfi.com>",
+      "references": [
+        "<SANCTUMFISERVERutJL00000282@sanctumfi.com>"
+      ],
+      "body_plain": "Robert Sams wrote:\n> Does anyone have R code to calculate implied vol and greeks of an option\n> on an interest rate future (e.g., CME's eurodollar contract)?\n\nThere are a lot of Greeks in fOptions, part of RMetrics.\n\nCould you be a little more specific on what approach you want to use to \nget to implied volatility?  There are several, and I know I've seen code \npointers posted to this list on implied volatilities in the past, so you \nmight want to search the list archives.  I'd be interested in a summary \nto the list of what your searching turns up, so that we could have a \ndirected conversation about it.\n\nRegards,\n\n  - Brian\n\n--\nPerformanceAnalytics\nhttp://braverock.com/R/",
+      "body_snippet": "Robert Sams wrote:\n> Does anyone have R code to calculate implied vol and greeks of an option\n> on an interest rate future (e.g., CME's eurodollar contract)?\n\nThere are a lot of Greeks in fOptions, pa",
+      "thread_id": "thread-6a486bfdced8",
+      "thread_depth": 1,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-9f8906386005",
+      "message_id": "<012a01c7aea5$888f0660$99ad1320$@com>",
+      "from_name": "Sylvain BARTHELEMY",
+      "from_email_hash": "6269d4704746af1637c45553827c0855b4600c0b85fed212ce0906917ec5632c",
+      "date": "2007-06-14T19:00:37+02:00",
+      "subject": "[R-SIG-Finance] option model for interest rate future",
+      "subject_clean": "option model for interest rate future",
+      "in_reply_to": "<SANCTUMFISERVERutJL00000282@sanctumfi.com>",
+      "references": [
+        "<SANCTUMFISERVERutJL00000282@sanctumfi.com>"
+      ],
+      "body_plain": "Hi Robert,\n\nI think that the fOptions pack does that: GBSGreeks & GBSVolatility\n\n\n---\nSylvain Barth?l?my\nResearch Director, TAC\nwww.tac-financial.com | www.sylbarth.com\n\n-----Message d'origine-----\nDe?: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] De la part de Robert Sams\nEnvoy??: jeudi 14 juin 2007 17:54\n??: r-sig-finance at stat.math.ethz.ch\nObjet?: [R-SIG-Finance] option model for interest rate future\n\nHi,\n\nDoes anyone have R code to calculate implied vol and greeks of an option\non an interest rate future (e.g., CME's eurodollar contract)?\n\nThanks,\nRobert\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.",
+      "body_snippet": "Hi Robert,\n\nI think that the fOptions pack does that: GBSGreeks & GBSVolatility\n\n\n---\nSylvain Barth?l?my\nResearch Director, TAC\nwww.tac-financial.com | www.sylbarth.com\n\n-----Message d'origine-----\nDe",
+      "thread_id": "thread-6a486bfdced8",
+      "thread_depth": 1,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-c20498f42e15",
+      "message_id": "<0946E293C7C22A45A0E33BA14FAA8D88F38841@500MAIL.goldbox.com>",
+      "from_name": "ngottlieb at marinercapital.com",
+      "from_email_hash": "5575da06d2fa5cb800e4817f76d2e771e21e0a4a88f6085e998984ccce4302a1",
+      "date": "2007-06-15T10:49:25-04:00",
+      "subject": "[R-SIG-Finance] Question: How to Notionalize a Commodity Future?",
+      "subject_clean": "Question: How to Notionalize a Commodity Future?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Does anyone know how to notionalize a commodity future (i.e CBT Corn,\nCBT Soybean etc.)?\n\nAnd if so what is the calculation?\n\nThanks,\nNeil Gottlieb\n--------------------------------------------------------\n\n \n \nThis information is being sent at the recipient's request or...{{dropped}}",
+      "body_snippet": "Does anyone know how to notionalize a commodity future (i.e CBT Corn,\nCBT Soybean etc.)?\n\nAnd if so what is the calculation?\n\nThanks,\nNeil Gottlieb\n----------------------------------------------------",
+      "thread_id": "thread-c20498f42e15",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-afae133178cb",
+      "message_id": "<2CF54397DF75234DA13D028A0753C0DE29637A@ex3.811t.hcmny.com>",
+      "from_name": "Armstrong, Whit",
+      "from_email_hash": "2edf8f0eb08ec455a2e0c4571181544371c24478e2ad71dbe8e4a55f6c6762a7",
+      "date": "2007-06-15T10:56:29-04:00",
+      "subject": "[R-SIG-Finance] Question: How to Notionalize a Commodity Future?",
+      "subject_clean": "Question: How to Notionalize a Commodity Future?",
+      "in_reply_to": "<0946E293C7C22A45A0E33BA14FAA8D88F38841@500MAIL.goldbox.com>",
+      "references": [],
+      "body_plain": "notionalize?\n\nIf you are talking about the notional value of a conctact it's just\nprice * contract size, but sizes are specific to each contract.  you can\nget this information from the exchanges or from BBG. \n\n> -----Original Message-----\n> From: r-sig-finance-bounces at stat.math.ethz.ch \n> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of \n> ngottlieb at marinercapital.com\n> Sent: Friday, June 15, 2007 10:49 AM\n> To: r-sig-finance at stat.math.ethz.ch\n> Subject: [R-SIG-Finance] Question: How to Notionalize a \n> Commodity Future?\n> \n> Does anyone know how to notionalize a commodity future (i.e \n> CBT Corn, CBT Soybean etc.)?\n> \n> And if so what is the calculation?\n> \n> Thanks,\n> Neil Gottlieb\n> --------------------------------------------------------\n> \n>  \n>  \n> This information is being sent at the recipient's request=...{{dropped}}",
+      "body_snippet": "notionalize?\n\nIf you are talking about the notional value of a conctact it's just\nprice * contract size, but sizes are specific to each contract.  you can\nget this information from the exchanges or fr",
+      "thread_id": "thread-c20498f42e15",
+      "thread_depth": 1,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-6800a2acfc77",
+      "message_id": "<8141d43c0706150806m74496b20g79e0a588dfe700d9@mail.gmail.com>",
+      "from_name": "Michael Sun",
+      "from_email_hash": "70810dd9e11ef49f5905f2cbae45516d397de909fba95977f6d431f81b2eb28c",
+      "date": "2007-06-15T16:06:24+01:00",
+      "subject": "[R-SIG-Finance] Program Trading Techniques and Financial Models for Hedge Funds: 3rd Annual CARISMA Seminar",
+      "subject_clean": "Program Trading Techniques and Financial Models for Hedge Funds: 3rd Annual CARISMA Seminar",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070615/b9d27d9a/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070615/b9d27d9a/attachment.pl",
+      "thread_id": "thread-6800a2acfc77",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-3e8a9618408d",
+      "message_id": "<0946E293C7C22A45A0E33BA14FAA8D88F38842@500MAIL.goldbox.com>",
+      "from_name": "ngottlieb at marinercapital.com",
+      "from_email_hash": "5575da06d2fa5cb800e4817f76d2e771e21e0a4a88f6085e998984ccce4302a1",
+      "date": "2007-06-15T11:08:08-04:00",
+      "subject": "[R-SIG-Finance] Question: How to Notionalize a Commodity Future?",
+      "subject_clean": "Question: How to Notionalize a Commodity Future?",
+      "in_reply_to": "<2CF54397DF75234DA13D028A0753C0DE29637A@ex3.811t.hcmny.com>",
+      "references": [
+        "<0946E293C7C22A45A0E33BA14FAA8D88F38841@500MAIL.goldbox.com>",
+        "<2CF54397DF75234DA13D028A0753C0DE29637A@ex3.811t.hcmny.com>"
+      ],
+      "body_plain": "Whit:\n\nThanks for your quick response.\nI tried doing this:\n\n# of contracts x contract price x contractsize x underlying price of the\ncontract size (ie. 18,000 bushels at whatever amount).\n                                          Contracts      Price     Quote\nUnits       Contract size        cents/per pound\n\tBOK7 Comdty\tSOYBEAN OIL FUTR May07\t200\t          32.48\nlbs.\tcents/lb.\t60,000.00\t         .01 \n\n  I am not sure if this is correct to get notional value?\n\nNeil\n\n-----Original Message-----\nFrom: Armstrong, Whit [mailto:whit.armstrong at hcmny.com] \nSent: Friday, June 15, 2007 10:56 AM\nTo: Gottlieb, Neil\nCc: r-sig-finance at stat.math.ethz.ch\nSubject: RE: [R-SIG-Finance] Question: How to Notionalize a Commodity\nFuture?\n\nnotionalize?\n\nIf you are talking about the notional value of a conctact it's just\nprice * contract size, but sizes are specific to each contract.  you can\nget this information from the exchanges or from BBG. \n\n> -----Original Message-----\n> From: r-sig-finance-bounces at stat.math.ethz.ch\n> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of \n> ngottlieb at marinercapital.com\n> Sent: Friday, June 15, 2007 10:49 AM\n> To: r-sig-finance at stat.math.ethz.ch\n> Subject: [R-SIG-Finance] Question: How to Notionalize a Commodity \n> Future?\n> \n> Does anyone know how to notionalize a commodity future (i.e CBT Corn, \n> CBT Soybean etc.)?\n> \n> And if so what is the calculation?\n> \n> Thanks,\n> Neil Gottlieb\n> --------------------------------------------------------\n> \n>  \n>  \n> This information is being sent at the recipient's request\\...{{dropped}}",
+      "body_snippet": "Whit:\n\nThanks for your quick response.\nI tried doing this:\n\n# of contracts x contract price x contractsize x underlying price of the\ncontract size (ie. 18,000 bushels at whatever amount).\n            ",
+      "thread_id": "thread-c20498f42e15",
+      "thread_depth": 2,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-53a23057d33a",
+      "message_id": "<4672B0CF.7030308@globaladvisors.co.uk>",
+      "from_name": "Edmund Jackson",
+      "from_email_hash": "9a14e13c0978741a110e78741526745ca5819614a86f469f8e5295560d7e2aec",
+      "date": "2007-06-15T16:31:27+01:00",
+      "subject": "[R-SIG-Finance] Question: How to Notionalize a Commodity Future?",
+      "subject_clean": "Question: How to Notionalize a Commodity Future?",
+      "in_reply_to": "<0946E293C7C22A45A0E33BA14FAA8D88F38842@500MAIL.goldbox.com>",
+      "references": [
+        "<0946E293C7C22A45A0E33BA14FAA8D88F38841@500MAIL.goldbox.com>",
+        "<2CF54397DF75234DA13D028A0753C0DE29637A@ex3.811t.hcmny.com>",
+        "<0946E293C7C22A45A0E33BA14FAA8D88F38842@500MAIL.goldbox.com>"
+      ],
+      "body_plain": "Neil,\n\nI think you might be multiplying the price in twice there. I would say its\nnum_contracts * contract_size * price_of_underlying\n\nie for Nymex Crude\n\nvalue of N contracts = N * 1000 * $68\n\nEdmund\n\nngottlieb at marinercapital.com wrote:\n> Whit:\n>\n> Thanks for your quick response.\n> I tried doing this:\n>\n> # of contracts x contract price x contractsize x underlying price of the\n> contract size (ie. 18,000 bushels at whatever amount).\n>                                           Contracts      Price     Quote\n> Units       Contract size        cents/per pound\n> \tBOK7 Comdty\tSOYBEAN OIL FUTR May07\t200\t          32.48\n> lbs.\tcents/lb.\t60,000.00\t         .01 \n>\n>   I am not sure if this is correct to get notional value?\n>\n> Neil\n>\n> -----Original Message-----\n> From: Armstrong, Whit [mailto:whit.armstrong at hcmny.com] \n> Sent: Friday, June 15, 2007 10:56 AM\n> To: Gottlieb, Neil\n> Cc: r-sig-finance at stat.math.ethz.ch\n> Subject: RE: [R-SIG-Finance] Question: How to Notionalize a Commodity\n> Future?\n>\n> notionalize?\n>\n> If you are talking about the notional value of a conctact it's just\n> price * contract size, but sizes are specific to each contract.  you can\n> get this information from the exchanges or from BBG. \n>\n>   \n>> -----Original Message-----\n>> From: r-sig-finance-bounces at stat.math.ethz.ch\n>> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of \n>> ngottlieb at marinercapital.com\n>> Sent: Friday, June 15, 2007 10:49 AM\n>> To: r-sig-finance at stat.math.ethz.ch\n>> Subject: [R-SIG-Finance] Question: How to Notionalize a Commodity \n>> Future?\n>>\n>> Does anyone know how to notionalize a commodity future (i.e CBT Corn, \n>> CBT Soybean etc.)?\n>>\n>> And if so what is the calculation?\n>>\n>> Thanks,\n>> Neil Gottlieb\n>> --------------------------------------------------------\n>>\n>>  \n>>  \n>> This information is being sent at the recipient's request\\...{{dropped}}\n>>     \n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.\n>\n>",
+      "body_snippet": "Neil,\n\nI think you might be multiplying the price in twice there. I would say its\nnum_contracts * contract_size * price_of_underlying\n\nie for Nymex Crude\n\nvalue of N contracts = N * 1000 * $68\n\nEdmund",
+      "thread_id": "thread-c20498f42e15",
+      "thread_depth": 3,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-7865d603a998",
+      "message_id": "<F9F2A641C593D7408925574C05A7BE77394955@rhopost.rhotrading.com>",
+      "from_name": "davidr at rhotrading.com",
+      "from_email_hash": "4998ec2d52ffe0c535ce902387987bbb6e981a3c144c9feae07c8ce7b5869756",
+      "date": "2007-06-15T11:04:09-05:00",
+      "subject": "[R-SIG-Finance] Question: How to Notionalize a Commodity Future?",
+      "subject_clean": "Question: How to Notionalize a Commodity Future?",
+      "in_reply_to": "<0946E293C7C22A45A0E33BA14FAA8D88F38842@500MAIL.goldbox.com>",
+      "references": [
+        "<0946E293C7C22A45A0E33BA14FAA8D88F38841@500MAIL.goldbox.com>",
+        "<2CF54397DF75234DA13D028A0753C0DE29637A@ex3.811t.hcmny.com>",
+        "<0946E293C7C22A45A0E33BA14FAA8D88F38842@500MAIL.goldbox.com>"
+      ],
+      "body_plain": "I believe you have it.\nI always encourage the use of UNITS:\n\n(# contracts) * (contract size = 60000 lbs/contract) * (price = 36.36\ncents/lb) (0.01 dollars/cent) = dollars = the current worth of you\nnumber of contracts. Notice that the units cancel appropriately. The DES\npage in Bloomberg helps here.\n\nHTH,\n\nDavid L. Reiner\nRho Trading Securities, LLC\n550 W. Jackson Blvd #1000\nChicago, IL 60661-5704\n \n312-244-4610 direct\n312-244-4500 main\n312-244-4501 fax\n \n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of\nngottlieb at marinercapital.com\nSent: Friday, June 15, 2007 10:08 AM\nTo: whit.armstrong at hcmny.com\nCc: r-sig-finance at stat.math.ethz.ch\nSubject: Re: [R-SIG-Finance] Question: How to Notionalize a Commodity\nFuture?\n\nWhit:\n\nThanks for your quick response.\nI tried doing this:\n\n# of contracts x contract price x contractsize x underlying price of the\ncontract size (ie. 18,000 bushels at whatever amount).\n                                          Contracts      Price     Quote\nUnits       Contract size        cents/per pound\n\tBOK7 Comdty\tSOYBEAN OIL FUTR May07\t200\t          32.48\nlbs.\tcents/lb.\t60,000.00\t         .01 \n\n  I am not sure if this is correct to get notional value?\n\nNeil\n\n-----Original Message-----\nFrom: Armstrong, Whit [mailto:whit.armstrong at hcmny.com] \nSent: Friday, June 15, 2007 10:56 AM\nTo: Gottlieb, Neil\nCc: r-sig-finance at stat.math.ethz.ch\nSubject: RE: [R-SIG-Finance] Question: How to Notionalize a Commodity\nFuture?\n\nnotionalize?\n\nIf you are talking about the notional value of a conctact it's just\nprice * contract size, but sizes are specific to each contract.  you can\nget this information from the exchanges or from BBG. \n\n> -----Original Message-----\n> From: r-sig-finance-bounces at stat.math.ethz.ch\n> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of \n> ngottlieb at marinercapital.com\n> Sent: Friday, June 15, 2007 10:49 AM\n> To: r-sig-finance at stat.math.ethz.ch\n> Subject: [R-SIG-Finance] Question: How to Notionalize a Commodity \n> Future?\n> \n> Does anyone know how to notionalize a commodity future (i.e CBT Corn, \n> CBT Soybean etc.)?\n> \n> And if so what is the calculation?\n> \n> Thanks,\n> Neil Gottlieb\n> --------------------------------------------------------\n> \n>  \n>  \n> This information is being sent at the recipient's\nrequest\\...{{dropped}}\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.",
+      "body_snippet": "I believe you have it.\nI always encourage the use of UNITS:\n\n(# contracts) * (contract size = 60000 lbs/contract) * (price = 36.36\ncents/lb) (0.01 dollars/cent) = dollars = the current worth of you\nnu",
+      "thread_id": "thread-c20498f42e15",
+      "thread_depth": 3,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-5c911cf224a0",
+      "message_id": "<0946E293C7C22A45A0E33BA14FAA8D88F38845@500MAIL.goldbox.com>",
+      "from_name": "ngottlieb at marinercapital.com",
+      "from_email_hash": "5575da06d2fa5cb800e4817f76d2e771e21e0a4a88f6085e998984ccce4302a1",
+      "date": "2007-06-15T12:27:22-04:00",
+      "subject": "[R-SIG-Finance] Question: How to Notionalize a Commodity Future?",
+      "subject_clean": "Question: How to Notionalize a Commodity Future?",
+      "in_reply_to": "<4672B0CF.7030308@globaladvisors.co.uk>",
+      "references": [
+        "<0946E293C7C22A45A0E33BA14FAA8D88F38841@500MAIL.goldbox.com>",
+        "<2CF54397DF75234DA13D028A0753C0DE29637A@ex3.811t.hcmny.com>",
+        "<0946E293C7C22A45A0E33BA14FAA8D88F38842@500MAIL.goldbox.com>",
+        "<4672B0CF.7030308@globaladvisors.co.uk>"
+      ],
+      "body_plain": "Edmund:\n\nYeah we made mistake that prices on CBOT are in cents.\nThus for Corn data we pulled 374.5 we should have\nConverted to cents  = 3.745.\n\nJust an FYI for everyone to avoid my dotard mistake! :)\nhttp://www.cbot.com/cbot/pub/cont_detail/0,3206,1272+17391,00.html\nCorn, Wheat, Soybeans, Oats\n4 Digit Price Quote \nFirst 3 digits are cents per bu \nFourth digit is 1/8 cent/bu \nTick size is ? cent/bu \n7350 = $7.35/bushel \n7352 = $7.35?  \n7354 = $7.35?  \n7356 = $7.35?  \n7360 = $7.36 \nSoybean Oil = cents per lb. \n2679 = $0.2679/lb  \n\nNeil\n\n-----Original Message-----\nFrom: Edmund Jackson [mailto:ejackson at globaladvisors.co.uk] \nSent: Friday, June 15, 2007 11:31 AM\nTo: Gottlieb, Neil\nCc: whit.armstrong at hcmny.com; r-sig-finance at stat.math.ethz.ch\nSubject: Re: [R-SIG-Finance] Question: How to Notionalize a Commodity Future?\n\nNeil,\n\nI think you might be multiplying the price in twice there. I would say its num_contracts * contract_size * price_of_underlying\n\nie for Nymex Crude\n\nvalue of N contracts = N * 1000 * $68\n\nEdmund\n\nngottlieb at marinercapital.com wrote:\n> Whit:\n>\n> Thanks for your quick response.\n> I tried doing this:\n>\n> # of contracts x contract price x contractsize x underlying price of \n> the contract size (ie. 18,000 bushels at whatever amount).\n>                                           Contracts      Price     Quote\n> Units       Contract size        cents/per pound\n> \tBOK7 Comdty\tSOYBEAN OIL FUTR May07\t200\t          32.48\n> lbs.\tcents/lb.\t60,000.00\t         .01 \n>\n>   I am not sure if this is correct to get notional value?\n>\n> Neil\n>\n> -----Original Message-----\n> From: Armstrong, Whit [mailto:whit.armstrong at hcmny.com]\n> Sent: Friday, June 15, 2007 10:56 AM\n> To: Gottlieb, Neil\n> Cc: r-sig-finance at stat.math.ethz.ch\n> Subject: RE: [R-SIG-Finance] Question: How to Notionalize a Commodity \n> Future?\n>\n> notionalize?\n>\n> If you are talking about the notional value of a conctact it's just \n> price * contract size, but sizes are specific to each contract.  you \n> can get this information from the exchanges or from BBG.\n>\n>   \n>> -----Original Message-----\n>> From: r-sig-finance-bounces at stat.math.ethz.ch\n>> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of \n>> ngottlieb at marinercapital.com\n>> Sent: Friday, June 15, 2007 10:49 AM\n>> To: r-sig-finance at stat.math.ethz.ch\n>> Subject: [R-SIG-Finance] Question: How to Notionalize a Commodity \n>> Future?\n>>\n>> Does anyone know how to notionalize a commodity future (i.e CBT Corn, \n>> CBT Soybean etc.)?\n>>\n>> And if so what is the calculation?\n>>\n>> Thanks,\n>> Neil Gottlieb\n>> --------------------------------------------------------\n>>\n>>  \n>>  \n>> This information is being sent at the recipient's \n>> request\\...{{dropped}}\n>>     \n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list \n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.\n>\n>\n--------------------------------------------------------\n\n \n \nThis information is being sent at the recipient's request or...{{dropped}}",
+      "body_snippet": "Edmund:\n\nYeah we made mistake that prices on CBOT are in cents.\nThus for Corn data we pulled 374.5 we should have\nConverted to cents  = 3.745.\n\nJust an FYI for everyone to avoid my dotard mistake! :)\n",
+      "thread_id": "thread-c20498f42e15",
+      "thread_depth": 4,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-c4c7af0fc45d",
+      "message_id": "<0946E293C7C22A45A0E33BA14FAA8D88F38846@500MAIL.goldbox.com>",
+      "from_name": "ngottlieb at marinercapital.com",
+      "from_email_hash": "5575da06d2fa5cb800e4817f76d2e771e21e0a4a88f6085e998984ccce4302a1",
+      "date": "2007-06-15T12:29:33-04:00",
+      "subject": "[R-SIG-Finance] Question: How to Notionalize a Commodity Future?",
+      "subject_clean": "Question: How to Notionalize a Commodity Future?",
+      "in_reply_to": "<F9F2A641C593D7408925574C05A7BE77394955@rhopost.rhotrading.com>",
+      "references": [
+        "<0946E293C7C22A45A0E33BA14FAA8D88F38841@500MAIL.goldbox.com>",
+        "<2CF54397DF75234DA13D028A0753C0DE29637A@ex3.811t.hcmny.com>",
+        "<0946E293C7C22A45A0E33BA14FAA8D88F38842@500MAIL.goldbox.com>",
+        "<F9F2A641C593D7408925574C05A7BE77394955@rhopost.rhotrading.com>"
+      ],
+      "body_plain": "Thanks David, appreciate it.\n\nHave to remember it's in cents!\n\nSometimes with age, wisdom does not arrive!  :)\n\nRegards,\nNeil \n\n-----Original Message-----\nFrom: davidr at rhotrading.com [mailto:davidr at rhotrading.com] \nSent: Friday, June 15, 2007 12:04 PM\nTo: Gottlieb, Neil; whit.armstrong at hcmny.com\nCc: r-sig-finance at stat.math.ethz.ch\nSubject: RE: [R-SIG-Finance] Question: How to Notionalize a Commodity\nFuture?\n\nI believe you have it.\nI always encourage the use of UNITS:\n\n(# contracts) * (contract size = 60000 lbs/contract) * (price = 36.36\ncents/lb) (0.01 dollars/cent) = dollars = the current worth of you\nnumber of contracts. Notice that the units cancel appropriately. The DES\npage in Bloomberg helps here.\n\nHTH,\n\nDavid L. Reiner\nRho Trading Securities, LLC\n550 W. Jackson Blvd #1000\nChicago, IL 60661-5704\n \n312-244-4610 direct\n312-244-4500 main\n312-244-4501 fax\n \n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of\nngottlieb at marinercapital.com\nSent: Friday, June 15, 2007 10:08 AM\nTo: whit.armstrong at hcmny.com\nCc: r-sig-finance at stat.math.ethz.ch\nSubject: Re: [R-SIG-Finance] Question: How to Notionalize a Commodity\nFuture?\n\nWhit:\n\nThanks for your quick response.\nI tried doing this:\n\n# of contracts x contract price x contractsize x underlying price of the\ncontract size (ie. 18,000 bushels at whatever amount).\n                                          Contracts      Price     Quote\nUnits       Contract size        cents/per pound\n\tBOK7 Comdty\tSOYBEAN OIL FUTR May07\t200\t          32.48\nlbs.\tcents/lb.\t60,000.00\t         .01 \n\n  I am not sure if this is correct to get notional value?\n\nNeil\n\n-----Original Message-----\nFrom: Armstrong, Whit [mailto:whit.armstrong at hcmny.com]\nSent: Friday, June 15, 2007 10:56 AM\nTo: Gottlieb, Neil\nCc: r-sig-finance at stat.math.ethz.ch\nSubject: RE: [R-SIG-Finance] Question: How to Notionalize a Commodity\nFuture?\n\nnotionalize?\n\nIf you are talking about the notional value of a conctact it's just\nprice * contract size, but sizes are specific to each contract.  you can\nget this information from the exchanges or from BBG. \n\n> -----Original Message-----\n> From: r-sig-finance-bounces at stat.math.ethz.ch\n> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of \n> ngottlieb at marinercapital.com\n> Sent: Friday, June 15, 2007 10:49 AM\n> To: r-sig-finance at stat.math.ethz.ch\n> Subject: [R-SIG-Finance] Question: How to Notionalize a Commodity \n> Future?\n> \n> Does anyone know how to notionalize a commodity future (i.e CBT Corn, \n> CBT Soybean etc.)?\n> \n> And if so what is the calculation?\n> \n> Thanks,\n> Neil Gottlieb\n> --------------------------------------------------------\n> \n>  \n>  \n> This information is being sent at the recipient's\nrequest\\...{{dropped}}\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.\n--------------------------------------------------------\n\n \n \nThis information is being sent at the recipient's request or...{{dropped}}",
+      "body_snippet": "Thanks David, appreciate it.\n\nHave to remember it's in cents!\n\nSometimes with age, wisdom does not arrive!  :)\n\nRegards,\nNeil \n\n-----Original Message-----\nFrom: davidr at rhotrading.com [mailto:davidr",
+      "thread_id": "thread-c20498f42e15",
+      "thread_depth": 4,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-081178e5ce2e",
+      "message_id": "<SANCTUMFISERVER2UAa000006c8@sanctumfi.com>",
+      "from_name": "Robert Sams",
+      "from_email_hash": "67252a45820598ec41cf5f10749a914db54058236b66f8a0728ab05064f156e1",
+      "date": "2007-06-15T19:43:10+01:00",
+      "subject": "[R-SIG-Finance] option model for interest rate future",
+      "subject_clean": "option model for interest rate future",
+      "in_reply_to": null,
+      "references": [
+        "<SANCTUMFISERVERutJL00000282@sanctumfi.com>",
+        "<SANCTUMFISERVERrvoG000002d9@sanctumfi.com>"
+      ],
+      "body_plain": "Thanks for the reply Sylvain and Brian,\n\nI take it that GBSOption with b=0 is what I'm looking for. However, I'm confused by the results. As an example, let's take the 94.50 put on the Sep 2008 eurodollar contract, expiry 9/15/08. The price is 94.625 and (price) vol is 12.35%. So,\n\n> GBSOption(\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n\nTitle:\n Black Scholes Option Valuation \n\nCall:\n GBSOption(TypeFlag = \"p\", S = 94.625, X = 94.5, Time = 458/365, \n     r = 0.05507, b = 0, sigma = 0.12382)\n\nParameters:\n          Value:          \n TypeFlag p               \n S        94.625          \n X        94.5            \n Time     1.25479452054795\n r        0.05507         \n b        0               \n sigma    0.12382         \n\nOption Price:\n 4.821096 \n\nDescription:\n Fri Jun 15 18:58:02 2007 \n\n> GBSGreeks(\"delta\",\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n[1] -0.4372786\n> GBSGreeks(\"gamma\",\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n[1] 0.02827910\n> GBSGreeks(\"vega\",\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n[1] 39.34058\n> GBSGreeks(\"theta\",\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n[1] -1.675517\n> GBSGreeks(\"rho\",\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n[1] -6.049485\n\nBut the correct values (using Bloomberg) are:\nPrice: 0.2215\nDelta: -0.426371\nGamma: 0.499401\nVega: 0.022302\nTheta: -0.000268\nRho: -0.277807\n\nWhat am I doing wrong? \n\nThank you,\nRobert \n\n-----Original Message-----\nFrom: Sylvain BARTHELEMY [mailto:barth at tac-financial.com] \nSent: 14 June 2007 18:01\nTo: Robert Sams; r-sig-finance at stat.math.ethz.ch\nSubject: RE: [R-SIG-Finance] option model for interest rate future\n\nHi Robert,\n\nI think that the fOptions pack does that: GBSGreeks & GBSVolatility\n\n\n---\nSylvain Barth?l?my\nResearch Director, TAC\nwww.tac-financial.com | www.sylbarth.com\n\n-----Message d'origine-----\nDe?: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] De la part de Robert Sams Envoy??: jeudi 14 juin 2007 17:54 ??: r-sig-finance at stat.math.ethz.ch Objet?: [R-SIG-Finance] option model for interest rate future\n\nHi,\n\nDoes anyone have R code to calculate implied vol and greeks of an option on an interest rate future (e.g., CME's eurodollar contract)?\n\nThanks,\nRobert\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.",
+      "body_snippet": "Thanks for the reply Sylvain and Brian,\n\nI take it that GBSOption with b=0 is what I'm looking for. However, I'm confused by the results. As an example, let's take the 94.50 put on the Sep 2008 eurodo",
+      "thread_id": "thread-081178e5ce2e",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-301c2a70ff82",
+      "message_id": "<459D6C78-2E0E-4DC3-9F3D-C24972B6FFDA@gmail.com>",
+      "from_name": "James",
+      "from_email_hash": "7983c06d16e049cbfb4f3cb939b0906207a4acc5daff9df661931db559d830a8",
+      "date": "2007-06-15T17:43:07-06:00",
+      "subject": "[R-SIG-Finance] option model for interest rate future",
+      "subject_clean": "option model for interest rate future",
+      "in_reply_to": "<SANCTUMFISERVER2UAa000006c8@sanctumfi.com>",
+      "references": [
+        "<SANCTUMFISERVERutJL00000282@sanctumfi.com>",
+        "<SANCTUMFISERVERrvoG000002d9@sanctumfi.com>",
+        "<SANCTUMFISERVER2UAa000006c8@sanctumfi.com>"
+      ],
+      "body_plain": "Robert,\n\nIt seems unusual to me that a nearly at-the-money option with a year  \nand a quarter left in it's life would only be worth $0.2215 according  \nto Bloomberg.  I would double-check the calculations from Bloomberg.   \nTo me, they seem most suspect.  I'm wondering if you entered the time  \nto expiration incorrectly on Bloomberg, because from the looks of the  \nGamma and Vega, it looks like you might have entered a shorter time.   \nI hope this helps.  Let me know if you figure this out.\n\nJames\n\n\nOn Jun 15, 2007, at 12:43 PM, Robert Sams wrote:\n\n> Thanks for the reply Sylvain and Brian,\n>\n> I take it that GBSOption with b=0 is what I'm looking for. However,  \n> I'm confused by the results. As an example, let's take the 94.50  \n> put on the Sep 2008 eurodollar contract, expiry 9/15/08. The price  \n> is 94.625 and (price) vol is 12.35%. So,\n>\n>> GBSOption(\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n>\n> Title:\n>  Black Scholes Option Valuation\n>\n> Call:\n>  GBSOption(TypeFlag = \"p\", S = 94.625, X = 94.5, Time = 458/365,\n>      r = 0.05507, b = 0, sigma = 0.12382)\n>\n> Parameters:\n>           Value:\n>  TypeFlag p\n>  S        94.625\n>  X        94.5\n>  Time     1.25479452054795\n>  r        0.05507\n>  b        0\n>  sigma    0.12382\n>\n> Option Price:\n>  4.821096\n>\n> Description:\n>  Fri Jun 15 18:58:02 2007\n>\n>> GBSGreeks(\"delta\",\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n> [1] -0.4372786\n>> GBSGreeks(\"gamma\",\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n> [1] 0.02827910\n>> GBSGreeks(\"vega\",\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n> [1] 39.34058\n>> GBSGreeks(\"theta\",\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n> [1] -1.675517\n>> GBSGreeks(\"rho\",\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n> [1] -6.049485\n>\n> But the correct values (using Bloomberg) are:\n> Price: 0.2215\n> Delta: -0.426371\n> Gamma: 0.499401\n> Vega: 0.022302\n> Theta: -0.000268\n> Rho: -0.277807\n>\n> What am I doing wrong?\n>\n> Thank you,\n> Robert\n>\n> -----Original Message-----\n> From: Sylvain BARTHELEMY [mailto:barth at tac-financial.com]\n> Sent: 14 June 2007 18:01\n> To: Robert Sams; r-sig-finance at stat.math.ethz.ch\n> Subject: RE: [R-SIG-Finance] option model for interest rate future\n>\n> Hi Robert,\n>\n> I think that the fOptions pack does that: GBSGreeks & GBSVolatility\n>\n>\n> ---\n> Sylvain Barth?l?my\n> Research Director, TAC\n> www.tac-financial.com | www.sylbarth.com\n>\n> -----Message d'origine-----\n> De : r-sig-finance-bounces at stat.math.ethz.ch\n> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] De la part de  \n> Robert Sams Envoy? : jeudi 14 juin 2007 17:54 ? : r-sig- \n> finance at stat.math.ethz.ch Objet : [R-SIG-Finance] option model for  \n> interest rate future\n>\n> Hi,\n>\n> Does anyone have R code to calculate implied vol and greeks of an  \n> option on an interest rate future (e.g., CME's eurodollar contract)?\n>\n> Thanks,\n> Robert\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list https://stat.ethz.ch/ \n> mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.",
+      "body_snippet": "Robert,\n\nIt seems unusual to me that a nearly at-the-money option with a year  \nand a quarter left in it's life would only be worth $0.2215 according  \nto Bloomberg.  I would double-check the calculat",
+      "thread_id": "thread-081178e5ce2e",
+      "thread_depth": 1,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-c39eacf03787",
+      "message_id": "<SANCTUMFISERVERQ1WE000007aa@sanctumfi.com>",
+      "from_name": "Robert Sams",
+      "from_email_hash": "67252a45820598ec41cf5f10749a914db54058236b66f8a0728ab05064f156e1",
+      "date": "2007-06-16T08:44:59+01:00",
+      "subject": "[R-SIG-Finance] option model for interest rate future",
+      "subject_clean": "option model for interest rate future",
+      "in_reply_to": null,
+      "references": [
+        "<SANCTUMFISERVERutJL00000282@sanctumfi.com>",
+        "<SANCTUMFISERVERrvoG000002d9@sanctumfi.com>",
+        "<SANCTUMFISERVER2UAa000006c8@sanctumfi.com>",
+        "<SANCTUMFISERVER4eBa00000771@sanctumfi.com>"
+      ],
+      "body_plain": "Hi James,\n\nThanks for the reply. The Bloomberg valuation and greeks are certainly correct. You seem to suggest that a price of 0.2215 for a long-dated, near-the-money expiry is somehow low. But the underlying is an interest rate future and the price here quoted is 22.15 ticks, or $553.75 per option (25$ tick value) on 1 million forward 3m libor deposit at 5.375 (100 - 94.625). Price vol (which here is the same as basis point rate vol) is 12.35% and a bp change in forward rate is worth 25$. Nothing unusual here. \n\nRobert\n\n\n-----Original Message-----\nFrom: James [mailto:jctoll at gmail.com] \nSent: 16 June 2007 00:43\nTo: Robert Sams\nCc: r-sig-finance at stat.math.ethz.ch\nSubject: Re: [R-SIG-Finance] option model for interest rate future\n\nRobert,\n\nIt seems unusual to me that a nearly at-the-money option with a year and a quarter left in it's life would only be worth $0.2215 according  \nto Bloomberg.  I would double-check the calculations from Bloomberg.   \nTo me, they seem most suspect.  I'm wondering if you entered the time to expiration incorrectly on Bloomberg, because from the looks of the  \nGamma and Vega, it looks like you might have entered a shorter time.   \nI hope this helps.  Let me know if you figure this out.\n\nJames\n\n\nOn Jun 15, 2007, at 12:43 PM, Robert Sams wrote:\n\n> Thanks for the reply Sylvain and Brian,\n>\n> I take it that GBSOption with b=0 is what I'm looking for. However, \n> I'm confused by the results. As an example, let's take the 94.50 put \n> on the Sep 2008 eurodollar contract, expiry 9/15/08. The price is \n> 94.625 and (price) vol is 12.35%. So,\n>\n>> GBSOption(\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n>\n> Title:\n>  Black Scholes Option Valuation\n>\n> Call:\n>  GBSOption(TypeFlag = \"p\", S = 94.625, X = 94.5, Time = 458/365,\n>      r = 0.05507, b = 0, sigma = 0.12382)\n>\n> Parameters:\n>           Value:\n>  TypeFlag p\n>  S        94.625\n>  X        94.5\n>  Time     1.25479452054795\n>  r        0.05507\n>  b        0\n>  sigma    0.12382\n>\n> Option Price:\n>  4.821096\n>\n> Description:\n>  Fri Jun 15 18:58:02 2007\n>\n>> GBSGreeks(\"delta\",\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n> [1] -0.4372786\n>> GBSGreeks(\"gamma\",\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n> [1] 0.02827910\n>> GBSGreeks(\"vega\",\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n> [1] 39.34058\n>> GBSGreeks(\"theta\",\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n> [1] -1.675517\n>> GBSGreeks(\"rho\",\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n> [1] -6.049485\n>\n> But the correct values (using Bloomberg) are:\n> Price: 0.2215\n> Delta: -0.426371\n> Gamma: 0.499401\n> Vega: 0.022302\n> Theta: -0.000268\n> Rho: -0.277807\n>\n> What am I doing wrong?\n>\n> Thank you,\n> Robert\n>\n> -----Original Message-----\n> From: Sylvain BARTHELEMY [mailto:barth at tac-financial.com]\n> Sent: 14 June 2007 18:01\n> To: Robert Sams; r-sig-finance at stat.math.ethz.ch\n> Subject: RE: [R-SIG-Finance] option model for interest rate future\n>\n> Hi Robert,\n>\n> I think that the fOptions pack does that: GBSGreeks & GBSVolatility\n>\n>\n> ---\n> Sylvain Barth?l?my\n> Research Director, TAC\n> www.tac-financial.com | www.sylbarth.com\n>\n> -----Message d'origine-----\n> De : r-sig-finance-bounces at stat.math.ethz.ch\n> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] De la part de Robert \n> Sams Envoy? : jeudi 14 juin 2007 17:54 ? : r-sig- \n> finance at stat.math.ethz.ch Objet : [R-SIG-Finance] option model for \n> interest rate future\n>\n> Hi,\n>\n> Does anyone have R code to calculate implied vol and greeks of an \n> option on an interest rate future (e.g., CME's eurodollar contract)?\n>\n> Thanks,\n> Robert\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list https://stat.ethz.ch/ \n> mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list \n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.",
+      "body_snippet": "Hi James,\n\nThanks for the reply. The Bloomberg valuation and greeks are certainly correct. You seem to suggest that a price of 0.2215 for a long-dated, near-the-money expiry is somehow low. But the un",
+      "thread_id": "thread-c39eacf03787",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-22226b9e0035",
+      "message_id": "<4673CCBC.2020601@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2007-06-16T06:42:52-05:00",
+      "subject": "[R-SIG-Finance] option model for interest rate future",
+      "subject_clean": "option model for interest rate future",
+      "in_reply_to": "<SANCTUMFISERVERQ1WE000007aa@sanctumfi.com>",
+      "references": [
+        "<SANCTUMFISERVERutJL00000282@sanctumfi.com>",
+        "<SANCTUMFISERVERrvoG000002d9@sanctumfi.com>",
+        "<SANCTUMFISERVER2UAa000006c8@sanctumfi.com>",
+        "<SANCTUMFISERVER4eBa00000771@sanctumfi.com>",
+        "<SANCTUMFISERVERQ1WE000007aa@sanctumfi.com>"
+      ],
+      "body_plain": "Top-quoting makes it quite confusing to read the message thread, and for \nfuture reference, is generally discouraged on this list.\n\nS and X in GBSOption need to be in the same units as the price you want \nout on the other end.  I'm not at a computer with R on it, being the \nweekend, but I would suspect units confusion here.  If everything is in \nthe same units, you should get a rational result.\n\nAlso without referring to the manual, isn't there a slightly different \nfunction for the Black Scholes calculation for an option on a futures \ncontract, which is what your Eurodollar example is?\n\nRegards,\n\n    - Brian\n\nRobert Sams wrote:\n> Hi James,\n> \n> Thanks for the reply. The Bloomberg valuation and greeks are certainly correct. You seem to suggest that a price of 0.2215 for a long-dated, near-the-money expiry is somehow low. But the underlying is an interest rate future and the price here quoted is 22.15 ticks, or $553.75 per option (25$ tick value) on 1 million forward 3m libor deposit at 5.375 (100 - 94.625). Price vol (which here is the same as basis point rate vol) is 12.35% and a bp change in forward rate is worth 25$. Nothing unusual here. \n> \n> Robert\n> \n> \n> -----Original Message-----\n> From: James [mailto:jctoll at gmail.com] \n> Sent: 16 June 2007 00:43\n> To: Robert Sams\n> Cc: r-sig-finance at stat.math.ethz.ch\n> Subject: Re: [R-SIG-Finance] option model for interest rate future\n> \n> Robert,\n> \n> It seems unusual to me that a nearly at-the-money option with a year and a quarter left in it's life would only be worth $0.2215 according  \n> to Bloomberg.  I would double-check the calculations from Bloomberg.   \n> To me, they seem most suspect.  I'm wondering if you entered the time to expiration incorrectly on Bloomberg, because from the looks of the  \n> Gamma and Vega, it looks like you might have entered a shorter time.   \n> I hope this helps.  Let me know if you figure this out.\n> \n> James\n> \n> \n> On Jun 15, 2007, at 12:43 PM, Robert Sams wrote:\n> \n>> Thanks for the reply Sylvain and Brian,\n>>\n>> I take it that GBSOption with b=0 is what I'm looking for. However, \n>> I'm confused by the results. As an example, let's take the 94.50 put \n>> on the Sep 2008 eurodollar contract, expiry 9/15/08. The price is \n>> 94.625 and (price) vol is 12.35%. So,\n>>\n>>> GBSOption(\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n>> Title:\n>>  Black Scholes Option Valuation\n>>\n>> Call:\n>>  GBSOption(TypeFlag = \"p\", S = 94.625, X = 94.5, Time = 458/365,\n>>      r = 0.05507, b = 0, sigma = 0.12382)\n>>\n>> Parameters:\n>>           Value:\n>>  TypeFlag p\n>>  S        94.625\n>>  X        94.5\n>>  Time     1.25479452054795\n>>  r        0.05507\n>>  b        0\n>>  sigma    0.12382\n>>\n>> Option Price:\n>>  4.821096\n>>\n>> Description:\n>>  Fri Jun 15 18:58:02 2007\n>>\n>>> GBSGreeks(\"delta\",\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n>> [1] -0.4372786\n>>> GBSGreeks(\"gamma\",\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n>> [1] 0.02827910\n>>> GBSGreeks(\"vega\",\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n>> [1] 39.34058\n>>> GBSGreeks(\"theta\",\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n>> [1] -1.675517\n>>> GBSGreeks(\"rho\",\"p\",94.625, 94.50, 458/365, .05507, 0, .12382)\n>> [1] -6.049485\n>>\n>> But the correct values (using Bloomberg) are:\n>> Price: 0.2215\n>> Delta: -0.426371\n>> Gamma: 0.499401\n>> Vega: 0.022302\n>> Theta: -0.000268\n>> Rho: -0.277807\n>>\n>> What am I doing wrong?\n>>\n>> Thank you,\n>> Robert\n>>\n>> -----Original Message-----\n>> From: Sylvain BARTHELEMY [mailto:barth at tac-financial.com]\n>> Sent: 14 June 2007 18:01\n>> To: Robert Sams; r-sig-finance at stat.math.ethz.ch\n>> Subject: RE: [R-SIG-Finance] option model for interest rate future\n>>\n>> Hi Robert,\n>>\n>> I think that the fOptions pack does that: GBSGreeks & GBSVolatility\n>>\n>>\n>> ---\n>> Sylvain Barth?l?my\n>> Research Director, TAC\n>> www.tac-financial.com | www.sylbarth.com\n>>\n>> -----Message d'origine-----\n>> De : r-sig-finance-bounces at stat.math.ethz.ch\n>> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] De la part de Robert \n>> Sams Envoy? : jeudi 14 juin 2007 17:54 ? : r-sig- \n>> finance at stat.math.ethz.ch Objet : [R-SIG-Finance] option model for \n>> interest rate future\n>>\n>> Hi,\n>>\n>> Does anyone have R code to calculate implied vol and greeks of an \n>> option on an interest rate future (e.g., CME's eurodollar contract)?\n>>\n>> Thanks,\n>> Robert",
+      "body_snippet": "Top-quoting makes it quite confusing to read the message thread, and for \nfuture reference, is generally discouraged on this list.\n\nS and X in GBSOption need to be in the same units as the price you w",
+      "thread_id": "thread-c39eacf03787",
+      "thread_depth": 1,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-9a4c7d53c04c",
+      "message_id": "<1786E620-84EA-4089-9DB1-754C5C6D25B9@gmail.com>",
+      "from_name": "James",
+      "from_email_hash": "7983c06d16e049cbfb4f3cb939b0906207a4acc5daff9df661931db559d830a8",
+      "date": "2007-06-16T10:36:34-06:00",
+      "subject": "[R-SIG-Finance] option model for interest rate future",
+      "subject_clean": "option model for interest rate future",
+      "in_reply_to": "<SANCTUMFISERVERQ1WE000007aa@sanctumfi.com>",
+      "references": [
+        "<SANCTUMFISERVERutJL00000282@sanctumfi.com>",
+        "<SANCTUMFISERVERrvoG000002d9@sanctumfi.com>",
+        "<SANCTUMFISERVER2UAa000006c8@sanctumfi.com>",
+        "<SANCTUMFISERVER4eBa00000771@sanctumfi.com>",
+        "<SANCTUMFISERVERQ1WE000007aa@sanctumfi.com>"
+      ],
+      "body_plain": "On Jun 16, 2007, at 1:44 AM, Robert Sams wrote:\n\n> Hi James,\n>\n> Thanks for the reply. The Bloomberg valuation and greeks are  \n> certainly correct. You seem to suggest that a price of 0.2215 for a  \n> long-dated, near-the-money expiry is somehow low. But the  \n> underlying is an interest rate future and the price here quoted is  \n> 22.15 ticks, or $553.75 per option (25$ tick value) on 1 million  \n> forward 3m libor deposit at 5.375 (100 - 94.625). Price vol (which  \n> here is the same as basis point rate vol) is 12.35% and a bp change  \n> in forward rate is worth 25$. Nothing unusual here.\n>\n> Robert\n\n\nRobert,\n\nAfter rethinking the issue, I'm wondering if the sigma you're using  \nneeds to be adapted to the Eurodollar contract pricing convention,  \nsince the contracts are priced at a discount (100-94.625).  So the  \nvolatility is really 12.35% on 5.375 not 12.35% on 94.625.  I looked  \naround and found a spreedsheet from NYU that appears to make this  \nadjustment.\n\nhttp://www.stern.nyu.edu/~igiddy/edoptprice.xls\n\nPlugging your numbers into the calculation (L6) from the spreadsheet  \nyields\n\n0.12382 (100 - 94.625) / 94.625  =  0.00703336856\n\nIf I use that for my sigma within R, I get\n\n > GBSOption(\"p\",94.625, 94.50, 458/360, .05507, 0, .00703336856)\n\nTitle:\nBlack Scholes Option Valuation\n\nCall:\nGBSOption(TypeFlag = \"p\", S = 94.625, X = 94.5, Time = 458/360,\n      r = 0.05507, b = 0, sigma = 0.00703336856)\n\nParameters:\n           Value:\nTypeFlag p\nS        94.625\nX        94.5\nTime     1.27222222222222\nr        0.05507\nb        0\nsigma    0.00703336856\n\nOption Price:\n0.2246195\n\nDescription:\nSat Jun 16 10:16:19 2007\n\nMuch closer to the price you got from Bloomberg.  Unfortunately, I  \ndon't have much experience with interest rate options to confirm this  \nadjustment.\n\nJames",
+      "body_snippet": "On Jun 16, 2007, at 1:44 AM, Robert Sams wrote:\n\n> Hi James,\n>\n> Thanks for the reply. The Bloomberg valuation and greeks are  \n> certainly correct. You seem to suggest that a price of 0.2215 for a  \n",
+      "thread_id": "thread-c39eacf03787",
+      "thread_depth": 1,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-04d19d7b629e",
+      "message_id": "<3f446aa30706180915p5d69c213g7a51495c240bd171@mail.gmail.com>",
+      "from_name": "Rory Winston",
+      "from_email_hash": "a5e9bde1e7ee4122b25b178a11360b964c029f2dbaa5bdb056b9209a4fccb209",
+      "date": "2007-06-18T17:15:56+01:00",
+      "subject": "[R-SIG-Finance] Simple TWAP-like Algorithm in R",
+      "subject_clean": "Simple TWAP-like Algorithm in R",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070618/1a66dc49/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070618/1a66dc49/attachment.pl",
+      "thread_id": "thread-04d19d7b629e",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-2745323d1497",
+      "message_id": "<BAY129-W951BB87E47588D1D61868CB110@phx.gbl>",
+      "from_name": "Fabrice McShort",
+      "from_email_hash": "622b38f6b97a05abf98401ac43561640f10afac227d0acf207090d9019f1086c",
+      "date": "2007-06-20T08:32:28+02:00",
+      "subject": "[R-SIG-Finance] R / Risk measurement and the problem of data",
+      "subject_clean": "R / Risk measurement and the problem of data",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070620/46ee5241/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070620/46ee5241/attachment.pl",
+      "thread_id": "thread-2745323d1497",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-e15829be68a2",
+      "message_id": "<0946E293C7C22A45A0E33BA14FAA8D88F3885A@500MAIL.goldbox.com>",
+      "from_name": "ngottlieb at marinercapital.com",
+      "from_email_hash": "5575da06d2fa5cb800e4817f76d2e771e21e0a4a88f6085e998984ccce4302a1",
+      "date": "2007-06-20T10:20:05-04:00",
+      "subject": "[R-SIG-Finance] R / Risk measurement and the problem of data",
+      "subject_clean": "R / Risk measurement and the problem of data",
+      "in_reply_to": "<BAY129-W951BB87E47588D1D61868CB110@phx.gbl>",
+      "references": [
+        "<BAY129-W951BB87E47588D1D61868CB110@phx.gbl>"
+      ],
+      "body_plain": "The issue to your questions is:\n\n1- What type of instruments do you trade? \n2- In terms of risk management are you looking to:\n   a) Track a benchmark and weight positions according (Portfolio Optimization).\n   B) Look at attribution by industries, sectors, primary factors as interest rates, etc(Style Analysis)?\n   C) Stress test your positions?\n\nR can provide a lot of the analytics you need. The data is another issue.\n\nYes Bloomberg is very helpful but expensive (approx $14K per year per seat).\n\nBarra now owned by Morgan Stanley is more equity focused but has been\nDoing some fixed instrument support.\n\nDepending on answers to above questions, suggest as alternative to Barra\nLook at Northfield Information Systems (think the site is http://www.northinfo.com)\nThey offer some fine risk analytics, the data needed and software.\n\nLast, one of the some of the most difficult instruments to model and get data on\nAre Credit Default Swaps (look at http://www.markit.com).\n\nInterest Rate Swaps are also difficult to model and get data on. Might try looking \nAt http://www.tradeweb.com\n\n\nLast, if you want to maintain your own Security Master you will obviously\nNeed a Database Product such as SQL Server, Oracle, Sybase.\n\nAnd one of your best sources to find needed products for data sources, applications is check out\nBob's Guide (http://www.bobsguide.com/).\n\nYou are definitely looking at mid to high 6 figure budget for a good\nRisk reporting system, not including, developers.\n\nHope this helps...\nNeil\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Fabrice McShort\nSent: Wednesday, June 20, 2007 2:32 AM\nTo: r-sig-finance at stat.math.ethz.ch\nSubject: [R-SIG-Finance] R / Risk measurement and the problem of data\nImportance: High\n\n\n\n\nDear Experts,I come back to you for one question. We decided to use R Project for our risk management (reporting) system. Because, our funds use derivative instruments, we will need to use many packages such as 'Performance Analytics Package' 'VaR package' 'fOptions package', etc.So, my question is what type of database we will need? Bloomberg data, Bara data, Datastream, etc. Other point: Is the system (R) is able to use these principal sources of data? This problem is very important in order to have a good estimation of the final cost of the system! I will be happy to have your opinions about this point.Thanks!Fabrice _________________________________________________________________\nDavid Guetta a r?uni les sons les plus connus de Messenger dans le Mix Messenger, le son de l'?t? ! T?l?chargez-le gratuitement !\n\n\t[[alternative HTML version deleted]]\n--------------------------------------------------------\n\n \n \nThis information is being sent at the recipient's request or...{{dropped}}",
+      "body_snippet": "The issue to your questions is:\n\n1- What type of instruments do you trade? \n2- In terms of risk management are you looking to:\n   a) Track a benchmark and weight positions according (Portfolio Optimiz",
+      "thread_id": "thread-2745323d1497",
+      "thread_depth": 1,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-02d3dc63591a",
+      "message_id": "<004601c7b350$809a4d20$81cee760$@com>",
+      "from_name": "Sylvain BARTHELEMY",
+      "from_email_hash": "6269d4704746af1637c45553827c0855b4600c0b85fed212ce0906917ec5632c",
+      "date": "2007-06-20T17:34:32+02:00",
+      "subject": "[R-SIG-Finance] R / Risk measurement and the problem of data",
+      "subject_clean": "R / Risk measurement and the problem of data",
+      "in_reply_to": "<0946E293C7C22A45A0E33BA14FAA8D88F3885A@500MAIL.goldbox.com>",
+      "references": [
+        "<BAY129-W951BB87E47588D1D61868CB110@phx.gbl>",
+        "<0946E293C7C22A45A0E33BA14FAA8D88F3885A@500MAIL.goldbox.com>"
+      ],
+      "body_plain": "Hi Neil,\n\nYour post is very interesting and I didn't know about bobsguide, very\ninteresting too !\n\nDo you think that a combination of the various data sources that you suggest\nwould be cheaper than Bloomberg, $14k/year ? And what about data providers\nlike Global Insight ?\n\nRegards.\n\n---\nSylvain Barth?l?my\nResearch Director, TAC\nwww.tac-financial.com | www.sylbarth.com\n\n\n-----Message d'origine-----\nDe?: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] De la part de\nngottlieb at marinercapital.com\nEnvoy??: mercredi 20 juin 2007 16:20\n??: fabricemcshort at hotmail.com; r-sig-finance at stat.math.ethz.ch\nObjet?: Re: [R-SIG-Finance] R / Risk measurement and the problem of data\n\nThe issue to your questions is:\n\n1- What type of instruments do you trade? \n2- In terms of risk management are you looking to:\n   a) Track a benchmark and weight positions according (Portfolio\nOptimization).\n   B) Look at attribution by industries, sectors, primary factors as\ninterest rates, etc(Style Analysis)?\n   C) Stress test your positions?\n\nR can provide a lot of the analytics you need. The data is another issue.\n\nYes Bloomberg is very helpful but expensive (approx $14K per year per seat).\n\nBarra now owned by Morgan Stanley is more equity focused but has been\nDoing some fixed instrument support.\n\nDepending on answers to above questions, suggest as alternative to Barra\nLook at Northfield Information Systems (think the site is\nhttp://www.northinfo.com)\nThey offer some fine risk analytics, the data needed and software.\n\nLast, one of the some of the most difficult instruments to model and get\ndata on\nAre Credit Default Swaps (look at http://www.markit.com).\n\nInterest Rate Swaps are also difficult to model and get data on. Might try\nlooking \nAt http://www.tradeweb.com\n\n\nLast, if you want to maintain your own Security Master you will obviously\nNeed a Database Product such as SQL Server, Oracle, Sybase.\n\nAnd one of your best sources to find needed products for data sources,\napplications is check out\nBob's Guide (http://www.bobsguide.com/).\n\nYou are definitely looking at mid to high 6 figure budget for a good\nRisk reporting system, not including, developers.\n\nHope this helps...\nNeil\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Fabrice\nMcShort\nSent: Wednesday, June 20, 2007 2:32 AM\nTo: r-sig-finance at stat.math.ethz.ch\nSubject: [R-SIG-Finance] R / Risk measurement and the problem of data\nImportance: High\n\n\n\n\nDear Experts,I come back to you for one question. We decided to use R\nProject for our risk management (reporting) system. Because, our funds use\nderivative instruments, we will need to use many packages such as\n'Performance Analytics Package' 'VaR package' 'fOptions package', etc.So, my\nquestion is what type of database we will need? Bloomberg data, Bara data,\nDatastream, etc. Other point: Is the system (R) is able to use these\nprincipal sources of data? This problem is very important in order to have a\ngood estimation of the final cost of the system! I will be happy to have\nyour opinions about this point.Thanks!Fabrice\n_________________________________________________________________\nDavid Guetta a r?uni les sons les plus connus de Messenger dans le Mix\nMessenger, le son de l'?t? ! T?l?chargez-le gratuitement !\n\n\t[[alternative HTML version deleted]]\n--------------------------------------------------------\n\n \n \nThis information is being sent at the recipient's request or...{{dropped}}\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.",
+      "body_snippet": "Hi Neil,\n\nYour post is very interesting and I didn't know about bobsguide, very\ninteresting too !\n\nDo you think that a combination of the various data sources that you suggest\nwould be cheaper than Bl",
+      "thread_id": "thread-2745323d1497",
+      "thread_depth": 2,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-48459dae3f02",
+      "message_id": "<0946E293C7C22A45A0E33BA14FAA8D88F38861@500MAIL.goldbox.com>",
+      "from_name": "ngottlieb at marinercapital.com",
+      "from_email_hash": "5575da06d2fa5cb800e4817f76d2e771e21e0a4a88f6085e998984ccce4302a1",
+      "date": "2007-06-20T12:43:45-04:00",
+      "subject": "[R-SIG-Finance] R / Risk measurement and the problem of data",
+      "subject_clean": "R / Risk measurement and the problem of data",
+      "in_reply_to": "<004601c7b350$809a4d20$81cee760$@com>",
+      "references": [
+        "<BAY129-W951BB87E47588D1D61868CB110@phx.gbl>",
+        "<0946E293C7C22A45A0E33BA14FAA8D88F3885A@500MAIL.goldbox.com>",
+        "<004601c7b350$809a4d20$81cee760$@com>"
+      ],
+      "body_plain": "Sylvain:\n\nDepends on how many seats you think you need for Bloomberg which\nwould most likely be a function of the number of Traders you have on the desk\nAnd probably number of back office people and risk manager.\n\nI don't know the pricing of Global Insight.\n\nThere is no one single source for data, most use\nA combination of service providers.\n\nWhat exactly, if you don't mind me asking, are you trading?\n\nLast, another option, since starting a Hedge Fund is not cheap, despite\nthe \"excitement\" of potential enormous fees is jump starting\nBy using a Fund Administrator.\n\nThe advantage of that is you get portfolio accounting done for you, reconciliation\nsupport, possible risk analytics etc.\n\nYou should find Fund Admin providers on Bob's Guide, there are a lot.\nThe two I know are GlobeOp and Citco.\n\nFinally, depending on who you select for your PB (Prime Broker),\nmany give out good support tools. In fact PB's are in many ways\nbecoming software firms, that's why we see firms such as Morgan Stanley\nbuying former publically traded Barra.\n\nSuggest to launch, pick your PB(s), see what they have to offer\nAnd go from there. (example: Lehman has a reasonable risk analytic\nproduct called Lehman Point, which would be provided if they were\nyour PB... this is NOT an endorsement  :)!\n\nRegards,\n\n\nNeil \n\n-----Original Message-----\nFrom: Sylvain BARTHELEMY [mailto:barth at tac-financial.com] \nSent: Wednesday, June 20, 2007 11:35 AM\nTo: Gottlieb, Neil; r-sig-finance at stat.math.ethz.ch\nSubject: RE: [R-SIG-Finance] R / Risk measurement and the problem of data\n\nHi Neil,\n\nYour post is very interesting and I didn't know about bobsguide, very interesting too !\n\nDo you think that a combination of the various data sources that you suggest would be cheaper than Bloomberg, $14k/year ? And what about data providers like Global Insight ?\n\nRegards.\n\n---\nSylvain Barth?l?my\nResearch Director, TAC\nwww.tac-financial.com | www.sylbarth.com\n\n\n-----Message d'origine-----\nDe : r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] De la part de ngottlieb at marinercapital.com Envoy? : mercredi 20 juin 2007 16:20 ? : fabricemcshort at hotmail.com; r-sig-finance at stat.math.ethz.ch Objet : Re: [R-SIG-Finance] R / Risk measurement and the problem of data\n\nThe issue to your questions is:\n\n1- What type of instruments do you trade? \n2- In terms of risk management are you looking to:\n   a) Track a benchmark and weight positions according (Portfolio Optimization).\n   B) Look at attribution by industries, sectors, primary factors as interest rates, etc(Style Analysis)?\n   C) Stress test your positions?\n\nR can provide a lot of the analytics you need. The data is another issue.\n\nYes Bloomberg is very helpful but expensive (approx $14K per year per seat).\n\nBarra now owned by Morgan Stanley is more equity focused but has been Doing some fixed instrument support.\n\nDepending on answers to above questions, suggest as alternative to Barra Look at Northfield Information Systems (think the site is\nhttp://www.northinfo.com)\nThey offer some fine risk analytics, the data needed and software.\n\nLast, one of the some of the most difficult instruments to model and get data on Are Credit Default Swaps (look at http://www.markit.com).\n\nInterest Rate Swaps are also difficult to model and get data on. Might try looking At http://www.tradeweb.com\n\n\nLast, if you want to maintain your own Security Master you will obviously\nNeed a Database Product such as SQL Server, Oracle, Sybase.\n\nAnd one of your best sources to find needed products for data sources,\napplications is check out\nBob's Guide (http://www.bobsguide.com/).\n\nYou are definitely looking at mid to high 6 figure budget for a good\nRisk reporting system, not including, developers.\n\nHope this helps...\nNeil\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Fabrice\nMcShort\nSent: Wednesday, June 20, 2007 2:32 AM\nTo: r-sig-finance at stat.math.ethz.ch\nSubject: [R-SIG-Finance] R / Risk measurement and the problem of data\nImportance: High\n\n\n\n\nDear Experts,I come back to you for one question. We decided to use R\nProject for our risk management (reporting) system. Because, our funds use\nderivative instruments, we will need to use many packages such as\n'Performance Analytics Package' 'VaR package' 'fOptions package', etc.So, my\nquestion is what type of database we will need? Bloomberg data, Bara data,\nDatastream, etc. Other point: Is the system (R) is able to use these\nprincipal sources of data? This problem is very important in order to have a\ngood estimation of the final cost of the system! I will be happy to have\nyour opinions about this point.Thanks!Fabrice\n_________________________________________________________________\nDavid Guetta a r?uni les sons les plus connus de Messenger dans le Mix\nMessenger, le son de l'?t? ! T?l?chargez-le gratuitement !\n\n\t[[alternative HTML version deleted]]\n--------------------------------------------------------\n\n \n \nThis information is being sent at the recipient's request or...{{dropped}}\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.\n--------------------------------------------------------\n\n \n \nThis information is being sent at the recipient's request or...{{dropped}}",
+      "body_snippet": "Sylvain:\n\nDepends on how many seats you think you need for Bloomberg which\nwould most likely be a function of the number of Traders you have on the desk\nAnd probably number of back office people and r",
+      "thread_id": "thread-2745323d1497",
+      "thread_depth": 3,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-1daf2cdb4292",
+      "message_id": "<46797974.7080308@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2007-06-20T14:01:08-05:00",
+      "subject": "[R-SIG-Finance] R / Risk measurement and the problem of data",
+      "subject_clean": "R / Risk measurement and the problem of data",
+      "in_reply_to": "<BAY129-W951BB87E47588D1D61868CB110@phx.gbl>",
+      "references": [
+        "<BAY129-W951BB87E47588D1D61868CB110@phx.gbl>"
+      ],
+      "body_plain": "Fabrice McShort wrote:\n> Dear Experts,I come back to you for one question. \n\nAnother poster has already given an opinion on the \"from scratch\" cost\nincluding all data, etc.  I'll focus my remarks more on R, to try to\nhelp you figure out what you may have the ability to build in-house and\nwhat you may wish to source externally.\n\n> We decided to use R Project for our risk management (reporting) \n> system. Because, our funds use derivative instruments, we will \n> need to use many packages such as 'Performance Analytics Package'\n> 'VaR package' 'fOptions package', etc.\n\n> So, my question is what type of database we will need?\n\nThere is a way of reading this question \"what database platform should\nwe use?\".  the answer to the platform question is that R can connect to\nall modern SQL databases.  To contain the cost, you may wish to consider\nMySQL, but any of the major commercial database engines would work as well.\n\nYour question may also be read \"what type of data do we need to store,\nand what type of data model?\"  This interpretation of your question is\nmore complex.\n\nClearly, you need instrument reference data, and historical\nprice/valuation data.  I would suggest that you develop your model data\nfields (loosely) based on your input data.  Clearly, you need a place to\nstore any data that is relevant to your analysis.\n\n\n> Bloomberg data, Bara data, Datastream, etc. \n\nI assume that you will already have subscriptions to this data.\n\nThere is a package RBloomberg, for getting data from Bloomberg, and\nseveral discussions in the list archive here about using it.\n\nFor Barra data and Datastream, your approach will depend on how you get\nthe data.  Do you have a custom application and need to export it?  Is\nit web page data with a login and password?  For data from subscription\nwebsites, you could use get.hist.quote or curl to download the data\ndirectly to R, or you could use some other language ranging from PHP to\nVisual Basic to get the data and put it directly in your data model.\n\n> Other point: Is the system (R) is able to use these principal \n> sources of data? This problem is very important in order\n> to have a good estimation of the final cost of the system!\n\nThe data itself will be reformatted for access in your functions.  You\nwill download the data you need, and probably store it in your data model.\n\nR can access the database, and can use RBloomberg or curl or\nget.hist.quote-style download mechanisms to access the data from your\ndata sources.\n\n> I will be happy to have your opinions about this point.Thanks!Fabrice\n\nI hope this helps your thinking.\n\nRegards,\n\n    - Brian",
+      "body_snippet": "Fabrice McShort wrote:\n> Dear Experts,I come back to you for one question. \n\nAnother poster has already given an opinion on the \"from scratch\" cost\nincluding all data, etc.  I'll focus my remarks more",
+      "thread_id": "thread-2745323d1497",
+      "thread_depth": 1,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-f470a06310be",
+      "message_id": "<1CDEA031FEA76E4F9A41822D63A2D2BC216013D5@SBKE2KMB04.win.dowjones.net>",
+      "from_name": "Alpert, William",
+      "from_email_hash": "28541db3112cebcd377990bb6409aac403e2619037d67aad2d2838ed1bb64cc8",
+      "date": "2007-06-20T15:20:51-04:00",
+      "subject": "[R-SIG-Finance] Event studies  in R ?",
+      "subject_clean": "Event studies  in R ?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Listers:\n\n\tI'm beginning an event study project without the benefit of SAS\nand Eventus -- which most published researchers seem to have used.  Has\nanyone used R or heard of someone who has used R for a pretty vanilla\nevent study ?\n\n\tMy Google searches of working papers have turned up a couple\nthat mention using R, but I find nothing on the R lists, packages or\ndocumentation.\n\n\tJust wanna make sure I haven't missed any readymades, before I\nstumble ahead on my own.\n\n\nBill Alpert\nBarron's\nDow Jones & Co (for the moment)\n\nwilliam.alpert at barrons.com\n1.212.416.2742",
+      "body_snippet": "Listers:\n\n\tI'm beginning an event study project without the benefit of SAS\nand Eventus -- which most published researchers seem to have used.  Has\nanyone used R or heard of someone who has used R for ",
+      "thread_id": "thread-f470a06310be",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-262fff765c01",
+      "message_id": "<OF8EBB4569.071353A6-ONC1257301.002011F4-C1257301.0021F489@hsbc.fr>",
+      "from_name": "guillaume.nicoulaud at halbis.com",
+      "from_email_hash": "7f9255d1786515332e92a75b628650265b8fae654111549ff0b48dcf88f53949",
+      "date": "2007-06-21T08:10:52+02:00",
+      "subject": "[R-SIG-Finance] Réf. :  R / Risk measurement and the problem of data",
+      "subject_clean": "Réf. :  R / Risk measurement and the problem of data",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Fabrice\n\nIt depends if you mean to store the data you use in a proprietary databse or not. If not, I would recommend Bloomberg (although it clearly is expensive) as it is the only source you can directly connect to R (with RBloomberg). I never saw\nany equivalent with Datastream or Barra.\nYet, I would follow Brian and recommend you to create your own database (which may potentially use several sources) and work from this point R (using the RODBC package): not only the odds are it will be much cheaper but it will also be much\nfaster...\n\nG\n\n\n\n\n                                                                                                                                   \n                                                                                                                                   \n                                                        Pour :   <r-sig-finance at stat.math.ethz.ch>                                 \n                                                        cc :                                                                       \n                                                        Objet :  [R-SIG-Finance] R / Risk measurement and the problem of data      \n             Fabrice McShort                                                                                                       \n             <fabricemcshort at hotmail.com>                                                                                          \n             Envoy? par :                                                                                                          \n             r-sig-finance-bounces at stat.math.ethz.                                                                                 \n             ch                                                                                                                    \n                                                                                                                                   \n                                                                                                                                   \n             20/06/2007 08:32                                                                                                      \n                                                                                                                                   \n                                                                                                                                   \n\n\n\n\n\n\n\nDear Experts,I come back to you for one question. We decided to use R Project for our risk management (reporting) system. Because, our funds use derivative instruments, we will need to use many packages such as 'Performance Analytics\nPackage' 'VaR package' 'fOptions package', etc.So, my question is what type of database we will need? Bloomberg data, Bara data, Datastream, etc. Other point: Is the system (R) is able to use these principal sources of data? This problem is\nvery important in order to have a good estimation of the final cost of the system! I will be happy to have your opinions about this point.Thanks!Fabrice\n_________________________________________________________________\nDavid Guetta a r?uni les sons les plus connus de Messenger dans le Mix Messenger, le son de l??t? ! T?l?chargez-le gratuitement !\n\n             [[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only.\n-- If you want to post, subscribe first.\n\nLes informations contenues dans ce message sont confidentielles et peuvent constituer des informations privilegiees. Si vous n etes pas le destinataire de ce message, il vous est interdit de le copier, de le faire suivre, de le divulguer ou d en utiliser tout ou partie. Si vous avez recu ce message par erreur, merci de le supprimer de votre systeme, ainsi que toutes ses copies, et d en avertir immediatement l expediteur par message de retour.\nIl est impossible de garantir que les communications par messagerie electronique arrivent en temps utile, sont securisees ou denuees de toute erreur ou virus. En consequence, l expediteur n accepte aucune responsabilite du fait des erreurs ou omissions qui pourraient en resulter.\n--- ----------------------------------------------------- ---\nThe information contained in this e-mail is confidential. It...{{dropped}}",
+      "body_snippet": "Hi Fabrice\n\nIt depends if you mean to store the data you use in a proprietary databse or not. If not, I would recommend Bloomberg (although it clearly is expensive) as it is the only source you can di",
+      "thread_id": "thread-262fff765c01",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-f9de9bb92061",
+      "message_id": "<1182425930.467a634a8a8fb@ssl0.ovh.net>",
+      "from_name": "rudy at zuck.fr",
+      "from_email_hash": "9168dbd98ab94ef3a0ade371b382622283d27012d26c99ddd7870a15c0d94fac",
+      "date": "2007-06-21T13:38:50+02:00",
+      "subject": "[R-SIG-Finance] R-SIG-Finance Digest, Vol 37, Issue 14",
+      "subject_clean": "R-SIG-Finance Digest, Vol 37, Issue 14",
+      "in_reply_to": "<mailman.18.1182333609.24790.r-sig-finance@stat.math.ethz.ch>",
+      "references": [
+        "<mailman.18.1182333609.24790.r-sig-finance@stat.math.ethz.ch>"
+      ],
+      "body_plain": "Dear Fabrice, (are you french?)\n\nI also begin to have a look at R, as i am working in a management company\nspecializing in Securitization. From what i have seen, R is not meant to\nparse/integrate directly from a data provider. But such feed like Bloomberg\nprovide convenient API that should be quiet easily to glue with R with few\nlines of scripting languages (we attack the Bloomberg database with a small\nperl app in our company).\n\nRegards,\n\n\n\n\"Dear Experts,I come back to you for one question. We decided to use R Project\nfor our risk management (reporting) system. Because, our funds use derivative\ninstruments, we will need to use many packages such as 'Performance Analytics\nPackage' 'VaR package' 'fOptions package', etc.So, my question is what type of\ndatabase we will need? Bloomberg data, Bara data, Datastream, etc. Other point:\nIs the system (R) is able to use these principal sources of data? This problem\nis very important in order to have a good estimation of the final cost of the\nsystem! I will be happy to have your opinions about this point.Thanks!Fabrice\"",
+      "body_snippet": "Dear Fabrice, (are you french?)\n\nI also begin to have a look at R, as i am working in a management company\nspecializing in Securitization. From what i have seen, R is not meant to\nparse/integrate dire",
+      "thread_id": "thread-f9de9bb92061",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-b7c42df6ea3f",
+      "message_id": "<CADFD0E28E1E6A46B0C84335BDB994F503EB3119@whexchmb16.bsna.bsroot.bear.com>",
+      "from_name": "Bernzweig, Bruce (Consultant)",
+      "from_email_hash": "059175e1537f939e6dcab8af41c4862106e1181ef0f439e98f11e266f193f4dd",
+      "date": "2007-06-22T08:42:27-04:00",
+      "subject": "[R-SIG-Finance] Connecting R w/ 3rd Party Apps",
+      "subject_clean": "Connecting R w/ 3rd Party Apps",
+      "in_reply_to": null,
+      "references": [
+        "<mailman.17.1182506406.20082.r-sig-finance@stat.math.ethz.ch>"
+      ],
+      "body_plain": "One question I have for you is whether or not the data pulling has to be\ndone in real time.\n\nRight now I'm using R on data that was originally pulled from FactSet\nand Bloomberg but first placed into Excel spread sheets.  The data\nprocessing (stats calculations) are only done once a month so how the\ndata is actually pulled (which is done by other people) is not too much\nof a concern to me at this time.\n\nHowever, there are ways to mix R with other languages.  Take a look at\nthe lists of R packages.  You can integrate R with MS Tools (Excel,\nAccess), C, C++, Java, etc.  You just need to download the relevant\npackages.\n\n- Bruce\n\n\n\n----------------------------------------------------------------------\n\nMessage: 1\nDate: Thu, 21 Jun 2007 13:38:50 +0200\nFrom: rudy at zuck.fr\nSubject: Re: [R-SIG-Finance] R-SIG-Finance Digest, Vol 37, Issue 14\nTo: r-sig-finance at stat.math.ethz.ch\nMessage-ID: <1182425930.467a634a8a8fb at ssl0.ovh.net>\nContent-Type: text/plain; charset=ISO-8859-1\n\nDear Fabrice, (are you french?)\n\nI also begin to have a look at R, as i am working in a management\ncompany\nspecializing in Securitization. From what i have seen, R is not meant to\nparse/integrate directly from a data provider. But such feed like\nBloomberg\nprovide convenient API that should be quiet easily to glue with R with\nfew\nlines of scripting languages (we attack the Bloomberg database with a\nsmall\nperl app in our company).\n\nRegards,\n\n\n\n\"Dear Experts,I come back to you for one question. We decided to use R\nProject\nfor our risk management (reporting) system. Because, our funds use\nderivative\ninstruments, we will need to use many packages such as 'Performance\nAnalytics\nPackage' 'VaR package' 'fOptions package', etc.So, my question is what\ntype of\ndatabase we will need? Bloomberg data, Bara data, Datastream, etc. Other\npoint:\nIs the system (R) is able to use these principal sources of data? This\nproblem\nis very important in order to have a good estimation of the final cost\nof the\nsystem! I will be happy to have your opinions about this\npoint.Thanks!Fabrice\"\n\n\n\n------------------------------\n\n_______________________________________________\nR-SIG-Finance mailing list\nR-SIG-Finance at stat.math.ethz.ch\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n\n\nEnd of R-SIG-Finance Digest, Vol 37, Issue 16\n*********************************************\n\n\n\n**********************************************************************\nPlease be aware that, notwithstanding the fact that the pers...{{dropped}}",
+      "body_snippet": "One question I have for you is whether or not the data pulling has to be\ndone in real time.\n\nRight now I'm using R on data that was originally pulled from FactSet\nand Bloomberg but first placed into E",
+      "thread_id": "thread-b7c42df6ea3f",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-4ef78e5f7eb1",
+      "message_id": "<20070622203523.ukt9nfnzwgswocww@webmail.inf.ufsc.br>",
+      "from_name": "Felipe Momm",
+      "from_email_hash": "b61bf77f154c11318bdef7c4c0cc5aaad0fd4bc9627257cef0a84cd78f2dd3df",
+      "date": "2007-06-22T20:35:23-03:00",
+      "subject": "[R-SIG-Finance] Connecting R w/ 3rd Party Apps",
+      "subject_clean": "Connecting R w/ 3rd Party Apps",
+      "in_reply_to": "<CADFD0E28E1E6A46B0C84335BDB994F503EB3119@whexchmb16.bsna.bsroot.bear.com>",
+      "references": [
+        "<mailman.17.1182506406.20082.r-sig-finance@stat.math.ethz.ch>",
+        "<CADFD0E28E1E6A46B0C84335BDB994F503EB3119@whexchmb16.bsna.bsroot.bear.com>"
+      ],
+      "body_plain": "Where i can find these packages? I will try to integrate R with C# .NET.\n\nThanks.\n\n--\nFelipe Momm\nSistemas de Informa??o\nUniversidade Federal de Santa Catarina\n\n\nQuoting \"Bernzweig, Bruce (Consultant)\" <bbernzwe at bear.com>:\n\n> One question I have for you is whether or not the data pulling has to be\n> done in real time.\n>\n> Right now I'm using R on data that was originally pulled from FactSet\n> and Bloomberg but first placed into Excel spread sheets.  The data\n> processing (stats calculations) are only done once a month so how the\n> data is actually pulled (which is done by other people) is not too much\n> of a concern to me at this time.\n>\n> However, there are ways to mix R with other languages.  Take a look at\n> the lists of R packages.  You can integrate R with MS Tools (Excel,\n> Access), C, C++, Java, etc.  You just need to download the relevant\n> packages.\n>\n> - Bruce\n>\n>\n>\n> ----------------------------------------------------------------------\n>\n> Message: 1\n> Date: Thu, 21 Jun 2007 13:38:50 +0200\n> From: rudy at zuck.fr\n> Subject: Re: [R-SIG-Finance] R-SIG-Finance Digest, Vol 37, Issue 14\n> To: r-sig-finance at stat.math.ethz.ch\n> Message-ID: <1182425930.467a634a8a8fb at ssl0.ovh.net>\n> Content-Type: text/plain; charset=ISO-8859-1\n>\n> Dear Fabrice, (are you french?)\n>\n> I also begin to have a look at R, as i am working in a management\n> company\n> specializing in Securitization. From what i have seen, R is not meant to\n> parse/integrate directly from a data provider. But such feed like\n> Bloomberg\n> provide convenient API that should be quiet easily to glue with R with\n> few\n> lines of scripting languages (we attack the Bloomberg database with a\n> small\n> perl app in our company).\n>\n> Regards,\n>\n>\n>\n> \"Dear Experts,I come back to you for one question. We decided to use R\n> Project\n> for our risk management (reporting) system. Because, our funds use\n> derivative\n> instruments, we will need to use many packages such as 'Performance\n> Analytics\n> Package' 'VaR package' 'fOptions package', etc.So, my question is what\n> type of\n> database we will need? Bloomberg data, Bara data, Datastream, etc. Other\n> point:\n> Is the system (R) is able to use these principal sources of data? This\n> problem\n> is very important in order to have a good estimation of the final cost\n> of the\n> system! I will be happy to have your opinions about this\n> point.Thanks!Fabrice\"\n>\n>\n>\n> ------------------------------\n>\n> _______________________________________________\n> R-SIG-Finance mailing list\n> R-SIG-Finance at stat.math.ethz.ch\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>\n> End of R-SIG-Finance Digest, Vol 37, Issue 16\n> *********************************************\n>\n>\n>\n> **********************************************************************\n> Please be aware that, notwithstanding the fact that the pers...{{dropped}}\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>",
+      "body_snippet": "Where i can find these packages? I will try to integrate R with C# .NET.\n\nThanks.\n\n--\nFelipe Momm\nSistemas de Informa??o\nUniversidade Federal de Santa Catarina\n\n\nQuoting \"Bernzweig, Bruce (Consultant)",
+      "thread_id": "thread-b7c42df6ea3f",
+      "thread_depth": 1,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-b8ed3783da45",
+      "message_id": "<af34d0c00706250414q37f73c38x62abff26acfff485@mail.gmail.com>",
+      "from_name": "Mario Aigner-Torres",
+      "from_email_hash": "5ac831698389685d3592dfc03984e25151a44f27e0c1c083727e3cd8722795c5",
+      "date": "2007-06-25T08:14:11-03:00",
+      "subject": "[R-SIG-Finance] Simulations for Project Management",
+      "subject_clean": "Simulations for Project Management",
+      "in_reply_to": "<af34d0c00706231748m165ec52bl5dff6aef11e2d118@mail.gmail.com>",
+      "references": [
+        "<af34d0c00706231748m165ec52bl5dff6aef11e2d118@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070625/eb0f90fe/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070625/eb0f90fe/attachment.pl",
+      "thread_id": "thread-b8ed3783da45",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-77bb450dd3dc",
+      "message_id": "<46801385.2030902@vanderbilt.edu>",
+      "from_name": "Jeffrey Horner",
+      "from_email_hash": "8b91e5b4000682951a703759aaef9fbaa2bc23dc141f7a1ef5c829c7c0d0d0de",
+      "date": "2007-06-25T14:12:05-05:00",
+      "subject": "[R-SIG-Finance] Looking for short-term consulting",
+      "subject_clean": "Looking for short-term consulting",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello list,\n\nI'm inquiring about short-term consulting over the next 3 weeks. For \nthose of you in a dire need and can swing a plane ticket and room and \nboard, I'd be willing to work on-site. I have what I call a typical \nUNIX/Web programmer skill set: C, Perl, Ruby, MySQL, PHP, plus R and \nembedding R with the littler and RApache projects, and I'm a CRAN \npackage author of brew and co-author of Cairo.\n\nE-mail me off-list if there are any takers. Also, you can learn more\nabout me from the url below.\n\nThanks,\n\nJeff\n--\nhttp://biostat.mc.vanderbilt.edu/JeffreyHorner",
+      "body_snippet": "Hello list,\n\nI'm inquiring about short-term consulting over the next 3 weeks. For \nthose of you in a dire need and can swing a plane ticket and room and \nboard, I'd be willing to work on-site. I have ",
+      "thread_id": "thread-77bb450dd3dc",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-3d2c9d20a86d",
+      "message_id": "<BAY129-W8DE513AC0E84E44656D7DCB0A0@phx.gbl>",
+      "from_name": "Fabrice McShort",
+      "from_email_hash": "622b38f6b97a05abf98401ac43561640f10afac227d0acf207090d9019f1086c",
+      "date": "2007-06-27T13:46:13+02:00",
+      "subject": "[R-SIG-Finance] R / Risk measurement and the problem of data",
+      "subject_clean": "R / Risk measurement and the problem of data",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070627/f9802aa1/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070627/f9802aa1/attachment.pl",
+      "thread_id": "thread-3d2c9d20a86d",
+      "thread_depth": 0,
+      "month": "2007-06"
+    },
+    {
+      "id": "msg-50611655915f",
+      "message_id": "<972441.14518.qm@web35410.mail.mud.yahoo.com>",
+      "from_name": "John McHenry",
+      "from_email_hash": "3ede77c296078fdfc17f557ea0c7fb5a67fc63ec37b21939d1b671aca1dc698a",
+      "date": "2007-06-28T09:05:05-07:00",
+      "subject": "[R-SIG-Finance] Method dispatch in functions?",
+      "subject_clean": "Method dispatch in functions?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070628/c47ce86f/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070628/c47ce86f/attachment.pl",
+      "thread_id": "thread-50611655915f",
+      "thread_depth": 0,
+      "month": "2007-06"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-e8254914f517",
+      "subject": "ISO-8601 with time zone designator, format handling with fCalendar/chron",
+      "message_count": 1,
+      "participants": [
+        "jeam"
+      ],
+      "started": "2007-06-01T03:34:38-07:00",
+      "last_reply": "2007-06-01T03:34:38-07:00",
+      "root_message_id": "msg-e8254914f517"
+    },
+    {
+      "id": "thread-a246b2bde830",
+      "subject": "fix for Package: r-cran-fcalendar (240.10068-2)",
+      "message_count": 1,
+      "participants": [
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2007-06-05T20:27:21-05:00",
+      "last_reply": "2007-06-05T20:27:21-05:00",
+      "root_message_id": "msg-a246b2bde830"
+    },
+    {
+      "id": "thread-22803540a24c",
+      "subject": "Welcome to the \"R-SIG-Finance\" mailing list (Digest mode)",
+      "message_count": 1,
+      "participants": [
+        "Fabrice McShort"
+      ],
+      "started": "2007-06-06T10:04:10+02:00",
+      "last_reply": "2007-06-06T10:04:10+02:00",
+      "root_message_id": "msg-22803540a24c"
+    },
+    {
+      "id": "thread-e88939da5f18",
+      "subject": "R-project and the risk measurement for mutual and hedge funds",
+      "message_count": 3,
+      "participants": [
+        "Fabrice McShort",
+        "Sylvain BARTHELEMY",
+        "stefano iacus"
+      ],
+      "started": "2007-06-06T10:24:16+02:00",
+      "last_reply": "2007-06-06T12:34:21+02:00",
+      "root_message_id": "msg-e88939da5f18"
+    },
+    {
+      "id": "thread-4f756a27afed",
+      "subject": "R-project and the risk measurement for mutual and hedge funds",
+      "message_count": 1,
+      "participants": [
+        "Fabrice McShort"
+      ],
+      "started": "2007-06-07T12:36:39+02:00",
+      "last_reply": "2007-06-07T12:36:39+02:00",
+      "root_message_id": "msg-4f756a27afed"
+    },
+    {
+      "id": "thread-c41f99f46b00",
+      "subject": "Réf. : Re:  R-project and the risk measurement for mutual and hedge funds",
+      "message_count": 5,
+      "participants": [
+        "Brian G. Peterson",
+        "Joshua Reich",
+        "Sylvain BARTHELEMY",
+        "guillaume.nicoulaud at halbis.com",
+        "ngottlieb at marinercapital.com"
+      ],
+      "started": "2007-06-07T13:37:05+02:00",
+      "last_reply": "2007-06-07T09:42:02-04:00",
+      "root_message_id": "msg-c41f99f46b00"
+    },
+    {
+      "id": "thread-5ea5f054627d",
+      "subject": "Réf. :  hedge funds data",
+      "message_count": 2,
+      "participants": [
+        "Frederick Novomestky",
+        "guillaume.nicoulaud at halbis.com"
+      ],
+      "started": "2007-06-08T07:53:54+02:00",
+      "last_reply": "2007-06-08T13:45:24-04:00",
+      "root_message_id": "msg-5ea5f054627d"
+    },
+    {
+      "id": "thread-0fec565c19fb",
+      "subject": "R-project and the risk measurement for mutual and hedge funds",
+      "message_count": 1,
+      "participants": [
+        "Bengoechea Bartolomé Enrique (SIES 73)"
+      ],
+      "started": "2007-06-08T12:36:00+02:00",
+      "last_reply": "2007-06-08T12:36:00+02:00",
+      "root_message_id": "msg-0fec565c19fb"
+    },
+    {
+      "id": "thread-71fceb6cd8ad",
+      "subject": "hedge funds data",
+      "message_count": 3,
+      "participants": [
+        "Brian G. Peterson",
+        "Liu Zhigang",
+        "ngottlieb at marinercapital.com"
+      ],
+      "started": "2007-06-08T13:48:51+08:00",
+      "last_reply": "2007-06-08T13:41:31-04:00",
+      "root_message_id": "msg-71fceb6cd8ad"
+    },
+    {
+      "id": "thread-2d6905d9bc64",
+      "subject": "R-project and the risk measurement for mutual and hedge funds",
+      "message_count": 3,
+      "participants": [
+        "Brian G. Peterson",
+        "Fabrice McShort",
+        "Matteo Fornasier"
+      ],
+      "started": "2007-06-08T15:27:41+02:00",
+      "last_reply": "2007-06-08T19:00:03+02:00",
+      "root_message_id": "msg-2d6905d9bc64"
+    },
+    {
+      "id": "thread-54509b4a2c77",
+      "subject": "Small Hedge Fund Seeks Data Deity",
+      "message_count": 1,
+      "participants": [
+        "Rob Steele"
+      ],
+      "started": "2007-06-10T19:24:17-04:00",
+      "last_reply": "2007-06-10T19:24:17-04:00",
+      "root_message_id": "msg-54509b4a2c77"
+    },
+    {
+      "id": "thread-75e66f497f46",
+      "subject": "R-project and the risk measurement for mutual and hedge funds",
+      "message_count": 1,
+      "participants": [
+        "Fabrice McShort"
+      ],
+      "started": "2007-06-12T00:22:04+02:00",
+      "last_reply": "2007-06-12T00:22:04+02:00",
+      "root_message_id": "msg-75e66f497f46"
+    },
+    {
+      "id": "thread-b2aa1290a841",
+      "subject": "How to solve DP from KMV model ?",
+      "message_count": 1,
+      "participants": [
+        "JOSH CHIEN"
+      ],
+      "started": "2007-06-14T16:51:39+08:00",
+      "last_reply": "2007-06-14T16:51:39+08:00",
+      "root_message_id": "msg-b2aa1290a841"
+    },
+    {
+      "id": "thread-6a486bfdced8",
+      "subject": "option model for interest rate future",
+      "message_count": 3,
+      "participants": [
+        "Brian G. Peterson",
+        "Robert Sams",
+        "Sylvain BARTHELEMY"
+      ],
+      "started": "2007-06-14T16:53:47+01:00",
+      "last_reply": "2007-06-14T19:00:37+02:00",
+      "root_message_id": "msg-6a486bfdced8"
+    },
+    {
+      "id": "thread-c20498f42e15",
+      "subject": "Question: How to Notionalize a Commodity Future?",
+      "message_count": 7,
+      "participants": [
+        "Armstrong, Whit",
+        "Edmund Jackson",
+        "davidr at rhotrading.com",
+        "ngottlieb at marinercapital.com"
+      ],
+      "started": "2007-06-15T10:49:25-04:00",
+      "last_reply": "2007-06-15T12:29:33-04:00",
+      "root_message_id": "msg-c20498f42e15"
+    },
+    {
+      "id": "thread-6800a2acfc77",
+      "subject": "Program Trading Techniques and Financial Models for Hedge Funds: 3rd Annual CARISMA Seminar",
+      "message_count": 1,
+      "participants": [
+        "Michael Sun"
+      ],
+      "started": "2007-06-15T16:06:24+01:00",
+      "last_reply": "2007-06-15T16:06:24+01:00",
+      "root_message_id": "msg-6800a2acfc77"
+    },
+    {
+      "id": "thread-081178e5ce2e",
+      "subject": "option model for interest rate future",
+      "message_count": 2,
+      "participants": [
+        "James",
+        "Robert Sams"
+      ],
+      "started": "2007-06-15T19:43:10+01:00",
+      "last_reply": "2007-06-15T17:43:07-06:00",
+      "root_message_id": "msg-081178e5ce2e"
+    },
+    {
+      "id": "thread-c39eacf03787",
+      "subject": "option model for interest rate future",
+      "message_count": 3,
+      "participants": [
+        "Brian G. Peterson",
+        "James",
+        "Robert Sams"
+      ],
+      "started": "2007-06-16T08:44:59+01:00",
+      "last_reply": "2007-06-16T10:36:34-06:00",
+      "root_message_id": "msg-c39eacf03787"
+    },
+    {
+      "id": "thread-04d19d7b629e",
+      "subject": "Simple TWAP-like Algorithm in R",
+      "message_count": 1,
+      "participants": [
+        "Rory Winston"
+      ],
+      "started": "2007-06-18T17:15:56+01:00",
+      "last_reply": "2007-06-18T17:15:56+01:00",
+      "root_message_id": "msg-04d19d7b629e"
+    },
+    {
+      "id": "thread-2745323d1497",
+      "subject": "R / Risk measurement and the problem of data",
+      "message_count": 5,
+      "participants": [
+        "Brian G. Peterson",
+        "Fabrice McShort",
+        "Sylvain BARTHELEMY",
+        "ngottlieb at marinercapital.com"
+      ],
+      "started": "2007-06-20T08:32:28+02:00",
+      "last_reply": "2007-06-20T14:01:08-05:00",
+      "root_message_id": "msg-2745323d1497"
+    },
+    {
+      "id": "thread-f470a06310be",
+      "subject": "Event studies  in R ?",
+      "message_count": 1,
+      "participants": [
+        "Alpert, William"
+      ],
+      "started": "2007-06-20T15:20:51-04:00",
+      "last_reply": "2007-06-20T15:20:51-04:00",
+      "root_message_id": "msg-f470a06310be"
+    },
+    {
+      "id": "thread-262fff765c01",
+      "subject": "Réf. :  R / Risk measurement and the problem of data",
+      "message_count": 1,
+      "participants": [
+        "guillaume.nicoulaud at halbis.com"
+      ],
+      "started": "2007-06-21T08:10:52+02:00",
+      "last_reply": "2007-06-21T08:10:52+02:00",
+      "root_message_id": "msg-262fff765c01"
+    },
+    {
+      "id": "thread-f9de9bb92061",
+      "subject": "R-SIG-Finance Digest, Vol 37, Issue 14",
+      "message_count": 1,
+      "participants": [
+        "rudy at zuck.fr"
+      ],
+      "started": "2007-06-21T13:38:50+02:00",
+      "last_reply": "2007-06-21T13:38:50+02:00",
+      "root_message_id": "msg-f9de9bb92061"
+    },
+    {
+      "id": "thread-b7c42df6ea3f",
+      "subject": "Connecting R w/ 3rd Party Apps",
+      "message_count": 2,
+      "participants": [
+        "Bernzweig, Bruce (Consultant)",
+        "Felipe Momm"
+      ],
+      "started": "2007-06-22T08:42:27-04:00",
+      "last_reply": "2007-06-22T20:35:23-03:00",
+      "root_message_id": "msg-b7c42df6ea3f"
+    },
+    {
+      "id": "thread-b8ed3783da45",
+      "subject": "Simulations for Project Management",
+      "message_count": 1,
+      "participants": [
+        "Mario Aigner-Torres"
+      ],
+      "started": "2007-06-25T08:14:11-03:00",
+      "last_reply": "2007-06-25T08:14:11-03:00",
+      "root_message_id": "msg-b8ed3783da45"
+    },
+    {
+      "id": "thread-77bb450dd3dc",
+      "subject": "Looking for short-term consulting",
+      "message_count": 1,
+      "participants": [
+        "Jeffrey Horner"
+      ],
+      "started": "2007-06-25T14:12:05-05:00",
+      "last_reply": "2007-06-25T14:12:05-05:00",
+      "root_message_id": "msg-77bb450dd3dc"
+    },
+    {
+      "id": "thread-3d2c9d20a86d",
+      "subject": "R / Risk measurement and the problem of data",
+      "message_count": 1,
+      "participants": [
+        "Fabrice McShort"
+      ],
+      "started": "2007-06-27T13:46:13+02:00",
+      "last_reply": "2007-06-27T13:46:13+02:00",
+      "root_message_id": "msg-3d2c9d20a86d"
+    },
+    {
+      "id": "thread-50611655915f",
+      "subject": "Method dispatch in functions?",
+      "message_count": 1,
+      "participants": [
+        "John McHenry"
+      ],
+      "started": "2007-06-28T09:05:05-07:00",
+      "last_reply": "2007-06-28T09:05:05-07:00",
+      "root_message_id": "msg-50611655915f"
+    }
+  ]
+}

@@ -1,0 +1,1021 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2007-05",
+  "messages": [
+    {
+      "id": "msg-e530fc8f36c7",
+      "message_id": "<f2e3401f0705010817x78e35489s846cffe56985bbd8@mail.gmail.com>",
+      "from_name": "Paul DeBruicker",
+      "from_email_hash": "99bd59dd6b0e9b03a00794db5e86f25f952a219eb5721b9842610430c68a558a",
+      "date": "2007-05-01T11:17:41-04:00",
+      "subject": "[R-SIG-Finance] Bloomberg bulk data download - example code",
+      "subject_clean": "Bloomberg bulk data download - example code",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Anyone -\n\nRBloomberg doesn't support downloading bulk data items from Bloomberg.\nI wanted to download the option chains and dividend histories for\nseveral equities.  I read the sources for RBloomberg to try to see if\nI could patch it, but stopped short because I was getting distracted\nfrom the goal of downloading the data.    Below is the code and some\nnotes I used to download the information I wanted using WinXP and\nR-2.5.0.  I'm sure there are more robust ways, but this one met my\nneeds.\n\nIf you run the code below you should get an error returned for the\noption chain (OPT_CHAIN) for the Vanguard S&P 500 index fund (VFINX\nEquity) but everything else will return usable data.  Its my\nunderstanding that there are over 400 bulk download fields available,\nand I've only tested these functions with 10 of them.  You must have\nBloomberg installed on the machine you run this code on.\n\nPaul\n\n\n\n\n\n\n\n\nlibrary(RDCOMClient)\nc<-COMCreate(\"Bloomberg.Data.1\") #open a COM connection\n\nsecs<-c(\"VFINX Equity\",\"INTC Equity\")\nflds<-c(\"EQY_DVD_HIST_ALL\",\"OPT_CHAIN\")\n\n# blpGetBulkData just calls the BlpSubscribe function\n\nblpGetBulkData<-function(connection=c,securities=secs,fields=flds){\n\tdat<-connection$BlpSubscribe(Security=securities,Fields=fields)\n\treturn(dat)\n\t}\n\n\nblpb.data<-blpGetBulkData(c,flds,secs)\n\n# Bloomberg returns the data in a nested list (data.frame?). If there\nis an error from Bloomberg\n# the data comes in as list(list(\"Error Message\")) and if its\nsuccessful the data\n# comes in as list(list(list(DATA))) where DATA is comprised of any\nnumber of equal\n# length lists.  The outer most list is for the fields, the second one\nin is for the securities\n# the third one in is for each list of data.\n\n\n# The blpBulkDataFormat function names the outer most list after the\nfields in the download\n# and the next list in after the securities\n\nblpBulkDataFormat<-function(data=blpb.data, fields=flds,securities=secs){\n\n\tnames(data)<-fields\n\tfor (i in 1:length(flds)) names(data[[i]])<-sub(\" +\",\".\",securities)\n\tretval<-data\n\treturn(retval)\n}\n\nbdf<-blpBulkDataFormat(blpb.data,flds,secs)\nbdf",
+      "body_snippet": "Anyone -\n\nRBloomberg doesn't support downloading bulk data items from Bloomberg.\nI wanted to download the option chains and dividend histories for\nseveral equities.  I read the sources for RBloomberg ",
+      "thread_id": "thread-e530fc8f36c7",
+      "thread_depth": 0,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-14e0f6f4d933",
+      "message_id": "<3022AB419500A8478FF6228C8D085A35012D7A20@cgi-exch06.cgi.clayton.com>",
+      "from_name": "Warren Loken",
+      "from_email_hash": "7938c900b168f2cb080da9697e292a6ee40a905f36bdf6e78564b679266e5adf",
+      "date": "2007-05-01T11:26:55-06:00",
+      "subject": "[R-SIG-Finance] Confidence Intervals",
+      "subject_clean": "Confidence Intervals",
+      "in_reply_to": "<f2e3401f0705010817x78e35489s846cffe56985bbd8@mail.gmail.com>",
+      "references": [],
+      "body_plain": "Anyone - \n\nWe have been working on a predictive default model for residential\nmortgages using the logistic regression functions in r.  We have had\nsatisfactory results in finding predictive independent variables. We are\nnow attempting to build confidence intervals.  We used the vcov function\nto obtain the variance and covariance coefficients.  Is there a function\nin r that will use the results of the vcov function that can be run\nagainst the data to obtain the covariance value?  We have numerous\nvariables and are finding it difficult at best to accomplish outside of\na program.\n\nAny help would be much appreciated\n\nWarren Loken\nClayton Fixed Income Services\n1700 lincoln street, suite 1600\ndenver, colorado 80203\nT: 720.947.6909\nF: 720.947.5181\n\nwloken at clayton.com\n\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Paul\nDeBruicker\nSent: Tuesday, May 01, 2007 9:18 AM\nTo: r-sig-finance\nSubject: [R-SIG-Finance] Bloomberg bulk data download - example code\n\nAnyone -\n\nRBloomberg doesn't support downloading bulk data items from Bloomberg.\nI wanted to download the option chains and dividend histories for\nseveral equities.  I read the sources for RBloomberg to try to see if\nI could patch it, but stopped short because I was getting distracted\nfrom the goal of downloading the data.    Below is the code and some\nnotes I used to download the information I wanted using WinXP and\nR-2.5.0.  I'm sure there are more robust ways, but this one met my\nneeds.\n\nIf you run the code below you should get an error returned for the\noption chain (OPT_CHAIN) for the Vanguard S&P 500 index fund (VFINX\nEquity) but everything else will return usable data.  Its my\nunderstanding that there are over 400 bulk download fields available,\nand I've only tested these functions with 10 of them.  You must have\nBloomberg installed on the machine you run this code on.\n\nPaul\n\n\n\n\n\n\n\n\nlibrary(RDCOMClient)\nc<-COMCreate(\"Bloomberg.Data.1\") #open a COM connection\n\nsecs<-c(\"VFINX Equity\",\"INTC Equity\")\nflds<-c(\"EQY_DVD_HIST_ALL\",\"OPT_CHAIN\")\n\n# blpGetBulkData just calls the BlpSubscribe function\n\nblpGetBulkData<-function(connection=c,securities=secs,fields=flds){\n\tdat<-connection$BlpSubscribe(Security=securities,Fields=fields)\n\treturn(dat)\n\t}\n\n\nblpb.data<-blpGetBulkData(c,flds,secs)\n\n# Bloomberg returns the data in a nested list (data.frame?). If there\nis an error from Bloomberg\n# the data comes in as list(list(\"Error Message\")) and if its\nsuccessful the data\n# comes in as list(list(list(DATA))) where DATA is comprised of any\nnumber of equal\n# length lists.  The outer most list is for the fields, the second one\nin is for the securities\n# the third one in is for each list of data.\n\n\n# The blpBulkDataFormat function names the outer most list after the\nfields in the download\n# and the next list in after the securities\n\nblpBulkDataFormat<-function(data=blpb.data,\nfields=flds,securities=secs){\n\n\tnames(data)<-fields\n\tfor (i in 1:length(flds)) names(data[[i]])<-sub(\"\n+\",\".\",securities)\n\tretval<-data\n\treturn(retval)\n}\n\nbdf<-blpBulkDataFormat(blpb.data,flds,secs)\nbdf\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.\nIMPORTANT NOTICE:\n\nThis message is intended only for the use of the individual or entity to which it is addressed and may contain information that is privileged, confidential and exempt from disclosure under applicable law.  If you have received this message in error, you are hereby notified that we do not consent to any reading, dissemination, distribution or copying of this message.  If you have received this communication in error, please notify the sender immediately and destroy the transmitted information.",
+      "body_snippet": "Anyone - \n\nWe have been working on a predictive default model for residential\nmortgages using the logistic regression functions in r.  We have had\nsatisfactory results in finding predictive independen",
+      "thread_id": "thread-e530fc8f36c7",
+      "thread_depth": 1,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-5995e76b4e35",
+      "message_id": "<9549405.1178044180769.JavaMail.root@mswamui-chipeau.atl.sa.earthlink.net>",
+      "from_name": "frednovo at pipeline.com",
+      "from_email_hash": "832e7e2b7f6e597e48404048397acadd75de80f0df1aeb61e3cfc14798ea3a44",
+      "date": "2007-05-01T14:29:40-04:00",
+      "subject": "[R-SIG-Finance] Confidence Intervals",
+      "subject_clean": "Confidence Intervals",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Have you considered using bootstrap regression (see Efron and Tibshirani).  You consider a sample of regression models with bootstrapped data samples.  From that, you can construct confidence intervals on the parameters of interest.\n\nBest regards,\n\nFrederick Novomestky\n\n-----Original Message-----\n>From: Warren Loken <WLoken at clayton.com>\n>Sent: May 1, 2007 1:26 PM\n>To: r-sig-finance <r-sig-finance at stat.math.ethz.ch>\n>Subject: [R-SIG-Finance] Confidence Intervals\n>\n>Anyone - \n>\n>We have been working on a predictive default model for residential\n>mortgages using the logistic regression functions in r.  We have had\n>satisfactory results in finding predictive independent variables. We are\n>now attempting to build confidence intervals.  We used the vcov function\n>to obtain the variance and covariance coefficients.  Is there a function\n>in r that will use the results of the vcov function that can be run\n>against the data to obtain the covariance value?  We have numerous\n>variables and are finding it difficult at best to accomplish outside of\n>a program.\n>\n>Any help would be much appreciated\n>\n>Warren Loken\n>Clayton Fixed Income Services\n>1700 lincoln street, suite 1600\n>denver, colorado 80203\n>T: 720.947.6909\n>F: 720.947.5181\n>\n>wloken at clayton.com\n>\n>\n>-----Original Message-----\n>From: r-sig-finance-bounces at stat.math.ethz.ch\n>[mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Paul\n>DeBruicker\n>Sent: Tuesday, May 01, 2007 9:18 AM\n>To: r-sig-finance\n>Subject: [R-SIG-Finance] Bloomberg bulk data download - example code\n>\n>Anyone -\n>\n>RBloomberg doesn't support downloading bulk data items from Bloomberg.\n>I wanted to download the option chains and dividend histories for\n>several equities.  I read the sources for RBloomberg to try to see if\n>I could patch it, but stopped short because I was getting distracted\n>from the goal of downloading the data.    Below is the code and some\n>notes I used to download the information I wanted using WinXP and\n>R-2.5.0.  I'm sure there are more robust ways, but this one met my\n>needs.\n>\n>If you run the code below you should get an error returned for the\n>option chain (OPT_CHAIN) for the Vanguard S&P 500 index fund (VFINX\n>Equity) but everything else will return usable data.  Its my\n>understanding that there are over 400 bulk download fields available,\n>and I've only tested these functions with 10 of them.  You must have\n>Bloomberg installed on the machine you run this code on.\n>\n>Paul\n>\n>\n>\n>\n>\n>\n>\n>\n>library(RDCOMClient)\n>c<-COMCreate(\"Bloomberg.Data.1\") #open a COM connection\n>\n>secs<-c(\"VFINX Equity\",\"INTC Equity\")\n>flds<-c(\"EQY_DVD_HIST_ALL\",\"OPT_CHAIN\")\n>\n># blpGetBulkData just calls the BlpSubscribe function\n>\n>blpGetBulkData<-function(connection=c,securities=secs,fields=flds){\n>\tdat<-connection$BlpSubscribe(Security=securities,Fields=fields)\n>\treturn(dat)\n>\t}\n>\n>\n>blpb.data<-blpGetBulkData(c,flds,secs)\n>\n># Bloomberg returns the data in a nested list (data.frame?). If there\n>is an error from Bloomberg\n># the data comes in as list(list(\"Error Message\")) and if its\n>successful the data\n># comes in as list(list(list(DATA))) where DATA is comprised of any\n>number of equal\n># length lists.  The outer most list is for the fields, the second one\n>in is for the securities\n># the third one in is for each list of data.\n>\n>\n># The blpBulkDataFormat function names the outer most list after the\n>fields in the download\n># and the next list in after the securities\n>\n>blpBulkDataFormat<-function(data=blpb.data,\n>fields=flds,securities=secs){\n>\n>\tnames(data)<-fields\n>\tfor (i in 1:length(flds)) names(data[[i]])<-sub(\"\n>+\",\".\",securities)\n>\tretval<-data\n>\treturn(retval)\n>}\n>\n>bdf<-blpBulkDataFormat(blpb.data,flds,secs)\n>bdf\n>\n>_______________________________________________\n>R-SIG-Finance at stat.math.ethz.ch mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>-- Subscriber-posting only. \n>-- If you want to post, subscribe first.\n>IMPORTANT NOTICE:\n>\n>This message is intended only for the use of the individual or entity to which it is addressed and may contain information that is privileged, confidential and exempt from disclosure under applicable law.  If you have received this message in error, you are hereby notified that we do not consent to any reading, dissemination, distribution or copying of this message.  If you have received this communication in error, please notify the sender immediately and destroy the transmitted information.\n>\n>_______________________________________________\n>R-SIG-Finance at stat.math.ethz.ch mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>-- Subscriber-posting only. \n>-- If you want to post, subscribe first.",
+      "body_snippet": "Have you considered using bootstrap regression (see Efron and Tibshirani).  You consider a sample of regression models with bootstrapped data samples.  From that, you can construct confidence interval",
+      "thread_id": "thread-5995e76b4e35",
+      "thread_depth": 0,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-55729991a6db",
+      "message_id": "<d0f55a670705020255s28fa019fr8520c7ad73cf1f35@mail.gmail.com>",
+      "from_name": "Thomas Steiner",
+      "from_email_hash": "750a3ff6af0be6db83d42f3a17b989a218e2ddb0dbf78cb7571168f5e4791c04",
+      "date": "2007-05-02T11:55:11+02:00",
+      "subject": "[R-SIG-Finance] Cox, Ingersoll, Ross/Vasicek parameter estimationviaKalman-Filter (SSPIR)",
+      "subject_clean": "Cox, Ingersoll, Ross/Vasicek parameter estimationviaKalman-Filter (SSPIR)",
+      "in_reply_to": "<OF07B8D1B0.62349DED-ON652572CA.003AC2BE-652572CA.003B3937@ccilindia.co.in>",
+      "references": [
+        "<d0f55a670704270043w801a4f1g8a537a630437b0cc@mail.gmail.com>",
+        "<OF07B8D1B0.62349DED-ON652572CA.003AC2BE-652572CA.003B3937@ccilindia.co.in>"
+      ],
+      "body_plain": "Hi Gyadav,\n\nHere is some sample code to show my estimation. It uses optim() to estimate.\nbest\nthomas\n\n\n#data as of 2005-07-25 (EUR)\nmat=c(0.002777778, 0.019230769,0.083333333, 0.250000000, 0.500000000,\n1.000000000, 2.000000000, 3.000000000, 5.000000000, 7.000000000,\n10.000000000, 20.000000000, 30.000000000)\nyield=c( 0.02054941, 0.02079584, 0.02104154, 0.02118381, 0.02131600,\n0.02159514, 0.02221619, 0.02345148, 0.02602769, 0.02854222,\n0.03145786, 0.03411269, 0.03453254)\n\n## very simple example, yields in Vasicek, notation as in Brigo/Mercurio\n#takes log(z) as parameter (nonnegativ)\nyvas<-function(x,z,rt) {\n  z=exp(z)\n  k=z[1]\n  theta=z[2]\n  sigma2=(z[3])^2\n  B=1/k*(1-exp(-k*x))\n  lnA=(theta-sigma2/(2*k^2))*(B-x)-sigma2/(4*k)*B^2\n  return(-(lnA-B*rt)/x)\n}\n\n#squaredistance, flag \"familie\" allowes for other estimation\nprocedures (CIR, Nelson-Siegel, Svensson)\nl2norm<-function(y, z, familie, rt=y[1,2]) { #y is a two-column\ndatavector with \"time(ttm)\" und \"yield\", z are the parameters\n  if(familie==\"yvasicek\") {\n    x=y[,1]\n    abstand = y[,2] - yvas(x=x,z=z,rt=rt)\n    res<-sum(abstand^2)\n    return( res )\n  }\n}\n\nt=seq(from=min(mat),to=max(mat)+8,length=500)\nyestV<-nlm(f=l2norm,p=log(c(exp(0.174),yield[1],0.004)),y=cbind(mat,yield),\nfamilie=\"yvasicek\", rt=yield[1], steptol=1e-10, iterlim=500)\n#take the exp() to get the real parameter-values\nvas.par=exp(yestV$estimate)\n\nplot(mat,yield,col=\"blue\",type=\"p\")\nlines(t,yvas(t,log(vas.par),yield[1]),lty=\"dashed\")",
+      "body_snippet": "Hi Gyadav,\n\nHere is some sample code to show my estimation. It uses optim() to estimate.\nbest\nthomas\n\n\n#data as of 2005-07-25 (EUR)\nmat=c(0.002777778, 0.019230769,0.083333333, 0.250000000, 0.500000000",
+      "thread_id": "thread-55729991a6db",
+      "thread_depth": 0,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-06ed801bc881",
+      "message_id": "<463B66C2.40400@altk.com>",
+      "from_name": "mel",
+      "from_email_hash": "5f26414359b36c4b31ed9dc8074c919f998046d9364eaa3489d5cabd09aa9a99",
+      "date": "2007-05-04T19:00:50+02:00",
+      "subject": "[R-SIG-Finance] Question for IB TWS users",
+      "subject_clean": "Question for IB TWS users",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nI tried to wrote a little function establishing a socketConnection\nto IB TWS. (aping c code from TWS API)\nI'm newbie with R connection functions ... and it does not go very far.\nI tried many combinations ... but not the good ones !\nIf a TWS user here has already done something like that,\ncould you please push me a bit in the right direction.\nThanks\nVincent (on windowsXP, R 2.4.1 (yes I'll upgrade)).\n\n#==============================================\n# TWS has to be running\n\nconnectToTWS = function()\n{\nTWS_PORT_NUMBER = 7496;\nCLIENT_VERSION  = '30';\nHOST            = '127.0.0.1';\n\ncon  = socketConnection(HOST, port=TWS_PORT_NUMBER, server=FALSE,\n       blocking = TRUE, open = \"w+\", encoding = getOption(\"encoding\"));\n\nprint(isOpen(con));     # TRUE : seems to work up to here\n\n#write(CLIENT_VERSION, con, sep='');\n#writeLines(CLIENT_VERSION, con, sep='')\ncat(CLIENT_VERSION, file=con, sep='');\n\nres = readLines(con, 1);    # would like to get something here !\nprint(res);                 # but always character(0)\n\nclose(con);\nreturn(TRUE);\n}",
+      "body_snippet": "Hello,\n\nI tried to wrote a little function establishing a socketConnection\nto IB TWS. (aping c code from TWS API)\nI'm newbie with R connection functions ... and it does not go very far.\nI tried many c",
+      "thread_id": "thread-06ed801bc881",
+      "thread_depth": 0,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-39f873014625",
+      "message_id": "<88386.24009.qm@web43143.mail.sp1.yahoo.com>",
+      "from_name": "Thomas Harte",
+      "from_email_hash": "e237db5cdc3eec8a70ca829434c1e02368e5ac9f586c8fdc74d008829aae855b",
+      "date": "2007-05-06T17:19:39-07:00",
+      "subject": "[R-SIG-Finance] R interface to LIM?",
+      "subject_clean": "R interface to LIM?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "hallo to all,\n\ndirk eddelbuettel previously implemented an interface to LIM (see\nhttp://dirk.eddelbuettel.com/papers/r_lim_bloomberg.pdf) but in \na recent correspondence he let me know that he no longer\nhas access to the code (it's proprietary anyway).\n\nhas anyone else tried this? there's some limited \nsupport from the LIM folks (see http://www.lim.com/download/splus.html)\nin the form of \"this *should* work for R\". has anyone got \nan interface to LIM up and running? \n\ncheers, thomas.",
+      "body_snippet": "hallo to all,\n\ndirk eddelbuettel previously implemented an interface to LIM (see\nhttp://dirk.eddelbuettel.com/papers/r_lim_bloomberg.pdf) but in \na recent correspondence he let me know that he no long",
+      "thread_id": "thread-39f873014625",
+      "thread_depth": 0,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-1d66c42deb35",
+      "message_id": "<2CF54397DF75234DA13D028A0753C0DE29607E@ex3.811t.hcmny.com>",
+      "from_name": "Armstrong, Whit",
+      "from_email_hash": "2edf8f0eb08ec455a2e0c4571181544371c24478e2ad71dbe8e4a55f6c6762a7",
+      "date": "2007-05-07T08:06:43-04:00",
+      "subject": "[R-SIG-Finance] R interface to LIM?",
+      "subject_clean": "R interface to LIM?",
+      "in_reply_to": "<88386.24009.qm@web43143.mail.sp1.yahoo.com>",
+      "references": [],
+      "body_plain": "please see:\nhttp://code.google.com/p/rlim/\n\nI no longer have access to a LIM server, so this code is not actively\nmaintained.\n\n\n> -----Original Message-----\n> From: r-sig-finance-bounces at stat.math.ethz.ch \n> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of \n> Thomas Harte\n> Sent: Sunday, May 06, 2007 8:20 PM\n> To: r-sig-finance at stat.math.ethz.ch\n> Subject: [R-SIG-Finance] R interface to LIM?\n> \n> hallo to all,\n> \n> dirk eddelbuettel previously implemented an interface to LIM (see\n> http://dirk.eddelbuettel.com/papers/r_lim_bloomberg.pdf) but \n> in a recent correspondence he let me know that he no longer \n> has access to the code (it's proprietary anyway).\n> \n> has anyone else tried this? there's some limited support from \n> the LIM folks (see http://www.lim.com/download/splus.html)\n> in the form of \"this *should* work for R\". has anyone got an \n> interface to LIM up and running? \n> \n> cheers, thomas.\n> \n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list \n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.\n> \n\n\n\n\nThis e-mail message is intended only for the named recipient(s) above. It may contain confidential information. If you are not the intended recipient you are hereby notified that any dissemination, distribution or copying of this e-mail and any attachment(s) is strictly prohibited. If you have received this e-mail in error, please immediately notify the sender by replying to this e-mail and delete the message and any attachment(s) from your system. Thank you.",
+      "body_snippet": "please see:\nhttp://code.google.com/p/rlim/\n\nI no longer have access to a LIM server, so this code is not actively\nmaintained.\n\n\n> -----Original Message-----\n> From: r-sig-finance-bounces at stat.math.",
+      "thread_id": "thread-39f873014625",
+      "thread_depth": 1,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-752009d714ce",
+      "message_id": "<200705071600.l47G0gbU020258@pippin.first.lan>",
+      "from_name": "Bill Pippin",
+      "from_email_hash": "6449799b2972cb409c5eede890cc49c5c519982e89b004a3da3fe038a30c3a67",
+      "date": "2007-05-07T12:00:42-04:00",
+      "subject": "[R-SIG-Finance] Question for IB TWS users [long]",
+      "subject_clean": "Question for IB TWS users [long]",
+      "in_reply_to": "<463B66C2.40400@altk.com> ",
+      "references": [
+        "<463B66C2.40400@altk.com>"
+      ],
+      "body_plain": "Mel,\n\nWith respect connecting to the IB tws, where you are able to open a socket,\nand write to it, but do not receive the handshake response in time:\n\n> I tried to wrote a little function establishing a socketConnection ...\n\n> connectToTWS = function()\n> {\n        ...\n> res = readLines(con, 1);    # would like to get something here !\n> print(res);                 # but always character(0)\n        ...\n> }\n\nIf we grant that the design approach you take is feasible, about which more\nlater, then you need a timeout.  It looks like your code has a race condition;\nyou are likely to read from the socket before results have arrived.  If\nyou are determined to take this approach, you may want to insert sleep\ndelays here and there, at least for debugging purposes.\n\n________________________________________________________________________________\n\nSummary of what follows:\n\n    * The IB tws api is not, in my opinion, convenient for synchronous use\n      by a controlling R process\n\n    * Another system, the trading shim, provides a command interpreter input\n      interface, though message responses from the tws may be out of order,\n      so that it can not achieve a true RPC interface.\n\n    * The two ways I see to make the IB tws api accessible from R involve\n      either:\n\n        + limiting ourselves to synchronous requests only (e.g., history),\n          and accepting high latencies, awkward error-handling, and clumsy\n          timeouts\n\n          OR\n\n        + providing full scheduler task loop logic on the client side,\n          mirroring similar code in the shim.\n\n    * The trading shim can be used to support either of the above approaches.\n\n    * I'm interested in knowing if anyone on this list has comments on\n      how the shim should be integrated with R.\n\n________________________________________________________________________________\n\nOff topic warning:\n\n*** Much of the following may or may not be of interest to most R users,\n*** and in case that be true, I suggest an alternative list near the end\n*** of this post.\n\nNow, about the design.  Viewing the IB servers and external markets as\nupstream, the problem is how to achieve downstream control of the tws\ninterface.\n\nIt would certainly be convenient to have synchronous control of the IB tws,\nin effect a remote procedure call interface, though unfortunately, I believe\nthis to be infeasible.\n\nAfter all, the tick data streams are asynchronous, and the delays for history\ndata can be worst case unpleasantly long.   If you want to combine such\nqueries and subscriptions with orders, the various latencies are all over\nthe map, and in any case orders themselves are fundamentally async; you may\nbe able to shoehorn the common case into a sync inteface, but it's the\nuncommon case that will eat you alive.  And finally, how do you integrate error\nhandling and timeouts?\n\nUlimately, I believe you need another process between the client code and\nthe IB tws, one that simplifies the IB tws protocol, and converts between\ntext for the downstream, and the binary tws api.  I also accept that, for\nthe general case, the resulting text outupt must be processed by downstream\nprograms that are themselves able to handle asynchronous events, such as\ntimeouts and error messages.\n\nWe're working on such a system, the trading-shim, and to make a long story\nshort, it boils down to a database-augmented command intepreter.  The database\nworks to simplify the command protocol; the text commands from the downstream\ncan be short and simple, since they can use database keys to stand for\ncontracts, order line items, and the like.  The command interpreter also\nconverts the binary IB tws api to a text stream, so that standard filters\nbecome applicable.\n\nPlease consider joining the ts-general at trading-shim.org mailing list if\nyou are interested, see http://www.trading-shim.org/mailman/listinfo\nfor details.  The trading-shim is GPL, and available from:\n\n    http://www.trading-shim.com/\n\n________________________________________________________________________________\n\nNow, back to R, and about tying R and the shim together.  I believe it's\nwell worth doing, but our resources, and in particular time, are very much\nfinite.\n\nOne possible design might involve yet another program, a downstream\nscript that drives both R and the shim.  After all, command interpreters are\ndesigned to (surprise) accept commands, and both systems are command\ninterpreters.  Note that we haven't yet implemented this kind of R:shim\nsystem.\n\nThe downstream script would poll on sockets for the two interpreters, e.g.,\nwith a bsd-style select.  It would send commands to the shim to subscribe\nto or query for data, capture the resulting market data and history\ninformation, store that data or otherwise provide it to the R process, and \nask for analysis as needed.\n\nI'm interested in what the R experts on this list think about the problem\nof tying the two interpreters together.  The issue I see is that any\nclient program has to poll, handle async events, and in practice provide\na task loop.  I've implemented such logic in the shim itself, but I suspect\nthat it is often an unpleasant surprise to developers of downstream clients\nthat they must do the same.\n\nFor those who prefer to treat the shim process as subordinate to R, there\nwould an be upfront time cost while the shim read in its database and connected\nto the IB tws, and then commands could be written to the shim, and results\nread back.  The initial connection would necessarily be static state; due\nto limitations of the IB tws, fast connect-disconnect cycles are a bad idea.\n\n***NOTE:*** The code to understand the resulting output is nontrivial.  There\nare on the order of 80 or so command, message, request, and comment events\nthat can be echoed to the downstream at the highest level of verbosity.  This\nincludes in particular a lot of tws api requests and message types, and it all\nadds up.  The shim commands themselves are very simple, and basic clients can\njust ignore most lines of message text, filtering by prefix.\n\nBy the way, for the simple case of history queries, and where latency and\nreliability are not critical issues, synchrony is straight forward; start\nthe shim, write history queries to it, and read the results from the text\nmessages file.\n\nOne problem here is upstream history farm disconnects and resource limits;\nit's important for downstream clients to watch for and understand error\nmessages, as well as to react to timeouts when the upstream chooses to\nignore the query because load limits were exceeded.\n\nThanks,\n\nBill Pippin",
+      "body_snippet": "Mel,\n\nWith respect connecting to the IB tws, where you are able to open a socket,\nand write to it, but do not receive the handshake response in time:\n\n> I tried to wrote a little function establishing",
+      "thread_id": "thread-06ed801bc881",
+      "thread_depth": 1,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-84c9258b7abe",
+      "message_id": "<4EFD7FEC-0F00-4205-BAC0-597F1A41DD57@gmail.com>",
+      "from_name": "James",
+      "from_email_hash": "7983c06d16e049cbfb4f3cb939b0906207a4acc5daff9df661931db559d830a8",
+      "date": "2007-05-07T21:48:44-06:00",
+      "subject": "[R-SIG-Finance] Plotting 2 option value lines",
+      "subject_clean": "Plotting 2 option value lines",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI'm trying to learn how to use R to do some very basic things with  \nthe fOptions package.  At the moment I'm just trying to create a  \nsimple plot with two lines, one depicting the theoretical value of an  \noption with time to expiration equal to approx. 3 months, and the  \nother line depicting the value at expiration.  This is basically what  \nI've done:\n\n > x <- (50:80)\n > c1 <- GBSOption(TypeFlag=\"c\", S=x, X=65, Time=1/4, r=.08, b=.08,  \nsigma=.3)@price\n > c2 <- GBSOption(TypeFlag=\"c\", S=x, X=65, Time=0.000000001, r=.08,  \nb=.08, sigma=.3)@price\n\nI can then plot either\n\n > plot(x,c1, type=\"l\")\n\nor\n\n > plot(x,c2, type=\"l\")\n\nand get a decent plot.  But how do I create one plot with both  \nlines?  Thanks for any help you can provide.\n\nJames\n\n\nP.S.  I probably ought to ask this in a separate thread but what's  \nthe \"proper\" way of setting the Time such that the options are priced  \nat expiration.  Setting time equal to 0 results in a price when the  \nunderlying is at the strike of N/A.  So as a kludge, I simply used  \nTime=0.000000001.  Thanks",
+      "body_snippet": "Hi,\n\nI'm trying to learn how to use R to do some very basic things with  \nthe fOptions package.  At the moment I'm just trying to create a  \nsimple plot with two lines, one depicting the theoretical v",
+      "thread_id": "thread-84c9258b7abe",
+      "thread_depth": 0,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-b4d6feaac0da",
+      "message_id": "<8C26C9B1-3758-4A51-B09D-82D23DD94432@gmail.com>",
+      "from_name": "James",
+      "from_email_hash": "7983c06d16e049cbfb4f3cb939b0906207a4acc5daff9df661931db559d830a8",
+      "date": "2007-05-07T22:03:25-06:00",
+      "subject": "[R-SIG-Finance] Plotting 2 option value lines",
+      "subject_clean": "Plotting 2 option value lines",
+      "in_reply_to": "<4EFD7FEC-0F00-4205-BAC0-597F1A41DD57@gmail.com>",
+      "references": [
+        "<4EFD7FEC-0F00-4205-BAC0-597F1A41DD57@gmail.com>"
+      ],
+      "body_plain": "Hi again,\n\nI think I figured it out.  I'm sorry to waste everyone's time.\n\n > points(x,c2, type=\"l\")\n\nThat did the trick.\n\nIf there's a preferable way of creating this plot I wouldn't mind  \nhearing it.  My question regarding setting Time to expiration still  \nstands though.  Thank you.\n\nJames",
+      "body_snippet": "Hi again,\n\nI think I figured it out.  I'm sorry to waste everyone's time.\n\n > points(x,c2, type=\"l\")\n\nThat did the trick.\n\nIf there's a preferable way of creating this plot I wouldn't mind  \nhearing i",
+      "thread_id": "thread-84c9258b7abe",
+      "thread_depth": 1,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-d25e6287b151",
+      "message_id": "<6A437605-918B-4E2C-A154-A0782C5AA67A@gmail.com>",
+      "from_name": "James",
+      "from_email_hash": "7983c06d16e049cbfb4f3cb939b0906207a4acc5daff9df661931db559d830a8",
+      "date": "2007-05-07T22:28:22-06:00",
+      "subject": "[R-SIG-Finance] Plotting 2 option value lines",
+      "subject_clean": "Plotting 2 option value lines",
+      "in_reply_to": "<8ed68eed0705072113r22d3d22do64041928dd00baed@mail.gmail.com>",
+      "references": [
+        "<4EFD7FEC-0F00-4205-BAC0-597F1A41DD57@gmail.com>",
+        "<8ed68eed0705072113r22d3d22do64041928dd00baed@mail.gmail.com>"
+      ],
+      "body_plain": "Good morning to you too.  You must be on the other side of the globe,  \nsince I'm actually thinking about heading off to bed soon.  Thanks  \nfor your help.  I tried out your suggestion and it works great.   \nThank you.  I also managed to get it to work using:\n\n > points(x, c2, type=\"l\", col=\"blue\")\n\nAgain, thank you, and I'll keep reading Chapter 12 in \"An  \nIntroduction to R\".\n\nJames\n\n\nOn May 7, 2007, at 10:13 PM, Sean O'Riordain wrote:\n\n> Good morning James,\n>\n> You need to use lines() for the second \"over-plot\" with a different\n> line type so you'd say something like...\n>\n> library(fOptions )\n> x <- (50:80)\n> c1 <- GBSOption(TypeFlag=\"c\", S=x, X=65, Time=1/4, r=.08, b=.08,  \n> sigma=.3)@price\n> c2 <- GBSOption(TypeFlag=\"c\", S=x, X=65, Time=0.000000001, r=.08,\n> b=.08, sigma=.3)@price\n> plot(x,c1, type=\"l\")\n> lines(x,c2, lty=3)\n>\n> Then you might add something like...\n> legend(\"top\",c(\"Expiration\",\"3 Months\"),lty=c(1,3))\n>\n> For more information on the basics of plotting have a really slow read\n> of section 12 of \"An Introduction to R\" which should have come with\n> your install of R.  Then go through the manual pages for things like\n> \"lines\", \"legend\", \"plot\", \"plot.default\" etc...\n>\n> On the options pricing question, I'm afraid I can't help you.\n>\n> Best Regards,\n> Sean",
+      "body_snippet": "Good morning to you too.  You must be on the other side of the globe,  \nsince I'm actually thinking about heading off to bed soon.  Thanks  \nfor your help.  I tried out your suggestion and it works gr",
+      "thread_id": "thread-d25e6287b151",
+      "thread_depth": 0,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-922d34c6b93e",
+      "message_id": "<2d8b0c420705080249p53e96256r520739f1fa9f8864@mail.gmail.com>",
+      "from_name": "udai",
+      "from_email_hash": "58826fdd1673642570ff68d32bdae3f7056a3f85dc33a5081e16d388042e1725",
+      "date": "2007-05-08T15:19:11+05:30",
+      "subject": "[R-SIG-Finance] Heston SV model implementation",
+      "subject_clean": "Heston SV model implementation",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI am looking for Heston SV model implementation, parameter estimation\n(using MLE) modules for R. In case this is not available for R please\nsuggest alternative tools.\n\n\nUdai\nIIM Ahmedabad",
+      "body_snippet": "Hi,\n\nI am looking for Heston SV model implementation, parameter estimation\n(using MLE) modules for R. In case this is not available for R please\nsuggest alternative tools.\n\n\nUdai\nIIM Ahmedabad",
+      "thread_id": "thread-922d34c6b93e",
+      "thread_depth": 0,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-00c7d6bf9206",
+      "message_id": "<4641A526.1050405@earthlink.net>",
+      "from_name": "Krishna Kumar",
+      "from_email_hash": "b5342e6f7178c92f67a17437313a28bb14db93175150fd429e207c65fb4f88b0",
+      "date": "2007-05-09T06:40:38-04:00",
+      "subject": "[R-SIG-Finance] Heston SV model implementation",
+      "subject_clean": "Heston SV model implementation",
+      "in_reply_to": "<2d8b0c420705080249p53e96256r520739f1fa9f8864@mail.gmail.com>",
+      "references": [
+        "<2d8b0c420705080249p53e96256r520739f1fa9f8864@mail.gmail.com>"
+      ],
+      "body_plain": "This paper describes both doing brute-force numerical integration and \nusing the carr-madan fft to compute vanilla prices.\nwww.cam.wits.ac.za/mfinance/projects/nimalinmoodley.pdf\nOnce you can price these vanillas under heston in R  then Calibration \ncan be done with optim or any of the other packages.\n\nudai wrote:\n> Hi,\n>\n> I am looking for Heston SV model implementation, parameter estimation\n> (using MLE) modules for R. In case this is not available for R please\n> suggest alternative tools.\n>\n>\n> Udai\n> IIM Ahmedabad\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.\n>\n>",
+      "body_snippet": "This paper describes both doing brute-force numerical integration and \nusing the carr-madan fft to compute vanilla prices.\nwww.cam.wits.ac.za/mfinance/projects/nimalinmoodley.pdf\nOnce you can price th",
+      "thread_id": "thread-922d34c6b93e",
+      "thread_depth": 1,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-27906b280534",
+      "message_id": "<BLU107-W400966983FF01F22C4CCFBA13B0@phx.gbl>",
+      "from_name": "Roger Davis",
+      "from_email_hash": "09b4fe0236cf327301bcce2427c218d99a94fe4825d50007c8e2a0ce546ca993",
+      "date": "2007-05-09T16:47:26-04:00",
+      "subject": "[R-SIG-Finance] simpleWarning in timeDate from Sys.putenv",
+      "subject_clean": "simpleWarning in timeDate from Sys.putenv",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070509/4fa4f2da/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070509/4fa4f2da/attachment.pl",
+      "thread_id": "thread-27906b280534",
+      "thread_depth": 0,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-04d0a6bfe7ac",
+      "message_id": "<17992.34114.167296.588377@basebud.nulle.part>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2007-05-14T10:50:26-05:00",
+      "subject": "[R-SIG-Finance] Finance at useR!2007",
+      "subject_clean": "Finance at useR!2007",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "The first North American useR! will be held at Iowa State University, Ames,\nIowa, August 8-10, 2007. It follows on from successful meetings in Vienna,\nAustria, in 2006 and 2004. \n\nAs with the previous UseR! conferences, talks or presentations about 'Using R\nin Finance' could be grouped together for a special session.\n\nPlease see\n\n\thttp://www.useR2007.org\n\nabout useR! 2007, and \n\n\thttp://www.useR2007.org/paper-submission.html\n\nfor details about to submit a proposal for a paper or poster.  While the\nsubmission deadline for papers is near, extensions could be granted.\n\nRegards, Dirk\n\n-- \nHell, there are no rules here - we're trying to accomplish something. \n                                                  -- Thomas A. Edison",
+      "body_snippet": "The first North American useR! will be held at Iowa State University, Ames,\nIowa, August 8-10, 2007. It follows on from successful meetings in Vienna,\nAustria, in 2006 and 2004. \n\nAs with the previous",
+      "thread_id": "thread-04d0a6bfe7ac",
+      "thread_depth": 0,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-e16239d0a99b",
+      "message_id": "<464DB3F8.5070800@slashworks.de>",
+      "from_name": "Christian Grupp",
+      "from_email_hash": "45fe6e29b684b9a3aec0e9c25f22f3ab8c362d8994e4c06d36fbc339c47ce071",
+      "date": "2007-05-18T16:11:04+02:00",
+      "subject": "[R-SIG-Finance] frontierMarkowitz problem: Tangential POrtfolio",
+      "subject_clean": "frontierMarkowitz problem: Tangential POrtfolio",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI am playing around with frontierMarkowitz\nsince I am interested in the tangetial portfolio.\nUnfortenately frontierMarkowitz does not work properly with my own data.\ni scan them with read.table,\nmake them a time series with ts.\n\nThe result looks fine, assetsStats shows results, so i think that my \ndata are in the right format...\n\nt.weights\n[1] NA\n\nRm\n[1] NA\n\nSm\n[1] NA\n\nAll other output looks fine so far.\n\nDoes anyone has an idea, where the problem is?\n\nGreets\nChristian Grupp",
+      "body_snippet": "Hi,\n\nI am playing around with frontierMarkowitz\nsince I am interested in the tangetial portfolio.\nUnfortenately frontierMarkowitz does not work properly with my own data.\ni scan them with read.table,\n",
+      "thread_id": "thread-e16239d0a99b",
+      "thread_depth": 0,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-f151c6429e84",
+      "message_id": "<464EDAAC.4030404@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2007-05-19T06:08:28-05:00",
+      "subject": "[R-SIG-Finance] frontierMarkowitz problem: Tangential POrtfolio",
+      "subject_clean": "frontierMarkowitz problem: Tangential POrtfolio",
+      "in_reply_to": "<464DB3F8.5070800@slashworks.de>",
+      "references": [
+        "<464DB3F8.5070800@slashworks.de>"
+      ],
+      "body_plain": "Christian Grupp wrote:\n> Hi,\n> \n> I am playing around with frontierMarkowitz\n> since I am interested in the tangetial portfolio.\n> Unfortenately frontierMarkowitz does not work properly with my own data.\n> i scan them with read.table,\n> make them a time series with ts.\n> \n> The result looks fine, assetsStats shows results, so i think that my \n> data are in the right format...\n> \n> t.weights\n> [1] NA\n> \n> Rm\n> [1] NA\n> \n> Sm\n> [1] NA\n> \n> All other output looks fine so far.\n> \n> Does anyone has an idea, where the problem is?\n\nYou haven't really given us enough information to give you any feedback.\n\nIf your constraints are too restrictive, it is quite possible to fail to \ngenerate *any* portfolio that will meet your constraints.\n\nHave you tried using portfolio.optim or even solve.QP directly?\n\nCan you produce a portfolio using fewer assets?\n\nHave you used debug() in R to examine the intermediary results inside \nthe function?\n\netc...\n\nmean-variance optimization is very sensitive to inputs and constraints. \n  Without information on those inputs and constraints, this list can't \ngive you anything more than general guidance.\n\nRegards,\n\n   - Brian",
+      "body_snippet": "Christian Grupp wrote:\n> Hi,\n> \n> I am playing around with frontierMarkowitz\n> since I am interested in the tangetial portfolio.\n> Unfortenately frontierMarkowitz does not work properly with my own da",
+      "thread_id": "thread-e16239d0a99b",
+      "thread_depth": 1,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-9a7cc00757a0",
+      "message_id": "<20070519123322.150950@gmx.net>",
+      "from_name": "Mathias Slansky",
+      "from_email_hash": "a3420d442a234e8e81f76746dd8435fb6166bf4775c0f1a137c0783c3346d016",
+      "date": "2007-05-19T14:33:22+02:00",
+      "subject": "[R-SIG-Finance] Problem with function \"garchFit\" (fSeries)",
+      "subject_clean": "Problem with function \"garchFit\" (fSeries)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nI have a problem with the function \"garchFit\" of the package \"fSeries\". When I try to fit the garch model, the system goes to an endless loop and I don?t get a result. \n\nhere?s what I wrote:\n\ngarchFit(formula= ~garch(1,1), series = corb, include.mean=T)\n\nhope you con help me... thanks!\n-- \nPsssst! Schon vom neuen GMX MultiMessenger geh?rt?\nDer kanns mit allen: http://www.gmx.net/de/go/multimessenger",
+      "body_snippet": "Hello,\n\nI have a problem with the function \"garchFit\" of the package \"fSeries\". When I try to fit the garch model, the system goes to an endless loop and I don?t get a result. \n\nhere?s what I wrote:\n\n",
+      "thread_id": "thread-9a7cc00757a0",
+      "thread_depth": 0,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-4f6b432c138d",
+      "message_id": "<464EF6DC.7090709@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2007-05-19T08:08:44-05:00",
+      "subject": "[R-SIG-Finance] Problem with function \"garchFit\" (fSeries)",
+      "subject_clean": "Problem with function \"garchFit\" (fSeries)",
+      "in_reply_to": "<20070519123322.150950@gmx.net>",
+      "references": [
+        "<20070519123322.150950@gmx.net>"
+      ],
+      "body_plain": "Mathias Slansky wrote:\n> I have a problem with the function \"garchFit\" of the package \"fSeries\". When I try to fit the garch model, the system goes to an endless loop and I don?t get a result. \n> \n> here?s what I wrote:\n> \n> garchFit(formula= ~garch(1,1), series = corb, include.mean=T)\n> \n> hope you con help me... thanks!\n\ngarchFit can take a very long time with a large series: long enough that \nI sometimes use it on a large fast server rather than on my laptop.\n\nHave you tried with include.mean=FALSE ?  This will speed things up, and \nmay let you know if you are on the right track, and it is worth letting \nthe computer think for potentially a very long time.\n\nHave you tried with a different algorithm? The algorithms have different \nperformance characteristics.\n\nHave you read the garch paper posted on the RMetrics website?\nIt has some additional suggestions on speeding the process.\n\n\nRegards,\n\n   - Brian",
+      "body_snippet": "Mathias Slansky wrote:\n> I have a problem with the function \"garchFit\" of the package \"fSeries\". When I try to fit the garch model, the system goes to an endless loop and I don?t get a result. \n> \n> h",
+      "thread_id": "thread-9a7cc00757a0",
+      "thread_depth": 1,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-a4c355ea3353",
+      "message_id": "<506151.64957.qm@web54508.mail.yahoo.com>",
+      "from_name": "M.R.Farzanegan",
+      "from_email_hash": "17827eb920bd4eb7b7e9f0c0e917404a7e2cdce80837085341dc50c39f1796d0",
+      "date": "2007-05-20T04:40:43-07:00",
+      "subject": "[R-SIG-Finance] Panel VAR in EViews",
+      "subject_clean": "Panel VAR in EViews",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070520/b9ba0295/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070520/b9ba0295/attachment.pl",
+      "thread_id": "thread-a4c355ea3353",
+      "thread_depth": 0,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-5727efc9ced3",
+      "message_id": "<352513725-1179677646-cardhu_blackberry.rim.net-1050551161-@bwe008-cell00.bisx.prod.on.blackberry>",
+      "from_name": "kriskumar at earthlink.net",
+      "from_email_hash": "b5342e6f7178c92f67a17437313a28bb14db93175150fd429e207c65fb4f88b0",
+      "date": "2007-05-20T16:14:07Z",
+      "subject": "[R-SIG-Finance] Panel VAR in EViews",
+      "subject_clean": "Panel VAR in EViews",
+      "in_reply_to": "<506151.64957.qm@web54508.mail.yahoo.com>",
+      "references": [
+        "<506151.64957.qm@web54508.mail.yahoo.com>"
+      ],
+      "body_plain": "I am sorry you have the wrong number.\n\n\nSent from my BlackBerry? wireless handheld  \n\n-----Original Message-----\nFrom: \"M.R.Farzanegan\" <mr_farzanegan at yahoo.com>\nDate: Sun, 20 May 2007 04:40:43 \nTo:r-sig-finance at stat.math.ethz.ch\nSubject: [R-SIG-Finance] Panel VAR in EViews\n\nHi:\n  \n  Any body know how to do Panel-VAR in EViews?\n  \n  Best,\n  Mamad\n  \n  \n\nDresden University of Technology \nDepartment of Economics \nChair for Public Economics \nD-01062 Dresden ,Gemany\nPhone: +49-(0)351-463 32895 \nFax: +49-(0)351-463 37052 \nMail: Mohammad_Reza.Farzanegan at mailbox.tu-dresden.de\n  weblog: http://mrfarzanegan.blogspot.com/\n   URL: http://www.tu-dresden.de/wwvwlfw/team_mitarbeiter_mohammad.htm\n\n       \n---------------------------------\nBoardwalk for $500? In 2007? Ha! \n\n\t[[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.",
+      "body_snippet": "I am sorry you have the wrong number.\n\n\nSent from my BlackBerry? wireless handheld  \n\n-----Original Message-----\nFrom: \"M.R.Farzanegan\" <mr_farzanegan at yahoo.com>\nDate: Sun, 20 May 2007 04:40:43 \nTo",
+      "thread_id": "thread-a4c355ea3353",
+      "thread_depth": 1,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-8e98b53609ff",
+      "message_id": "<93843C113DD8914BB1A9A63878E8918CD8A61D@EH002EXC.eurobank.efg.gr>",
+      "from_name": "Vorlow Constantinos",
+      "from_email_hash": "495e47be780b0992c68443b5c59fcf340516f2e1a30040eb8f65e14586c7fcbe",
+      "date": "2007-05-22T17:52:22+03:00",
+      "subject": "[R-SIG-Finance] readcsvIts",
+      "subject_clean": "readcsvIts",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070522/28011a37/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070522/28011a37/attachment.pl",
+      "thread_id": "thread-8e98b53609ff",
+      "thread_depth": 0,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-a666ea21e859",
+      "message_id": "<2CF54397DF75234DA13D028A0753C0DE2961BB@ex3.811t.hcmny.com>",
+      "from_name": "Armstrong, Whit",
+      "from_email_hash": "2edf8f0eb08ec455a2e0c4571181544371c24478e2ad71dbe8e4a55f6c6762a7",
+      "date": "2007-05-22T11:13:31-04:00",
+      "subject": "[R-SIG-Finance] readcsvIts",
+      "subject_clean": "readcsvIts",
+      "in_reply_to": "<93843C113DD8914BB1A9A63878E8918CD8A61D@EH002EXC.eurobank.efg.gr>",
+      "references": [],
+      "body_plain": "I believe you need:\n\nits(readcsvIts(\"brenthf.csv\",informat=\"%d/%m/%Y %H:%S\"))\n\n\n> -----Original Message-----\n> From: r-sig-finance-bounces at stat.math.ethz.ch \n> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of \n> Vorlow Constantinos\n> Sent: Tuesday, May 22, 2007 10:52 AM\n> To: r-help at stat.math.ethz.ch\n> Cc: r-sig-finance at stat.math.ethz.ch\n> Subject: [R-SIG-Finance] readcsvIts\n> \n> Hello,\n>  \n> I am trying to read a .CSV file from Bloomberg of prices (for an \"its\"\n> series) of the following format:\n>  \n>              Date\t      Price\t\n> 23/10/2006 09:59\t 57.291\t\n> 23/10/2006 10:01\t 57.221\t\n> 23/10/2006 10:02\t 57.201\t\n> 23/10/2006 10:03\t 57.231\t\n> 23/10/2006 10:04\t 57.191\t\n> 23/10/2006 10:05\t 57.191\t\n> 23/10/2006 10:06\t 57.141\t\n> 23/10/2006 10:07\t 57.081\t\n>  \n>  \n> I get the following:\n>  \n> > its.format(\"%d/%m/%Y %X\")\n> [1] \"%d/%m/%Y %X\"\n> > brent<-its(readcsvIts(filename=\"brenthf.csv\"))\n> Error in validObject(.Object) : invalid class \"its\" object: \n> Missing values in dates\n> > \n> \n> What am I doing wrong? Used %H:%S as well but nothing improved...\n>  \n> The csv file looks fine...\n>  \n> Using the latest versions of R and its library on windows XP.\n>  \n> Thanks in advance,\n> Costas\n>  \n> -------------------------------------------------------\n> tel: +30-210-3337273 (ext 17273)\n> fax: +30-210-3337687\n> \n> \n> \n> \n> Disclaimer:\n> This e-mail is confidential. If you are not the intended \n> recipient, you should not copy it, re-transmit it, use it or \n> disclose its contents, but should return it to the sender \n> immediately and delete the copy from your system.\n> EFG Eurobank Ergasias S.A. is not responsible for, nor \n> endorses, any opinion, recommendation, conclusion, \n> solicitation, offer or agreement or any information contained \n> in this communication.\n> EFG Eurobank Ergasias S.A. cannot accept any responsibility \n> for the accuracy or completeness of this message as it has \n> been transmitted over a public network. If you suspect that \n> the message may have been intercepted or amended, please call \n> the sender.\n> \n> \n> \t[[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list \n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.\n> \n\n\n\n\nThis e-mail message is intended only for the named recipient(s) above. It may contain confidential information. If you are not the intended recipient you are hereby notified that any dissemination, distribution or copying of this e-mail and any attachment(s) is strictly prohibited. If you have received this e-mail in error, please immediately notify the sender by replying to this e-mail and delete the message and any attachment(s) from your system. Thank you.",
+      "body_snippet": "I believe you need:\n\nits(readcsvIts(\"brenthf.csv\",informat=\"%d/%m/%Y %H:%S\"))\n\n\n> -----Original Message-----\n> From: r-sig-finance-bounces at stat.math.ethz.ch \n> [mailto:r-sig-finance-bounces at stat",
+      "thread_id": "thread-8e98b53609ff",
+      "thread_depth": 1,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-36da1661217e",
+      "message_id": "<10766189.post@talk.nabble.com>",
+      "from_name": "genx",
+      "from_email_hash": "988c3969ea449636bf2ecddd29c8339bbfcb5e69ff8c63a59eb73ef6bfb6e73c",
+      "date": "2007-05-23T08:26:36-07:00",
+      "subject": "[R-SIG-Finance] Standard deviation and plots",
+      "subject_clean": "Standard deviation and plots",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Is there a way to display brackets 1sigma, 2sigma in combination with actual\nvalues on the x scale in histogram plots or any other type of plots? I am\nnot quite sure how this would be accomplished but if its possible to squeeze\nin the sigma brackets it would be great.\n\nThank you\n-- \nView this message in context: http://www.nabble.com/Standard-deviation-and-plots-tf3804736.html#a10766189\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "Is there a way to display brackets 1sigma, 2sigma in combination with actual\nvalues on the x scale in histogram plots or any other type of plots? I am\nnot quite sure how this would be accomplished but",
+      "thread_id": "thread-36da1661217e",
+      "thread_depth": 0,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-81bdc68851b1",
+      "message_id": "<6e8360ad0705230838n1e2c71e4u63a3e327d1666930@mail.gmail.com>",
+      "from_name": "BBands",
+      "from_email_hash": "0f7f8073f0acceeb16c5cb0f1e87bc3b6c563391b2d7d349176cfb0b1ec4f070",
+      "date": "2007-05-23T08:38:00-07:00",
+      "subject": "[R-SIG-Finance] Standard deviation and plots",
+      "subject_clean": "Standard deviation and plots",
+      "in_reply_to": "<10766189.post@talk.nabble.com>",
+      "references": [
+        "<10766189.post@talk.nabble.com>"
+      ],
+      "body_plain": "On 5/23/07, genx <info at genetrix.se> wrote:\n>\n> Is there a way to display brackets 1sigma, 2sigma in combination with actual\n> values on the x scale in histogram plots or any other type of plots? I am\n> not quite sure how this would be accomplished but if its possible to squeeze\n> in the sigma brackets it would be great.\n\nIs something like this what you are after?\n\nhttp://addictedtor.free.fr/graphiques/RGraphGallery.php?graph=65\n\n     jab\n-- \nJohn Bollinger, CFA, CMT\nwww.BollingerBands.com\n\nIf you advance far enough, you arrive at the beginning.",
+      "body_snippet": "On 5/23/07, genx <info at genetrix.se> wrote:\n>\n> Is there a way to display brackets 1sigma, 2sigma in combination with actual\n> values on the x scale in histogram plots or any other type of plots? I ",
+      "thread_id": "thread-36da1661217e",
+      "thread_depth": 1,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-ffda8650a856",
+      "message_id": "<200705231042.28480.pcarl@gsbalum.uchicago.edu>",
+      "from_name": "Peter Carl",
+      "from_email_hash": "a0c166ee5842b12dfd6e24e147ed94fac8a68de9b3469ad5119b50e43aedc861",
+      "date": "2007-05-23T10:42:27-05:00",
+      "subject": "[R-SIG-Finance] Standard deviation and plots",
+      "subject_clean": "Standard deviation and plots",
+      "in_reply_to": "<10766189.post@talk.nabble.com>",
+      "references": [
+        "<10766189.post@talk.nabble.com>"
+      ],
+      "body_plain": "There's a good example of such an overlay at:\n\nhttp://zoonek2.free.fr/UNIX/48_R/03.html\n\nLook for a chart called \"Third moment (skewness)\".  The example shows \nhow to calculate dimensions and draw a vertical line segment overlaid \non the histogram.  Although he isn't doing exactly what you're looking \nfor, the code could be easily modified for your use.   \n\nThere's a lot of other good stuff there, as well.\n\nEnjoy,\n\npcc\n\nOn Wednesday 23 May 2007 10:26, genx wrote:\n> Is there a way to display brackets 1sigma, 2sigma in combination with\n> actual values on the x scale in histogram plots or any other type of\n> plots? I am not quite sure how this would be accomplished but if its\n> possible to squeeze in the sigma brackets it would be great.\n>\n> Thank you\n\n-- \nPeter Carl\n145 Scottswood Rd\nRiverside, IL 60546\n708.447.6465",
+      "body_snippet": "There's a good example of such an overlay at:\n\nhttp://zoonek2.free.fr/UNIX/48_R/03.html\n\nLook for a chart called \"Third moment (skewness)\".  The example shows \nhow to calculate dimensions and draw a v",
+      "thread_id": "thread-36da1661217e",
+      "thread_depth": 1,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-7d0a12e21162",
+      "message_id": "<4654622A.7020805@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2007-05-23T10:47:54-05:00",
+      "subject": "[R-SIG-Finance] Standard deviation and plots",
+      "subject_clean": "Standard deviation and plots",
+      "in_reply_to": "<10766189.post@talk.nabble.com>",
+      "references": [
+        "<10766189.post@talk.nabble.com>"
+      ],
+      "body_plain": "genx wrote:\n> Is there a way to display brackets 1sigma, 2sigma in combination with actual\n> values on the x scale in histogram plots or any other type of plots? I am\n> not quite sure how this would be accomplished but if its possible to squeeze\n> in the sigma brackets it would be great.\n\nThere are very good examples on adding extra things to the standard \nhistogram here:\n\nhttp://zoonek2.free.fr/UNIX/48_R/03.html\n\nand in the chart.Histogram function in package PerformanceAnalytics\n\nPlease share your results for others to benefit from.\n\nRegards,\n\n   - Brian",
+      "body_snippet": "genx wrote:\n> Is there a way to display brackets 1sigma, 2sigma in combination with actual\n> values on the x scale in histogram plots or any other type of plots? I am\n> not quite sure how this would b",
+      "thread_id": "thread-36da1661217e",
+      "thread_depth": 1,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-777a0d80a127",
+      "message_id": "<1179957081.4654b759702c2@10.1.2.205>",
+      "from_name": "iperez at escuelaing.edu.co",
+      "from_email_hash": "090af6e76327c83dccc5bd12aec22f549b4f7814f2cc6c365205c2e49e242a61",
+      "date": "2007-05-23T16:51:21-05:00",
+      "subject": "[R-SIG-Finance] Problems with fSeries on Vista",
+      "subject_clean": "Problems with fSeries on Vista",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI am sorry if this is an elementary question more related with Vista:\nI recently installed Vista and the last R version (2.5.0, as an administrator).\nI also installed all R-metrics? modules. When I upload fSeries I get the\nfollowing output :\n\n> local({pkg <- select.list(sort(.packages(all.available = TRUE)))\n+ if(nchar(pkg)) library(pkg, character.only=TRUE)})\nLoading required package: mgcv\nThis is mgcv 1.3-24\nLoading required package: nnet\nLoading required package: fCalendar\nLoading required package: fEcofin\n\nRmetrics, (C) 1999-2006, Diethelm Wuertz, GPL\nfCalendar: Time, Date and Calendar Tools\nLoading required package: fBasics\nLoading required package: MASS\n\nRmetrics, (C) 1999-2005, Diethelm Wuertz, GPL\nfBasics: Markets and Basic Statistics\n\nRmetrics, (C) 1999-2006, Diethelm Wuertz, GPL\nfSeries: The Dynamical Process Behind Financial Markets\nError in file(file, ifelse(append, \"a\", \"w\")) :\n        no fue posible abrir la conexi?n\nAdem?s: Warning message:\nno fue posible abrir el archivo '@sink@', motivo 'Permission denied'\nError en library(pkg, character.only = TRUE) :\n        .First.lib failed for 'fSeries'\n>\n\nNone of the functions of fSeries is available. Any suggestions?\n\nThanks in advance,\n\nIgnacio Perez\n\n\n\n----------------------------------------------------------------\n\n\n\n#####################################################################################\nThis e-mail message has been scanned for Viruses and Content and cleared \nby NetIQ MailMarshal\n#####################################################################################",
+      "body_snippet": "Hi,\n\nI am sorry if this is an elementary question more related with Vista:\nI recently installed Vista and the last R version (2.5.0, as an administrator).\nI also installed all R-metrics? modules. When",
+      "thread_id": "thread-777a0d80a127",
+      "thread_depth": 0,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-727c1760cb0c",
+      "message_id": "<002f01c79ddf$c2f5b960$11f38c05@ORD21>",
+      "from_name": "Sylvain BARTHELEMY",
+      "from_email_hash": "6269d4704746af1637c45553827c0855b4600c0b85fed212ce0906917ec5632c",
+      "date": "2007-05-24T10:44:36+02:00",
+      "subject": "[R-SIG-Finance] Convertion of a zoo object to a ts object",
+      "subject_clean": "Convertion of a zoo object to a ts object",
+      "in_reply_to": "<1179957081.4654b759702c2@10.1.2.205>",
+      "references": [
+        "<1179957081.4654b759702c2@10.1.2.205>"
+      ],
+      "body_plain": "Dear All,\n\nI use get.hist.quote to read historical prices on various quotes from\nFinance Yahoo. It works fine on daily prices and most of the time on monthly\nprices but it is sometimes difficult to synchronize monthly data without\nduplicating months when extracting more than one quote. \n\nHere is an example where many months are duplicated (see at the end of the\ntime series that 2006-05 is duplicated because CAC40 is quoted on 2006-05-02\nand AXA on 2006-05-01):\nx <- get.hist.quote(\"^FCHI\", compression = \"m\", start = as.Date(0), quote =\n\"Close\")\nx <- cbind( xx, get.hist.quote(\"CS.PA\", compression = \"m\", start =\nas.Date(0), quote = \"Close\") )\n\nFor the moment, to avoid these problems, I use something like:\nreadFromYahooM <- function(nam,quote) {\n xx.0 <- get.hist.quote(nam, compression = \"m\", start = as.Date(0), quote =\nquote)\n xx <- ts( coredata(xx.0), frequency = 12, start =\nas.numeric(as.yearmon(as.Date(start(xx.0)[1]))) )\n xx\n}\nx <- readFromYahooM(\"^FCHI\",\"Close\")\nx <- cbind(x, readFromYahooM(\"CS.PA\",\"Close\"))\ncolnames(x) <- c(\"FCHI\",\"CS.PA\")\n\nIt works, but there is a strong assumption that all the months are present\nin the two time series and the fact is that xx is a zoo object and zoo\nobjects can contain irregular time series ! I am sure that there should be a\nmore elegant way to do a conversion from a zoo object to a ts object or to\nreplace the \"start\" parameter by the exact vector of zoo dates and or\nyearmon but I don't find any way do to that.\n\nI anyone can help me, I would appreciate.\nThanks in advance.\n\n---\nSylvain Barth?l?my\nHead of Quantitative Research, TAC\nwww.tac-financial.com | www.sylbarth.com\n\n\n\n\n15:59",
+      "body_snippet": "Dear All,\n\nI use get.hist.quote to read historical prices on various quotes from\nFinance Yahoo. It works fine on daily prices and most of the time on monthly\nprices but it is sometimes difficult to sy",
+      "thread_id": "thread-777a0d80a127",
+      "thread_depth": 1,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-5d1c8955ec06",
+      "message_id": "<003d01c79de1$b39b2480$11f38c05@ORD21>",
+      "from_name": "Sylvain BARTHELEMY",
+      "from_email_hash": "6269d4704746af1637c45553827c0855b4600c0b85fed212ce0906917ec5632c",
+      "date": "2007-05-24T10:58:29+02:00",
+      "subject": "[R-SIG-Finance] Convertion of a zoo object to a ts object",
+      "subject_clean": "Convertion of a zoo object to a ts object",
+      "in_reply_to": "<002f01c79ddf$c2f5b960$11f38c05@ORD21>",
+      "references": [
+        "<1179957081.4654b759702c2@10.1.2.205>",
+        "<002f01c79ddf$c2f5b960$11f38c05@ORD21>"
+      ],
+      "body_plain": "Since my post, I have found I way to do that and it seems to work:\n\nxx.zoo <- get.hist.quote(\"^FCHI\", compression = \"m\", start = as.Date(0),\nquote = \"Close\")\nxx.ts  <- as.ts(aggregate(xx.zoo, as.yearmon, mean))\t\n\n\n---\nSylvain Barth?l?my\nHead of Quantitative Research, TAC\nwww.tac-financial.com | www.sylbarth.com\n \n\n-----Message d'origine-----\nDe : r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] De la part de Sylvain\nBARTHELEMY\nEnvoy? : jeudi 24 mai 2007 10:45\n? : r-sig-finance at stat.math.ethz.ch\nObjet : [R-SIG-Finance] Convertion of a zoo object to a ts object\n\nDear All,\n\nI use get.hist.quote to read historical prices on various quotes from\nFinance Yahoo. It works fine on daily prices and most of the time on monthly\nprices but it is sometimes difficult to synchronize monthly data without\nduplicating months when extracting more than one quote. \n\nHere is an example where many months are duplicated (see at the end of the\ntime series that 2006-05 is duplicated because CAC40 is quoted on 2006-05-02\nand AXA on 2006-05-01):\nx <- get.hist.quote(\"^FCHI\", compression = \"m\", start = as.Date(0), quote =\n\"Close\")\nx <- cbind( xx, get.hist.quote(\"CS.PA\", compression = \"m\", start =\nas.Date(0), quote = \"Close\") )\n\nFor the moment, to avoid these problems, I use something like:\nreadFromYahooM <- function(nam,quote) {\n xx.0 <- get.hist.quote(nam, compression = \"m\", start = as.Date(0), quote =\nquote)\n xx <- ts( coredata(xx.0), frequency = 12, start =\nas.numeric(as.yearmon(as.Date(start(xx.0)[1]))) )  xx } x <-\nreadFromYahooM(\"^FCHI\",\"Close\") x <- cbind(x,\nreadFromYahooM(\"CS.PA\",\"Close\"))\ncolnames(x) <- c(\"FCHI\",\"CS.PA\")\n\nIt works, but there is a strong assumption that all the months are present\nin the two time series and the fact is that xx is a zoo object and zoo\nobjects can contain irregular time series ! I am sure that there should be a\nmore elegant way to do a conversion from a zoo object to a ts object or to\nreplace the \"start\" parameter by the exact vector of zoo dates and or\nyearmon but I don't find any way do to that.\n\nI anyone can help me, I would appreciate.\nThanks in advance.\n\n---\nSylvain Barth?l?my\nHead of Quantitative Research, TAC\nwww.tac-financial.com | www.sylbarth.com\n\n\n\n\n15:59\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.\n\nNo virus found in this incoming message.\n\n\n15:59\n \n\n\n\n\n15:59",
+      "body_snippet": "Since my post, I have found I way to do that and it seems to work:\n\nxx.zoo <- get.hist.quote(\"^FCHI\", compression = \"m\", start = as.Date(0),\nquote = \"Close\")\nxx.ts  <- as.ts(aggregate(xx.zoo, as.yearm",
+      "thread_id": "thread-777a0d80a127",
+      "thread_depth": 2,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-02920b677137",
+      "message_id": "<46555456.1090509@activestocks.de>",
+      "from_name": "Ulrich Staudinger",
+      "from_email_hash": "6bd2543a0781131bc932b5f8873c383cc85ef1cc42ef381d69033c001c21ec83",
+      "date": "2007-05-24T11:01:10+02:00",
+      "subject": "[R-SIG-Finance] Convertion of a zoo object to a ts object",
+      "subject_clean": "Convertion of a zoo object to a ts object",
+      "in_reply_to": "<002f01c79ddf$c2f5b960$11f38c05@ORD21>",
+      "references": [
+        "<1179957081.4654b759702c2@10.1.2.205>",
+        "<002f01c79ddf$c2f5b960$11f38c05@ORD21>"
+      ],
+      "body_plain": "Hi Sylvain,\n\ni know this is a R mailing list, but let me add some information on how \ni solve the very same problem.\n\nI usually do the whole data obtaining and preparation in ccapi2, i then \nexport this data from ccapi2 as a CSV file which i load into R.\n\nData preparation includes for example aligning multiple timeseries, \ndealing with extreme outliers due to unreasonable trades.\nFor aligning multiple time series i use the java method alignTimeSeries \nviewable at \nhttp://activestocks.de:8081/viewrep/ccapi3/src/core/ccapi/core/util/TimeSeriesUtil.java?r=1.7#l44 \n\n\nWould be good if RMetrics would integrate such a method. Yahoo does drop \na few days in long timeseries, usually.\n\nHope this helps,\nBest regards,\nUlrich Staudinger\n\n\nSylvain BARTHELEMY schrieb:\n> Dear All,\n>\n> I use get.hist.quote to read historical prices on various quotes from\n> Finance Yahoo. It works fine on daily prices and most of the time on monthly\n> prices but it is sometimes difficult to synchronize monthly data without\n> duplicating months when extracting more than one quote. \n>\n> Here is an example where many months are duplicated (see at the end of the\n> time series that 2006-05 is duplicated because CAC40 is quoted on 2006-05-02\n> and AXA on 2006-05-01):\n> x <- get.hist.quote(\"^FCHI\", compression = \"m\", start = as.Date(0), quote =\n> \"Close\")\n> x <- cbind( xx, get.hist.quote(\"CS.PA\", compression = \"m\", start =\n> as.Date(0), quote = \"Close\") )\n>\n> For the moment, to avoid these problems, I use something like:\n> readFromYahooM <- function(nam,quote) {\n>  xx.0 <- get.hist.quote(nam, compression = \"m\", start = as.Date(0), quote =\n> quote)\n>  xx <- ts( coredata(xx.0), frequency = 12, start =\n> as.numeric(as.yearmon(as.Date(start(xx.0)[1]))) )\n>  xx\n> }\n> x <- readFromYahooM(\"^FCHI\",\"Close\")\n> x <- cbind(x, readFromYahooM(\"CS.PA\",\"Close\"))\n> colnames(x) <- c(\"FCHI\",\"CS.PA\")\n>\n> It works, but there is a strong assumption that all the months are present\n> in the two time series and the fact is that xx is a zoo object and zoo\n> objects can contain irregular time series ! I am sure that there should be a\n> more elegant way to do a conversion from a zoo object to a ts object or to\n> replace the \"start\" parameter by the exact vector of zoo dates and or\n> yearmon but I don't find any way do to that.\n>\n> I anyone can help me, I would appreciate.\n> Thanks in advance.\n>\n> ---\n> Sylvain Barth?l?my\n> Head of Quantitative Research, TAC\n> www.tac-financial.com | www.sylbarth.com\n>\n>\n>\n>\n> 15:59\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.\n>",
+      "body_snippet": "Hi Sylvain,\n\ni know this is a R mailing list, but let me add some information on how \ni solve the very same problem.\n\nI usually do the whole data obtaining and preparation in ccapi2, i then \nexport th",
+      "thread_id": "thread-777a0d80a127",
+      "thread_depth": 2,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-9f652df83bb7",
+      "message_id": "<003e01c79de4$70cee4e0$11f38c05@ORD21>",
+      "from_name": "Sylvain BARTHELEMY",
+      "from_email_hash": "6269d4704746af1637c45553827c0855b4600c0b85fed212ce0906917ec5632c",
+      "date": "2007-05-24T11:18:06+02:00",
+      "subject": "[R-SIG-Finance] Convertion of a zoo object to a ts object",
+      "subject_clean": "Convertion of a zoo object to a ts object",
+      "in_reply_to": "<46555456.1090509@activestocks.de>",
+      "references": [
+        "<1179957081.4654b759702c2@10.1.2.205>",
+        "<002f01c79ddf$c2f5b960$11f38c05@ORD21>",
+        "<46555456.1090509@activestocks.de>"
+      ],
+      "body_plain": "Hi Ulrich,\n\nThanks for your answer and it surely helps. I didn't known about CCAPI and\nSlimFX and both seem to be very interesting projects.\n\n---\nSylvain Barth?l?my\nHead of Quantitative Research, TAC\nwww.tac-financial.com | www.sylbarth.com\n\n \n-----Message d'origine-----\nDe : Ulrich Staudinger [mailto:us at activestocks.de] \nEnvoy? : jeudi 24 mai 2007 11:01\n? : Sylvain BARTHELEMY\nCc : r-sig-finance at stat.math.ethz.ch\nObjet : Re: [R-SIG-Finance] Convertion of a zoo object to a ts object\n\nHi Sylvain,\n\ni know this is a R mailing list, but let me add some information on how i\nsolve the very same problem.\n\nI usually do the whole data obtaining and preparation in ccapi2, i then\nexport this data from ccapi2 as a CSV file which i load into R.\n\nData preparation includes for example aligning multiple timeseries, dealing\nwith extreme outliers due to unreasonable trades.\nFor aligning multiple time series i use the java method alignTimeSeries\nviewable at\nhttp://activestocks.de:8081/viewrep/ccapi3/src/core/ccapi/core/util/TimeSeri\nesUtil.java?r=1.7#l44 \n\n\nWould be good if RMetrics would integrate such a method. Yahoo does drop a\nfew days in long timeseries, usually.\n\nHope this helps,\nBest regards,\nUlrich Staudinger\n\n\nSylvain BARTHELEMY schrieb:\n> Dear All,\n>\n> I use get.hist.quote to read historical prices on various quotes from \n> Finance Yahoo. It works fine on daily prices and most of the time on \n> monthly prices but it is sometimes difficult to synchronize monthly \n> data without duplicating months when extracting more than one quote.\n>\n> Here is an example where many months are duplicated (see at the end of \n> the time series that 2006-05 is duplicated because CAC40 is quoted on \n> 2006-05-02 and AXA on 2006-05-01):\n> x <- get.hist.quote(\"^FCHI\", compression = \"m\", start = as.Date(0), \n> quote =\n> \"Close\")\n> x <- cbind( xx, get.hist.quote(\"CS.PA\", compression = \"m\", start = \n> as.Date(0), quote = \"Close\") )\n>\n> For the moment, to avoid these problems, I use something like:\n> readFromYahooM <- function(nam,quote) {  xx.0 <- get.hist.quote(nam, \n> compression = \"m\", start = as.Date(0), quote =\n> quote)\n>  xx <- ts( coredata(xx.0), frequency = 12, start =\n> as.numeric(as.yearmon(as.Date(start(xx.0)[1]))) )  xx } x <- \n> readFromYahooM(\"^FCHI\",\"Close\") x <- cbind(x, \n> readFromYahooM(\"CS.PA\",\"Close\"))\n> colnames(x) <- c(\"FCHI\",\"CS.PA\")\n>\n> It works, but there is a strong assumption that all the months are \n> present in the two time series and the fact is that xx is a zoo object \n> and zoo objects can contain irregular time series ! I am sure that \n> there should be a more elegant way to do a conversion from a zoo \n> object to a ts object or to replace the \"start\" parameter by the exact \n> vector of zoo dates and or yearmon but I don't find any way do to that.\n>\n> I anyone can help me, I would appreciate.\n> Thanks in advance.\n>\n> ---\n> Sylvain Barth?l?my\n> Head of Quantitative Research, TAC\n> www.tac-financial.com | www.sylbarth.com\n>\n>\n>\n>\n> 15:59\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list \n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.\n>   \n\nNo virus found in this incoming message.\n\n\n15:59\n \n\n\n\n\n15:59",
+      "body_snippet": "Hi Ulrich,\n\nThanks for your answer and it surely helps. I didn't known about CCAPI and\nSlimFX and both seem to be very interesting projects.\n\n---\nSylvain Barth?l?my\nHead of Quantitative Research, TAC\n",
+      "thread_id": "thread-777a0d80a127",
+      "thread_depth": 3,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-b7d00963333a",
+      "message_id": "<Pine.LNX.4.64.0705241111000.8773@eowyn>",
+      "from_name": "Achim Zeileis",
+      "from_email_hash": "d766623ae20ff5eea9df5809187df08da7b9ac247d6072a1908ecce0219ab3e0",
+      "date": "2007-05-24T11:28:26+02:00",
+      "subject": "[R-SIG-Finance] Convertion of a zoo object to a ts object",
+      "subject_clean": "Convertion of a zoo object to a ts object",
+      "in_reply_to": "<002f01c79ddf$c2f5b960$11f38c05@ORD21>",
+      "references": [
+        "<1179957081.4654b759702c2@10.1.2.205>",
+        "<002f01c79ddf$c2f5b960$11f38c05@ORD21>"
+      ],
+      "body_plain": "Sylvain:\n\n> I use get.hist.quote to read historical prices on various quotes from\n> Finance Yahoo. It works fine on daily prices and most of the time on monthly\n> prices but it is sometimes difficult to synchronize monthly data without\n> duplicating months when extracting more than one quote.\n\nOK, there are some useful tools in this situation. Which you want to use \ndepends what exactly what to end up with.\n\n## obtain series\nx <- get.hist.quote(\"^FCHI\", compression = \"m\", start = as.Date(0),\n   quote = \"Close\")\ny <- get.hist.quote(\"CS.PA\", compression = \"m\", start = as.Date(0),\n   quote = \"Close\")\n\n## merge based on \"Date\" time stamps (which might not match)\nxy <- merge(x, y)\n\n## remove NAs by averaging in each month\nxy1 <- aggregate(xy, as.yearmon, mean, na.rm = TRUE)\n## (which gives NaN rather NA for the first \"y\" observations)\n\n## alternatively: first go to \"yearmon\" scale and then merge\nx2 <- aggregate(x, as.yearmon, mean)\ny2 <- aggregate(y, as.yearmon, mean)\nxy2 <- merge(x2, y2)\n\n## to convert to \"ts\", you can simply do\nxy1ts <- as.ts(xy1)\nxy2ts <- as.ts(xy2)\n\n## Of course, you could also keep the merged series with \"Date\" time \n## stamp, e.g., using the first of the month\nxy2d <- xy2\ntime(xy2d) <- as.Date(time(xy2))\n\nhth,\nZ",
+      "body_snippet": "Sylvain:\n\n> I use get.hist.quote to read historical prices on various quotes from\n> Finance Yahoo. It works fine on daily prices and most of the time on monthly\n> prices but it is sometimes difficult ",
+      "thread_id": "thread-777a0d80a127",
+      "thread_depth": 2,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-949b15ac4a42",
+      "message_id": "<004301c79de6$6cc77b80$11f38c05@ORD21>",
+      "from_name": "Sylvain BARTHELEMY",
+      "from_email_hash": "6269d4704746af1637c45553827c0855b4600c0b85fed212ce0906917ec5632c",
+      "date": "2007-05-24T11:32:18+02:00",
+      "subject": "[R-SIG-Finance] Convertion of a zoo object to a ts object",
+      "subject_clean": "Convertion of a zoo object to a ts object",
+      "in_reply_to": "<Pine.LNX.4.64.0705241111000.8773@eowyn>",
+      "references": [
+        "<1179957081.4654b759702c2@10.1.2.205>",
+        "<002f01c79ddf$c2f5b960$11f38c05@ORD21>",
+        "<Pine.LNX.4.64.0705241111000.8773@eowyn>"
+      ],
+      "body_plain": "Exactly what I needed !\nThanks.\n\n---\nSylvain Barth?l?my\nHead of Quantitative Research, TAC\nwww.tac-financial.com | www.sylbarth.com\n \n-----Message d'origine-----\nDe : Achim Zeileis [mailto:Achim.Zeileis at wu-wien.ac.at] \nEnvoy? : jeudi 24 mai 2007 11:28\n? : Sylvain BARTHELEMY\nCc : r-sig-finance at stat.math.ethz.ch\nObjet : Re: [R-SIG-Finance] Convertion of a zoo object to a ts object\n\nSylvain:\n\n> I use get.hist.quote to read historical prices on various quotes from \n> Finance Yahoo. It works fine on daily prices and most of the time on \n> monthly prices but it is sometimes difficult to synchronize monthly \n> data without duplicating months when extracting more than one quote.\n\nOK, there are some useful tools in this situation. Which you want to use\ndepends what exactly what to end up with.\n\n## obtain series\nx <- get.hist.quote(\"^FCHI\", compression = \"m\", start = as.Date(0),\n   quote = \"Close\")\ny <- get.hist.quote(\"CS.PA\", compression = \"m\", start = as.Date(0),\n   quote = \"Close\")\n\n## merge based on \"Date\" time stamps (which might not match) xy <- merge(x,\ny)\n\n## remove NAs by averaging in each month\nxy1 <- aggregate(xy, as.yearmon, mean, na.rm = TRUE) ## (which gives NaN\nrather NA for the first \"y\" observations)\n\n## alternatively: first go to \"yearmon\" scale and then merge\nx2 <- aggregate(x, as.yearmon, mean)\ny2 <- aggregate(y, as.yearmon, mean)\nxy2 <- merge(x2, y2)\n\n## to convert to \"ts\", you can simply do xy1ts <- as.ts(xy1) xy2ts <-\nas.ts(xy2)\n\n## Of course, you could also keep the merged series with \"Date\" time ##\nstamp, e.g., using the first of the month xy2d <- xy2\ntime(xy2d) <- as.Date(time(xy2))\n\nhth,\nZ\n\nNo virus found in this incoming message.\n\n\n15:59\n \n\n\n\n\n15:59",
+      "body_snippet": "Exactly what I needed !\nThanks.\n\n---\nSylvain Barth?l?my\nHead of Quantitative Research, TAC\nwww.tac-financial.com | www.sylbarth.com\n \n-----Message d'origine-----\nDe : Achim Zeileis [mailto:Achim.Zeile",
+      "thread_id": "thread-777a0d80a127",
+      "thread_depth": 3,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-0cb576c2c5e9",
+      "message_id": "<FF3A66D60EC.00000316marco.zanella@inbox.com>",
+      "from_name": "Zanella Marco",
+      "from_email_hash": "f65767c3ae59d21d8ba5123dab02947d5f58d33beed1e5bf262490a163313cec",
+      "date": "2007-05-29T10:31:28-08:00",
+      "subject": "[R-SIG-Finance] R quant framework?",
+      "subject_clean": "R quant framework?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear Sirs,\n\nI'm working to understand the practicability to found the quantitative framework of a investment advisory company on R. For this reason I'm searching for a paper presented at \"user R! 2004\":\nBernhard Pfaff, 2004, \"useR! - at an investment bank?\", user R! Conference materials\n\nI hope you can help me sending the paper and related materials or lead me to find the paper.\n\nThanks in advance.\n\nMarco Zanella\n\nPS:I have just send a mail to author that advice me that actually he don't have the paper.",
+      "body_snippet": "Dear Sirs,\n\nI'm working to understand the practicability to found the quantitative framework of a investment advisory company on R. For this reason I'm searching for a paper presented at \"user R! 2004",
+      "thread_id": "thread-0cb576c2c5e9",
+      "thread_depth": 0,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-da61ac1d9607",
+      "message_id": "<6BC17AB6B99BC441ABC83269178375A30F49AF@grcserver.gutmark.de>",
+      "from_name": "Hans Radtke",
+      "from_email_hash": "f649b9aa9d70a7caa56cd01e7c06a00f8932dd7b15d3d6aad44ea11033b256da",
+      "date": "2007-05-30T12:22:30+02:00",
+      "subject": "[R-SIG-Finance] R quant framework",
+      "subject_clean": "R quant framework",
+      "in_reply_to": null,
+      "references": [
+        "<mailman.19.1180519209.13217.r-sig-finance@stat.math.ethz.ch>"
+      ],
+      "body_plain": "Marco,\n\n...why don't you try the following link: http://www.ci.tuwien.ac.at/Conferences/useR-2004/abstracts/Pfaff.pdf \n\n\nMit besten Gr??en / With kind regards\nHans Radtke\nVorstand\n \nGutmark, Radtke & Company AG\nLotzstrasse 36\n65934 Frankfurt\n \nTelefon  +49 69 35358-102\nTelefax  +49 69 35358-100\nMobil    +49 162 7675407\n \n \n \nGutmark, Radtke & Company AG is incorporated under German law. Board of Directors (Vorstand): Benny Gutmark, Hans Radtke. Supervisory Board (Aufsichtsrat): Dr Jacob Gutmark, Chairman. Company Registration: HRB 53028, Amtsgericht Frankfurt. Value Added Tax Registration (USt-IdNr): DE218021594. This e-mail and any attachments are confidential and may be legally privileged. If you are not the intended recipient please notify the sender immediately and delete this email. Any dissemination, distribution, copying or other use is strictly prohibited. Any opinions expressed in this communication are personal and are not attributable to Gutmark, Radtke & Company. Any communication related to specific engagements is to be read in conjunction with the relevant engagement letter or proposal document as well as our terms and conditions.",
+      "body_snippet": "Marco,\n\n...why don't you try the following link: http://www.ci.tuwien.ac.at/Conferences/useR-2004/abstracts/Pfaff.pdf \n\n\nMit besten Gr??en / With kind regards\nHans Radtke\nVorstand\n \nGutmark, Radtke & ",
+      "thread_id": "thread-da61ac1d9607",
+      "thread_depth": 0,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-566488b3225b",
+      "message_id": "<0D362EA23EC.000004DEmarco.zanella@inbox.com>",
+      "from_name": "Zanella Marco",
+      "from_email_hash": "f65767c3ae59d21d8ba5123dab02947d5f58d33beed1e5bf262490a163313cec",
+      "date": "2007-05-30T13:13:02-08:00",
+      "subject": "[R-SIG-Finance] R quant framework",
+      "subject_clean": "R quant framework",
+      "in_reply_to": "<6BC17AB6B99BC441ABC83269178375A30F49AF@grcserver.gutmark.de>",
+      "references": [
+        "<mailman.19.1180519209.13217.r-sig-finance@stat.math.ethz.ch>"
+      ],
+      "body_plain": "Dear Sirs,\nthanks for your kindly reply.\n\nIn the past days first I have googled and I have found the abstract, but is not enough for me. For this reason, now, I'm searching for the complete paper.\n\nBest,\n\nMarco\n\n\n> -----Original Message-----\n> From: hans.radtke at gutmark.net\n> Sent: Wed, 30 May 2007 12:22:30 +0200\n> To: r-sig-finance at stat.math.ethz.ch\n> Subject: [R-SIG-Finance] R quant framework\n> \n> Marco,\n> \n> ...why don't you try the following link:\n> http://www.ci.tuwien.ac.at/Conferences/useR-2004/abstracts/Pfaff.pdf\n> \n> \n> Mit besten Gr??en / With kind regards\n> Hans Radtke\n> Vorstand\n> \n> Gutmark, Radtke & Company AG\n> Lotzstrasse 36\n> 65934 Frankfurt\n> \n> Telefon  +49 69 35358-102\n> Telefax  +49 69 35358-100\n> Mobil    +49 162 7675407\n> \n> \n> \n> Gutmark, Radtke & Company AG is incorporated under German law. Board of\n> Directors (Vorstand): Benny Gutmark, Hans Radtke. Supervisory Board\n> (Aufsichtsrat): Dr Jacob Gutmark, Chairman. Company Registration: HRB\n> 53028, Amtsgericht Frankfurt. Value Added Tax Registration (USt-IdNr):\n> DE218021594. This e-mail and any attachments are confidential and may be\n> legally privileged. If you are not the intended recipient please notify\n> the sender immediately and delete this email. Any dissemination,\n> distribution, copying or other use is strictly prohibited. Any opinions\n> expressed in this communication are personal and are not attributable to\n> Gutmark, Radtke & Company. Any communication related to specific\n> engagements is to be read in conjunction with the relevant engagement\n> letter or proposal document as well as our terms and conditions.\n> \n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.",
+      "body_snippet": "Dear Sirs,\nthanks for your kindly reply.\n\nIn the past days first I have googled and I have found the abstract, but is not enough for me. For this reason, now, I'm searching for the complete paper.\n\nBe",
+      "thread_id": "thread-da61ac1d9607",
+      "thread_depth": 1,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-f3d52927e495",
+      "message_id": "<465E7BC3.9060701@gmx.net>",
+      "from_name": "Stefan Grosse",
+      "from_email_hash": "f1a361b570385e056309a1ef4f8e1307cd8cc223904fbbee1cfe52001c687662",
+      "date": "2007-05-31T09:39:47+02:00",
+      "subject": "[R-SIG-Finance] R quant framework",
+      "subject_clean": "R quant framework",
+      "in_reply_to": "<0D362EA23EC.000004DEmarco.zanella@inbox.com>",
+      "references": [
+        "<mailman.19.1180519209.13217.r-sig-finance@stat.math.ethz.ch>",
+        "<0D362EA23EC.000004DEmarco.zanella@inbox.com>"
+      ],
+      "body_plain": "So why dont you ask the author for it? The e-mail address is below the\nabstract...\n\nZanella Marco wrote:\n> Dear Sirs,\n> thanks for your kindly reply.\n>\n> In the past days first I have googled and I have found the abstract, but is not enough for me. For this reason, now, I'm searching for the complete paper.\n>\n> Best,\n>\n> Marco\n>\n>\n>   \n>> -----Original Message-----\n>> From: hans.radtke at gutmark.net\n>> Sent: Wed, 30 May 2007 12:22:30 +0200\n>> To: r-sig-finance at stat.math.ethz.ch\n>> Subject: [R-SIG-Finance] R quant framework\n>>\n>> Marco,\n>>\n>> ...why don't you try the following link:\n>> http://www.ci.tuwien.ac.at/Conferences/useR-2004/abstracts/Pfaff.pdf\n>>\n>>\n>> Mit besten Gr??en / With kind regards\n>> Hans Radtke\n>> Vorstand\n>>\n>> Gutmark, Radtke & Company AG\n>> Lotzstrasse 36\n>> 65934 Frankfurt\n>>\n>> Telefon  +49 69 35358-102\n>> Telefax  +49 69 35358-100\n>> Mobil    +49 162 7675407\n>>\n>>\n>>\n>> Gutmark, Radtke & Company AG is incorporated under German law. Board of\n>> Directors (Vorstand): Benny Gutmark, Hans Radtke. Supervisory Board\n>> (Aufsichtsrat): Dr Jacob Gutmark, Chairman. Company Registration: HRB\n>> 53028, Amtsgericht Frankfurt. Value Added Tax Registration (USt-IdNr):\n>> DE218021594. This e-mail and any attachments are confidential and may be\n>> legally privileged. If you are not the intended recipient please notify\n>> the sender immediately and delete this email. Any dissemination,\n>> distribution, copying or other use is strictly prohibited. Any opinions\n>> expressed in this communication are personal and are not attributable to\n>> Gutmark, Radtke & Company. Any communication related to specific\n>> engagements is to be read in conjunction with the relevant engagement\n>> letter or proposal document as well as our terms and conditions.\n>>\n>> _______________________________________________\n>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only.\n>> -- If you want to post, subscribe first.\n>>     \n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.\n> ------------------------------------------------------------------------\n>\n> No virus found in this incoming message.\n> Checked by AVG Free Edition. \n> Version: 7.5.472 / Virus Database: 269.8.4/825 - Release Date: 30.05.2007 15:03\n>",
+      "body_snippet": "So why dont you ask the author for it? The e-mail address is below the\nabstract...\n\nZanella Marco wrote:\n> Dear Sirs,\n> thanks for your kindly reply.\n>\n> In the past days first I have googled and I ha",
+      "thread_id": "thread-da61ac1d9607",
+      "thread_depth": 2,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-b92640444f0b",
+      "message_id": "<130854682E8.00000783marco.zanella@inbox.com>",
+      "from_name": "Zanella Marco",
+      "from_email_hash": "f65767c3ae59d21d8ba5123dab02947d5f58d33beed1e5bf262490a163313cec",
+      "date": "2007-05-31T00:19:43-08:00",
+      "subject": "[R-SIG-Finance] R quant framework",
+      "subject_clean": "R quant framework",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear Sirs,\nI think there is a little misunderstanding. In fact, as you can read in my first post I have already googled (I found the abstract), searched in website of papers (ex. IDEAS: Economic and Finance Research) and contacted the author (he say that don't have a copy and kindly summerize me the content of paper). R SIG FINANCE is the last resources for me to find the complete paper or the slide of talk.\n\nThanks a lot and excuse me for insistence.\n\nRegards,\n\nMarco",
+      "body_snippet": "Dear Sirs,\nI think there is a little misunderstanding. In fact, as you can read in my first post I have already googled (I found the abstract), searched in website of papers (ex. IDEAS: Economic and F",
+      "thread_id": "thread-b92640444f0b",
+      "thread_depth": 0,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-b2117763bec6",
+      "message_id": "<19811401A1D8174CB3EAD7F6072E9B50915A28@chsa1025.share.beluni.net>",
+      "from_name": "Bengoechea Bartolomé Enrique (SIES 73)",
+      "from_email_hash": "867c96515f3a620c9951603a510be56a57f731c55dd06a62929d63c3ceec7a59",
+      "date": "2007-05-31T12:30:26+02:00",
+      "subject": "[R-SIG-Finance] R-SIG-Finance Digest, Vol 36, Issue 13",
+      "subject_clean": "R-SIG-Finance Digest, Vol 36, Issue 13",
+      "in_reply_to": "<mailman.19.1180605610.28898.r-sig-finance@stat.math.ethz.ch>",
+      "references": [
+        "<mailman.19.1180605610.28898.r-sig-finance@stat.math.ethz.ch>"
+      ],
+      "body_plain": "Marco,\n\nThere has been some discussion on the past in this list about these issues, have you reviewed the archives? (hint: search for \"use of R in big companies\")\n\nBest,\n\nEnrique",
+      "body_snippet": "Marco,\n\nThere has been some discussion on the past in this list about these issues, have you reviewed the archives? (hint: search for \"use of R in big companies\")\n\nBest,\n\nEnrique",
+      "thread_id": "thread-b2117763bec6",
+      "thread_depth": 0,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-7e1585db05ed",
+      "message_id": "<10903450.post@talk.nabble.com>",
+      "from_name": "jeam",
+      "from_email_hash": "5b0766b53dcecccc2dd4815c829f0884712970217d642df34d29694a1bef1c30",
+      "date": "2007-05-31T15:36:17-07:00",
+      "subject": "[R-SIG-Finance] ISO-8601 with time zone designator, format handling with fCalendar/chron",
+      "subject_clean": "ISO-8601 with time zone designator, format handling with fCalendar/chron",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear All;\n\nI have searched the forum but couldn't find a similar problem. \nCurrently I am working with a very large set of XML files and the date is\nformatted something like that\n(YYYY-MM-DDThh:mm:ss+TZD)\n\nEx: \"2005-12-05T00:00:00+02:00\"\n\nPreviously, I've tried chron and fCalendar but couldn't find a way to import\nthis data as a time object.\n\nI think somehow, timeDate may handle it, i tried almost all variations\nformats, but couldn't make it work.\n\nAny help appreciated...\n\nRegards\n\n-- \nView this message in context: http://www.nabble.com/ISO-8601-with-time-zone-designator%2C-format-handling-with-fCalendar-chron-tf3849304.html#a10903450\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "Dear All;\n\nI have searched the forum but couldn't find a similar problem. \nCurrently I am working with a very large set of XML files and the date is\nformatted something like that\n(YYYY-MM-DDThh:mm:ss+",
+      "thread_id": "thread-7e1585db05ed",
+      "thread_depth": 0,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-094a32729dfb",
+      "message_id": "<465F63AA.4040706@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2007-05-31T19:09:14-05:00",
+      "subject": "[R-SIG-Finance] ISO-8601 with time zone designator, format handling with fCalendar/chron",
+      "subject_clean": "ISO-8601 with time zone designator, format handling with fCalendar/chron",
+      "in_reply_to": "<10903450.post@talk.nabble.com>",
+      "references": [
+        "<10903450.post@talk.nabble.com>"
+      ],
+      "body_plain": "jeam wrote:\n> I have searched the forum but couldn't find a similar problem. \n> Currently I am working with a very large set of XML files and the date is\n> formatted something like that\n> (YYYY-MM-DDThh:mm:ss+TZD)\n\nzoo allows you to specify the date format.\n\nas for your XML format, the CRAN package 'XML'\nhttp://cran.r-project.org/src/contrib/Descriptions/XML.html\nshould allow you to parse your data into a format that is suitable for \npassing into zoo.\n\nRegards,\n\n   - Brian",
+      "body_snippet": "jeam wrote:\n> I have searched the forum but couldn't find a similar problem. \n> Currently I am working with a very large set of XML files and the date is\n> formatted something like that\n> (YYYY-MM-DDT",
+      "thread_id": "thread-7e1585db05ed",
+      "thread_depth": 1,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-bfc0ca50dc8f",
+      "message_id": "<971536df0705311807x5b32b47fk9e9d7a7c1de0f5af@mail.gmail.com>",
+      "from_name": "Gabor Grothendieck",
+      "from_email_hash": "2252aad0894f89a900da56345b1c4e0414e3b441d448c40b473f7149e06e5a05",
+      "date": "2007-05-31T21:07:16-04:00",
+      "subject": "[R-SIG-Finance] ISO-8601 with time zone designator, format handling with fCalendar/chron",
+      "subject_clean": "ISO-8601 with time zone designator, format handling with fCalendar/chron",
+      "in_reply_to": "<10903450.post@talk.nabble.com>",
+      "references": [
+        "<10903450.post@talk.nabble.com>"
+      ],
+      "body_plain": "Try this:\n\nlibrary(chron)\nx <- \"2005-12-05T00:00:00+02:00\"\ndatetime <- chron(as.Date(x), substring(x, 12, 19))\nsgn <- switch(substring(x, 20, 20), \"+\" = +1, \"-\" = -1)\noffset <- as.numeric(times(paste(substring(x, 21), \"00\", sep = \":\")))\ndatetime + sgn * offset\n\n# or perhaps the last line should be:\ndatetime - sgn * offset\n\nOn 5/31/07, jeam <eraslan.cem at gmail.com> wrote:\n>\n> Dear All;\n>\n> I have searched the forum but couldn't find a similar problem.\n> Currently I am working with a very large set of XML files and the date is\n> formatted something like that\n> (YYYY-MM-DDThh:mm:ss+TZD)\n>\n> Ex: \"2005-12-05T00:00:00+02:00\"\n>\n> Previously, I've tried chron and fCalendar but couldn't find a way to import\n> this data as a time object.\n>\n> I think somehow, timeDate may handle it, i tried almost all variations\n> formats, but couldn't make it work.\n>\n> Any help appreciated...\n>\n> Regards\n>\n> --\n> View this message in context: http://www.nabble.com/ISO-8601-with-time-zone-designator%2C-format-handling-with-fCalendar-chron-tf3849304.html#a10903450\n> Sent from the Rmetrics mailing list archive at Nabble.com.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>",
+      "body_snippet": "Try this:\n\nlibrary(chron)\nx <- \"2005-12-05T00:00:00+02:00\"\ndatetime <- chron(as.Date(x), substring(x, 12, 19))\nsgn <- switch(substring(x, 20, 20), \"+\" = +1, \"-\" = -1)\noffset <- as.numeric(times(paste(",
+      "thread_id": "thread-7e1585db05ed",
+      "thread_depth": 1,
+      "month": "2007-05"
+    },
+    {
+      "id": "msg-fc7ffe666345",
+      "message_id": "<971536df0705311849n4e51066amdb83406a4fab6c99@mail.gmail.com>",
+      "from_name": "Gabor Grothendieck",
+      "from_email_hash": "2252aad0894f89a900da56345b1c4e0414e3b441d448c40b473f7149e06e5a05",
+      "date": "2007-05-31T21:49:46-04:00",
+      "subject": "[R-SIG-Finance] ISO-8601 with time zone designator, format handling with fCalendar/chron",
+      "subject_clean": "ISO-8601 with time zone designator, format handling with fCalendar/chron",
+      "in_reply_to": "<971536df0705311807x5b32b47fk9e9d7a7c1de0f5af@mail.gmail.com>",
+      "references": [
+        "<10903450.post@talk.nabble.com>",
+        "<971536df0705311807x5b32b47fk9e9d7a7c1de0f5af@mail.gmail.com>"
+      ],
+      "body_plain": "Here is one improvement.  The sgn line is changed to make the entire\ncalculation vectorized:\n\nlibrary(chron)\nx <- \"2005-12-05T00:00:00+02:00\"\nx <- c(x, x)\ndatetime <- chron(as.Date(x), substring(x, 12, 19))\nsgn <- substring(x, 20, 20)\nsgn <- (sgn == \"+\") - (sgn == \"-\")\noffset <- as.numeric(times(paste(substring(x, 21), \"00\", sep = \":\")))\n# or should + be - in next line?\ndatetime + sgn * offset\n\n\nOn 5/31/07, Gabor Grothendieck <ggrothendieck at gmail.com> wrote:\n> Try this:\n>\n> library(chron)\n> x <- \"2005-12-05T00:00:00+02:00\"\n> datetime <- chron(as.Date(x), substring(x, 12, 19))\n> sgn <- switch(substring(x, 20, 20), \"+\" = +1, \"-\" = -1)\n> offset <- as.numeric(times(paste(substring(x, 21), \"00\", sep = \":\")))\n> datetime + sgn * offset\n>\n> # or perhaps the last line should be:\n> datetime - sgn * offset\n>\n> On 5/31/07, jeam <eraslan.cem at gmail.com> wrote:\n> >\n> > Dear All;\n> >\n> > I have searched the forum but couldn't find a similar problem.\n> > Currently I am working with a very large set of XML files and the date is\n> > formatted something like that\n> > (YYYY-MM-DDThh:mm:ss+TZD)\n> >\n> > Ex: \"2005-12-05T00:00:00+02:00\"\n> >\n> > Previously, I've tried chron and fCalendar but couldn't find a way to import\n> > this data as a time object.\n> >\n> > I think somehow, timeDate may handle it, i tried almost all variations\n> > formats, but couldn't make it work.\n> >\n> > Any help appreciated...\n> >\n> > Regards\n> >\n> > --\n> > View this message in context: http://www.nabble.com/ISO-8601-with-time-zone-designator%2C-format-handling-with-fCalendar-chron-tf3849304.html#a10903450\n> > Sent from the Rmetrics mailing list archive at Nabble.com.\n> >\n> > _______________________________________________\n> > R-SIG-Finance at stat.math.ethz.ch mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only.\n> > -- If you want to post, subscribe first.\n> >\n>",
+      "body_snippet": "Here is one improvement.  The sgn line is changed to make the entire\ncalculation vectorized:\n\nlibrary(chron)\nx <- \"2005-12-05T00:00:00+02:00\"\nx <- c(x, x)\ndatetime <- chron(as.Date(x), substring(x, 12",
+      "thread_id": "thread-7e1585db05ed",
+      "thread_depth": 2,
+      "month": "2007-05"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-e530fc8f36c7",
+      "subject": "Bloomberg bulk data download - example code",
+      "message_count": 2,
+      "participants": [
+        "Paul DeBruicker",
+        "Warren Loken"
+      ],
+      "started": "2007-05-01T11:17:41-04:00",
+      "last_reply": "2007-05-01T11:26:55-06:00",
+      "root_message_id": "msg-e530fc8f36c7"
+    },
+    {
+      "id": "thread-5995e76b4e35",
+      "subject": "Confidence Intervals",
+      "message_count": 1,
+      "participants": [
+        "frednovo at pipeline.com"
+      ],
+      "started": "2007-05-01T14:29:40-04:00",
+      "last_reply": "2007-05-01T14:29:40-04:00",
+      "root_message_id": "msg-5995e76b4e35"
+    },
+    {
+      "id": "thread-55729991a6db",
+      "subject": "Cox, Ingersoll, Ross/Vasicek parameter estimationviaKalman-Filter (SSPIR)",
+      "message_count": 1,
+      "participants": [
+        "Thomas Steiner"
+      ],
+      "started": "2007-05-02T11:55:11+02:00",
+      "last_reply": "2007-05-02T11:55:11+02:00",
+      "root_message_id": "msg-55729991a6db"
+    },
+    {
+      "id": "thread-06ed801bc881",
+      "subject": "Question for IB TWS users",
+      "message_count": 2,
+      "participants": [
+        "Bill Pippin",
+        "mel"
+      ],
+      "started": "2007-05-04T19:00:50+02:00",
+      "last_reply": "2007-05-07T12:00:42-04:00",
+      "root_message_id": "msg-06ed801bc881"
+    },
+    {
+      "id": "thread-39f873014625",
+      "subject": "R interface to LIM?",
+      "message_count": 2,
+      "participants": [
+        "Armstrong, Whit",
+        "Thomas Harte"
+      ],
+      "started": "2007-05-06T17:19:39-07:00",
+      "last_reply": "2007-05-07T08:06:43-04:00",
+      "root_message_id": "msg-39f873014625"
+    },
+    {
+      "id": "thread-84c9258b7abe",
+      "subject": "Plotting 2 option value lines",
+      "message_count": 2,
+      "participants": [
+        "James"
+      ],
+      "started": "2007-05-07T21:48:44-06:00",
+      "last_reply": "2007-05-07T22:03:25-06:00",
+      "root_message_id": "msg-84c9258b7abe"
+    },
+    {
+      "id": "thread-d25e6287b151",
+      "subject": "Plotting 2 option value lines",
+      "message_count": 1,
+      "participants": [
+        "James"
+      ],
+      "started": "2007-05-07T22:28:22-06:00",
+      "last_reply": "2007-05-07T22:28:22-06:00",
+      "root_message_id": "msg-d25e6287b151"
+    },
+    {
+      "id": "thread-922d34c6b93e",
+      "subject": "Heston SV model implementation",
+      "message_count": 2,
+      "participants": [
+        "Krishna Kumar",
+        "udai"
+      ],
+      "started": "2007-05-08T15:19:11+05:30",
+      "last_reply": "2007-05-09T06:40:38-04:00",
+      "root_message_id": "msg-922d34c6b93e"
+    },
+    {
+      "id": "thread-27906b280534",
+      "subject": "simpleWarning in timeDate from Sys.putenv",
+      "message_count": 1,
+      "participants": [
+        "Roger Davis"
+      ],
+      "started": "2007-05-09T16:47:26-04:00",
+      "last_reply": "2007-05-09T16:47:26-04:00",
+      "root_message_id": "msg-27906b280534"
+    },
+    {
+      "id": "thread-04d0a6bfe7ac",
+      "subject": "Finance at useR!2007",
+      "message_count": 1,
+      "participants": [
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2007-05-14T10:50:26-05:00",
+      "last_reply": "2007-05-14T10:50:26-05:00",
+      "root_message_id": "msg-04d0a6bfe7ac"
+    },
+    {
+      "id": "thread-e16239d0a99b",
+      "subject": "frontierMarkowitz problem: Tangential POrtfolio",
+      "message_count": 2,
+      "participants": [
+        "Brian G. Peterson",
+        "Christian Grupp"
+      ],
+      "started": "2007-05-18T16:11:04+02:00",
+      "last_reply": "2007-05-19T06:08:28-05:00",
+      "root_message_id": "msg-e16239d0a99b"
+    },
+    {
+      "id": "thread-9a7cc00757a0",
+      "subject": "Problem with function \"garchFit\" (fSeries)",
+      "message_count": 2,
+      "participants": [
+        "Brian G. Peterson",
+        "Mathias Slansky"
+      ],
+      "started": "2007-05-19T14:33:22+02:00",
+      "last_reply": "2007-05-19T08:08:44-05:00",
+      "root_message_id": "msg-9a7cc00757a0"
+    },
+    {
+      "id": "thread-a4c355ea3353",
+      "subject": "Panel VAR in EViews",
+      "message_count": 2,
+      "participants": [
+        "M.R.Farzanegan",
+        "kriskumar at earthlink.net"
+      ],
+      "started": "2007-05-20T04:40:43-07:00",
+      "last_reply": "2007-05-20T16:14:07+00:00",
+      "root_message_id": "msg-a4c355ea3353"
+    },
+    {
+      "id": "thread-8e98b53609ff",
+      "subject": "readcsvIts",
+      "message_count": 2,
+      "participants": [
+        "Armstrong, Whit",
+        "Vorlow Constantinos"
+      ],
+      "started": "2007-05-22T17:52:22+03:00",
+      "last_reply": "2007-05-22T11:13:31-04:00",
+      "root_message_id": "msg-8e98b53609ff"
+    },
+    {
+      "id": "thread-36da1661217e",
+      "subject": "Standard deviation and plots",
+      "message_count": 4,
+      "participants": [
+        "BBands",
+        "Brian G. Peterson",
+        "Peter Carl",
+        "genx"
+      ],
+      "started": "2007-05-23T08:26:36-07:00",
+      "last_reply": "2007-05-23T10:47:54-05:00",
+      "root_message_id": "msg-36da1661217e"
+    },
+    {
+      "id": "thread-777a0d80a127",
+      "subject": "Problems with fSeries on Vista",
+      "message_count": 7,
+      "participants": [
+        "Achim Zeileis",
+        "Sylvain BARTHELEMY",
+        "Ulrich Staudinger",
+        "iperez at escuelaing.edu.co"
+      ],
+      "started": "2007-05-23T16:51:21-05:00",
+      "last_reply": "2007-05-24T11:32:18+02:00",
+      "root_message_id": "msg-777a0d80a127"
+    },
+    {
+      "id": "thread-0cb576c2c5e9",
+      "subject": "R quant framework?",
+      "message_count": 1,
+      "participants": [
+        "Zanella Marco"
+      ],
+      "started": "2007-05-29T10:31:28-08:00",
+      "last_reply": "2007-05-29T10:31:28-08:00",
+      "root_message_id": "msg-0cb576c2c5e9"
+    },
+    {
+      "id": "thread-da61ac1d9607",
+      "subject": "R quant framework",
+      "message_count": 3,
+      "participants": [
+        "Hans Radtke",
+        "Stefan Grosse",
+        "Zanella Marco"
+      ],
+      "started": "2007-05-30T12:22:30+02:00",
+      "last_reply": "2007-05-31T09:39:47+02:00",
+      "root_message_id": "msg-da61ac1d9607"
+    },
+    {
+      "id": "thread-b92640444f0b",
+      "subject": "R quant framework",
+      "message_count": 1,
+      "participants": [
+        "Zanella Marco"
+      ],
+      "started": "2007-05-31T00:19:43-08:00",
+      "last_reply": "2007-05-31T00:19:43-08:00",
+      "root_message_id": "msg-b92640444f0b"
+    },
+    {
+      "id": "thread-b2117763bec6",
+      "subject": "R-SIG-Finance Digest, Vol 36, Issue 13",
+      "message_count": 1,
+      "participants": [
+        "Bengoechea Bartolomé Enrique (SIES 73)"
+      ],
+      "started": "2007-05-31T12:30:26+02:00",
+      "last_reply": "2007-05-31T12:30:26+02:00",
+      "root_message_id": "msg-b2117763bec6"
+    },
+    {
+      "id": "thread-7e1585db05ed",
+      "subject": "ISO-8601 with time zone designator, format handling with fCalendar/chron",
+      "message_count": 4,
+      "participants": [
+        "Brian G. Peterson",
+        "Gabor Grothendieck",
+        "jeam"
+      ],
+      "started": "2007-05-31T15:36:17-07:00",
+      "last_reply": "2007-05-31T21:49:46-04:00",
+      "root_message_id": "msg-7e1585db05ed"
+    }
+  ]
+}

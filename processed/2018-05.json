@@ -1,0 +1,194 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2018-05",
+  "messages": [
+    {
+      "id": "msg-3a43df9db9bb",
+      "message_id": "<CAKg2dJu47Owew7xOMLCaeR10u6-aDKW0AXyBoQm9Yk_i4X1bLQ@mail.gmail.com>",
+      "from_name": "Sultan Islam",
+      "from_email_hash": "b9c498d8cd8e3905a5ab79d17d50716efcee3e6b3847340ed0c86e90eec16908",
+      "date": "2018-05-01T14:42:08+03:00",
+      "subject": "[R-SIG-Finance] dcc simulation",
+      "subject_clean": "dcc simulation",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\nI have used R rmgarch package to implement EGARCH ADCC model from which I\ncan extract conditional covariance matrix. Now I would like to introduce\npositive and/or negative shocks to see the asymmetric response of\ncovariance. I have come to know that impulse response function (IRF) or\nvolatility IRF is not compatible for any asymmetric models, therefore, the\nonly way to introduce shocks into the ADCC model can be through simulation\ngiven the parameters.\n\nFor the purpose of introducing shocks and simulating the model, I intend to\nuse dccsim function for simulating the model given the shocks in preZ\n(standardized residuals specified by the user) argument. I am not sure\nwhether this dccsim function actually does what I intend to do. Therefore,\nI would like to have your helpful suggestion regarding the use of dccsim\nfunction in this purpose.\n\nThe simulation code what I describe above is as follows:\n\n# first specify univariate egarch model\n\nuspec<-ugarchspec(variance.model=list(model=\"eGARCH\",garchOrder=c(1,1)),distribution.model=\"norm\",mean.model=list(armaOrder=c(0,0),include.mean=F))\n\nmodel=multispec(replicate(2,uspec)) # replicate for two series\n\n  # specify ADCC model\n\n  mvspec=dccspec(model,dccOrder = c(1,1),model = \"aDCC\",distribution =\n\"mvnorm\")\n\n  # cluster\n\n  cl= makePSOCKcluster(2)\n\n  multf = multifit(model, Data, cluster = cl)\n\n  fitADCC=dccfit(mvspec,data = Data, fit = multf, cluster = cl)\n\n  ADCC<-print(fitADCC)\n\n  stopCluster(cl) # stop cluster\n\n  # store covariance matrix\n\n  COV<-matrix(rcov(fitADCC)[1,2,]) # COV contains 2345 obs\n\n# simulate the model\n\n# given positive shocks in preZ\n\nsim<-dccsim(ADCC, n.sim =2345,n.start =100 , m.sim = 1, startMethod =\n\"unconditional\",preZ = 0.7131)\n\n# extract covariance\n\n  sim_cov<-as.matrix(rcov(sim)[1,2,])\n\n# # to specify negative shocks I put a minus sign before 0.7131 in preZ\n\nsim1<-dccsim(ADCC, n.sim =2345,n.start =100 , m.sim = 1, startMethod =\n\"unconditional\",preZ = - 0.7131)\n\n# extract covariance\n\n  sim1_cov<-as.matrix(rcov(sim)[1,2,])\n\n\nPlease feel free to reply that this approach is correct to proceed. Thanks.\nBest regards,\nsultan\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\nI have used R rmgarch package to implement EGARCH ADCC model from which I\ncan extract conditional covariance matrix. Now I would like to introduce\npositive and/or negative shocks to see the asymme",
+      "thread_id": "thread-3a43df9db9bb",
+      "thread_depth": 0,
+      "month": "2018-05"
+    },
+    {
+      "id": "msg-fe8e4d0b0e98",
+      "message_id": "<AM0PR0602MB349240A79967C17BBEBD2A2C8F840@AM0PR0602MB3492.eurprd06.prod.outlook.com>",
+      "from_name": "Andreas Bregiannis",
+      "from_email_hash": "f5db9cff1c7303a7e4910089196a7d2492e1f91b530f0e7c1d31e9ae865ea51a",
+      "date": "2018-05-06T15:42:24Z",
+      "subject": "[R-SIG-Finance] Speed up for loop",
+      "subject_clean": "Speed up for loop",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello everyone,\n\nI would like to ask you how I can speed up this for loop.  In the following code I generate a sample of 200 of the NIG distribution and then I fit to them the NIG distribution. My aim is to estimate 1mln times the mean parameter of this NIG distribution.\nAny ideas?\n\nlibrary(GeneralizedHyperbolic)\nmu=0;delta = 1;alpha = 1;beta = 0\nm=numeric(1000000)\nfor(i in 1:1000000){\nm[i]=coef(nigFit(rnig(200, param = c(mu, delta, alpha, beta))\n))[1]\n}\n\nThank you in advance.\nBest,\nAndreas\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello everyone,\n\nI would like to ask you how I can speed up this for loop.  In the following code I generate a sample of 200 of the NIG distribution and then I fit to them the NIG distribution. My aim",
+      "thread_id": "thread-fe8e4d0b0e98",
+      "thread_depth": 0,
+      "month": "2018-05"
+    },
+    {
+      "id": "msg-bd9bdda54ea9",
+      "message_id": "<alpine.LFD.2.20.1805061811430.1086@localhost>",
+      "from_name": "Eivind K. Dovik",
+      "from_email_hash": "035539d9be9fb0c08bb794524b62c1c501f9947a7bda06d19b45f5302bc157b2",
+      "date": "2018-05-06T18:14:17+02:00",
+      "subject": "[R-SIG-Finance] Speed up for loop",
+      "subject_clean": "Speed up for loop",
+      "in_reply_to": "<AM0PR0602MB349240A79967C17BBEBD2A2C8F840@AM0PR0602MB3492.eurprd06.prod.outlook.com>",
+      "references": [
+        "<AM0PR0602MB349240A79967C17BBEBD2A2C8F840@AM0PR0602MB3492.eurprd06.prod.outlook.com>"
+      ],
+      "body_plain": "On Sun, 6 May 2018, Andreas Bregiannis wrote:\n\n> Hello everyone,\n>\n> I would like to ask you how I can speed up this for loop.  In the following code I generate a sample of 200 of the NIG distribution and then I fit to them the NIG distribution. My aim is to estimate 1mln times the mean parameter of this NIG distribution.\n> Any ideas?\n>\n> library(GeneralizedHyperbolic)\n> mu=0;delta = 1;alpha = 1;beta = 0\n> m=numeric(1000000)\n> for(i in 1:1000000){\n> m[i]=coef(nigFit(rnig(200, param = c(mu, delta, alpha, beta))\n> ))[1]\n> }\n>\n> Thank you in advance.\n> Best,\n> Andreas\n\nHi, Andreas.\n\nHow about this?\n\nlibrary(GeneralizedHyperbolic)\nmu = 0; delta = 1; alpha = 1; beta = 0\n\nfunc <- function(){\n     random_numbers <- rnig(200, param = c(mu, delta, alpha, beta))\n     fit <- nigFit(d)\n     return(coef(fit)[1])\n}\n\nm <- as.numeric(rep(func(), 1000000)\n\n\n\nEivind K. Dovik\nBergen, NO\n\n\n\n>\n>\n> \t[[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>",
+      "body_snippet": "On Sun, 6 May 2018, Andreas Bregiannis wrote:\n\n> Hello everyone,\n>\n> I would like to ask you how I can speed up this for loop.  In the following code I generate a sample of 200 of the NIG distribution",
+      "thread_id": "thread-fe8e4d0b0e98",
+      "thread_depth": 1,
+      "month": "2018-05"
+    },
+    {
+      "id": "msg-05b331de847f",
+      "message_id": "<alpine.LFD.2.20.1805061815430.1086@localhost>",
+      "from_name": "Eivind K. Dovik",
+      "from_email_hash": "035539d9be9fb0c08bb794524b62c1c501f9947a7bda06d19b45f5302bc157b2",
+      "date": "2018-05-06T18:16:31+02:00",
+      "subject": "[R-SIG-Finance] Speed up for loop",
+      "subject_clean": "Speed up for loop",
+      "in_reply_to": "<alpine.LFD.2.20.1805061811430.1086@localhost>",
+      "references": [
+        "<AM0PR0602MB349240A79967C17BBEBD2A2C8F840@AM0PR0602MB3492.eurprd06.prod.outlook.com>",
+        "<alpine.LFD.2.20.1805061811430.1086@localhost>"
+      ],
+      "body_plain": "On Sun, 6 May 2018, Eivind K. Dovik wrote:\n\n> On Sun, 6 May 2018, Andreas Bregiannis wrote:\n>\n>>  Hello everyone,\n>>\n>>  I would like to ask you how I can speed up this for loop.  In the\n>>  following code I generate a sample of 200 of the NIG distribution and then\n>>  I fit to them the NIG distribution. My aim is to estimate 1mln times the\n>>  mean parameter of this NIG distribution.\n>>  Any ideas?\n>>\n>>  library(GeneralizedHyperbolic)\n>>  mu=0;delta = 1;alpha = 1;beta = 0\n>>  m=numeric(1000000)\n>>  for(i in 1:1000000){\n>>  m[i]=coef(nigFit(rnig(200, param = c(mu, delta, alpha, beta))\n>> )) [1]\n>>  }\n>>\n>>  Thank you in advance.\n>>  Best,\n>>  Andreas\n>\n> Hi, Andreas.\n>\n> How about this?\n>\n> library(GeneralizedHyperbolic)\n> mu = 0; delta = 1; alpha = 1; beta = 0\n>\n> func <- function(){\n>     random_numbers <- rnig(200, param = c(mu, delta, alpha, beta))\n>     fit <- nigFit(d)\n>     return(coef(fit)[1])\n> }\n>\n> m <- as.numeric(rep(func(), 1000000)\n\nMy apologies. The last line should be:\n\nm <- as.numeric(replicate(1000000, func())\n\n>\n>\n>\n> Eivind K. Dovik\n> Bergen, NO\n>\n>\n>\n>> \n>>\n>>   [[alternative HTML version deleted]]\n>>\n>>  _______________________________________________\n>>  R-SIG-Finance at r-project.org mailing list\n>>  https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>  -- Subscriber-posting only. If you want to post, subscribe first.\n>>  -- Also note that this is not the r-help list where general R questions\n>>  should go.\n>> \n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions \n> should go.\n>",
+      "body_snippet": "On Sun, 6 May 2018, Eivind K. Dovik wrote:\n\n> On Sun, 6 May 2018, Andreas Bregiannis wrote:\n>\n>>  Hello everyone,\n>>\n>>  I would like to ask you how I can speed up this for loop.  In the\n>>  following",
+      "thread_id": "thread-fe8e4d0b0e98",
+      "thread_depth": 2,
+      "month": "2018-05"
+    },
+    {
+      "id": "msg-b04a60af1ddc",
+      "message_id": "<CAPPM_gSjFbqs_DXLU8=aLWWCQMJyGvZMXMTN5mHiQ8=ns4Mvsg@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "a425ab3832ccd69401741603dd2c2ef569297144eaa6f47e54ea9c4a672f700d",
+      "date": "2018-05-14T12:28:24-05:00",
+      "subject": "[R-SIG-Finance] R/Finance 2018 Registration",
+      "subject_clean": "R/Finance 2018 Registration",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi All,\n\nA quick note that R/Finance registration is open, and early-bird\npricing ends a week from today, on 5/21.\n\nAnnouncement below:\n\nThis year marks the 10th anniversary of the R/Finance Conference!  As\nin prior years, we expect more than 250 attendees from around the\nworld. R users from industry, academia, and government will joining\n50+ presenters covering all areas of finance with R.  The conference\nwill take place on June 1st and 2nd, at UIC in Chicago.\n\nYou can find registration information on the conference website:\nhttp://www.rinfinance.com/#registration\n\nor you can go directly to the Cvent registration page:\nhttp://go.uic.edu/rfinance\n\nNote that registration fees will increase by 50% at the end of early\nregistration on May 21, 2018.\n\nWe are very excited about keynote presentations by JJ Allaire, Li\nDeng, and Norm Matloff.  The conference agenda (currently) includes 18\nfull presentations and 33 shorter \"lightning talks\".  As in previous\nyears, several (optional) pre-conference seminars are offered on\nFriday morning.  We're still working on the agenda, but we have\nanother great lineup of speakers this year!\n\nThere is also an (optional) conference dinner at Wyndham Grand Chicago\nRiverfront in the 39th Floor Penthouse Ballroom and Terrace.  Situated\ndirectly on the riverfront, it is a perfect venue to continue\nconversations while dining and drinking.\n\nWe would to thank our 2018 Sponsors for the continued support enabling\nus to host such an exciting conference:\n\n  UIC Liautaud Master of Science in Finance\n  Microsoft\n  R Consortium\n  RStudio\n  William Blair\n  Citadel\n  Quasardb\n\nOn behalf of the committee and sponsors, we look forward to seeing you\nin Chicago!\n\n  Gib Bassett, Peter Carl, Dirk Eddelbuettel, Brian Peterson, Dale\nRosenthal, Jeffrey Ryan, Joshua Ulrich\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2018 | www.rinfinance.com",
+      "body_snippet": "Hi All,\n\nA quick note that R/Finance registration is open, and early-bird\npricing ends a week from today, on 5/21.\n\nAnnouncement below:\n\nThis year marks the 10th anniversary of the R/Finance Conferenc",
+      "thread_id": "thread-b04a60af1ddc",
+      "thread_depth": 0,
+      "month": "2018-05"
+    },
+    {
+      "id": "msg-055017c974b8",
+      "message_id": "<CAEEj48nCW8y+-4VpwvhjB+z=gT+axXMMvjprZ4qb-3P1o9PjhA@mail.gmail.com>",
+      "from_name": "Adam Ginensky",
+      "from_email_hash": "f544299c65a76b967b5ea21182e257242680da9eb37c03b603e7312db2def7c1",
+      "date": "2018-05-18T10:59:36-05:00",
+      "subject": "[R-SIG-Finance] R/Finance 2018 Registration",
+      "subject_clean": "R/Finance 2018 Registration",
+      "in_reply_to": "<CAPPM_gSjFbqs_DXLU8=aLWWCQMJyGvZMXMTN5mHiQ8=ns4Mvsg@mail.gmail.com>",
+      "references": [
+        "<CAPPM_gSjFbqs_DXLU8=aLWWCQMJyGvZMXMTN5mHiQ8=ns4Mvsg@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Josh,\n\nI have a few details that I need corrected.  I signed up for the Bayesian\npre-conference course and I see that now has been cancelled and I have been\nmoved to another seminar.  I have no interest in attending any of the other\nsessions, so I would like my money refunded.  In fact, I would also like to\nchange my registration so that I am attending the Friday night conference\ndinner.  I don't see how I can do that either.  Please advise me on how I\ncan accomplish both of these.  Thanks,\n\nAdam Ginensky\n\nOn Mon, May 14, 2018 at 12:28 PM, Joshua Ulrich <josh.m.ulrich at gmail.com>\nwrote:\n\n> Hi All,\n>\n> A quick note that R/Finance registration is open, and early-bird\n> pricing ends a week from today, on 5/21.\n>\n> Announcement below:\n>\n> This year marks the 10th anniversary of the R/Finance Conference!  As\n> in prior years, we expect more than 250 attendees from around the\n> world. R users from industry, academia, and government will joining\n> 50+ presenters covering all areas of finance with R.  The conference\n> will take place on June 1st and 2nd, at UIC in Chicago.\n>\n> You can find registration information on the conference website:\n> http://www.rinfinance.com/#registration\n>\n> or you can go directly to the Cvent registration page:\n> http://go.uic.edu/rfinance\n>\n> Note that registration fees will increase by 50% at the end of early\n> registration on May 21, 2018.\n>\n> We are very excited about keynote presentations by JJ Allaire, Li\n> Deng, and Norm Matloff.  The conference agenda (currently) includes 18\n> full presentations and 33 shorter \"lightning talks\".  As in previous\n> years, several (optional) pre-conference seminars are offered on\n> Friday morning.  We're still working on the agenda, but we have\n> another great lineup of speakers this year!\n>\n> There is also an (optional) conference dinner at Wyndham Grand Chicago\n> Riverfront in the 39th Floor Penthouse Ballroom and Terrace.  Situated\n> directly on the riverfront, it is a perfect venue to continue\n> conversations while dining and drinking.\n>\n> We would to thank our 2018 Sponsors for the continued support enabling\n> us to host such an exciting conference:\n>\n>   UIC Liautaud Master of Science in Finance\n>   Microsoft\n>   R Consortium\n>   RStudio\n>   William Blair\n>   Citadel\n>   Quasardb\n>\n> On behalf of the committee and sponsors, we look forward to seeing you\n> in Chicago!\n>\n>   Gib Bassett, Peter Carl, Dirk Eddelbuettel, Brian Peterson, Dale\n> Rosenthal, Jeffrey Ryan, Joshua Ulrich\n>\n>\n>\n> --\n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com\n> R/Finance 2018 | www.rinfinance.com\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Josh,\n\nI have a few details that I need corrected.  I signed up for the Bayesian\npre-conference course and I see that now has been cancelled and I have been\nmoved to another seminar.  I have no int",
+      "thread_id": "thread-b04a60af1ddc",
+      "thread_depth": 1,
+      "month": "2018-05"
+    },
+    {
+      "id": "msg-60b0789dbaf2",
+      "message_id": "<1526661471.30655.244.camel@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "5156c75393f43c5e36e55c789f6a1b909f591eb46079141f41127c3bf8ed5547",
+      "date": "2018-05-18T11:37:51-05:00",
+      "subject": "[R-SIG-Finance] R/Finance 2018 Registration",
+      "subject_clean": "R/Finance 2018 Registration",
+      "in_reply_to": "<CAEEj48nCW8y+-4VpwvhjB+z=gT+axXMMvjprZ4qb-3P1o9PjhA@mail.gmail.com>",
+      "references": [
+        "<CAPPM_gSjFbqs_DXLU8=aLWWCQMJyGvZMXMTN5mHiQ8=ns4Mvsg@mail.gmail.com>",
+        "<CAEEj48nCW8y+-4VpwvhjB+z=gT+axXMMvjprZ4qb-3P1o9PjhA@mail.gmail.com>"
+      ],
+      "body_plain": "Adam,\n\nThis probably doesn't need to be on the R-SIG-Finance mailing list.\n\nJust to clear things up...  The Bayesian seminar has *not* been\ncanceled.  I still see it in the registration system.\n\nFor schedule change assistance, please contact the UIC events team at c\nbaevents at uic.edu . If they can't help you, you can contact the\ncommittee directly at committee at rinfinance.com.\n\nFor anyone else reading this email and wondering what it is about,\nplease consider joining us in Chicago in two weeks for R/Finance!\n\nRegister soon, prices go up on Monday:\n\nhttp://www.rinfinance.com/\n\nRegards,\n\nBrian\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock\n\nOn Fri, 2018-05-18 at 10:59 -0500, Adam Ginensky wrote:\n> Hi Josh,\n> \n> I have a few details that I need corrected.  I signed up for the\n> Bayesian\n> pre-conference course and I see that now has been cancelled and I\n> have been\n> moved to another seminar.  I have no interest in attending any of the\n> other\n> sessions, so I would like my money refunded.  In fact, I would also\n> like to\n> change my registration so that I am attending the Friday night\n> conference\n> dinner.  I don't see how I can do that either.  Please advise me on\n> how I\n> can accomplish both of these.  Thanks,\n> \n> Adam Ginensky\n> \n> On Mon, May 14, 2018 at 12:28 PM, Joshua Ulrich <josh.m.ulrich at gmail.\n> com>\n> wrote:\n> \n> > Hi All,\n> > \n> > A quick note that R/Finance registration is open, and early-bird\n> > pricing ends a week from today, on 5/21.\n> > \n> > Announcement below:\n> > \n> > This year marks the 10th anniversary of the R/Finance\n> > Conference!  As\n> > in prior years, we expect more than 250 attendees from around the\n> > world. R users from industry, academia, and government will joining\n> > 50+ presenters covering all areas of finance with R.  The\n> > conference\n> > will take place on June 1st and 2nd, at UIC in Chicago.\n> > \n> > You can find registration information on the conference website:\n> > http://www.rinfinance.com/#registration\n> > \n> > or you can go directly to the Cvent registration page:\n> > http://go.uic.edu/rfinance\n> > \n> > Note that registration fees will increase by 50% at the end of\n> > early\n> > registration on May 21, 2018.\n> > \n> > We are very excited about keynote presentations by JJ Allaire, Li\n> > Deng, and Norm Matloff.  The conference agenda (currently) includes\n> > 18\n> > full presentations and 33 shorter \"lightning talks\".  As in\n> > previous\n> > years, several (optional) pre-conference seminars are offered on\n> > Friday morning.  We're still working on the agenda, but we have\n> > another great lineup of speakers this year!\n> > \n> > There is also an (optional) conference dinner at Wyndham Grand\n> > Chicago\n> > Riverfront in the 39th Floor Penthouse Ballroom and\n> > Terrace.  Situated\n> > directly on the riverfront, it is a perfect venue to continue\n> > conversations while dining and drinking.\n> > \n> > We would to thank our 2018 Sponsors for the continued support\n> > enabling\n> > us to host such an exciting conference:\n> > \n> >   UIC Liautaud Master of Science in Finance\n> >   Microsoft\n> >   R Consortium\n> >   RStudio\n> >   William Blair\n> >   Citadel\n> >   Quasardb\n> > \n> > On behalf of the committee and sponsors, we look forward to seeing\n> > you\n> > in Chicago!\n> > \n> >   Gib Bassett, Peter Carl, Dirk Eddelbuettel, Brian Peterson, Dale\n> > Rosenthal, Jeffrey Ryan, Joshua Ulrich\n> > \n> > \n> > \n> > --\n> > Joshua Ulrich  |  about.me/joshuaulrich\n> > FOSS Trading  |  www.fosstrading.com\n> > R/Finance 2018 | www.rinfinance.com\n> > \n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R\n> > questions\n> > should go.\n> > \n> \n> \t[[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R\n> questions should go.",
+      "body_snippet": "Adam,\n\nThis probably doesn't need to be on the R-SIG-Finance mailing list.\n\nJust to clear things up...  The Bayesian seminar has *not* been\ncanceled.  I still see it in the registration system.\n\nFor s",
+      "thread_id": "thread-b04a60af1ddc",
+      "thread_depth": 2,
+      "month": "2018-05"
+    },
+    {
+      "id": "msg-23caa79c07f0",
+      "message_id": "<CAKg2dJv2Af1hrhNr4vH8unsdG0_rrt_FDaOAZ2fV8HV67R0+jg@mail.gmail.com>",
+      "from_name": "Sultan Islam",
+      "from_email_hash": "d0288b21068f0405fd923c83bc9df37b296a6299b38e906fb86b062eeb598c40",
+      "date": "2018-05-22T13:41:23+03:00",
+      "subject": "[R-SIG-Finance] DCC model simulation",
+      "subject_clean": "DCC model simulation",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\nI have used R rmgarch package to implement EGARCH ADCC model from which I\ncan extract conditional covariance matrix. Now I would like to introduce\npositive and/or negative shocks to see the asymmetric response of\ncovariance. I have come to know that impulse response function (IRF) or\nvolatility IRF is not compatible for any asymmetric models, therefore, the\nonly way to introduce shocks into the ADCC model can be through simulation\ngiven the parameters.\n\nFor the purpose of introducing shocks and simulating the model, I intend to\nuse dccsim function for simulating the model given the shocks in preZ\n(standardized residuals specified by the user) argument. I am not sure\nwhether this dccsim function actually does what I intend to do. Therefore,\nI would like to have your helpful suggestion regarding the use of dccsim\nfunction in this purpose.\n\nThe simulation code what I describe above is as follows:\n\n# first specify univariate egarch model\n\nuspec<-ugarchspec(variance.model=list(model=\"eGARCH\",garchOrder=c(1,1)),\ndistribution.model=\"norm\",mean.model=list(armaOrder=c(0,0),include.mean=F))\n\nmodel=multispec(replicate(2,uspec)) # replicate for two series\n\n  # specify ADCC model\n\n  mvspec=dccspec(model,dccOrder = c(1,1),model = \"aDCC\",distribution =\n\"mvnorm\")\n\n  # cluster\n\n  cl= makePSOCKcluster(2)\n\n  multf = multifit(model, Data, cluster = cl)\n\n  fitADCC=dccfit(mvspec,data = Data, fit = multf, cluster = cl)\n\n  ADCC<-print(fitADCC)\n\n  stopCluster(cl) # stop cluster\n\n  # store covariance matrix\n\n  COV<-matrix(rcov(fitADCC)[1,2,]) # COV contains 2345 obs\n\n# simulate the model\n\n# given positive shocks in preZ\n\nsim<-dccsim(ADCC, n.sim =2345,n.start =100 , m.sim = 1, startMethod =\n\"unconditional\",preZ = 0.7131)\n\n# extract covariance\n\n  sim_cov<-as.matrix(rcov(sim)[1,2,])\n\n# # to specify negative shocks I put a minus sign before 0.7131 in preZ\n\nsim1<-dccsim(ADCC, n.sim =2345,n.start =100 , m.sim = 1, startMethod =\n\"unconditional\",preZ = - 0.7131)\n\n# extract covariance\n\n  sim1_cov<-as.matrix(rcov(sim)[1,2,])\n\n\nPlease feel free to reply that this approach is correct to proceed. Thanks.\nBest regards,\nsultan\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\nI have used R rmgarch package to implement EGARCH ADCC model from which I\ncan extract conditional covariance matrix. Now I would like to introduce\npositive and/or negative shocks to see the asymme",
+      "thread_id": "thread-23caa79c07f0",
+      "thread_depth": 0,
+      "month": "2018-05"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-3a43df9db9bb",
+      "subject": "dcc simulation",
+      "message_count": 1,
+      "participants": [
+        "Sultan Islam"
+      ],
+      "started": "2018-05-01T14:42:08+03:00",
+      "last_reply": "2018-05-01T14:42:08+03:00",
+      "root_message_id": "msg-3a43df9db9bb"
+    },
+    {
+      "id": "thread-fe8e4d0b0e98",
+      "subject": "Speed up for loop",
+      "message_count": 3,
+      "participants": [
+        "Andreas Bregiannis",
+        "Eivind K. Dovik"
+      ],
+      "started": "2018-05-06T15:42:24+00:00",
+      "last_reply": "2018-05-06T18:16:31+02:00",
+      "root_message_id": "msg-fe8e4d0b0e98"
+    },
+    {
+      "id": "thread-b04a60af1ddc",
+      "subject": "R/Finance 2018 Registration",
+      "message_count": 3,
+      "participants": [
+        "Adam Ginensky",
+        "Brian G. Peterson",
+        "Joshua Ulrich"
+      ],
+      "started": "2018-05-14T12:28:24-05:00",
+      "last_reply": "2018-05-18T11:37:51-05:00",
+      "root_message_id": "msg-b04a60af1ddc"
+    },
+    {
+      "id": "thread-23caa79c07f0",
+      "subject": "DCC model simulation",
+      "message_count": 1,
+      "participants": [
+        "Sultan Islam"
+      ],
+      "started": "2018-05-22T13:41:23+03:00",
+      "last_reply": "2018-05-22T13:41:23+03:00",
+      "root_message_id": "msg-23caa79c07f0"
+    }
+  ]
+}

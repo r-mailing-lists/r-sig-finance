@@ -1,0 +1,382 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2017-10",
+  "messages": [
+    {
+      "id": "msg-498eabcf950a",
+      "message_id": "<AM5PR0202MB2515D3A05C039B51980AEAAEF6720@AM5PR0202MB2515.eurprd02.prod.outlook.com>",
+      "from_name": "khemakhem emna",
+      "from_email_hash": "6787eee8d6383405e820fa28518a281c781ae78a43203408f2f557435c8c9f4a",
+      "date": "2017-10-04T09:05:17Z",
+      "subject": "[R-SIG-Finance] ruragrch package using external regressors",
+      "subject_clean": "ruragrch package using external regressors",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I?m using the rugarch package to estimate an ARMA(1,0)-GJR-GARCH(1,1) model with dummy variable but i don't know how to do to add the dummy as an external regressor in the variance equation.\n\nI want to estimate the following model:\n\ny(t)=mu+c1y(t-1)+epsilon(t)\nsigma(t)?=omega+aplpha1*epsilon(t-1)?+gamma1*epsilon(t-1)?*I(t-1)+gamma2*epsilon(t-1)?*I(t-1)*dummy+theta*dummy+beta1*sigma(t-1)?\n\nI will be very grateful if you tells me how to add this part of equation epsilon(t-1)?*I(t-1)*dummy in the variance specification of the GJR-GARCH in rugarch package in R (my problem is how to compute residuals epsilon(t-1)).\n\ni think that in the case of y(t)=epsilon(t) i can use this program:\n\n\nlibrary(xlsx)\n\nkospi_call<-read.xlsx(\"/Users/emnakhemakhem/Desktop/Untitleddddd.xlsx ?,2) #variables: time, rendement, dummy\n\n\nresult=xts(kospi_call[,-1],order.by=kospi_call[,1], as.Date(rownames(kospi_call)))\n\n\nt=length(result[,-1])\n\ns = rep(0,t)\n\ntest<-result[,1]\n\n\nfor(i in 1:t){\n\n  if(test[i]<0){s[i]=1}\n\n}\n\n\n# eps.neg represents the leverage effect regressor\n\neps.neg <- xts(test*s)\n\ncolnames(eps.neg)<-\"eps.neg\"\n\n# lag eps.neg\n\neps.neg.lag = lag(eps.neg,1)\n\neps.neg.lag.carree=eps.neg.lag^2\n\n#interaction variable=dummy*epsilon(t-1)*I(t-1)\n\ndummy<-result[,2]\n\ninteraction<-dummy*eps.neg.lag.carree\n\n\ninputs2<-na.omit(cbind(test, interaction, join=\"left\"))\n\n\naug.s.spec <- ugarchspec(variance.model = list(model='sGARCH', garchOrder=c(1,1),\n\n                        external.regressors = inputs2[,2], variance.targeting = T),\n\n                        mean.model = list(armaOrder=c(0,0)),fixed.pars=list(mu = 0))\n\nsetbounds(aug.s.spec)<-list(\"vxreg1\"=c(-1, 1))\n\naug.s.fit <- ugarchfit(spec=aug.s.spec, data=inputs2[,1])\n\nSo my question is, if my program is correct, how to get eps.neg.lag  in the case of AR(1)-GJR-GARCH(1,1)?\n\nI will be very grateful if you help me to get the solution\n\nBest regards,\n\n\nEmna\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I?m using the rugarch package to estimate an ARMA(1,0)-GJR-GARCH(1,1) model with dummy variable but i don't know how to do to add the dummy as an external regressor in the variance equation.\n\nI want t",
+      "thread_id": "thread-498eabcf950a",
+      "thread_depth": 0,
+      "month": "2017-10"
+    },
+    {
+      "id": "msg-b49d90e8caaa",
+      "message_id": "<AM5PR0202MB2515DACB32696AB9317738F9F6730@AM5PR0202MB2515.eurprd02.prod.outlook.com>",
+      "from_name": "khemakhem emna",
+      "from_email_hash": "6787eee8d6383405e820fa28518a281c781ae78a43203408f2f557435c8c9f4a",
+      "date": "2017-10-04T09:37:02Z",
+      "subject": "[R-SIG-Finance] ruragrch package using external regressors",
+      "subject_clean": "ruragrch package using external regressors",
+      "in_reply_to": "<AM5PR0202MB2515D3A05C039B51980AEAAEF6720@AM5PR0202MB2515.eurprd02.prod.outlook.com>",
+      "references": [
+        "<AM5PR0202MB2515D3A05C039B51980AEAAEF6720@AM5PR0202MB2515.eurprd02.prod.outlook.com>"
+      ],
+      "body_plain": "I get this message but I am a member (\n\nR-SIG-Finance mailing list membership configuration for emna_khemakhem at hotmail.com, emna\n\nemna_khemakhem at hotmail.com, emna's subscription status, password, and options for the R-SIG-Finance mailing list.\n)\n\nso i don't know why i cannot post my question?\n\n\nbest regards,\n\nEmna Khemakhem\n\n\n\n\n________________________________\nDe : R-SIG-Finance <r-sig-finance-bounces at r-project.org> de la part de khemakhem emna <emna_khemakhem at hotmail.com>\nEnvoy? : mercredi 4 octobre 2017 11:05:17\n? : r-sig-finance at r-project.org\nObjet : [R-SIG-Finance] ruragrch package using external regressors\n\n\nI?m using the rugarch package to estimate an ARMA(1,0)-GJR-GARCH(1,1) model with dummy variable but i don't know how to do to add the dummy as an external regressor in the variance equation.\n\nI want to estimate the following model:\n\ny(t)=mu+c1y(t-1)+epsilon(t)\nsigma(t)?=omega+aplpha1*epsilon(t-1)?+gamma1*epsilon(t-1)?*I(t-1)+gamma2*epsilon(t-1)?*I(t-1)*dummy+theta*dummy+beta1*sigma(t-1)?\n\nI will be very grateful if you tells me how to add this part of equation epsilon(t-1)?*I(t-1)*dummy in the variance specification of the GJR-GARCH in rugarch package in R (my problem is how to compute residuals epsilon(t-1)).\n\ni think that in the case of y(t)=epsilon(t) i can use this program:\n\n\nlibrary(xlsx)\n\nkospi_call<-read.xlsx(\"/Users/emnakhemakhem/Desktop/Untitleddddd.xlsx ?,2) #variables: time, rendement, dummy\n\n\nresult=xts(kospi_call[,-1],order.by=kospi_call[,1], as.Date(rownames(kospi_call)))\n\n\nt=length(result[,-1])\n\ns = rep(0,t)\n\ntest<-result[,1]\n\n\nfor(i in 1:t){\n\n  if(test[i]<0){s[i]=1}\n\n}\n\n\n# eps.neg represents the leverage effect regressor\n\neps.neg <- xts(test*s)\n\ncolnames(eps.neg)<-\"eps.neg\"\n\n# lag eps.neg\n\neps.neg.lag = lag(eps.neg,1)\n\neps.neg.lag.carree=eps.neg.lag^2\n\n#interaction variable=dummy*epsilon(t-1)*I(t-1)\n\ndummy<-result[,2]\n\ninteraction<-dummy*eps.neg.lag.carree\n\n\ninputs2<-na.omit(cbind(test, interaction, join=\"left\"))\n\n\naug.s.spec <- ugarchspec(variance.model = list(model='sGARCH', garchOrder=c(1,1),\n\n                        external.regressors = inputs2[,2], variance.targeting = T),\n\n                        mean.model = list(armaOrder=c(0,0)),fixed.pars=list(mu = 0))\n\nsetbounds(aug.s.spec)<-list(\"vxreg1\"=c(-1, 1))\n\naug.s.fit <- ugarchfit(spec=aug.s.spec, data=inputs2[,1])\n\nSo my question is, if my program is correct, how to get eps.neg.lag  in the case of AR(1)-GJR-GARCH(1,1)?\n\nI will be very grateful if you help me to get the solution\n\nBest regards,\n\n\nEmna\n\n\n        [[alternative HTML version deleted]]\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I get this message but I am a member (\n\nR-SIG-Finance mailing list membership configuration for emna_khemakhem at hotmail.com, emna\n\nemna_khemakhem at hotmail.com, emna's subscription status, password",
+      "thread_id": "thread-498eabcf950a",
+      "thread_depth": 1,
+      "month": "2017-10"
+    },
+    {
+      "id": "msg-19fd64216849",
+      "message_id": "<714631349.861145.1508146544390@mail.yahoo.com>",
+      "from_name": "Pankaj K Agarwal",
+      "from_email_hash": "0cbb0f9165a5f6176569cf3596bb8d4666fe7d2828a40590fd539fc0758d58e0",
+      "date": "2017-10-16T09:35:44Z",
+      "subject": "[R-SIG-Finance] R packages/resources for Financial Risk Management",
+      "subject_clean": "R packages/resources for Financial Risk Management",
+      "in_reply_to": null,
+      "references": [
+        "<714631349.861145.1508146544390.ref@mail.yahoo.com>"
+      ],
+      "body_plain": "Dear allCan someone suggest some good resources/package on Financial Risk Management based on R? I would like to use them for a graduate class i teach. Thanks in advance.\nRegards,Pankaj K Agarwal\n+91-98397-11444http://in.linkedin.com/in/pankajkagarwal/\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear allCan someone suggest some good resources/package on Financial Risk Management based on R? I would like to use them for a graduate class i teach. Thanks in advance.\nRegards,Pankaj K Agarwal\n+91-",
+      "thread_id": "thread-19fd64216849",
+      "thread_depth": 0,
+      "month": "2017-10"
+    },
+    {
+      "id": "msg-edf6073e5987",
+      "message_id": "<20171016114916.Horde.qPWxfK3hqV6Xy0dAOgnSEl8@webmail.your-server.de>",
+      "from_name": "Enrico Schumann",
+      "from_email_hash": "6e2b07dfece9903edd38ae5f89516e6019180d40f61f8bc93b0510f5f6c6ba17",
+      "date": "2017-10-16T11:49:16+02:00",
+      "subject": "[R-SIG-Finance] R packages/resources for Financial Risk Management",
+      "subject_clean": "R packages/resources for Financial Risk Management",
+      "in_reply_to": "<714631349.861145.1508146544390@mail.yahoo.com>",
+      "references": [
+        "<714631349.861145.1508146544390.ref@mail.yahoo.com>",
+        "<714631349.861145.1508146544390@mail.yahoo.com>"
+      ],
+      "body_plain": "Quoting Pankaj K Agarwal via R-SIG-Finance <r-sig-finance at r-project.org>:\n\n> Dear all Can someone suggest some good resources/package on  \n> Financial Risk Management based on R? I would like to use them for a  \n> graduate class i teach. Thanks in advance.\n\n> Regards,Pankaj K Agarwal\n> +91-98397-11444http://in.linkedin.com/in/pankajkagarwal/\n\nAs a starting point, you could look at the packages listed here:\n\n     https://cran.r-project.org/web/views/Finance.html\n\n\n-- \nEnrico Schumann\nLucerne, Switzerland\nhttp://enricoschumann.net",
+      "body_snippet": "Quoting Pankaj K Agarwal via R-SIG-Finance <r-sig-finance at r-project.org>:\n\n> Dear all Can someone suggest some good resources/package on  \n> Financial Risk Management based on R? I would like to us",
+      "thread_id": "thread-19fd64216849",
+      "thread_depth": 1,
+      "month": "2017-10"
+    },
+    {
+      "id": "msg-3a44d25955e7",
+      "message_id": "<1284786752.880441.1508147969441@mail.yahoo.com>",
+      "from_name": "Pankaj K Agarwal",
+      "from_email_hash": "0cbb0f9165a5f6176569cf3596bb8d4666fe7d2828a40590fd539fc0758d58e0",
+      "date": "2017-10-16T09:59:29Z",
+      "subject": "[R-SIG-Finance] R packages/resources for Financial Risk Management",
+      "subject_clean": "R packages/resources for Financial Risk Management",
+      "in_reply_to": "<20171016114916.Horde.qPWxfK3hqV6Xy0dAOgnSEl8@webmail.your-server.de>",
+      "references": [
+        "<714631349.861145.1508146544390.ref@mail.yahoo.com>",
+        "<714631349.861145.1508146544390@mail.yahoo.com>",
+        "<20171016114916.Horde.qPWxfK3hqV6Xy0dAOgnSEl8@webmail.your-server.de>"
+      ],
+      "body_plain": "Dear EnricoI did. The listings are very specialized and do not seem to be suitable for wide coverage of tools. Thanks anyway.\nRegards,Pankaj K Agarwal\n+91-98397-11444http://in.linkedin.com/in/pankajkagarwal/ \n\n    On Monday 16 October 2017, 3:19:21 PM IST, Enrico Schumann <es at enricoschumann.net> wrote:  \n \n Quoting Pankaj K Agarwal via R-SIG-Finance <r-sig-finance at r-project.org>:\n\n> Dear all Can someone suggest some good resources/package on? \n> Financial Risk Management based on R? I would like to use them for a? \n> graduate class i teach. Thanks in advance.\n\n> Regards,Pankaj K Agarwal\n> +91-98397-11444http://in.linkedin.com/in/pankajkagarwal/\n\nAs a starting point, you could look at the packages listed here:\n\n? ? https://cran.r-project.org/web/views/Finance.html\n\n\n-- \nEnrico Schumann\nLucerne, Switzerland\nhttp://enricoschumann.net\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear EnricoI did. The listings are very specialized and do not seem to be suitable for wide coverage of tools. Thanks anyway.\nRegards,Pankaj K Agarwal\n+91-98397-11444http://in.linkedin.com/in/pankajka",
+      "thread_id": "thread-19fd64216849",
+      "thread_depth": 2,
+      "month": "2017-10"
+    },
+    {
+      "id": "msg-475840a534d3",
+      "message_id": "<66780b8b-00b7-0f9b-747f-dd4701e3ecb1@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2017-10-16T05:43:50-05:00",
+      "subject": "[R-SIG-Finance] R packages/resources for Financial Risk Management",
+      "subject_clean": "R packages/resources for Financial Risk Management",
+      "in_reply_to": "<714631349.861145.1508146544390@mail.yahoo.com>",
+      "references": [
+        "<714631349.861145.1508146544390.ref@mail.yahoo.com>",
+        "<714631349.861145.1508146544390@mail.yahoo.com>"
+      ],
+      "body_plain": "On 10/16/2017 04:35 AM, Pankaj K Agarwal via R-SIG-Finance wrote:\n> Dear allCan someone suggest some good resources/package on Financial Risk Management based on R? I would like to use them for a graduate class i teach. Thanks in advance.\n> Regards,Pankaj K Agarwal\n> +91-98397-11444http://in.linkedin.com/in/pankajkagarwal/\n\nFor a book length survey treatment of packages for these topics, see \nBernhard Pfaff's excellent 'Financial Risk Modeling and Portfolio \nOptimization with R, 2nd Edition'.\n\nEnrico's suggestion of the task view certainly includes 'very \nspecialized' resources, but also includes a number of more fundamental \nresources, such as PerformanceAnalytics and rugarch.\n\nRegards,\n\nBrian\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
+      "body_snippet": "On 10/16/2017 04:35 AM, Pankaj K Agarwal via R-SIG-Finance wrote:\n> Dear allCan someone suggest some good resources/package on Financial Risk Management based on R? I would like to use them for a grad",
+      "thread_id": "thread-19fd64216849",
+      "thread_depth": 1,
+      "month": "2017-10"
+    },
+    {
+      "id": "msg-0508a36cb30b",
+      "message_id": "<1508155473.9559.165.camel@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2017-10-16T07:04:33-05:00",
+      "subject": "[R-SIG-Finance] R packages/resources for Financial Risk Management",
+      "subject_clean": "R packages/resources for Financial Risk Management",
+      "in_reply_to": "<66780b8b-00b7-0f9b-747f-dd4701e3ecb1@braverock.com>",
+      "references": [
+        "<714631349.861145.1508146544390.ref@mail.yahoo.com>",
+        "<714631349.861145.1508146544390@mail.yahoo.com>",
+        "<66780b8b-00b7-0f9b-747f-dd4701e3ecb1@braverock.com>"
+      ],
+      "body_plain": "On Mon, 2017-10-16 at 05:43 -0500, Brian G. Peterson wrote:\n> On 10/16/2017 04:35 AM, Pankaj K Agarwal via R-SIG-Finance wrote:\n> > Dear allCan someone suggest some good resources/package on\n> > Financial Risk Management based on R? I would like to use them for\n> > a graduate class i teach. Thanks in advance.\n> > Regards,Pankaj K Agarwal\n> > +91-98397-11444http://in.linkedin.com/in/pankajkagarwal/\n> \n> For a book length survey treatment of packages for these topics, see?\n> Bernhard Pfaff's excellent 'Financial Risk Modeling and Portfolio?\n> Optimization with R, 2nd Edition'.\n> \n> Enrico's suggestion of the task view certainly includes 'very?\n> specialized' resources, but also includes a number of more\n> fundamental?resources, such as PerformanceAnalytics and rugarch.\n> \n\nI should also have mentioned McNeil, Frey, and Embrechts \"Quantitative\nRisk Management\" and the accompanying R package QRM.\n\nIf you are a bit more specific about what topics you plan to cover, I\nam certain that the list could suggest more resources.\n\nRegards,\n\nBrian",
+      "body_snippet": "On Mon, 2017-10-16 at 05:43 -0500, Brian G. Peterson wrote:\n> On 10/16/2017 04:35 AM, Pankaj K Agarwal via R-SIG-Finance wrote:\n> > Dear allCan someone suggest some good resources/package on\n> > Finan",
+      "thread_id": "thread-19fd64216849",
+      "thread_depth": 2,
+      "month": "2017-10"
+    },
+    {
+      "id": "msg-4cd8bbe3e17b",
+      "message_id": "<BLUPR0101MB1506FDBB290E703F7A104E458D4F0@BLUPR0101MB1506.prod.exchangelabs.com>",
+      "from_name": "Terry Leitch",
+      "from_email_hash": "9d049c392ca879d193d5887803e5e7b70cc2fa2b16853ed81589f43e66e92b07",
+      "date": "2017-10-16T14:28:38Z",
+      "subject": "[R-SIG-Finance] R packages/resources for Financial Risk Management",
+      "subject_clean": "R packages/resources for Financial Risk Management",
+      "in_reply_to": "<1508155473.9559.165.camel@braverock.com>",
+      "references": [
+        "<714631349.861145.1508146544390.ref@mail.yahoo.com>",
+        "<714631349.861145.1508146544390@mail.yahoo.com>",
+        "<66780b8b-00b7-0f9b-747f-dd4701e3ecb1@braverock.com>",
+        "<1508155473.9559.165.camel@braverock.com>"
+      ],
+      "body_plain": "Rupert's \"Statistics and Data Analysis for Financial Engineering\"  is R based. I use rugarch package in my courses. - Terry Leitch\n\n________________________________\nFrom: R-SIG-Finance <r-sig-finance-bounces at r-project.org> on behalf of Brian G. Peterson <brian at braverock.com>\nSent: Monday, October 16, 2017 8:04:33 AM\nTo: r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] R packages/resources for Financial Risk Management\n\nOn Mon, 2017-10-16 at 05:43 -0500, Brian G. Peterson wrote:\n> On 10/16/2017 04:35 AM, Pankaj K Agarwal via R-SIG-Finance wrote:\n> > Dear allCan someone suggest some good resources/package on\n> > Financial Risk Management based on R? I would like to use them for\n> > a graduate class i teach. Thanks in advance.\n> > Regards,Pankaj K Agarwal\n> > +91-98397-11444http://in.linkedin.com/in/pankajkagarwal/\n>\n> For a book length survey treatment of packages for these topics, see\n> Bernhard Pfaff's excellent 'Financial Risk Modeling and Portfolio\n> Optimization with R, 2nd Edition'.\n>\n> Enrico's suggestion of the task view certainly includes 'very\n> specialized' resources, but also includes a number of more\n> fundamental resources, such as PerformanceAnalytics and rugarch.\n>\n\nI should also have mentioned McNeil, Frey, and Embrechts \"Quantitative\nRisk Management\" and the accompanying R package QRM.\n\nIf you are a bit more specific about what topics you plan to cover, I\nam certain that the list could suggest more resources.\n\nRegards,\n\nBrian\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Rupert's \"Statistics and Data Analysis for Financial Engineering\"  is R based. I use rugarch package in my courses. - Terry Leitch\n\n________________________________\nFrom: R-SIG-Finance <r-sig-finance-",
+      "thread_id": "thread-19fd64216849",
+      "thread_depth": 3,
+      "month": "2017-10"
+    },
+    {
+      "id": "msg-6fce5f892284",
+      "message_id": "<84153428.172784.1508210821008@mail.yahoo.com>",
+      "from_name": "Pankaj K Agarwal",
+      "from_email_hash": "0cbb0f9165a5f6176569cf3596bb8d4666fe7d2828a40590fd539fc0758d58e0",
+      "date": "2017-10-17T03:27:00Z",
+      "subject": "[R-SIG-Finance] R packages/resources for Financial Risk Management",
+      "subject_clean": "R packages/resources for Financial Risk Management",
+      "in_reply_to": "<BLUPR0101MB1506FDBB290E703F7A104E458D4F0@BLUPR0101MB1506.prod.exchangelabs.com>",
+      "references": [
+        "<714631349.861145.1508146544390.ref@mail.yahoo.com>",
+        "<714631349.861145.1508146544390@mail.yahoo.com>",
+        "<66780b8b-00b7-0f9b-747f-dd4701e3ecb1@braverock.com>",
+        "<1508155473.9559.165.camel@braverock.com>",
+        "<BLUPR0101MB1506FDBB290E703F7A104E458D4F0@BLUPR0101MB1506.prod.exchangelabs.com>"
+      ],
+      "body_plain": "Thanks a lot Brian and Terry for your time.\nRegards,Pankaj K Agarwal\n+91-98397-11444http://in.linkedin.com/in/pankajkagarwal/ \n\n    On Monday 16 October 2017, 7:59:16 PM IST, Terry Leitch <tleitch1 at jhu.edu> wrote:  \n \n Rupert's \"Statistics and Data Analysis for Financial Engineering\"? is R based. I use rugarch package in my courses. - Terry Leitch\n\n________________________________\nFrom: R-SIG-Finance <r-sig-finance-bounces at r-project.org> on behalf of Brian G. Peterson <brian at braverock.com>\nSent: Monday, October 16, 2017 8:04:33 AM\nTo: r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] R packages/resources for Financial Risk Management\n\nOn Mon, 2017-10-16 at 05:43 -0500, Brian G. Peterson wrote:\n> On 10/16/2017 04:35 AM, Pankaj K Agarwal via R-SIG-Finance wrote:\n> > Dear allCan someone suggest some good resources/package on\n> > Financial Risk Management based on R? I would like to use them for\n> > a graduate class i teach. Thanks in advance.\n> > Regards,Pankaj K Agarwal\n> > +91-98397-11444http://in.linkedin.com/in/pankajkagarwal/\n>\n> For a book length survey treatment of packages for these topics, see\n> Bernhard Pfaff's excellent 'Financial Risk Modeling and Portfolio\n> Optimization with R, 2nd Edition'.\n>\n> Enrico's suggestion of the task view certainly includes 'very\n> specialized' resources, but also includes a number of more\n> fundamental resources, such as PerformanceAnalytics and rugarch.\n>\n\nI should also have mentioned McNeil, Frey, and Embrechts \"Quantitative\nRisk Management\" and the accompanying R package QRM.\n\nIf you are a bit more specific about what topics you plan to cover, I\nam certain that the list could suggest more resources.\n\nRegards,\n\nBrian\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n??? [[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thanks a lot Brian and Terry for your time.\nRegards,Pankaj K Agarwal\n+91-98397-11444http://in.linkedin.com/in/pankajkagarwal/ \n\n    On Monday 16 October 2017, 7:59:16 PM IST, Terry Leitch <tleitch1 at",
+      "thread_id": "thread-19fd64216849",
+      "thread_depth": 4,
+      "month": "2017-10"
+    },
+    {
+      "id": "msg-f719c71b630d",
+      "message_id": "<296291788.2415648.1508752641387@mail.yahoo.com>",
+      "from_name": "Pankaj K Agarwal",
+      "from_email_hash": "0cbb0f9165a5f6176569cf3596bb8d4666fe7d2828a40590fd539fc0758d58e0",
+      "date": "2017-10-23T09:57:21Z",
+      "subject": "[R-SIG-Finance] R packages/resources for Financial Risk Management",
+      "subject_clean": "R packages/resources for Financial Risk Management",
+      "in_reply_to": "<CABHS13eQ3=nXBDwDw5YWzvAFSRUV6aQUrianEsy97i97ek+aUg@mail.gmail.com>",
+      "references": [
+        "<714631349.861145.1508146544390.ref@mail.yahoo.com>",
+        "<714631349.861145.1508146544390@mail.yahoo.com>",
+        "<66780b8b-00b7-0f9b-747f-dd4701e3ecb1@braverock.com>",
+        "<1508155473.9559.165.camel@braverock.com>",
+        "<BLUPR0101MB1506FDBB290E703F7A104E458D4F0@BLUPR0101MB1506.prod.exchangelabs.com>",
+        "<84153428.172784.1508210821008@mail.yahoo.com>",
+        "<CABHS13eQ3=nXBDwDw5YWzvAFSRUV6aQUrianEsy97i97ek+aUg@mail.gmail.com>"
+      ],
+      "body_plain": "Dear RamosriskR?is great. Thanks again buddy.\nRegards,Pankaj K Agarwal\n+91-98397-11444http://in.linkedin.com/in/pankajkagarwal/ \n\n    On Tuesday 17 October 2017, 4:23:51 PM IST, Henrique Ramos <hpramos4 at gmail.com> wrote:  \n \n Dear Agarwal,\nYou can find some historical-simulation-based calculations of risk measures on the riskR package (with the capital \"R\" at the end).\nRegards,\n \n|  | Livre de v?rus. www.avast.com.  |\n\n\n2017-10-17 1:27 GMT-02:00 Pankaj K Agarwal via R-SIG-Finance <r-sig-finance at r-project.org>:\n\nThanks a lot Brian and Terry for your time.\nRegards,Pankaj K Agarwal\n+91-98397-11444http://in.linkedin.com/in/ pankajkagarwal/\n\n? ? On Monday 16 October 2017, 7:59:16 PM IST, Terry Leitch <tleitch1 at jhu.edu> wrote:\n\n?Rupert's \"Statistics and Data Analysis for Financial Engineering\"? is R based. I use rugarch package in my courses. - Terry Leitch\n\n______________________________ __\nFrom: R-SIG-Finance <r-sig-finance-bounces at r- project.org> on behalf of Brian G. Peterson <brian at braverock.com>\nSent: Monday, October 16, 2017 8:04:33 AM\nTo: r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] R packages/resources for Financial Risk Management\n\nOn Mon, 2017-10-16 at 05:43 -0500, Brian G. Peterson wrote:\n> On 10/16/2017 04:35 AM, Pankaj K Agarwal via R-SIG-Finance wrote:\n> > Dear allCan someone suggest some good resources/package on\n> > Financial Risk Management based on R? I would like to use them for\n> > a graduate class i teach. Thanks in advance.\n> > Regards,Pankaj K Agarwal\n> > +91-98397-11444http://in.linkedin.com/in/ pankajkagarwal/\n>\n> For a book length survey treatment of packages for these topics, see\n> Bernhard Pfaff's excellent 'Financial Risk Modeling and Portfolio\n> Optimization with R, 2nd Edition'.\n>\n> Enrico's suggestion of the task view certainly includes 'very\n> specialized' resources, but also includes a number of more\n> fundamental resources, such as PerformanceAnalytics and rugarch.\n>\n\nI should also have mentioned McNeil, Frey, and Embrechts \"Quantitative\nRisk Management\" and the accompanying R package QRM.\n\nIf you are a bit more specific about what topics you plan to cover, I\nam certain that the list could suggest more resources.\n\nRegards,\n\nBrian\n\n______________________________ _________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/ listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n??? [[alternative HTML version deleted]]\n\n______________________________ _________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/ listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n? ? ? ? [[alternative HTML version deleted]]\n\n______________________________ _________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/ listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \n--\nHenrique P. Ramos\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear RamosriskR?is great. Thanks again buddy.\nRegards,Pankaj K Agarwal\n+91-98397-11444http://in.linkedin.com/in/pankajkagarwal/ \n\n    On Tuesday 17 October 2017, 4:23:51 PM IST, Henrique Ramos <hpramo",
+      "thread_id": "thread-f719c71b630d",
+      "thread_depth": 0,
+      "month": "2017-10"
+    },
+    {
+      "id": "msg-22bec504fd2e",
+      "message_id": "<HE1PR10MB007458684498A0DEC73A0969AD440@HE1PR10MB0074.EURPRD10.PROD.OUTLOOK.COM>",
+      "from_name": "Nelson Wong",
+      "from_email_hash": "b497150e5740006bb5c62ef90dffd37f322a677f573b99c3266503e92adb90b7",
+      "date": "2017-10-25T01:01:15Z",
+      "subject": "[R-SIG-Finance] Books on R & Finance",
+      "subject_clean": "Books on R & Finance",
+      "in_reply_to": "<mailman.3.1508839202.4415.r-sig-finance@r-project.org>",
+      "references": [
+        "<mailman.3.1508839202.4415.r-sig-finance@r-project.org>"
+      ],
+      "body_plain": "Hi,\n\n\nJust sharing a list of books which I have on R & Business/Finance, with worked example in R & respective packages, with regard to the recent discussion on R packages in finance. Later editions may be available.\n\n\n  1.  Financial Analytics with R. Building a Laptop Laboratory for Data Science. Cambridge University Press. 2016.\n  2.  Statistics and Data Analysis for Financial Engineering. Springer. 2011.\n  3.  Financial Risk Modelling and Portfolio Optimization with R. Second Edition. Wiley. 2016.\n  4.  Business Analytics Using R - A Practical Approach. Apress. 2017.\n  5.  Introduction to R for Quantitative Finance. Packt. 2013.\n  6.  Mastering R for Quantitative Finance. Packt. 2015.\n\nSincerely,\n\nNelson Wong\nMalaysia\n\n\n________________________________\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\n\nJust sharing a list of books which I have on R & Business/Finance, with worked example in R & respective packages, with regard to the recent discussion on R packages in finance. Later editions m",
+      "thread_id": "thread-22bec504fd2e",
+      "thread_depth": 0,
+      "month": "2017-10"
+    },
+    {
+      "id": "msg-eaf39db001a0",
+      "message_id": "<CABHS13fix6H2bD8ev7ZAG5gSi3yFP9Aptrwwefy2a82zL7YNmw@mail.gmail.com>",
+      "from_name": "Henrique Ramos",
+      "from_email_hash": "f328ce6462ad2b4faeb6dfcf10bcc5f758145738dabcd70e4934fd5505af234d",
+      "date": "2017-10-25T08:54:16-02:00",
+      "subject": "[R-SIG-Finance] Books on R & Finance",
+      "subject_clean": "Books on R & Finance",
+      "in_reply_to": "<HE1PR10MB007458684498A0DEC73A0969AD440@HE1PR10MB0074.EURPRD10.PROD.OUTLOOK.COM>",
+      "references": [
+        "<mailman.3.1508839202.4415.r-sig-finance@r-project.org>",
+        "<HE1PR10MB007458684498A0DEC73A0969AD440@HE1PR10MB0074.EURPRD10.PROD.OUTLOOK.COM>"
+      ],
+      "body_plain": "Thanks for that list, Wong.\n\nAnother one:  Processing and Analyzing Financial Data with R. Free book\navailable in the following links:\n\n*https://sites.google.com/view/pafdR/home\n<https://sites.google.com/view/pafdR/home>*\n*https://msperlin.github.io/pafdR/ <https://msperlin.github.io/pafdR/>*\n\n\n2017-10-24 23:01 GMT-02:00 Nelson Wong <nelsonyswong at live.com>:\n\n> Hi,\n>\n>\n> Just sharing a list of books which I have on R & Business/Finance, with\n> worked example in R & respective packages, with regard to the recent\n> discussion on R packages in finance. Later editions may be available.\n>\n>\n>   1.  Financial Analytics with R. Building a Laptop Laboratory for Data\n> Science. Cambridge University Press. 2016.\n>   2.  Statistics and Data Analysis for Financial Engineering. Springer.\n> 2011.\n>   3.  Financial Risk Modelling and Portfolio Optimization with R. Second\n> Edition. Wiley. 2016.\n>   4.  Business Analytics Using R - A Practical Approach. Apress. 2017.\n>   5.  Introduction to R for Quantitative Finance. Packt. 2013.\n>   6.  Mastering R for Quantitative Finance. Packt. 2015.\n>\n> Sincerely,\n>\n> Nelson Wong\n> Malaysia\n>\n>\n> ________________________________\n>\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\n\n-- \n--\nHenrique P. Ramos\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thanks for that list, Wong.\n\nAnother one:  Processing and Analyzing Financial Data with R. Free book\navailable in the following links:\n\n*https://sites.google.com/view/pafdR/home\n<https://sites.google.",
+      "thread_id": "thread-22bec504fd2e",
+      "thread_depth": 1,
+      "month": "2017-10"
+    },
+    {
+      "id": "msg-33d45c3b0bca",
+      "message_id": "<DB5PR10MB0070D766A0C6FFBD32B8B2AFAD440@DB5PR10MB0070.EURPRD10.PROD.OUTLOOK.COM>",
+      "from_name": "Nelson Wong",
+      "from_email_hash": "b497150e5740006bb5c62ef90dffd37f322a677f573b99c3266503e92adb90b7",
+      "date": "2017-10-25T15:53:40Z",
+      "subject": "[R-SIG-Finance] Books on R & Finance",
+      "subject_clean": "Books on R & Finance",
+      "in_reply_to": "<CABHS13fix6H2bD8ev7ZAG5gSi3yFP9Aptrwwefy2a82zL7YNmw@mail.gmail.com>",
+      "references": [
+        "<mailman.3.1508839202.4415.r-sig-finance@r-project.org>",
+        "<HE1PR10MB007458684498A0DEC73A0969AD440@HE1PR10MB0074.EURPRD10.PROD.OUTLOOK.COM>",
+        "<CABHS13fix6H2bD8ev7ZAG5gSi3yFP9Aptrwwefy2a82zL7YNmw@mail.gmail.com>"
+      ],
+      "body_plain": "You're most welcome Ramos. Here're 2 books of mine which I left out earlier in the previous post:\n\n\n  1.  An Introduction to Analysis of Financial Data with R. Wiley. 2013.\n  2.  Automated Trading with R. Quantitative Research and Platform Development. Apress. 2016.\n\nCheers.\n\nNelson Wong\nMalaysia\n\n\n________________________________\nFrom: Henrique Ramos <hpramos4 at gmail.com>\nSent: 25 October 2017 10:54\nTo: Nelson Wong\nCc: r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] Books on R & Finance\n\nThanks for that list, Wong.\n\nAnother one:  Processing and Analyzing Financial Data with R. Free book available in the following links:\n\nhttps://sites.google.com/view/pafdR/home\npafdR - Google Sites<https://sites.google.com/view/pafdR/home>\nsites.google.com\nWelcome to the book site for Processing and Analyzing Financial Data with R, by Marcelo S. Perlin. Here you can find the following information:\n\n\n\nhttps://msperlin.github.io/pafdR/\n[https://msperlin.github.io/pafdR/figs/CAPADigital_FinancialDataR.jpg]<https://msperlin.github.io/pafdR/>\n\nProcessing and Analyzing Financial Data with R<https://msperlin.github.io/pafdR/>\nmsperlin.github.io\nWelcome! Welcome to the book site of Processing and Analyzing Financial Data with R. Here you can find the full online content of the book. The book is also available ...\n\n\n\n\n\n2017-10-24 23:01 GMT-02:00 Nelson Wong <nelsonyswong at live.com<mailto:nelsonyswong at live.com>>:\nHi,\n\n\nJust sharing a list of books which I have on R & Business/Finance, with worked example in R & respective packages, with regard to the recent discussion on R packages in finance. Later editions may be available.\n\n\n  1.  Financial Analytics with R. Building a Laptop Laboratory for Data Science. Cambridge University Press. 2016.\n  2.  Statistics and Data Analysis for Financial Engineering. Springer. 2011.\n  3.  Financial Risk Modelling and Portfolio Optimization with R. Second Edition. Wiley. 2016.\n  4.  Business Analytics Using R - A Practical Approach. Apress. 2017.\n  5.  Introduction to R for Quantitative Finance. Packt. 2013.\n  6.  Mastering R for Quantitative Finance. Packt. 2015.\n\nSincerely,\n\nNelson Wong\nMalaysia\n\n\n________________________________\n\n\n        [[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at r-project.org<mailto:R-SIG-Finance at r-project.org> mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\n\n--\n--\nHenrique P. Ramos\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "You're most welcome Ramos. Here're 2 books of mine which I left out earlier in the previous post:\n\n\n  1.  An Introduction to Analysis of Financial Data with R. Wiley. 2013.\n  2.  Automated Trading wit",
+      "thread_id": "thread-22bec504fd2e",
+      "thread_depth": 2,
+      "month": "2017-10"
+    },
+    {
+      "id": "msg-bc2d2bf05d3b",
+      "message_id": "<CA+oJuEFosJZsXa9yk_h3i41cLLrMJdOgXWEwNMYvRS4Bg-xuRg@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "82540aa84df90b083b58f5752a77274af680540119bfecc0c0436c59ddd13e5c",
+      "date": "2017-10-25T11:56:55-04:00",
+      "subject": "[R-SIG-Finance] Books on R & Finance",
+      "subject_clean": "Books on R & Finance",
+      "in_reply_to": "<DB5PR10MB0070D766A0C6FFBD32B8B2AFAD440@DB5PR10MB0070.EURPRD10.PROD.OUTLOOK.COM>",
+      "references": [
+        "<mailman.3.1508839202.4415.r-sig-finance@r-project.org>",
+        "<HE1PR10MB007458684498A0DEC73A0969AD440@HE1PR10MB0074.EURPRD10.PROD.OUTLOOK.COM>",
+        "<CABHS13fix6H2bD8ev7ZAG5gSi3yFP9Aptrwwefy2a82zL7YNmw@mail.gmail.com>",
+        "<DB5PR10MB0070D766A0C6FFBD32B8B2AFAD440@DB5PR10MB0070.EURPRD10.PROD.OUTLOOK.COM>"
+      ],
+      "body_plain": "Chris Conlan's book uses Yahoo getSymbols, so he'll have to update that.\n\nI'm not sure if anyone has yet listed the book Harry Georgakopoulos and I\nworked on--Quantitative trading with R.\n\n(I wrote chapter 7, as an FYI)\n\nOn Wed, Oct 25, 2017 at 11:53 AM, Nelson Wong <nelsonyswong at live.com> wrote:\n\n> You're most welcome Ramos. Here're 2 books of mine which I left out\n> earlier in the previous post:\n>\n>\n>   1.  An Introduction to Analysis of Financial Data with R. Wiley. 2013.\n>   2.  Automated Trading with R. Quantitative Research and Platform\n> Development. Apress. 2016.\n>\n> Cheers.\n>\n> Nelson Wong\n> Malaysia\n>\n>\n> ________________________________\n> From: Henrique Ramos <hpramos4 at gmail.com>\n> Sent: 25 October 2017 10:54\n> To: Nelson Wong\n> Cc: r-sig-finance at r-project.org\n> Subject: Re: [R-SIG-Finance] Books on R & Finance\n>\n> Thanks for that list, Wong.\n>\n> Another one:  Processing and Analyzing Financial Data with R. Free book\n> available in the following links:\n>\n> https://sites.google.com/view/pafdR/home\n> pafdR - Google Sites<https://sites.google.com/view/pafdR/home>\n> sites.google.com\n> Welcome to the book site for Processing and Analyzing Financial Data with\n> R, by Marcelo S. Perlin. Here you can find the following information:\n>\n>\n>\n> https://msperlin.github.io/pafdR/\n> [https://msperlin.github.io/pafdR/figs/CAPADigital_FinancialDataR.jpg]<\n> https://msperlin.github.io/pafdR/>\n>\n> Processing and Analyzing Financial Data with R<https://msperlin.github.io/\n> pafdR/>\n> msperlin.github.io\n> Welcome! Welcome to the book site of Processing and Analyzing Financial\n> Data with R. Here you can find the full online content of the book. The\n> book is also available ...\n>\n>\n>\n>\n>\n> 2017-10-24 23:01 GMT-02:00 Nelson Wong <nelsonyswong at live.com<mailto:\n> nelsonyswong at live.com>>:\n> Hi,\n>\n>\n> Just sharing a list of books which I have on R & Business/Finance, with\n> worked example in R & respective packages, with regard to the recent\n> discussion on R packages in finance. Later editions may be available.\n>\n>\n>   1.  Financial Analytics with R. Building a Laptop Laboratory for Data\n> Science. Cambridge University Press. 2016.\n>   2.  Statistics and Data Analysis for Financial Engineering. Springer.\n> 2011.\n>   3.  Financial Risk Modelling and Portfolio Optimization with R. Second\n> Edition. Wiley. 2016.\n>   4.  Business Analytics Using R - A Practical Approach. Apress. 2017.\n>   5.  Introduction to R for Quantitative Finance. Packt. 2013.\n>   6.  Mastering R for Quantitative Finance. Packt. 2015.\n>\n> Sincerely,\n>\n> Nelson Wong\n> Malaysia\n>\n>\n> ________________________________\n>\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org<mailto:R-SIG-Finance at r-project.org> mailing\n> list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n>\n>\n> --\n> --\n> Henrique P. Ramos\n>\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Chris Conlan's book uses Yahoo getSymbols, so he'll have to update that.\n\nI'm not sure if anyone has yet listed the book Harry Georgakopoulos and I\nworked on--Quantitative trading with R.\n\n(I wrote ch",
+      "thread_id": "thread-22bec504fd2e",
+      "thread_depth": 3,
+      "month": "2017-10"
+    },
+    {
+      "id": "msg-2f3724101139",
+      "message_id": "<DB5PR10MB0070A56042BBAE86A9F7A9AEAD450@DB5PR10MB0070.EURPRD10.PROD.OUTLOOK.COM>",
+      "from_name": "Nelson Wong",
+      "from_email_hash": "b497150e5740006bb5c62ef90dffd37f322a677f573b99c3266503e92adb90b7",
+      "date": "2017-10-26T14:35:56Z",
+      "subject": "[R-SIG-Finance] Thanks for posting this. If you've read these books, it would be helpful if you posted a 1- or 2-line 'review' or summary of each.",
+      "subject_clean": "Thanks for posting this. If you've read these books, it would be helpful if you posted a 1- or 2-line 'review' or summary of each.",
+      "in_reply_to": "<CAJHYTCF4wYxu4+fn5EOtZxH-wCdd2eQz2_PWdjzfB_T8CsWCVA@mail.gmail.com>",
+      "references": [
+        "<CAJHYTCF4wYxu4+fn5EOtZxH-wCdd2eQz2_PWdjzfB_T8CsWCVA@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Steve,\n\n\nGood idea. Just give me a few days.\n\n\nSincerely,\n\n\nNelson Wong\n\n\n________________________________\nFrom: Steve Wisdom <swisdom at gmail.com>\nSent: 25 October 2017 16:28\nTo: nelsonyswong at live.com\nSubject: Thanks for posting this. If you've read these books, it would be helpful if you posted a 1- or 2-line 'review' or summary of each.\n\nMessage: 1\nDate: Wed, 25 Oct 2017 01:01:15 +0000\nFrom: Nelson Wong <nelsonyswong at live.com>\nTo: \"r-sig-finance at r-project.org\" <r-sig-finance at r-project.org>\nSubject: [R-SIG-Finance] Books on R & Finance\nMessage-ID:\n        <HE1PR10MB007458684498A0DEC73A0969AD440 at HE1PR10MB0074.EURPRD10.PROD.OUTLOOK.COM>\n\nContent-Type: text/plain; charset=\"UTF-8\"\n\nHi,\n\nJust sharing a list of books which I have on R & Business/Finance,\nwith worked example in R & respective packages, with regard to the\nrecent discussion on R packages in finance. Later editions may be\navailable.\n\n  1.  Financial Analytics with R. Building a Laptop Laboratory for\nData Science. Cambridge University Press. 2016.\n  2.  Statistics and Data Analysis for Financial Engineering. Springer. 2011.\n  3.  Financial Risk Modelling and Portfolio Optimization with R.\nSecond Edition. Wiley. 2016.\n  4.  Business Analytics Using R - A Practical Approach. Apress. 2017.\n  5.  Introduction to R for Quantitative Finance. Packt. 2013.\n  6.  Mastering R for Quantitative Finance. Packt. 2015.\n\nSincerely,\n\nNelson Wong\nMalaysia\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Steve,\n\n\nGood idea. Just give me a few days.\n\n\nSincerely,\n\n\nNelson Wong\n\n\n________________________________\nFrom: Steve Wisdom <swisdom at gmail.com>\nSent: 25 October 2017 16:28\nTo: nelsonyswong at ",
+      "thread_id": "thread-2f3724101139",
+      "thread_depth": 0,
+      "month": "2017-10"
+    },
+    {
+      "id": "msg-0b37eaf9c1da",
+      "message_id": "<CACjNfmmEW-qzvtekF_37iAZwymKS7+7-VcvcSPEkrVkU53bVzg@mail.gmail.com>",
+      "from_name": "Erol Biceroglu",
+      "from_email_hash": "1c913c5823dc119883c6c86d1addf58a2399c9c18607f641f97847d84bb8ff29",
+      "date": "2017-10-26T11:00:21-04:00",
+      "subject": "[R-SIG-Finance] Thanks for posting this. If you've read these books, it would be helpful if you posted a 1- or 2-line 'review' or summary of each.",
+      "subject_clean": "Thanks for posting this. If you've read these books, it would be helpful if you posted a 1- or 2-line 'review' or summary of each.",
+      "in_reply_to": "<DB5PR10MB0070A56042BBAE86A9F7A9AEAD450@DB5PR10MB0070.EURPRD10.PROD.OUTLOOK.COM>",
+      "references": [
+        "<CAJHYTCF4wYxu4+fn5EOtZxH-wCdd2eQz2_PWdjzfB_T8CsWCVA@mail.gmail.com>",
+        "<DB5PR10MB0070A56042BBAE86A9F7A9AEAD450@DB5PR10MB0070.EURPRD10.PROD.OUTLOOK.COM>"
+      ],
+      "body_plain": "I found the PortfolioAnalytics documentation (vignette's, etc) also very\nuseful.\n\n\nErol Biceroglu\n416-275-7970\n*LinkedIn <http://ca.linkedin.com/in/erolbiceroglu> | Wordpress\n<https://propfoliomanagement.wordpress.com/>*\n\nOn Thu, Oct 26, 2017 at 10:35 AM, Nelson Wong <nelsonyswong at live.com> wrote:\n\n> Hi Steve,\n>\n>\n> Good idea. Just give me a few days.\n>\n>\n> Sincerely,\n>\n>\n> Nelson Wong\n>\n>\n> ________________________________\n> From: Steve Wisdom <swisdom at gmail.com>\n> Sent: 25 October 2017 16:28\n> To: nelsonyswong at live.com\n> Subject: Thanks for posting this. If you've read these books, it would be\n> helpful if you posted a 1- or 2-line 'review' or summary of each.\n>\n> Message: 1\n> Date: Wed, 25 Oct 2017 01:01:15 +0000\n> From: Nelson Wong <nelsonyswong at live.com>\n> To: \"r-sig-finance at r-project.org\" <r-sig-finance at r-project.org>\n> Subject: [R-SIG-Finance] Books on R & Finance\n> Message-ID:\n>         <HE1PR10MB007458684498A0DEC73A0969AD440 at HE1PR10MB0074.\n> EURPRD10.PROD.OUTLOOK.COM>\n>\n> Content-Type: text/plain; charset=\"UTF-8\"\n>\n> Hi,\n>\n> Just sharing a list of books which I have on R & Business/Finance,\n> with worked example in R & respective packages, with regard to the\n> recent discussion on R packages in finance. Later editions may be\n> available.\n>\n>   1.  Financial Analytics with R. Building a Laptop Laboratory for\n> Data Science. Cambridge University Press. 2016.\n>   2.  Statistics and Data Analysis for Financial Engineering. Springer.\n> 2011.\n>   3.  Financial Risk Modelling and Portfolio Optimization with R.\n> Second Edition. Wiley. 2016.\n>   4.  Business Analytics Using R - A Practical Approach. Apress. 2017.\n>   5.  Introduction to R for Quantitative Finance. Packt. 2013.\n>   6.  Mastering R for Quantitative Finance. Packt. 2015.\n>\n> Sincerely,\n>\n> Nelson Wong\n> Malaysia\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I found the PortfolioAnalytics documentation (vignette's, etc) also very\nuseful.\n\n\nErol Biceroglu\n416-275-7970\n*LinkedIn <http://ca.linkedin.com/in/erolbiceroglu> | Wordpress\n<https://propfoliomanagem",
+      "thread_id": "thread-2f3724101139",
+      "thread_depth": 1,
+      "month": "2017-10"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-498eabcf950a",
+      "subject": "ruragrch package using external regressors",
+      "message_count": 2,
+      "participants": [
+        "khemakhem emna"
+      ],
+      "started": "2017-10-04T09:05:17+00:00",
+      "last_reply": "2017-10-04T09:37:02+00:00",
+      "root_message_id": "msg-498eabcf950a"
+    },
+    {
+      "id": "thread-19fd64216849",
+      "subject": "R packages/resources for Financial Risk Management",
+      "message_count": 7,
+      "participants": [
+        "Brian G. Peterson",
+        "Enrico Schumann",
+        "Pankaj K Agarwal",
+        "Terry Leitch"
+      ],
+      "started": "2017-10-16T09:35:44+00:00",
+      "last_reply": "2017-10-17T03:27:00+00:00",
+      "root_message_id": "msg-19fd64216849"
+    },
+    {
+      "id": "thread-f719c71b630d",
+      "subject": "R packages/resources for Financial Risk Management",
+      "message_count": 1,
+      "participants": [
+        "Pankaj K Agarwal"
+      ],
+      "started": "2017-10-23T09:57:21+00:00",
+      "last_reply": "2017-10-23T09:57:21+00:00",
+      "root_message_id": "msg-f719c71b630d"
+    },
+    {
+      "id": "thread-22bec504fd2e",
+      "subject": "Books on R & Finance",
+      "message_count": 4,
+      "participants": [
+        "Henrique Ramos",
+        "Ilya Kipnis",
+        "Nelson Wong"
+      ],
+      "started": "2017-10-25T01:01:15+00:00",
+      "last_reply": "2017-10-25T11:56:55-04:00",
+      "root_message_id": "msg-22bec504fd2e"
+    },
+    {
+      "id": "thread-2f3724101139",
+      "subject": "Thanks for posting this. If you've read these books, it would be helpful if you posted a 1- or 2-line 'review' or summary of each.",
+      "message_count": 2,
+      "participants": [
+        "Erol Biceroglu",
+        "Nelson Wong"
+      ],
+      "started": "2017-10-26T14:35:56+00:00",
+      "last_reply": "2017-10-26T11:00:21-04:00",
+      "root_message_id": "msg-2f3724101139"
+    }
+  ]
+}

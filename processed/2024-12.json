@@ -1,0 +1,94 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2024-12",
+  "messages": [
+    {
+      "id": "msg-3e95a632b6af",
+      "message_id": "<Z2NPI_lFh4t_o3Qk@local>",
+      "from_name": "Mike",
+      "from_email_hash": "a749a62c328de7b6608d963ca6f1da91383d0e63c2c3dd1775185d3e6475dfb4",
+      "date": "2024-12-18T22:39:31Z",
+      "subject": "[R-SIG-Finance] Quantstrat: Multiple instruments, pre-generated signals",
+      "subject_clean": "Quantstrat: Multiple instruments, pre-generated signals",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "My strategy involves a universe with more than 1000 stocks. Since\nthe entry rules are complex, I've generated the entry signals with\na separate program. The resulting table for entry signals includes\nthese columns: Symbol, EntryDate, EntryTime, ExitDate.\n\nThe backtest has to run on intraday basis. I have intraday data\nOHLCV for every stock involved.  The period to be tested spans\nseveral years.\n\nEach trade has to be closed market on close on ExitDate at the\nlatest (time stop).\n\nStop loss and take profit have to be handled prior to close on\nExitDate. Stop loss has to be tightened up once if a profit target\nis met.\n\nCan I backtest such a type of strategy using quantstrat?\nEspecially:\n- Can I inject pre-generated signals to quantstrat?\n- Can quantstrat/R handle such an amount of data?\n\nMike",
+      "body_snippet": "My strategy involves a universe with more than 1000 stocks. Since\nthe entry rules are complex, I've generated the entry signals with\na separate program. The resulting table for entry signals includes\n",
+      "thread_id": "thread-3e95a632b6af",
+      "thread_depth": 0,
+      "month": "2024-12"
+    },
+    {
+      "id": "msg-b66f3ef1d29b",
+      "message_id": "<CA+oJuEFr4Xv6giOe0ZTn6n=my5kNvryQJkC=SzDWbFVXfkYR_w@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "3e375900f97169bfcb61fc4fdc48bafc91349f60a4f7a4813c93bbe535a52a19",
+      "date": "2024-12-18T17:49:59-05:00",
+      "subject": "[R-SIG-Finance] Quantstrat: Multiple instruments, pre-generated signals",
+      "subject_clean": "Quantstrat: Multiple instruments, pre-generated signals",
+      "in_reply_to": "<Z2NPI_lFh4t_o3Qk@local>",
+      "references": [
+        "<Z2NPI_lFh4t_o3Qk@local>"
+      ],
+      "body_plain": "Mike,\n\nYes, you definitely can. You can definitely inject pre-generated signals as\nadditional columns on your data ahead of time, and then use add.signal to\nwork with them later, skipping the add.indicator step entirely.\nQuantstrat/R *can* handle such an amount of data, but understand that\nquantstrat will loop over each instrument individually, and the loops occur\nby signal observations.\n\nThat said, the \"handle these prior to close\" is a bit *vague* as far as\nobjective implementation goes. What does \"prior to close\" mean? 3:55 PM EST?\n\nThe rest of the logic seems implementable through various order chains.\n\nHope this helps.\n\nBest,\n\nIlya\n\nOn Wed, Dec 18, 2024 at 5:40?PM Mike <mike9 at posteo.nl> wrote:\n\n> My strategy involves a universe with more than 1000 stocks. Since\n> the entry rules are complex, I've generated the entry signals with\n> a separate program. The resulting table for entry signals includes\n> these columns: Symbol, EntryDate, EntryTime, ExitDate.\n>\n> The backtest has to run on intraday basis. I have intraday data\n> OHLCV for every stock involved.  The period to be tested spans\n> several years.\n>\n> Each trade has to be closed market on close on ExitDate at the\n> latest (time stop).\n>\n> Stop loss and take profit have to be handled prior to close on\n> ExitDate. Stop loss has to be tightened up once if a profit target\n> is met.\n>\n> Can I backtest such a type of strategy using quantstrat?\n> Especially:\n> - Can I inject pre-generated signals to quantstrat?\n> - Can quantstrat/R handle such an amount of data?\n>\n> Mike\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Mike,\n\nYes, you definitely can. You can definitely inject pre-generated signals as\nadditional columns on your data ahead of time, and then use add.signal to\nwork with them later, skipping the add.indi",
+      "thread_id": "thread-3e95a632b6af",
+      "thread_depth": 1,
+      "month": "2024-12"
+    },
+    {
+      "id": "msg-c9334489ae2d",
+      "message_id": "<Z2NkTyWd5twkNjh4@local>",
+      "from_name": "Mike",
+      "from_email_hash": "a749a62c328de7b6608d963ca6f1da91383d0e63c2c3dd1775185d3e6475dfb4",
+      "date": "2024-12-19T00:09:51Z",
+      "subject": "[R-SIG-Finance] Quantstrat: Multiple instruments, pre-generated signals",
+      "subject_clean": "Quantstrat: Multiple instruments, pre-generated signals",
+      "in_reply_to": "<CA+oJuEFr4Xv6giOe0ZTn6n=my5kNvryQJkC=SzDWbFVXfkYR_w@mail.gmail.com>",
+      "references": [
+        "<Z2NPI_lFh4t_o3Qk@local>",
+        "<CA+oJuEFr4Xv6giOe0ZTn6n=my5kNvryQJkC=SzDWbFVXfkYR_w@mail.gmail.com>"
+      ],
+      "body_plain": "Ilya,\n\n> Yes, you definitely can. You can definitely inject pre-generated\n> signals as additional columns on your data ahead of time, and then\n> use add.signal to work with them later, skipping the add.indicator\n> step entirely.\n\nSo if the strategy involves 1000 stocks quantstrat's object would\nget 1000 additional columns?\n\n> Quantstrat/R *can* handle such an amount of data, but understand that\n> quantstrat will loop over each instrument individually,\n\nDoes this mean, when there are multiple entry signals at the same\nday and time and I like to discard some of them (because of\ninsufficient cash) that I can not do this on a random basis? The idea\nwould be to add a Monte Carlo simulation at such points, but I'm not\nsure how long such a calculation would take.\n\n> and the loops\n> occur by signal observations.\n\nWhat do you mean by this?\n\n> That said, the \"handle these prior to close\" is a bit *vague* as far\n> as objective implementation goes. What does \"prior to close\" mean?\n> 3:55 PM EST?\n\nI just referred to the time stop rule one paragraph above. The exit\nshould be like a three-leg logical or-rule:\n\nMy trades start at EntryDate, EntryTime and exit (at the latest)\nwith the close of the last bar of ExitDate. But a trade is closed out\nearlier, if a take profit or a stop loss is met.\n\nSo if at any day during the trade's lifetime a bar at 3:55 PM EST\n(or whenever) mets a take profit or a stop loss, the trade should be\nclosed - even if the last bar of ExitDate is not yet reached.\n\nThanks\nMike\n\n\n> On Wed, Dec 18, 2024 at 5:40?PM Mike <mike9 at posteo.nl> wrote:\n> \n> > My strategy involves a universe with more than 1000 stocks. Since\n> > the entry rules are complex, I've generated the entry signals with\n> > a separate program. The resulting table for entry signals includes\n> > these columns: Symbol, EntryDate, EntryTime, ExitDate.\n> >\n> > The backtest has to run on intraday basis. I have intraday data\n> > OHLCV for every stock involved.  The period to be tested spans\n> > several years.\n> >\n> > Each trade has to be closed market on close on ExitDate at the\n> > latest (time stop).\n> >\n> > Stop loss and take profit have to be handled prior to close on\n> > ExitDate. Stop loss has to be tightened up once if a profit target\n> > is met.\n> >\n> > Can I backtest such a type of strategy using quantstrat?\n> > Especially:\n> > - Can I inject pre-generated signals to quantstrat?\n> > - Can quantstrat/R handle such an amount of data?\n> >\n> > Mike",
+      "body_snippet": "Ilya,\n\n> Yes, you definitely can. You can definitely inject pre-generated\n> signals as additional columns on your data ahead of time, and then\n> use add.signal to work with them later, skipping the ad",
+      "thread_id": "thread-3e95a632b6af",
+      "thread_depth": 2,
+      "month": "2024-12"
+    },
+    {
+      "id": "msg-0f10cb131083",
+      "message_id": "<CA+oJuEGdV7M7PuuzT4=iHzWSfybvZ+aR4c-6TM2_AD=g1verNQ@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "3e375900f97169bfcb61fc4fdc48bafc91349f60a4f7a4813c93bbe535a52a19",
+      "date": "2024-12-18T19:29:42-05:00",
+      "subject": "[R-SIG-Finance] Quantstrat: Multiple instruments, pre-generated signals",
+      "subject_clean": "Quantstrat: Multiple instruments, pre-generated signals",
+      "in_reply_to": "<Z2NkTyWd5twkNjh4@local>",
+      "references": [
+        "<Z2NPI_lFh4t_o3Qk@local>",
+        "<CA+oJuEFr4Xv6giOe0ZTn6n=my5kNvryQJkC=SzDWbFVXfkYR_w@mail.gmail.com>",
+        "<Z2NkTyWd5twkNjh4@local>"
+      ],
+      "body_plain": "> So if the strategy involves 1000 stocks quantstrat's object would\nget 1000 additional columns?\n\nNo. Each stock is passed in as its own object in initialization. And each\nstock would need its own separate additional column.\n\n>  Does this mean, when there are multiple entry signals at the same\nday and time and I like to discard some of them (because of\ninsufficient cash) that I can not do this on a random basis? The idea\nwould be to add a Monte Carlo simulation at such points, but I'm not\nsure how long such a calculation would take.\n\nQuantstrat processes instruments one at a time. It is not aware of\npositions in other instruments. There are ways to get at the order book and\nextract signals/positions to potentially do further calculations later, but\nthat would be outside of the scope of the quantstrat simulation.\n\n>  What do you mean by this?\n\nIf you have 1,000 instruments, each with 10 signals, quantstrat would need\n10,000 steps in that loop to run the simulation.\n\n> I just referred to the time stop rule one paragraph above. The exit\nshould be like a three-leg logical or-rule:\n\n> My trades start at EntryDate, EntryTime and exit (at the latest)\nwith the close of the last bar of ExitDate. But a trade is closed out\nearlier, if a take profit or a stop loss is met.\n\n> So if at any day during the trade's lifetime a bar at 3:55 PM EST\n(or whenever) mets a take profit or a stop loss, the trade should be\nclosed - even if the last bar of ExitDate is not yet reached.\n\nOrder chaining (one cancels the other) can take care of that. See this post\nI made a long time ago:\n\nA Hammer Trading System ? Demonstrating Custom Indicator-Based Limit Orders\nin Quantstrat | QuantStrat TradeR\n<https://quantstrattrader.com/2014/08/18/a-hammer-trading-system-demonstrating-custom-indicator-based-limit-orders-in-quantstrat/>\n\nWhile that basically uses a custom R package that I haven't updated in\nyears, the idea is that you can add your basic entry and exit rules (though\nI'm not quite sure how a time-to-exit rule would work with intraday data--I\nsuppose it could be something like the max time before 4:00 PM EST on the\ndate of exit), and then you can create chain orders based off of your basic\nexit rule to override it with a take profit or stop loss.\n\nOn Wed, Dec 18, 2024 at 7:10?PM Mike <mike9 at posteo.nl> wrote:\n\n> Ilya,\n>\n> > Yes, you definitely can. You can definitely inject pre-generated\n> > signals as additional columns on your data ahead of time, and then\n> > use add.signal to work with them later, skipping the add.indicator\n> > step entirely.\n>\n> So if the strategy involves 1000 stocks quantstrat's object would\n> get 1000 additional columns?\n>\n> > Quantstrat/R *can* handle such an amount of data, but understand that\n> > quantstrat will loop over each instrument individually,\n>\n> Does this mean, when there are multiple entry signals at the same\n> day and time and I like to discard some of them (because of\n> insufficient cash) that I can not do this on a random basis? The idea\n> would be to add a Monte Carlo simulation at such points, but I'm not\n> sure how long such a calculation would take.\n>\n> > and the loops\n> > occur by signal observations.\n>\n> What do you mean by this?\n>\n> > That said, the \"handle these prior to close\" is a bit *vague* as far\n> > as objective implementation goes. What does \"prior to close\" mean?\n> > 3:55 PM EST?\n>\n> I just referred to the time stop rule one paragraph above. The exit\n> should be like a three-leg logical or-rule:\n>\n> My trades start at EntryDate, EntryTime and exit (at the latest)\n> with the close of the last bar of ExitDate. But a trade is closed out\n> earlier, if a take profit or a stop loss is met.\n>\n> So if at any day during the trade's lifetime a bar at 3:55 PM EST\n> (or whenever) mets a take profit or a stop loss, the trade should be\n> closed - even if the last bar of ExitDate is not yet reached.\n>\n> Thanks\n> Mike\n>\n>\n> > On Wed, Dec 18, 2024 at 5:40?PM Mike <mike9 at posteo.nl> wrote:\n> >\n> > > My strategy involves a universe with more than 1000 stocks. Since\n> > > the entry rules are complex, I've generated the entry signals with\n> > > a separate program. The resulting table for entry signals includes\n> > > these columns: Symbol, EntryDate, EntryTime, ExitDate.\n> > >\n> > > The backtest has to run on intraday basis. I have intraday data\n> > > OHLCV for every stock involved.  The period to be tested spans\n> > > several years.\n> > >\n> > > Each trade has to be closed market on close on ExitDate at the\n> > > latest (time stop).\n> > >\n> > > Stop loss and take profit have to be handled prior to close on\n> > > ExitDate. Stop loss has to be tightened up once if a profit target\n> > > is met.\n> > >\n> > > Can I backtest such a type of strategy using quantstrat?\n> > > Especially:\n> > > - Can I inject pre-generated signals to quantstrat?\n> > > - Can quantstrat/R handle such an amount of data?\n> > >\n> > > Mike\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "> So if the strategy involves 1000 stocks quantstrat's object would\nget 1000 additional columns?\n\nNo. Each stock is passed in as its own object in initialization. And each\nstock would need its own sep",
+      "thread_id": "thread-3e95a632b6af",
+      "thread_depth": 3,
+      "month": "2024-12"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-3e95a632b6af",
+      "subject": "Quantstrat: Multiple instruments, pre-generated signals",
+      "message_count": 4,
+      "participants": [
+        "Ilya Kipnis",
+        "Mike"
+      ],
+      "started": "2024-12-18T22:39:31+00:00",
+      "last_reply": "2024-12-18T19:29:42-05:00",
+      "root_message_id": "msg-3e95a632b6af"
+    }
+  ]
+}

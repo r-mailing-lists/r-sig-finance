@@ -1,0 +1,65 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2022-01",
+  "messages": [
+    {
+      "id": "msg-ccfe937b59f7",
+      "message_id": "<CAPPM_gSwFLy0n26T7n1xQriQ+cjXjMT5x1--WMgdSC8CiaagcQ@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "23f6c30ff3bdcca471f7faac8696c097be744a921830fdf6ee417f06337a1b60",
+      "date": "2022-01-03T09:03:21-06:00",
+      "subject": "[R-SIG-Finance] charts.PerformanceAnalytics plotting glitchy",
+      "subject_clean": "charts.PerformanceAnalytics plotting glitchy",
+      "in_reply_to": "<CA+oJuEEWQOOHuCyxKWdc7WNLC--Ly64ht3E9bbRdG_-Ak3yUyQ@mail.gmail.com>",
+      "references": [
+        "<CA+oJuEEWQOOHuCyxKWdc7WNLC--Ly64ht3E9bbRdG_-Ak3yUyQ@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Ilya,\n\nIt looks like this is an artifact of how that part of the plot is drawn.\nThe grid line and black drawdown line nearly overlap. I can see the line if\nI make the plot larger.\n\nBest,\nJosh\n\n\nOn Fri, Dec 31, 2021 at 2:12 PM Ilya Kipnis <ilya.kipnis at gmail.com> wrote:\n\n> Ilya Kipnis <ilya.kipnis at gmail.com>\n> 3:06 PM (5 minutes ago)\n> to r-sig-finance\n> Quick bug description: using charts.PerformanceSummary, the drawdown plot\n> looks like it has a gap.\n>\n> Min reproducible example using a simple moving average crossover on SPY:\n>\n> require(quantmod)\n> require(TTR)\n> require(PerformanceAnalytics)\n>\n> sma_strat <- function(prices, n_short = 1, n_long = 200, lag = 2) {\n>   returns <- na.omit(Return.calculate(prices))\n>   out <- lag(SMA(prices, n_short) > SMA(prices, n_long), 2) * returns\n>   return(out)\n> }\n>\n> stratStats <- function(rets) {\n>   stats <- rbind(table.AnnualizedReturns(rets), maxDrawdown(rets))\n>   stats[5,] <- stats[1,]/stats[4,]\n>   stats[6,] <- stats[1,]/UlcerIndex(rets)\n>\n>   stats <- rbind(stats, Omega(rets), SortinoRatio(rets),\n>                  skewness(rets), kurtosis(rets), VaR(rets))\n>   rownames(stats)[4] <- \"Worst Drawdown\"\n>   rownames(stats)[5] <- \"Calmar Ratio\"\n>   rownames(stats)[6] <- \"Ulcer Performance Index\"\n>   return(stats)\n> }\n>\n> getSymbols('SPY', from = '1990-01-01')\n>\n>\n> spy_SMA_1_200 <- sma_strat(Cl(SPY))\n> spy_SMA_50_200 <- sma_strat(Cl(SPY), 50, 200)\n>\n> compare <- na.omit(cbind(spy_SMA_1_200, spy_SMA_50_200))\n> colnames(compare) <- c(\"SPY_1_200\", \"SPY_50_200\")\n>\n> charts.PerformanceSummary(compare)\n> stratStats(compare)\n>\n> Output:\n>\n>\n>\n> [image: image.png]\n>\n> Notice the gap in the drawdowns in 2008-2009 on the black line.\n>\n> Just something I noticed now.\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\n\n-------------- next part --------------\nAn HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20220103/4ae50c02/attachment.html>\n\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: image.png\nType: image/png\nSize: 243228 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20220103/4ae50c02/attachment.png>",
+      "body_snippet": "Hi Ilya,\n\nIt looks like this is an artifact of how that part of the plot is drawn.\nThe grid line and black drawdown line nearly overlap. I can see the line if\nI make the plot larger.\n\nBest,\nJosh\n\n\nOn ",
+      "thread_id": "thread-ccfe937b59f7",
+      "thread_depth": 0,
+      "month": "2022-01"
+    },
+    {
+      "id": "msg-38a8f9f28818",
+      "message_id": "<CAKN1paZn2R2dtvbZ7sYyeVsanS3nsShiE1hQ-YANqRgxMmi9JA@mail.gmail.com>",
+      "from_name": "Nelson Rayl",
+      "from_email_hash": "684e05be59658e28583475cffd7372a0584bc3f30621b25d66e3b11a2ba1a4e4",
+      "date": "2022-01-15T09:15:22-08:00",
+      "subject": "[R-SIG-Finance] lmForc package",
+      "subject_clean": "lmForc package",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "The R package lmForc (lmForc 0.1.0) is now available on CRAN. lmForc\nintroduces functions for evaluating linear forecasting models and a new\nclass for working with forecast data: Forecast. Test linear models\nout-of-sample by conditioning on realized values, vintage forecasts, or\nlagged values. Create and test performance weighted forecasts\nout-of-sample. Collect multiple forecasts and evaluate MSE or RMSE. These\nfunctions are built around the Forecast class which matches the simplicity\nand interpretability of linear models.\n\nFor additional information and examples, please visit the lmForc GitHub\nrepository or check out the lmForc vignette.\n\nGitHub:https://github.com/lucius-verus-fan/lmForc\n\nVignette:https://cran.r-project.org/web/packages/lmForc/vignettes/lmForc.html\n\nCRAN:https://CRAN.R-project.org/package=lmForc\n<https://cran.r-project.org/package=lmForc>\n\nBest,\nNelson Rayl\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "The R package lmForc (lmForc 0.1.0) is now available on CRAN. lmForc\nintroduces functions for evaluating linear forecasting models and a new\nclass for working with forecast data: Forecast. Test linear",
+      "thread_id": "thread-38a8f9f28818",
+      "thread_depth": 0,
+      "month": "2022-01"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-ccfe937b59f7",
+      "subject": "charts.PerformanceAnalytics plotting glitchy",
+      "message_count": 1,
+      "participants": [
+        "Joshua Ulrich"
+      ],
+      "started": "2022-01-03T09:03:21-06:00",
+      "last_reply": "2022-01-03T09:03:21-06:00",
+      "root_message_id": "msg-ccfe937b59f7"
+    },
+    {
+      "id": "thread-38a8f9f28818",
+      "subject": "lmForc package",
+      "message_count": 1,
+      "participants": [
+        "Nelson Rayl"
+      ],
+      "started": "2022-01-15T09:15:22-08:00",
+      "last_reply": "2022-01-15T09:15:22-08:00",
+      "root_message_id": "msg-38a8f9f28818"
+    }
+  ]
+}

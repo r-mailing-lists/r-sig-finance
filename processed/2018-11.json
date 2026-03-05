@@ -1,0 +1,409 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2018-11",
+  "messages": [
+    {
+      "id": "msg-d0835c512e09",
+      "message_id": "<003601d47271$6a194960$3e4bdc20$@gmail.com>",
+      "from_name": "Riddell Red",
+      "from_email_hash": "9cea67be5ba4c5877ad8a127fe38983e851c956214acd8c8cff68b4f5545edfd",
+      "date": "2018-11-02T17:00:50+11:00",
+      "subject": "[R-SIG-Finance] Extending the variance equation in GARCH models in the rugarch package (Realized GARCH)",
+      "subject_clean": "Extending the variance equation in GARCH models in the rugarch package (Realized GARCH)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear all,\n\nI am wondering if you are able to give me some direction. I am currently writing my thesis in Economics and Finance, and have been using the rugarch package for the GARCH modelling.\n\n \n\nI am using the realized GARCH model, and comparing forecasts to a HAR model (that includes long memory of volatility). For a fair comparison, I want to extend the realized GARCH variance equation by including two parameters. These parameters are: the lagged 5 day average RV measure and the lagged 22 day average RV measure. This is the same as the HAR specification. The measurement equation remains the same, and thus the likelihood functions should be the same as far as I am aware.\n\n \n\nThe variance equation would be: log(?2t) =?+??1log(RVt?1) +??2log(RVt?2) +??log(?2t?1) + ??1log(5davgRVt-1) + ??2log(22davgRVt-1)\n\n \n\nThis is similar to a paper by Huang, Liu and Wang, named Modeling long memory volatility using realized measures of volatility: A realized HAR GARCH model. Huang is one of the authors of the original Realized GARCH model, so it lends credibility. I can send you the paper if you wish.\n\n \n\nI am struggling to wrap my head around how to modify the realgarch R file.\n\n \n\nThank you for your time,\n\nRegards,\n\nRed.\n\n \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,\n\nI am wondering if you are able to give me some direction. I am currently writing my thesis in Economics and Finance, and have been using the rugarch package for the GARCH modelling.\n\n \n\nI a",
+      "thread_id": "thread-d0835c512e09",
+      "thread_depth": 0,
+      "month": "2018-11"
+    },
+    {
+      "id": "msg-96c0e97e4805",
+      "message_id": "<919779915.1520264.1542324777256@mail.yahoo.com>",
+      "from_name": "Baki UNAL",
+      "from_email_hash": "8131d1a3608f610e4c462be6c47dfb36a7681705ed158956b8e5fe7fe5c0afdf",
+      "date": "2018-11-15T23:32:57Z",
+      "subject": "[R-SIG-Finance] Error plotting a zoo object",
+      "subject_clean": "Error plotting a zoo object",
+      "in_reply_to": null,
+      "references": [
+        "<919779915.1520264.1542324777256.ref@mail.yahoo.com>"
+      ],
+      "body_plain": "Hello\nMy code is:\n\nlibrary(quantmod)library(tseriesChaos)library(nonlinearTseries)library(zoo)library(ggplot2)\nbist100 <- getSymbols(\"XU100.IS\", from=\"2011-01-01\")\nbist100 <- XU100.IS$XU100.IS.Close\nbist100na <- na.approx(bist100)\nbist100norm <- (bist100na - (min(bist100na)))/(max(bist100na) - min(bist100na))\nmy_rqa_det <- function(mydata) {? rqa.analysis=rqa(time.series = mydata, embedding.dim=11, time.lag=1,? ? ? ? ? ? ? ? ? ?radius=0.05,lmin=2,do.plot=FALSE,distanceToBorder=2)? mydet <- rqa.analysis$DET? return(mydet)}\nrollbist100norm<- rollapply(bist100norm, 260, my_rqa_det, by.column = TRUE,?? ? ? ? ? ? ? ? ? ? ? ? ? ? align = \"right\")\nrollbist100normna <- na.omit(rollbist100norm)\nggplot(rollbist100normna, aes(x = date, y = det)) + geom_line()\n\n\nI tried to plot \"rollbist100normna\" in the last line but I got the following error:\n\n\nDon't know how to automatically pick scale for object of type function. Defaulting to continuous.Don't know how to automatically pick scale for object of type function. Defaulting to continuous.Error: Columns `x`, `y` must be 1d atomic vectors or listsCall `rlang::last_error()` to see a backtrace\n\n\nHow can I fix this problem?\nBest regards.\nBaki\n\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello\nMy code is:\n\nlibrary(quantmod)library(tseriesChaos)library(nonlinearTseries)library(zoo)library(ggplot2)\nbist100 <- getSymbols(\"XU100.IS\", from=\"2011-01-01\")\nbist100 <- XU100.IS$XU100.IS.Close\nb",
+      "thread_id": "thread-96c0e97e4805",
+      "thread_depth": 0,
+      "month": "2018-11"
+    },
+    {
+      "id": "msg-86c538b9e273",
+      "message_id": "<CAPPM_gS5Ku_3RSaFN71HVFUw8czZf1COESh4dUQgN8G7kQ0yqQ@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "a425ab3832ccd69401741603dd2c2ef569297144eaa6f47e54ea9c4a672f700d",
+      "date": "2018-11-17T08:35:50-06:00",
+      "subject": "[R-SIG-Finance] Error plotting a zoo object",
+      "subject_clean": "Error plotting a zoo object",
+      "in_reply_to": "<919779915.1520264.1542324777256@mail.yahoo.com>",
+      "references": [
+        "<919779915.1520264.1542324777256.ref@mail.yahoo.com>",
+        "<919779915.1520264.1542324777256@mail.yahoo.com>"
+      ],
+      "body_plain": "Hi Baki,\n\nPlease follow the posting guide and use plain text.  Your HTML message was\nmangled.\n\nHere's a simple example that reproduces the behavior:\nlibrary(quantmod)\nlibrary(ggplot2)\nbist100 <- getSymbols(\"XU100.IS\", from=\"2011-01-01\")\nbist100 <- Cl(XU100.IS)\nbist100na <- na.approx(bist100)\nggplot(bist100na, aes(x = date, y = XU100.IS.Close)) + geom_line()\n\nYou get an error because \"date\" is a function in 'base'.\n\nYou can either use 'autoplot()`:\nautoplot(bist100na)\n\nOr you can fortify the object yourself, but then you have to name the `x`\nand `y` columns correctly.  By default, the xts/zoo index is put in a\ncolumn named \"Index\".  So the ggplot() call would look like:\nggplot(fortify(bist100na), aes(x = Index, y = XU100.IS.Close)) + geom_line()\n\nIt is also very easy to use xts or zoo plotting via the plot() function:\nplot(bist100na)\n\nHope that helps.\n\nBest,\nJosh\n\n\nOn Thu, Nov 15, 2018 at 5:34 PM Baki UNAL via R-SIG-Finance <\nr-sig-finance at r-project.org> wrote:\n\n> Hello\n> My code is:\n>\n>\n> library(quantmod)library(tseriesChaos)library(nonlinearTseries)library(zoo)library(ggplot2)\n> bist100 <- getSymbols(\"XU100.IS\", from=\"2011-01-01\")\n> bist100 <- XU100.IS$XU100.IS.Close\n> bist100na <- na.approx(bist100)\n> bist100norm <- (bist100na - (min(bist100na)))/(max(bist100na) -\n> min(bist100na))\n> my_rqa_det <- function(mydata) {  rqa.analysis=rqa(time.series = mydata,\n> embedding.dim=11, time.lag=1,\n>  radius=0.05,lmin=2,do.plot=FALSE,distanceToBorder=2)  mydet <-\n> rqa.analysis$DET  return(mydet)}\n> rollbist100norm<- rollapply(bist100norm, 260, my_rqa_det, by.column =\n> TRUE,                             align = \"right\")\n> rollbist100normna <- na.omit(rollbist100norm)\n> ggplot(rollbist100normna, aes(x = date, y = det)) + geom_line()\n>\n>\n> I tried to plot \"rollbist100normna\" in the last line but I got the\n> following error:\n>\n>\n> Don't know how to automatically pick scale for object of type function.\n> Defaulting to continuous.Don't know how to automatically pick scale for\n> object of type function. Defaulting to continuous.Error: Columns `x`, `y`\n> must be 1d atomic vectors or listsCall `rlang::last_error()` to see a\n> backtrace\n>\n>\n> How can I fix this problem?\n> Best regards.\n> Baki\n>\n>\n>\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2018 | www.rinfinance.com\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Baki,\n\nPlease follow the posting guide and use plain text.  Your HTML message was\nmangled.\n\nHere's a simple example that reproduces the behavior:\nlibrary(quantmod)\nlibrary(ggplot2)\nbist100 <- getSy",
+      "thread_id": "thread-96c0e97e4805",
+      "thread_depth": 1,
+      "month": "2018-11"
+    },
+    {
+      "id": "msg-daec6a7a4e44",
+      "message_id": "<41e2dc0f-2c17-e923-f5cd-af59423ab492@organicfoodmarkets.com.au>",
+      "from_name": "Stephen Choularton",
+      "from_email_hash": "e71a0d810e5548ab5d2945104afca6a969cd191b76c4a435f9c5ee2333528377",
+      "date": "2018-11-21T06:05:18+11:00",
+      "subject": "[R-SIG-Finance] timestamps IBrokers",
+      "subject_clean": "timestamps IBrokers",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi\n\nI'm trying to figure out the time stamps\n\nI am in Sydney.\n\nIf I use:\n\ntws = twsConnect()\ncontract <- twsContract(0,'GC', \"FUT\", \n'NYMEX','','20181227',\"0.0\",\"USD\",\"\",\"\",\"\",NULL,NULL,\"0\")\nreqHistoricalData(tws, contract, duration = \"3600 S\", barSize=\"1 min\", \nuseRTH=0) #1 = mkt hours only, 0 = anytime\ncloseAllConnections()\n\nI get? long list of which this is a part:\n\n2018-11-20 19:29:00??? 1226.3??? 1226.4?? 1226.2 1226.2????????? 88? \n1226.24??????????? 0???????? 35\n2018-11-20 19:30:00??? 1226.2??? 1226.4?? 1226.1 1226.2???????? 131? \n1226.25??????????? 0???????? 63\n2018-11-20 19:31:00??? 1226.2??? 1226.3?? 1226.1 1226.1???????? 106? \n1226.23??????????? 0???????? 43\n2018-11-20 19:32:00??? 1226.1??? 1226.2?? 1225.8 1225.9???????? 130? \n1225.96??????????? 0???????? 64\n2018-11-20 19:33:00??? 1225.9??? 1226.0?? 1225.8 1225.9???????? 106? \n1225.94??????????? 0???????? 60\n\nIf I use reqMktData and then log the stream of data I get is a long list \nof which this is part:\n\n2018-11-21 \t05:31:54.728322 \t1221.5\n2018-11-21 \t05:31:56.41735 \t1221.5\n2018-11-21 \t05:31:57.712608 \t1221.5\n2018-11-21 \t05:31:59.008863 \t1221.5\n2018-11-21 \t05:32:00.279135 \t1221.5\n2018-11-21 \t05:32:01.555404 \t1221.5\n2018-11-21 \t05:32:03.279417 \t1221.6\n2018-11-21 \t05:32:04.702601 \t1221.6\n2018-11-21 \t05:32:05.589896 \t1221.6\n\nThe closing price here is being picked out with:\n\nLast_1_1 <- as.numeric(eWrapper$.Data$data[[1]][,5])\n\nwhich I hope is the correct data item.\n\nOf course I want to align the data.? The hours in the time stamp are \ndifferent - reqMktData is time stamping with my local time (Sydney) but \n19:32 in not the time here or in NY where it is 13:32 if my arithmetic \nis correct.\n\nCan anyone give me guidance on where that time stamp comes from?\n\nSecond the close from reqMktData just towards the end of 31 seconds \n(05:31:59.008863) shows a closing price of? 1221.5 but the closing price \nfrom reqHistoricalData at 31 second was 1226.2 and at 32 second was \n1225.9 both several dollars away from the reqMktData figure.\n\nCan anyone give me guidance why these two figures are not much closer \ntogether.? Have I got the wrong data item (eWrapper$.Data$data[[1]][,5]) \nor have I misunderstood <20181121 06:00:56.150975> id=1 symbol=GC \nclosePrice: 1225.30? as being the closing price data that is returned by \nreqMktData.\n\nThanks\n\nStephen Choularton PhD, FIoD",
+      "body_snippet": "Hi\n\nI'm trying to figure out the time stamps\n\nI am in Sydney.\n\nIf I use:\n\ntws = twsConnect()\ncontract <- twsContract(0,'GC', \"FUT\", \n'NYMEX','','20181227',\"0.0\",\"USD\",\"\",\"\",\"\",NULL,NULL,\"0\")\nreqHistor",
+      "thread_id": "thread-daec6a7a4e44",
+      "thread_depth": 0,
+      "month": "2018-11"
+    },
+    {
+      "id": "msg-b596b48898d3",
+      "message_id": "<939704435.317354.1542833586661@romandiev5-http1.romandie.int>",
+      "from_name": "Farid Moussaoui",
+      "from_email_hash": "176f0ac4eef787b04d5957c7d2b69ecf1e47b9add4c1ae694f0100b4605e0281",
+      "date": "2018-11-21T21:53:06+01:00",
+      "subject": "[R-SIG-Finance] timestamps IBrokers",
+      "subject_clean": "timestamps IBrokers",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\nIt seems that \"reqHistoralData\" time zone is GMT while reqMktData is local time.\nF.\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\nIt seems that \"reqHistoralData\" time zone is GMT while reqMktData is local time.\nF.\n\n\n\t[[alternative HTML version deleted]]",
+      "thread_id": "thread-b596b48898d3",
+      "thread_depth": 0,
+      "month": "2018-11"
+    },
+    {
+      "id": "msg-cc6a2c7d61b7",
+      "message_id": "<CAC-NtZZrz-sbppTBse=ukjKOKyGvF5XvGFq98To+tP=g+APG2w@mail.gmail.com>",
+      "from_name": "John Writer",
+      "from_email_hash": "b78a20af65dfaec279ab773adeab419aeeb6227b52301ce39d720c06e27b5b8f",
+      "date": "2018-11-26T20:26:14+05:30",
+      "subject": "[R-SIG-Finance] How to access rugarch output object ?",
+      "subject_clean": "How to access rugarch output object ?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi There,\n\nI am trying to write a script which is essentially a \"for loop\" where I run\nrugarch and then pick specific parameter values from it and feed them to\nanother vector/function. This needs to happen several times.\n\nAs of now, I can see that the ugarchfit (rugarch) output is broken into\nsection and I can access a specific section using the $ operator. But I\ncould not access the specfic parameter value. To be more specific, how do I\npick the alpha1 value from the ugarchfit output object via an R script ?\n\nMore generally, is this possible for other R packages (e.g. pick the VaR\nvalue from PerformanceAnalytics package) ?\n\nPlease advise.\n\nThanks.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi There,\n\nI am trying to write a script which is essentially a \"for loop\" where I run\nrugarch and then pick specific parameter values from it and feed them to\nanother vector/function. This needs to h",
+      "thread_id": "thread-cc6a2c7d61b7",
+      "thread_depth": 0,
+      "month": "2018-11"
+    },
+    {
+      "id": "msg-37e962f9a5af",
+      "message_id": "<CAGgJW76KjPy2NxwpDxApvTq4uRhvxc5JQSM2LsuMQdv0PdJmbQ@mail.gmail.com>",
+      "from_name": "Eric Berger",
+      "from_email_hash": "b71d0105a00bad28391c9c5416eb3b4763fe4229812f50d5751becac739fa8fe",
+      "date": "2018-11-26T17:35:16+02:00",
+      "subject": "[R-SIG-Finance] How to access rugarch output object ?",
+      "subject_clean": "How to access rugarch output object ?",
+      "in_reply_to": "<CAC-NtZZrz-sbppTBse=ukjKOKyGvF5XvGFq98To+tP=g+APG2w@mail.gmail.com>",
+      "references": [
+        "<CAC-NtZZrz-sbppTBse=ukjKOKyGvF5XvGFq98To+tP=g+APG2w@mail.gmail.com>"
+      ],
+      "body_plain": "Hi John,\nRegarding your specific question about alpha1 it is possible.\nIn general it should be possible to get the values you want from other R\npackages *if* those packages return it somewhere in the object (ok that's a\ntautology).\n\nI don't have huge experience with the rugarch package but I did the\nfollowing \"poking around\" and solved your issue. Here's the general\napproach.\n\n> foo <- somefunc()  # grab the output of the function you care about (e.g.\nugarchfit() )\n> str(foo)  # dump information about the output (str = 'structure')\n> summary(foo) # dump more information, if it exists\n\nlook for what you need and see if you can isolate it.\n\nIn the ugarchfit case there was a lot of output so I did the following\n> sink(\"tmpfile\")\n> str(foo)\n> summary(foo)\n> sink()\n\nto get the output into a text file. Then I searched for 'alpha1' in the\ntext file. I found it in the 'model' section of the summary output.\nI then searched for 'model' and found it is a slot in the output structure\nof ugarchfit. (which is an S4 object)\n\nAfter a few attempts the following works. FYI I used the example in the\nhelp page of the ugarchfit() function. (The first three lines, to set the\noutput to the variable 'fit' instead of 'foo').\n\n> irow <- match(\"alpha1\", rownames(fit at model$pars))\n> alpha1 <- fit at model$pars[irow,1]\n\nThat's it.\nHTH,\nEric\n\n\n\nOn Mon, Nov 26, 2018 at 4:57 PM John Writer <john.d.writer at gmail.com> wrote:\n\n> Hi There,\n>\n> I am trying to write a script which is essentially a \"for loop\" where I run\n> rugarch and then pick specific parameter values from it and feed them to\n> another vector/function. This needs to happen several times.\n>\n> As of now, I can see that the ugarchfit (rugarch) output is broken into\n> section and I can access a specific section using the $ operator. But I\n> could not access the specfic parameter value. To be more specific, how do I\n> pick the alpha1 value from the ugarchfit output object via an R script ?\n>\n> More generally, is this possible for other R packages (e.g. pick the VaR\n> value from PerformanceAnalytics package) ?\n>\n> Please advise.\n>\n> Thanks.\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi John,\nRegarding your specific question about alpha1 it is possible.\nIn general it should be possible to get the values you want from other R\npackages *if* those packages return it somewhere in the ",
+      "thread_id": "thread-cc6a2c7d61b7",
+      "thread_depth": 1,
+      "month": "2018-11"
+    },
+    {
+      "id": "msg-5a900c273a94",
+      "message_id": "<CAC-NtZYvTfmRd5TXt8-R0ZtgU3fbVtD1hDEdqoFMxwfZdrzvqA@mail.gmail.com>",
+      "from_name": "John Writer",
+      "from_email_hash": "b78a20af65dfaec279ab773adeab419aeeb6227b52301ce39d720c06e27b5b8f",
+      "date": "2018-11-27T06:36:50+05:30",
+      "subject": "[R-SIG-Finance] How to access rugarch output object ?",
+      "subject_clean": "How to access rugarch output object ?",
+      "in_reply_to": "<CAGgJW76KjPy2NxwpDxApvTq4uRhvxc5JQSM2LsuMQdv0PdJmbQ@mail.gmail.com>",
+      "references": [
+        "<CAC-NtZZrz-sbppTBse=ukjKOKyGvF5XvGFq98To+tP=g+APG2w@mail.gmail.com>",
+        "<CAGgJW76KjPy2NxwpDxApvTq4uRhvxc5JQSM2LsuMQdv0PdJmbQ@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Eric,\n\nThanks a lot for your time and effort. ?\n\n\nOn Mon, Nov 26, 2018 at 9:05 PM Eric Berger <ericjberger at gmail.com> wrote:\n\n> Hi John,\n> Regarding your specific question about alpha1 it is possible.\n> In general it should be possible to get the values you want from other R\n> packages *if* those packages return it somewhere in the object (ok that's a\n> tautology).\n>\n> I don't have huge experience with the rugarch package but I did the\n> following \"poking around\" and solved your issue. Here's the general\n> approach.\n>\n> > foo <- somefunc()  # grab the output of the function you care about\n> (e.g. ugarchfit() )\n> > str(foo)  # dump information about the output (str = 'structure')\n> > summary(foo) # dump more information, if it exists\n>\n> look for what you need and see if you can isolate it.\n>\n> In the ugarchfit case there was a lot of output so I did the following\n> > sink(\"tmpfile\")\n> > str(foo)\n> > summary(foo)\n> > sink()\n>\n> to get the output into a text file. Then I searched for 'alpha1' in the\n> text file. I found it in the 'model' section of the summary output.\n> I then searched for 'model' and found it is a slot in the output structure\n> of ugarchfit. (which is an S4 object)\n>\n> After a few attempts the following works. FYI I used the example in the\n> help page of the ugarchfit() function. (The first three lines, to set the\n> output to the variable 'fit' instead of 'foo').\n>\n> > irow <- match(\"alpha1\", rownames(fit at model$pars))\n> > alpha1 <- fit at model$pars[irow,1]\n>\n> That's it.\n> HTH,\n> Eric\n>\n>\n>\n> On Mon, Nov 26, 2018 at 4:57 PM John Writer <john.d.writer at gmail.com>\n> wrote:\n>\n>> Hi There,\n>>\n>> I am trying to write a script which is essentially a \"for loop\" where I\n>> run\n>> rugarch and then pick specific parameter values from it and feed them to\n>> another vector/function. This needs to happen several times.\n>>\n>> As of now, I can see that the ugarchfit (rugarch) output is broken into\n>> section and I can access a specific section using the $ operator. But I\n>> could not access the specfic parameter value. To be more specific, how do\n>> I\n>> pick the alpha1 value from the ugarchfit output object via an R script ?\n>>\n>> More generally, is this possible for other R packages (e.g. pick the VaR\n>> value from PerformanceAnalytics package) ?\n>>\n>> Please advise.\n>>\n>> Thanks.\n>>\n>>         [[alternative HTML version deleted]]\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Eric,\n\nThanks a lot for your time and effort. ?\n\n\nOn Mon, Nov 26, 2018 at 9:05 PM Eric Berger <ericjberger at gmail.com> wrote:\n\n> Hi John,\n> Regarding your specific question about alpha1 it is pos",
+      "thread_id": "thread-cc6a2c7d61b7",
+      "thread_depth": 2,
+      "month": "2018-11"
+    },
+    {
+      "id": "msg-1c3190b9610b",
+      "message_id": "<CA+oJuEEnn7qbVLBCvvw9hmucyzVgJ_81YMbu0Fhwijs-rrv+6g@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "5f7744028622a95a060e069faa7865dd08ee991cd11ef190b10ad283f38c8e39",
+      "date": "2018-11-28T22:22:40-05:00",
+      "subject": "[R-SIG-Finance] Just finished Kris Boudt's course, running into errors from non-convergence in rugarch",
+      "subject_clean": "Just finished Kris Boudt's course, running into errors from non-convergence in rugarch",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I just completed Kris Boudt's datacamp course on GARCH models, and thought\nI'd give it a spin in a more reasonable setting. I've run into an error\nthat the course didn't cover. I'm using a rolling window of 504 trading\ndays to try to fit a GJR-GARCH with AR1 return innovations and a skewed\nstudent t distribution and refitting the model every 22 days (so, basically\nevery month) on SPY returns.\n\nIn the course, it was possible to convert this output into a data frame,\nwith an as.data.frame command.\n\nUnfortunately, the course didn't cover what happened when over the course\nof ~300 model fits, there would be the occasional failure to converge,\nwhich throws the following error:\n\n[image: image.png]\n\nHere's my MRE:\n\nrequire(rugarch)\nrequire(quantmod)\n\n# get SPY data from Yahoo (also tried with Quandl, data isn't the issue)\ngetSymbols(\"SPY\", from = '1990-01-01')\n\nspyRets <- Return.calculate(Ad(SPY))\n\n# GJR garch with AR1 innovations under a skewed student T distribution for\nreturns\ngjrSpec <- ugarchspec(mean.model = list(armaOrder = c(1,0)),\n                      variance.model = list(model = \"gjrGARCH\"),\n                      distribution.model = \"sstd\")\n\n# Use rolling window of 504 days, refitting the model every 22 trading days\nt1 <- Sys.time()\ngarchroll <- ugarchroll(gjrSpec, data = spyRets,\n                        n.start = 504, refit.window = \"moving\",\nrefit.every = 22)\nt2 <- Sys.time()\nprint(t2-t1)\n\n# try to convert predictions to data frame, as in course -- error thrown\nregarding non-converged estimation windows\ngarchroll <- as.data.frame(garchroll)\n\nWith a screenshot for better readability:\n\n[image: image.png]\nI also tried the resume command from the following post\nhttps://stat.ethz.ch/pipermail/r-sig-finance/2013q2/011720.html, which did\nnot solve my problem.\n\nI feel that this is a pretty straightforward application of the rugarch\npackage, and that there is most likely a solution that simply wasn't\ncovered in the course. I'd be greatly appreciative if someone could help me\nover this hill (albeit at the risk of revealing that I'm not exactly an\nexpert on GARCH models).\n\nThank you so much.\n\nSincerely,\n\nIlya Kipnis (author of Quantstrat TradeR)\n\n-------------- next part --------------\nAn HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20181128/e647fe88/attachment.html>\n\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: image.png\nType: image/png\nSize: 6511 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20181128/e647fe88/attachment.png>\n\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: image.png\nType: image/png\nSize: 49282 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20181128/e647fe88/attachment-0001.png>",
+      "body_snippet": "I just completed Kris Boudt's datacamp course on GARCH models, and thought\nI'd give it a spin in a more reasonable setting. I've run into an error\nthat the course didn't cover. I'm using a rolling win",
+      "thread_id": "thread-1c3190b9610b",
+      "thread_depth": 0,
+      "month": "2018-11"
+    },
+    {
+      "id": "msg-3adcd3d4165c",
+      "message_id": "<def2cf5a-2444-0c4a-32af-e9e890d1ae91@4dscape.com>",
+      "from_name": "alexios galanos",
+      "from_email_hash": "f12a89c6562792937246cb8bec959797c75bc6b52bac14749297d96240c05c5f",
+      "date": "2018-11-28T19:27:47-08:00",
+      "subject": "[R-SIG-Finance] Just finished Kris Boudt's course, running into errors from non-convergence in rugarch",
+      "subject_clean": "Just finished Kris Boudt's course, running into errors from non-convergence in rugarch",
+      "in_reply_to": "<CA+oJuEEnn7qbVLBCvvw9hmucyzVgJ_81YMbu0Fhwijs-rrv+6g@mail.gmail.com>",
+      "references": [
+        "<CA+oJuEEnn7qbVLBCvvw9hmucyzVgJ_81YMbu0Fhwijs-rrv+6g@mail.gmail.com>"
+      ],
+      "body_plain": "Try setting the solver in the resume command to \"gosolnp\".\nIt may also have helped to set fit.control(scale=1) in the ugarchroll, \nbut you can set this in resume as well.\n\nAlexios\n\nOn 11/28/18 7:22 PM, Ilya Kipnis wrote:\n> I just completed Kris Boudt's datacamp course on GARCH models, and \n> thought I'd give it a spin in a more reasonable setting. I've run into \n> an error that the course didn't cover. I'm using a rolling window of 504 \n> trading days to try to fit a GJR-GARCH with AR1 return innovations and a \n> skewed student t distribution and refitting the model every 22 days (so, \n> basically every month) on SPY returns.\n> \n> In the course, it was possible to convert this output into a data frame, \n> with an as.data.frame command.\n> \n> Unfortunately, the course didn't cover what happened when over the \n> course of ~300 model fits, there would be the occasional failure to \n> converge, which throws the following error:\n> \n> image.png\n> \n> Here's my MRE:\n> \n> require(rugarch)\n> require(quantmod)\n> \n> # get SPY data from Yahoo (also tried with Quandl, data isn't the issue)\n> getSymbols(\"SPY\", from = '1990-01-01')\n> \n> spyRets <- Return.calculate(Ad(SPY))\n> \n> # GJR garch with AR1 innovations under a skewed student T distribution \n> for returns\n> gjrSpec <- ugarchspec(mean.model = list(armaOrder = c(1,0)),\n>  ? ? ? ? ? ? ? ? ? ? ? variance.model = list(model = \"gjrGARCH\"),\n>  ? ? ? ? ? ? ? ? ? ? ? distribution.model = \"sstd\")\n> \n> # Use rolling window of 504 days, refitting the model every 22 trading days\n> t1 <- Sys.time()\n> garchroll <- ugarchroll(gjrSpec, data = spyRets,\n>  ? ? ? ? ? ? ? ? ? ? ? ? n.start = 504, refit.window = \"moving\",  \n> refit.every = 22)\n> t2 <- Sys.time()\n> print(t2-t1)\n> \n> # try to convert predictions to data frame, as in course -- error thrown \n> regarding non-converged estimation windows\n> garchroll <- as.data.frame(garchroll)\n> \n> With a screenshot for better readability:\n> \n> image.png\n> I also tried the resume command from the following post \n> https://stat.ethz.ch/pipermail/r-sig-finance/2013q2/011720.html, which \n> did not solve my problem.\n> \n> I feel that this is a pretty straightforward application of the rugarch \n> package, and that there is most likely a solution that simply wasn't \n> covered in the course. I'd be greatly appreciative if someone could help \n> me over this hill (albeit at the risk of revealing that I'm not exactly \n> an expert on GARCH models).\n> \n> Thank you so much.\n> \n> Sincerely,\n> \n> Ilya Kipnis (author of Quantstrat TradeR)\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>",
+      "body_snippet": "Try setting the solver in the resume command to \"gosolnp\".\nIt may also have helped to set fit.control(scale=1) in the ugarchroll, \nbut you can set this in resume as well.\n\nAlexios\n\nOn 11/28/18 7:22 PM",
+      "thread_id": "thread-1c3190b9610b",
+      "thread_depth": 1,
+      "month": "2018-11"
+    },
+    {
+      "id": "msg-2780cd5a7599",
+      "message_id": "<CA+oJuEEoX0EAPwLDLn=5vvVoWvNS7v94CmJ8GKe630vTBthyVA@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "5f7744028622a95a060e069faa7865dd08ee991cd11ef190b10ad283f38c8e39",
+      "date": "2018-11-28T22:39:59-05:00",
+      "subject": "[R-SIG-Finance] Just finished Kris Boudt's course, running into errors from non-convergence in rugarch",
+      "subject_clean": "Just finished Kris Boudt's course, running into errors from non-convergence in rugarch",
+      "in_reply_to": "<def2cf5a-2444-0c4a-32af-e9e890d1ae91@4dscape.com>",
+      "references": [
+        "<CA+oJuEEnn7qbVLBCvvw9hmucyzVgJ_81YMbu0Fhwijs-rrv+6g@mail.gmail.com>",
+        "<def2cf5a-2444-0c4a-32af-e9e890d1ae91@4dscape.com>"
+      ],
+      "body_plain": "[image: image.png]\n\nUnfortunately, the gosolnp method does not work.\n\nTried implementing fit.control as best I understood it.\n\n[image: image.png]\n\nAlso does not work.\n\nOn Wed, Nov 28, 2018 at 10:33 PM alexios galanos <alexios at 4dscape.com>\nwrote:\n\n> Try setting the solver in the resume command to \"gosolnp\".\n> It may also have helped to set fit.control(scale=1) in the ugarchroll,\n> but you can set this in resume as well.\n>\n> Alexios\n>\n> On 11/28/18 7:22 PM, Ilya Kipnis wrote:\n> > I just completed Kris Boudt's datacamp course on GARCH models, and\n> > thought I'd give it a spin in a more reasonable setting. I've run into\n> > an error that the course didn't cover. I'm using a rolling window of 504\n> > trading days to try to fit a GJR-GARCH with AR1 return innovations and a\n> > skewed student t distribution and refitting the model every 22 days (so,\n> > basically every month) on SPY returns.\n> >\n> > In the course, it was possible to convert this output into a data frame,\n> > with an as.data.frame command.\n> >\n> > Unfortunately, the course didn't cover what happened when over the\n> > course of ~300 model fits, there would be the occasional failure to\n> > converge, which throws the following error:\n> >\n> > image.png\n> >\n> > Here's my MRE:\n> >\n> > require(rugarch)\n> > require(quantmod)\n> >\n> > # get SPY data from Yahoo (also tried with Quandl, data isn't the issue)\n> > getSymbols(\"SPY\", from = '1990-01-01')\n> >\n> > spyRets <- Return.calculate(Ad(SPY))\n> >\n> > # GJR garch with AR1 innovations under a skewed student T distribution\n> > for returns\n> > gjrSpec <- ugarchspec(mean.model = list(armaOrder = c(1,0)),\n> >                        variance.model = list(model = \"gjrGARCH\"),\n> >                        distribution.model = \"sstd\")\n> >\n> > # Use rolling window of 504 days, refitting the model every 22 trading\n> days\n> > t1 <- Sys.time()\n> > garchroll <- ugarchroll(gjrSpec, data = spyRets,\n> >                          n.start = 504, refit.window = \"moving\",\n> > refit.every = 22)\n> > t2 <- Sys.time()\n> > print(t2-t1)\n> >\n> > # try to convert predictions to data frame, as in course -- error thrown\n> > regarding non-converged estimation windows\n> > garchroll <- as.data.frame(garchroll)\n> >\n> > With a screenshot for better readability:\n> >\n> > image.png\n> > I also tried the resume command from the following post\n> > https://stat.ethz.ch/pipermail/r-sig-finance/2013q2/011720.html, which\n> > did not solve my problem.\n> >\n> > I feel that this is a pretty straightforward application of the rugarch\n> > package, and that there is most likely a solution that simply wasn't\n> > covered in the course. I'd be greatly appreciative if someone could help\n> > me over this hill (albeit at the risk of revealing that I'm not exactly\n> > an expert on GARCH models).\n> >\n> > Thank you so much.\n> >\n> > Sincerely,\n> >\n> > Ilya Kipnis (author of Quantstrat TradeR)\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions\n> should go.\n> >\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n-------------- next part --------------\nAn HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20181128/ff26fab5/attachment.html>\n\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: image.png\nType: image/png\nSize: 27701 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20181128/ff26fab5/attachment.png>\n\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: image.png\nType: image/png\nSize: 29132 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20181128/ff26fab5/attachment-0001.png>",
+      "body_snippet": "[image: image.png]\n\nUnfortunately, the gosolnp method does not work.\n\nTried implementing fit.control as best I understood it.\n\n[image: image.png]\n\nAlso does not work.\n\nOn Wed, Nov 28, 2018 at 10:33 PM",
+      "thread_id": "thread-1c3190b9610b",
+      "thread_depth": 2,
+      "month": "2018-11"
+    },
+    {
+      "id": "msg-622916cb74d7",
+      "message_id": "<09e5aa01-00d3-a6d8-9b46-f86ba451f037@4dscape.com>",
+      "from_name": "alexios galanos",
+      "from_email_hash": "f12a89c6562792937246cb8bec959797c75bc6b52bac14749297d96240c05c5f",
+      "date": "2018-11-28T19:57:25-08:00",
+      "subject": "[R-SIG-Finance] Just finished Kris Boudt's course, running into errors from non-convergence in rugarch",
+      "subject_clean": "Just finished Kris Boudt's course, running into errors from non-convergence in rugarch",
+      "in_reply_to": "<CA+oJuEEoX0EAPwLDLn=5vvVoWvNS7v94CmJ8GKe630vTBthyVA@mail.gmail.com>",
+      "references": [
+        "<CA+oJuEEnn7qbVLBCvvw9hmucyzVgJ_81YMbu0Fhwijs-rrv+6g@mail.gmail.com>",
+        "<def2cf5a-2444-0c4a-32af-e9e890d1ae91@4dscape.com>",
+        "<CA+oJuEEoX0EAPwLDLn=5vvVoWvNS7v94CmJ8GKe630vTBthyVA@mail.gmail.com>"
+      ],
+      "body_plain": "That's piqued my interest...here is my suggestion (which I have \nsuccessfully tested) for a quick solution:\n\n1. Use variance targeting:\n\ngjrSpec <- ugarchspec(mean.model = list(armaOrder = \nc(1,0)),variance.model = list(model = \"gjrGARCH\", \nvariance.targeting=TRUE),distribution.model = \"sstd\")\n\n2. remove the NA leftover from the return calculation:\nna.omit(spyRets)\n\n\nAlexios\n\n\nOn 11/28/18 7:39 PM, Ilya Kipnis wrote:\n> image.png\n> \n> Unfortunately, the gosolnp method does not work.\n> \n> Tried implementing fit.control as best I understood it.\n> \n> image.png\n> \n> Also does not work.\n> \n> On Wed, Nov 28, 2018 at 10:33 PM alexios galanos <alexios at 4dscape.com \n> <mailto:alexios at 4dscape.com>> wrote:\n> \n>     Try setting the solver in the resume command to \"gosolnp\".\n>     It may also have helped to set fit.control(scale=1) in the ugarchroll,\n>     but you can set this in resume as well.\n> \n>     Alexios\n> \n>     On 11/28/18 7:22 PM, Ilya Kipnis wrote:\n>      > I just completed Kris Boudt's datacamp course on GARCH models, and\n>      > thought I'd give it a spin in a more reasonable setting. I've run\n>     into\n>      > an error that the course didn't cover. I'm using a rolling window\n>     of 504\n>      > trading days to try to fit a GJR-GARCH with AR1 return\n>     innovations and a\n>      > skewed student t distribution and refitting the model every 22\n>     days (so,\n>      > basically every month) on SPY returns.\n>      >\n>      > In the course, it was possible to convert this output into a data\n>     frame,\n>      > with an as.data.frame command.\n>      >\n>      > Unfortunately, the course didn't cover what happened when over the\n>      > course of ~300 model fits, there would be the occasional failure to\n>      > converge, which throws the following error:\n>      >\n>      > image.png\n>      >\n>      > Here's my MRE:\n>      >\n>      > require(rugarch)\n>      > require(quantmod)\n>      >\n>      > # get SPY data from Yahoo (also tried with Quandl, data isn't the\n>     issue)\n>      > getSymbols(\"SPY\", from = '1990-01-01')\n>      >\n>      > spyRets <- Return.calculate(Ad(SPY))\n>      >\n>      > # GJR garch with AR1 innovations under a skewed student T\n>     distribution\n>      > for returns\n>      > gjrSpec <- ugarchspec(mean.model = list(armaOrder = c(1,0)),\n>      >? ? ? ? ? ? ? ? ? ? ? ? variance.model = list(model = \"gjrGARCH\"),\n>      >? ? ? ? ? ? ? ? ? ? ? ? distribution.model = \"sstd\")\n>      >\n>      > # Use rolling window of 504 days, refitting the model every 22\n>     trading days\n>      > t1 <- Sys.time()\n>      > garchroll <- ugarchroll(gjrSpec, data = spyRets,\n>      >? ? ? ? ? ? ? ? ? ? ? ? ? n.start = 504, refit.window = \"moving\",\n>      > refit.every = 22)\n>      > t2 <- Sys.time()\n>      > print(t2-t1)\n>      >\n>      > # try to convert predictions to data frame, as in course -- error\n>     thrown\n>      > regarding non-converged estimation windows\n>      > garchroll <- as.data.frame(garchroll)\n>      >\n>      > With a screenshot for better readability:\n>      >\n>      > image.png\n>      > I also tried the resume command from the following post\n>      > https://stat.ethz.ch/pipermail/r-sig-finance/2013q2/011720.html,\n>     which\n>      > did not solve my problem.\n>      >\n>      > I feel that this is a pretty straightforward application of the\n>     rugarch\n>      > package, and that there is most likely a solution that simply wasn't\n>      > covered in the course. I'd be greatly appreciative if someone\n>     could help\n>      > me over this hill (albeit at the risk of revealing that I'm not\n>     exactly\n>      > an expert on GARCH models).\n>      >\n>      > Thank you so much.\n>      >\n>      > Sincerely,\n>      >\n>      > Ilya Kipnis (author of Quantstrat TradeR)\n>      >\n>      > _______________________________________________\n>      > R-SIG-Finance at r-project.org <mailto:R-SIG-Finance at r-project.org>\n>     mailing list\n>      > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>      > -- Subscriber-posting only. If you want to post, subscribe first.\n>      > -- Also note that this is not the r-help list where general R\n>     questions should go.\n>      >\n> \n>     _______________________________________________\n>     R-SIG-Finance at r-project.org <mailto:R-SIG-Finance at r-project.org>\n>     mailing list\n>     https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>     -- Subscriber-posting only. If you want to post, subscribe first.\n>     -- Also note that this is not the r-help list where general R\n>     questions should go.\n>",
+      "body_snippet": "That's piqued my interest...here is my suggestion (which I have \nsuccessfully tested) for a quick solution:\n\n1. Use variance targeting:\n\ngjrSpec <- ugarchspec(mean.model = list(armaOrder = \nc(1,0)),va",
+      "thread_id": "thread-1c3190b9610b",
+      "thread_depth": 3,
+      "month": "2018-11"
+    },
+    {
+      "id": "msg-0b7b736e9fa9",
+      "message_id": "<CA+oJuEGw+1y6GCNZ1MTvLFftxhpkqyHYA1voVAVsHD6Me6d0yQ@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "5f7744028622a95a060e069faa7865dd08ee991cd11ef190b10ad283f38c8e39",
+      "date": "2018-11-28T23:11:32-05:00",
+      "subject": "[R-SIG-Finance] Just finished Kris Boudt's course, running into errors from non-convergence in rugarch",
+      "subject_clean": "Just finished Kris Boudt's course, running into errors from non-convergence in rugarch",
+      "in_reply_to": "<09e5aa01-00d3-a6d8-9b46-f86ba451f037@4dscape.com>",
+      "references": [
+        "<CA+oJuEEnn7qbVLBCvvw9hmucyzVgJ_81YMbu0Fhwijs-rrv+6g@mail.gmail.com>",
+        "<def2cf5a-2444-0c4a-32af-e9e890d1ae91@4dscape.com>",
+        "<CA+oJuEEoX0EAPwLDLn=5vvVoWvNS7v94CmJ8GKe630vTBthyVA@mail.gmail.com>",
+        "<09e5aa01-00d3-a6d8-9b46-f86ba451f037@4dscape.com>"
+      ],
+      "body_plain": "The variance.targeting does work, but it does impose an assumption on the\nnature of the variance of the S&P 500 returns, that the variance is\nnaturally mean-reverting, and I'm not sure that's the case. While the VIX\ncertainly does tend to mean-revert more often than not, the times it\n*doesn't* are the times that all of the volatility mean-reverting guys just\nget absolutely blown up, whether it's 2008, when vol went up and up, or Feb\n4-Feb 5 of 2018, when anyone that thought Feb 5 was a nice time to revert\nthe Feb 4 spike got blown up in 20 minutes after hours.\n\nWill go with this solution for now in terms of trying to see if there's a\nnew VIX trading strategy, but I'm hoping I can relax the assumption in the\nnear future.\n\nThanks again.\n\nOn Wed, Nov 28, 2018 at 10:57 PM alexios galanos <alexios at 4dscape.com>\nwrote:\n\n> That's piqued my interest...here is my suggestion (which I have\n> successfully tested) for a quick solution:\n>\n> 1. Use variance targeting:\n>\n> gjrSpec <- ugarchspec(mean.model = list(armaOrder =\n> c(1,0)),variance.model = list(model = \"gjrGARCH\",\n> variance.targeting=TRUE),distribution.model = \"sstd\")\n>\n> 2. remove the NA leftover from the return calculation:\n> na.omit(spyRets)\n>\n>\n> Alexios\n>\n>\n> On 11/28/18 7:39 PM, Ilya Kipnis wrote:\n> > image.png\n> >\n> > Unfortunately, the gosolnp method does not work.\n> >\n> > Tried implementing fit.control as best I understood it.\n> >\n> > image.png\n> >\n> > Also does not work.\n> >\n> > On Wed, Nov 28, 2018 at 10:33 PM alexios galanos <alexios at 4dscape.com\n> > <mailto:alexios at 4dscape.com>> wrote:\n> >\n> >     Try setting the solver in the resume command to \"gosolnp\".\n> >     It may also have helped to set fit.control(scale=1) in the\n> ugarchroll,\n> >     but you can set this in resume as well.\n> >\n> >     Alexios\n> >\n> >     On 11/28/18 7:22 PM, Ilya Kipnis wrote:\n> >      > I just completed Kris Boudt's datacamp course on GARCH models, and\n> >      > thought I'd give it a spin in a more reasonable setting. I've run\n> >     into\n> >      > an error that the course didn't cover. I'm using a rolling window\n> >     of 504\n> >      > trading days to try to fit a GJR-GARCH with AR1 return\n> >     innovations and a\n> >      > skewed student t distribution and refitting the model every 22\n> >     days (so,\n> >      > basically every month) on SPY returns.\n> >      >\n> >      > In the course, it was possible to convert this output into a data\n> >     frame,\n> >      > with an as.data.frame command.\n> >      >\n> >      > Unfortunately, the course didn't cover what happened when over the\n> >      > course of ~300 model fits, there would be the occasional failure\n> to\n> >      > converge, which throws the following error:\n> >      >\n> >      > image.png\n> >      >\n> >      > Here's my MRE:\n> >      >\n> >      > require(rugarch)\n> >      > require(quantmod)\n> >      >\n> >      > # get SPY data from Yahoo (also tried with Quandl, data isn't the\n> >     issue)\n> >      > getSymbols(\"SPY\", from = '1990-01-01')\n> >      >\n> >      > spyRets <- Return.calculate(Ad(SPY))\n> >      >\n> >      > # GJR garch with AR1 innovations under a skewed student T\n> >     distribution\n> >      > for returns\n> >      > gjrSpec <- ugarchspec(mean.model = list(armaOrder = c(1,0)),\n> >      >                        variance.model = list(model = \"gjrGARCH\"),\n> >      >                        distribution.model = \"sstd\")\n> >      >\n> >      > # Use rolling window of 504 days, refitting the model every 22\n> >     trading days\n> >      > t1 <- Sys.time()\n> >      > garchroll <- ugarchroll(gjrSpec, data = spyRets,\n> >      >                          n.start = 504, refit.window = \"moving\",\n> >      > refit.every = 22)\n> >      > t2 <- Sys.time()\n> >      > print(t2-t1)\n> >      >\n> >      > # try to convert predictions to data frame, as in course -- error\n> >     thrown\n> >      > regarding non-converged estimation windows\n> >      > garchroll <- as.data.frame(garchroll)\n> >      >\n> >      > With a screenshot for better readability:\n> >      >\n> >      > image.png\n> >      > I also tried the resume command from the following post\n> >      > https://stat.ethz.ch/pipermail/r-sig-finance/2013q2/011720.html,\n> >     which\n> >      > did not solve my problem.\n> >      >\n> >      > I feel that this is a pretty straightforward application of the\n> >     rugarch\n> >      > package, and that there is most likely a solution that simply\n> wasn't\n> >      > covered in the course. I'd be greatly appreciative if someone\n> >     could help\n> >      > me over this hill (albeit at the risk of revealing that I'm not\n> >     exactly\n> >      > an expert on GARCH models).\n> >      >\n> >      > Thank you so much.\n> >      >\n> >      > Sincerely,\n> >      >\n> >      > Ilya Kipnis (author of Quantstrat TradeR)\n> >      >\n> >      > _______________________________________________\n> >      > R-SIG-Finance at r-project.org <mailto:R-SIG-Finance at r-project.org>\n> >     mailing list\n> >      > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> >      > -- Subscriber-posting only. If you want to post, subscribe first.\n> >      > -- Also note that this is not the r-help list where general R\n> >     questions should go.\n> >      >\n> >\n> >     _______________________________________________\n> >     R-SIG-Finance at r-project.org <mailto:R-SIG-Finance at r-project.org>\n> >     mailing list\n> >     https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> >     -- Subscriber-posting only. If you want to post, subscribe first.\n> >     -- Also note that this is not the r-help list where general R\n> >     questions should go.\n> >\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "The variance.targeting does work, but it does impose an assumption on the\nnature of the variance of the S&P 500 returns, that the variance is\nnaturally mean-reverting, and I'm not sure that's the case",
+      "thread_id": "thread-1c3190b9610b",
+      "thread_depth": 4,
+      "month": "2018-11"
+    },
+    {
+      "id": "msg-73f5189bb109",
+      "message_id": "<01d301d4879a$fab6e2f0$f024a8d0$@gmail.com>",
+      "from_name": "prof@@mit@mitt@l m@ili@g off gm@il@com",
+      "from_email_hash": "6b841195dc8fbf9d539420fade25be0861ec01cf56951e0acbccd3d21e5adc28",
+      "date": "2018-11-29T09:51:15+05:30",
+      "subject": "[R-SIG-Finance] Just finished Kris Boudt's course, running into errors from non-convergence in rugarch",
+      "subject_clean": "Just finished Kris Boudt's course, running into errors from non-convergence in rugarch",
+      "in_reply_to": "<CA+oJuEEnn7qbVLBCvvw9hmucyzVgJ_81YMbu0Fhwijs-rrv+6g@mail.gmail.com>",
+      "references": [
+        "<CA+oJuEEnn7qbVLBCvvw9hmucyzVgJ_81YMbu0Fhwijs-rrv+6g@mail.gmail.com>"
+      ],
+      "body_plain": "End to end examples to extract data objects from results and resolve errors in eric zivot?s presentations on DCC correlations at https://faculty.washington.edu/ezivot/econ589/DCCgarchPowerpoint.pdf\n\n \n\nRmgarch is just rugarch for more than one series at the same time making it richer in functionality. Also make sure input data does not have NAs using na.omit. Also instead of as.data.frame try  converting into xts objects as well. Easier with some rugarch extensions. (These two last methods take care of all errors in between) \n\n \n\nThere is a corresponding one on copulas later also by zivot for his uw advanced econ class\n\n \n\nBest regards\n\nAmit\n\n \n\n \n\n \n\nFrom: R-SIG-Finance <r-sig-finance-bounces at r-project.org> On Behalf Of Ilya Kipnis\nSent: Thursday, November 29, 2018 8:53 AM\nTo: r-sig-finance at r-project.org\nSubject: [R-SIG-Finance] Just finished Kris Boudt's course, running into errors from non-convergence in rugarch\n\n \n\nI just completed Kris Boudt's datacamp course on GARCH models, and thought I'd give it a spin in a more reasonable setting. I've run into an error that the course didn't cover. I'm using a rolling window of 504 trading days to try to fit a GJR-GARCH with AR1 return innovations and a skewed student t distribution and refitting the model every 22 days (so, basically every month) on SPY returns.  \n\nIn the course, it was possible to convert this output into a data frame, with an as.data.frame command.\n\nUnfortunately, the course didn't cover what happened when over the course of ~300 model fits, there would be the occasional failure to converge, which throws the following error:\n\n \n\n\n\n\nHere's my MRE:\n\nrequire(rugarch)\n\nrequire(quantmod)\n\n \n\n# get SPY data from Yahoo (also tried with Quandl, data isn't the issue)\n\ngetSymbols(\"SPY\", from = '1990-01-01')\n\n \n\nspyRets <- Return.calculate(Ad(SPY))\n\n \n\n# GJR garch with AR1 innovations under a skewed student T distribution for returns\n\ngjrSpec <- ugarchspec(mean.model = list(armaOrder = c(1,0)),\n\n                      variance.model = list(model = \"gjrGARCH\"),\n\n                      distribution.model = \"sstd\")\n\n \n\n# Use rolling window of 504 days, refitting the model every 22 trading days\n\nt1 <- Sys.time()\n\ngarchroll <- ugarchroll(gjrSpec, data = spyRets, \n\n                        n.start = 504, refit.window = \"moving\",  refit.every = 22)\n\nt2 <- Sys.time()\n\nprint(t2-t1)\n\n \n\n# try to convert predictions to data frame, as in course -- error thrown regarding non-converged estimation windows\n\ngarchroll <- as.data.frame(garchroll)\n\n \n\nWith a screenshot for better readability:\n\n\nI also tried the resume command from the following post https://stat.ethz.ch/pipermail/r-sig-finance/2013q2/011720.html, which did not solve my problem.  \n\nI feel that this is a pretty straightforward application of the rugarch package, and that there is most likely a solution that simply wasn't covered in the course. I'd be greatly appreciative if someone could help me over this hill (albeit at the risk of revealing that I'm not exactly an expert on GARCH models).  \n\nThank you so much.\n\n \n\nSincerely,\n\nIlya Kipnis (author of Quantstrat TradeR)\n\n\n-------------- next part --------------\nAn HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20181129/8765e989/attachment.html>\n\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: image001.png\nType: image/png\nSize: 6511 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20181129/8765e989/attachment.png>\n\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: image002.png\nType: image/png\nSize: 71728 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20181129/8765e989/attachment-0001.png>",
+      "body_snippet": "End to end examples to extract data objects from results and resolve errors in eric zivot?s presentations on DCC correlations at https://faculty.washington.edu/ezivot/econ589/DCCgarchPowerpoint.pdf\n\n ",
+      "thread_id": "thread-1c3190b9610b",
+      "thread_depth": 1,
+      "month": "2018-11"
+    },
+    {
+      "id": "msg-1004938a5e5f",
+      "message_id": "<01d901d4879b$4607bd60$d2173820$@gmail.com>",
+      "from_name": "prof@@mit@mitt@l m@ili@g off gm@il@com",
+      "from_email_hash": "6b841195dc8fbf9d539420fade25be0861ec01cf56951e0acbccd3d21e5adc28",
+      "date": "2018-11-29T09:53:23+05:30",
+      "subject": "[R-SIG-Finance] Just finished Kris Boudt's course, running into errors from non-convergence in rugarch",
+      "subject_clean": "Just finished Kris Boudt's course, running into errors from non-convergence in rugarch",
+      "in_reply_to": "<CA+oJuEGw+1y6GCNZ1MTvLFftxhpkqyHYA1voVAVsHD6Me6d0yQ@mail.gmail.com>",
+      "references": [
+        "<CA+oJuEEnn7qbVLBCvvw9hmucyzVgJ_81YMbu0Fhwijs-rrv+6g@mail.gmail.com>",
+        "<def2cf5a-2444-0c4a-32af-e9e890d1ae91@4dscape.com>",
+        "<CA+oJuEEoX0EAPwLDLn=5vvVoWvNS7v94CmJ8GKe630vTBthyVA@mail.gmail.com>",
+        "<09e5aa01-00d3-a6d8-9b46-f86ba451f037@4dscape.com>",
+        "<CA+oJuEGw+1y6GCNZ1MTvLFftxhpkqyHYA1voVAVsHD6Me6d0yQ@mail.gmail.com>"
+      ],
+      "body_plain": "Check the rugarch vignettes, it covers each included models with detailed\nsub options\nBest regards\nAmit\n\n-----Original Message-----\nFrom: R-SIG-Finance <r-sig-finance-bounces at r-project.org> On Behalf Of Ilya\nKipnis\nSent: Thursday, November 29, 2018 9:42 AM\nTo: Alexios G <alexios at 4dscape.com>\nCc: r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] Just finished Kris Boudt's course, running into\nerrors from non-convergence in rugarch\n\nThe variance.targeting does work, but it does impose an assumption on the\nnature of the variance of the S&P 500 returns, that the variance is\nnaturally mean-reverting, and I'm not sure that's the case. While the VIX\ncertainly does tend to mean-revert more often than not, the times it\n*doesn't* are the times that all of the volatility mean-reverting guys just\nget absolutely blown up, whether it's 2008, when vol went up and up, or Feb\n4-Feb 5 of 2018, when anyone that thought Feb 5 was a nice time to revert\nthe Feb 4 spike got blown up in 20 minutes after hours.\n\nWill go with this solution for now in terms of trying to see if there's a\nnew VIX trading strategy, but I'm hoping I can relax the assumption in the\nnear future.\n\nThanks again.\n\nOn Wed, Nov 28, 2018 at 10:57 PM alexios galanos <alexios at 4dscape.com>\nwrote:\n\n> That's piqued my interest...here is my suggestion (which I have \n> successfully tested) for a quick solution:\n>\n> 1. Use variance targeting:\n>\n> gjrSpec <- ugarchspec(mean.model = list(armaOrder = \n> c(1,0)),variance.model = list(model = \"gjrGARCH\", \n> variance.targeting=TRUE),distribution.model = \"sstd\")\n>\n> 2. remove the NA leftover from the return calculation:\n> na.omit(spyRets)\n>\n>\n> Alexios\n>\n>\n> On 11/28/18 7:39 PM, Ilya Kipnis wrote:\n> > image.png\n> >\n> > Unfortunately, the gosolnp method does not work.\n> >\n> > Tried implementing fit.control as best I understood it.\n> >\n> > image.png\n> >\n> > Also does not work.\n> >\n> > On Wed, Nov 28, 2018 at 10:33 PM alexios galanos \n> > <alexios at 4dscape.com <mailto:alexios at 4dscape.com>> wrote:\n> >\n> >     Try setting the solver in the resume command to \"gosolnp\".\n> >     It may also have helped to set fit.control(scale=1) in the\n> ugarchroll,\n> >     but you can set this in resume as well.\n> >\n> >     Alexios\n> >\n> >     On 11/28/18 7:22 PM, Ilya Kipnis wrote:\n> >      > I just completed Kris Boudt's datacamp course on GARCH models,\nand\n> >      > thought I'd give it a spin in a more reasonable setting. I've run\n> >     into\n> >      > an error that the course didn't cover. I'm using a rolling window\n> >     of 504\n> >      > trading days to try to fit a GJR-GARCH with AR1 return\n> >     innovations and a\n> >      > skewed student t distribution and refitting the model every 22\n> >     days (so,\n> >      > basically every month) on SPY returns.\n> >      >\n> >      > In the course, it was possible to convert this output into a data\n> >     frame,\n> >      > with an as.data.frame command.\n> >      >\n> >      > Unfortunately, the course didn't cover what happened when over\nthe\n> >      > course of ~300 model fits, there would be the occasional \n> > failure\n> to\n> >      > converge, which throws the following error:\n> >      >\n> >      > image.png\n> >      >\n> >      > Here's my MRE:\n> >      >\n> >      > require(rugarch)\n> >      > require(quantmod)\n> >      >\n> >      > # get SPY data from Yahoo (also tried with Quandl, data isn't the\n> >     issue)\n> >      > getSymbols(\"SPY\", from = '1990-01-01')\n> >      >\n> >      > spyRets <- Return.calculate(Ad(SPY))\n> >      >\n> >      > # GJR garch with AR1 innovations under a skewed student T\n> >     distribution\n> >      > for returns\n> >      > gjrSpec <- ugarchspec(mean.model = list(armaOrder = c(1,0)),\n> >      >                        variance.model = list(model = \"gjrGARCH\"),\n> >      >                        distribution.model = \"sstd\")\n> >      >\n> >      > # Use rolling window of 504 days, refitting the model every 22\n> >     trading days\n> >      > t1 <- Sys.time()\n> >      > garchroll <- ugarchroll(gjrSpec, data = spyRets,\n> >      >                          n.start = 504, refit.window = \"moving\",\n> >      > refit.every = 22)\n> >      > t2 <- Sys.time()\n> >      > print(t2-t1)\n> >      >\n> >      > # try to convert predictions to data frame, as in course -- error\n> >     thrown\n> >      > regarding non-converged estimation windows\n> >      > garchroll <- as.data.frame(garchroll)\n> >      >\n> >      > With a screenshot for better readability:\n> >      >\n> >      > image.png\n> >      > I also tried the resume command from the following post\n> >      > https://stat.ethz.ch/pipermail/r-sig-finance/2013q2/011720.html,\n> >     which\n> >      > did not solve my problem.\n> >      >\n> >      > I feel that this is a pretty straightforward application of the\n> >     rugarch\n> >      > package, and that there is most likely a solution that simply\n> wasn't\n> >      > covered in the course. I'd be greatly appreciative if someone\n> >     could help\n> >      > me over this hill (albeit at the risk of revealing that I'm not\n> >     exactly\n> >      > an expert on GARCH models).\n> >      >\n> >      > Thank you so much.\n> >      >\n> >      > Sincerely,\n> >      >\n> >      > Ilya Kipnis (author of Quantstrat TradeR)\n> >      >\n> >      > _______________________________________________\n> >      > R-SIG-Finance at r-project.org <mailto:R-SIG-Finance at r-project.org>\n> >     mailing list\n> >      > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> >      > -- Subscriber-posting only. If you want to post, subscribe first.\n> >      > -- Also note that this is not the r-help list where general R\n> >     questions should go.\n> >      >\n> >\n> >     _______________________________________________\n> >     R-SIG-Finance at r-project.org <mailto:R-SIG-Finance at r-project.org>\n> >     mailing list\n> >     https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> >     -- Subscriber-posting only. If you want to post, subscribe first.\n> >     -- Also note that this is not the r-help list where general R\n> >     questions should go.\n> >\n>\n\n\t[[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions\nshould go.",
+      "body_snippet": "Check the rugarch vignettes, it covers each included models with detailed\nsub options\nBest regards\nAmit\n\n-----Original Message-----\nFrom: R-SIG-Finance <r-sig-finance-bounces at r-project.org> On Beha",
+      "thread_id": "thread-1c3190b9610b",
+      "thread_depth": 5,
+      "month": "2018-11"
+    },
+    {
+      "id": "msg-4201927858cf",
+      "message_id": "<826293536.193243.1543590646232@romandiev5-http2.romandie.int>",
+      "from_name": "Farid Moussaoui",
+      "from_email_hash": "176f0ac4eef787b04d5957c7d2b69ecf1e47b9add4c1ae694f0100b4605e0281",
+      "date": "2018-11-30T16:10:46+01:00",
+      "subject": "[R-SIG-Finance] Just finished Kris Boudt's course, running into errors from non-convergence in rugarch",
+      "subject_clean": "Just finished Kris Boudt's course, running into errors from non-convergence in rugarch",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "If you look to warnings(), it is said that\n\nWarning in .makefitmodel(garchmodel = \"gjrGARCH\", f = .gjrgarchLLH, T = T,  :\nrugarch-->warning: failed to invert hessian\n\nThe 6 available solvers got the same message.\nF.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "If you look to warnings(), it is said that\n\nWarning in .makefitmodel(garchmodel = \"gjrGARCH\", f = .gjrgarchLLH, T = T,  :\nrugarch-->warning: failed to invert hessian\n\nThe 6 available solvers got the s",
+      "thread_id": "thread-4201927858cf",
+      "thread_depth": 0,
+      "month": "2018-11"
+    },
+    {
+      "id": "msg-dc0c2abaf8d1",
+      "message_id": "<0253BA59-6AD0-40EE-ADB9-2608A7FEE5A4@4dscape.com>",
+      "from_name": "Alexios Galanos",
+      "from_email_hash": "f12a89c6562792937246cb8bec959797c75bc6b52bac14749297d96240c05c5f",
+      "date": "2018-11-30T22:00:56-08:00",
+      "subject": "[R-SIG-Finance] rugarch roll plot. why abs(mu) in plot?",
+      "subject_clean": "rugarch roll plot. why abs(mu) in plot?",
+      "in_reply_to": "<78991543639842@iva6-71ba8554b85c.qloud-c.yandex.net>",
+      "references": [
+        "<1377311542791922@myt1-cd60b8ae9bb9.qloud-c.yandex.net>",
+        "<9398151543607516@sas1-4b7566131ec9.qloud-c.yandex.net>",
+        "<78991543639842@iva6-71ba8554b85c.qloud-c.yandex.net>"
+      ],
+      "body_plain": "Agreed, it shouldn?t...my bad for copying the code from another plot snippet.\nThanks for catching this. Will fix in next release.\n\nAlexios\n\n\n> On Nov 30, 2018, at 20:50, ???????? ?????? <vivanov879 at ya.ru> wrote:\n> \n>  \n>>> Hi. After fitting a rolling model and plotting the Series forecast all forecasted values are positive. Use this code to reproduce: http://www.unstarched.net/wp-content/uploads/2013/06/an-example-in-rugarch.pdf I would expect the series forecasts be both positive and negative. \n>>>  \n>>> <series_plot.png>\n>>>  \n>>> After looking through the sources I found that it is a plot of abs(mu) against realized values. :\n>>>  \n>>> # rolling series forecast comparison plot\n>>> .plot.garchroll.3 = function(x, VaR.alpha = 0.01, density.support = c(-0.15, 0.15), ...)\n>>> {\n>>> density = x at forecast$density\n>>> plot(as.Date(rownames(density)), density[,6], type=\"l\", col = \"grey\",\n>>> main = paste(\"Series Forecast vs Realized\", sep = \"\"),\n>>> ylab = \"\", xlab  = \"\", cex.main = 0.7, cex.axis = 0.8, cex.lab=0.9)\n>>> lines(as.Date(rownames(density)), abs(density[,1]), col = \"tomato1\", lwd = 1.5)\n>>> grid()\n>>> invisible(x)\n>>> }\n>>>  \n>>> I think it there should be no abs . What do you think?\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Agreed, it shouldn?t...my bad for copying the code from another plot snippet.\nThanks for catching this. Will fix in next release.\n\nAlexios\n\n\n> On Nov 30, 2018, at 20:50, ???????? ?????? <vivanov879 at",
+      "thread_id": "thread-dc0c2abaf8d1",
+      "thread_depth": 0,
+      "month": "2018-11"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-d0835c512e09",
+      "subject": "Extending the variance equation in GARCH models in the rugarch package (Realized GARCH)",
+      "message_count": 1,
+      "participants": [
+        "Riddell Red"
+      ],
+      "started": "2018-11-02T17:00:50+11:00",
+      "last_reply": "2018-11-02T17:00:50+11:00",
+      "root_message_id": "msg-d0835c512e09"
+    },
+    {
+      "id": "thread-96c0e97e4805",
+      "subject": "Error plotting a zoo object",
+      "message_count": 2,
+      "participants": [
+        "Baki UNAL",
+        "Joshua Ulrich"
+      ],
+      "started": "2018-11-15T23:32:57+00:00",
+      "last_reply": "2018-11-17T08:35:50-06:00",
+      "root_message_id": "msg-96c0e97e4805"
+    },
+    {
+      "id": "thread-daec6a7a4e44",
+      "subject": "timestamps IBrokers",
+      "message_count": 1,
+      "participants": [
+        "Stephen Choularton"
+      ],
+      "started": "2018-11-21T06:05:18+11:00",
+      "last_reply": "2018-11-21T06:05:18+11:00",
+      "root_message_id": "msg-daec6a7a4e44"
+    },
+    {
+      "id": "thread-b596b48898d3",
+      "subject": "timestamps IBrokers",
+      "message_count": 1,
+      "participants": [
+        "Farid Moussaoui"
+      ],
+      "started": "2018-11-21T21:53:06+01:00",
+      "last_reply": "2018-11-21T21:53:06+01:00",
+      "root_message_id": "msg-b596b48898d3"
+    },
+    {
+      "id": "thread-cc6a2c7d61b7",
+      "subject": "How to access rugarch output object ?",
+      "message_count": 3,
+      "participants": [
+        "Eric Berger",
+        "John Writer"
+      ],
+      "started": "2018-11-26T20:26:14+05:30",
+      "last_reply": "2018-11-27T06:36:50+05:30",
+      "root_message_id": "msg-cc6a2c7d61b7"
+    },
+    {
+      "id": "thread-1c3190b9610b",
+      "subject": "Just finished Kris Boudt's course, running into errors from non-convergence in rugarch",
+      "message_count": 7,
+      "participants": [
+        "Ilya Kipnis",
+        "alexios galanos",
+        "prof@@mit@mitt@l m@ili@g off gm@il@com"
+      ],
+      "started": "2018-11-28T22:22:40-05:00",
+      "last_reply": "2018-11-29T09:53:23+05:30",
+      "root_message_id": "msg-1c3190b9610b"
+    },
+    {
+      "id": "thread-4201927858cf",
+      "subject": "Just finished Kris Boudt's course, running into errors from non-convergence in rugarch",
+      "message_count": 1,
+      "participants": [
+        "Farid Moussaoui"
+      ],
+      "started": "2018-11-30T16:10:46+01:00",
+      "last_reply": "2018-11-30T16:10:46+01:00",
+      "root_message_id": "msg-4201927858cf"
+    },
+    {
+      "id": "thread-dc0c2abaf8d1",
+      "subject": "rugarch roll plot. why abs(mu) in plot?",
+      "message_count": 1,
+      "participants": [
+        "Alexios Galanos"
+      ],
+      "started": "2018-11-30T22:00:56-08:00",
+      "last_reply": "2018-11-30T22:00:56-08:00",
+      "root_message_id": "msg-dc0c2abaf8d1"
+    }
+  ]
+}

@@ -1,0 +1,1625 @@
+From p@nk@j@b| @end|ng |rom y@hoo@com  Wed Nov  5 15:55:04 2025
+From: p@nk@j@b| @end|ng |rom y@hoo@com (Pankaj K Agarwal)
+Date: Wed, 5 Nov 2025 14:55:04 +0000 (UTC)
+Subject: [R-SIG-Finance] startMethod in rmgarch package
+In-Reply-To: <CAHAR1uPROwTKdtz=16nZOgcOJ8Us=Tco0jEEUoBr0Y6Ghg+4Aw@mail.gmail.com>
+References: <CAHAR1uPROwTKdtz=16nZOgcOJ8Us=Tco0jEEUoBr0Y6Ghg+4Aw@mail.gmail.com>
+Message-ID: <1350605888.2885623.1762354504031@mail.yahoo.com>
+
+Hi EveryoneMy colleagues and I at XLRI - Xavier School of Management, a top b-school in India, are organizing an international conference, Global Banking and Finance Conference, on February 05-07, 2026, in Delhi-NCR,? India. The Keynote speakers include ?Prof. Marcin Kacperczyk, Prof. John H Cochrane, and Prof. Vikas Agarwal, among others.?In addition to empirical and theoretical papers in various areas of finance, we encourage presentations that utilise open-source?programming languages as primary tools for financial model development and research. Developers of new financial packages are also welcome to present their work.
+The submissions are open till November 15, 2025 at this link -?https://editorialexpress.com/conference/GBFC2026/.?Please visit the conference website here?for further details.?
+We look forward to receiving your submissions.?
+Regards,Pankaj K Agarwal
++91-98397-11444http://in.linkedin.com/in/pankajkagarwal/ 
+
+    On Wednesday 10 September, 2025 at 07:29:37 pm IST, Simon Rhodes <si.g.rhodes at gmail.com> wrote:  
+ 
+ Hi,
+I am using the following to simulate a multivariate GARCH model:
+
+cgarchsim(model, n.sim = samples, n.start = 0, m.sim = simCount,
+startMethod = "unconditional", only.density = TRUE)
+
+But I seem to have an issue where the early draws from the simulation have
+variances across multiple simulations that are different from the
+unconditional variance, but meet the unconditional over time. As I
+understand it, I can use the start parameter to burn-in draws, but I was
+curious as to why the startMethod isn't sufficient.
+
+Thanks,
+Simon
+
+??? [[alternative HTML version deleted]]
+
+_______________________________________________
+R-SIG-Finance at r-project.org mailing list
+https://stat.ethz.ch/mailman/listinfo/r-sig-finance
+-- Subscriber-posting only. If you want to post, subscribe first.
+-- Also note that this is not the r-help list where general R questions should go.
+  
+	[[alternative HTML version deleted]]
+
+
+From @ndre|tr@mo@ @end|ng |rom gm@||@com  Mon Nov 10 14:44:15 2025
+From: @ndre|tr@mo@ @end|ng |rom gm@||@com (Andre Luiz Tietbohl Ramos)
+Date: Mon, 10 Nov 2025 10:44:15 -0300
+Subject: [R-SIG-Finance] 
+ X axis labels, title, subtitle, labels customisation
+Message-ID: <CAPZA_qLf4_iFoPXigAhwF6wBOryEwt=zp4UoEQbR0SF_OC5Org@mail.gmail.com>
+
+Hello,
+
+I'd like to customize the makeChart function output of the quantmod
+library.  Its main objective is threefold:
+
+1. have x axis labels at 45 degree angle.
+2. have a title and subtitle
+3. have labels legends.
+
+I can obtain the desired output via the ggplot code below.  However, the
+chartSeries() function doesn't work. port_cumulative_ret along with the
+other data required are obtained via tiidyquant library.
+
+port_cumulative_ret %>%
+    ## axis data
+    ggplot(aes(x = date, y = cum_ret)) +
+    ## plot configuration
+    theme_gray() +
+    theme(plot.background = element_rect(fill = "gray86")) +
+    geom_line(color = "blue") +
+    theme(axis.text.x = element_text(angle = 50, hjust = 1)) +  ## x axis
+text at 45 degree angle
+    ## graph text, notation and number settings
+    labs(x = 'Data',
+            y = 'Cum Return',
+         title = paste0('Portfolio Cum Return on ', format(as.Date(end),
+format="%m/%d/%Y")),
+         subtitle = paste0("Actives: ", toString(tickers.clean),
+"\nWeights: ",
+                           toString(percent(wts, accuracy = 0.01)))
+         ) +
+    ## axis numbering settings
+    scale_x_date(date_breaks = '2 weeks',
+                 date_labels = '%d %b %y')
+    )
+
+Thanks in advance for any help.
+
+--
+Andr? Luiz T. Ramos, PhD
+
+	[[alternative HTML version deleted]]
+
+
+From br@h|m@@d@m @end|ng |rom gm@||@com  Mon Nov 10 16:10:32 2025
+From: br@h|m@@d@m @end|ng |rom gm@||@com (Brahim A.)
+Date: Mon, 10 Nov 2025 16:10:32 +0100
+Subject: [R-SIG-Finance] 
+ X axis labels, title, subtitle, labels customisation
+In-Reply-To: <CAPZA_qLf4_iFoPXigAhwF6wBOryEwt=zp4UoEQbR0SF_OC5Org@mail.gmail.com>
+References: <CAPZA_qLf4_iFoPXigAhwF6wBOryEwt=zp4UoEQbR0SF_OC5Org@mail.gmail.com>
+Message-ID: <CAHcRUdFjCCK8E=oPWPVxgZyfrp2xSBFCqeh1DN=HCkCVA4evFQ@mail.gmail.com>
+
+Hi Andre ,
+
+If you must stay in quantmod, you can add some cosmetic tweaks manually:
+
+library(quantmod)
+
+chartSeries(portf_xts,
+            theme = chartTheme("white"),
+            name = "Portfolio Cumulative Return",
+            TA = NULL) # remove technical analysis overlays for clean chart
+
+# Add a subtitle manually
+mtext("Actives: AAPL, MSFT | Weights: 50%, 50%", side = 3, line = 0.5, cex
+= 0.8)
+
+# Rotate x-axis labels manually
+axis(1, at = axTicks(1), labels = FALSE)
+text(x = axTicks(1),
+     y = par("usr")[3] - 0.05,
+     srt = 45, adj = 1,
+     labels = format(index(portf_xts)[axTicks(1)], "%d %b %y"),
+     xpd = TRUE, cex = 0.7)
+
+This works but is clunky ? you?re manually redrawing parts of the chart.
+
+
+
+
+On Mon, Nov 10, 2025, 14:44 Andre Luiz Tietbohl Ramos <
+andreltramos at gmail.com> wrote:
+
+> Hello,
+>
+> I'd like to customize the makeChart function output of the quantmod
+> library.  Its main objective is threefold:
+>
+> 1. have x axis labels at 45 degree angle.
+> 2. have a title and subtitle
+> 3. have labels legends.
+>
+> I can obtain the desired output via the ggplot code below.  However, the
+> chartSeries() function doesn't work. port_cumulative_ret along with the
+> other data required are obtained via tiidyquant library.
+>
+> port_cumulative_ret %>%
+>     ## axis data
+>     ggplot(aes(x = date, y = cum_ret)) +
+>     ## plot configuration
+>     theme_gray() +
+>     theme(plot.background = element_rect(fill = "gray86")) +
+>     geom_line(color = "blue") +
+>     theme(axis.text.x = element_text(angle = 50, hjust = 1)) +  ## x axis
+> text at 45 degree angle
+>     ## graph text, notation and number settings
+>     labs(x = 'Data',
+>             y = 'Cum Return',
+>          title = paste0('Portfolio Cum Return on ', format(as.Date(end),
+> format="%m/%d/%Y")),
+>          subtitle = paste0("Actives: ", toString(tickers.clean),
+> "\nWeights: ",
+>                            toString(percent(wts, accuracy = 0.01)))
+>          ) +
+>     ## axis numbering settings
+>     scale_x_date(date_breaks = '2 weeks',
+>                  date_labels = '%d %b %y')
+>     )
+>
+> Thanks in advance for any help.
+>
+> --
+> Andr? Luiz T. Ramos, PhD
+>
+>         [[alternative HTML version deleted]]
+>
+> _______________________________________________
+> R-SIG-Finance at r-project.org mailing list
+> https://stat.ethz.ch/mailman/listinfo/r-sig-finance
+> -- Subscriber-posting only. If you want to post, subscribe first.
+> -- Also note that this is not the r-help list where general R questions
+> should go.
+>
+
+	[[alternative HTML version deleted]]
+
+
+From @ndre|tr@mo@ @end|ng |rom gm@||@com  Sun Nov 16 11:31:48 2025
+From: @ndre|tr@mo@ @end|ng |rom gm@||@com (Andre Luiz Tietbohl Ramos)
+Date: Sun, 16 Nov 2025 07:31:48 -0300
+Subject: [R-SIG-Finance] addRSI TA and chartSeries
+Message-ID: <CAPZA_qJfEE+vtcYFR+N0soXi8Ad02_xjTEg8-Mh0-3NSkKOJmg@mail.gmail.com>
+
+Hello,
+
+Hello,
+
+Is there a way to show the typical 70% and 30% level lines when plotting
+the addRSI indicator? TIA.
+
+Regards,
+
+--
+Andre Luiz T. Ramos, PhD
+
+	[[alternative HTML version deleted]]
+
+
+From @ndre|tr@mo@ @end|ng |rom gm@||@com  Sun Nov 16 11:45:11 2025
+From: @ndre|tr@mo@ @end|ng |rom gm@||@com (Andre Luiz Tietbohl Ramos)
+Date: Sun, 16 Nov 2025 07:45:11 -0300
+Subject: [R-SIG-Finance] chartSeries custom background color
+Message-ID: <CAPZA_qJHXMSLPqn_jAYCwajKV0N+tHvTCG-5bDOSou1h0+2MpQ@mail.gmail.com>
+
+Hello,
+
+Is there a way to have a custom background color on a chart plot?
+I was able to obtain its outer range with gray color via bg.col = "gray"
+however I rather have this color throughout the chart. TIA.
+
+Regards,
+
+--
+Andr? Luiz T. Ramos, PhD
+
+	[[alternative HTML version deleted]]
+
+
+From @@8098 @end|ng |rom nyu@edu  Sun Nov 30 16:00:47 2025
+From: @@8098 @end|ng |rom nyu@edu (Anatoly Schmidt)
+Date: Sun, 30 Nov 2025 10:00:47 -0500
+Subject: [R-SIG-Finance] Volatility estimate in rugarch
+Message-ID: <CAOTSzfkJGb+835DdriJv_-GZhoXRwWywHbNiJVPakU7pCCryFQ@mail.gmail.com>
+
+I'm wondering what's the adequate volatility estimate from the rugarch
+output for a ARMA-GARCH model:
+1) std(ARMA-GARCH residuals)
+2) GARCH sigma
+
+Thank you! Alec
+
+	[[alternative HTML version deleted]]
+
+
+From @ndre|tr@mo@ @end|ng |rom gm@||@com  Mon Dec  8 12:36:35 2025
+From: @ndre|tr@mo@ @end|ng |rom gm@||@com (Andre Luiz Tietbohl Ramos)
+Date: Mon, 8 Dec 2025 08:36:35 -0300
+Subject: [R-SIG-Finance] Custom colour on the plot background using
+ chartSeries()
+Message-ID: <CAPZA_q+U5ObHY-2GyHKNAjbHOJYPRvX6r0QRxkHN1NeskuHOfA@mail.gmail.com>
+
+Hello,
+
+I'm trying to get a custom colour on a plot background to no avail.
+I also tried via custom theme and via the rect function described below.
+
+myTheme <- chart_theme()
+myTheme$col$bg <- "#6C7B8B"   ## "slategray4" or
+myTheme$panel.background$fill <- "slategray4"
+
+## Via set plot region color
+rect(
+    par("usr")[1],
+    par("usr")[3],
+    par("usr")[2],
+    par("usr")[4],
+    col = "slategray4"
+)
+
+The solution below keeps the actual plot with white background for only its
+borders have the desired colour,
+
+ chartSeries(PETR4.SA,
+                          theme = chartTheme('white', up.col = 'darkgreen',
+bg.col = "darkgray"),
+                          par(lwd = 2),
+                          type = "line",
+                          bar.type = "hlc",
+                          major.ticks='months',
+                          minor.ticks=TRUE,
+                          show.grid = TRUE,
+                          TA = NULL
+                          ) + theme(plot.background = element_rect(fill =
+"darkgray", color = "darkgray", size = 2))
+
+Suggestions?  Any help greatly appreciated.
+
+Best,
+
+--
+Andre Luiz Tietbohl Ramos, PhD
+
+	[[alternative HTML version deleted]]
+
+
+From @@8098 @end|ng |rom nyu@edu  Wed Dec 17 23:16:34 2025
+From: @@8098 @end|ng |rom nyu@edu (Anatoly Schmidt)
+Date: Wed, 17 Dec 2025 17:16:34 -0500
+Subject: [R-SIG-Finance] Skipping non-convergent GARCH run within a loop
+Message-ID: <CAOTSzfm+JqSxVSNvh0XwaizniLUQe1_jC1HwA6xszdFSNyVjEQ@mail.gmail.com>
+
+I'm wondering if there is an option to skip a non-convergent combo of garch
+input parameters within the loop upon different parameter values.
+I thought something like
+if(convergence(ugarchfit(GARCHspec, solver="hybrid", returns)) != "0") {
+      print("NA")
+      next
+}
+It did not give an error for the runs with 'good' parameters. But in case
+of a 'bad' parameter combo, I got the following:
+
+error in evaluating the argument 'object' in selecting a method for
+function 'convergence': object 'B' not found
+
+Thanks much, Alec
+
+-- 
+Anatoly Schmidt
+Adjunct Professor, Finance and Risk Engineering, NYU Tandon School
+https://www.linkedin.com/in/alec-schmidt-9a761716/
+
+	[[alternative HTML version deleted]]
+
+
+From @|ex|o@ @end|ng |rom 4d@c@pe@com  Thu Dec 18 01:28:13 2025
+From: @|ex|o@ @end|ng |rom 4d@c@pe@com (Alexios Galanos)
+Date: Thu, 18 Dec 2025 09:28:13 +0900
+Subject: [R-SIG-Finance] Skipping non-convergent GARCH run within a loop
+In-Reply-To: <CAOTSzfm+JqSxVSNvh0XwaizniLUQe1_jC1HwA6xszdFSNyVjEQ@mail.gmail.com>
+References: <CAOTSzfm+JqSxVSNvh0XwaizniLUQe1_jC1HwA6xszdFSNyVjEQ@mail.gmail.com>
+Message-ID: <EFA60067-0F99-41BD-B9AA-43E4D16FE74D@4dscape.com>
+
+Hi Anatoly, try wrapping it in a ?try/catch? function. Additionally, I suggest you switch to tsgarch. rugarch is in minimal maintenance mode it?s the intention to slowly transition everyone to use the new package. With the exception of a few models/features, there is little missing from tsgarch and it is a more robust/modern GARCH package.
+
+Alexios
+
+> On Dec 18, 2025, at 07:17, Anatoly Schmidt <as8098 at nyu.edu> wrote:
+> 
+> ?I'm wondering if there is an option to skip a non-convergent combo of garch
+> input parameters within the loop upon different parameter values.
+> I thought something like
+> if(convergence(ugarchfit(GARCHspec, solver="hybrid", returns)) != "0") {
+>      print("NA")
+>      next
+> }
+> It did not give an error for the runs with 'good' parameters. But in case
+> of a 'bad' parameter combo, I got the following:
+> 
+> error in evaluating the argument 'object' in selecting a method for
+> function 'convergence': object 'B' not found
+> 
+> Thanks much, Alec
+> 
+> --
+> Anatoly Schmidt
+> Adjunct Professor, Finance and Risk Engineering, NYU Tandon School
+> https://www.linkedin.com/in/alec-schmidt-9a761716/
+> 
+>    [[alternative HTML version deleted]]
+> 
+> _______________________________________________
+> R-SIG-Finance at r-project.org mailing list
+> https://stat.ethz.ch/mailman/listinfo/r-sig-finance
+> -- Subscriber-posting only. If you want to post, subscribe first.
+> -- Also note that this is not the r-help list where general R questions should go.
+
+
+From @@8098 @end|ng |rom nyu@edu  Thu Dec 18 02:33:12 2025
+From: @@8098 @end|ng |rom nyu@edu (Anatoly Schmidt)
+Date: Wed, 17 Dec 2025 20:33:12 -0500
+Subject: [R-SIG-Finance] Skipping non-convergent GARCH run within a loop
+In-Reply-To: <EFA60067-0F99-41BD-B9AA-43E4D16FE74D@4dscape.com>
+References: <CAOTSzfm+JqSxVSNvh0XwaizniLUQe1_jC1HwA6xszdFSNyVjEQ@mail.gmail.com>
+ <EFA60067-0F99-41BD-B9AA-43E4D16FE74D@4dscape.com>
+Message-ID: <CAOTSzfkAyh_GxEqRKBMEYFLERsJFG+NQTzVfeED-7uM7cS7FcA@mail.gmail.com>
+
+Thank you Alexios.
+Before I got your reply, I checked ChatGPT. One of its solutions was the
+one I tried and reported below its failure. But another was:
+
+try(fit <- ugarchfit(GARCHspec, solver="hybrid", returns))
+    if(inherits(fit, "try-error")){
+      message("  --> fit failed (error). Skipping.")
+      next
+    }
+And it works! Surprisingly, I never get the message "fit failed (error).
+Skipping".
+Instead, I have the system message
+Error in robustvcv(fun = f, pars = ipars[estidx, 1], nlag = nlag, hess =
+fit$hessian, : object 'B' not found
+
+(which I guess points at switching to another solver)
+
+or
+Error : $ operator is invalid for atomic vectors
+
+but then the process continued with other parameters.
+
+Cheers, Alec
+
+
+On Wed, Dec 17, 2025 at 7:28?PM Alexios Galanos <alexios at 4dscape.com> wrote:
+
+> Hi Anatoly, try wrapping it in a ?try/catch? function. Additionally, I
+> suggest you switch to tsgarch. rugarch is in minimal maintenance mode it?s
+> the intention to slowly transition everyone to use the new package. With
+> the exception of a few models/features, there is little missing from
+> tsgarch and it is a more robust/modern GARCH package.
+>
+> Alexios
+>
+> > On Dec 18, 2025, at 07:17, Anatoly Schmidt <as8098 at nyu.edu> wrote:
+> >
+> > ?I'm wondering if there is an option to skip a non-convergent combo of
+> garch
+> > input parameters within the loop upon different parameter values.
+> > I thought something like
+> > if(convergence(ugarchfit(GARCHspec, solver="hybrid", returns)) != "0") {
+> >      print("NA")
+> >      next
+> > }
+> > It did not give an error for the runs with 'good' parameters. But in case
+> > of a 'bad' parameter combo, I got the following:
+> >
+> > error in evaluating the argument 'object' in selecting a method for
+> > function 'convergence': object 'B' not found
+> >
+> > Thanks much, Alec
+> >
+> > --
+> > Anatoly Schmidt
+> > Adjunct Professor, Finance and Risk Engineering, NYU Tandon School
+> >
+> https://urldefense.proofpoint.com/v2/url?u=https-3A__www.linkedin.com_in_alec-2Dschmidt-2D9a761716_&d=DwIFaQ&c=slrrB7dE8n7gBJbeO0g-IQ&r=CPekRlIiK6v83hOL1MBVGQ&m=z7JjOM861jrHuHRwto8z69jfs02lutlHGQzgMwPUXXJxJaNXKUmFwvLnTfS4HCRs&s=v3bFfvL5vv7OGPOY8aI2-gvB5C0EY9kSZMkdwgAAi9A&e=
+> >
+> >    [[alternative HTML version deleted]]
+> >
+> > _______________________________________________
+> > R-SIG-Finance at r-project.org mailing list
+> >
+> https://urldefense.proofpoint.com/v2/url?u=https-3A__stat.ethz.ch_mailman_listinfo_r-2Dsig-2Dfinance&d=DwIFaQ&c=slrrB7dE8n7gBJbeO0g-IQ&r=CPekRlIiK6v83hOL1MBVGQ&m=z7JjOM861jrHuHRwto8z69jfs02lutlHGQzgMwPUXXJxJaNXKUmFwvLnTfS4HCRs&s=3B4nRdRsIxyJWDtSQUmiyJyUmDBmG1wuoWPxNQqSMV0&e=
+> > -- Subscriber-posting only. If you want to post, subscribe first.
+> > -- Also note that this is not the r-help list where general R questions
+> should go.
+>
+
+	[[alternative HTML version deleted]]
+
+
+From @ndre|tr@mo@ @end|ng |rom gm@||@com  Sun Dec 28 22:51:24 2025
+From: @ndre|tr@mo@ @end|ng |rom gm@||@com (Andre Luiz Tietbohl Ramos)
+Date: Sun, 28 Dec 2025 18:51:24 -0300
+Subject: [R-SIG-Finance] getSymbols() quantmod library doubt
+Message-ID: <CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>
+
+Hello,
+
+I'm downloading quote data using the getSymbols() function.  It works very
+well but downloads two additional columns for a few symbols,
+namely _mean_log and _sd_log.
+Therefore, the traditional 5 column OHLCV data frame has two more columns
+in some symbols.
+
+I move all downloaded symbols to a list in order to ease some required
+computation.  At the same time, my routine depends on OHLCV data only.
+Thus, I need to have a new list discarding the additional columns that
+exist in some symbols on the current list.  The symbols with the "extra"
+columns must be kept. However their additional columns must be removed.
+
+Could anyone suggest a solution to this problem, please?
+
+Thanks in advance for any help,
+
+--
+Andre Luiz Tietbohl Ramos, PhD
+
+	[[alternative HTML version deleted]]
+
+
+From @ndre|tr@mo@ @end|ng |rom gm@||@com  Sun Dec 28 23:33:03 2025
+From: @ndre|tr@mo@ @end|ng |rom gm@||@com (Andre Luiz Tietbohl Ramos)
+Date: Sun, 28 Dec 2025 19:33:03 -0300
+Subject: [R-SIG-Finance] getSymbols() quantmod library doubt - correct post
+Message-ID: <CAPZA_qK_eJ9NFTEyB53Vy1bJkuusL610QRJNTXV9Nek1Zio59Q@mail.gmail.com>
+
+Hello,
+
+Please disregard my previous message for it was wrong.  The correct one is
+below.
+
+I'm downloading quote data using the getSymbols() function.  It works very
+well but it downloads two additional data frames with just one column for a
+few of the symbols, namely _mean_log and _sd_log.
+The traditional 5 column OHLCV data frames for each symbol remain ok.
+However there are more two data frames downloaded with one column in some
+symbols.
+
+I move all downloaded symbols to a list in order to ease some required
+computation.  At the same time, my routine depends on OHLCV data only.
+Thus, I need to have a new list discarding the new data frames with a
+single column that exist in some symbols on the current list.  These
+symbols with the "extra" column must be removed from the list.
+
+Could anyone suggest a solution to this problem, please?
+I thought about using the ncol() function for each element on the list and
+keep only the list elements with 5 columns.
+
+Thanks in advance for any help,
+
+--
+Andre Luiz Tietbohl Ramos, PhD
+
+	[[alternative HTML version deleted]]
+
+
+From er|cjberger @end|ng |rom gm@||@com  Mon Dec 29 07:17:36 2025
+From: er|cjberger @end|ng |rom gm@||@com (Eric Berger)
+Date: Mon, 29 Dec 2025 08:17:36 +0200
+Subject: [R-SIG-Finance] getSymbols() quantmod library doubt
+In-Reply-To: <CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>
+References: <CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>
+Message-ID: <CAGgJW76xkM9x6jUAdfm2GLq06Y0GWd91YmJP8NqfmQ5Gikst8A@mail.gmail.com>
+
+library(quantmod)
+
+keepohlc <- function(x) {
+    ohlc <- c(".Open",".High",".Low",".Close")
+    iV <- sapply(ohlc, \(s) {grep(s,colnames(x))})
+    x[,iV]
+}
+
+getSymbols("MSFT")
+
+head(MSFT)
+
+           MSFT.Open MSFT.High MSFT.Low MSFT.Close MSFT.Volume MSFT.Adjusted
+2007-01-03     29.91     30.25    29.40      29.86    76935100      21.12207
+2007-01-04     29.70     29.97    29.44      29.81    45774500      21.08670
+2007-01-05     29.63     29.75    29.45      29.64    44607200      20.96644
+2007-01-08     29.65     30.10    29.53      29.93    50220200      21.17159
+2007-01-09     30.00     30.18    29.73      29.96    44636600      21.19280
+2007-01-10     29.80     29.89    29.43      29.66    55017400      20.98060
+
+MSFT <- keepohlc(MSFT)
+
+head(MSFT)
+
+           MSFT.Open MSFT.High MSFT.Low MSFT.Close
+2007-01-03     29.91     30.25    29.40      29.86
+2007-01-04     29.70     29.97    29.44      29.81
+2007-01-05     29.63     29.75    29.45      29.64
+2007-01-08     29.65     30.10    29.53      29.93
+2007-01-09     30.00     30.18    29.73      29.96
+2007-01-10     29.80     29.89    29.43      29.66
+
+
+On Sun, Dec 28, 2025 at 11:51?PM Andre Luiz Tietbohl Ramos
+<andreltramos at gmail.com> wrote:
+>
+> Hello,
+>
+> I'm downloading quote data using the getSymbols() function.  It works very
+> well but downloads two additional columns for a few symbols,
+> namely _mean_log and _sd_log.
+> Therefore, the traditional 5 column OHLCV data frame has two more columns
+> in some symbols.
+>
+> I move all downloaded symbols to a list in order to ease some required
+> computation.  At the same time, my routine depends on OHLCV data only.
+> Thus, I need to have a new list discarding the additional columns that
+> exist in some symbols on the current list.  The symbols with the "extra"
+> columns must be kept. However their additional columns must be removed.
+>
+> Could anyone suggest a solution to this problem, please?
+>
+> Thanks in advance for any help,
+>
+> --
+> Andre Luiz Tietbohl Ramos, PhD
+>
+>         [[alternative HTML version deleted]]
+>
+> _______________________________________________
+> R-SIG-Finance at r-project.org mailing list
+> https://stat.ethz.ch/mailman/listinfo/r-sig-finance
+> -- Subscriber-posting only. If you want to post, subscribe first.
+> -- Also note that this is not the r-help list where general R questions should go.
+
+
+From @ndre|tr@mo@ @end|ng |rom gm@||@com  Mon Dec 29 13:38:20 2025
+From: @ndre|tr@mo@ @end|ng |rom gm@||@com (Andre Luiz Tietbohl Ramos)
+Date: Mon, 29 Dec 2025 09:38:20 -0300
+Subject: [R-SIG-Finance] getSymbols() quantmod library doubt
+In-Reply-To: <CAGgJW76xkM9x6jUAdfm2GLq06Y0GWd91YmJP8NqfmQ5Gikst8A@mail.gmail.com>
+References: <CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>
+ <CAGgJW76xkM9x6jUAdfm2GLq06Y0GWd91YmJP8NqfmQ5Gikst8A@mail.gmail.com>
+Message-ID: <CAPZA_q+Q_ues9NkLaKefG5LgcAv=6m6rr7VxdK5r+zqN+NEtog@mail.gmail.com>
+
+Hello Eric,
+
+Thanks for the reply!  Your answer was correct however the my problem was
+not explained correctly, my apologies to everyone.
+The issue is that once a list is built from the symbols that were download
+a mixed type list is formed, see below.
+
+R> class(tickers$VALE3.SA_sd_log)
+[1] "numeric"
+R> class(tickers$VALE3.SA)
+[1] "xts" "zoo"
+R> R>
+
+The VALE3 ticker has another list element as well: VALE3.SA_mean_log.
+This happens with a few of the symbols only thus the issue at hand seems to
+be removing the list "numeric" type elements.
+
+TIA,
+
+--
+Andr? Luiz Tietbohl Ramos, PhD.
+
+
+Em seg., 29 de dez. de 2025 ?s 03:18, Eric Berger <ericjberger at gmail.com>
+escreveu:
+
+> library(quantmod)
+>
+> keepohlc <- function(x) {
+>     ohlc <- c(".Open",".High",".Low",".Close")
+>     iV <- sapply(ohlc, \(s) {grep(s,colnames(x))})
+>     x[,iV]
+> }
+>
+> getSymbols("MSFT")
+>
+> head(MSFT)
+>
+>            MSFT.Open MSFT.High MSFT.Low MSFT.Close MSFT.Volume
+> MSFT.Adjusted
+> 2007-01-03     29.91     30.25    29.40      29.86    76935100
+> 21.12207
+> 2007-01-04     29.70     29.97    29.44      29.81    45774500
+> 21.08670
+> 2007-01-05     29.63     29.75    29.45      29.64    44607200
+> 20.96644
+> 2007-01-08     29.65     30.10    29.53      29.93    50220200
+> 21.17159
+> 2007-01-09     30.00     30.18    29.73      29.96    44636600
+> 21.19280
+> 2007-01-10     29.80     29.89    29.43      29.66    55017400
+> 20.98060
+>
+> MSFT <- keepohlc(MSFT)
+>
+> head(MSFT)
+>
+>            MSFT.Open MSFT.High MSFT.Low MSFT.Close
+> 2007-01-03     29.91     30.25    29.40      29.86
+> 2007-01-04     29.70     29.97    29.44      29.81
+> 2007-01-05     29.63     29.75    29.45      29.64
+> 2007-01-08     29.65     30.10    29.53      29.93
+> 2007-01-09     30.00     30.18    29.73      29.96
+> 2007-01-10     29.80     29.89    29.43      29.66
+>
+>
+> On Sun, Dec 28, 2025 at 11:51?PM Andre Luiz Tietbohl Ramos
+> <andreltramos at gmail.com> wrote:
+> >
+> > Hello,
+> >
+> > I'm downloading quote data using the getSymbols() function.  It works
+> very
+> > well but downloads two additional columns for a few symbols,
+> > namely _mean_log and _sd_log.
+> > Therefore, the traditional 5 column OHLCV data frame has two more columns
+> > in some symbols.
+> >
+> > I move all downloaded symbols to a list in order to ease some required
+> > computation.  At the same time, my routine depends on OHLCV data only.
+> > Thus, I need to have a new list discarding the additional columns that
+> > exist in some symbols on the current list.  The symbols with the "extra"
+> > columns must be kept. However their additional columns must be removed.
+> >
+> > Could anyone suggest a solution to this problem, please?
+> >
+> > Thanks in advance for any help,
+> >
+> > --
+> > Andre Luiz Tietbohl Ramos, PhD
+> >
+> >         [[alternative HTML version deleted]]
+> >
+> > _______________________________________________
+> > R-SIG-Finance at r-project.org mailing list
+> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance
+> > -- Subscriber-posting only. If you want to post, subscribe first.
+> > -- Also note that this is not the r-help list where general R questions
+> should go.
+>
+
+	[[alternative HTML version deleted]]
+
+
+From e@ @end|ng |rom enr|co@chum@nn@net  Mon Dec 29 14:25:30 2025
+From: e@ @end|ng |rom enr|co@chum@nn@net (Enrico Schumann)
+Date: Mon, 29 Dec 2025 14:25:30 +0100
+Subject: [R-SIG-Finance] getSymbols() quantmod library doubt
+In-Reply-To: <CAPZA_q+Q_ues9NkLaKefG5LgcAv=6m6rr7VxdK5r+zqN+NEtog@mail.gmail.com>
+ (Andre Luiz Tietbohl Ramos's message of "Mon, 29 Dec 2025 09:38:20
+ -0300")
+References: <CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>
+ <CAGgJW76xkM9x6jUAdfm2GLq06Y0GWd91YmJP8NqfmQ5Gikst8A@mail.gmail.com>
+ <CAPZA_q+Q_ues9NkLaKefG5LgcAv=6m6rr7VxdK5r+zqN+NEtog@mail.gmail.com>
+Message-ID: <87tsx9ifn9.fsf@enricoschumann.net>
+
+On Mon, 29 Dec 2025, Andre Luiz Tietbohl Ramos writes:
+
+> Hello Eric,
+>
+> Thanks for the reply!  Your answer was correct however the my problem was
+> not explained correctly, my apologies to everyone.
+> The issue is that once a list is built from the symbols that were download
+> a mixed type list is formed, see below.
+>
+> R> class(tickers$VALE3.SA_sd_log)
+> [1] "numeric"
+> R> class(tickers$VALE3.SA)
+> [1] "xts" "zoo"
+> R> R>
+>
+> The VALE3 ticker has another list element as well: VALE3.SA_mean_log.
+> This happens with a few of the symbols only thus the issue at hand seems to
+> be removing the list "numeric" type elements.
+>
+> TIA,
+>
+> --
+> Andr? Luiz Tietbohl Ramos, PhD.
+>
+
+Could you please post a small, reproducible example (in plain
+text)?  Otherwise, it will be hard so see where your problem
+lies.
+
+
+kind regards
+    Enrico
+
+
+> Em seg., 29 de dez. de 2025 ?s 03:18, Eric Berger <ericjberger at gmail.com>
+> escreveu:
+>
+>> library(quantmod)
+>>
+>> keepohlc <- function(x) {
+>>     ohlc <- c(".Open",".High",".Low",".Close")
+>>     iV <- sapply(ohlc, \(s) {grep(s,colnames(x))})
+>>     x[,iV]
+>> }
+>>
+>> getSymbols("MSFT")
+>>
+>> head(MSFT)
+>>
+>>            MSFT.Open MSFT.High MSFT.Low MSFT.Close MSFT.Volume
+>> MSFT.Adjusted
+>> 2007-01-03     29.91     30.25    29.40      29.86    76935100
+>> 21.12207
+>> 2007-01-04     29.70     29.97    29.44      29.81    45774500
+>> 21.08670
+>> 2007-01-05     29.63     29.75    29.45      29.64    44607200
+>> 20.96644
+>> 2007-01-08     29.65     30.10    29.53      29.93    50220200
+>> 21.17159
+>> 2007-01-09     30.00     30.18    29.73      29.96    44636600
+>> 21.19280
+>> 2007-01-10     29.80     29.89    29.43      29.66    55017400
+>> 20.98060
+>>
+>> MSFT <- keepohlc(MSFT)
+>>
+>> head(MSFT)
+>>
+>>            MSFT.Open MSFT.High MSFT.Low MSFT.Close
+>> 2007-01-03     29.91     30.25    29.40      29.86
+>> 2007-01-04     29.70     29.97    29.44      29.81
+>> 2007-01-05     29.63     29.75    29.45      29.64
+>> 2007-01-08     29.65     30.10    29.53      29.93
+>> 2007-01-09     30.00     30.18    29.73      29.96
+>> 2007-01-10     29.80     29.89    29.43      29.66
+>>
+>>
+>> On Sun, Dec 28, 2025 at 11:51?PM Andre Luiz Tietbohl Ramos
+>> <andreltramos at gmail.com> wrote:
+>> >
+>> > Hello,
+>> >
+>> > I'm downloading quote data using the getSymbols() function.  It works
+>> very
+>> > well but downloads two additional columns for a few symbols,
+>> > namely _mean_log and _sd_log.
+>> > Therefore, the traditional 5 column OHLCV data frame has two more columns
+>> > in some symbols.
+>> >
+>> > I move all downloaded symbols to a list in order to ease some required
+>> > computation.  At the same time, my routine depends on OHLCV data only.
+>> > Thus, I need to have a new list discarding the additional columns that
+>> > exist in some symbols on the current list.  The symbols with the "extra"
+>> > columns must be kept. However their additional columns must be removed.
+>> >
+>> > Could anyone suggest a solution to this problem, please?
+>> >
+>> > Thanks in advance for any help,
+>> >
+>> > --
+>> > Andre Luiz Tietbohl Ramos, PhD
+>> >
+
+-- 
+Enrico Schumann
+Lucerne, Switzerland
+https://enricoschumann.net
+
+
+From @ndre|tr@mo@ @end|ng |rom gm@||@com  Mon Dec 29 15:23:22 2025
+From: @ndre|tr@mo@ @end|ng |rom gm@||@com (Andre Luiz Tietbohl Ramos)
+Date: Mon, 29 Dec 2025 11:23:22 -0300
+Subject: [R-SIG-Finance] getSymbols() quantmod library doubt
+In-Reply-To: <87tsx9ifn9.fsf@enricoschumann.net>
+References: <CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>
+ <CAGgJW76xkM9x6jUAdfm2GLq06Y0GWd91YmJP8NqfmQ5Gikst8A@mail.gmail.com>
+ <CAPZA_q+Q_ues9NkLaKefG5LgcAv=6m6rr7VxdK5r+zqN+NEtog@mail.gmail.com>
+ <87tsx9ifn9.fsf@enricoschumann.net>
+Message-ID: <CAPZA_qLBVwRgjx6a2VvdNSX+af8KCDpFxTiFhhNrPKTNMg1kpA@mail.gmail.com>
+
+Hello,
+
+Thanks for the interest, Enrico. It is below.
+R> R> tickers
+ "AALR3.SA"  "AGRO3.SA"  "ALPA3.SA"  "ALPA4.SA"  "ALUP11.SA" "AMER3.SA"  "
+AMOB3.SA"  "ANIM3.SA"  "ASAI3.SA"  "AURE3.SA"  "AZUL4.SA"  "B3SA3.SA" "
+BAUH4.SA"  "BAZA3.SA"  "BBAS3.SA"  "BBDC4.SA"  "BBSE3.SA"  "BDLL4.SA"  "
+BEES3.SA"  "BIDU34.SA" "BLAU3.SA"  "BMOB3.SA"  "BPAC11.SA" "BPAN4.SA" "
+BRAP4.SA"  "BRFS3.SA"  "BRKM5.SA"  "BRSR6.SA"  "BRST3.SA"  "BSLI3.SA"  "
+CBAV3.SA"  "CEAB3.SA"  "CEBR3.SA"  "CMIG3.SA"  "CMIG4.SA"  "CMIN3.SA" "
+COPH34.SA" "CPFE3.SA"  "CPLE6.SA"  "CRPG5.SA"  "CSAN3.SA"  "CSED3.SA"  "
+CSMG3.SA"  "CSNA3.SA"  "CSUD3.SA"  "CXSE3.SA"  "CYRE3.SA"
+...
+R>
+R> getSymbols(tickers, src = "yahoo", from = start, to = end, maxgap = 10,
+auto.asign = TRUE)
+R>
+R> tickers <- mget(ls(pattern = paste(tickers, collapse = "|")))
+R>
+R> names(tickers)
+  [1] "AALR3.SA"              "AFHI11.SA"             "AGRO3.SA"
+   "ALPA3.SA"              "ALPA4.SA"              "ALUP11.SA"
+  [7] "AMER3.SA"              "AMOB3.SA"              "ANIM3.SA"
+   "ASAI3.SA"              "AURE3.SA"              "AZUL4.SA"
+ [13] "B3SA3.SA"              "BAUH4.SA"              "BAZA3.SA"
+   *"BBAS3.SA <http://BBAS3.SA>"              "BBAS3.SA_log_returns"
+ "BBAS3.SA_mean_log"   *
+ [19] "BBAS3.SA_sd_log"       "BBDC4.SA"              "BBSE3.SA"
+ "BBSE3.SA_log_returns"  "BBSE3.SA_mean_log"     "BBSE3.SA_sd_log"
+ [25] "BDLL4.SA"              "BEES3.SA"              "BIDU34.SA"
+  "BLAU3.SA"              "BMOB3.SA"              "BPAC11.SA"
+ [31] "BPAN4.SA"              "BRAP4.SA"              "BRFS3.SA"
+   "BRKM5.SA"              "BRSR6.SA"              "BRST3.SA"
+...
+R> class(tickers$BBAS3.SA)
+[1] "xts" "zoo"
+R> colnames(tickers$BBAS3.SA)
+[1] "BBAS3.SA.Open"     "BBAS3.SA.High"     "BBAS3.SA.Low"
+ "BBAS3.SA.Close"    "BBAS3.SA.Volume"   "BBAS3.SA.Adjusted"
+R> class(tickers$BBAS3.SA_log_returns)
+[1] "xts" "zoo"
+R>  colnames(tickers$BBAS3.SA_log_returns)
+[1] "daily.returns"
+R> class(tickers$BBAS3.SA_mean_log)
+[1] "numeric"
+R> R> colnames(tickers$BBAS3.SA_mean_log)
+NULL  (as expected)
+R>
+
+Therefore the list I get from the mget operation above contains several
+elements with different types, which may include even _sd_ columns as well.
+My objective is to get rid of the .SA suffix used for Brazilian stocks in
+all elements downloaded as well as their columns.  I chose to put
+everything in a list and operate on it.
+
+TIA,
+
+--
+Andr? Luiz Tietbohl Ramos, PhD.
+
+
+Em seg., 29 de dez. de 2025 ?s 10:25, Enrico Schumann <es at enricoschumann.net>
+escreveu:
+
+> On Mon, 29 Dec 2025, Andre Luiz Tietbohl Ramos writes:
+>
+> > Hello Eric,
+> >
+> > Thanks for the reply!  Your answer was correct however the my problem was
+> > not explained correctly, my apologies to everyone.
+> > The issue is that once a list is built from the symbols that were
+> download
+> > a mixed type list is formed, see below.
+> >
+> > R> class(tickers$VALE3.SA_sd_log)
+> > [1] "numeric"
+> > R> class(tickers$VALE3.SA)
+> > [1] "xts" "zoo"
+> > R> R>
+> >
+> > The VALE3 ticker has another list element as well: VALE3.SA_mean_log.
+> > This happens with a few of the symbols only thus the issue at hand seems
+> to
+> > be removing the list "numeric" type elements.
+> >
+> > TIA,
+> >
+> > --
+> > Andr? Luiz Tietbohl Ramos, PhD.
+> >
+>
+> Could you please post a small, reproducible example (in plain
+> text)?  Otherwise, it will be hard so see where your problem
+> lies.
+>
+>
+> kind regards
+>     Enrico
+>
+>
+> > Em seg., 29 de dez. de 2025 ?s 03:18, Eric Berger <ericjberger at gmail.com
+> >
+> > escreveu:
+> >
+> >> library(quantmod)
+> >>
+> >> keepohlc <- function(x) {
+> >>     ohlc <- c(".Open",".High",".Low",".Close")
+> >>     iV <- sapply(ohlc, \(s) {grep(s,colnames(x))})
+> >>     x[,iV]
+> >> }
+> >>
+> >> getSymbols("MSFT")
+> >>
+> >> head(MSFT)
+> >>
+> >>            MSFT.Open MSFT.High MSFT.Low MSFT.Close MSFT.Volume
+> >> MSFT.Adjusted
+> >> 2007-01-03     29.91     30.25    29.40      29.86    76935100
+> >> 21.12207
+> >> 2007-01-04     29.70     29.97    29.44      29.81    45774500
+> >> 21.08670
+> >> 2007-01-05     29.63     29.75    29.45      29.64    44607200
+> >> 20.96644
+> >> 2007-01-08     29.65     30.10    29.53      29.93    50220200
+> >> 21.17159
+> >> 2007-01-09     30.00     30.18    29.73      29.96    44636600
+> >> 21.19280
+> >> 2007-01-10     29.80     29.89    29.43      29.66    55017400
+> >> 20.98060
+> >>
+> >> MSFT <- keepohlc(MSFT)
+> >>
+> >> head(MSFT)
+> >>
+> >>            MSFT.Open MSFT.High MSFT.Low MSFT.Close
+> >> 2007-01-03     29.91     30.25    29.40      29.86
+> >> 2007-01-04     29.70     29.97    29.44      29.81
+> >> 2007-01-05     29.63     29.75    29.45      29.64
+> >> 2007-01-08     29.65     30.10    29.53      29.93
+> >> 2007-01-09     30.00     30.18    29.73      29.96
+> >> 2007-01-10     29.80     29.89    29.43      29.66
+> >>
+> >>
+> >> On Sun, Dec 28, 2025 at 11:51?PM Andre Luiz Tietbohl Ramos
+> >> <andreltramos at gmail.com> wrote:
+> >> >
+> >> > Hello,
+> >> >
+> >> > I'm downloading quote data using the getSymbols() function.  It works
+> >> very
+> >> > well but downloads two additional columns for a few symbols,
+> >> > namely _mean_log and _sd_log.
+> >> > Therefore, the traditional 5 column OHLCV data frame has two more
+> columns
+> >> > in some symbols.
+> >> >
+> >> > I move all downloaded symbols to a list in order to ease some required
+> >> > computation.  At the same time, my routine depends on OHLCV data only.
+> >> > Thus, I need to have a new list discarding the additional columns that
+> >> > exist in some symbols on the current list.  The symbols with the
+> "extra"
+> >> > columns must be kept. However their additional columns must be
+> removed.
+> >> >
+> >> > Could anyone suggest a solution to this problem, please?
+> >> >
+> >> > Thanks in advance for any help,
+> >> >
+> >> > --
+> >> > Andre Luiz Tietbohl Ramos, PhD
+> >> >
+>
+> --
+> Enrico Schumann
+> Lucerne, Switzerland
+> https://enricoschumann.net
+>
+
+	[[alternative HTML version deleted]]
+
+
+From er|cjberger @end|ng |rom gm@||@com  Mon Dec 29 16:05:37 2025
+From: er|cjberger @end|ng |rom gm@||@com (Eric Berger)
+Date: Mon, 29 Dec 2025 17:05:37 +0200
+Subject: [R-SIG-Finance] getSymbols() quantmod library doubt
+In-Reply-To: <CAPZA_qLBVwRgjx6a2VvdNSX+af8KCDpFxTiFhhNrPKTNMg1kpA@mail.gmail.com>
+References: <CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>
+ <CAGgJW76xkM9x6jUAdfm2GLq06Y0GWd91YmJP8NqfmQ5Gikst8A@mail.gmail.com>
+ <CAPZA_q+Q_ues9NkLaKefG5LgcAv=6m6rr7VxdK5r+zqN+NEtog@mail.gmail.com>
+ <87tsx9ifn9.fsf@enricoschumann.net>
+ <CAPZA_qLBVwRgjx6a2VvdNSX+af8KCDpFxTiFhhNrPKTNMg1kpA@mail.gmail.com>
+Message-ID: <CAGgJW76vTXhx27u5xEkWoHEf4AxX0qpsZ+gFkJydj4Yb2H6uNw@mail.gmail.com>
+
+I am not able to reproduce your problem but I may have a solution that
+will help.
+The result of my
+names(tickers)
+doesn't have those strange objects.
+In any case, try this workaround. Replace
+
+tickers <- mget(ls(pattern = paste(tickers, collapse = "|")))
+
+by
+
+tickers <- mget(ls(pattern = paste(paste(tickers,"$",sep=""), collapse="|")))
+
+HTH,
+Eric
+
+On Mon, Dec 29, 2025 at 4:23?PM Andre Luiz Tietbohl Ramos
+<andreltramos at gmail.com> wrote:
+>
+> Hello,
+>
+> Thanks for the interest, Enrico. It is below.
+> R> R> tickers
+>  "AALR3.SA"  "AGRO3.SA"  "ALPA3.SA"  "ALPA4.SA"  "ALUP11.SA" "AMER3.SA"  "AMOB3.SA"  "ANIM3.SA"  "ASAI3.SA"  "AURE3.SA"  "AZUL4.SA"  "B3SA3.SA" "BAUH4.SA"  "BAZA3.SA"  "BBAS3.SA"  "BBDC4.SA"  "BBSE3.SA"  "BDLL4.SA"  "BEES3.SA"  "BIDU34.SA" "BLAU3.SA"  "BMOB3.SA"  "BPAC11.SA" "BPAN4.SA" "BRAP4.SA"  "BRFS3.SA"  "BRKM5.SA"  "BRSR6.SA"  "BRST3.SA"  "BSLI3.SA"  "CBAV3.SA"  "CEAB3.SA"  "CEBR3.SA"  "CMIG3.SA"  "CMIG4.SA"  "CMIN3.SA" "COPH34.SA" "CPFE3.SA"  "CPLE6.SA"  "CRPG5.SA"  "CSAN3.SA"  "CSED3.SA"  "CSMG3.SA"  "CSNA3.SA"  "CSUD3.SA"  "CXSE3.SA"  "CYRE3.SA"
+> ...
+> R>
+> R> getSymbols(tickers, src = "yahoo", from = start, to = end, maxgap = 10, auto.asign = TRUE)
+> R>
+> R> tickers <- mget(ls(pattern = paste(tickers, collapse = "|")))
+> R>
+> R> names(tickers)
+>   [1] "AALR3.SA"              "AFHI11.SA"             "AGRO3.SA"              "ALPA3.SA"              "ALPA4.SA"              "ALUP11.SA"
+>   [7] "AMER3.SA"              "AMOB3.SA"              "ANIM3.SA"              "ASAI3.SA"              "AURE3.SA"              "AZUL4.SA"
+>  [13] "B3SA3.SA"              "BAUH4.SA"              "BAZA3.SA"              "BBAS3.SA"              "BBAS3.SA_log_returns"  "BBAS3.SA_mean_log"
+>  [19] "BBAS3.SA_sd_log"       "BBDC4.SA"              "BBSE3.SA"        "BBSE3.SA_log_returns"  "BBSE3.SA_mean_log"     "BBSE3.SA_sd_log"
+>  [25] "BDLL4.SA"              "BEES3.SA"              "BIDU34.SA"             "BLAU3.SA"              "BMOB3.SA"              "BPAC11.SA"
+>  [31] "BPAN4.SA"              "BRAP4.SA"              "BRFS3.SA"              "BRKM5.SA"              "BRSR6.SA"              "BRST3.SA"
+> ...
+> R> class(tickers$BBAS3.SA)
+> [1] "xts" "zoo"
+> R> colnames(tickers$BBAS3.SA)
+> [1] "BBAS3.SA.Open"     "BBAS3.SA.High"     "BBAS3.SA.Low"      "BBAS3.SA.Close"    "BBAS3.SA.Volume"   "BBAS3.SA.Adjusted"
+> R> class(tickers$BBAS3.SA_log_returns)
+> [1] "xts" "zoo"
+> R>  colnames(tickers$BBAS3.SA_log_returns)
+> [1] "daily.returns"
+> R> class(tickers$BBAS3.SA_mean_log)
+> [1] "numeric"
+> R> R> colnames(tickers$BBAS3.SA_mean_log)
+> NULL  (as expected)
+> R>
+>
+> Therefore the list I get from the mget operation above contains several elements with different types, which may include even _sd_ columns as well.
+> My objective is to get rid of the .SA suffix used for Brazilian stocks in all elements downloaded as well as their columns.  I chose to put everything in a list and operate on it.
+>
+> TIA,
+>
+> --
+> Andr? Luiz Tietbohl Ramos, PhD.
+>
+>
+> Em seg., 29 de dez. de 2025 ?s 10:25, Enrico Schumann <es at enricoschumann.net> escreveu:
+>>
+>> On Mon, 29 Dec 2025, Andre Luiz Tietbohl Ramos writes:
+>>
+>> > Hello Eric,
+>> >
+>> > Thanks for the reply!  Your answer was correct however the my problem was
+>> > not explained correctly, my apologies to everyone.
+>> > The issue is that once a list is built from the symbols that were download
+>> > a mixed type list is formed, see below.
+>> >
+>> > R> class(tickers$VALE3.SA_sd_log)
+>> > [1] "numeric"
+>> > R> class(tickers$VALE3.SA)
+>> > [1] "xts" "zoo"
+>> > R> R>
+>> >
+>> > The VALE3 ticker has another list element as well: VALE3.SA_mean_log.
+>> > This happens with a few of the symbols only thus the issue at hand seems to
+>> > be removing the list "numeric" type elements.
+>> >
+>> > TIA,
+>> >
+>> > --
+>> > Andr? Luiz Tietbohl Ramos, PhD.
+>> >
+>>
+>> Could you please post a small, reproducible example (in plain
+>> text)?  Otherwise, it will be hard so see where your problem
+>> lies.
+>>
+>>
+>> kind regards
+>>     Enrico
+>>
+>>
+>> > Em seg., 29 de dez. de 2025 ?s 03:18, Eric Berger <ericjberger at gmail.com>
+>> > escreveu:
+>> >
+>> >> library(quantmod)
+>> >>
+>> >> keepohlc <- function(x) {
+>> >>     ohlc <- c(".Open",".High",".Low",".Close")
+>> >>     iV <- sapply(ohlc, \(s) {grep(s,colnames(x))})
+>> >>     x[,iV]
+>> >> }
+>> >>
+>> >> getSymbols("MSFT")
+>> >>
+>> >> head(MSFT)
+>> >>
+>> >>            MSFT.Open MSFT.High MSFT.Low MSFT.Close MSFT.Volume
+>> >> MSFT.Adjusted
+>> >> 2007-01-03     29.91     30.25    29.40      29.86    76935100
+>> >> 21.12207
+>> >> 2007-01-04     29.70     29.97    29.44      29.81    45774500
+>> >> 21.08670
+>> >> 2007-01-05     29.63     29.75    29.45      29.64    44607200
+>> >> 20.96644
+>> >> 2007-01-08     29.65     30.10    29.53      29.93    50220200
+>> >> 21.17159
+>> >> 2007-01-09     30.00     30.18    29.73      29.96    44636600
+>> >> 21.19280
+>> >> 2007-01-10     29.80     29.89    29.43      29.66    55017400
+>> >> 20.98060
+>> >>
+>> >> MSFT <- keepohlc(MSFT)
+>> >>
+>> >> head(MSFT)
+>> >>
+>> >>            MSFT.Open MSFT.High MSFT.Low MSFT.Close
+>> >> 2007-01-03     29.91     30.25    29.40      29.86
+>> >> 2007-01-04     29.70     29.97    29.44      29.81
+>> >> 2007-01-05     29.63     29.75    29.45      29.64
+>> >> 2007-01-08     29.65     30.10    29.53      29.93
+>> >> 2007-01-09     30.00     30.18    29.73      29.96
+>> >> 2007-01-10     29.80     29.89    29.43      29.66
+>> >>
+>> >>
+>> >> On Sun, Dec 28, 2025 at 11:51?PM Andre Luiz Tietbohl Ramos
+>> >> <andreltramos at gmail.com> wrote:
+>> >> >
+>> >> > Hello,
+>> >> >
+>> >> > I'm downloading quote data using the getSymbols() function.  It works
+>> >> very
+>> >> > well but downloads two additional columns for a few symbols,
+>> >> > namely _mean_log and _sd_log.
+>> >> > Therefore, the traditional 5 column OHLCV data frame has two more columns
+>> >> > in some symbols.
+>> >> >
+>> >> > I move all downloaded symbols to a list in order to ease some required
+>> >> > computation.  At the same time, my routine depends on OHLCV data only.
+>> >> > Thus, I need to have a new list discarding the additional columns that
+>> >> > exist in some symbols on the current list.  The symbols with the "extra"
+>> >> > columns must be kept. However their additional columns must be removed.
+>> >> >
+>> >> > Could anyone suggest a solution to this problem, please?
+>> >> >
+>> >> > Thanks in advance for any help,
+>> >> >
+>> >> > --
+>> >> > Andre Luiz Tietbohl Ramos, PhD
+>> >> >
+>>
+>> --
+>> Enrico Schumann
+>> Lucerne, Switzerland
+>> https://enricoschumann.net
+
+
+From edd @end|ng |rom deb|@n@org  Mon Dec 29 16:08:51 2025
+From: edd @end|ng |rom deb|@n@org (Dirk Eddelbuettel)
+Date: Mon, 29 Dec 2025 09:08:51 -0600
+Subject: [R-SIG-Finance] getSymbols() quantmod library doubt
+In-Reply-To: <CAPZA_qLBVwRgjx6a2VvdNSX+af8KCDpFxTiFhhNrPKTNMg1kpA@mail.gmail.com>
+References: <CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>
+ <CAGgJW76xkM9x6jUAdfm2GLq06Y0GWd91YmJP8NqfmQ5Gikst8A@mail.gmail.com>
+ <CAPZA_q+Q_ues9NkLaKefG5LgcAv=6m6rr7VxdK5r+zqN+NEtog@mail.gmail.com>
+ <87tsx9ifn9.fsf@enricoschumann.net>
+ <CAPZA_qLBVwRgjx6a2VvdNSX+af8KCDpFxTiFhhNrPKTNMg1kpA@mail.gmail.com>
+Message-ID: <26962.39299.36795.894611@paul.eddelbuettel.com>
+
+
+On 29 December 2025 at 11:23, Andre Luiz Tietbohl Ramos wrote:
+| I chose to put everything in a list and operate on it.
+
+Welcome to programming, and debugging. In your list processing, fundamentally
+processing of each symbol is still one distinct call.  You can either modify
+your copy of the data getter (hey, it is open source ...) or wrap its use in
+another helper function that ensures the correct / expected data format is
+passed along.  Such post-processing is very common when dealing with open or
+free APIs such as this one ... which after all is non-official. There is even
+a (half-joking ?) theorem for this. [1]
+
+Dirk
+
+[1] https://en.wikipedia.org/wiki/Fundamental_theorem_of_software_engineering
+ 
+-- 
+dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org
+
+
+From e@ @end|ng |rom enr|co@chum@nn@net  Mon Dec 29 21:58:03 2025
+From: e@ @end|ng |rom enr|co@chum@nn@net (Enrico Schumann)
+Date: Mon, 29 Dec 2025 21:58:03 +0100
+Subject: [R-SIG-Finance] getSymbols() quantmod library doubt
+In-Reply-To: <CAPZA_qLBVwRgjx6a2VvdNSX+af8KCDpFxTiFhhNrPKTNMg1kpA@mail.gmail.com>
+ (Andre Luiz Tietbohl Ramos's message of "Mon, 29 Dec 2025 11:23:22
+ -0300")
+References: <CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>
+ <CAGgJW76xkM9x6jUAdfm2GLq06Y0GWd91YmJP8NqfmQ5Gikst8A@mail.gmail.com>
+ <CAPZA_q+Q_ues9NkLaKefG5LgcAv=6m6rr7VxdK5r+zqN+NEtog@mail.gmail.com>
+ <87tsx9ifn9.fsf@enricoschumann.net>
+ <CAPZA_qLBVwRgjx6a2VvdNSX+af8KCDpFxTiFhhNrPKTNMg1kpA@mail.gmail.com>
+Message-ID: <87wm25vwdg.fsf@enricoschumann.net>
+
+On Mon, 29 Dec 2025, Andre Luiz Tietbohl Ramos writes:
+
+> Em seg., 29 de dez. de 2025 ?s 10:25, Enrico Schumann <es at enricoschumann.net>
+> escreveu:
+>>
+>> Could you please post a small, reproducible example (in plain
+>> text)?  Otherwise, it will be hard so see where your problem
+>> lies.
+>>
+>>
+>> kind regards
+>>     Enrico
+>>
+>
+> Hello,
+>
+> Thanks for the interest, Enrico. It is below.
+> R> tickers
+>  "AALR3.SA"  "AGRO3.SA"  "ALPA3.SA"  "ALPA4.SA"  "ALUP11.SA" "AMER3.SA"  "
+> AMOB3.SA"  "ANIM3.SA"  "ASAI3.SA"  "AURE3.SA"  "AZUL4.SA"  "B3SA3.SA" "
+> BAUH4.SA"  "BAZA3.SA"  "BBAS3.SA"  "BBDC4.SA"  "BBSE3.SA"  "BDLL4.SA"  "
+> BEES3.SA"  "BIDU34.SA" "BLAU3.SA"  "BMOB3.SA"  "BPAC11.SA" "BPAN4.SA" "
+> BRAP4.SA"  "BRFS3.SA"  "BRKM5.SA"  "BRSR6.SA"  "BRST3.SA"  "BSLI3.SA"  "
+> CBAV3.SA"  "CEAB3.SA"  "CEBR3.SA"  "CMIG3.SA"  "CMIG4.SA"  "CMIN3.SA" "
+> COPH34.SA" "CPFE3.SA"  "CPLE6.SA"  "CRPG5.SA"  "CSAN3.SA"  "CSED3.SA"  "
+> CSMG3.SA"  "CSNA3.SA"  "CSUD3.SA"  "CXSE3.SA"  "CYRE3.SA"
+> ...
+> R>
+> R> getSymbols(tickers, src = "yahoo", from = start, to = end, maxgap = 10,
+> auto.asign = TRUE)
+> R>
+> R> tickers <- mget(ls(pattern = paste(tickers, collapse = "|")))
+> R>
+> R> names(tickers)
+>   [1] "AALR3.SA"              "AFHI11.SA"             "AGRO3.SA"
+>    "ALPA3.SA"              "ALPA4.SA"              "ALUP11.SA"
+>   [7] "AMER3.SA"              "AMOB3.SA"              "ANIM3.SA"
+>    "ASAI3.SA"              "AURE3.SA"              "AZUL4.SA"
+>  [13] "B3SA3.SA"              "BAUH4.SA"              "BAZA3.SA"
+>    *"BBAS3.SA <http://BBAS3.SA>"              "BBAS3.SA_log_returns"
+>  "BBAS3.SA_mean_log"   *
+>  [19] "BBAS3.SA_sd_log"       "BBDC4.SA"              "BBSE3.SA"
+>  "BBSE3.SA_log_returns"  "BBSE3.SA_mean_log"     "BBSE3.SA_sd_log"
+>  [25] "BDLL4.SA"              "BEES3.SA"              "BIDU34.SA"
+>   "BLAU3.SA"              "BMOB3.SA"              "BPAC11.SA"
+>  [31] "BPAN4.SA"              "BRAP4.SA"              "BRFS3.SA"
+>    "BRKM5.SA"              "BRSR6.SA"              "BRST3.SA"
+> ...
+> R> class(tickers$BBAS3.SA)
+> [1] "xts" "zoo"
+> R> colnames(tickers$BBAS3.SA)
+> [1] "BBAS3.SA.Open"     "BBAS3.SA.High"     "BBAS3.SA.Low"
+>  "BBAS3.SA.Close"    "BBAS3.SA.Volume"   "BBAS3.SA.Adjusted"
+> R> class(tickers$BBAS3.SA_log_returns)
+> [1] "xts" "zoo"
+> R>  colnames(tickers$BBAS3.SA_log_returns)
+> [1] "daily.returns"
+> R> class(tickers$BBAS3.SA_mean_log)
+> [1] "numeric"
+> R> R> colnames(tickers$BBAS3.SA_mean_log)
+> NULL  (as expected)
+> R>
+>
+> Therefore the list I get from the mget operation above contains several
+> elements with different types, which may include even _sd_ columns as well.
+> My objective is to get rid of the .SA suffix used for Brazilian stocks in
+> all elements downloaded as well as their columns.  I chose to put
+> everything in a list and operate on it.
+>
+
+[...]
+
+Like Eric, I cannot reproduce your result. In addition
+to Dirk's suggestions for debugging:
+
+ i) start from a clean session (no workspace-loading);
+
+ii) since your column 'tickers$BBAS3.SA_log_returns' is named
+    "daily.returns" -- any chance you are (accidentally) calling
+    'quantmod::dailyReturn' in your code?
+
+
+
+
+-- 
+Enrico Schumann
+Lucerne, Switzerland
+https://enricoschumann.net
+
+
+From @ndre|tr@mo@ @end|ng |rom gm@||@com  Tue Dec 30 22:45:10 2025
+From: @ndre|tr@mo@ @end|ng |rom gm@||@com (Andre Luiz Tietbohl Ramos)
+Date: Tue, 30 Dec 2025 18:45:10 -0300
+Subject: [R-SIG-Finance] getSymbols() quantmod library doubt
+In-Reply-To: <87wm25vwdg.fsf@enricoschumann.net>
+References: <CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>
+ <CAGgJW76xkM9x6jUAdfm2GLq06Y0GWd91YmJP8NqfmQ5Gikst8A@mail.gmail.com>
+ <CAPZA_q+Q_ues9NkLaKefG5LgcAv=6m6rr7VxdK5r+zqN+NEtog@mail.gmail.com>
+ <87tsx9ifn9.fsf@enricoschumann.net>
+ <CAPZA_qLBVwRgjx6a2VvdNSX+af8KCDpFxTiFhhNrPKTNMg1kpA@mail.gmail.com>
+ <87wm25vwdg.fsf@enricoschumann.net>
+Message-ID: <CAPZA_qJ4LESzrObm4ZiWOYRyfEe9EXZXQ-mvRdPVVpArLq=OBQ@mail.gmail.com>
+
+Hello everyone,
+
+I solved the problem! I had nothing to do with any of the aspects
+explained.  It might seem even funny to some...
+My lack of in depth knowledge about the R platform was the culprit.  I
+didn't know R kept all the workspace symbols between sessions if saved.
+Thus, there was some kind of mess with them. My apologies.
+
+The solution was very simple: rm(list = ls()).  Everything works fine just
+a before with the functions I developed originally.  In order to guarantee
+it doesn't happen again I put this command first in the startup
+configuration and in the .Last function of the .Rprofile.
+
+Regards,
+
+--
+Andr? Luiz Tietbohl Ramos, PhD.
+
+
+Em seg., 29 de dez. de 2025 ?s 17:58, Enrico Schumann <es at enricoschumann.net>
+escreveu:
+
+> On Mon, 29 Dec 2025, Andre Luiz Tietbohl Ramos writes:
+>
+> > Em seg., 29 de dez. de 2025 ?s 10:25, Enrico Schumann <
+> es at enricoschumann.net>
+> > escreveu:
+> >>
+> >> Could you please post a small, reproducible example (in plain
+> >> text)?  Otherwise, it will be hard so see where your problem
+> >> lies.
+> >>
+> >>
+> >> kind regards
+> >>     Enrico
+> >>
+> >
+> > Hello,
+> >
+> > Thanks for the interest, Enrico. It is below.
+> > R> tickers
+> >  "AALR3.SA"  "AGRO3.SA"  "ALPA3.SA"  "ALPA4.SA"  "ALUP11.SA" "AMER3.SA"
+> "
+> > AMOB3.SA"  "ANIM3.SA"  "ASAI3.SA"  "AURE3.SA"  "AZUL4.SA"  "B3SA3.SA" "
+> > BAUH4.SA"  "BAZA3.SA"  "BBAS3.SA"  "BBDC4.SA"  "BBSE3.SA"  "BDLL4.SA"  "
+> > BEES3.SA"  "BIDU34.SA" "BLAU3.SA"  "BMOB3.SA"  "BPAC11.SA" "BPAN4.SA" "
+> > BRAP4.SA"  "BRFS3.SA"  "BRKM5.SA"  "BRSR6.SA"  "BRST3.SA"  "BSLI3.SA"  "
+> > CBAV3.SA"  "CEAB3.SA"  "CEBR3.SA"  "CMIG3.SA"  "CMIG4.SA"  "CMIN3.SA" "
+> > COPH34.SA" "CPFE3.SA"  "CPLE6.SA"  "CRPG5.SA"  "CSAN3.SA"  "CSED3.SA"  "
+> > CSMG3.SA"  "CSNA3.SA"  "CSUD3.SA"  "CXSE3.SA"  "CYRE3.SA"
+> > ...
+> > R>
+> > R> getSymbols(tickers, src = "yahoo", from = start, to = end, maxgap =
+> 10,
+> > auto.asign = TRUE)
+> > R>
+> > R> tickers <- mget(ls(pattern = paste(tickers, collapse = "|")))
+> > R>
+> > R> names(tickers)
+> >   [1] "AALR3.SA"              "AFHI11.SA"             "AGRO3.SA"
+> >    "ALPA3.SA"              "ALPA4.SA"              "ALUP11.SA"
+> >   [7] "AMER3.SA"              "AMOB3.SA"              "ANIM3.SA"
+> >    "ASAI3.SA"              "AURE3.SA"              "AZUL4.SA"
+> >  [13] "B3SA3.SA"              "BAUH4.SA"              "BAZA3.SA"
+> >    *"BBAS3.SA <http://BBAS3.SA>"              "BBAS3.SA_log_returns"
+> >  "BBAS3.SA_mean_log"   *
+> >  [19] "BBAS3.SA_sd_log"       "BBDC4.SA"              "BBSE3.SA"
+> >  "BBSE3.SA_log_returns"  "BBSE3.SA_mean_log"     "BBSE3.SA_sd_log"
+> >  [25] "BDLL4.SA"              "BEES3.SA"              "BIDU34.SA"
+> >   "BLAU3.SA"              "BMOB3.SA"              "BPAC11.SA"
+> >  [31] "BPAN4.SA"              "BRAP4.SA"              "BRFS3.SA"
+> >    "BRKM5.SA"              "BRSR6.SA"              "BRST3.SA"
+> > ...
+> > R> class(tickers$BBAS3.SA)
+> > [1] "xts" "zoo"
+> > R> colnames(tickers$BBAS3.SA)
+> > [1] "BBAS3.SA.Open"     "BBAS3.SA.High"     "BBAS3.SA.Low"
+> >  "BBAS3.SA.Close"    "BBAS3.SA.Volume"   "BBAS3.SA.Adjusted"
+> > R> class(tickers$BBAS3.SA_log_returns)
+> > [1] "xts" "zoo"
+> > R>  colnames(tickers$BBAS3.SA_log_returns)
+> > [1] "daily.returns"
+> > R> class(tickers$BBAS3.SA_mean_log)
+> > [1] "numeric"
+> > R> R> colnames(tickers$BBAS3.SA_mean_log)
+> > NULL  (as expected)
+> > R>
+> >
+> > Therefore the list I get from the mget operation above contains several
+> > elements with different types, which may include even _sd_ columns as
+> well.
+> > My objective is to get rid of the .SA suffix used for Brazilian stocks in
+> > all elements downloaded as well as their columns.  I chose to put
+> > everything in a list and operate on it.
+> >
+>
+> [...]
+>
+> Like Eric, I cannot reproduce your result. In addition
+> to Dirk's suggestions for debugging:
+>
+>  i) start from a clean session (no workspace-loading);
+>
+> ii) since your column 'tickers$BBAS3.SA_log_returns' is named
+>     "daily.returns" -- any chance you are (accidentally) calling
+>     'quantmod::dailyReturn' in your code?
+>
+>
+>
+>
+> --
+> Enrico Schumann
+> Lucerne, Switzerland
+> https://enricoschumann.net
+>
+
+	[[alternative HTML version deleted]]
+
+
+From e@ @end|ng |rom enr|co@chum@nn@net  Wed Dec 31 11:08:27 2025
+From: e@ @end|ng |rom enr|co@chum@nn@net (Enrico Schumann)
+Date: Wed, 31 Dec 2025 11:08:27 +0100
+Subject: [R-SIG-Finance] getSymbols() quantmod library doubt
+In-Reply-To: <CAPZA_qJ4LESzrObm4ZiWOYRyfEe9EXZXQ-mvRdPVVpArLq=OBQ@mail.gmail.com>
+ (Andre Luiz Tietbohl Ramos's message of "Tue, 30 Dec 2025 18:45:10
+ -0300")
+References: <CAPZA_qKb8v9qi+_ufSYri1u+2is=Oz8pJ05bGV1S82xdVke_+w@mail.gmail.com>
+ <CAGgJW76xkM9x6jUAdfm2GLq06Y0GWd91YmJP8NqfmQ5Gikst8A@mail.gmail.com>
+ <CAPZA_q+Q_ues9NkLaKefG5LgcAv=6m6rr7VxdK5r+zqN+NEtog@mail.gmail.com>
+ <87tsx9ifn9.fsf@enricoschumann.net>
+ <CAPZA_qLBVwRgjx6a2VvdNSX+af8KCDpFxTiFhhNrPKTNMg1kpA@mail.gmail.com>
+ <87wm25vwdg.fsf@enricoschumann.net>
+ <CAPZA_qJ4LESzrObm4ZiWOYRyfEe9EXZXQ-mvRdPVVpArLq=OBQ@mail.gmail.com>
+Message-ID: <87wm23otes.fsf@enricoschumann.net>
+
+On Tue, 30 Dec 2025, Andre Luiz Tietbohl Ramos writes:
+
+> Hello everyone,
+>
+> I solved the problem! I had nothing to do with any of the aspects
+> explained.  It might seem even funny to some...
+> My lack of in depth knowledge about the R platform was the culprit.  I
+> didn't know R kept all the workspace symbols between sessions if saved.
+> Thus, there was some kind of mess with them. My apologies.
+>
+> The solution was very simple: rm(list = ls()).  Everything works fine just
+> a before with the functions I developed originally.  In order to guarantee
+> it doesn't happen again I put this command first in the startup
+> configuration and in the .Last function of the .Rprofile.
+>
+> Regards,
+>
+> --
+> Andr? Luiz Tietbohl Ramos, PhD.
+>
+
+
+R has commandline options for not saving/restoring the
+workspace; decent editors allow you to put such options into
+your configuration:
+
+   --no-save
+          Don't save [workspace at the end of the session]
+
+   --no-restore-data
+          Don't restore previously saved objects
+
+   --no-restore-history
+          Don't restore the R history file
+
+   --no-restore
+          Don't restore anything
+
+
+kind regards
+  Enrico
+
+>
+> Em seg., 29 de dez. de 2025 ?s 17:58, Enrico Schumann <es at enricoschumann.net>
+> escreveu:
+>
+>> On Mon, 29 Dec 2025, Andre Luiz Tietbohl Ramos writes:
+>>
+>> > Em seg., 29 de dez. de 2025 ?s 10:25, Enrico Schumann <es at enricoschumann.net>
+>> > escreveu:
+>> >>
+>> >> Could you please post a small, reproducible example (in plain
+>> >> text)?  Otherwise, it will be hard so see where your problem
+>> >> lies.
+>> >>
+>> >>
+>> >> kind regards
+>> >>     Enrico
+>> >>
+>> >
+>> > Hello,
+>> >
+>> > Thanks for the interest, Enrico. It is below.
+>> > R> tickers
+>> >  "AALR3.SA"  "AGRO3.SA"  "ALPA3.SA"  "ALPA4.SA"  "ALUP11.SA" "AMER3.SA"
+>> "
+>> > AMOB3.SA"  "ANIM3.SA"  "ASAI3.SA"  "AURE3.SA"  "AZUL4.SA"  "B3SA3.SA" "
+>> > BAUH4.SA"  "BAZA3.SA"  "BBAS3.SA"  "BBDC4.SA"  "BBSE3.SA"  "BDLL4.SA"  "
+>> > BEES3.SA"  "BIDU34.SA" "BLAU3.SA"  "BMOB3.SA"  "BPAC11.SA" "BPAN4.SA" "
+>> > BRAP4.SA"  "BRFS3.SA"  "BRKM5.SA"  "BRSR6.SA"  "BRST3.SA"  "BSLI3.SA"  "
+>> > CBAV3.SA"  "CEAB3.SA"  "CEBR3.SA"  "CMIG3.SA"  "CMIG4.SA"  "CMIN3.SA" "
+>> > COPH34.SA" "CPFE3.SA"  "CPLE6.SA"  "CRPG5.SA"  "CSAN3.SA"  "CSED3.SA"  "
+>> > CSMG3.SA"  "CSNA3.SA"  "CSUD3.SA"  "CXSE3.SA"  "CYRE3.SA"
+>> > ...
+>> > R>
+>> > R> getSymbols(tickers, src = "yahoo", from = start, to = end, maxgap =
+>> 10,
+>> > auto.asign = TRUE)
+>> > R>
+>> > R> tickers <- mget(ls(pattern = paste(tickers, collapse = "|")))
+>> > R>
+>> > R> names(tickers)
+>> >   [1] "AALR3.SA"              "AFHI11.SA"             "AGRO3.SA"
+>> >    "ALPA3.SA"              "ALPA4.SA"              "ALUP11.SA"
+>> >   [7] "AMER3.SA"              "AMOB3.SA"              "ANIM3.SA"
+>> >    "ASAI3.SA"              "AURE3.SA"              "AZUL4.SA"
+>> >  [13] "B3SA3.SA"              "BAUH4.SA"              "BAZA3.SA"
+>> >    *"BBAS3.SA <http://BBAS3.SA>"              "BBAS3.SA_log_returns"
+>> >  "BBAS3.SA_mean_log"   *
+>> >  [19] "BBAS3.SA_sd_log"       "BBDC4.SA"              "BBSE3.SA"
+>> >  "BBSE3.SA_log_returns"  "BBSE3.SA_mean_log"     "BBSE3.SA_sd_log"
+>> >  [25] "BDLL4.SA"              "BEES3.SA"              "BIDU34.SA"
+>> >   "BLAU3.SA"              "BMOB3.SA"              "BPAC11.SA"
+>> >  [31] "BPAN4.SA"              "BRAP4.SA"              "BRFS3.SA"
+>> >    "BRKM5.SA"              "BRSR6.SA"              "BRST3.SA"
+>> > ...
+>> > R> class(tickers$BBAS3.SA)
+>> > [1] "xts" "zoo"
+>> > R> colnames(tickers$BBAS3.SA)
+>> > [1] "BBAS3.SA.Open"     "BBAS3.SA.High"     "BBAS3.SA.Low"
+>> >  "BBAS3.SA.Close"    "BBAS3.SA.Volume"   "BBAS3.SA.Adjusted"
+>> > R> class(tickers$BBAS3.SA_log_returns)
+>> > [1] "xts" "zoo"
+>> > R>  colnames(tickers$BBAS3.SA_log_returns)
+>> > [1] "daily.returns"
+>> > R> class(tickers$BBAS3.SA_mean_log)
+>> > [1] "numeric"
+>> > R> R> colnames(tickers$BBAS3.SA_mean_log)
+>> > NULL  (as expected)
+>> > R>
+>> >
+>> > Therefore the list I get from the mget operation above contains several
+>> > elements with different types, which may include even _sd_ columns as
+>> well.
+>> > My objective is to get rid of the .SA suffix used for Brazilian stocks in
+>> > all elements downloaded as well as their columns.  I chose to put
+>> > everything in a list and operate on it.
+>> >
+>>
+>> [...]
+>>
+>> Like Eric, I cannot reproduce your result. In addition
+>> to Dirk's suggestions for debugging:
+>>
+>>  i) start from a clean session (no workspace-loading);
+>>
+>> ii) since your column 'tickers$BBAS3.SA_log_returns' is named
+>>     "daily.returns" -- any chance you are (accidentally) calling
+>>     'quantmod::dailyReturn' in your code?
+>>
+>> --
+>> Enrico Schumann
+>> Lucerne, Switzerland
+>> https://enricoschumann.net
+
+-- 
+Enrico Schumann
+Lucerne, Switzerland
+https://enricoschumann.net
+
+

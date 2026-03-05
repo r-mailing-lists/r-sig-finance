@@ -1,0 +1,355 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2024-09",
+  "messages": [
+    {
+      "id": "msg-c57c35f58afc",
+      "message_id": "<540b4e2b.23af9.191be91c62d.Webtop.55@btinternet.com>",
+      "from_name": "Amarjit Chandhial",
+      "from_email_hash": "2968038959c503cd701e2833aa9a9f8d5fc19b2b0a9e22ea9126a2a2c8ed62ef",
+      "date": "2024-09-04T20:45:10+01:00",
+      "subject": "[R-SIG-Finance] PerformanceAnalytics::table.CalendarReturns",
+      "subject_clean": "PerformanceAnalytics::table.CalendarReturns",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n?\nAre there any plans for \nhttps://timelyportfolio.github.io/PerformanceAnalytics/reference/table.CalendarReturns.html \nfunction to handle daily returns aggregated to monthly and year?\n?\nIt would be useful to have a table displaying Monthly Returns and Total \nReturn (rows), by year's (columns), for daily returns.\n?\nAmarjit\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n?\nAre there any plans for \nhttps://timelyportfolio.github.io/PerformanceAnalytics/reference/table.CalendarReturns.html \nfunction to handle daily returns aggregated to monthly and year?\n?\nIt would ",
+      "thread_id": "thread-c57c35f58afc",
+      "thread_depth": 0,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-29ad25892731",
+      "message_id": "<CA+oJuEFri_bEH9beEYrrd9E_RT0OxxOD+apxbu9y3nfepR08uQ@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "3e375900f97169bfcb61fc4fdc48bafc91349f60a4f7a4813c93bbe535a52a19",
+      "date": "2024-09-04T16:19:54-04:00",
+      "subject": "[R-SIG-Finance] PerformanceAnalytics::table.CalendarReturns",
+      "subject_clean": "PerformanceAnalytics::table.CalendarReturns",
+      "in_reply_to": "<540b4e2b.23af9.191be91c62d.Webtop.55@btinternet.com>",
+      "references": [
+        "<540b4e2b.23af9.191be91c62d.Webtop.55@btinternet.com>"
+      ],
+      "body_plain": "Amarjit,\n\nMaybe this is something you'd find useful?\n\nrequire(data.table)\ncalendarReturnTable <- function(rets, digits = 3, percent = FALSE) {\n\n  # get maximum drawdown using daily returns\n  dds <- apply.yearly(rets, maxDrawdown)\n\n  # get monthly returns\n  rets <- apply.monthly(rets, Return.cumulative)\n\n  # convert to data frame with year, month, and monthly return value\n  dfRets <- cbind(year(index(rets)), month(index(rets)), coredata(rets))\n\n  # convert to data table and reshape into year x month table\n  dfRets <- data.frame(dfRets)\n  colnames(dfRets) <- c(\"Year\", \"Month\", \"Value\")\n  monthNames <- c(\"Jan\", \"Feb\", \"Mar\", \"Apr\", \"May\", \"Jun\", \"Jul\", \"Aug\",\n\"Sep\", \"Oct\", \"Nov\", \"Dec\")\n  for(i in 1:length(monthNames)) {\n    dfRets$Month[dfRets$Month==i] <- monthNames[i]\n  }\n  dfRets <- data.table(dfRets)\n  dfRets <- data.table::dcast(dfRets, Year~Month)\n\n  # create row names and rearrange table in month order\n  dfRets <- data.frame(dfRets)\n  yearNames <- dfRets$Year\n  rownames(dfRets) <- yearNames; dfRets$Year <- NULL\n  dfRets <- dfRets[,monthNames]\n\n  # append yearly returns and drawdowns\n  yearlyRets <- apply.yearly(rets, Return.cumulative)\n  dfRets$Annual <- yearlyRets\n  dfRets$DD <- dds\n\n  # convert to percentage\n  if(percent) {\n    dfRets <- dfRets * 100\n  }\n\n  # round for formatting\n  dfRets <- apply(dfRets, 2, round, digits)\n\n  # paste the percentage sign\n  if(percent) {\n    dfRets <- apply(dfRets, 2, pastePerc)\n    dfRets <- apply(dfRets, 2, rowGsub)\n    dfRets <- data.frame(dfRets)\n    rownames(dfRets) <- yearNames\n  }\n  return(dfRets)\n}\n\nOn Wed, Sep 4, 2024 at 3:45?PM Amarjit Chandhial via R-SIG-Finance <\nr-sig-finance at r-project.org> wrote:\n\n>\n> Hi,\n>\n> Are there any plans for\n>\n> https://timelyportfolio.github.io/PerformanceAnalytics/reference/table.CalendarReturns.html\n> function to handle daily returns aggregated to monthly and year?\n>\n> It would be useful to have a table displaying Monthly Returns and Total\n> Return (rows), by year's (columns), for daily returns.\n>\n> Amarjit\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Amarjit,\n\nMaybe this is something you'd find useful?\n\nrequire(data.table)\ncalendarReturnTable <- function(rets, digits = 3, percent = FALSE) {\n\n  # get maximum drawdown using daily returns\n  dds <- ap",
+      "thread_id": "thread-c57c35f58afc",
+      "thread_depth": 1,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-0202e8427c3e",
+      "message_id": "<26328.49763.995638.832282@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "26604783910298c073ad132e77cb72b30037ddd7369ecad11e5fe08281600547",
+      "date": "2024-09-04T15:26:11-05:00",
+      "subject": "[R-SIG-Finance] Rblpapi testing needed",
+      "subject_clean": "Rblpapi testing needed",
+      "in_reply_to": "<26322.2924.500202.28527@rob.eddelbuettel.com>",
+      "references": [
+        "<26322.2924.500202.28527@rob.eddelbuettel.com>"
+      ],
+      "body_plain": "On 30 August 2024 at 13:11, Dirk Eddelbuettel wrote:\n| \n| The Rblpapi package is readying a new release with updated libraries. This\n| would also bring, inter alia, a version for arm64 macOS.\n| \n| Now, if *you* are familiar with Rblpapi, can build it from source and have\n| built it from source *we would love to hear from you*.  For \"reasons\" neither\n| John nor I can test it right now but as responsible stewards of the code we\n| would appreciate some testing prior to next steps.\n| \n| In short, we have a development branch at Rblpapi will builds against a\n| corresponding development branch at the blp repo providing binary blobs from\n| Bloomberg (repackaged for our use).  A command such as\n| \n|    remotes::install_github(\"Rblp/Rblpapi\", ref=\"feature/release_3.24.6.1\")\n| \n| will do this. Windows users need Rtools, of course. You should then see\n| \n|    > library(Rblpapi)    \n|    Rblpapi version 0.3.14.1 using Blpapi headers 3.24.6.1 and run-time 3.24.6.1. \n|    Please respect the Bloomberg licensing agreement and terms of service.\n|    >  \n| \n| Please come to the GitHub repo for Rblpapi with any questions.\n\nMichael was able to help so we have some progress towards a new release. More\nat the GitHub repo of Rblpapi.\n\nCheers, Dirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 30 August 2024 at 13:11, Dirk Eddelbuettel wrote:\n| \n| The Rblpapi package is readying a new release with updated libraries. This\n| would also bring, inter alia, a version for arm64 macOS.\n| \n| Now",
+      "thread_id": "thread-0202e8427c3e",
+      "thread_depth": 0,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-dcd57f0cde73",
+      "message_id": "<731b4fbc.23e02.191bee68536.Webtop.55@btinternet.com>",
+      "from_name": "Amarjit Chandhial",
+      "from_email_hash": "2968038959c503cd701e2833aa9a9f8d5fc19b2b0a9e22ea9126a2a2c8ed62ef",
+      "date": "2024-09-04T22:17:44+01:00",
+      "subject": "[R-SIG-Finance] PerformanceAnalytics::table.CalendarReturns",
+      "subject_clean": "PerformanceAnalytics::table.CalendarReturns",
+      "in_reply_to": "<540b4e2b.23af9.191be91c62d.Webtop.55@btinternet.com>",
+      "references": [
+        "<540b4e2b.23af9.191be91c62d.Webtop.55@btinternet.com>"
+      ],
+      "body_plain": "?\nThanks Ilya - including helper functions: Creating a Table of Monthly \nReturns With R and a Volatility Trading Interview | QuantStrat TradeR \n<https://quantstrattrader.com/2018/02/20/creating-a-table-of-monthly-returns-with-r-and-a-volatility-trading-interview/>\n?\nCheers,\nAmarjit\n?\n?\n?\n------ Original Message ------\nFrom: ilya.kipnis at gmail.com\nTo: a.chandhial at btinternet.com Cc: r-sig-finance at r-project.org\nSent: Wednesday, September 4th 2024, 21:20\nSubject: Re: [R-SIG-Finance] PerformanceAnalytics::table.CalendarReturns\n?\nAmarjit,\nMaybe this is something you'd find useful?\n?\nrequire(data.table)\ncalendarReturnTable <- function(rets, digits = 3, percent = FALSE) {\n??\n? # get maximum drawdown using daily returns\n? dds <- apply.yearly(rets, maxDrawdown)\n??\n? # get monthly returns\n? rets <- apply.monthly(rets, Return.cumulative)\n??\n? # convert to data frame with year, month, and monthly return value\n? dfRets <- cbind(year(index(rets)), month(index(rets)), coredata(rets))\n??\n? # convert to data table and reshape into year x month table\n? dfRets <- data.frame(dfRets)\n? colnames(dfRets) <- c(&quot;Year&quot;, &quot;Month&quot;, \n&quot;Value&quot;)\n? monthNames <- c(&quot;Jan&quot;, &quot;Feb&quot;, &quot;Mar&quot;, \n&quot;Apr&quot;, &quot;May&quot;, &quot;Jun&quot;, &quot;Jul&quot;, \n&quot;Aug&quot;, &quot;Sep&quot;, &quot;Oct&quot;, &quot;Nov&quot;, \n&quot;Dec&quot;)\n? for(i in 1:length(monthNames)) {\n? ? dfRets$Month[dfRets$Month==i] <- monthNames[i]\n? }\n? dfRets <- data.table(dfRets)\n? dfRets <- data.table::dcast(dfRets, Year~Month)\n??\n? # create row names and rearrange table in month order\n? dfRets <- data.frame(dfRets)\n? yearNames <- dfRets$Year\n? rownames(dfRets) <- yearNames; dfRets$Year <- NULL\n? dfRets <- dfRets[,monthNames]\n??\n? # append yearly returns and drawdowns\n? yearlyRets <- apply.yearly(rets, Return.cumulative)\n? dfRets$Annual <- yearlyRets\n? dfRets$DD <- dds\n??\n? # convert to percentage\n? if(percent) {\n? ? dfRets <- dfRets * 100\n? }\n??\n? # round for formatting\n? dfRets <- apply(dfRets, 2, round, digits)\n??\n? # paste the percentage sign\n? if(percent) {\n? ? dfRets <- apply(dfRets, 2, pastePerc)\n? ? dfRets <- apply(dfRets, 2, rowGsub)\n? ? dfRets <- data.frame(dfRets)\n? ? rownames(dfRets) <- yearNames\n? }\n? return(dfRets)\n}\n?\n\n?\nOn Wed, Sep 4, 2024 at 3:45?PM Amarjit Chandhial via R-SIG-Finance \n<r-sig-finance at r-project.org <mailto:r-sig-finance at r-project.org> > \nwrote:\n?\n\nHi,\n?\nAre there any plans for?\nhttps://timelyportfolio.github.io/PerformanceAnalytics/reference/table.CalendarReturns.html \n<https://timelyportfolio.github.io/PerformanceAnalytics/reference/table.CalendarReturns.html> \n?\nfunction to handle daily returns aggregated to monthly and year?\n?\nIt would be useful to have a table displaying Monthly Returns and Total?\nReturn (rows), by year's (columns), for daily returns.\n?\nAmarjit\n? ? ? ? [[alternative HTML version deleted]]\n_______________________________________________\nR-SIG-Finance at r-project.org <mailto:R-SIG-Finance at r-project.org> \nmailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance \n<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions \nshould go.\n?\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "?\nThanks Ilya - including helper functions: Creating a Table of Monthly \nReturns With R and a Volatility Trading Interview | QuantStrat TradeR \n<https://quantstrattrader.com/2018/02/20/creating-a-tabl",
+      "thread_id": "thread-c57c35f58afc",
+      "thread_depth": 1,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-24a24914f418",
+      "message_id": "<874j6ucvpy.fsf@enricoschumann.net>",
+      "from_name": "Enrico Schumann",
+      "from_email_hash": "42e3fbcaa04e968726f4c1d1a69e34143bdbc62b403d112ba1d3712256bacb88",
+      "date": "2024-09-05T11:10:01+02:00",
+      "subject": "[R-SIG-Finance] PerformanceAnalytics::table.CalendarReturns",
+      "subject_clean": "PerformanceAnalytics::table.CalendarReturns",
+      "in_reply_to": "<540b4e2b.23af9.191be91c62d.Webtop.55@btinternet.com> (Amarjit Chandhial via's message of \"Wed, 4 Sep 2024 20:45:10 +0100 (BST)\")",
+      "references": [
+        "<540b4e2b.23af9.191be91c62d.Webtop.55@btinternet.com>"
+      ],
+      "body_plain": "On Wed, 04 Sep 2024, Amarjit Chandhial via R-SIG-Finance writes:\n\n> Hi,\n> ?\n> Are there any plans for \n> https://timelyportfolio.github.io/PerformanceAnalytics/reference/table.CalendarReturns.html \n> function to handle daily returns aggregated to monthly and year?\n> ?\n> It would be useful to have a table displaying Monthly Returns and Total \n> Return (rows), by year's (columns), for daily returns.\n> ?\n> Amarjit\n>\n\nIf an alternative package be acceptable as well, then\nfunction 'returns' in PMwR (which I maintain) might do\nwhat you want:\n\n    returns(<series>, period = \"month\")\n\nin which series is a zoo (or xts) series.  It is\ndescribed in the manual:\nhttps://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#holding-period-returns\n\n\n-- \nEnrico Schumann\nLucerne, Switzerland\nhttps://enricoschumann.net",
+      "body_snippet": "On Wed, 04 Sep 2024, Amarjit Chandhial via R-SIG-Finance writes:\n\n> Hi,\n> ?\n> Are there any plans for \n> https://timelyportfolio.github.io/PerformanceAnalytics/reference/table.CalendarReturns.html \n> ",
+      "thread_id": "thread-c57c35f58afc",
+      "thread_depth": 1,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-c96c5e46c970",
+      "message_id": "<5ff73181.832a.191c1f80fdb.Webtop.89@btinternet.com>",
+      "from_name": "Amarjit Chandhial",
+      "from_email_hash": "2968038959c503cd701e2833aa9a9f8d5fc19b2b0a9e22ea9126a2a2c8ed62ef",
+      "date": "2024-09-05T12:35:45+01:00",
+      "subject": "[R-SIG-Finance] PerformanceAnalytics::table.CalendarReturns",
+      "subject_clean": "PerformanceAnalytics::table.CalendarReturns",
+      "in_reply_to": "<540b4e2b.23af9.191be91c62d.Webtop.55@btinternet.com> (Amarjit Chandhial via's message of \"Wed, 4 Sep 2024 20:45:10 +0100 (BST)\")",
+      "references": [
+        "<540b4e2b.23af9.191be91c62d.Webtop.55@btinternet.com>"
+      ],
+      "body_plain": "?\nThanks Enrico!\n?\nIf try on SPY for the year 2023?\n?\n?> calendarReturnTable(spyRets, digits = 4, percent = FALSE)\nUsing 'Value' as value column. Use 'value.var' to override\n     Jan     Feb     Mar     Apr     May     Jun     Jul     Aug     Sep \nOct     Nov     Dec  Annual\n  0.0674 -0.0251  0.0371  0.0160  0.0046  0.0648  0.0327 -0.0163 -0.0474 \n-0.0217  0.0913  0.0457  0.2671\n      DD\n  0.0997 ?\n?> PMwR::returns(SPY, period = &quot;month&quot;)\n      Jan  Feb Mar Apr May Jun Jul  Aug  Sep  Oct Nov Dec  YTD\n2023 6.7 -2.5 3.7 1.6 0.5 6.5 3.3 -1.6 -4.7 -2.2 9.1 4.6 26.7??> \nPerformanceAnalytics::table.AnnualizedReturns(spyRets, scale = 249, \ngeometric = TRUE)\n                           Adjusted\nAnnualized Return           0.2671\nAnnualized Std Dev          0.1301\nAnnualized Sharpe (Rf=0%)   2.0525\n?> PerformanceAnalytics::maxDrawdown(spyRets)\n[1] 0.09974311?\n?\n?\nAmarjit\n?\n?\n?\n------ Original Message ------\nFrom: es at enricoschumann.net\nTo: a.chandhial at btinternet.com Cc: r-sig-finance at r-project.org\nSent: Thursday, September 5th 2024, 10:10\nSubject: Re: [R-SIG-Finance] PerformanceAnalytics::table.CalendarReturns\nOn Wed, 04 Sep 2024, Amarjit Chandhial via R-SIG-Finance writes: > Hi, > \n? > Are there any plans for > \nhttps://timelyportfolio.github.io/PerformanceAnalytics/reference/table.CalendarReturns.html \n> function to handle daily returns aggregated to monthly and year? > ? > \nIt would be useful to have a table displaying Monthly Returns and Total \n> Return (rows), by year's (columns), for daily returns. > ? > Amarjit > \nIf an alternative package be acceptable as well, then function 'returns' \nin PMwR (which I maintain) might do what you want: returns(, period = \n&quot;month&quot;) in which series is a zoo (or xts) series. It is \ndescribed in the manual: \nhttps://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#holding-period-returns \n-- Enrico Schumann Lucerne, Switzerland https://enricoschumann.net\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "?\nThanks Enrico!\n?\nIf try on SPY for the year 2023?\n?\n?> calendarReturnTable(spyRets, digits = 4, percent = FALSE)\nUsing 'Value' as value column. Use 'value.var' to override\n     Jan     Feb     Mar  ",
+      "thread_id": "thread-c57c35f58afc",
+      "thread_depth": 1,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-70a0028a4b80",
+      "message_id": "<d48298811461a55d044809d7778734ee9eb9191a.camel@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "8f7d7863b98c36f594dc0b3ee1ea66fe80f3c655487f1e98dd55606a26ed6070",
+      "date": "2024-09-05T07:44:52-05:00",
+      "subject": "[R-SIG-Finance] PerformanceAnalytics::table.CalendarReturns",
+      "subject_clean": "PerformanceAnalytics::table.CalendarReturns",
+      "in_reply_to": "<5ff73181.832a.191c1f80fdb.Webtop.89@btinternet.com>",
+      "references": [
+        "<540b4e2b.23af9.191be91c62d.Webtop.55@btinternet.com>",
+        "<5ff73181.832a.191c1f80fdb.Webtop.89@btinternet.com>"
+      ],
+      "body_plain": "the 'returns' package has just turned them into whole numbers rather\nthan decimals. ?The numbers all agree.\n-- \nBrian\nOn Thu, 2024-09-05 at 12:35 +0100, Amarjit Chandhial via R-SIG-Finance\nwrote:\n> \n> ?\n> Thanks Enrico!\n> ?\n> If try on SPY for the year 2023?\n> ?\n> ?> calendarReturnTable(spyRets, digits = 4, percent = FALSE)\n> Using 'Value' as value column. Use 'value.var' to override\n> ???? Jan???? Feb???? Mar???? Apr???? May???? Jun???? Jul???? Aug????\n> Sep \n> Oct???? Nov???? Dec? Annual\n> ? 0.0674 -0.0251? 0.0371? 0.0160? 0.0046? 0.0648? 0.0327 -0.0163 -\n> 0.0474 \n> -0.0217? 0.0913? 0.0457? 0.2671\n> ????? DD\n> ? 0.0997 ?\n> ?> PMwR::returns(SPY, period = &quot;month&quot;)\n> ????? Jan? Feb Mar Apr May Jun Jul? Aug? Sep? Oct Nov Dec? YTD\n> 2023 6.7 -2.5 3.7 1.6 0.5 6.5 3.3 -1.6 -4.7 -2.2 9.1 4.6 26.7??> \n> PerformanceAnalytics::table.AnnualizedReturns(spyRets, scale = 249, \n> geometric = TRUE)\n> ?????????????????????????? Adjusted\n> Annualized Return?????????? 0.2671\n> Annualized Std Dev????????? 0.1301\n> Annualized Sharpe (Rf=0%)?? 2.0525\n> ?> PerformanceAnalytics::maxDrawdown(spyRets)\n> [1] 0.09974311?\n> ?\n> ?\n> Amarjit\n> ?\n> ?\n> ?\n> ------ Original Message ------\n> From: es at enricoschumann.net\n> To: a.chandhial at btinternet.com?Cc: r-sig-finance at r-project.org\n> Sent: Thursday, September 5th 2024, 10:10\n> Subject: Re: [R-SIG-Finance]\n> PerformanceAnalytics::table.CalendarReturns\n> On Wed, 04 Sep 2024, Amarjit Chandhial via R-SIG-Finance writes: >\n> Hi, > \n> ? > Are there any plans for > \n> https://timelyportfolio.github.io/PerformanceAnalytics/reference/table.CalendarReturns.html\n> ?\n> > function to handle daily returns aggregated to monthly and year? >\n> > ? > \n> It would be useful to have a table displaying Monthly Returns and\n> Total \n> > Return (rows), by year's (columns), for daily returns. > ? >\n> > Amarjit > \n> If an alternative package be acceptable as well, then function\n> 'returns' \n> in PMwR (which I maintain) might do what you want: returns(, period =\n> &quot;month&quot;) in which series is a zoo (or xts) series. It is \n> described in the manual: \n> https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#holding-period-returns\n> ?\n> -- Enrico Schumann Lucerne, Switzerland https://enricoschumann.net\n> \n> ????????[[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org?mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R\n> questions should go.\n> \n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "the 'returns' package has just turned them into whole numbers rather\nthan decimals. ?The numbers all agree.\n-- \nBrian\nOn Thu, 2024-09-05 at 12:35 +0100, Amarjit Chandhial via R-SIG-Finance\nwrote:\n> \n>",
+      "thread_id": "thread-c57c35f58afc",
+      "thread_depth": 2,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-50242c504dbe",
+      "message_id": "<87cyli9nxn.fsf@enricoschumann.net>",
+      "from_name": "Enrico Schumann",
+      "from_email_hash": "42e3fbcaa04e968726f4c1d1a69e34143bdbc62b403d112ba1d3712256bacb88",
+      "date": "2024-09-05T16:26:28+02:00",
+      "subject": "[R-SIG-Finance] PerformanceAnalytics::table.CalendarReturns",
+      "subject_clean": "PerformanceAnalytics::table.CalendarReturns",
+      "in_reply_to": "<d48298811461a55d044809d7778734ee9eb9191a.camel@braverock.com> (Brian G. Peterson via's message of \"Thu, 05 Sep 2024 07:44:52 -0500\")",
+      "references": [
+        "<540b4e2b.23af9.191be91c62d.Webtop.55@btinternet.com>",
+        "<5ff73181.832a.191c1f80fdb.Webtop.89@btinternet.com>",
+        "<d48298811461a55d044809d7778734ee9eb9191a.camel@braverock.com>"
+      ],
+      "body_plain": "On Thu, 05 Sep 2024, Brian G. Peterson via R-SIG-Finance writes:\n\n> the 'returns' package has just turned them into whole numbers rather\n> than decimals.  The numbers all agree.\n\nThank you, Brian.  Indeed, I do hope that the numbers\nare the same ;-)\n\nAmarjit, it's just that PMwR::returns _prints_ the\nreturns as percentages.  To give an example:\n\n    library(\"quantmod\")\n    S <- getSymbols(\"SPY\", src = \"yahoo\",\n                    from = as.Date(\"2020-01-01\"),\n                    return.class = \"zoo\",\n                    periodicity = \"daily\", \n                    auto.assign = FALSE)[, 6]\n    \n    library(\"PMwR\")\n    returns(S, period = \"month\")\n    ##       Jan  Feb   Mar  Apr May  Jun Jul  Aug  Sep  Oct  Nov  Dec   YTD\n    ## 2020 -1.0 -7.9 -12.5 12.7 4.8  1.8 5.9  7.0 -3.7 -2.5 10.9  3.7  17.2\n    ## 2021 -1.0  2.8   4.5  5.3 0.7  2.2 2.4  3.0 -4.7  7.0 -0.8  4.6  28.7\n    ## 2022 -5.3 -3.0   3.8 -8.8 0.2 -8.2 9.2 -4.1 -9.2  8.1  5.6 -5.8 -18.2\n    ## 2023  6.3 -2.5   3.7  1.6 0.5  6.5 3.3 -1.6 -4.7 -2.2  9.1  4.6  26.2\n    ## 2024  1.6  5.2   3.3 -4.0 5.1  3.5 1.2  2.3 -2.3                 16.6\n\nTo see the raw numbers, a convenient way is to use\n'as.matrix', which drops the class and leaves a numeric\nmatrix (with options(digits = 3)):\n\n    as.matrix(returns(S, period = \"month\"))\n        ##         1       2       3       4       5       6\n    ## 2020 -0.00967 -0.0792 -0.1249  0.1270 0.04765  0.0177\n    ## 2021 -0.01019  0.0278  0.0454  0.0529 0.00657  0.0224\n    ## 2022 -0.05274 -0.0295  0.0376 -0.0878 0.00226 -0.0825\n    ## 2023  0.06289 -0.0251  0.0371  0.0160 0.00462  0.0648\n    ## 2024  0.01593  0.0522  0.0327 -0.0403 0.05058  0.0353\n    ##           7       8       9      10       11      12    YTD\n    ## 2020 0.0589  0.0698 -0.0374 -0.0249  0.10878  0.0370  0.172\n    ## 2021 0.0244  0.0298 -0.0466  0.0702 -0.00803  0.0462  0.287\n    ## 2022 0.0921 -0.0408 -0.0924  0.0813  0.05559 -0.0576 -0.182\n    ## 2023 0.0327 -0.0163 -0.0474 -0.0217  0.09134  0.0457  0.262\n    ## 2024 0.0121  0.0234 -0.0226      NA       NA      NA  0.166\n\n\n\nkind regards\n    Enrico\n\n>On Thu, 2024-09-05 at 12:35 +0100, Amarjit Chandhial via R-SIG-Finance\n>wrote:\n>> \n>> ?\n>> Thanks Enrico!\n>> ?\n>> If try on SPY for the year 2023?\n>> ?\n>> ?> calendarReturnTable(spyRets, digits = 4, percent = FALSE)\n>> Using 'Value' as value column. Use 'value.var' to override\n>> ???? Jan???? Feb???? Mar???? Apr???? May???? Jun???? Jul???? Aug????\n>> Sep \n>> Oct???? Nov???? Dec? Annual\n>> ? 0.0674 -0.0251? 0.0371? 0.0160? 0.0046? 0.0648? 0.0327 -0.0163 -\n>> 0.0474 \n>> -0.0217? 0.0913? 0.0457? 0.2671\n>> ????? DD\n>> ? 0.0997 ?\n>> ?> PMwR::returns(SPY, period = &quot;month&quot;)\n>> ????? Jan? Feb Mar Apr May Jun Jul? Aug? Sep? Oct Nov Dec? YTD\n>> 2023 6.7 -2.5 3.7 1.6 0.5 6.5 3.3 -1.6 -4.7 -2.2 9.1 4.6 26.7??> \n>> PerformanceAnalytics::table.AnnualizedReturns(spyRets, scale = 249, \n>> geometric = TRUE)\n>> ?????????????????????????? Adjusted\n>> Annualized Return?????????? 0.2671\n>> Annualized Std Dev????????? 0.1301\n>> Annualized Sharpe (Rf=0%)?? 2.0525\n>> ?> PerformanceAnalytics::maxDrawdown(spyRets)\n>> [1] 0.09974311?\n>> ?\n>> ?\n>> Amarjit\n>> ?\n>> ?\n>> ?\n>> ------ Original Message ------\n>> From: es at enricoschumann.net\n>> To: a.chandhial at btinternet.com?Cc: r-sig-finance at r-project.org\n>> Sent: Thursday, September 5th 2024, 10:10\n>> Subject: Re: [R-SIG-Finance]\n>> PerformanceAnalytics::table.CalendarReturns\n>> On Wed, 04 Sep 2024, Amarjit Chandhial via R-SIG-Finance writes: >\n>> Hi, > \n>> ? > Are there any plans for > \n>> https://timelyportfolio.github.io/PerformanceAnalytics/reference/table.CalendarReturns.html\n>> ?\n>> > function to handle daily returns aggregated to monthly and year? >\n>> > ? > \n>> It would be useful to have a table displaying Monthly Returns and\n>> Total \n>> > Return (rows), by year's (columns), for daily returns. > ? >\n>> > Amarjit > \n>> If an alternative package be acceptable as well, then function\n>> 'returns' \n>> in PMwR (which I maintain) might do what you want: returns(, period =\n>> &quot;month&quot;) in which series is a zoo (or xts) series. It is \n>> described in the manual: \n>> https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#holding-period-returns\n>> ?\n>> -- Enrico Schumann Lucerne, Switzerland https://enricoschumann.net\n>> \n>> ????????[[alternative HTML version deleted]]\n\n\n-- \nEnrico Schumann\nLucerne, Switzerland\nhttps://enricoschumann.net",
+      "body_snippet": "On Thu, 05 Sep 2024, Brian G. Peterson via R-SIG-Finance writes:\n\n> the 'returns' package has just turned them into whole numbers rather\n> than decimals.  The numbers all agree.\n\nThank you, Brian.  In",
+      "thread_id": "thread-c57c35f58afc",
+      "thread_depth": 3,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-c4654ee60183",
+      "message_id": "<CADRZJuH7878PYNcwCOfOy2JgofbhbPC2nm46_vRjd9Z17+ChpA@mail.gmail.com>",
+      "from_name": "Leonardo Bargigli",
+      "from_email_hash": "52afb2876d913fb941c82a3e2a7f2b941c0d51292daec27ed137f25d2484e1c5",
+      "date": "2024-09-06T17:10:22+02:00",
+      "subject": "[R-SIG-Finance] Assistance on gogarch estimation",
+      "subject_clean": "Assistance on gogarch estimation",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\nI'm having a problem in reproducing the following example reproduced below,\nwhich is provided in the documentation with rugarch = 1.5.2 and rmgarch =\n1.3.9.\nAny help or suggestion would be greatly appreciated!\nThank you for your assistance.\nBest regards,\nLeonardo\n\ndata(dji30ret)\nspec = gogarchspec(mean.model = list(demean = \"constant\"),\nvariance.model = list(model = \"sGARCH\", garchOrder = c(1,1), submodel =\nNULL),\ndistribution.model = list(distribution = \"manig\"),ica = \"fastica\")\nfit = gogarchfit(spec = spec, data = dji30ret[,1:4, drop = FALSE],\nout.sample = 50, gfun = \"tanh\")\n\nwhich returns the following error:\n\nError in .local(variance.model, mean.model, distribution.model, start.pars, :\nugarchspec-->error: cond.distribution argument must be a character\nTraceback:\n\n1. gogarchfit(spec = spec, data = dji30ret[, 1:4, drop = FALSE],\n .     out.sample = 50, gfun = \"tanh\")\n2. gogarchfit(spec = spec, data = dji30ret[, 1:4, drop = FALSE],\n .     out.sample = 50, gfun = \"tanh\")\n3. ugarchspec(mean.model = list(include.mean = FALSE, armaOrder = c(0,\n .     0)), variance.model = list(model = umodel$vmodel, garchOrder =\numodel$garchOrder,\n .     submodel = umodel$vsubmodel, variance.targeting =\numodel$variance.targeting),\n .     distribution.model = umodel$distribution)\n4. ugarchspec(mean.model = list(include.mean = FALSE, armaOrder = c(0,\n .     0)), variance.model = list(model = umodel$vmodel, garchOrder =\numodel$garchOrder,\n .     submodel = umodel$vsubmodel, variance.targeting =\numodel$variance.targeting),\n .     distribution.model = umodel$distribution)\n5. .local(variance.model, mean.model, distribution.model, start.pars,\n .     fixed.pars, ...)\n6. stop(\"\\nugarchspec-->error: cond.distribution argument must be a character\")\n\n\n\n-- \nLeonardo Bargigli, PhD\nAssociate Professor in Economics, Disei, Universit? degli Studi di Firenze\n- Personal page\n<https://www.unifi.it/p-doc2-2013-000000-B-3f2b3a2f362930.html>\nDirector of the bachelor's degree program in Economics & Business\n<http://ec.unifi.it>\nCsdc - Centro studi dinamiche complesse -  https://www.csdc.unifi.it\nORCID: 0000-0002-7524-9148 <https://orcid.org/0000-0002-7524-9148>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\nI'm having a problem in reproducing the following example reproduced below,\nwhich is provided in the documentation with rugarch = 1.5.2 and rmgarch =\n1.3.9.\nAny help or suggestion would be greatly",
+      "thread_id": "thread-c4654ee60183",
+      "thread_depth": 0,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-4af4de4461fb",
+      "message_id": "<87311F2D-6FDA-45A5-9C8F-720A36C55783@4dscape.com>",
+      "from_name": "alexios galanos",
+      "from_email_hash": "a96d1f9bc31603cc8b7738f0d9a0b72c41ec7e0b943e1806c497adc2018497a3",
+      "date": "2024-09-06T19:31:13+03:00",
+      "subject": "[R-SIG-Finance] Assistance on gogarch estimation",
+      "subject_clean": "Assistance on gogarch estimation",
+      "in_reply_to": "<CADRZJuH7878PYNcwCOfOy2JgofbhbPC2nm46_vRjd9Z17+ChpA@mail.gmail.com>",
+      "references": [
+        "<CADRZJuH7878PYNcwCOfOy2JgofbhbPC2nm46_vRjd9Z17+ChpA@mail.gmail.com>"
+      ],
+      "body_plain": "Just use distribution.model = ?manig?? the example should probably be updated to reflect this.\n\nAlexios\n\n\n> On Sep 6, 2024, at 6:10?PM, Leonardo Bargigli <leonardo.bargigli at unifi.it> wrote:\n> \n> Hi,\n> I'm having a problem in reproducing the following example reproduced below,\n> which is provided in the documentation with rugarch = 1.5.2 and rmgarch =\n> 1.3.9.\n> Any help or suggestion would be greatly appreciated!\n> Thank you for your assistance.\n> Best regards,\n> Leonardo\n> \n> data(dji30ret)\n> spec = gogarchspec(mean.model = list(demean = \"constant\"),\n> variance.model = list(model = \"sGARCH\", garchOrder = c(1,1), submodel =\n> NULL),\n> distribution.model = list(distribution = \"manig\"),ica = \"fastica\")\n> fit = gogarchfit(spec = spec, data = dji30ret[,1:4, drop = FALSE],\n> out.sample = 50, gfun = \"tanh\")\n> \n> which returns the following error:\n> \n> Error in .local(variance.model, mean.model, distribution.model, start.pars, :\n> ugarchspec-->error: cond.distribution argument must be a character\n> Traceback:\n> \n> 1. gogarchfit(spec = spec, data = dji30ret[, 1:4, drop = FALSE],\n> .     out.sample = 50, gfun = \"tanh\")\n> 2. gogarchfit(spec = spec, data = dji30ret[, 1:4, drop = FALSE],\n> .     out.sample = 50, gfun = \"tanh\")\n> 3. ugarchspec(mean.model = list(include.mean = FALSE, armaOrder = c(0,\n> .     0)), variance.model = list(model = umodel$vmodel, garchOrder =\n> umodel$garchOrder,\n> .     submodel = umodel$vsubmodel, variance.targeting =\n> umodel$variance.targeting),\n> .     distribution.model = umodel$distribution)\n> 4. ugarchspec(mean.model = list(include.mean = FALSE, armaOrder = c(0,\n> .     0)), variance.model = list(model = umodel$vmodel, garchOrder =\n> umodel$garchOrder,\n> .     submodel = umodel$vsubmodel, variance.targeting =\n> umodel$variance.targeting),\n> .     distribution.model = umodel$distribution)\n> 5. .local(variance.model, mean.model, distribution.model, start.pars,\n> .     fixed.pars, ...)\n> 6. stop(\"\\nugarchspec-->error: cond.distribution argument must be a character\")\n> \n> \n> \n> -- \n> Leonardo Bargigli, PhD\n> Associate Professor in Economics, Disei, Universit? degli Studi di Firenze\n> - Personal page\n> <https://www.unifi.it/p-doc2-2013-000000-B-3f2b3a2f362930.html>\n> Director of the bachelor's degree program in Economics & Business\n> <http://ec.unifi.it>\n> Csdc - Centro studi dinamiche complesse -  https://www.csdc.unifi.it\n> ORCID: 0000-0002-7524-9148 <https://orcid.org/0000-0002-7524-9148>\n> \n> \t[[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Just use distribution.model = ?manig?? the example should probably be updated to reflect this.\n\nAlexios\n\n\n> On Sep 6, 2024, at 6:10?PM, Leonardo Bargigli <leonardo.bargigli at unifi.it> wrote:\n> \n> Hi",
+      "thread_id": "thread-c4654ee60183",
+      "thread_depth": 1,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-4af4de4461fb",
+      "message_id": "<87311F2D-6FDA-45A5-9C8F-720A36C55783@4dscape.com>",
+      "from_name": "alexios galanos",
+      "from_email_hash": "a96d1f9bc31603cc8b7738f0d9a0b72c41ec7e0b943e1806c497adc2018497a3",
+      "date": "2024-09-06T19:31:13+03:00",
+      "subject": "[R-SIG-Finance] Assistance on gogarch estimation",
+      "subject_clean": "Assistance on gogarch estimation",
+      "in_reply_to": "<CADRZJuH7878PYNcwCOfOy2JgofbhbPC2nm46_vRjd9Z17+ChpA@mail.gmail.com>",
+      "references": [
+        "<CADRZJuH7878PYNcwCOfOy2JgofbhbPC2nm46_vRjd9Z17+ChpA@mail.gmail.com>"
+      ],
+      "body_plain": "Just use distribution.model = ?manig?? the example should probably be updated to reflect this.\n\nAlexios\n\n\n> On Sep 6, 2024, at 6:10?PM, Leonardo Bargigli <leonardo.bargigli at unifi.it> wrote:\n> \n> Hi,\n> I'm having a problem in reproducing the following example reproduced below,\n> which is provided in the documentation with rugarch = 1.5.2 and rmgarch =\n> 1.3.9.\n> Any help or suggestion would be greatly appreciated!\n> Thank you for your assistance.\n> Best regards,\n> Leonardo\n> \n> data(dji30ret)\n> spec = gogarchspec(mean.model = list(demean = \"constant\"),\n> variance.model = list(model = \"sGARCH\", garchOrder = c(1,1), submodel =\n> NULL),\n> distribution.model = list(distribution = \"manig\"),ica = \"fastica\")\n> fit = gogarchfit(spec = spec, data = dji30ret[,1:4, drop = FALSE],\n> out.sample = 50, gfun = \"tanh\")\n> \n> which returns the following error:\n> \n> Error in .local(variance.model, mean.model, distribution.model, start.pars, :\n> ugarchspec-->error: cond.distribution argument must be a character\n> Traceback:\n> \n> 1. gogarchfit(spec = spec, data = dji30ret[, 1:4, drop = FALSE],\n> .     out.sample = 50, gfun = \"tanh\")\n> 2. gogarchfit(spec = spec, data = dji30ret[, 1:4, drop = FALSE],\n> .     out.sample = 50, gfun = \"tanh\")\n> 3. ugarchspec(mean.model = list(include.mean = FALSE, armaOrder = c(0,\n> .     0)), variance.model = list(model = umodel$vmodel, garchOrder =\n> umodel$garchOrder,\n> .     submodel = umodel$vsubmodel, variance.targeting =\n> umodel$variance.targeting),\n> .     distribution.model = umodel$distribution)\n> 4. ugarchspec(mean.model = list(include.mean = FALSE, armaOrder = c(0,\n> .     0)), variance.model = list(model = umodel$vmodel, garchOrder =\n> umodel$garchOrder,\n> .     submodel = umodel$vsubmodel, variance.targeting =\n> umodel$variance.targeting),\n> .     distribution.model = umodel$distribution)\n> 5. .local(variance.model, mean.model, distribution.model, start.pars,\n> .     fixed.pars, ...)\n> 6. stop(\"\\nugarchspec-->error: cond.distribution argument must be a character\")\n> \n> \n> \n> -- \n> Leonardo Bargigli, PhD\n> Associate Professor in Economics, Disei, Universit? degli Studi di Firenze\n> - Personal page\n> <https://www.unifi.it/p-doc2-2013-000000-B-3f2b3a2f362930.html>\n> Director of the bachelor's degree program in Economics & Business\n> <http://ec.unifi.it>\n> Csdc - Centro studi dinamiche complesse -  https://www.csdc.unifi.it\n> ORCID: 0000-0002-7524-9148 <https://orcid.org/0000-0002-7524-9148>\n> \n> \t[[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Just use distribution.model = ?manig?? the example should probably be updated to reflect this.\n\nAlexios\n\n\n> On Sep 6, 2024, at 6:10?PM, Leonardo Bargigli <leonardo.bargigli at unifi.it> wrote:\n> \n> Hi",
+      "thread_id": "thread-c4654ee60183",
+      "thread_depth": 1,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-137afca9e68c",
+      "message_id": "<CADRZJuFd7NWwD8PLQh=w1y_eA3G+sUiVYvnR-8odRbjNnTrDdQ@mail.gmail.com>",
+      "from_name": "Leonardo Bargigli",
+      "from_email_hash": "52afb2876d913fb941c82a3e2a7f2b941c0d51292daec27ed137f25d2484e1c5",
+      "date": "2024-09-09T11:26:46+02:00",
+      "subject": "[R-SIG-Finance] Assistance on gogarch estimation",
+      "subject_clean": "Assistance on gogarch estimation",
+      "in_reply_to": "<87311F2D-6FDA-45A5-9C8F-720A36C55783@4dscape.com>",
+      "references": [
+        "<CADRZJuH7878PYNcwCOfOy2JgofbhbPC2nm46_vRjd9Z17+ChpA@mail.gmail.com>",
+        "<87311F2D-6FDA-45A5-9C8F-720A36C55783@4dscape.com>"
+      ],
+      "body_plain": "Dear Alexios,\nit works! Thank you very much for your assistance.\nBest regards,\nLeonardo\n\nIl giorno ven 6 set 2024 alle ore 18:31 alexios galanos <alexios at 4dscape.com>\nha scritto:\n\n> Just use distribution.model = ?manig?? the example should probably be\n> updated to reflect this.\n>\n> Alexios\n>\n>\n> > On Sep 6, 2024, at 6:10?PM, Leonardo Bargigli <\n> leonardo.bargigli at unifi.it> wrote:\n> >\n> > Hi,\n> > I'm having a problem in reproducing the following example reproduced\n> below,\n> > which is provided in the documentation with rugarch = 1.5.2 and rmgarch =\n> > 1.3.9.\n> > Any help or suggestion would be greatly appreciated!\n> > Thank you for your assistance.\n> > Best regards,\n> > Leonardo\n> >\n> > data(dji30ret)\n> > spec = gogarchspec(mean.model = list(demean = \"constant\"),\n> > variance.model = list(model = \"sGARCH\", garchOrder = c(1,1), submodel =\n> > NULL),\n> > distribution.model = list(distribution = \"manig\"),ica = \"fastica\")\n> > fit = gogarchfit(spec = spec, data = dji30ret[,1:4, drop = FALSE],\n> > out.sample = 50, gfun = \"tanh\")\n> >\n> > which returns the following error:\n> >\n> > Error in .local(variance.model, mean.model, distribution.model,\n> start.pars, :\n> > ugarchspec-->error: cond.distribution argument must be a character\n> > Traceback:\n> >\n> > 1. gogarchfit(spec = spec, data = dji30ret[, 1:4, drop = FALSE],\n> > .     out.sample = 50, gfun = \"tanh\")\n> > 2. gogarchfit(spec = spec, data = dji30ret[, 1:4, drop = FALSE],\n> > .     out.sample = 50, gfun = \"tanh\")\n> > 3. ugarchspec(mean.model = list(include.mean = FALSE, armaOrder = c(0,\n> > .     0)), variance.model = list(model = umodel$vmodel, garchOrder =\n> > umodel$garchOrder,\n> > .     submodel = umodel$vsubmodel, variance.targeting =\n> > umodel$variance.targeting),\n> > .     distribution.model = umodel$distribution)\n> > 4. ugarchspec(mean.model = list(include.mean = FALSE, armaOrder = c(0,\n> > .     0)), variance.model = list(model = umodel$vmodel, garchOrder =\n> > umodel$garchOrder,\n> > .     submodel = umodel$vsubmodel, variance.targeting =\n> > umodel$variance.targeting),\n> > .     distribution.model = umodel$distribution)\n> > 5. .local(variance.model, mean.model, distribution.model, start.pars,\n> > .     fixed.pars, ...)\n> > 6. stop(\"\\nugarchspec-->error: cond.distribution argument must be a\n> character\")\n> >\n> >\n> >\n> > --\n> > Leonardo Bargigli, PhD\n> > Associate Professor in Economics, Disei, Universit? degli Studi di\n> Firenze\n> > - Personal page\n> > <https://www.unifi.it/p-doc2-2013-000000-B-3f2b3a2f362930.html>\n> > Director of the bachelor's degree program in Economics & Business\n> > <http://ec.unifi.it>\n> > Csdc - Centro studi dinamiche complesse -  https://www.csdc.unifi.it\n> > ORCID: 0000-0002-7524-9148 <https://orcid.org/0000-0002-7524-9148>\n> >\n> >       [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear Alexios,\nit works! Thank you very much for your assistance.\nBest regards,\nLeonardo\n\nIl giorno ven 6 set 2024 alle ore 18:31 alexios galanos <alexios at 4dscape.com>\nha scritto:\n\n> Just use distri",
+      "thread_id": "thread-c4654ee60183",
+      "thread_depth": 2,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-ffcb713a7712",
+      "message_id": "<26338.14123.88859.992324@rob.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "26604783910298c073ad132e77cb72b30037ddd7369ecad11e5fe08281600547",
+      "date": "2024-09-11T19:34:51-05:00",
+      "subject": "[R-SIG-Finance] Rblpapi release candidate",
+      "subject_clean": "Rblpapi release candidate",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Another follow-up to the thread from last week: we made good progress and now\nhave a new release candidate version 0.3.14.1 of package Rblpapi in source\nform at the GitHub repo [1] and also as binaries at the r-universe page [2].\n\nBinary builds for windows and macos/arm64 are available, you can install\nthese directly via\n\n   repos <- c('https://rblp.r-universe.dev', 'https://cloud.r-project.org')\n   install.packages('Rblpapi', repos = repos)\n\nwhich will also install any dependencies. (There is also a Linux binary you\ncan use on Ubuntu 24.04 along with r2u binaries, see [3] and [4].)\n\nWe would appreciate additional testing 'just in case'. All features of the\nprior release 0.3.14 are supported, but are now provided via the current SDK\nfor the Bloomberg API.\n\nCheers,  Dirk \n\n[1] https://github.com/rblp/rblpapi/\n[2] https://rblp.r-universe.dev/Rblpapi\n[3] https://github.com/r-universe-org/help#does-r-universe-have-linux-binaries\n[4] https://eddelbuettel.github.io/r2u\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "Another follow-up to the thread from last week: we made good progress and now\nhave a new release candidate version 0.3.14.1 of package Rblpapi in source\nform at the GitHub repo [1] and also as binarie",
+      "thread_id": "thread-ffcb713a7712",
+      "thread_depth": 0,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-8c9847fd3f4e",
+      "message_id": "<qjc_3HwhSZqo_KT1Kk77dA@geopod-ismtpd-13>",
+      "from_name": "mzyphur m@iii@g oii i@st@ts@org",
+      "from_email_hash": "252b54e096b1cc2b7cae76e00ed703f3596525227cfc47687b655cf5c7e64f69",
+      "date": "2024-09-17T21:20:00Z",
+      "subject": "[R-SIG-Finance] Online Course: Statistics and Data Science using Tidyverse in R",
+      "subject_clean": "Online Course: Statistics and Data Science using Tidyverse in R",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20240917/d4d78d85/attachment.html>",
+      "body_snippet": "An HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20240917/d4d78d85/attachment.html>",
+      "thread_id": "thread-8c9847fd3f4e",
+      "thread_depth": 0,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-20cb8c92a2d7",
+      "message_id": "<CA+oJuEE7xxZr9UnHs_ea9kp3zFaPtuLHVaeCPC7YXij3FoJOPA@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "3e375900f97169bfcb61fc4fdc48bafc91349f60a4f7a4813c93bbe535a52a19",
+      "date": "2024-09-17T17:23:28-04:00",
+      "subject": "[R-SIG-Finance]  Online Course: Statistics and Data Science using Tidyverse in R",
+      "subject_clean": "Online Course: Statistics and Data Science using Tidyverse in R",
+      "in_reply_to": "<qjc_3HwhSZqo_KT1Kk77dA@geopod-ismtpd-13>",
+      "references": [
+        "<qjc_3HwhSZqo_KT1Kk77dA@geopod-ismtpd-13>"
+      ],
+      "body_plain": "Anyone who was actually an active part of the R-SIG Finance mailing list\nwould know that the Tidyverse is uniquely given the side-eye around these\nparts for overriding several critical functions.\n\nBoooooooooo.\n\nOn Tue, Sep 17, 2024 at 5:20?PM Michael Zyphur via R-SIG-Finance <\nr-sig-finance at r-project.org> wrote:\n\n> Hi everyone\n>\n> Instats is offering a 4-day workshop on Statistics and Data Science using\n> Tidyverse in R\n> <https://instats.org/seminar/statistics-using-the-tidyverse-in-r2?utm_source=r-sig-finance>\n> with professor Chester Ismay, running October 15, 17, 22, and 24. This\n> comprehensive seminar introduces participants to key concepts and practices\n> in statistical inference and data science using R, covering topics such as\n> data wrangling, exploratory data analysis, regression analysis, confidence\n> intervals, hypothesis testing, and more. Attendees will gain hands-on\n> experience, enhancing their ability to manage and analyze complex datasets\n> and effectively communicate their research findings. Starting with an\n> introduction to R and the tidyverse, the workshop will incrementally\n> introduce statistical concepts and practical hands-on techniques for\n> efficiently using the tidyverse to manipulate and analyze data, as well as\n> present results with data visualizations. The workshop will also cover more\n> advanced topics such as resampling methods for hypothesis tests with\n> regression analysis, providing robust tools for data analysis and\n> interpretation. Moreover, learning to communicate statistical findings\n> effectively will enable researchers to present their work compellingly for\n> academic journals, conferences, and policy papers.\n>\n> For anyone wanting a deep dive into Quarto to automatically create\n> reproducible research using R, we also have a 1-day workshop Quarto in\n> RStudio: Writing Reproducible & Dynamic Research Papers\n> <https://instats.org/seminar/quarto-in-r-studio-writing-reproducible2?utm_source=r-sig-finance>,\n> running Oct 7, by professor Seraphine Maerz.\n>\n> Sign up today\n> <https://instats.org/seminar/statistics-using-the-tidyverse-in-r2?utm_source=r-sig-finance>\n> for to secure your spot in these unique workshops and please feel free to\n> tell your friends and colleagues!\n>\n>\n> Best wishes\n>\n> ?Michael Zyphur\n> Director\n> Institute for Statistical and Data Science\n> *instats.org* <http://instats.org?utm_source=r-sig-finance>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Anyone who was actually an active part of the R-SIG Finance mailing list\nwould know that the Tidyverse is uniquely given the side-eye around these\nparts for overriding several critical functions.\n\nBoo",
+      "thread_id": "thread-8c9847fd3f4e",
+      "thread_depth": 1,
+      "month": "2024-09"
+    },
+    {
+      "id": "msg-e5bdb0558861",
+      "message_id": "<26346.43600.265497.283593@stat.math.ethz.ch>",
+      "from_name": "Martin Maechler",
+      "from_email_hash": "a92f4a07d4e3cad5fba985e30db2b0fff598d5ddfbadbb2e91ffe91636400c62",
+      "date": "2024-09-18T12:24:16+02:00",
+      "subject": "[R-SIG-Finance]  Online Course: Statistics and Data Science using Tidyverse in R",
+      "subject_clean": "Online Course: Statistics and Data Science using Tidyverse in R",
+      "in_reply_to": "<CA+oJuEE7xxZr9UnHs_ea9kp3zFaPtuLHVaeCPC7YXij3FoJOPA@mail.gmail.com>",
+      "references": [
+        "<qjc_3HwhSZqo_KT1Kk77dA@geopod-ismtpd-13>",
+        "<CA+oJuEE7xxZr9UnHs_ea9kp3zFaPtuLHVaeCPC7YXij3FoJOPA@mail.gmail.com>"
+      ],
+      "body_plain": ">>>>> Ilya Kipnis \n>>>>>     on Tue, 17 Sep 2024 17:23:28 -0400 writes:\n\n    > Anyone who was actually an active part of the R-SIG Finance mailing list\n    > would know that the Tidyverse is uniquely given the side-eye around these\n    > parts for overriding several critical functions.\n\n    > Boooooooooo.\n\n(indeed!)\n\nIt is absolutely fully  INappropriate that  Michael Zyphur  (Head of 'Instats')\nsends such advertizements to *several*  R-SIG-*\nR Special Interest Groups' mailing lists,  which are\n*NOT AT ALL* related to tidyverse and general R & Stats courses,\nindeed !\n\nI hope this will be the last time this has happened!\n       (and yes, I'm sometimes too optimistic ;-)\nMartin\n\n---\nMartin Maechler\nETH Zurich  and  R Core Team\n(and site maintainer & creator of almost all of these lists)\n\n\n\n    > On Tue, Sep 17, 2024 at 5:20?PM Michael Zyphur via R-SIG-Finance <\n    > r-sig-finance at r-project.org> wrote:\n\n    >> Hi everyone\n    >> \n    >> Instats is offering a 4-day workshop on Statistics and Data Science using\n    >> Tidyverse in R\n\n ........",
+      "body_snippet": ">>>>> Ilya Kipnis \n>>>>>     on Tue, 17 Sep 2024 17:23:28 -0400 writes:\n\n    > Anyone who was actually an active part of the R-SIG Finance mailing list\n    > would know that the Tidyverse is uniquely ",
+      "thread_id": "thread-8c9847fd3f4e",
+      "thread_depth": 2,
+      "month": "2024-09"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-0202e8427c3e",
+      "subject": "Rblpapi testing needed",
+      "message_count": 1,
+      "participants": [
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2024-09-04T15:26:11-05:00",
+      "last_reply": "2024-09-04T15:26:11-05:00",
+      "root_message_id": "msg-0202e8427c3e"
+    },
+    {
+      "id": "thread-c57c35f58afc",
+      "subject": "PerformanceAnalytics::table.CalendarReturns",
+      "message_count": 7,
+      "participants": [
+        "Amarjit Chandhial",
+        "Brian G. Peterson",
+        "Enrico Schumann",
+        "Ilya Kipnis"
+      ],
+      "started": "2024-09-04T20:45:10+01:00",
+      "last_reply": "2024-09-05T16:26:28+02:00",
+      "root_message_id": "msg-c57c35f58afc"
+    },
+    {
+      "id": "thread-c4654ee60183",
+      "subject": "Assistance on gogarch estimation",
+      "message_count": 4,
+      "participants": [
+        "Leonardo Bargigli",
+        "alexios galanos"
+      ],
+      "started": "2024-09-06T17:10:22+02:00",
+      "last_reply": "2024-09-09T11:26:46+02:00",
+      "root_message_id": "msg-c4654ee60183"
+    },
+    {
+      "id": "thread-ffcb713a7712",
+      "subject": "Rblpapi release candidate",
+      "message_count": 1,
+      "participants": [
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2024-09-11T19:34:51-05:00",
+      "last_reply": "2024-09-11T19:34:51-05:00",
+      "root_message_id": "msg-ffcb713a7712"
+    },
+    {
+      "id": "thread-8c9847fd3f4e",
+      "subject": "Online Course: Statistics and Data Science using Tidyverse in R",
+      "message_count": 3,
+      "participants": [
+        "Ilya Kipnis",
+        "Martin Maechler",
+        "mzyphur m@iii@g oii i@st@ts@org"
+      ],
+      "started": "2024-09-17T21:20:00+00:00",
+      "last_reply": "2024-09-18T12:24:16+02:00",
+      "root_message_id": "msg-8c9847fd3f4e"
+    }
+  ]
+}

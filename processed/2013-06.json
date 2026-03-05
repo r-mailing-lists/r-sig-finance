@@ -1,0 +1,58 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2013-06",
+  "messages": [
+    {
+      "id": "msg-07e03ea00068",
+      "message_id": "<CA+xi=qYVUux56=5cD_VeugXHnd7CcJmqRXXgrxmEqUVH7Haw0g@mail.gmail.com>",
+      "from_name": "G See",
+      "from_email_hash": "9e2196e2f2c9a9c79bb5b29bd87645c7a75b58fc093ff9cf52d847253a97f8b1",
+      "date": "2013-06-30T17:14:50-05:00",
+      "subject": "[R-SIG-Finance] Delete bad dividend row",
+      "subject_clean": "Delete bad dividend row",
+      "in_reply_to": "<D1005A76DEBE435BB0EBEC9F25A39287@Franki7PC>",
+      "references": [
+        "<D1005A76DEBE435BB0EBEC9F25A39287@Franki7PC>"
+      ],
+      "body_plain": "Hi Frank,\n\nThere are a few ways to do it.\n\nlibrary(quantmod)\ndiv <- getDividends(\"PM\", from=\"2010-01-01\")\n\n# find the row(s) you want to remove and use negative indexing\ndiv[-12]\ndiv[-which(div == 0.039)]\ndiv[-div[\"2012-12-20\", which.i=TRUE]]\n\n# exclude specific date by passing logical vector to [.xts\ndiv[!index(div) %in% as.Date(\"2012-12-20\")]\n\n# exclude specific weekdays\ndiv[weekdays(index(div)) != \"Thursday\"]\ndiv[as.POSIXlt(index(div))$wday != 4]\n\n# exclude amounts smaller than some arbitrary number\ndiv[div > 0.1]\n# exclude specific amount\ndiv[div != 0.039]\n\nHTH,\nGarrett",
+      "body_snippet": "Hi Frank,\n\nThere are a few ways to do it.\n\nlibrary(quantmod)\ndiv <- getDividends(\"PM\", from=\"2010-01-01\")\n\n# find the row(s) you want to remove and use negative indexing\ndiv[-12]\ndiv[-which(div == 0.0",
+      "thread_id": "thread-07e03ea00068",
+      "thread_depth": 0,
+      "month": "2013-06"
+    },
+    {
+      "id": "msg-7f75f29b65b6",
+      "message_id": "<FB0EC0E80D0F4938B13B0DF4E2D82405@Franki7PC>",
+      "from_name": "Frank",
+      "from_email_hash": "abdffc2429bfa78db9949f51e22b4e11e2e14915791103deccd563dd4d9da29e",
+      "date": "2013-06-30T18:29:59-05:00",
+      "subject": "[R-SIG-Finance] Delete bad dividend row",
+      "subject_clean": "Delete bad dividend row",
+      "in_reply_to": "<CA+xi=qYVUux56=5cD_VeugXHnd7CcJmqRXXgrxmEqUVH7Haw0g@mail.gmail.com>",
+      "references": [
+        "<D1005A76DEBE435BB0EBEC9F25A39287@Franki7PC>",
+        "<CA+xi=qYVUux56=5cD_VeugXHnd7CcJmqRXXgrxmEqUVH7Haw0g@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Garret,\n\nThat did help. I've been analyzing dividend yields and the quantmod\ngetDividends and getSymbols work flawlessly. But then the dividends change\nfrequency over time, special dividends creep in and now a spurious data\npoint for PM. So far I've dealt with these with your help and others. \n\nBest,\n\nFrank\n\n-----Original Message-----\nFrom: G See [mailto:gsee000 at gmail.com] \nSent: Sunday, June 30, 2013 5:15 PM\nTo: Frank\nCc: r-sig-finance\nSubject: Re: [R-SIG-Finance] Delete bad dividend row\n\nHi Frank,\n\nThere are a few ways to do it.\n\nlibrary(quantmod)\ndiv <- getDividends(\"PM\", from=\"2010-01-01\")\n\n# find the row(s) you want to remove and use negative indexing\ndiv[-12]\ndiv[-which(div == 0.039)]\ndiv[-div[\"2012-12-20\", which.i=TRUE]]\n\n# exclude specific date by passing logical vector to [.xts\ndiv[!index(div) %in% as.Date(\"2012-12-20\")]\n\n# exclude specific weekdays\ndiv[weekdays(index(div)) != \"Thursday\"]\ndiv[as.POSIXlt(index(div))$wday != 4]\n\n# exclude amounts smaller than some arbitrary number\ndiv[div > 0.1]\n# exclude specific amount\ndiv[div != 0.039]\n\nHTH,\nGarrett",
+      "body_snippet": "Hi Garret,\n\nThat did help. I've been analyzing dividend yields and the quantmod\ngetDividends and getSymbols work flawlessly. But then the dividends change\nfrequency over time, special dividends creep ",
+      "thread_id": "thread-07e03ea00068",
+      "thread_depth": 1,
+      "month": "2013-06"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-07e03ea00068",
+      "subject": "Delete bad dividend row",
+      "message_count": 2,
+      "participants": [
+        "Frank",
+        "G See"
+      ],
+      "started": "2013-06-30T17:14:50-05:00",
+      "last_reply": "2013-06-30T18:29:59-05:00",
+      "root_message_id": "msg-07e03ea00068"
+    }
+  ]
+}

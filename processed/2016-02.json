@@ -1,0 +1,736 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2016-02",
+  "messages": [
+    {
+      "id": "msg-bc8378624c1e",
+      "message_id": "<CAC_=oyPe7JAGkeX1a_7A-itpPJ2=O35+a_fey3oWgRp6_M_uPQ@mail.gmail.com>",
+      "from_name": "Jersey Fanatic",
+      "from_email_hash": "023a343854d763e8dd34f79bc40aee120a3d885a2d183d7a3d7f621c51cead86",
+      "date": "2016-02-01T09:12:18+02:00",
+      "subject": "[R-SIG-Finance] apply.paramset trade-by-trade PnL data",
+      "subject_clean": "apply.paramset trade-by-trade PnL data",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Transaction table from applyStrategy() lists transaction dates and PnL in\ntrade-by-trade basis. However, after executing apply.paramset() on a\ndistribution of parameters, same trade-by-trade PnL statistics is not\nretrievable via getTxns(). Is there a way to access trade-by-trade PnL data\nresults from applyStrategy for each combination tried in the optimization\nrange? My end goal is to construct a time-aligned data table with\nhourly/daily/weekly PnL for each combination of parameters.\n\nThanks for the help in advance.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Transaction table from applyStrategy() lists transaction dates and PnL in\ntrade-by-trade basis. However, after executing apply.paramset() on a\ndistribution of parameters, same trade-by-trade PnL stati",
+      "thread_id": "thread-bc8378624c1e",
+      "thread_depth": 0,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-899adb63e59a",
+      "message_id": "<CAC_=oyNU_UCGkfD85x49a0PkJZmYAMgDUXjU1BxGKcsyxG2VQg@mail.gmail.com>",
+      "from_name": "Jersey Fanatic",
+      "from_email_hash": "023a343854d763e8dd34f79bc40aee120a3d885a2d183d7a3d7f621c51cead86",
+      "date": "2016-02-01T12:43:06+02:00",
+      "subject": "[R-SIG-Finance] apply.paramset trade-by-trade PnL data",
+      "subject_clean": "apply.paramset trade-by-trade PnL data",
+      "in_reply_to": "<CAC_=oyPe7JAGkeX1a_7A-itpPJ2=O35+a_fey3oWgRp6_M_uPQ@mail.gmail.com>",
+      "references": [
+        "<CAC_=oyPe7JAGkeX1a_7A-itpPJ2=O35+a_fey3oWgRp6_M_uPQ@mail.gmail.com>"
+      ],
+      "body_plain": "Transaction table from applyStrategy() lists transaction dates and PnL in\ntrade-by-trade basis. However, after executing apply.paramset() on a\ndistribution of parameters, same trade-by-trade PnL statistics is not\nretrievable via getTxns(). Is there a way to access trade-by-trade PnL data\nresults from *apply.paramset()* for each combination tried in the\noptimization range? My end goal is to construct a time-aligned data table\nwith hourly/daily/weekly PnL for each combination of parameters.\n\n\n2016-02-01 9:12 GMT+02:00 Jersey Fanatic <jerseyfanatic1 at gmail.com>:\n\n> Transaction table from applyStrategy() lists transaction dates and PnL in\n> trade-by-trade basis. However, after executing apply.paramset() on a\n> distribution of parameters, same trade-by-trade PnL statistics is not\n> retrievable via getTxns(). Is there a way to access trade-by-trade PnL data\n> results from applyStrategy for each combination tried in the optimization\n> range? My end goal is to construct a time-aligned data table with\n> hourly/daily/weekly PnL for each combination of parameters.\n>\n> Thanks for the help in advance.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Transaction table from applyStrategy() lists transaction dates and PnL in\ntrade-by-trade basis. However, after executing apply.paramset() on a\ndistribution of parameters, same trade-by-trade PnL stati",
+      "thread_id": "thread-bc8378624c1e",
+      "thread_depth": 1,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-28a56825652d",
+      "message_id": "<CAC_=oyNUjOZKhXBbEc9Gh+St+noZdAvTO-ym9ipShiFYPbcVUw@mail.gmail.com>",
+      "from_name": "Jersey Fanatic",
+      "from_email_hash": "023a343854d763e8dd34f79bc40aee120a3d885a2d183d7a3d7f621c51cead86",
+      "date": "2016-02-02T16:29:53+02:00",
+      "subject": "[R-SIG-Finance] apply.paramset trade-by-trade PnL data",
+      "subject_clean": "apply.paramset trade-by-trade PnL data",
+      "in_reply_to": "<CAC_=oyNU_UCGkfD85x49a0PkJZmYAMgDUXjU1BxGKcsyxG2VQg@mail.gmail.com>",
+      "references": [
+        "<CAC_=oyPe7JAGkeX1a_7A-itpPJ2=O35+a_fey3oWgRp6_M_uPQ@mail.gmail.com>",
+        "<CAC_=oyNU_UCGkfD85x49a0PkJZmYAMgDUXjU1BxGKcsyxG2VQg@mail.gmail.com>"
+      ],
+      "body_plain": "Reproducible code:\n\nlibrary(lattice);library(foreach);library(doSNOW);library(ggplot2)\nlibrary(gridExtra);library(reshape);library(beepr);library(quantstrat)\n\nSys.setenv(TZ=\"UTC\")\n\n.strategy<- new.env();.blotter<- new.env()\n\n\n\ncurrency('USD')\nsymbol.name = \"AAPL\"\n\n\nstock(symbol.name, currency=\"USD\", multiplier=1,tick_size= 0.01)\n\ninitialEquity = 100000\n\nstrategy.keyword = \"MACD_D1\"\n\nconstantTxnFee = 0\n\ngetSymbols('AAPL',src = 'yahoo', from=\"2014-01-01\", to=\"2015-05-31\")\nAAPL <- adjustOHLC(AAPL)\n\nstrategy.st <- paste(symbol.name,strategy.keyword,sep = \"_\")\nrm.strat(strategy.st)\n\ninitDate = \"2013-12-30\"\ninitPortf(strategy.st, symbol.name, initDate=initDate, currency = \"USD\")\ninitAcct(strategy.st, portfolios=strategy.st, initDate=initDate,\ninitEq=initialEquity, currency = \"USD\")\ninitOrders(portfolio=strategy.st,initDate=initDate)\nstrategy(strategy.st,store=TRUE)\n\ntxn.model <- constantTxnFee\n\nmacdFastMARange <- seq(5,35,by=10)\nmacdSlowMARange <- seq(2,62,by=20)\nmacdSignalRange <- seq(2,26,by=6)\nstrategy.indicator.name <- \"MACD\"\n\nstrategy.name <- strategy.st\nadd.indicator(strategy.name,\n              name = strategy.indicator.name,\n              arguments = list(x=Cl(eval(parse(text = symbol.name)))),\n              label='macd')\n\nadd.signal(strategy.name,name=\"sigCrossover\",\n           arguments =\nlist(columns=c(\"macd.macd\",\"signal.macd\"),relationship=\"gt\"),\n           label=\"macd.gt.signal\")\nadd.signal(strategy.name,name=\"sigCrossover\",\n           arguments =\nlist(columns=c(\"macd.macd\",\"signal.macd\"),relationship=\"lt\"),\n           label=\"macd.lt.signal\")\n\nadd.rule(strategy.name,\n         name='ruleSignal', arguments = list(sigcol=\"macd.gt.signal\",\nsigval=TRUE,  prefer=\"Open\",\n                          orderqty= 1000,  ordertype='market',\norderside='long',\n                          orderset='ocolong',  TxnFees = txn.model),\n         type='enter', label='longenter', enabled=FALSE)\nadd.rule(strategy.name,\n         name='ruleSignal', arguments = list(sigcol=\"macd.lt.signal\",\nsigval=TRUE, prefer=\"Open\",  orderqty='all',\n                          ordertype='market', orderside='long',\norderset='ocolong', TxnFees = txn.model),\n         type='exit', label='longexit', enabled=FALSE)\nadd.rule(strategy.name, name='ruleSignal', arguments =\nlist(sigcol=\"macd.lt.signal\", sigval=TRUE,\n                          prefer=\"Open\",  orderqty=1000,\n ordertype='market',\n                          orderside='short', orderset='ocoshort', TxnFees =\ntxn.model),\n         type='enter', label='shortenter', enabled=FALSE)\nadd.rule(strategy.name, name='ruleSignal', arguments =\nlist(sigcol=\"macd.gt.signal\",  sigval=TRUE,\n                          prefer=\"Open\",  orderqty='all',\nordertype='market',  orderside='short',\n                          orderset='ocoshort',  TxnFees = txn.model),\ntype='exit', label='shortexit', enabled=FALSE)\n\nadd.distribution(strategy.name, paramset.label = \"MACD_OPT\", component.type\n= 'indicator',\n                 component.label = \"macd\", variable = list( nFast =\nmacdFastMARange ), label = \"macdFastMARANGE\")\nadd.distribution(strategy.name, paramset.label = \"MACD_OPT\", component.type\n= 'indicator',\n                 component.label = \"macd\", variable = list( nSlow =\nmacdSlowMARange ), label = \"macdSlowMARANGE\")\nadd.distribution(strategy.name, paramset.label = \"MACD_OPT\", component.type\n= 'indicator',\n                 component.label = \"macd\", variable = list( nSig =\nmacdSignalRange ), label = \"macdSignalRANGE\")\nadd.distribution.constraint(strategy.name, paramset.label = 'MACD_OPT',\n                            distribution.label.1 = 'macdFastMARANGE',\ndistribution.label.2 = 'macdSlowMARANGE',\n                            operator = '<', label = 'FastMA<SlowMA')\n\nenable.rule(strategy.st,type=\"enter\",label=\"longenter\", enable = TRUE)\nenable.rule(strategy.st,type=\"exit\",label=\"longexit\", enable = TRUE)\nenable.rule(strategy.st,type=\"enter\",label=\"shortenter\", enable = TRUE)\nenable.rule(strategy.st,type=\"exit\",label=\"shortexit\", enable = TRUE)\n\nresults <- apply.paramset(strategy.st,paramset.label = \"MACD_OPT\",\n                          portfolio=strategy.st, account=strategy.st,\nnsamples=0,verbose = FALSE)\n\n\n2016-02-01 12:43 GMT+02:00 Jersey Fanatic <jerseyfanatic1 at gmail.com>:\n\n> Transaction table from applyStrategy() lists transaction dates and PnL in\n> trade-by-trade basis. However, after executing apply.paramset() on a\n> distribution of parameters, same trade-by-trade PnL statistics is not\n> retrievable via getTxns(). Is there a way to access trade-by-trade PnL data\n> results from *apply.paramset()* for each combination tried in the\n> optimization range? My end goal is to construct a time-aligned data table\n> with hourly/daily/weekly PnL for each combination of parameters.\n>\n>\n> 2016-02-01 9:12 GMT+02:00 Jersey Fanatic <jerseyfanatic1 at gmail.com>:\n>\n>> Transaction table from applyStrategy() lists transaction dates and PnL in\n>> trade-by-trade basis. However, after executing apply.paramset() on a\n>> distribution of parameters, same trade-by-trade PnL statistics is not\n>> retrievable via getTxns(). Is there a way to access trade-by-trade PnL data\n>> results from applyStrategy for each combination tried in the optimization\n>> range? My end goal is to construct a time-aligned data table with\n>> hourly/daily/weekly PnL for each combination of parameters.\n>>\n>> Thanks for the help in advance.\n>>\n>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Reproducible code:\n\nlibrary(lattice);library(foreach);library(doSNOW);library(ggplot2)\nlibrary(gridExtra);library(reshape);library(beepr);library(quantstrat)\n\nSys.setenv(TZ=\"UTC\")\n\n.strategy<- new.env",
+      "thread_id": "thread-bc8378624c1e",
+      "thread_depth": 2,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-662094b907a3",
+      "message_id": "<1454432102.2794.61.camel@brian-rcg>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2016-02-02T10:55:02-06:00",
+      "subject": "[R-SIG-Finance] apply.paramset trade-by-trade PnL data",
+      "subject_clean": "apply.paramset trade-by-trade PnL data",
+      "in_reply_to": "<CAC_=oyNUjOZKhXBbEc9Gh+St+noZdAvTO-ym9ipShiFYPbcVUw@mail.gmail.com>",
+      "references": [
+        "<CAC_=oyPe7JAGkeX1a_7A-itpPJ2=O35+a_fey3oWgRp6_M_uPQ@mail.gmail.com>",
+        "<CAC_=oyNU_UCGkfD85x49a0PkJZmYAMgDUXjU1BxGKcsyxG2VQg@mail.gmail.com>",
+        "<CAC_=oyNUjOZKhXBbEc9Gh+St+noZdAvTO-ym9ipShiFYPbcVUw@mail.gmail.com>"
+      ],
+      "body_plain": "On Tue, 2016-02-02 at 16:29 +0200, Jersey Fanatic wrote:\n> results <- apply.paramset(strategy.st,paramset.label = \"MACD_OPT\",\n>                           portfolio=strategy.st, account=strategy.st,\n>                           nsamples=0,verbose = FALSE)\n> \nYour problem is here.  You're not setting an 'audit' environment.\n\n\nparamsetenv<-new.env()\n\nresults <- apply.paramset(strategy.st,paramset.label=\"MACD_OPT\",\nportfolio=strategy.st, account=strategy.st,nsamples=0,verbose = FALSE,\naudit=paramsetenv)\n\nls(pos=paramsetenv)\n\n#note that paramsetenv will have the portfolio for each parameter set.\n#results$tradeStats will give you summary statistics for each paramset. \n\n# see: http://www.rinfinance.com/agenda/2013/workshop/Humme+Peterson.pdf\n# p.42-43 on paramsets, \n# and p.62-67 on walk forward testing, which uses the audit environment\n\n\n> \n> 2016-02-01 12:43 GMT+02:00 Jersey Fanatic <jerseyfanatic1 at gmail.com>:\n> \n> > Transaction table from applyStrategy() lists transaction dates and\n> PnL in > trade-by-trade basis. However, after executing\n> apply.paramset() on a > distribution of parameters, same\n> trade-by-trade\n> PnL statistics is not > retrievable via getTxns(). Is there a way to\n> access trade-by-trade PnL data > results from *apply.paramset()* for\n> each combination tried in the > optimization range? My end goal is to\n> construct a time-aligned data table > with hourly/daily/weekly PnL for\n> each combination of parameters. > > > 2016-02-01 9:12 GMT+02:00 Jersey\n> Fanatic <jerseyfanatic1 at gmail.com>: > >> Transaction table from\n> applyStrategy() lists transaction dates and PnL in >> trade-by-trade\n> basis. However, after executing apply.paramset() on a >> distribution\n> of parameters, same trade-by-trade PnL statistics is not >>\n> retrievable\n> via getTxns(). Is there a way to access trade-by-trade PnL data >>\n> results from applyStrategy for each combination tried in the\n> optimization >> range? My end goal is to construct a time-aligned data\n> table with >> hourly/daily/weekly PnL for each combination of\n> parameters. >> >> Thanks for the help in advance. >> > >",
+      "body_snippet": "On Tue, 2016-02-02 at 16:29 +0200, Jersey Fanatic wrote:\n> results <- apply.paramset(strategy.st,paramset.label = \"MACD_OPT\",\n>                           portfolio=strategy.st, account=strategy.st,\n> ",
+      "thread_id": "thread-bc8378624c1e",
+      "thread_depth": 3,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-36fd05c74027",
+      "message_id": "<CAPLrYERx9ORwb927XkhMQyBHjmA8OqLHYeE8j3gMop9Z1cKXYQ@mail.gmail.com>",
+      "from_name": "Daniel Cegiełka",
+      "from_email_hash": "a53c7f1be3d7b89cbf62e91b70b96a3ed4a6d3306db4e0a96cdd8e340115b214",
+      "date": "2016-02-02T19:00:23+01:00",
+      "subject": "[R-SIG-Finance] tick data database",
+      "subject_clean": "tick data database",
+      "in_reply_to": "<197a5bbc0905011445r3e7ca72co41abe6a6bc315a28@mail.gmail.com>",
+      "references": [
+        "<197a5bbc0905011445r3e7ca72co41abe6a6bc315a28@mail.gmail.com>"
+      ],
+      "body_plain": "2009-05-01 23:45 GMT+02:00 Hae Kyung Im <haky.im at gmail.com>:\n\n> Hi,\n>\n> it may be slightly off topic but I was wondering if any of you heard\n> about using netCDF format (or similar) to handle tick data?\n>\n> I thought kdb would be a nice option but the price seems a bit too\n> high for my purpose. Do you know of any good open source alternative?\n>\n> Also is there any package to connect R with kdb?\n>\n>\nHi Haky,\n\nIf you want to have a database primarily for analysis, testing etc.:\n\nhttp://www.cerebralmastication.com/wp-content/uploads/2010/06/RUG-Chicago-RYAN.pdf\n\nhttp://files.meetup.com/1772780/Analyzing%20Big%20Data%20in%20R.pdf\n\nBest regards,\nDaniel\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "2009-05-01 23:45 GMT+02:00 Hae Kyung Im <haky.im at gmail.com>:\n\n> Hi,\n>\n> it may be slightly off topic but I was wondering if any of you heard\n> about using netCDF format (or similar) to handle tick ",
+      "thread_id": "thread-36fd05c74027",
+      "thread_depth": 0,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-8b2dae6e72d0",
+      "message_id": "<CALqbvp5e1Or1Woyigx_GV232aTK4NoDPGEXKPdyRRLUsXDQHMg@mail.gmail.com>",
+      "from_name": "Daniel Krizian",
+      "from_email_hash": "a60defebe126b7d72aa6080b35567eb58a1928b96fd20ca477f87ef201d71196",
+      "date": "2016-02-02T19:22:41Z",
+      "subject": "[R-SIG-Finance] tick data database",
+      "subject_clean": "tick data database",
+      "in_reply_to": "<CAPLrYERx9ORwb927XkhMQyBHjmA8OqLHYeE8j3gMop9Z1cKXYQ@mail.gmail.com>",
+      "references": [
+        "<197a5bbc0905011445r3e7ca72co41abe6a6bc315a28@mail.gmail.com>",
+        "<CAPLrYERx9ORwb927XkhMQyBHjmA8OqLHYeE8j3gMop9Z1cKXYQ@mail.gmail.com>"
+      ],
+      "body_plain": "Note that the pricey kdb is the one in 64-bit.\n\n32-bit kdb+/q prior version v.3.3 (and after 2.8 I think) is free for\nproduction use (if you managed to download the copy from kx site in the\npast).\nNote that those versions are no longer available for download. Latest\n32-bit versions are still free for proof-of-concept and development use.\n\nRegards,\nDaniel Krizian\n\n\nOn Tue, Feb 2, 2016 at 6:00 PM, Daniel Cegie?ka <daniel.cegielka at gmail.com>\nwrote:\n\n> 2009-05-01 23:45 GMT+02:00 Hae Kyung Im <haky.im at gmail.com>:\n>\n> > Hi,\n> >\n> > it may be slightly off topic but I was wondering if any of you heard\n> > about using netCDF format (or similar) to handle tick data?\n> >\n> > I thought kdb would be a nice option but the price seems a bit too\n> > high for my purpose. Do you know of any good open source alternative?\n> >\n> > Also is there any package to connect R with kdb?\n> >\n> >\n> Hi Haky,\n>\n> If you want to have a database primarily for analysis, testing etc.:\n>\n>\n> http://www.cerebralmastication.com/wp-content/uploads/2010/06/RUG-Chicago-RYAN.pdf\n>\n> http://files.meetup.com/1772780/Analyzing%20Big%20Data%20in%20R.pdf\n>\n> Best regards,\n> Daniel\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Note that the pricey kdb is the one in 64-bit.\n\n32-bit kdb+/q prior version v.3.3 (and after 2.8 I think) is free for\nproduction use (if you managed to download the copy from kx site in the\npast).\nNot",
+      "thread_id": "thread-36fd05c74027",
+      "thread_depth": 1,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-93e9bb975b5d",
+      "message_id": "<56B37D6D.4030204@gmx.ch>",
+      "from_name": "T.",
+      "from_email_hash": "47caefa7457ef98e4a3f19443e08d06c958641fcbef76b75905e784922c6e311",
+      "date": "2016-02-04T17:33:49+01:00",
+      "subject": "[R-SIG-Finance] gmm error",
+      "subject_clean": "gmm error",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello all,\n\nI am trying to estimate a gmm in order to estimate a capital market \nmodel. I use the gmm-package. I set up the moment functions, and an \nanalytic gradient matrix function and I chose some initial values. I \nthoroughly tested the moment functions and the gradient matrix as inputs \nof the gmm function. There are no missing values or NaN in the input data.\n\nNow I am getting the following error message, after runing the gmm-function:\n\n\"Error in colMeans(gt) : 'x' must be an array of at least two dimensions\"\n\nI have been looking for hours to fix the error, with no success. Do some \nof you know how this error arises?\n\nThanks,\n\nTom",
+      "body_snippet": "Hello all,\n\nI am trying to estimate a gmm in order to estimate a capital market \nmodel. I use the gmm-package. I set up the moment functions, and an \nanalytic gradient matrix function and I chose some",
+      "thread_id": "thread-93e9bb975b5d",
+      "thread_depth": 0,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-2222cf05aa0f",
+      "message_id": "<56B51BDA.4080408@comcast.net>",
+      "from_name": "Robert Sherry",
+      "from_email_hash": "aa1836dc0994d699d644290606d4b6d9eff5cc8dc84143f655cce662228ec2a7",
+      "date": "2016-02-05T17:02:02-05:00",
+      "subject": "[R-SIG-Finance] Option Quotes",
+      "subject_clean": "Option Quotes",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I have been getting my option quotes (calls and puts), in R, using the \nlibrary quantmod. That library gets the quotes via Yahoo. At times,\nI find the quotes I get from Yahoo to be incomplete. That is, it is not \ncarrying all the options.\n\nIs there a better way to get option quotes in R?\n\nBob",
+      "body_snippet": "I have been getting my option quotes (calls and puts), in R, using the \nlibrary quantmod. That library gets the quotes via Yahoo. At times,\nI find the quotes I get from Yahoo to be incomplete. That is",
+      "thread_id": "thread-2222cf05aa0f",
+      "thread_depth": 0,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-766e1ad26df4",
+      "message_id": "<CAH8hi=Kq4M1f6bYAD=Sj7OLweZ2tbovGsz6OM+h4pV03gZznYA@mail.gmail.com>",
+      "from_name": "Biswarup Ghosh",
+      "from_email_hash": "d897286e7716190dc8eb4a16cbd7bd414621ad0b3e25ce754b69bfcd61809d88",
+      "date": "2016-02-06T16:23:33-08:00",
+      "subject": "[R-SIG-Finance] Approach to predict balance of account in retail bank",
+      "subject_clean": "Approach to predict balance of account in retail bank",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi\nI have a database table consisting of balance of accounts over a year\nduring different Business dates . I want to predict the balance of the\naccount in next one month period .\n\nFew of the concerns that I am facing is\n\n1. The balances of this accounts are not on same dates like for example\nsome accounts is very active and the balance is changed over every one or\ntwo days in this One year period and Some accounts are not that active and\nrarely changes\n\nNow What I have done so far is\n1. Flagging no of changes of a account per year\n2. Percent of balance change on each period\n\nNow I am at loss on how to go with the forecasting algorithm.\n\nNow based on this parameters how I can give a forecasting , please point me\nto a similar literature on which I can work on\n\n\n\n-- \nwith warm regards\nBiswarup Ghosh\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi\nI have a database table consisting of balance of accounts over a year\nduring different Business dates . I want to predict the balance of the\naccount in next one month period .\n\nFew of the concerns ",
+      "thread_id": "thread-766e1ad26df4",
+      "thread_depth": 0,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-51e7bf5422fa",
+      "message_id": "<0795860C-7EAB-4F48-B095-5E54EEFC4169@alum.northwestern.edu>",
+      "from_name": "Daniel Melendez",
+      "from_email_hash": "35a3963319baa5a53209390e95d2c8dbea5ebb938572608e2a4f62622537a451",
+      "date": "2016-02-06T19:28:58-06:00",
+      "subject": "[R-SIG-Finance] Approach to predict balance of account in retail bank",
+      "subject_clean": "Approach to predict balance of account in retail bank",
+      "in_reply_to": "<CAH8hi=Kq4M1f6bYAD=Sj7OLweZ2tbovGsz6OM+h4pV03gZznYA@mail.gmail.com>",
+      "references": [
+        "<CAH8hi=Kq4M1f6bYAD=Sj7OLweZ2tbovGsz6OM+h4pV03gZznYA@mail.gmail.com>"
+      ],
+      "body_plain": "Hello Biswarup -  \n\nHave you looked into state space models?  If not, I'd first start with an ARIMA model.  I suggest working with the forecast package.  \n\nRegards - Daniel\n\n> On Feb 6, 2016, at 6:23 PM, Biswarup Ghosh <reachbiswarup at gmail.com> wrote:\n> \n> Hi\n> I have a database table consisting of balance of accounts over a year\n> during different Business dates . I want to predict the balance of the\n> account in next one month period .\n> \n> Few of the concerns that I am facing is\n> \n> 1. The balances of this accounts are not on same dates like for example\n> some accounts is very active and the balance is changed over every one or\n> two days in this One year period and Some accounts are not that active and\n> rarely changes\n> \n> Now What I have done so far is\n> 1. Flagging no of changes of a account per year\n> 2. Percent of balance change on each period\n> \n> Now I am at loss on how to go with the forecasting algorithm.\n> \n> Now based on this parameters how I can give a forecasting , please point me\n> to a similar literature on which I can work on\n> \n> \n> \n> -- \n> with warm regards\n> Biswarup Ghosh\n> \n>    [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Hello Biswarup -  \n\nHave you looked into state space models?  If not, I'd first start with an ARIMA model.  I suggest working with the forecast package.  \n\nRegards - Daniel\n\n> On Feb 6, 2016, at 6:23 ",
+      "thread_id": "thread-766e1ad26df4",
+      "thread_depth": 1,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-beaefa4392de",
+      "message_id": "<CAH8hi=J-deQbQvhCj6HsvodYzWe1kVG2OcmsQDwv6roHpqj0Ow@mail.gmail.com>",
+      "from_name": "Biswarup Ghosh",
+      "from_email_hash": "d897286e7716190dc8eb4a16cbd7bd414621ad0b3e25ce754b69bfcd61809d88",
+      "date": "2016-02-06T21:00:02-08:00",
+      "subject": "[R-SIG-Finance] Approach to predict balance of account in retail bank",
+      "subject_clean": "Approach to predict balance of account in retail bank",
+      "in_reply_to": "<0795860C-7EAB-4F48-B095-5E54EEFC4169@alum.northwestern.edu>",
+      "references": [
+        "<CAH8hi=Kq4M1f6bYAD=Sj7OLweZ2tbovGsz6OM+h4pV03gZznYA@mail.gmail.com>",
+        "<0795860C-7EAB-4F48-B095-5E54EEFC4169@alum.northwestern.edu>"
+      ],
+      "body_plain": "Hi Daniel ,\n\nMy confusion for using an Arima / or any other Time series  model, is,\nsince for every account I have a series  ,How do I ensure a model which is\napplicable to all .\npardon my lack of knowledge in this.\n\nOn Sat, Feb 6, 2016 at 5:28 PM, Daniel Melendez <\ndanielmelendez at alum.northwestern.edu> wrote:\n\n> Hello Biswarup -\n>\n> Have you looked into state space models?  If not, I'd first start with an\n> ARIMA model.  I suggest working with the forecast package.\n>\n> Regards - Daniel\n>\n> > On Feb 6, 2016, at 6:23 PM, Biswarup Ghosh <reachbiswarup at gmail.com>\n> wrote:\n> >\n> > Hi\n> > I have a database table consisting of balance of accounts over a year\n> > during different Business dates . I want to predict the balance of the\n> > account in next one month period .\n> >\n> > Few of the concerns that I am facing is\n> >\n> > 1. The balances of this accounts are not on same dates like for example\n> > some accounts is very active and the balance is changed over every one or\n> > two days in this One year period and Some accounts are not that active\n> and\n> > rarely changes\n> >\n> > Now What I have done so far is\n> > 1. Flagging no of changes of a account per year\n> > 2. Percent of balance change on each period\n> >\n> > Now I am at loss on how to go with the forecasting algorithm.\n> >\n> > Now based on this parameters how I can give a forecasting , please point\n> me\n> > to a similar literature on which I can work on\n> >\n> >\n> >\n> > --\n> > with warm regards\n> > Biswarup Ghosh\n> >\n> >    [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\n\n-- \nwith warm regards\nBiswarup Ghosh\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Daniel ,\n\nMy confusion for using an Arima / or any other Time series  model, is,\nsince for every account I have a series  ,How do I ensure a model which is\napplicable to all .\npardon my lack of kno",
+      "thread_id": "thread-766e1ad26df4",
+      "thread_depth": 2,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-56b28b80b5c9",
+      "message_id": "<CAH8hi=KZVG9JfxmH0J_DAsjsnyY92OmogAELxCYbkoDnExs1QQ@mail.gmail.com>",
+      "from_name": "Biswarup Ghosh",
+      "from_email_hash": "d897286e7716190dc8eb4a16cbd7bd414621ad0b3e25ce754b69bfcd61809d88",
+      "date": "2016-02-07T18:15:07-08:00",
+      "subject": "[R-SIG-Finance] Approach to predict balance of account in retail bank",
+      "subject_clean": "Approach to predict balance of account in retail bank",
+      "in_reply_to": "<CAJWf-119YjXQbZHwj3oxbK+oSecrRYBWzXdySJ7ey_o1Ozt72A@mail.gmail.com>",
+      "references": [
+        "<CAH8hi=Kq4M1f6bYAD=Sj7OLweZ2tbovGsz6OM+h4pV03gZznYA@mail.gmail.com>",
+        "<0795860C-7EAB-4F48-B095-5E54EEFC4169@alum.northwestern.edu>",
+        "<CAH8hi=J-deQbQvhCj6HsvodYzWe1kVG2OcmsQDwv6roHpqj0Ow@mail.gmail.com>",
+        "<CAJWf-119YjXQbZHwj3oxbK+oSecrRYBWzXdySJ7ey_o1Ozt72A@mail.gmail.com>"
+      ],
+      "body_plain": "Hi John ,\n\nThe data set I have is for one year . For some accounts which are very\nactive the balance is changed pretty often ,and for some it does not . Now\nthere is no apparent seasonality as this are bank accounts of retail\nbanking customers ( normal folks ) .\nNow what would be your suggestion in this case .\n\nOn Sun, Feb 7, 2016 at 12:49 PM, John Frain <frainj at tcd.ie> wrote:\n\n>\n> On 7 Feb 2016 05:03, \"Biswarup Ghosh\" <reachbiswarup at gmail.com> wrote:\n> >\n> > Hi Daniel ,\n> >\n> > My confusion for using an Arima / or any other Time series  model, is,\n> > since for every account I have a series  ,How do I ensure a model which\n> is\n> > applicable to all .\n> > pardon my lack of knowledge in this.\n> >\n> > On Sat, Feb 6, 2016 at 5:28 PM, Daniel Melendez <\n> > danielmelendez at alum.northwestern.edu> wrote:\n>\n> I would think that each individual account holder is different.  If you do\n> find an appropriate model you will need to estimate separate parameters for\n> each account holder. For each account holder I presume that the balance\n> remains constant between the dates on which the balances are recorded. You\n> should extend your data set by filling in the missing values by repeating\n> the previous balance.\n>\n> Would it be sufficient to aggregate accounts for each date. You might find\n> it easier to obtain aggregates (e. g. end of month aggregate data) for a\n> period of several years and apply Bureau X12 methodology. I presume that\n> data are seasonal.lpl\n>\n> '\n>\n> >\n> > > Hello Biswarup -\n> > >\n> > > Have you looked into state space models?  If not, I'd first start with\n> an\n> > > ARIMA model.  I suggest working with the forecast package.\n> > >\n> > > Regards - Daniel\n> > >\n> > > > On Feb 6, 2016, at 6:23 PM, Biswarup Ghosh <reachbiswarup at gmail.com>\n> > > wrote:\n> > > >\n> > > > Hi\n> > > > I have a database table consisting of balance of accounts over a year\n> > > > during different Business dates . I want to predict the balance of\n> the\n> > > > account in next one month period .\n> > > >\n> > > > Few of the concerns that I am facing is\n> > > >\n> > > > 1. The balances of this accounts are not on same dates like for\n> example\n> > > > some accounts is very active and the balance is changed over every\n> one or\n> > > > two days in this One year period and Some accounts are not that\n> active\n> > > and\n> > > > rarely changes\n> > > >\n> > > > Now What I have done so far is\n> > > > 1. Flagging no of changes of a account per year\n> > > > 2. Percent of balance change on each period\n> > > >\n> > > > Now I am at loss on how to go with the forecasting algorithm.\n> > > >\n> > > > Now based on this parameters how I can give a forecasting , please\n> point\n> > > me\n> > > > to a similar literature on which I can work on\n> > > >\n> > > >\n> > > >\n> > > > --\n> > > > with warm regards\n> > > > Biswarup Ghosh\n> > > >\n> > > >    [[alternative HTML version deleted]]\n> > > >\n> > > > _______________________________________________\n> > > > R-SIG-Finance at r-project.org mailing list\n> > > > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > > > -- Subscriber-posting only. If you want to post, subscribe first.\n> > > > -- Also note that this is not the r-help list where general R\n> questions\n> > > should go.\n> > >\n> >\n> >\n> >\n> > --\n> > with warm regards\n> > Biswarup Ghosh\n> >\n> >         [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\n\n-- \nwith warm regards\nBiswarup Ghosh\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi John ,\n\nThe data set I have is for one year . For some accounts which are very\nactive the balance is changed pretty often ,and for some it does not . Now\nthere is no apparent seasonality as this ar",
+      "thread_id": "thread-56b28b80b5c9",
+      "thread_depth": 0,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-d9c7b96f7691",
+      "message_id": "<CAGb2M9du0kBWW4DPRTT85Z3xSR9HS7cAVxx-bOe7W793o=b1Pg@mail.gmail.com>",
+      "from_name": "Smith Jimmy",
+      "from_email_hash": "13c8caa0bddc6e9d692367a4699b4cc22ac4758d28bf440b5bdc46a7c5540fec",
+      "date": "2016-02-09T17:56:01+08:00",
+      "subject": "[R-SIG-Finance] Using the market (SPY) as an indicator in Quanstrat",
+      "subject_clean": "Using the market (SPY) as an indicator in Quanstrat",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I have a portfolio of 50 stocks that I am back testing a strategy on using\nQuantstrat.\n\nI would like to also use the RSI of the SPY (as an example) as another\nsignal in the strategy.\n\nEg. Buy Signal - SPY RSI < 20\n\nHowever I'm not sure where in the Quanstrat workflow I should be\nimplementing it.\n\nI can't add it to the add.indicator as that references mktdata and the\nadd.signal references the columns.\n\nHow should I go about adding this in?\n\nMany thanks.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I have a portfolio of 50 stocks that I am back testing a strategy on using\nQuantstrat.\n\nI would like to also use the RSI of the SPY (as an example) as another\nsignal in the strategy.\n\nEg. Buy Signal -",
+      "thread_id": "thread-d9c7b96f7691",
+      "thread_depth": 0,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-0d9445152f65",
+      "message_id": "<56B9BCFC.4010801@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2016-02-09T04:18:36-06:00",
+      "subject": "[R-SIG-Finance] Using the market (SPY) as an indicator in Quanstrat",
+      "subject_clean": "Using the market (SPY) as an indicator in Quanstrat",
+      "in_reply_to": "<CAGb2M9du0kBWW4DPRTT85Z3xSR9HS7cAVxx-bOe7W793o=b1Pg@mail.gmail.com>",
+      "references": [
+        "<CAGb2M9du0kBWW4DPRTT85Z3xSR9HS7cAVxx-bOe7W793o=b1Pg@mail.gmail.com>"
+      ],
+      "body_plain": "On 02/09/2016 03:56 AM, Smith Jimmy wrote:\n> I have a portfolio of 50 stocks that I am back testing a strategy on using\n> Quantstrat.\n>\n> I would like to also use the RSI of the SPY (as an example) as another\n> signal in the strategy.\n>\n> Eg. Buy Signal - SPY RSI < 20\n>\n> However I'm not sure where in the Quanstrat workflow I should be\n> implementing it.\n>\n> I can't add it to the add.indicator as that references mktdata and the\n> add.signal references the columns.\n>\n> How should I go about adding this in?\n\nIn the future, please provide a minimal reproducible example, per the \nposting guide.  It makes it easier for others to help you.\n\nThere is nothing that requires your indicators to reference mktdata. \nThat's the most common case, as you typically want to be adding columns \nto the mktdata object, and want mktdata to change as quantstrat loops \nover symbols.\n\nSo, for example, if the 'standard' or 'demonstration' construction looks \nsomething like this:\n\nadd.indicator(strategy = 'stratRSI', name = \"RSI\",\narguments = list(price = quote(getPrice(mktdata))), label=\"RSI\")\n\nwhere you reference mktdata (and as such, are expecting mktdata to \nchange for each instrument, see the 'faber' demo for an example).\n\nYou can construct an indicator like so:\n\nadd.indicator(strategy = stratRSI, name = \"RSI\",\narguments = list(price = getPrice(SPY)), label=\"SPYRSI\")\n\nThis will cause a 'SPYRSI' column to be added to the mktdata object for \neach symbol in your symbols list, and you may now reference column \n'SPYRSI' in later indicators or signals, as usual.\n\nRegards,\n\nBrian\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
+      "body_snippet": "On 02/09/2016 03:56 AM, Smith Jimmy wrote:\n> I have a portfolio of 50 stocks that I am back testing a strategy on using\n> Quantstrat.\n>\n> I would like to also use the RSI of the SPY (as an example) as",
+      "thread_id": "thread-d9c7b96f7691",
+      "thread_depth": 1,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-cd0d8df842ca",
+      "message_id": "<2D1AC19CDA3D5643B9D7AE596C377B280C57C2C8@GBS0039303.lloyds.net>",
+      "from_name": "Gesmann, Markus",
+      "from_email_hash": "476b59d20b82d06df10ee85b28af07155133bfbb523d75606839fd9dca84bdff",
+      "date": "2016-02-09T11:03:19Z",
+      "subject": "[R-SIG-Finance] CONFERENCE: R in Insurance, London, 11 July 2015",
+      "subject_clean": "CONFERENCE: R in Insurance, London, 11 July 2015",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear all,\n\nFollowing the successful 3rd R in Insurance conference in Amsterdam last year, we return to London this year.\n\nThe registration for the 4th conference on R in Insurance on Monday 11 July 2016 at Cass Business School has opened.\n\nThis one-day conference will focus again on applications in insurance and actuarial science that use R, the lingua franca for statistical computation.\n\nThe intended audience of the conference includes both academics and practitioners who are active or interested in the applications of R in insurance.\n\nInvited talks will be given by:\n\n        - Mario V. W?thrich, RiskLab, Department of Mathematics, ETH Zurich.\n        - Dan Murphy, President, Trinostics LLC.\n\nDetails about the registration and abstract submission are given on the dedicated R in Insurance page at Cass Business School:\nhttp://www.cass.city.ac.uk/news-and-events/conferences/r-in-insurance2016\n\nThe submission deadline for abstracts is 28 March 2016. Please email your abstract of no more than 300 words to: rinsuranceconference at gmail.com<mailto:rinsuranceconference at gmail.com>.\n\nAttendance of the whole conference is the equivalent of 6.5 hours of CPD for members of the Actuarial Profession.\n\nFor more information about the past events visit http://www.rininsurance.com .\n\nThe organisers gratefully acknowledge the sponsorship of Verisk/ISO, Mirai Solutions, RStudio, Applied AI, and CYBAEA.\n\nBest regards\n\nMarkus\n\n\n----------------------------------------------------------------------\nThe information in this E-Mail and in any attachments is...{{dropped:22}}",
+      "body_snippet": "Dear all,\n\nFollowing the successful 3rd R in Insurance conference in Amsterdam last year, we return to London this year.\n\nThe registration for the 4th conference on R in Insurance on Monday 11 July 20",
+      "thread_id": "thread-cd0d8df842ca",
+      "thread_depth": 0,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-fee708b24a66",
+      "message_id": "<CADSYbtV_ZiL6DX4BkEZavZHwqg4Wx7mwASDg9njiupTvr6Mdqw@mail.gmail.com>",
+      "from_name": "Andrey Kostin",
+      "from_email_hash": "c662b1c480fc32211a89c753c3632f1f81743781f05c68f4e9f07794f285c210",
+      "date": "2016-02-10T12:00:08-05:00",
+      "subject": "[R-SIG-Finance] New Package PortfolioEffectEstim",
+      "subject_clean": "New Package PortfolioEffectEstim",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear R enthusiasts,\n\n\n\nI would like to announce PortfolioEffectEstim package availability on CRAN:\nhttps://cran.r-project.org/web/packages/PortfolioEffectEstim/\n\n\n\nPackage features estimators for working with high frequency market data.\n\n\nMicrostructure Noise:\n- Autocovariance Noise Variance\n- Realized Noise Variance\n- Unbiased Realized Noise Variance\n- Noise-to-Signal Ratio\n\n\n\nPrice Variance:\n- Two Series Realized Variance\n- Multiple Series Realized Variance\n- Modulated Realized Variance\n- Jump Robust Modulated Realized Variance\n- Uncertainty Zones Realized Variance\n- Kernel Realized Variance (Bartlett, Cubic, 5th/6th/7th/8th-order,\nEpanichnikov, Parzen, Tukey-Hanning kernels)\n\nPrice Quarticity:\n- Realized Quarticity\n- Realized Quad-power Quarticity\n- Realized Tri-power Quarticity\n- Modulated Realized Quarticity\n\n\n\nUse could provide your own high frequency market data or use our\nserver-side equity prices since 2013.\n\n\nMore details in the package manual:\nhttps://cran.r-project.org/web/packages/PortfolioEffectEstim/vignettes/PortfolioEffectEstim.pdf\n\n\nAPI Reference:\nhttps://cran.r-project.org/web/packages/PortfolioEffectEstim/PortfolioEffectEstim.pdf\n\n\nSincerely,\n\nAndrey Kostin, PhD\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear R enthusiasts,\n\n\n\nI would like to announce PortfolioEffectEstim package availability on CRAN:\nhttps://cran.r-project.org/web/packages/PortfolioEffectEstim/\n\n\n\nPackage features estimators for work",
+      "thread_id": "thread-fee708b24a66",
+      "thread_depth": 0,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-cd6440ef4bcf",
+      "message_id": "<CAGb2M9eKBHDbiygqBvdA9TkyUiNCZW=9ZMVAz==egB-8vDmpXQ@mail.gmail.com>",
+      "from_name": "Smith Jimmy",
+      "from_email_hash": "13c8caa0bddc6e9d692367a4699b4cc22ac4758d28bf440b5bdc46a7c5540fec",
+      "date": "2016-02-11T14:50:24+08:00",
+      "subject": "[R-SIG-Finance] Quantstrat - Entering a limit order below the open price",
+      "subject_clean": "Quantstrat - Entering a limit order below the open price",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I'm wanting to enter a limit order at a set percentage below the open price\nif that's possible with Quantstrat.\n\nI'm not sure if I have set this out correctly but here is an example. I was\ntrying to set the limit 1% below the open price.\n\nI'm not quite sure how to use order.price to achieve this.\n\nadd.rule(strategy.st, name=\"ruleSignal\",\n         arguments=list(sigcol=\"longentry\", sigval=TRUE, ordertype=\"limit\",\n                        orderside=\"long\", replace=FALSE, prefer=\"Open\",\norder.price=mktdata*(0.99),tmult=TRUE, orderqty=tradeSize,\nosFUN=osMaxDollar, tradeSize=tradeSize,\n                        maxSize=tradeSize),\n         type=\"enter\", path.dep=TRUE, label=\"enterlong\")\n\nI'd ideally like to have a trailing stop that would be based on the\nexecuted price.\n\nadd.rule(strategy.st, name=\"ruleSignal\", arguments=list(sigcol=\"longentry\",\n                                                        sigval=TRUE,\n\nordertype=\"stoptrailing\",\n                                                        orderside=\"long\",\n                                                        replace=FALSE,\n                                                        orderqty=\"all\",\n                                                        threshold=0.05,\n                                                        tmult=TRUE,\n                                                        TxnFees=-2,\n\norderset=\"ocolong\"),\n         type=\"chain\",\n         parent=\"enterlong\",\n         label=\"stopLossLong\",\n         path.dep=TRUE,\n         enable=TRUE)\n\nAny advice would be much appreciated. At this point this strategy doesn't\nproduce any errors but it also doesn't trade.\n\nThank you in advance.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I'm wanting to enter a limit order at a set percentage below the open price\nif that's possible with Quantstrat.\n\nI'm not sure if I have set this out correctly but here is an example. I was\ntrying to s",
+      "thread_id": "thread-cd6440ef4bcf",
+      "thread_depth": 0,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-257419454ec2",
+      "message_id": "<56BC730C.10508@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2016-02-11T05:39:56-06:00",
+      "subject": "[R-SIG-Finance] Quantstrat - Entering a limit order below the open price",
+      "subject_clean": "Quantstrat - Entering a limit order below the open price",
+      "in_reply_to": "<CAGb2M9eKBHDbiygqBvdA9TkyUiNCZW=9ZMVAz==egB-8vDmpXQ@mail.gmail.com>",
+      "references": [
+        "<CAGb2M9eKBHDbiygqBvdA9TkyUiNCZW=9ZMVAz==egB-8vDmpXQ@mail.gmail.com>"
+      ],
+      "body_plain": "Dear 'Jimmy',\n\n(if that is your real name, the complete lack of online footprint seems \nto suggest that it is not)\n\nOn 02/11/2016 12:50 AM, Smith Jimmy wrote:\n> I'm wanting to enter a limit order at a set percentage below the open price\n> if that's possible with Quantstrat.\n\nYes, it is.\n\nPlease do your homework, and read the documentation. Many people have \ncontributed that documentation in the hopes that users will actually \nread it.\n\n> I'm not sure if I have set this out correctly but here is an example. I was\n> trying to set the limit 1% below the open price.\n\nThis is *still* not a minimal reproducible example.\n\nhttp://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example\n\n> I'm not quite sure how to use order.price to achieve this.\n\nYou won't use order.price, you'll use threshold.\n\n> add.rule(strategy.st, name=\"ruleSignal\",\n>           arguments=list(sigcol=\"longentry\", sigval=TRUE, ordertype=\"limit\",\n>                          orderside=\"long\", replace=FALSE, prefer=\"Open\",\n> order.price=mktdata*(0.99),tmult=TRUE, orderqty=tradeSize,\n> osFUN=osMaxDollar, tradeSize=tradeSize,\n>                          maxSize=tradeSize),\n>           type=\"enter\", path.dep=TRUE, label=\"enterlong\")\n\nYou most likely want\n\nthreshold=0.99, tmult=TRUE\n\nand no order.price argument.\n\nin your code, 'mktdata' probably doesn't exist yet, which is why you get \nno errors.  Have you noticed the use of quote() in many of the demos?  I \nsuggest you look at\n\n?quote\n\nand the descriptions of the 'mktdata' object inside quantstrat to \nunderstand why mktdata is so often quoted when used inside parts of the \nstrategy specification.\n\nIn your example mktdata probably doesn't exist at the time of strategy \nspecification, so you are setting order.price = NULL*0.99, getting NULL. \n  quantstrat will quite reasonably set no price and enter no order.\n\nIf you had a mktdata object from a previous run or inadvisably quoted \nmktdata as it is in the other demos, you would have been multiplying \n0.99 by the entire time series of the mktdata object, and quantstrat \nwould fail pointing out that order.price needs to be a scalar.\n\n> I'd ideally like to have a trailing stop that would be based on the\n> executed price.\n\nThen please spend some time examining and working with the many demos \nwhich do this already.\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
+      "body_snippet": "Dear 'Jimmy',\n\n(if that is your real name, the complete lack of online footprint seems \nto suggest that it is not)\n\nOn 02/11/2016 12:50 AM, Smith Jimmy wrote:\n> I'm wanting to enter a limit order at a",
+      "thread_id": "thread-cd6440ef4bcf",
+      "thread_depth": 1,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-43f306bd9e3c",
+      "message_id": "<CALROeVEjpcxtDxkCJHvy=JLJyMNX0hcho+yUhbUzp+gDhxHjDA@mail.gmail.com>",
+      "from_name": "Samit Paul",
+      "from_email_hash": "7c73fe57b051666c369200b359aecd8ebf73a3f9d1af4ed1dfcc41a6f71bd9ec",
+      "date": "2016-02-16T10:02:56+05:30",
+      "subject": "[R-SIG-Finance] Tangency portfolio in \"fPortfolio\" package",
+      "subject_clean": "Tangency portfolio in \"fPortfolio\" package",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear R users,\n\nI am using \"fPortfolio\" package for portfolio construction by minimizing\nCVaR. I want to remove the constraint \"LongOnly\" and allow the portfolio to\nbe constructed when short sale is allowed. Therefore, I have set solver as\n\"solveRshortExact\" instead of \"solveRquadprog\" in portfolioSpec() and use\nconstraint \"Short\" instead of \"LongOnly\".\n\nIt's working fine for the function \"efficientPortfolio\". However, when I\ntry to use \"tangencyPortfolio\" function, it's assigning maximum weight of 1\nto the constituent and does not allow for short position.\n\nCan you provide a solution please? Thank you.\n\nRegards,\n\nSamit Paul\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear R users,\n\nI am using \"fPortfolio\" package for portfolio construction by minimizing\nCVaR. I want to remove the constraint \"LongOnly\" and allow the portfolio to\nbe constructed when short sale is al",
+      "thread_id": "thread-43f306bd9e3c",
+      "thread_depth": 0,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-95e1b0e0f4bc",
+      "message_id": "<CALQudT-OuA_xp5ntfjTnrHzzmf3UHMsy4F-kD6B4eaWBTCF0yg@mail.gmail.com>",
+      "from_name": "Derek Wong",
+      "from_email_hash": "8078884757a61edbe7650ffa2c74b6c91c0c8059a30a8350c615bf1993fe0bc6",
+      "date": "2016-02-17T16:22:46+08:00",
+      "subject": "[R-SIG-Finance] stoptrailing mechanics question in MACD example - Quantstrat",
+      "subject_clean": "stoptrailing mechanics question in MACD example - Quantstrat",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello All,\n\nI am using Quantstrat 0.9.1709 with Microsoft R Open 3.2.3 on Rstudio.\n\nI am having a problem understanding the trailing methodology of the\nstoptrailing order type in Quantstrat. It seems to me that the\ntrailing stop is not replaced as frequently as it should. Only for\nlarger price changes (threshold value?) it moves but for smaller\nincrements it remains the same. Is this the intended result?\n\nI am using the MACD example and commenting out the original exit rule\nand un-commenting the trailing exit.\n\n<snip>\n#alternatives for risk stops:\n# simple stoplimit order, with threshold multiplier\n#add.rule(strat.st,name='ruleSignal', arguments =\nlist(sigcol=\"signal.gt.zero\",sigval=TRUE, orderqty='all',\nordertype='stoplimit', orderside='long', threshold=-.05,tmult=TRUE,\norderset='exit2'),type='chain', parent='enter',\nlabel='risk',storefun=FALSE)\n# alternately, use a trailing order, also with a threshold multiplier\nadd.rule(strat.st,name='ruleSignal',\n         arguments = list(sigcol=\"signal.gt.zero\",\n                          sigval=TRUE,\n                          orderqty='all',\n                          ordertype='stoptrailing',\n                          orderside='long',\n                          threshold=-1,\n                          tmult=FALSE,\n                          orderset='exit2'),\n         type='chain',\n         parent='enter',\n         label='trailingexit')\n\n# # exit\n# add.rule(strat.st,name='ruleSignal',\n#          arguments = list(sigcol=\"signal.lt.zero\",\n#                           sigval=TRUE,\n#                           orderqty='all',\n#                           ordertype='market',\n#                           orderside='long',\n#                           threshold=NULL,\n#                           orderset='exit2'),\n#          type='exit',\n#          label='exit'\n# )\n\n<snip>\n\n\nI am looking at the orderbook and comparing it to the portfolio and\nprice of AAPL. I can see that the trailing stop moves but not on every\nnew high created during the trade. The first trade is an example.\n\n<output>\n> AAPL[\"2007-03-15/2007-03-26\"]\n           AAPL.Open AAPL.High AAPL.Low AAPL.Close AAPL.Volume AAPL.Adjusted\n2007-03-15     89.96     90.36    89.31      89.57   139874700      11.84997\n2007-03-16     89.54     89.99    89.32      89.59   142926000      11.85262\n2007-03-19     90.24     91.55    89.59      91.13   178240300      12.05636\n2007-03-20     91.35     91.84    91.06      91.48   122229100      12.10266\n2007-03-21     91.99     94.00    91.65      93.87   171724000      12.41886\n2007-03-22     93.73     94.36    93.00      93.96   140373100      12.43076\n2007-03-23     93.35     94.07    93.30      93.52   112721000      12.37255\n2007-03-26     93.99     95.90    93.30      95.85   216246800      12.68081\n> obook$macd$AAPL[\"2007-03-15/2007-03-26\"]\n           Order.Qty Order.Price Order.Type     Order.Side\nOrder.Threshold Order.Status Order.StatusTime      Prefer\n2007-03-15 \"100\"     \"89.570001\" \"market\"       \"long\"     NA\n    \"closed\"     \"2007-03-16 00:00:00\" \"\"\n2007-03-16 \"all\"     \"88.590001\" \"stoptrailing\" \"long\"     \"-1\"\n    \"replaced\"   \"2007-03-19 00:00:00\" \"\"\n2007-03-19 \"all\"     \"90.549999\" \"stoptrailing\" \"long\"     \"-1\"\n    \"replaced\"   \"2007-03-21 00:00:00\" \"\"\n2007-03-21 \"all\"     \"93.000002\" \"stoptrailing\" \"long\"     \"-1\"\n    \"replaced\"   \"2007-03-26 00:00:00\" \"\"\n2007-03-26 \"all\"     \"94.899999\" \"stoptrailing\" \"long\"     \"-1\"\n    \"closed\"     \"2007-03-28 00:00:00\" \"\"\n           Order.Set Txn.Fees Rule           Time.In.Force\n2007-03-15 NA        \"0\"      \"enter\"        \"\"\n2007-03-16 \"exit2\"   \"0\"      \"trailingexit\" \"\"\n2007-03-19 \"exit2\"   \"0\"      \"trailingexit\" \"\"\n2007-03-21 \"exit2\"   \"0\"      \"trailingexit\" \"\"\n2007-03-26 \"exit2\"   \"0\"      \"trailingexit\" \"\"\n\n<output>\n\nYou can see that for the date 2007-03-15 to 2007-03-21 we would have\nwhat I would believe to be the expected behavior. However at\n2007-03-22 we have a new high of 94.36 so i thought the new\nOrder.Price would be at 93.36 given a threshold =-1 but the order is\nnot adjusted. The order is however adjusted to the correct value on\n2007-03-26 after a new AAPL.High at 95.90 and Order Price is 94.899999\n\nI am very curious if the threshold works not only as the distance\nbetween price but also the threshold of a new high price change in\norder for the new Order.Price to be changed. I was expecting every new\nAAPL.high to generate a new Order.Price for a stoptrailing order type.\n\nIf someone could explain this to me or tell me the expected behavior\nand mechanics of the trailing methodology I would very much appreciate\nit.\n\nThank you\n\nDerek",
+      "body_snippet": "Hello All,\n\nI am using Quantstrat 0.9.1709 with Microsoft R Open 3.2.3 on Rstudio.\n\nI am having a problem understanding the trailing methodology of the\nstoptrailing order type in Quantstrat. It seems ",
+      "thread_id": "thread-95e1b0e0f4bc",
+      "thread_depth": 0,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-3c5ad2bf069e",
+      "message_id": "<CAKqaSd_ASgUiiWirwKsmpu0dirCk5EufmjDwN1gfRmgT6d8qHw@mail.gmail.com>",
+      "from_name": "Hannah Linder",
+      "from_email_hash": "9160b72361c28299f1ad024bab9335110e0b81485e7a1d667408f321b92cfaa0",
+      "date": "2016-02-20T20:04:54-08:00",
+      "subject": "[R-SIG-Finance] Rugarch fitted values lag by 1",
+      "subject_clean": "Rugarch fitted values lag by 1",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nI am sorry to post a naive question, but I am struggling to sort this out\non my own. I am fitting the following garch model using the rugarch package:\n\nfit.spec1a[[1]]=ugarchspec(variance.model = list(model = \"sGARCH\",\n                                               garchOrder = c(2,0)),\n                         mean.model= list(armaOrder = c(1,0),\n                                          include.mean = T),\n                         distribution.model = \"sstd\")\n\ngarch[[1]]<- ugarchfit(data=train.set[[2]][,c(1)],spec =\nfit.spec1a[[1]],solver=\"hybrid\")\n\n\nWhen I examine the fitted values using fitted(garch[[1]]) the values appear\nto lag behind the observed values by 1 even though the length of the fitted\nseries is equal to that of the observed data (See plot below), so I am not\nsure if I am using the fitted function incorrectly, or if the fitted values\nare truly lagged. Should be using the fitted values from t=2 until t=T\nrather than t=1 until t=T for calculations such as RMSE in-sample.\n\n[image: Inline image 2]\n\nThank-you very much for any help,\nHannah\n-------------- next part --------------\nAn HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20160220/71276124/attachment.html>\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: image.png\nType: image/png\nSize: 46543 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20160220/71276124/attachment.png>",
+      "body_snippet": "Hello,\n\nI am sorry to post a naive question, but I am struggling to sort this out\non my own. I am fitting the following garch model using the rugarch package:\n\nfit.spec1a[[1]]=ugarchspec(variance.mode",
+      "thread_id": "thread-3c5ad2bf069e",
+      "thread_depth": 0,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-b99ad2a850b3",
+      "message_id": "<CAK80y3DNMZRY7wu=H9AaGk+tNJgMW4Qx-48xhT6SqwFUE-Y-Pg@mail.gmail.com>",
+      "from_name": "Hsiao-nan Cheung",
+      "from_email_hash": "5f2bfe06f61930a124ad56feb18661f799acce08ba3a07869cf015d5bc0447a4",
+      "date": "2016-02-22T14:10:36+08:00",
+      "subject": "[R-SIG-Finance] How to Draw a Candle Chart using ggplot2?",
+      "subject_clean": "How to Draw a Candle Chart using ggplot2?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear All,\n\nRecently I tried to plot a candle chart using package ggplot2, and have\ntried geom_boxplot function, but here I have some problems. Since a candle\nchart haven't a middle bar, when I use stat = \"identity\" to set the single\ncandle's border of a candle chart, I want to ignore the middle param of a\nboxplot. But in recent ggplot2 version (2.0), in geom_boxplot's aesthetics,\nthe middle param is required, and I cannot give it a NA value to ommit it\nas early version. My solution now is set middle = lower, but this would\nlead to a VERY strong lower bar. So is there any suggestion that can meet\nmy requirement?\n\nMy sessionInfo()\n\nR version 3.2.3 (2015-12-10)\nPlatform: x86_64-w64-mingw32/x64 (64-bit)\nRunning under: Windows 7 x64 (build 7601) Service Pack 1\n\nlocale:\n[1] LC_COLLATE=Chinese (Simplified)_People's Republic of China.936\n[2] LC_CTYPE=Chinese (Simplified)_People's Republic of China.936\n[3] LC_MONETARY=Chinese (Simplified)_People's Republic of China.936\n[4] LC_NUMERIC=C\n[5] LC_TIME=Chinese (Simplified)_People's Republic of China.936\n\nattached base packages:\n[1] stats graphics grDevices utils datasets methods base\n\nother attached packages:\n[1] ggplot2_2.0.0 RevoUtilsMath_3.2.3\n\nloaded via a namespace (and not attached):\n[1] colorspace_1.2-6 scales_0.3.0 plyr_1.8.3 rsconnect_0.3.79 tools_3.2.3\n[6] gtable_0.1.2 Rcpp_0.12.2 grid_3.2.3 munsell_0.4.2\n\nbtw, my data's data.frame has two column to indecate the single boxplot's\ncolor and fill, but ggplot2 will treat it as some factors. For example, if\nI set somedata[1, \"Color\"] = \"red\" and somedata[1, \"Fill\"] = \"red\",\nand set colour\n= Color, fill = Fill in geom_boxplot's aes arg, the plot may show me a\ngreen box... How to define the colour and fill in the data.frame directly?\nYours,\n\nHsiao-nan Cheung\n2016/2/22\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear All,\n\nRecently I tried to plot a candle chart using package ggplot2, and have\ntried geom_boxplot function, but here I have some problems. Since a candle\nchart haven't a middle bar, when I use sta",
+      "thread_id": "thread-b99ad2a850b3",
+      "thread_depth": 0,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-a44f9c3bb567",
+      "message_id": "<CAK80y3BRB+i_MrFQnToNGuLbmv+a9DUJ1oDz0W-y7nVM59Z86A@mail.gmail.com>",
+      "from_name": "Hsiao-nan Cheung",
+      "from_email_hash": "5f2bfe06f61930a124ad56feb18661f799acce08ba3a07869cf015d5bc0447a4",
+      "date": "2016-02-22T14:12:07+08:00",
+      "subject": "[R-SIG-Finance] RStudio Crashes when using quantmod's chartSeries()",
+      "subject_clean": "RStudio Crashes when using quantmod's chartSeries()",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear All,\n\nSorry for my second question.\n\nWhen I use quantmod's chartSeries() function, the RStudio crashes. The code\nis as below.\n\nlibrary(quantmod)\ngetSymbols(\"IBM\")\nchartSeries(IBM)\n\nVery simple code... And the same function is working well in Rgui.exe, i.e.\nthere is a plot in the default graphics device. So maybe it's a graphics\nengine error?\n\nI've tried the plot() function, e.g., plot(chartSeries(IBM)), and it\ncrashes, too. Nothing improve.\n\nYours,\nHsiao-nan Cheung\n2016/2/22\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear All,\n\nSorry for my second question.\n\nWhen I use quantmod's chartSeries() function, the RStudio crashes. The code\nis as below.\n\nlibrary(quantmod)\ngetSymbols(\"IBM\")\nchartSeries(IBM)\n\nVery simple co",
+      "thread_id": "thread-a44f9c3bb567",
+      "thread_depth": 0,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-7607bf1fc0a6",
+      "message_id": "<CALB30JC_742XcVXWWgqpzAhcpY5JWfsosVzjDqc7a9z62WbeCg@mail.gmail.com>",
+      "from_name": "Maxim Fomin",
+      "from_email_hash": "607ea5ecafe6756c1f45d88501f38f4a2f55e97ffa084e235ed6348afbdb7ecb",
+      "date": "2016-02-22T11:15:22+03:00",
+      "subject": "[R-SIG-Finance] RStudio Crashes when using quantmod's chartSeries()",
+      "subject_clean": "RStudio Crashes when using quantmod's chartSeries()",
+      "in_reply_to": "<CAK80y3BRB+i_MrFQnToNGuLbmv+a9DUJ1oDz0W-y7nVM59Z86A@mail.gmail.com>",
+      "references": [
+        "<CAK80y3BRB+i_MrFQnToNGuLbmv+a9DUJ1oDz0W-y7nVM59Z86A@mail.gmail.com>"
+      ],
+      "body_plain": "Hi!\n\n1) Your problem has nothing to do with R Finance in particular. You\nhave R or Rstudio problem.\n2) You need to figure out whether it works in simple R session. If it\nworks, then it is Rstudio problem.\n3) Also please consider providing session information (if you have\ntruly R problem) using sessionInfo() .\n\nP.S. The code works for me.\n\nBest regards,\nMaxim\n\n2016-02-22 9:12 GMT+03:00 Hsiao-nan Cheung <niheaven at gmail.com>:\n> Dear All,\n>\n> Sorry for my second question.\n>\n> When I use quantmod's chartSeries() function, the RStudio crashes. The code\n> is as below.\n>\n> library(quantmod)\n> getSymbols(\"IBM\")\n> chartSeries(IBM)\n>\n> Very simple code... And the same function is working well in Rgui.exe, i.e.\n> there is a plot in the default graphics device. So maybe it's a graphics\n> engine error?\n>\n> I've tried the plot() function, e.g., plot(chartSeries(IBM)), and it\n> crashes, too. Nothing improve.\n>\n> Yours,\n> Hsiao-nan Cheung\n> 2016/2/22\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Hi!\n\n1) Your problem has nothing to do with R Finance in particular. You\nhave R or Rstudio problem.\n2) You need to figure out whether it works in simple R session. If it\nworks, then it is Rstudio prob",
+      "thread_id": "thread-a44f9c3bb567",
+      "thread_depth": 1,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-ca0bb03d1d50",
+      "message_id": "<56CD2C4A.9090309@organicfoodmarkets.com.au>",
+      "from_name": "Stephen Choularton",
+      "from_email_hash": "be50afa784ca5d067902f310283ce1e85a162aa45ff41ca22e7220432c1408b1",
+      "date": "2016-02-24T15:06:34+11:00",
+      "subject": "[R-SIG-Finance] IBrokers reqOpenOrders - getting data into a program",
+      "subject_clean": "IBrokers reqOpenOrders - getting data into a program",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi\n\nI am working with the IBrokers package.  I notice that almost all the \ncode samples I can find simply assume that if you are doing a spread and \nyou issue the orders you can then assume that trading has taken place on \nboth sides but my experience is that sometimes the short cannot be put \nin place or can only be partially fulfilled.  So I am trying to make \nsure the long only takes place to the extent the short has been \nfulfilled.  So I need to be able to check the state of the short.\n\nI have spent a lot of time trying to grapple with reqOpenOrders but I \nfind (just like I did with reqMarketData which I can now manage) that \nunless you know the places in the data structure that hold the \ninformation you are after its very difficult to guess.  I notice that \nthe manual does not seem to have an entry for ?reqOpenOrders so I have \nbeen googling generally but without success.\n\nI wondered if anyone could point me to a/some example(s) on the internet \nwhere the code checks the state of the transaction so that I can try and \nwork them out.\n\nThanks for any help.\n\nStephen",
+      "body_snippet": "Hi\n\nI am working with the IBrokers package.  I notice that almost all the \ncode samples I can find simply assume that if you are doing a spread and \nyou issue the orders you can then assume that tradi",
+      "thread_id": "thread-ca0bb03d1d50",
+      "thread_depth": 0,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-3796275896ec",
+      "message_id": "<CAK80y3CbBt8hzO=70NECf2i4-ud4CwXYR3bX+k6vB7r6DY6-iQ@mail.gmail.com>",
+      "from_name": "Hsiao-nan Cheung",
+      "from_email_hash": "5f2bfe06f61930a124ad56feb18661f799acce08ba3a07869cf015d5bc0447a4",
+      "date": "2016-02-24T14:26:58+08:00",
+      "subject": "[R-SIG-Finance] RStudio Crashes when using quantmod's chartSeries()",
+      "subject_clean": "RStudio Crashes when using quantmod's chartSeries()",
+      "in_reply_to": "<CALB30JC_742XcVXWWgqpzAhcpY5JWfsosVzjDqc7a9z62WbeCg@mail.gmail.com>",
+      "references": [
+        "<CAK80y3BRB+i_MrFQnToNGuLbmv+a9DUJ1oDz0W-y7nVM59Z86A@mail.gmail.com>",
+        "<CALB30JC_742XcVXWWgqpzAhcpY5JWfsosVzjDqc7a9z62WbeCg@mail.gmail.com>"
+      ],
+      "body_plain": "Hi,\n\nThat's a truly RStudio problem, since I've tested it in R console. So I'll\nresend it to RStudio Support and R mailing list to get a solution. Thank\nyou any more.\n\nYours,\nHsiao-nan\n\n2016-02-22 16:15 GMT+08:00 Maxim Fomin <mxfomin at gmail.com>:\n\n>  Hi!\n>\n> 1) Your problem has nothing to do with R Finance in particular. You\n> have R or Rstudio problem.\n> 2) You need to figure out whether it works in simple R session. If it\n> works, then it is Rstudio problem.\n> 3) Also please consider providing session information (if you have\n> truly R problem) using sessionInfo() .\n>\n> P.S. The code works for me.\n>\n> Best regards,\n> Maxim\n>\n> 2016-02-22 9:12 GMT+03:00 Hsiao-nan Cheung <niheaven at gmail.com>:\n> > Dear All,\n> >\n> > Sorry for my second question.\n> >\n> > When I use quantmod's chartSeries() function, the RStudio crashes. The\n> code\n> > is as below.\n> >\n> > library(quantmod)\n> > getSymbols(\"IBM\")\n> > chartSeries(IBM)\n> >\n> > Very simple code... And the same function is working well in Rgui.exe,\n> i.e.\n> > there is a plot in the default graphics device. So maybe it's a graphics\n> > engine error?\n> >\n> > I've tried the plot() function, e.g., plot(chartSeries(IBM)), and it\n> > crashes, too. Nothing improve.\n> >\n> > Yours,\n> > Hsiao-nan Cheung\n> > 2016/2/22\n> >\n> >         [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nThat's a truly RStudio problem, since I've tested it in R console. So I'll\nresend it to RStudio Support and R mailing list to get a solution. Thank\nyou any more.\n\nYours,\nHsiao-nan\n\n2016-02-22 16:",
+      "thread_id": "thread-a44f9c3bb567",
+      "thread_depth": 2,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-8823076815e2",
+      "message_id": "<CAEeDWya5VsBfg_-z_5LP==HOmC-ts2xkh-vsYiCPfeFwsHVfmw@mail.gmail.com>",
+      "from_name": "John Williams",
+      "from_email_hash": "fa823d7a5dd6cd1e9e7645dbf2393634d66454c5ef3f01cc514fa53a974f3dc9",
+      "date": "2016-02-24T01:37:37-05:00",
+      "subject": "[R-SIG-Finance] RStudio Crashes when using quantmod's chartSeries()",
+      "subject_clean": "RStudio Crashes when using quantmod's chartSeries()",
+      "in_reply_to": "<CAK80y3CbBt8hzO=70NECf2i4-ud4CwXYR3bX+k6vB7r6DY6-iQ@mail.gmail.com>",
+      "references": [
+        "<CAK80y3BRB+i_MrFQnToNGuLbmv+a9DUJ1oDz0W-y7nVM59Z86A@mail.gmail.com>",
+        "<CALB30JC_742XcVXWWgqpzAhcpY5JWfsosVzjDqc7a9z62WbeCg@mail.gmail.com>",
+        "<CAK80y3CbBt8hzO=70NECf2i4-ud4CwXYR3bX+k6vB7r6DY6-iQ@mail.gmail.com>"
+      ],
+      "body_plain": "library(quantmod)\ngetSymbols(\"IBM\")\nchartSeries(IBM)\n\nworks fine in Rstudio\n\nOn Wed, Feb 24, 2016 at 1:26 AM, Hsiao-nan Cheung <niheaven at gmail.com>\nwrote:\n\n> Hi,\n>\n> That's a truly RStudio problem, since I've tested it in R console. So I'll\n> resend it to RStudio Support and R mailing list to get a solution. Thank\n> you any more.\n>\n> Yours,\n> Hsiao-nan\n>\n> 2016-02-22 16:15 GMT+08:00 Maxim Fomin <mxfomin at gmail.com>:\n>\n> >  Hi!\n> >\n> > 1) Your problem has nothing to do with R Finance in particular. You\n> > have R or Rstudio problem.\n> > 2) You need to figure out whether it works in simple R session. If it\n> > works, then it is Rstudio problem.\n> > 3) Also please consider providing session information (if you have\n> > truly R problem) using sessionInfo() .\n> >\n> > P.S. The code works for me.\n> >\n> > Best regards,\n> > Maxim\n> >\n> > 2016-02-22 9:12 GMT+03:00 Hsiao-nan Cheung <niheaven at gmail.com>:\n> > > Dear All,\n> > >\n> > > Sorry for my second question.\n> > >\n> > > When I use quantmod's chartSeries() function, the RStudio crashes. The\n> > code\n> > > is as below.\n> > >\n> > > library(quantmod)\n> > > getSymbols(\"IBM\")\n> > > chartSeries(IBM)\n> > >\n> > > Very simple code... And the same function is working well in Rgui.exe,\n> > i.e.\n> > > there is a plot in the default graphics device. So maybe it's a\n> graphics\n> > > engine error?\n> > >\n> > > I've tried the plot() function, e.g., plot(chartSeries(IBM)), and it\n> > > crashes, too. Nothing improve.\n> > >\n> > > Yours,\n> > > Hsiao-nan Cheung\n> > > 2016/2/22\n> > >\n> > >         [[alternative HTML version deleted]]\n> > >\n> > > _______________________________________________\n> > > R-SIG-Finance at r-project.org mailing list\n> > > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > > -- Subscriber-posting only. If you want to post, subscribe first.\n> > > -- Also note that this is not the r-help list where general R questions\n> > should go.\n> >\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "library(quantmod)\ngetSymbols(\"IBM\")\nchartSeries(IBM)\n\nworks fine in Rstudio\n\nOn Wed, Feb 24, 2016 at 1:26 AM, Hsiao-nan Cheung <niheaven at gmail.com>\nwrote:\n\n> Hi,\n>\n> That's a truly RStudio problem,",
+      "thread_id": "thread-a44f9c3bb567",
+      "thread_depth": 3,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-ad4f1381a518",
+      "message_id": "<CAK80y3A_GTPVw-wBDFr0Wmkv8wzUEyPH1dVgLVww5dJ0+O4QHA@mail.gmail.com>",
+      "from_name": "Hsiao-nan Cheung",
+      "from_email_hash": "5f2bfe06f61930a124ad56feb18661f799acce08ba3a07869cf015d5bc0447a4",
+      "date": "2016-02-24T14:41:54+08:00",
+      "subject": "[R-SIG-Finance] RStudio Crashes when using quantmod's chartSeries()",
+      "subject_clean": "RStudio Crashes when using quantmod's chartSeries()",
+      "in_reply_to": "<CAEeDWya5VsBfg_-z_5LP==HOmC-ts2xkh-vsYiCPfeFwsHVfmw@mail.gmail.com>",
+      "references": [
+        "<CAK80y3BRB+i_MrFQnToNGuLbmv+a9DUJ1oDz0W-y7nVM59Z86A@mail.gmail.com>",
+        "<CALB30JC_742XcVXWWgqpzAhcpY5JWfsosVzjDqc7a9z62WbeCg@mail.gmail.com>",
+        "<CAK80y3CbBt8hzO=70NECf2i4-ud4CwXYR3bX+k6vB7r6DY6-iQ@mail.gmail.com>",
+        "<CAEeDWya5VsBfg_-z_5LP==HOmC-ts2xkh-vsYiCPfeFwsHVfmw@mail.gmail.com>"
+      ],
+      "body_plain": "Sorry for no screen capture, but it really crashes here, and it's ok in R\nconsole...\n\nI don't know why...??\n\n2016-02-24 14:37 GMT+08:00 John Williams <john.b.williams at gmail.com>:\n\n> library(quantmod)\n> getSymbols(\"IBM\")\n> chartSeries(IBM)\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Sorry for no screen capture, but it really crashes here, and it's ok in R\nconsole...\n\nI don't know why...??\n\n2016-02-24 14:37 GMT+08:00 John Williams <john.b.williams at gmail.com>:\n\n> library(quantmo",
+      "thread_id": "thread-a44f9c3bb567",
+      "thread_depth": 4,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-d91464f99790",
+      "message_id": "<0765308CD028654885F30322557308D81F072366@NYCSM0208.rth.ad.rothschild.com>",
+      "from_name": "Bos, Roger",
+      "from_email_hash": "9e4fe8046bd5ee629c8ff9a7876bef5eb6b0362323b01f92f5fa0e59fc3f9fdf",
+      "date": "2016-02-26T17:28:00Z",
+      "subject": "[R-SIG-Finance] quartstrat applyStrategy error when starting one month earlier (endDate not found)",
+      "subject_clean": "quartstrat applyStrategy error when starting one month earlier (endDate not found)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear all quantstrat users,\n\nI am trying to learn how to use quantstrat with pricing data read in from a csv file using getSymbols(symbols, src='csv'). I think I have that part working, but I am having a problem that I cannot debug myself.  The following code is from the faber_rebal demo. To make it reproducible I have used dput() to generate a truncated version of the csv pricing data for my example symbol G12 (actually XLF).  I have truncated the data to make it easier to post this message.  The first version of G12 does not work and the second version does.  The only difference is the starting point.  If the G12 data starts in 1/31/1999 the code works fine, but if the G12 data starts in 12/31/1998 the code gives an error in applyStrategy.rebalancing:\n\n> out<-applyStrategy.rebalancing(strategy='faber' , portfolios='faber')\nError in if (is.na(endDate)) endDate <- NULL : argument is of length zero\n\nThanks in advance for any advice on this, Roger\n\n\n# Not Working (starting at 12/31/1998)\nG12 <- structure(c(23.4375, 23.84375, 24.21875, 24.9375, 26.6875, 25.078125, \n26.09375, 24.5, 23.421875, 22.125, 25.5625, 24.4375, 23.765625, \n23.0625, 20.59375, 24.265625, 24.5, 25.046875, 23.75, 25.984375, \n28.46875, 29, 28.75, 27.28125, 29.5, 23.8125, 25.0625, 24.875, \n26.3125, 29.28125, 27.28125, 26.3125, 26.84375, 25.796875, 24.25, \n26.15625, 26.78125, 25.40625, 24.078125, 23.234375, 25.1875, \n25.796875, 25.1875, 27.15625, 26.34375, 28.625, 29.625, 29.625, \n29.21875, 30.0625, 23.21875, 22.71875, 22.0625, 24.015625, 24.75, \n24.375, 24.15625, 24.46875, 22.65625, 21.5, 20.875, 24.03125, \n22.71875, 21.46875, 19.65625, 19.46875, 22.125, 22.65625, 23.40625, \n23.5625, 25.875, 27.125, 24.875, 25.75, 26.71875, 23.4375, 23.84375, \n24.21875, 24.9375, 26.6875, 25.078125, 26.09375, 24.5, 23.421875, \n22.125, 25.5625, 24.4375, 23.765625, 23.0625, 20.59375, 24.265625, \n24.5, 25.046875, 23.75, 25.984375, 28.46875, 29, 28.75, 27.28125, \n29.5, 447800, 2057500, 2334300, 3122300, 2662900, 3307500, 2091900, \n2333800, 3945700, 5653600, 9955200, 5993600, 14715300, 8663400, \n8425500, 15117400, 8647800, 5391700, 9438800, 4609900, 4224100, \n9112300, 18210900, 17317600, 21173200, 23.4375, 23.84375, 24.21875, \n24.9375, 26.6875, 25.078125, 26.09375, 24.5, 23.421875, 22.125, \n25.5625, 24.4375, 23.765625, 23.0625, 20.59375, 24.265625, 24.5, \n25.046875, 23.75, 25.984375, 28.46875, 29, 28.75, 27.28125, 29.5), \n.Dim = c(25L, 6L), .Dimnames = list(NULL, c(\"G12.Open\", \"G12.High\", \n\"G12.Low\", \"G12.Close\", \"G12.Volume\", \"G12.Adjusted\")), index = structure(c(915062400, \n                                   917740800, 920160000, 922838400, 925430400, 928108800, 930700800, \n                                   933379200, 936057600, 938649600, 941328000, 943920000, 946598400, \n                                   949276800, 951782400, 954460800, 957052800, 959731200, 962323200, \n                                   965001600, 967680000, 970272000, 972950400, 975542400, 978220800\n), tclass = \"Date\"), tclass = \"Date\", tzone = \"UTC\", src = \"csv\", updated = structure(1456505311.48799, class = c(\"POSIXct\", \n                                                                         \"POSIXt\")), .indexCLASS = \"Date\", .indexTZ = \"UTC\", .indexFORMAT = \"%Y-%m-%d\", class = c(\"xts\",\"zoo\"))\n\n\n# Working (starting at 1/31/1999)\nG12 <- structure(c(23.84375, 24.21875, 24.9375, 26.6875, 25.078125, \n26.09375, 24.5, 23.421875, 22.125, 25.5625, 24.4375, 23.765625, \n23.0625, 20.59375, 24.265625, 24.5, 25.046875, 23.75, 25.984375, \n28.46875, 29, 28.75, 27.28125, 29.5, 25.0625, 24.875, 26.3125, \n29.28125, 27.28125, 26.3125, 26.84375, 25.796875, 24.25, 26.15625, \n26.78125, 25.40625, 24.078125, 23.234375, 25.1875, 25.796875, \n25.1875, 27.15625, 26.34375, 28.625, 29.625, 29.625, 29.21875, \n30.0625, 22.71875, 22.0625, 24.015625, 24.75, 24.375, 24.15625, \n24.46875, 22.65625, 21.5, 20.875, 24.03125, 22.71875, 21.46875, \n19.65625, 19.46875, 22.125, 22.65625, 23.40625, 23.5625, 25.875, \n27.125, 24.875, 25.75, 26.71875, 23.84375, 24.21875, 24.9375, \n26.6875, 25.078125, 26.09375, 24.5, 23.421875, 22.125, 25.5625, \n24.4375, 23.765625, 23.0625, 20.59375, 24.265625, 24.5, 25.046875, \n23.75, 25.984375, 28.46875, 29, 28.75, 27.28125, 29.5, 2057500, \n2334300, 3122300, 2662900, 3307500, 2091900, 2333800, 3945700, \n5653600, 9955200, 5993600, 14715300, 8663400, 8425500, 15117400, \n8647800, 5391700, 9438800, 4609900, 4224100, 9112300, 18210900, \n17317600, 21173200, 23.84375, 24.21875, 24.9375, 26.6875, 25.078125, \n26.09375, 24.5, 23.421875, 22.125, 25.5625, 24.4375, 23.765625, \n23.0625, 20.59375, 24.265625, 24.5, 25.046875, 23.75, 25.984375, \n28.46875, 29, 28.75, 27.28125, 29.5), .Dim = c(24L, 6L), .Dimnames = list(\nNULL, c(\"G12.Open\", \"G12.High\", \"G12.Low\", \"G12.Close\", \"G12.Volume\", \n\"G12.Adjusted\")), index = structure(c(917740800, 920160000, \n922838400, 925430400, 928108800, 930700800, 933379200, 936057600, \n938649600, 941328000, 943920000, 946598400, 949276800, 951782400, \n954460800, 957052800, 959731200, 962323200, 965001600, 967680000, \n970272000, 972950400, 975542400, 978220800), tclass = \"Date\"), tclass = \"Date\", tzone = \"UTC\", src = \"csv\", \nupdated = structure(1456505447.82159, class = c(\"POSIXct\", \n\"POSIXt\")), .indexCLASS = \"Date\", .indexTZ = \"UTC\", .indexFORMAT = \"%Y-%m-%d\", class = c(\"xts\",\"zoo\"))\n\n\n\n# Load required libraries\nrequire(quantstrat)\n\n#correct for TZ issues if they crop up\noldtz <- Sys.getenv('TZ')\nif(oldtz=='') {\n  Sys.setenv(TZ=\"UTC\")\n}\n\n# Try to clean up in case the demo was run previously\nsuppressWarnings(rm(\"account.faber\",\"portfolio.faber\",pos=.blotter))\nsuppressWarnings(rm(\"ltaccount\", \"ltportfolio\", \"ClosePrice\", \"CurrentDate\", \"equity\", \n            \"GSPC\", \"stratFaber\", \"startDate\", \"initEq\", \"Posn\", \"UnitSize\", \"verbose\"))\nsuppressWarnings(rm(\"order_book.faber\",pos=.strategy))\n\n# Set initial values\nstartDate='1997-12-31'\ninitEq=100000\n\n# Set up instruments with FinancialInstruments package\ncurrency(\"USD\")\n#symbols = c(\"XLF\", \"XLP\", \"XLE\", \"XLY\", \"XLV\", \"XLI\", \"XLB\", \"XLK\", \"XLU\")\nsymbols = c(\"G12\")\nfor(symbol in symbols){ # establish tradable instruments\n    stock(symbol, currency=\"USD\",multiplier=1)\n}\n\n# Load data with quantmod\n#getSymbols(symbols, src='yahoo', index.class=c(\"POSIXt\",\"POSIXct\"), from='1998-01-01')\n### Download monthly data instead?\n### GSPC=to.monthly(GSPC, indexAt='endof')\n#getSymbols(symbols, src='yahoo', index.class=c(\"POSIXt\",\"POSIXct\"), from='1999-01-01')\n#getSymbols(symbols, src='csv')\nfor(symbol in symbols) {\n    x<-get(symbol)\n    x<-to.monthly(x,indexAt='lastof',drop.time=TRUE)\n    indexFormat(x)<-'%Y-%m-%d'\n    colnames(x)<-gsub(\"x\",symbol,colnames(x))\n    assign(symbol,x)\n}\n\n# Initialize portfolio and account\ninitPortf('faber', symbols=symbols)\ninitAcct('faber', portfolios='faber', initEq=100000)\ninitOrders(portfolio='faber')\n\n# set intial position limits\nposval <- initEq/length(symbols)\nfor(symbol in symbols){\n  #pos <- round((posval/first(getPrice(get(symbol)))[,1]),-2)\n  pos <- round((posval/first(getPrice(get(symbol)))),-2)\n  addPosLimit('faber', symbol, startDate, maxpos=pos, minpos=-pos)\n}\nprint(\"setup completed\")\n\n# Initialize a strategy object\nstrategy(\"faber\", store=TRUE)\n\n# Add an indicator\nadd.indicator('faber', name = \"SMA\", arguments = list(x = quote(Cl(mktdata)), n=10), label=\"SMA10\")\n\n# There are two signals:\n# The first is when monthly price crosses over the 10-month SMA\nadd.signal('faber',name=\"sigCrossover\",arguments = list(columns=c(\"Close\",\"SMA10\"),relationship=\"gte\"),label=\"Cl.gt.SMA\")\n# The second is when the monthly price crosses under the 10-month SMA\nadd.signal('faber',name=\"sigCrossover\",arguments = list(columns=c(\"Close\",\"SMA10\"),relationship=\"lt\"),label=\"Cl.lt.SMA\")\n\n# There are two rules:\n# The first is to buy when the price crosses above the SMA\nadd.rule('faber', name='ruleSignal', arguments = list(sigcol=\"Cl.gt.SMA\", sigval=TRUE, orderqty=100000, osFUN='osMaxPos', ordertype='market', orderside='long', pricemethod='market',TxnFees=-5), type='enter', path.dep=TRUE)\n# The second is to sell when the price crosses below the SMA\nadd.rule('faber', name='ruleSignal', arguments = list(sigcol=\"Cl.lt.SMA\", sigval=TRUE, orderqty='all', ordertype='market', orderside='long', pricemethod='market',TxnFees=-5), type='exit', path.dep=TRUE)\n\n# add quaterly rebalancing\nadd.rule('faber', 'rulePctEquity',\n        arguments=list(rebalance_on='quarters',\n                trade.percent=1/length(symbols),\n                refprice=quote(last(getPrice(mktdata)[paste('::',as.character(curIndex),sep='')][,1])),\n                digits=0\n        ),\n        type='rebalance',\n        label='rebalance'\n)\n\n# Process the strategy and generate trades\nstart_t<-Sys.time()\nout<-applyStrategy.rebalancing(strategy='faber' , portfolios='faber')\nend_t<-Sys.time()\nprint(\"Strategy Loop:\")\nprint(end_t-start_t)",
+      "body_snippet": "Dear all quantstrat users,\n\nI am trying to learn how to use quantstrat with pricing data read in from a csv file using getSymbols(symbols, src='csv'). I think I have that part working, but I am having",
+      "thread_id": "thread-d91464f99790",
+      "thread_depth": 0,
+      "month": "2016-02"
+    },
+    {
+      "id": "msg-9d0935567de2",
+      "message_id": "<CANf4qfjuqJ2Ps1+nwd+=hZXUbMpY2oNL_SnkiHxucderLXy_mw@mail.gmail.com>",
+      "from_name": "Ryan",
+      "from_email_hash": "090bb9a15fd21af237a5d782c770f905713068029eb58b542bbf68418aad93f1",
+      "date": "2016-02-29T14:10:11+11:00",
+      "subject": "[R-SIG-Finance] Time in Force conditions with Quantstrat",
+      "subject_clean": "Time in Force conditions with Quantstrat",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I'm having some difficulty getting time in force to work with quanstrat.\n\nI've studied the documentation and it states that:\n\ntimestamp time-in-force; either a time stamp, or a number of seconds, or\n'GTC' / ?, 'GTC' and ? both meaning 'Good Till Canceled'; order expires if\nstill 'open' at this timestamp, default is ?\n\nI have been trying to enter a limit order, 5% below the Close price, as\nwhen I study the orderbook and mktdata object, it appears that a limit\norder is based on the bar in which the signal occurs. Hence the limit price\nwould be 5% below the Close.\n\nI've tried to enter a time in seconds, which is the equivalent to two days,\nfor the sake of the example. If I remove timestamp it runs however\ntime.in.force remains blank in the orderbook as I would expect timestamp +\ntime.in.force is the time when the order is cancelled.\n\nAs laid out below I get the following error:\n\nError in if (prefer == \"Close\") { : argument is of length zero\n\n\nBelow is a reproducible example that produces the error. Any assistance\nwould be greatly appreciated.\n\n\nrequire(quantstrat)\nrequire(quantmod)\nrequire(PerformanceAnalytics)\nrequire(TTR)\nrequire(blotter)\nrequire(IKTrading)\n\n# Suppresses warnings\noptions(\"getSymbols.warning4.0\" = FALSE)\n\n# Set the currency and the timezone\ncurrency('USD')\nSys.setenv(TZ = \"UTC\")\n\n# Define symbols of interest\nsymbols <- c(\"AMP.AX\",\n             \"BHP.AX\",\n             \"ANZ.AX\",\n             \"CBA.AX\",\n             \"BXB.AX\",\n             \"CSL.AX\",\n             \"IAG.AX\",\n             \"MQG.AX\",\n             \"NAB.AX\",\n             \"ORG.AX\",\n             \"QBE.AX\",\n             \"RIO.AX\",\n             \"SCG.AX\",\n             \"SUN.AX\",\n             \"TLS.AX\",\n             \"WBC.AX\",\n             \"WES.AX\",\n             \"WOW.AX\",\n             \"WPL.AX\",\n             \"TCL.AX\",\n             \"WFD.AX\",\n             \"AMC.AX\"\n)\n\n\n#Get Symbols\ngetSymbols(Symbols=symbols, from=\"2010-01-01\", to=\"2015-12-31\")\n\n# Define the instrument type\nstock(symbols, currency = \"USD\", multiplier = 1)\n\n#Boilerplate\ninitDate = \"2005-01-01\"\nfrom = \"2010-01-01\"\nto = \"2015-12-31\"\n\n#trade sizing and initial equity settings\ntradeSize <- 2500\ninitEq <- 100000\n\nstrategy.st <- portfolio.st <- account.st <- \"Timeinforce\"\nrm.strat(portfolio.st)\nrm.strat(strategy.st)\ninitPortf(portfolio.st, symbols=symbols, initDate=initDate, currency='USD')\ninitAcct(account.st, portfolios=portfolio.st, initDate=initDate,\ncurrency='USD',initEq=initEq)\ninitOrders(portfolio.st, initDate=initDate)\nstrategy(strategy.st, store=TRUE)\n\n#parameters\n\nnSMA=20\n\n#Add Indicators\n\nadd.indicator(strategy.st, name=\"SMA\",\n              arguments=list(x=quote(Cl(mktdata)), n=nSMA),\n              label=\"sma\")\n\n#Add Entry and Exit Signals\n\nadd.signal(strategy.st, name=\"sigComparison\",\n           arguments=list(columns=c(\"Close\", \"SMA.20.sma\"),\nrelationship=\"gt\"),\n           label=\"longentry\")\n\n#add.signal(strategy.st, name=\"sigComparison\",\n#          arguments=list(columns=c(\"Close\", \"SMA.20.sma\"),\nrelationship=\"lt\"),\n#         label=\"longexit\")\n\n#enter signal rule\nadd.rule(strategy.st, name=\"ruleSignal\",\n         arguments=list(sigcol=\"longentry\", sigval=TRUE, ordertype=\"limit\",\n                        orderside=\"long\", replace=TRUE, prefer=\"Close\",\ntmult = TRUE, threshold = 0.05, timestamp, time.in.force='172800',\norderqty=tradeSize, osFUN=osMaxDollar, tradeSize=tradeSize,\n                        maxSize=tradeSize),\n         type=\"enter\", path.dep=TRUE, label=\"enterlong\")\n\n#add.rule(strategy.st, name=\"ruleSignal\",\n#       arguments=list(sigcol=\"longexit\", sigval=TRUE, ordertype=\"market\",\n#                    orderside=\"long\", replace=FALSE, prefer=\"Open\",\norderqty=\"all\", TxnFees=-12),\n#   type=\"exit\", path.dep=TRUE, label=\"exitlong\")\n\n#stop loss.\nadd.rule(strategy.st, name=\"ruleSignal\", arguments=list(sigcol=\"longentry\",\n                                                        sigval=TRUE,\n\nordertype=\"stoptrailing\",\n                                                        orderside=\"long\",\n                                                        replace=FALSE,\n                                                        orderqty=\"all\",\n                                                        threshold=0.05,\n                                                        tmult=TRUE,\n                                                        orderset=\"ocolong\"),\n         type=\"chain\",\n         parent=\"enterlong\",\n         label=\"stopLossLong\",\n         path.dep=TRUE,\n         enable=TRUE)\n\n#apply strategy\nt1 <- Sys.time()\nout2 <- applyStrategy(strategy=strategy.st,portfolios=portfolio.st )\nt2 <- Sys.time()\nprint(t2-t1)\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I'm having some difficulty getting time in force to work with quanstrat.\n\nI've studied the documentation and it states that:\n\ntimestamp time-in-force; either a time stamp, or a number of seconds, or\n'",
+      "thread_id": "thread-9d0935567de2",
+      "thread_depth": 0,
+      "month": "2016-02"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-bc8378624c1e",
+      "subject": "apply.paramset trade-by-trade PnL data",
+      "message_count": 4,
+      "participants": [
+        "Brian G. Peterson",
+        "Jersey Fanatic"
+      ],
+      "started": "2016-02-01T09:12:18+02:00",
+      "last_reply": "2016-02-02T10:55:02-06:00",
+      "root_message_id": "msg-bc8378624c1e"
+    },
+    {
+      "id": "thread-36fd05c74027",
+      "subject": "tick data database",
+      "message_count": 2,
+      "participants": [
+        "Daniel Cegiełka",
+        "Daniel Krizian"
+      ],
+      "started": "2016-02-02T19:00:23+01:00",
+      "last_reply": "2016-02-02T19:22:41+00:00",
+      "root_message_id": "msg-36fd05c74027"
+    },
+    {
+      "id": "thread-93e9bb975b5d",
+      "subject": "gmm error",
+      "message_count": 1,
+      "participants": [
+        "T."
+      ],
+      "started": "2016-02-04T17:33:49+01:00",
+      "last_reply": "2016-02-04T17:33:49+01:00",
+      "root_message_id": "msg-93e9bb975b5d"
+    },
+    {
+      "id": "thread-2222cf05aa0f",
+      "subject": "Option Quotes",
+      "message_count": 1,
+      "participants": [
+        "Robert Sherry"
+      ],
+      "started": "2016-02-05T17:02:02-05:00",
+      "last_reply": "2016-02-05T17:02:02-05:00",
+      "root_message_id": "msg-2222cf05aa0f"
+    },
+    {
+      "id": "thread-766e1ad26df4",
+      "subject": "Approach to predict balance of account in retail bank",
+      "message_count": 3,
+      "participants": [
+        "Biswarup Ghosh",
+        "Daniel Melendez"
+      ],
+      "started": "2016-02-06T16:23:33-08:00",
+      "last_reply": "2016-02-06T21:00:02-08:00",
+      "root_message_id": "msg-766e1ad26df4"
+    },
+    {
+      "id": "thread-56b28b80b5c9",
+      "subject": "Approach to predict balance of account in retail bank",
+      "message_count": 1,
+      "participants": [
+        "Biswarup Ghosh"
+      ],
+      "started": "2016-02-07T18:15:07-08:00",
+      "last_reply": "2016-02-07T18:15:07-08:00",
+      "root_message_id": "msg-56b28b80b5c9"
+    },
+    {
+      "id": "thread-cd0d8df842ca",
+      "subject": "CONFERENCE: R in Insurance, London, 11 July 2015",
+      "message_count": 1,
+      "participants": [
+        "Gesmann, Markus"
+      ],
+      "started": "2016-02-09T11:03:19+00:00",
+      "last_reply": "2016-02-09T11:03:19+00:00",
+      "root_message_id": "msg-cd0d8df842ca"
+    },
+    {
+      "id": "thread-d9c7b96f7691",
+      "subject": "Using the market (SPY) as an indicator in Quanstrat",
+      "message_count": 2,
+      "participants": [
+        "Brian G. Peterson",
+        "Smith Jimmy"
+      ],
+      "started": "2016-02-09T17:56:01+08:00",
+      "last_reply": "2016-02-09T04:18:36-06:00",
+      "root_message_id": "msg-d9c7b96f7691"
+    },
+    {
+      "id": "thread-fee708b24a66",
+      "subject": "New Package PortfolioEffectEstim",
+      "message_count": 1,
+      "participants": [
+        "Andrey Kostin"
+      ],
+      "started": "2016-02-10T12:00:08-05:00",
+      "last_reply": "2016-02-10T12:00:08-05:00",
+      "root_message_id": "msg-fee708b24a66"
+    },
+    {
+      "id": "thread-cd6440ef4bcf",
+      "subject": "Quantstrat - Entering a limit order below the open price",
+      "message_count": 2,
+      "participants": [
+        "Brian G. Peterson",
+        "Smith Jimmy"
+      ],
+      "started": "2016-02-11T14:50:24+08:00",
+      "last_reply": "2016-02-11T05:39:56-06:00",
+      "root_message_id": "msg-cd6440ef4bcf"
+    },
+    {
+      "id": "thread-43f306bd9e3c",
+      "subject": "Tangency portfolio in \"fPortfolio\" package",
+      "message_count": 1,
+      "participants": [
+        "Samit Paul"
+      ],
+      "started": "2016-02-16T10:02:56+05:30",
+      "last_reply": "2016-02-16T10:02:56+05:30",
+      "root_message_id": "msg-43f306bd9e3c"
+    },
+    {
+      "id": "thread-95e1b0e0f4bc",
+      "subject": "stoptrailing mechanics question in MACD example - Quantstrat",
+      "message_count": 1,
+      "participants": [
+        "Derek Wong"
+      ],
+      "started": "2016-02-17T16:22:46+08:00",
+      "last_reply": "2016-02-17T16:22:46+08:00",
+      "root_message_id": "msg-95e1b0e0f4bc"
+    },
+    {
+      "id": "thread-3c5ad2bf069e",
+      "subject": "Rugarch fitted values lag by 1",
+      "message_count": 1,
+      "participants": [
+        "Hannah Linder"
+      ],
+      "started": "2016-02-20T20:04:54-08:00",
+      "last_reply": "2016-02-20T20:04:54-08:00",
+      "root_message_id": "msg-3c5ad2bf069e"
+    },
+    {
+      "id": "thread-b99ad2a850b3",
+      "subject": "How to Draw a Candle Chart using ggplot2?",
+      "message_count": 1,
+      "participants": [
+        "Hsiao-nan Cheung"
+      ],
+      "started": "2016-02-22T14:10:36+08:00",
+      "last_reply": "2016-02-22T14:10:36+08:00",
+      "root_message_id": "msg-b99ad2a850b3"
+    },
+    {
+      "id": "thread-a44f9c3bb567",
+      "subject": "RStudio Crashes when using quantmod's chartSeries()",
+      "message_count": 5,
+      "participants": [
+        "Hsiao-nan Cheung",
+        "John Williams",
+        "Maxim Fomin"
+      ],
+      "started": "2016-02-22T14:12:07+08:00",
+      "last_reply": "2016-02-24T14:41:54+08:00",
+      "root_message_id": "msg-a44f9c3bb567"
+    },
+    {
+      "id": "thread-ca0bb03d1d50",
+      "subject": "IBrokers reqOpenOrders - getting data into a program",
+      "message_count": 1,
+      "participants": [
+        "Stephen Choularton"
+      ],
+      "started": "2016-02-24T15:06:34+11:00",
+      "last_reply": "2016-02-24T15:06:34+11:00",
+      "root_message_id": "msg-ca0bb03d1d50"
+    },
+    {
+      "id": "thread-d91464f99790",
+      "subject": "quartstrat applyStrategy error when starting one month earlier (endDate not found)",
+      "message_count": 1,
+      "participants": [
+        "Bos, Roger"
+      ],
+      "started": "2016-02-26T17:28:00+00:00",
+      "last_reply": "2016-02-26T17:28:00+00:00",
+      "root_message_id": "msg-d91464f99790"
+    },
+    {
+      "id": "thread-9d0935567de2",
+      "subject": "Time in Force conditions with Quantstrat",
+      "message_count": 1,
+      "participants": [
+        "Ryan"
+      ],
+      "started": "2016-02-29T14:10:11+11:00",
+      "last_reply": "2016-02-29T14:10:11+11:00",
+      "root_message_id": "msg-9d0935567de2"
+    }
+  ]
+}

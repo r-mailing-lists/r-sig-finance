@@ -1,0 +1,721 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2016-11",
+  "messages": [
+    {
+      "id": "msg-e5bbf257debb",
+      "message_id": "<OF699E0F19.E35FCA48-ON8025805E.0032CD17-8025805E.00332E69@hsbcib.com>",
+      "from_name": "pierre.lequeux at hsbc.com",
+      "from_email_hash": "55f087d94749df408af557590cb54aa97f5023f7c6d75b61c7625aa7a59c9a98",
+      "date": "2016-11-01T09:19:02Z",
+      "subject": "[R-SIG-Finance] fPortfolio minimum variance optimisation under constraints",
+      "subject_clean": "fPortfolio minimum variance optimisation under constraints",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I have when running an optimisation under constraints to derive a set of\ncurrency hedge ratios using the fPortfolio package.  My portfolio is made\nof 1 domestic asset (GBP) with a fix weight of 60% and 4 other non-domestic\nassets for which I have for each a currency hedged and currency un-hedged\nseries with a box constraint summing up to the country weight in my\nbenchmark (respectively 20% for US 10% for Euro, 5% for Japan and 5% for\nSwitzerland). What I want to do is to find the portfolio that minimise the\nvariance (and also the one that maximise the risk return ratio). then the\nproportionality of weights between the hedge and un-hedged asset will be my\nhedge ratio.  The code below is in respect of the minimum variance\nportfolio. I have coded a few lines and this seems to work most of the time\nbut in some occasion I am returned with a vector solution where of weights\nare equal to zero. So I am obviously doing something wrong. It may be\nsomething trivial,  possibly the initial settings of the portfolio spec or\nthe constraints,.but I can t seem to find what it is and running out of\nideas. I would be really thankful  if someonee could take the time to\nperuse through the few below lines or point me towarda solution. I have\ntried the StackOverflow forum but did not get any answer so far.  I have\nattached  my code  and a sample of the data in the below.\n                                                                                                                                                      \n                GBP-U         USD-U         EUR-U        JPY-U         CHF-U         USD-H         EUR-H         JPY-H        CHF-H                   \n 2016-05-13  0.0013866228 -0.0004015032  0.0023176509  0.004868271  0.0230163636 -0.0046939993  0.0065432710  0.0146679154  0.022040377               \n 2016-05-20  0.0027094242 -0.0063831791 -0.0126106089 -0.006146676 -0.0158351590  0.0031237903  0.0045931268  0.0173505502  0.008964457               \n 2016-05-27  0.0181190929  0.0140661262  0.0099806390 -0.005023782  0.0206840583  0.0223892121  0.0282165690  0.0048453909  0.033676661               \n 2016-06-03 -0.0102711128  0.0081653966  0.0133194563  0.031814348  0.0092257881  0.0009701383 -0.0161380212 -0.0101505102 -0.016812484               \n 2016-06-10 -0.0144639135  0.0160062120 -0.0152727781  0.008429249  0.0015983898 -0.0021260494 -0.0229890046 -0.0054785155 -0.027628141               \n 2016-06-17 -0.0152295990 -0.0183599416 -0.0266861641 -0.039472434 -0.0286395252 -0.0112888146 -0.0217678087 -0.0589147494 -0.026415992               \n 2016-06-24  0.0200253356  0.0317549413  0.0346147227  0.029164922  0.0401491058 -0.0166789670  0.0006268938 -0.0379679346  0.004386684               \n 2016-07-01  0.0696777854  0.0620232077  0.0754752233  0.065465564  0.0704656764  0.0314514909  0.0433540129  0.0379248977  0.041482495               \n 2016-07-08  0.0016753950  0.0369097752  0.0076117981  0.007834512  0.0070165833  0.0130392554 -0.0084350439 -0.0354380321 -0.006380199               \n 2016-07-15  0.0118593292 -0.0037643046  0.0058939005  0.028278185 -0.0020681743  0.0144418213  0.0257127861  0.0888542585  0.015778875               \n 2016-07-22  0.0092918745  0.0130552307  0.0086318585  0.001398931  0.0062780458  0.0067460116  0.0077586182  0.0070486894  0.004685162               \n 2016-07-29 -0.0004646661 -0.0094042916  0.0124831676  0.025141288  0.0018086154 -0.0002180359  0.0040494413 -0.0046691781 -0.006745367               \n 2016-08-05  0.0101311910  0.0160368778  0.0045395343 -0.014712256  0.0081973627  0.0040861320  0.0006639525 -0.0289135714  0.007984259               \n 2016-08-12  0.0177313054  0.0125451367  0.0377475690  0.050109303  0.0322171465  0.0007342288  0.0192744848  0.0332886266  0.014216897               \n 2016-08-19 -0.0086591802 -0.0121869847 -0.0131592756 -0.018946998 -0.0182591489 -0.0003056645 -0.0156054036 -0.0176744155 -0.020491089               \n 2016-08-26 -0.0032629188 -0.0112907806 -0.0099742141 -0.028672792 -0.0178773544 -0.0066076557  0.0061594585 -0.0078421386  0.005324054               \n 2016-09-02  0.0082322936 -0.0063800658 -0.0012434593  0.010783580  0.0006709931  0.0054516933  0.0145201246  0.0429479722  0.015518353               \n 2016-09-09 -0.0172703615 -0.0222186855 -0.0031692051  0.014054238  0.0031503483 -0.0243009678 -0.0119551411  0.0001827415 -0.004089906               \n 2016-09-16 -0.0105444978  0.0257113060 -0.0072348498 -0.002332981 -0.0002596633  0.0054847746 -0.0203191336 -0.0263452760 -0.015320125               \n 2016-09-23  0.0294827487  0.0150126367  0.0358026791  0.041563858  0.0298489405  0.0121889694  0.0268098637  0.0263689159  0.017033142               \n 2016-09-30 -0.0010620124  0.0010033756 -0.0058345738 -0.025319672 -0.0159143301  0.0014163678 -0.0060494835 -0.0215285310 -0.014212323               \n 2016-10-07  0.0213392520  0.0351900327  0.0426486765  0.047394294  0.0333505051 -0.0072195144  0.0034453853  0.0210516899 -0.002539864               \n 2016-10-14 -0.0050982217  0.0095672058  0.0009866843  0.004577971  0.0035956430 -0.0102205657  0.0020303997 -0.0035136735 -0.002926098               \n 2016-10-21  0.0002873986  0.0004041448 -0.0029951394  0.012861688 -0.0135120432  0.0038727554  0.0087025204  0.0127856995 -0.006358163               \n 2016-10-28 -0.0039917961 -0.0029823347  0.0078312950  0.013806532 -0.0053670019 -0.0070482290 -0.0052953175  0.0188646173 -0.014826428               \n                                                                                                                                                      \n\n\n\n                                                                                                                                                      \n require(fPortfolio)                                                                                                                                  \n spec <- portfolioSpec()                                                                                                                              \n mydata <- as.timeSeries(mydata)                                                                                                                      \n                                                                                                                                                      \n cons <- c(\"eqsumW['GBP-U']=0.6\" ,\"eqsumW[c('USD-U','USD-H')]=0.20\",\"eqsumW[c('EUR-U','EUR-H')]=0.10\",\"eqsumW[c('JPY-U','JPY-H')]=0.05\",\"eqsumW[c     \n ('CHF-U','CHF-H')]=0.05\")                                                                                                                            \n                                                                                                                                                      \n minvariancePortfolio(list(mu=apply(mydata,2,function(x) mean(x)),sigma=cov(mydata)), spec = spec , constraints = cons)                               \n                                                                                                                                                      \n\n\n\n\n\nwhen running the above lines on the data I get the following:\n                                                                            \n Title:                                                                     \n  MV Minimum Variance Portfolio                                             \n  Estimator:         covEstimator                                           \n  Solver:            solveRquadprog                                         \n  Optimize:          minRisk                                                \n  Constraints:       LongOnly                                               \n                                                                            \n Portfolio Weights:                                                         \n GBP-U USD-U EUR-U JPY-U CHF-U USD-H EUR-H JPY-H CHF-H                      \n     0     0     0     0     0     0     0     0     0                      \n                                                                            \n Covariance Risk Budgets:                                                   \n GBP-U USD-U EUR-U JPY-U CHF-U USD-H EUR-H JPY-H CHF-H                      \n                                                                            \n                                                                            \n Target Return and Risk:                                                    \n [1] 0                                                                      \n                                                                            \n Description:                                                               \n  Mon Oct 31 11:26:35 2016 by user: 43951663                                \n                                                                            \n\n\n\n\nClearly this is not right as I have a solution when I optimise this in\nexcel I get the following when I solve to minimise the portfolio risk:\n\n                                                                                                  \n     Constraints                                                                                  \n GBP 0.6000                                                                                       \n USD 0.2000                                                                                       \n EUR 0.1000                                                                                       \n JPY 0.0500                                                                                       \n CHF 0.0500                                                                                       \n                                                                                                  \n Portfolio   1.0000                                                                               \n                                                                                                  \n                                                                                                  \n Weights                                                                                          \n GBP-U   USD-U   EUR-U   JPY-U   CHF-U   USD-H   EUR-H   JPY-H   CHF-H                            \n 0.6000  0.0000  0.0000  0.0423  0.0000  0.2000  0.1000  0.0077  0.0500                           \n                                                                                                  \n Portfolio Stdev 0.01562                                                                          \n Portfolio Mean  0.00424                                                                          \n                                                                                                  \n\n\n\n\n\nKind regards\n\n\n\nPierre\n\n\n\n************************************************************\nHSBC Bank plc\nRegistered Office: 8 Canada Square, London E14 5HQ\nRegistered in England - Number 14259\nAuthorised by the Prudential Regulation Authority and regulated by the\nFinancial Conduct Authority and the Prudential Regulation Authority\n************************************************************\n\n\n\n-----------------------------------------\nSAVE PAPER - THINK BEFORE YOU PRINT!\n\nThis E-mail is confidential.  \n\nIt may also be legally privileged. If you are not the addressee you may not copy,\nforward, disclose or use any part of it. If you have received this message in error,\nplease delete it and all copies from your system and notify the sender immediately by\nreturn E-mail.\n\nInternet communications cannot be guaranteed to be timely secure, error or virus-free.\nThe sender does not accept liability for any errors or omissions.",
+      "body_snippet": "I have when running an optimisation under constraints to derive a set of\ncurrency hedge ratios using the fPortfolio package.  My portfolio is made\nof 1 domestic asset (GBP) with a fix weight of 60% an",
+      "thread_id": "thread-e5bbf257debb",
+      "thread_depth": 0,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-8d50bad45d78",
+      "message_id": "<BAY173-W90E7B7F990626A453976CCBA10@phx.gbl>",
+      "from_name": "Be Water",
+      "from_email_hash": "4f27ba7aaf936b3a77f10dc36316a7e3f6f804fd069b55dd02a1e8343e798d2b",
+      "date": "2016-11-01T09:57:42Z",
+      "subject": "[R-SIG-Finance] How to add new data to be predicted with fGarch?",
+      "subject_clean": "How to add new data to be predicted with fGarch?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "## R version 3.3.1 (2016-06-21)\n## Platform: x86_64-w64-mingw32/x64 (64-bit)\n## Running under: Windows>= 8 x64 (build 9200)\n\nlibrary(fGarch)\n\n## Data simulation\nset.seed(345)\nar.sim <- arima.sim(model=list(ar=c(.9,-.2)), n=1000) \ntail(ar.sim) \nplot(ar.sim)\n\n## Model fit \nmodel = garchFit( ~ arma(1, 2) + garch(1, 1), Data=ar.sim) \nprint(model)\n\n##QUESTION: How to add new data to be predicted?\nhelp('predict-methods', pac=fGarch) ## I cannot find any example\n\nnewdata <- data.frame(x= -0.3)\nnewdata <- -0.3\npredict(model, newdata = newdata, n.ahead=1)\n\nThanks",
+      "body_snippet": "## R version 3.3.1 (2016-06-21)\n## Platform: x86_64-w64-mingw32/x64 (64-bit)\n## Running under: Windows>= 8 x64 (build 9200)\n\nlibrary(fGarch)\n\n## Data simulation\nset.seed(345)\nar.sim <- arima.sim(model",
+      "thread_id": "thread-8d50bad45d78",
+      "thread_depth": 0,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-c27bf985aa57",
+      "message_id": "<CAM0JZ3noAunegcQfrmd7JUd+6tf=+LDGrGkjj0SL+uA4fjZLOA@mail.gmail.com>",
+      "from_name": "Thomas Fuller",
+      "from_email_hash": "3b021161fd989322bc154aa1ec05003531fe2816e6e657e0af3d1cbc6bbe2eed",
+      "date": "2016-11-01T10:44:53-04:00",
+      "subject": "[R-SIG-Finance] Coherent Datafeed R Package for Thomson Reuters Elektron version 1.0.9 Released Today",
+      "subject_clean": "Coherent Datafeed R Package for Thomson Reuters Elektron version 1.0.9 Released Today",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Folks,\n\nWe have a new version of the Coherent Datafeed R Package for working with\nthe Thomson Reuters Elektron platform available for download here:\n\nhttps://coherentlogic.com/middleware-development/\nsolutions-for-traders-using-thomson-reuters-market-data/\nreleases/version-1-0-9-release-details/\n\nVersion 1.0.9 has many improvements, bug fixes, and includes the following\nnew functions:\n\nQueryMarketMaker   and  GetNextMarketMakerUpdateAsJavaObject\nQueryMarketByPrice and  GetNextMarketByPriceUpdateAsJavaObject\nQueryMarketByOrder and  GetNextMarketByOrderUpdateAsJavaObject\n\nThe release page includes a short video that covers the installation and\nusage of the package, along with example code.\n\nMore information pertaining to the Java API, which is used internally in\nthis package, is also available here.\n\nWith this release I am now available for contract work so if you need help\nwith this software, anything involving Thomson Reuters Elektron and RFA\n(Java), data engineering projects (see below for two examples), or any\nother projects which fit my background, please feel free to contact me\ndirectly.\n\nQuestions and comments are welcomed.\n\nTom\nLinkedIn <https://www.linkedin.com/in/thomasfuller>\n\n*FRED Client*:\n\nhttps://coherentlogic.com/middleware-development/are-\nyou-looking-to-retrieve-economic-data-from-the-federal-reserve-bank-of-st-\nlouis/\n\n*World Bank Client*:\n\nhttps://coherentlogic.com/middleware-development/world-bank-client/\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Folks,\n\nWe have a new version of the Coherent Datafeed R Package for working with\nthe Thomson Reuters Elektron platform available for download here:\n\nhttps://coherentlogic.com/middleware-developmen",
+      "thread_id": "thread-c27bf985aa57",
+      "thread_depth": 0,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-10ce75b194c2",
+      "message_id": "<CAAmySGPGAY2no8OxL_--5=kyKP_HnKqEQ=bqV9=9FR6ZLp77dA@mail.gmail.com>",
+      "from_name": "Michael Weylandt",
+      "from_email_hash": "44e8775a589b9ef81880469e200f3cce307c7180b4289ca1696a578afb772b3a",
+      "date": "2016-11-01T11:05:25-05:00",
+      "subject": "[R-SIG-Finance] How to add new data to be predicted with fGarch?",
+      "subject_clean": "How to add new data to be predicted with fGarch?",
+      "in_reply_to": "<BAY173-W90E7B7F990626A453976CCBA10@phx.gbl>",
+      "references": [
+        "<BAY173-W90E7B7F990626A453976CCBA10@phx.gbl>"
+      ],
+      "body_plain": "I'm not sure what you're trying to do. What should the `newdata`\nargument be used for here? (The shocks/innovations, external\nregressors, etc.?)\n\nOn Tue, Nov 1, 2016 at 4:57 AM, Be Water <bwater at outlook.com> wrote:\n> ## R version 3.3.1 (2016-06-21)\n> ## Platform: x86_64-w64-mingw32/x64 (64-bit)\n> ## Running under: Windows>= 8 x64 (build 9200)\n>\n> library(fGarch)\n>\n> ## Data simulation\n> set.seed(345)\n> ar.sim <- arima.sim(model=list(ar=c(.9,-.2)), n=1000)\n> tail(ar.sim)\n> plot(ar.sim)\n>\n> ## Model fit\n> model = garchFit( ~ arma(1, 2) + garch(1, 1), Data=ar.sim)\n> print(model)\n>\n> ##QUESTION: How to add new data to be predicted?\n> help('predict-methods', pac=fGarch) ## I cannot find any example\n>\n> newdata <- data.frame(x= -0.3)\n> newdata <- -0.3\n> predict(model, newdata = newdata, n.ahead=1)\n>\n> Thanks\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "I'm not sure what you're trying to do. What should the `newdata`\nargument be used for here? (The shocks/innovations, external\nregressors, etc.?)\n\nOn Tue, Nov 1, 2016 at 4:57 AM, Be Water <bwater at ou",
+      "thread_id": "thread-8d50bad45d78",
+      "thread_depth": 1,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-ee6087efea03",
+      "message_id": "<CAAmySGMHhANvVWf9kh8FZu9tuepPU4v=AYHxjM_pLCKrc2uXSg@mail.gmail.com>",
+      "from_name": "Michael Weylandt",
+      "from_email_hash": "44e8775a589b9ef81880469e200f3cce307c7180b4289ca1696a578afb772b3a",
+      "date": "2016-11-01T11:08:54-05:00",
+      "subject": "[R-SIG-Finance] fPortfolio minimum variance optimisation under constraints",
+      "subject_clean": "fPortfolio minimum variance optimisation under constraints",
+      "in_reply_to": "<OF699E0F19.E35FCA48-ON8025805E.0032CD17-8025805E.00332E69@hsbcib.com>",
+      "references": [
+        "<OF699E0F19.E35FCA48-ON8025805E.0032CD17-8025805E.00332E69@hsbcib.com>"
+      ],
+      "body_plain": "Hi Pierre,\n\nI'm willing to take a look, but could you format the data in a way\nthat would make it a bit easier to use?\n\nThe dput() function can produce a representation which is safe for\nemailing and can be read directly back into R.\n\nCheers,\nMichael\n\nOn Tue, Nov 1, 2016 at 4:19 AM,  <pierre.lequeux at hsbc.com> wrote:\n>\n> I have when running an optimisation under constraints to derive a set of\n> currency hedge ratios using the fPortfolio package.  My portfolio is made\n> of 1 domestic asset (GBP) with a fix weight of 60% and 4 other non-domestic\n> assets for which I have for each a currency hedged and currency un-hedged\n> series with a box constraint summing up to the country weight in my\n> benchmark (respectively 20% for US 10% for Euro, 5% for Japan and 5% for\n> Switzerland). What I want to do is to find the portfolio that minimise the\n> variance (and also the one that maximise the risk return ratio). then the\n> proportionality of weights between the hedge and un-hedged asset will be my\n> hedge ratio.  The code below is in respect of the minimum variance\n> portfolio. I have coded a few lines and this seems to work most of the time\n> but in some occasion I am returned with a vector solution where of weights\n> are equal to zero. So I am obviously doing something wrong. It may be\n> something trivial,  possibly the initial settings of the portfolio spec or\n> the constraints,.but I can t seem to find what it is and running out of\n> ideas. I would be really thankful  if someonee could take the time to\n> peruse through the few below lines or point me towarda solution. I have\n> tried the StackOverflow forum but did not get any answer so far.  I have\n> attached  my code  and a sample of the data in the below.\n>\n>                 GBP-U         USD-U         EUR-U        JPY-U         CHF-U         USD-H         EUR-H         JPY-H        CHF-H\n>  2016-05-13  0.0013866228 -0.0004015032  0.0023176509  0.004868271  0.0230163636 -0.0046939993  0.0065432710  0.0146679154  0.022040377\n>  2016-05-20  0.0027094242 -0.0063831791 -0.0126106089 -0.006146676 -0.0158351590  0.0031237903  0.0045931268  0.0173505502  0.008964457\n>  2016-05-27  0.0181190929  0.0140661262  0.0099806390 -0.005023782  0.0206840583  0.0223892121  0.0282165690  0.0048453909  0.033676661\n>  2016-06-03 -0.0102711128  0.0081653966  0.0133194563  0.031814348  0.0092257881  0.0009701383 -0.0161380212 -0.0101505102 -0.016812484\n>  2016-06-10 -0.0144639135  0.0160062120 -0.0152727781  0.008429249  0.0015983898 -0.0021260494 -0.0229890046 -0.0054785155 -0.027628141\n>  2016-06-17 -0.0152295990 -0.0183599416 -0.0266861641 -0.039472434 -0.0286395252 -0.0112888146 -0.0217678087 -0.0589147494 -0.026415992\n>  2016-06-24  0.0200253356  0.0317549413  0.0346147227  0.029164922  0.0401491058 -0.0166789670  0.0006268938 -0.0379679346  0.004386684\n>  2016-07-01  0.0696777854  0.0620232077  0.0754752233  0.065465564  0.0704656764  0.0314514909  0.0433540129  0.0379248977  0.041482495\n>  2016-07-08  0.0016753950  0.0369097752  0.0076117981  0.007834512  0.0070165833  0.0130392554 -0.0084350439 -0.0354380321 -0.006380199\n>  2016-07-15  0.0118593292 -0.0037643046  0.0058939005  0.028278185 -0.0020681743  0.0144418213  0.0257127861  0.0888542585  0.015778875\n>  2016-07-22  0.0092918745  0.0130552307  0.0086318585  0.001398931  0.0062780458  0.0067460116  0.0077586182  0.0070486894  0.004685162\n>  2016-07-29 -0.0004646661 -0.0094042916  0.0124831676  0.025141288  0.0018086154 -0.0002180359  0.0040494413 -0.0046691781 -0.006745367\n>  2016-08-05  0.0101311910  0.0160368778  0.0045395343 -0.014712256  0.0081973627  0.0040861320  0.0006639525 -0.0289135714  0.007984259\n>  2016-08-12  0.0177313054  0.0125451367  0.0377475690  0.050109303  0.0322171465  0.0007342288  0.0192744848  0.0332886266  0.014216897\n>  2016-08-19 -0.0086591802 -0.0121869847 -0.0131592756 -0.018946998 -0.0182591489 -0.0003056645 -0.0156054036 -0.0176744155 -0.020491089\n>  2016-08-26 -0.0032629188 -0.0112907806 -0.0099742141 -0.028672792 -0.0178773544 -0.0066076557  0.0061594585 -0.0078421386  0.005324054\n>  2016-09-02  0.0082322936 -0.0063800658 -0.0012434593  0.010783580  0.0006709931  0.0054516933  0.0145201246  0.0429479722  0.015518353\n>  2016-09-09 -0.0172703615 -0.0222186855 -0.0031692051  0.014054238  0.0031503483 -0.0243009678 -0.0119551411  0.0001827415 -0.004089906\n>  2016-09-16 -0.0105444978  0.0257113060 -0.0072348498 -0.002332981 -0.0002596633  0.0054847746 -0.0203191336 -0.0263452760 -0.015320125\n>  2016-09-23  0.0294827487  0.0150126367  0.0358026791  0.041563858  0.0298489405  0.0121889694  0.0268098637  0.0263689159  0.017033142\n>  2016-09-30 -0.0010620124  0.0010033756 -0.0058345738 -0.025319672 -0.0159143301  0.0014163678 -0.0060494835 -0.0215285310 -0.014212323\n>  2016-10-07  0.0213392520  0.0351900327  0.0426486765  0.047394294  0.0333505051 -0.0072195144  0.0034453853  0.0210516899 -0.002539864\n>  2016-10-14 -0.0050982217  0.0095672058  0.0009866843  0.004577971  0.0035956430 -0.0102205657  0.0020303997 -0.0035136735 -0.002926098\n>  2016-10-21  0.0002873986  0.0004041448 -0.0029951394  0.012861688 -0.0135120432  0.0038727554  0.0087025204  0.0127856995 -0.006358163\n>  2016-10-28 -0.0039917961 -0.0029823347  0.0078312950  0.013806532 -0.0053670019 -0.0070482290 -0.0052953175  0.0188646173 -0.014826428\n>\n>\n>\n>\n>\n>  require(fPortfolio)\n>  spec <- portfolioSpec()\n>  mydata <- as.timeSeries(mydata)\n>\n>  cons <- c(\"eqsumW['GBP-U']=0.6\" ,\"eqsumW[c('USD-U','USD-H')]=0.20\",\"eqsumW[c('EUR-U','EUR-H')]=0.10\",\"eqsumW[c('JPY-U','JPY-H')]=0.05\",\"eqsumW[c\n>  ('CHF-U','CHF-H')]=0.05\")\n>\n>  minvariancePortfolio(list(mu=apply(mydata,2,function(x) mean(x)),sigma=cov(mydata)), spec = spec , constraints = cons)\n>\n>\n>\n>\n>\n>\n> when running the above lines on the data I get the following:\n>\n>  Title:\n>   MV Minimum Variance Portfolio\n>   Estimator:         covEstimator\n>   Solver:            solveRquadprog\n>   Optimize:          minRisk\n>   Constraints:       LongOnly\n>\n>  Portfolio Weights:\n>  GBP-U USD-U EUR-U JPY-U CHF-U USD-H EUR-H JPY-H CHF-H\n>      0     0     0     0     0     0     0     0     0\n>\n>  Covariance Risk Budgets:\n>  GBP-U USD-U EUR-U JPY-U CHF-U USD-H EUR-H JPY-H CHF-H\n>\n>\n>  Target Return and Risk:\n>  [1] 0\n>\n>  Description:\n>   Mon Oct 31 11:26:35 2016 by user: 43951663\n>\n>\n>\n>\n>\n> Clearly this is not right as I have a solution when I optimise this in\n> excel I get the following when I solve to minimise the portfolio risk:\n>\n>\n>      Constraints\n>  GBP 0.6000\n>  USD 0.2000\n>  EUR 0.1000\n>  JPY 0.0500\n>  CHF 0.0500\n>\n>  Portfolio   1.0000\n>\n>\n>  Weights\n>  GBP-U   USD-U   EUR-U   JPY-U   CHF-U   USD-H   EUR-H   JPY-H   CHF-H\n>  0.6000  0.0000  0.0000  0.0423  0.0000  0.2000  0.1000  0.0077  0.0500\n>\n>  Portfolio Stdev 0.01562\n>  Portfolio Mean  0.00424\n>\n>\n>\n>\n>\n>\n> Kind regards\n>\n>\n>\n> Pierre\n>\n>\n>\n> ************************************************************\n> HSBC Bank plc\n> Registered Office: 8 Canada Square, London E14 5HQ\n> Registered in England - Number 14259\n> Authorised by the Prudential Regulation Authority and regulated by the\n> Financial Conduct Authority and the Prudential Regulation Authority\n> ************************************************************\n>\n>\n>\n> -----------------------------------------\n> SAVE PAPER - THINK BEFORE YOU PRINT!\n>\n> This E-mail is confidential.\n>\n> It may also be legally privileged. If you are not the addressee you may not copy,\n> forward, disclose or use any part of it. If you have received this message in error,\n> please delete it and all copies from your system and notify the sender immediately by\n> return E-mail.\n>\n> Internet communications cannot be guaranteed to be timely secure, error or virus-free.\n> The sender does not accept liability for any errors or omissions.\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Hi Pierre,\n\nI'm willing to take a look, but could you format the data in a way\nthat would make it a bit easier to use?\n\nThe dput() function can produce a representation which is safe for\nemailing and ",
+      "thread_id": "thread-e5bbf257debb",
+      "thread_depth": 1,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-b5c8109d1ee7",
+      "message_id": "<BAY173-W313F948E20C26104BAAD9ECBA00@phx.gbl>",
+      "from_name": "Be Water",
+      "from_email_hash": "4f27ba7aaf936b3a77f10dc36316a7e3f6f804fd069b55dd02a1e8343e798d2b",
+      "date": "2016-11-02T08:21:25Z",
+      "subject": "[R-SIG-Finance] How to add new data to be predicted with fGarch?",
+      "subject_clean": "How to add new data to be predicted with fGarch?",
+      "in_reply_to": "<CAAmySGPGAY2no8OxL_--5=kyKP_HnKqEQ=bqV9=9FR6ZLp77dA@mail.gmail.com>",
+      "references": [
+        "<BAY173-W90E7B7F990626A453976CCBA10@phx.gbl>",
+        "<CAAmySGPGAY2no8OxL_--5=kyKP_HnKqEQ=bqV9=9FR6ZLp77dA@mail.gmail.com>"
+      ],
+      "body_plain": "Well, I just want to predict mean and variance for the next period? based on the fitted model parameters.\nCould be I don't understand how GARCH?models work.\nThanks",
+      "body_snippet": "Well, I just want to predict mean and variance for the next period? based on the fitted model parameters.\nCould be I don't understand how GARCH?models work.\nThanks",
+      "thread_id": "thread-8d50bad45d78",
+      "thread_depth": 2,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-220f93c09bae",
+      "message_id": "<CAAmySGOUpjkVN7uP1nMwLFQNt6JYH7YdKCSNe510992WLBy6WQ@mail.gmail.com>",
+      "from_name": "Michael Weylandt",
+      "from_email_hash": "44e8775a589b9ef81880469e200f3cce307c7180b4289ca1696a578afb772b3a",
+      "date": "2016-11-02T10:57:58-05:00",
+      "subject": "[R-SIG-Finance] How to add new data to be predicted with fGarch?",
+      "subject_clean": "How to add new data to be predicted with fGarch?",
+      "in_reply_to": "<BAY173-W313F948E20C26104BAAD9ECBA00@phx.gbl>",
+      "references": [
+        "<BAY173-W90E7B7F990626A453976CCBA10@phx.gbl>",
+        "<CAAmySGPGAY2no8OxL_--5=kyKP_HnKqEQ=bqV9=9FR6ZLp77dA@mail.gmail.com>",
+        "<BAY173-W313F948E20C26104BAAD9ECBA00@phx.gbl>"
+      ],
+      "body_plain": "The fGARCH predict() method will do that with the n.ahead argument; no\nneed to supply newdata. Try running\n\n> example('predict-methods', package=\"fGARCH\")\n\nto see an example (with plots!).\n\nThe standard ARMA and GARCH models don't need external data to make\npredictions: their predictions are made by integrating over the shocks\n(innovations), the distribution of which is specified by the fitted\nmodel.\n\nI think ugarchsim from the rugarch package sometimes needs external\nregressors if you fit an ARMA-X mean model [ARMA with external\nregressors], but that's because they have a new (non-shock) term that\nyou don't want to integrate over.\n\n(More precisely, you probably do want to integrate over the predictive\ndistribution of your external regressors, but you don't want your\nGARCH model doing that. Instead, you want something with a proper\nmodel to give a predictive distribution over your external regressors\nand then do use a conditioning argument to get your predictive\ndistribution over both the regressors and the shocks).\n\nCheers,\nMichael\n\n\n\nOn Wed, Nov 2, 2016 at 3:21 AM, Be Water <bwater at outlook.com> wrote:\n> Well, I just want to predict mean and variance for the next period  based on the fitted model parameters.\n> Could be I don't understand how GARCH models work.\n> Thanks\n>",
+      "body_snippet": "The fGARCH predict() method will do that with the n.ahead argument; no\nneed to supply newdata. Try running\n\n> example('predict-methods', package=\"fGARCH\")\n\nto see an example (with plots!).\n\nThe standa",
+      "thread_id": "thread-8d50bad45d78",
+      "thread_depth": 3,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-37212fe23441",
+      "message_id": "<1408856412.19125.1478242789992@mail.yahoo.com>",
+      "from_name": "FMH",
+      "from_email_hash": "7dc73dc9655c3495c5c2085b66f550420f85772ba952c493f013b4a311119b8c",
+      "date": "2016-11-04T06:59:49Z",
+      "subject": "[R-SIG-Finance] Continuous Wavelet tranform in Biwavelet Package",
+      "subject_clean": "Continuous Wavelet tranform in Biwavelet Package",
+      "in_reply_to": null,
+      "references": [
+        "<1408856412.19125.1478242789992.ref@mail.yahoo.com>"
+      ],
+      "body_plain": "Dear All,\nI have 15 minutes of temperature data for 3 years and would like calculate and plot the CWT using wt command in Biwavelet package. \n\nAppreciate if someone could tell me the way to define it in wt command.\nThank you,\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear All,\nI have 15 minutes of temperature data for 3 years and would like calculate and plot the CWT using wt command in Biwavelet package. \n\nAppreciate if someone could tell me the way to define it ",
+      "thread_id": "thread-37212fe23441",
+      "thread_depth": 0,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-3a0a7cf7c12c",
+      "message_id": "<CAAmySGOtaKhG_MuwM5=bpcqTpDhTB9E42thBKZ_o8n6aiGDYnA@mail.gmail.com>",
+      "from_name": "Michael Weylandt",
+      "from_email_hash": "44e8775a589b9ef81880469e200f3cce307c7180b4289ca1696a578afb772b3a",
+      "date": "2016-11-04T15:53:31-05:00",
+      "subject": "[R-SIG-Finance] Continuous Wavelet tranform in Biwavelet Package",
+      "subject_clean": "Continuous Wavelet tranform in Biwavelet Package",
+      "in_reply_to": "<1408856412.19125.1478242789992@mail.yahoo.com>",
+      "references": [
+        "<1408856412.19125.1478242789992.ref@mail.yahoo.com>",
+        "<1408856412.19125.1478242789992@mail.yahoo.com>"
+      ],
+      "body_plain": "Hi FMH,\n\nPerhaps you could set up a minimal reproducible example [1,2] to help\nus answer your question.\n\nNote that the biwavelet [sic] package has lots of examples that you\ncan access. The most useful ones are probably found by running\n\nexample(wt)\n\nand\n\nexample(biwavelet)\n\nCheers,\nMichael\n\n[1] http://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example\n[2] http://adv-r.had.co.nz/Reproducibility.html\n\nOn Fri, Nov 4, 2016 at 1:59 AM, FMH via R-SIG-Finance\n<r-sig-finance at r-project.org> wrote:\n> Dear All,\n> I have 15 minutes of temperature data for 3 years and would like calculate and plot the CWT using wt command in Biwavelet package.\n>\n> Appreciate if someone could tell me the way to define it in wt command.\n> Thank you,\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Hi FMH,\n\nPerhaps you could set up a minimal reproducible example [1,2] to help\nus answer your question.\n\nNote that the biwavelet [sic] package has lots of examples that you\ncan access. The most useful",
+      "thread_id": "thread-37212fe23441",
+      "thread_depth": 1,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-ff47a8e5c27e",
+      "message_id": "<CAMBYN3e634azKFePok-VkyQbZkM4ex+BrLU+Vq-3RmfqS1dATQ@mail.gmail.com>",
+      "from_name": "Luis Damiano",
+      "from_email_hash": "e649ae9c126e3a4dc614f5236cec9d60db92f6c3bc334b17b249812c21c8d5d6",
+      "date": "2016-11-04T21:51:35-03:00",
+      "subject": "[R-SIG-Finance] Uneven time series",
+      "subject_clean": "Uneven time series",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear all,\n\nI'm dealing with an uneven time series with regressors [0]. If the series\nwas regular, my preferred approach would be some form of space state\nrepresentation such as smoothing, time varying regression or an\nautoregressive process with external regressors.\n\nThe series shows a clear trend and I believe that irregularity is an\nimportant feature. So far, I've found two alternatives: a) continuous time\nmodels and packages like ctsem [1] and cts [2], but they seemed limited in\ntheir application, and b) exponential smoothing for uneven time series [3]\nbut they wouldn't allow for regressors.\n\nBefore I give up, I was wondering if you can suggest a better way to model\nthis series.\n\nThank you a lot!\n\nRegards,\n\n[0] http://puu.sh/s6O9q/ba6aa206f6.png\n\n[1] https://cran.r-project.org/web/packages/ctsem/\n\n[2] https://cran.r-project.org/web/packages/cts/\n\n[3] https://oroboro.com/irregular-ema/\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,\n\nI'm dealing with an uneven time series with regressors [0]. If the series\nwas regular, my preferred approach would be some form of space state\nrepresentation such as smoothing, time varying",
+      "thread_id": "thread-ff47a8e5c27e",
+      "thread_depth": 0,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-684b2c8750c5",
+      "message_id": "<CY4PR14MB136786730DA320A98BCFCD9BB1A50@CY4PR14MB1367.namprd14.prod.outlook.com>",
+      "from_name": "Michael Chen",
+      "from_email_hash": "1c2c255e59bf0c174c7dded04d366810c8580a0f22f821c371683eef170d13d3",
+      "date": "2016-11-05T15:51:51Z",
+      "subject": "[R-SIG-Finance]  blotter updatePortf",
+      "subject_clean": "blotter updatePortf",
+      "in_reply_to": "<CAMBYN3e634azKFePok-VkyQbZkM4ex+BrLU+Vq-3RmfqS1dATQ@mail.gmail.com>",
+      "references": [
+        "<CAMBYN3e634azKFePok-VkyQbZkM4ex+BrLU+Vq-3RmfqS1dATQ@mail.gmail.com>"
+      ],
+      "body_plain": "I have found in running my own customized strategy using blotter and updatePortf that whether I call updatePortf after completely applying my strategy/transactions or call updatePortf at regular intervals like weekly or monthly after each period's transactions, the performance statistics are the same.  So, is there a reason that I should updatePortf regularly during a run or just wait till the end?  I am puzzled.  \n\nThanks,\n\nMichael",
+      "body_snippet": "I have found in running my own customized strategy using blotter and updatePortf that whether I call updatePortf after completely applying my strategy/transactions or call updatePortf at regular inter",
+      "thread_id": "thread-ff47a8e5c27e",
+      "thread_depth": 1,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-eb11659f3c04",
+      "message_id": "<CA+oJuEGiS9tiNajbLgqvwpk_kxkAQYBUiXFyJRJ-2fkS5idNqA@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "82540aa84df90b083b58f5752a77274af680540119bfecc0c0436c59ddd13e5c",
+      "date": "2016-11-05T12:27:21-04:00",
+      "subject": "[R-SIG-Finance] blotter updatePortf",
+      "subject_clean": "blotter updatePortf",
+      "in_reply_to": "<CY4PR14MB136786730DA320A98BCFCD9BB1A50@CY4PR14MB1367.namprd14.prod.outlook.com>",
+      "references": [
+        "<CAMBYN3e634azKFePok-VkyQbZkM4ex+BrLU+Vq-3RmfqS1dATQ@mail.gmail.com>",
+        "<CY4PR14MB136786730DA320A98BCFCD9BB1A50@CY4PR14MB1367.namprd14.prod.outlook.com>"
+      ],
+      "body_plain": "Michael,\n\nUnless you want to use a new end equity over the course of your strategy\n(EG I started off with 100 dollars, I made 50 more dollars, I want to go\nforward with 150 now), there's no reason to do so that I can think of.\n\n-Ilya\n\nOn Sat, Nov 5, 2016 at 11:51 AM, Michael Chen <mwc4120 at hotmail.com> wrote:\n\n> I have found in running my own customized strategy using blotter and\n> updatePortf that whether I call updatePortf after completely applying my\n> strategy/transactions or call updatePortf at regular intervals like weekly\n> or monthly after each period's transactions, the performance statistics are\n> the same.  So, is there a reason that I should updatePortf regularly during\n> a run or just wait till the end?  I am puzzled.\n>\n> Thanks,\n>\n> Michael\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Michael,\n\nUnless you want to use a new end equity over the course of your strategy\n(EG I started off with 100 dollars, I made 50 more dollars, I want to go\nforward with 150 now), there's no reason to ",
+      "thread_id": "thread-ff47a8e5c27e",
+      "thread_depth": 2,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-bb2505d1dfb9",
+      "message_id": "<CAPPM_gQy1fOGFTE6i7D-7u07NJ1Cg9t2xX+D70P_TMuL3WWaKw@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2016-11-05T18:46:56-05:00",
+      "subject": "[R-SIG-Finance] blotter updatePortf",
+      "subject_clean": "blotter updatePortf",
+      "in_reply_to": "<CY4PR14MB136786730DA320A98BCFCD9BB1A50@CY4PR14MB1367.namprd14.prod.outlook.com>",
+      "references": [
+        "<CAMBYN3e634azKFePok-VkyQbZkM4ex+BrLU+Vq-3RmfqS1dATQ@mail.gmail.com>",
+        "<CY4PR14MB136786730DA320A98BCFCD9BB1A50@CY4PR14MB1367.namprd14.prod.outlook.com>"
+      ],
+      "body_plain": "On Sat, Nov 5, 2016 at 10:51 AM, Michael Chen <mwc4120 at hotmail.com> wrote:\n> I have found in running my own customized strategy using blotter and updatePortf that whether I call updatePortf after completely applying my strategy/transactions or call updatePortf at regular intervals like weekly or monthly after each period's transactions, the performance statistics are the same.  So, is there a reason that I should updatePortf regularly during a run or just wait till the end?  I am puzzled.\n>\nCalling updatePortf marks your portfolio to market.  I assume (since\nyou didn't specify in your message) that your transaction sizing is\ninvariant to portfolio equity.  In that case, you should not expect\ncalling updatePortf to change strategy performance.\n\nIn short, if your strategy doesn't depend on your portfolio market\nvalue, there's no need to call updatePortf until the end of the\nsimulation.\n\n> Thanks,\n>\n> Michael\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2016 | www.rinfinance.com",
+      "body_snippet": "On Sat, Nov 5, 2016 at 10:51 AM, Michael Chen <mwc4120 at hotmail.com> wrote:\n> I have found in running my own customized strategy using blotter and updatePortf that whether I call updatePortf after c",
+      "thread_id": "thread-ff47a8e5c27e",
+      "thread_depth": 2,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-1e7d52150d9b",
+      "message_id": "<CAB-xM08svszwe-vS7VfbYzpe8nV-QrjyuLZ-96mzYdj21iBu4w@mail.gmail.com>",
+      "from_name": "Cameron McLean",
+      "from_email_hash": "d100ece9b88f15f137e64f158b23a391f46375cabeeb68e61b60c3548940b436",
+      "date": "2016-11-06T20:10:19+02:00",
+      "subject": "[R-SIG-Finance] blotter updatePortf",
+      "subject_clean": "blotter updatePortf",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Josh, Ilya\n\nIs there example code you can share or an existing demo in quantstrat\nthat shows how to update the portfolio equity curve and size future\norders based on the current amount?\n\nA simple example would be something similar to the faber demo where he\ninvests 20% of equity in each of the 5 asset classes (currently the\nfaber demo buys and sells lots of 500 shares) or a more complex\nexample could be using a indicator such as ATR to size trades based on\nrisk.\n\nthanks\nCam",
+      "body_snippet": "Hi Josh, Ilya\n\nIs there example code you can share or an existing demo in quantstrat\nthat shows how to update the portfolio equity curve and size future\norders based on the current amount?\n\nA simple e",
+      "thread_id": "thread-1e7d52150d9b",
+      "thread_depth": 0,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-e59ec21c9043",
+      "message_id": "<581F8147.9080402@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2016-11-06T13:15:19-06:00",
+      "subject": "[R-SIG-Finance] blotter updatePortf",
+      "subject_clean": "blotter updatePortf",
+      "in_reply_to": "<CAB-xM08svszwe-vS7VfbYzpe8nV-QrjyuLZ-96mzYdj21iBu4w@mail.gmail.com>",
+      "references": [
+        "<CAB-xM08svszwe-vS7VfbYzpe8nV-QrjyuLZ-96mzYdj21iBu4w@mail.gmail.com>"
+      ],
+      "body_plain": "On 11/06/2016 12:10 PM, Cameron McLean wrote:\n> Is there example code you can share or an existing demo in quantstrat\n> that shows how to update the portfolio equity curve and size future\n> orders based on the current amount?\n\nLook at any of the rebalancing demos.  There are rebalancing versions of \nthe Faber and macd demos, at least.\n\nThese rebalance (adjust max trade size) periodically based on current \nportfolio equity.\n\n> A simple example would be something similar to the faber demo where he\n> invests 20% of equity in each of the 5 asset classes (currently the\n> faber demo buys and sells lots of 500 shares) or a more complex\n> example could be using a indicator such as ATR to size trades based on\n> risk.\n\nSizing based on risk would be done via a custom order sizing function \nthat used the indicator value to adjust trade size.  I believe Ilya has \nexamples of this on his blog.\n\nRegards,\n\nBrian\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
+      "body_snippet": "On 11/06/2016 12:10 PM, Cameron McLean wrote:\n> Is there example code you can share or an existing demo in quantstrat\n> that shows how to update the portfolio equity curve and size future\n> orders bas",
+      "thread_id": "thread-1e7d52150d9b",
+      "thread_depth": 1,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-79a6c079069d",
+      "message_id": "<293135334.237550.1478580677660@mail.yahoo.com>",
+      "from_name": "Wei-han Liu",
+      "from_email_hash": "eb5308aa0eacd89488e977ff486bc0c8277a639bc238a172cc94ec4ea10113f2",
+      "date": "2016-11-08T04:51:17Z",
+      "subject": "[R-SIG-Finance] Function ugarchroll in Package rugarch",
+      "subject_clean": "Function ugarchroll in Package rugarch",
+      "in_reply_to": null,
+      "references": [
+        "<293135334.237550.1478580677660.ref@mail.yahoo.com>"
+      ],
+      "body_plain": "Hi R users:\n\n?I am trying and learning the Package ?rugarch.? Function?ugarchroll helps?create the rolling density forecast from ARMA-GARCH models with option for re?tting\n\nevery n periods with parallel functionality. A nice example of application is posted on this webpage:?A short introduction to the rugarch package\n\n?Could some people show how to extract all the residuals in every refitting after fitting ugarchroll function? I do not find a specific command for that purpose in the documentation.\n\n\n\n\n\nCHEERS!\n\n\nWeihan\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi R users:\n\n?I am trying and learning the Package ?rugarch.? Function?ugarchroll helps?create the rolling density forecast from ARMA-GARCH models with option for re?tting\n\nevery n periods with parall",
+      "thread_id": "thread-79a6c079069d",
+      "thread_depth": 0,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-62abc1cb4e9d",
+      "message_id": "<4090ABE9-1154-478B-B570-76C74018915B@verizon.net>",
+      "from_name": "Daniel Mack",
+      "from_email_hash": "4651efd9039f1cd71673bd43d20b7d080955db90a235ed72e1500a4dc4522d7d",
+      "date": "2016-11-08T07:27:54-05:00",
+      "subject": "[R-SIG-Finance] Error Check on Yahoo Data",
+      "subject_clean": "Error Check on Yahoo Data",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "All,  I did not get an update to yesterday end of day OHLC data (Nov ).  I am using quant mod with a current version of R and have been running it every day for almost 2 years.  I got data in my last call last night through Nov 4, but Nov 7th did not update.  Did anyone else experience this?   I have also observed the yahoo update times are getting erratic when the updates are published.  I also check with my day coming from google as well and did not update the Nov 7 data\n\nFromDate = \"2002-05-24\"\nToDate = \"2016-11-07\" #Set one day ahead\nDayBeingPred = \"2016-11-08\"\n\n\nuserInput=c(\"EMR\",\"ESV\",\"ETR\",\"EQT\",\"EFX\",\"EQR\",\"ESS\",\"EL\",\"EXC\",\n            \"FFIV\",\"FAST\",\"FDX\",\"FIS\",\"FITB\",\"FE\",\"FISV\",\"FLIR\",\"FLS\",\"FLR\",\"FMC\",\"FTI\",\"F\",?FOSL?)\n\ngetSymbols(Symbols=userInput, src=\"yahoo\", from = FromDate, to = ToDate, auto.assign=TRUE, return.class=\"data.frame\")  \n\n\nThanks ,   Dab",
+      "body_snippet": "All,  I did not get an update to yesterday end of day OHLC data (Nov ).  I am using quant mod with a current version of R and have been running it every day for almost 2 years.  I got data in my last ",
+      "thread_id": "thread-62abc1cb4e9d",
+      "thread_depth": 0,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-9101dc868b3e",
+      "message_id": "<062B605D-957A-4E13-B695-2B6CC50B25A7@gmail.com>",
+      "from_name": "Michael Weylandt",
+      "from_email_hash": "44e8775a589b9ef81880469e200f3cce307c7180b4289ca1696a578afb772b3a",
+      "date": "2016-11-08T22:42:58-06:00",
+      "subject": "[R-SIG-Finance] Continuous Wavelet tranform in Biwavelet Package",
+      "subject_clean": "Continuous Wavelet tranform in Biwavelet Package",
+      "in_reply_to": "<1624283767.168774.1478666266485@mail.yahoo.com>",
+      "references": [
+        "<1408856412.19125.1478242789992.ref@mail.yahoo.com>",
+        "<1408856412.19125.1478242789992@mail.yahoo.com>",
+        "<CAAmySGOtaKhG_MuwM5=bpcqTpDhTB9E42thBKZ_o8n6aiGDYnA@mail.gmail.com>",
+        "<1624283767.168774.1478666266485@mail.yahoo.com>"
+      ],
+      "body_plain": "I'm watching election results right now so can't answer. \n\nKeeping the list cc'd in case someone else can.  \n\n> On Nov 8, 2016, at 10:37 PM, FMH <kagba2006 at yahoo.com> wrote:\n> \n> Dear Michael,\n> \n> Thank you for the comment. \n> \n> In this study, I want to capture the diurnal pattern (at period of 1 day) and I have 96 measurements for each day (15-minutes measurement).\n> \n> How to define the correct code based on the above data?\n> \n> The data is as attached and the current codes are as follows:\n> \n> data <- read.csv(\"C:\\\\data.csv\")\n> attach(data)\n> \n> library(biwavelet)\n> dat <- cbind(1:length(data$Temp),data$Temp)\n> wt.dat <- wt(dat)\n> \n> par(mfrow=c(2,1))\n> plot.ts(dat[,2])\n> plot(wt.dat, plot.cb=TRUE, plot.phase=FALSE)\n> \n> Thank you very much for your guideline.\n> \n> Fir\n> \n> \n> \n> On Saturday, November 5, 2016 4:53 AM, Michael Weylandt <michael.weylandt at gmail.com> wrote:\n> \n> \n> Hi FMH,\n> \n> Perhaps you could set up a minimal reproducible example [1,2] to help\n> us answer your question.\n> \n> Note that the biwavelet [sic] package has lots of examples that you\n> can access. The most useful ones are probably found by running\n> \n> example(wt)\n> \n> and\n> \n> example(biwavelet)\n> \n> Cheers,\n> Michael\n> \n> [1] http://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example\n> [2] http://adv-r.had.co.nz/Reproducibility.html\n> \n> On Fri, Nov 4, 2016 at 1:59 AM, FMH via R-SIG-Finance\n> <r-sig-finance at r-project.org> wrote:\n> > Dear All,\n> > I have 15 minutes of temperature data for 3 years and would like calculate and plot the CWT using wt command in Biwavelet package.\n> >\n> > Appreciate if someone could tell me the way to define it in wt command.\n> > Thank you,\n> \n> >\n> >        [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions should go.\n> \n> \n> \n> <data.csv>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I'm watching election results right now so can't answer. \n\nKeeping the list cc'd in case someone else can.  \n\n> On Nov 8, 2016, at 10:37 PM, FMH <kagba2006 at yahoo.com> wrote:\n> \n> Dear Michael,\n> \n>",
+      "thread_id": "thread-9101dc868b3e",
+      "thread_depth": 0,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-f80be67ce76a",
+      "message_id": "<CY4PR14MB1367407CAF76BF0D343E1661B1B90@CY4PR14MB1367.namprd14.prod.outlook.com>",
+      "from_name": "Michael Chen",
+      "from_email_hash": "1c2c255e59bf0c174c7dded04d366810c8580a0f22f821c371683eef170d13d3",
+      "date": "2016-11-09T06:41:08Z",
+      "subject": "[R-SIG-Finance] blotter updatePortf",
+      "subject_clean": "blotter updatePortf",
+      "in_reply_to": "<581F8147.9080402@braverock.com>",
+      "references": [
+        "<CAB-xM08svszwe-vS7VfbYzpe8nV-QrjyuLZ-96mzYdj21iBu4w@mail.gmail.com>",
+        "<581F8147.9080402@braverock.com>"
+      ],
+      "body_plain": "Reading these answers reminded me to inquire the same about Quantstrat.  I looked into the code for applyStrategy, I don't see any explicit calls to updatePort.  Is this because in my runs of quanstrat, I didn't use \"real time\" re-balancing? So, no update was necessary?  Usually, l  just run updatePortf (strategy) which updates every symbol and calculates PnL for each period prices available after I ran applyStrategy in quantstrat.   Please let me know if I am missing something.\n\nthanks as always,\n\n\n\n________________________________\nFrom: R-SIG-Finance <r-sig-finance-bounces at r-project.org> on behalf of Brian G. Peterson <brian at braverock.com>\nSent: Sunday, November 6, 2016 11:15 AM\nTo: r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] blotter updatePortf\n\nOn 11/06/2016 12:10 PM, Cameron McLean wrote:\n> Is there example code you can share or an existing demo in quantstrat\n> that shows how to update the portfolio equity curve and size future\n> orders based on the current amount?\n\nLook at any of the rebalancing demos.  There are rebalancing versions of\nthe Faber and macd demos, at least.\n\nThese rebalance (adjust max trade size) periodically based on current\nportfolio equity.\n\n> A simple example would be something similar to the faber demo where he\n> invests 20% of equity in each of the 5 asset classes (currently the\n> faber demo buys and sells lots of 500 shares) or a more complex\n> example could be using a indicator such as ATR to size trades based on\n> risk.\n\nSizing based on risk would be done via a custom order sizing function\nthat used the indicator value to adjust trade size.  I believe Ilya has\nexamples of this on his blog.\n\nRegards,\n\nBrian\n\n--\nBrian G. Peterson\nhttp://braverock.com/brian/\nBrian G. Peterson<http://braverock.com/brian/>\nbraverock.com\nBRIAN G. PETERSON 773-459-4973. brian at braverock.com. download resume as PDF SUMMARY. Senior quantitative trader, financial analyst, technical architect, and project ...\n\n\n\nPh: 773-459-4973\nIM: bgpbraverock\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Reading these answers reminded me to inquire the same about Quantstrat.  I looked into the code for applyStrategy, I don't see any explicit calls to updatePort.  Is this because in my runs of quanstra",
+      "thread_id": "thread-1e7d52150d9b",
+      "thread_depth": 2,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-794c398c1856",
+      "message_id": "<582304E3.9030400@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2016-11-09T05:13:39-06:00",
+      "subject": "[R-SIG-Finance] blotter updatePortf",
+      "subject_clean": "blotter updatePortf",
+      "in_reply_to": "<CY4PR14MB1367407CAF76BF0D343E1661B1B90@CY4PR14MB1367.namprd14.prod.outlook.com>",
+      "references": [
+        "<CAB-xM08svszwe-vS7VfbYzpe8nV-QrjyuLZ-96mzYdj21iBu4w@mail.gmail.com>",
+        "<581F8147.9080402@braverock.com>",
+        "<CY4PR14MB1367407CAF76BF0D343E1661B1B90@CY4PR14MB1367.namprd14.prod.outlook.com>"
+      ],
+      "body_plain": "On 11/09/2016 12:41 AM, Michael Chen wrote:\n> Reading these answers reminded me to inquire the same about\n> Quantstrat.  I looked into the code for applyStrategy, I don't see\n> any explicit calls to updatePort.  Is this because in my runs of\n> quanstrat, I didn't use \"real time\" re-balancing? So, no update was\n> necessary?  Usually, l  just run updatePortf (strategy) which\n> updates every symbol and calculates PnL for each period prices\n> available after I ran applyStrategy in quantstrat.   Please let me\n> know if I am missing something.\n\nupdatePortf will be called automatically in quantstrat for rebalancing,\nfor paramsets, and for walk.forward. It will only be called by the\ndefault applyStrategy call if wrapup=TRUE and you're using the\n(experimental, incomplete?) wrapup code.\n\nRegards,\n\nBrian\n\n> on Sunday, November 6, 2016 11:15 AM, Brian G. Peterson wrote:\n> On 11/06/2016 12:10 PM, Cameron McLean wrote:\n>> Is there example code you can share or an existing demo in\n>> quantstrat that shows how to update the portfolio equity curve and\n>> size future orders based on the current amount?\n>\n> Look at any of the rebalancing demos.  There are rebalancing\n> versions of the Faber and macd demos, at least.\n>\n> These rebalance (adjust max trade size) periodically based on current\n> portfolio equity.\n>\n>> A simple example would be something similar to the faber demo\n>> where he invests 20% of equity in each of the 5 asset classes\n>> (currently the faber demo buys and sells lots of 500 shares) or a\n>> more complex example could be using a indicator such as ATR to\n>> size trades based on risk.\n>\n> Sizing based on risk would be done via a custom order sizing function\n> that used the indicator value to adjust trade size.  I believe Ilya\n> has examples of this on his blog.\n>\n> Regards,\n>\n> Brian",
+      "body_snippet": "On 11/09/2016 12:41 AM, Michael Chen wrote:\n> Reading these answers reminded me to inquire the same about\n> Quantstrat.  I looked into the code for applyStrategy, I don't see\n> any explicit calls to u",
+      "thread_id": "thread-1e7d52150d9b",
+      "thread_depth": 3,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-015afb4a42c8",
+      "message_id": "<0765308CD028654885F30322557308D856A861D4@NYCSM0208.rth.ad.rothschild.com>",
+      "from_name": "Bos, Roger",
+      "from_email_hash": "9e4fe8046bd5ee629c8ff9a7876bef5eb6b0362323b01f92f5fa0e59fc3f9fdf",
+      "date": "2016-11-09T17:48:57Z",
+      "subject": "[R-SIG-Finance] Portfolio Attributino example with one common benchmark",
+      "subject_clean": "Portfolio Attributino example with one common benchmark",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "The help shows an example with one benchmark for each asset:\n\n    library(PortfolioAttribution)\n    data(attrib)\n    Attribution(Rp = attrib.returns[, 1:10],\n      wp = attrib.weights[1, ],\n      Rb = attrib.returns[, 11:20],\n      wb = attrib.weights[2, ],\n      method = \"top.down\",\n      linking = \"carino\")\n\nI tried to create modify the example to use one benchmark, as the following error message hints is possible:\n\nError in Attribution(Rp = attrib.returns[, 1:10], wp = attrib.weights[1,  :\n  Please use benchmark xts that has columns with benchmarks for each\n            asset or one common benchmark for all assets\n\nBut this is not working, giving the following error:\n\n   Attribution(Rp = attrib.returns[, 1:10],\n      wp = attrib.weights[1, ],\n      Rb = attrib.returns[, 11],\n      wb = 1,\n      method = \"top.down\",\n      linking = \"carino\")\n\nError in checkData(R, method = \"xts\") :\n  The data cannot be converted into a time series.  If you are trying to pass in names from a data object with one column, you should use the form 'data[rows, columns, drop = FALSE]'.  Rownames should have standard date formats, such as '1985-03-15'.\n\nAnd for completeness, drop=FALSE  does not fix the error:\n\n    Attribution(Rp = attrib.returns[, 1:10],\n      wp = attrib.weights[1, ],\n      Rb = attrib.returns[, 11, drop=FALSE],\n      wb = 1,\n      method = \"top.down\",\n      linking = \"carino\")\n\nCould anyone please show me how to do this?\n\nThanks, Roger\n\n\n\n\nThis message and any attachments are for the intended recipient?s use only. This message may contain confidential, proprietary or legally privileged information. No right to confidential or privileged treatment of this message is waived or lost by an error in transmission.\nIf you have received this message in error, please immediately notify the sender by e-mail, delete the message, any attachments and all copies from your system and destroy any hard copies. You must not, directly or indirectly, use, disclose, distribute, print or copy any part of this message or any attachments if you are not the intended recipient.",
+      "body_snippet": "The help shows an example with one benchmark for each asset:\n\n    library(PortfolioAttribution)\n    data(attrib)\n    Attribution(Rp = attrib.returns[, 1:10],\n      wp = attrib.weights[1, ],\n      Rb =",
+      "thread_id": "thread-015afb4a42c8",
+      "thread_depth": 0,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-4284425e12c3",
+      "message_id": "<1158910971.1408058.1478796829705@mail.yahoo.com>",
+      "from_name": "fceci",
+      "from_email_hash": "1ed946e12f9d02f9d052e4688452d1bf333ed4e561dbb462f2adaafbbce450d5",
+      "date": "2016-11-10T16:53:49Z",
+      "subject": "[R-SIG-Finance] Portfolio Attributino example with one common benchmark",
+      "subject_clean": "Portfolio Attributino example with one common benchmark",
+      "in_reply_to": null,
+      "references": [
+        "<1158910971.1408058.1478796829705.ref@mail.yahoo.com>"
+      ],
+      "body_plain": "This is supposed to be appended to Roger Bos' post with the same title, but I am not sure it will not result in a new post. If it does, I am sorry....\nRoger, concerning your question:\n?I think that if you do\n...\nRb = attrib.returns[, 11:20],\nwb = c(1,rep(0,9))\n...\n\nyou actually have a single benchmark for all assets. Unless I am wrong, the program uses only the 11th column of attrib.returns and does not care about the others that are weighted at zero.\n\nCaveat emptor: I just started looking into the package so I may be wrong.\nRegards, Frank\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "This is supposed to be appended to Roger Bos' post with the same title, but I am not sure it will not result in a new post. If it does, I am sorry....\nRoger, concerning your question:\n?I think that if",
+      "thread_id": "thread-4284425e12c3",
+      "thread_depth": 0,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-c9c5b6af04e5",
+      "message_id": "<CY4PR14MB13672C4B8794C3E4C3AF3CA1B1BB0@CY4PR14MB1367.namprd14.prod.outlook.com>",
+      "from_name": "Michael Chen",
+      "from_email_hash": "1c2c255e59bf0c174c7dded04d366810c8580a0f22f821c371683eef170d13d3",
+      "date": "2016-11-11T10:04:05Z",
+      "subject": "[R-SIG-Finance] blotter updatePortf",
+      "subject_clean": "blotter updatePortf",
+      "in_reply_to": "<582304E3.9030400@braverock.com>",
+      "references": [
+        "<CAB-xM08svszwe-vS7VfbYzpe8nV-QrjyuLZ-96mzYdj21iBu4w@mail.gmail.com>",
+        "<581F8147.9080402@braverock.com>",
+        "<CY4PR14MB1367407CAF76BF0D343E1661B1B90@CY4PR14MB1367.namprd14.prod.outlook.com>",
+        "<582304E3.9030400@braverock.com>"
+      ],
+      "body_plain": "Hi,\n\nSo, in running my custom strategy using blotter, I ran into this problem.  I'll describle the problem first before I give the simplified code to save some trouble and time for all.    I  ran  updatePortf(strategy, symbols, Dates=tradeDate), updpateAcct, and updateEndEq after each weekly transactions (addTxn).    Data is also in weekly format.  I also ran my program entirely first, then ran updatePortf(Strategy) at end.     The codes is otherwise the same.  The two runs have differene Equity curves and  performance analystics results.    Since in both runs, the trades(transactions) are the same, shouldn't the equity curve and performance results the same?    Thanks for any general suggestions and advice that I can try to fix this first.   If not, I will provide data and simplified code.\n\nthank you all again,\n\nMichael\n________________________________\nFrom: R-SIG-Finance <r-sig-finance-bounces at r-project.org> on behalf of Brian G. Peterson <brian at braverock.com>\nSent: Wednesday, November 9, 2016 3:13 AM\nTo: r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] blotter updatePortf\n\nOn 11/09/2016 12:41 AM, Michael Chen wrote:\n> Reading these answers reminded me to inquire the same about\n> Quantstrat.  I looked into the code for applyStrategy, I don't see\n> any explicit calls to updatePort.  Is this because in my runs of\n> quanstrat, I didn't use \"real time\" re-balancing? So, no update was\n> necessary?  Usually, l  just run updatePortf (strategy) which\n> updates every symbol and calculates PnL for each period prices\n> available after I ran applyStrategy in quantstrat.   Please let me\n> know if I am missing something.\n\nupdatePortf will be called automatically in quantstrat for rebalancing,\nfor paramsets, and for walk.forward. It will only be called by the\ndefault applyStrategy call if wrapup=TRUE and you're using the\n(experimental, incomplete?) wrapup code.\n\nRegards,\n\nBrian\n\n> on Sunday, November 6, 2016 11:15 AM, Brian G. Peterson wrote:\n> On 11/06/2016 12:10 PM, Cameron McLean wrote:\n>> Is there example code you can share or an existing demo in\n>> quantstrat that shows how to update the portfolio equity curve and\n>> size future orders based on the current amount?\n>\n> Look at any of the rebalancing demos.  There are rebalancing\n> versions of the Faber and macd demos, at least.\n>\n> These rebalance (adjust max trade size) periodically based on current\n> portfolio equity.\n>\n>> A simple example would be something similar to the faber demo\n>> where he invests 20% of equity in each of the 5 asset classes\n>> (currently the faber demo buys and sells lots of 500 shares) or a\n>> more complex example could be using a indicator such as ATR to\n>> size trades based on risk.\n>\n> Sizing based on risk would be done via a custom order sizing function\n> that used the indicator value to adjust trade size.  I believe Ilya\n> has examples of this on his blog.\n>\n> Regards,\n>\n> Brian\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nSo, in running my custom strategy using blotter, I ran into this problem.  I'll describle the problem first before I give the simplified code to save some trouble and time for all.    I  ran  upd",
+      "thread_id": "thread-1e7d52150d9b",
+      "thread_depth": 4,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-fd7b85f5a58b",
+      "message_id": "<5825A3E1.2020909@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2016-11-11T04:56:33-06:00",
+      "subject": "[R-SIG-Finance] blotter updatePortf",
+      "subject_clean": "blotter updatePortf",
+      "in_reply_to": "<CY4PR14MB13672C4B8794C3E4C3AF3CA1B1BB0@CY4PR14MB1367.namprd14.prod.outlook.com>",
+      "references": [
+        "<CAB-xM08svszwe-vS7VfbYzpe8nV-QrjyuLZ-96mzYdj21iBu4w@mail.gmail.com>",
+        "<581F8147.9080402@braverock.com>",
+        "<CY4PR14MB1367407CAF76BF0D343E1661B1B90@CY4PR14MB1367.namprd14.prod.outlook.com>",
+        "<582304E3.9030400@braverock.com>",
+        "<CY4PR14MB13672C4B8794C3E4C3AF3CA1B1BB0@CY4PR14MB1367.namprd14.prod.outlook.com>"
+      ],
+      "body_plain": "Without a minimal reproducible example, I'm just guessing.\n\nI would hope that what you really mean is that you are using daily data, \nsince daily data is widely available. Even if you plan to trade only \nonce a week (Monday, Friday, Wednesday, whatever) I would certainly want \nmore data points to check risk and other metrics against. In any event, \nwithout more information, I would assume a subsetting problem.\n\nThe first thing I would check is that in your periodic runs of \nupdatePortf, you should not be using a date range. Differences are most \nlikely due to incorrect subsetting with your 'weekly' data.  You say \nbelow that you are calling something like:\n\nupdatePortf(strategy, symbols, Dates=tradeDate)\n\njust call\n\nupdatePortf(strategy, symbols)\n\ninstead.\n\nIf my guess is correct, forcing the  subset is not providing the \n'starting' values to calculate the difference on your 'tradeDate' period \nfrom.\n\nRegards,\n\nBrian\n\nOn 11/11/2016 04:04 AM, Michael Chen wrote:\n>\n> Hi,\n>\n> So, in running my custom strategy using blotter, I ran into this\n> problem.  I'll describle the problem first before I give the\n> simplified code to save some trouble and time for all.    I  ran\n> updatePortf(strategy, symbols, Dates=tradeDate), updpateAcct, and\n> updateEndEq after each weekly transactions (addTxn).    Data is also\n> in weekly format.  I also ran my program entirely first, then ran\n> updatePortf(Strategy) at end.     The codes is otherwise the same.\n> The two runs have differene Equity curves and  performance analystics\n> results.    Since in both runs, the trades(transactions) are the\n> same, shouldn't the equity curve and performance results the same?\n> Thanks for any general suggestions and advice that I can try to fix\n> this first.   If not, I will provide data and simplified code.\n>\n> thank you all again,\n>\n> Michael ________________________________ From: R-SIG-Finance\n> <r-sig-finance-bounces at r-project.org> on behalf of Brian G. Peterson\n> <brian at braverock.com> Sent: Wednesday, November 9, 2016 3:13 AM To:\n> r-sig-finance at r-project.org Subject: Re: [R-SIG-Finance] blotter\n> updatePortf\n>\n> On 11/09/2016 12:41 AM, Michael Chen wrote:\n>> Reading these answers reminded me to inquire the same about\n>> Quantstrat.  I looked into the code for applyStrategy, I don't see\n>> any explicit calls to updatePort.  Is this because in my runs of\n>> quanstrat, I didn't use \"real time\" re-balancing? So, no update\n>> was necessary?  Usually, l  just run updatePortf (strategy) which\n>> updates every symbol and calculates PnL for each period prices\n>> available after I ran applyStrategy in quantstrat.   Please let me\n>> know if I am missing something.\n>\n> updatePortf will be called automatically in quantstrat for\n> rebalancing, for paramsets, and for walk.forward. It will only be\n> called by the default applyStrategy call if wrapup=TRUE and you're\n> using the (experimental, incomplete?) wrapup code.\n>\n> Regards,\n>\n> Brian\n>\n>> on Sunday, November 6, 2016 11:15 AM, Brian G. Peterson wrote: On\n>> 11/06/2016 12:10 PM, Cameron McLean wrote:\n>>> Is there example code you can share or an existing demo in\n>>> quantstrat that shows how to update the portfolio equity curve\n>>> and size future orders based on the current amount?\n>>\n>> Look at any of the rebalancing demos.  There are rebalancing\n>> versions of the Faber and macd demos, at least.\n>>\n>> These rebalance (adjust max trade size) periodically based on\n>> current portfolio equity.\n>>\n>>> A simple example would be something similar to the faber demo\n>>> where he invests 20% of equity in each of the 5 asset classes\n>>> (currently the faber demo buys and sells lots of 500 shares) or\n>>> a more complex example could be using a indicator such as ATR to\n>>> size trades based on risk.\n>>\n>> Sizing based on risk would be done via a custom order sizing\n>> function that used the indicator value to adjust trade size.  I\n>> believe Ilya has examples of this on his blog.\n>>\n>> Regards,\n>>\n>> Brian\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance --\n> Subscriber-posting only. If you want to post, subscribe first. --\n> Also note that this is not the r-help list where general R questions\n> should go.\n>\n> [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance --\n> Subscriber-posting only. If you want to post, subscribe first. --\n> Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
+      "body_snippet": "Without a minimal reproducible example, I'm just guessing.\n\nI would hope that what you really mean is that you are using daily data, \nsince daily data is widely available. Even if you plan to trade on",
+      "thread_id": "thread-1e7d52150d9b",
+      "thread_depth": 5,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-ded5fbf179b9",
+      "message_id": "<CAE5uSD0FRF1T3hkthzFVXmUr3aP-OzrH6snCrEzr0DRW2VVwVQ@mail.gmail.com>",
+      "from_name": "Colton Smith",
+      "from_email_hash": "93322e6aaa6e0f78aa408221e56a044593ec2a98479e09e7b5bb57e0acf3d38b",
+      "date": "2016-11-15T10:50:28-08:00",
+      "subject": "[R-SIG-Finance] Properly making a xts object from csv file",
+      "subject_clean": "Properly making a xts object from csv file",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nI'm currently wokring with a csv file that looks like this:\n[image: Inline image 1]\nI'm trying to make it an xts object so I can use it for backtesting. If I\ndetach dplyr, errors happen on the stock() line and if I have dplyr\nattached errors happen initPortf()/initOrders().\n[image: Inline image 1]\nI'm aware of the frustrating interactions between dplyr and finance\npackages. I assume there is a proper way to go about this without using\ndplyr. If anybody could link me to an example or explain what I need to\nuse, that'd be great!\n\nThanks,\nColton Smith\n-------------- next part --------------\nAn HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20161115/ade1a1d1/attachment.html>\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: image.png\nType: image/png\nSize: 21163 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20161115/ade1a1d1/attachment.png>\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: image.png\nType: image/png\nSize: 69809 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20161115/ade1a1d1/attachment-0001.png>",
+      "body_snippet": "Hello,\n\nI'm currently wokring with a csv file that looks like this:\n[image: Inline image 1]\nI'm trying to make it an xts object so I can use it for backtesting. If I\ndetach dplyr, errors happen on the",
+      "thread_id": "thread-ded5fbf179b9",
+      "thread_depth": 0,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-4745157f7e1b",
+      "message_id": "<CAPPM_gT1WFB6CC0hD6WwBhoFQdBHCAXGXoB6ZRuG+Mk1r7jytA@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2016-11-15T13:05:07-06:00",
+      "subject": "[R-SIG-Finance] Properly making a xts object from csv file",
+      "subject_clean": "Properly making a xts object from csv file",
+      "in_reply_to": "<CAE5uSD0FRF1T3hkthzFVXmUr3aP-OzrH6snCrEzr0DRW2VVwVQ@mail.gmail.com>",
+      "references": [
+        "<CAE5uSD0FRF1T3hkthzFVXmUr3aP-OzrH6snCrEzr0DRW2VVwVQ@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Colton,\n\nOn Tue, Nov 15, 2016 at 12:50 PM, Colton Smith <coltonsmith321 at gmail.com> wrote:\n> Hello,\n>\n> I'm currently wokring with a csv file that looks like this:\n>\nPictures of data aren't particularly helpful.  Someone would have to\nhand-enter those values to be able to do anything meaningful with the\ndata.\n\n> I'm trying to make it an xts object so I can use it for backtesting. If I\n> detach dplyr, errors happen on the stock() line and if I have dplyr attached\n> errors happen initPortf()/initOrders().\n>\nPictures of code are even less helpful than pictures of data.  No one\ncan copy/paste your picture into their R console to try and replicate\nyour results. ;)\n\n> I'm aware of the frustrating interactions between dplyr and finance\n> packages. I assume there is a proper way to go about this without using\n> dplyr. If anybody could link me to an example or explain what I need to use,\n> that'd be great!\n>\nNothing in FinancialInstrument depends on dplyr, so there's no way\nthat *not* having dplyr attached could cause an issue with stock().\nThe problem is that you're passing an xts object as the 'primary_id',\nwhen the documentation says:\n\nprimary_id: String describing the unique ID for the instrument. Most of\n          the wrappers allow this to be a vector.\n\ndplyr shouldn't cause issues with most package code, because most\npackages should now protect themselves from the sort of badness in\ndplyr (I'm looking at you, dplyr::lag).  But it will cause issues for\nyou at the top-level, because calling lag() on an xts object won't do\nwhat you'd expect.\n\n> Thanks,\n> Colton Smith\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2016 | www.rinfinance.com",
+      "body_snippet": "Hi Colton,\n\nOn Tue, Nov 15, 2016 at 12:50 PM, Colton Smith <coltonsmith321 at gmail.com> wrote:\n> Hello,\n>\n> I'm currently wokring with a csv file that looks like this:\n>\nPictures of data aren't parti",
+      "thread_id": "thread-ded5fbf179b9",
+      "thread_depth": 1,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-0108fd529ae4",
+      "message_id": "<d57c0056-861f-6aee-ccf6-ea820a7283a6@vodafone.it>",
+      "from_name": "Diego Peroni",
+      "from_email_hash": "4f59bb7582d4e55f2130fc4f18f6593941ff9dc7b06ebda4a084118e98878d2c",
+      "date": "2016-11-18T10:22:21+01:00",
+      "subject": "[R-SIG-Finance] Quantstrat Exit Signal by Time from Enter",
+      "subject_clean": "Quantstrat Exit Signal by Time from Enter",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi all,\n\nis there a way to create a signal that triggers an exit rule just by \nevaluating that my position is losing after N bars from Enter Time?\n\nThanks in advance\n\nDiego",
+      "body_snippet": "Hi all,\n\nis there a way to create a signal that triggers an exit rule just by \nevaluating that my position is losing after N bars from Enter Time?\n\nThanks in advance\n\nDiego",
+      "thread_id": "thread-0108fd529ae4",
+      "thread_depth": 0,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-2bdc1a0b2683",
+      "message_id": "<5832fce0.2aa9c20a.88c0a.4eb5@mx.google.com>",
+      "from_name": "Oleg Mubarakshin",
+      "from_email_hash": "b6ffbde57ec694cc26b2271e1f3d4f93c0444ea85c538d02fc8b91725c1ef7b0",
+      "date": "2016-11-21T13:55:42Z",
+      "subject": "[R-SIG-Finance] Fw: Rblapi",
+      "subject_clean": "Rblapi",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20161121/2fa3be6c/attachment.html>",
+      "body_snippet": "An HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20161121/2fa3be6c/attachment.html>",
+      "thread_id": "thread-2bdc1a0b2683",
+      "thread_depth": 0,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-7532e600d44c",
+      "message_id": "<CAMi=pg7S4wWFhs1_a-KoMFxKKJPizAvfNXaVqOxCtkTnjmnWgw@mail.gmail.com>",
+      "from_name": "Whit Armstrong",
+      "from_email_hash": "9f0af921ac5e402b55cb0593a435b87162faa6caa4eef5ccb3498c95d81634d0",
+      "date": "2016-11-21T09:14:54-05:00",
+      "subject": "[R-SIG-Finance] Fw: Rblapi",
+      "subject_clean": "Rblapi",
+      "in_reply_to": "<5832fce0.2aa9c20a.88c0a.4eb5@mx.google.com>",
+      "references": [
+        "<5832fce0.2aa9c20a.88c0a.4eb5@mx.google.com>"
+      ],
+      "body_plain": "I think what you want is overrides, not options.\n\nFor package specific questions like this, I suggest the github site rather\nthan the general r-sig-fin list.\nhttps://github.com/Rblp/Rblpapi/issues\n\n-Whit\n\n\nOn Mon, Nov 21, 2016 at 8:55 AM, Oleg Mubarakshin <\noleg.mubarakshin at gmail.com> wrote:\n\n>\n>\n> Sent from my Huawei Ascend Mate 7\n>\n>\n> -------- Original Message --------\n> Subject: Rblapi\n> From: Oleg Mubarakshin\n> To: Oleg Mubarakshin\n> CC:\n>\n>\n> Hi everyone,\n>\n> when I am trying to receive data by bdp() with defined options I get the\n> error\n> sample code\n> > library(Rblpapi)\n> > blpConnect()\n> > bdp(securities=\"GBP2M BGN Curncy\", fields=\"PX_BID\",\n> options=c(\"FWD_CURVE_QUOTE_FORMAT\"=\"OUTRIGHT\"))\n> Error in bdp_Impl(con, securities, fields, options, overrides, verbose,  :\n>   Sub-element '(null)' does not exist.\n>\n> what is it?\n>\n>\n> --\n> Oleg Mubarakshin\n> Senior FX Structurer [image: Currency Solutions]\n> *Tel:* +44 (0)207 740 0000\n> *Fax:* +44 (0)207 990 8080\n> Hobbs Court, 2 Jacob Street, London SE1 2BG.\n>\n> www.currencysolutions.co.uk\n> [image: Facebook]\n> <https://www.facebook.com/Currency-Solutions-Ltd-283996884686/> [image:\n> Twitter] <https://twitter.com/currencytrans> [image: Google]\n> <https://www.google.co.uk/?q=currencysolutions.co.uk> [image: LinkedIn]\n> <https://www.linkedin.com/company/currency-solutions> [image: RSS]\n> <http://www.currencysolutions.co.uk/tools/feeds/source/news/feed.xml>\n>\n> Currency Solutions Ltd is registered in England, Company No. 4864491. Her\n> Majesty's Revenue & Customs, No. 12162570. Regulated and authorised by the\n> Financial Conduct Authority as a Payment Institution, No. No. 512130 and as\n> an Investment Firm No. 602082\n>\n> This email (including attachments) is confidential. If you have received\n> this email in error please notify the sender immediately and delete this\n> email from your system without copying or disseminating it or placing any\n> reliance upon its contents. We cannot accept liability for any breaches of\n> confidence arising through use of email. Any opinions expressed in this\n> email (including attachments) are those of the author and do not\n> necessarily reflect our opinions. We will not accept responsibility for any\n> commitments made by our employees outside the scope of our business. We do\n> not warrant the accuracy or completeness of such information.\n>\n> *Please consider the environment: think before you print.*\n>\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I think what you want is overrides, not options.\n\nFor package specific questions like this, I suggest the github site rather\nthan the general r-sig-fin list.\nhttps://github.com/Rblp/Rblpapi/issues\n\n-W",
+      "thread_id": "thread-2bdc1a0b2683",
+      "thread_depth": 1,
+      "month": "2016-11"
+    },
+    {
+      "id": "msg-0db25a7e4007",
+      "message_id": "<5833020b.6a5cc20a.a0487.5d17@mx.google.com>",
+      "from_name": "Oleg Mubarakshin",
+      "from_email_hash": "b6ffbde57ec694cc26b2271e1f3d4f93c0444ea85c538d02fc8b91725c1ef7b0",
+      "date": "2016-11-21T14:17:45Z",
+      "subject": "[R-SIG-Finance] Fw: Rblapi",
+      "subject_clean": "Rblapi",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20161121/d443d8ef/attachment.html>",
+      "body_snippet": "An HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20161121/d443d8ef/attachment.html>",
+      "thread_id": "thread-0db25a7e4007",
+      "thread_depth": 0,
+      "month": "2016-11"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-e5bbf257debb",
+      "subject": "fPortfolio minimum variance optimisation under constraints",
+      "message_count": 2,
+      "participants": [
+        "Michael Weylandt",
+        "pierre.lequeux at hsbc.com"
+      ],
+      "started": "2016-11-01T09:19:02+00:00",
+      "last_reply": "2016-11-01T11:08:54-05:00",
+      "root_message_id": "msg-e5bbf257debb"
+    },
+    {
+      "id": "thread-8d50bad45d78",
+      "subject": "How to add new data to be predicted with fGarch?",
+      "message_count": 4,
+      "participants": [
+        "Be Water",
+        "Michael Weylandt"
+      ],
+      "started": "2016-11-01T09:57:42+00:00",
+      "last_reply": "2016-11-02T10:57:58-05:00",
+      "root_message_id": "msg-8d50bad45d78"
+    },
+    {
+      "id": "thread-c27bf985aa57",
+      "subject": "Coherent Datafeed R Package for Thomson Reuters Elektron version 1.0.9 Released Today",
+      "message_count": 1,
+      "participants": [
+        "Thomas Fuller"
+      ],
+      "started": "2016-11-01T10:44:53-04:00",
+      "last_reply": "2016-11-01T10:44:53-04:00",
+      "root_message_id": "msg-c27bf985aa57"
+    },
+    {
+      "id": "thread-37212fe23441",
+      "subject": "Continuous Wavelet tranform in Biwavelet Package",
+      "message_count": 2,
+      "participants": [
+        "FMH",
+        "Michael Weylandt"
+      ],
+      "started": "2016-11-04T06:59:49+00:00",
+      "last_reply": "2016-11-04T15:53:31-05:00",
+      "root_message_id": "msg-37212fe23441"
+    },
+    {
+      "id": "thread-ff47a8e5c27e",
+      "subject": "Uneven time series",
+      "message_count": 4,
+      "participants": [
+        "Ilya Kipnis",
+        "Joshua Ulrich",
+        "Luis Damiano",
+        "Michael Chen"
+      ],
+      "started": "2016-11-04T21:51:35-03:00",
+      "last_reply": "2016-11-05T18:46:56-05:00",
+      "root_message_id": "msg-ff47a8e5c27e"
+    },
+    {
+      "id": "thread-1e7d52150d9b",
+      "subject": "blotter updatePortf",
+      "message_count": 6,
+      "participants": [
+        "Brian G. Peterson",
+        "Cameron McLean",
+        "Michael Chen"
+      ],
+      "started": "2016-11-06T20:10:19+02:00",
+      "last_reply": "2016-11-11T04:56:33-06:00",
+      "root_message_id": "msg-1e7d52150d9b"
+    },
+    {
+      "id": "thread-79a6c079069d",
+      "subject": "Function ugarchroll in Package rugarch",
+      "message_count": 1,
+      "participants": [
+        "Wei-han Liu"
+      ],
+      "started": "2016-11-08T04:51:17+00:00",
+      "last_reply": "2016-11-08T04:51:17+00:00",
+      "root_message_id": "msg-79a6c079069d"
+    },
+    {
+      "id": "thread-62abc1cb4e9d",
+      "subject": "Error Check on Yahoo Data",
+      "message_count": 1,
+      "participants": [
+        "Daniel Mack"
+      ],
+      "started": "2016-11-08T07:27:54-05:00",
+      "last_reply": "2016-11-08T07:27:54-05:00",
+      "root_message_id": "msg-62abc1cb4e9d"
+    },
+    {
+      "id": "thread-9101dc868b3e",
+      "subject": "Continuous Wavelet tranform in Biwavelet Package",
+      "message_count": 1,
+      "participants": [
+        "Michael Weylandt"
+      ],
+      "started": "2016-11-08T22:42:58-06:00",
+      "last_reply": "2016-11-08T22:42:58-06:00",
+      "root_message_id": "msg-9101dc868b3e"
+    },
+    {
+      "id": "thread-015afb4a42c8",
+      "subject": "Portfolio Attributino example with one common benchmark",
+      "message_count": 1,
+      "participants": [
+        "Bos, Roger"
+      ],
+      "started": "2016-11-09T17:48:57+00:00",
+      "last_reply": "2016-11-09T17:48:57+00:00",
+      "root_message_id": "msg-015afb4a42c8"
+    },
+    {
+      "id": "thread-4284425e12c3",
+      "subject": "Portfolio Attributino example with one common benchmark",
+      "message_count": 1,
+      "participants": [
+        "fceci"
+      ],
+      "started": "2016-11-10T16:53:49+00:00",
+      "last_reply": "2016-11-10T16:53:49+00:00",
+      "root_message_id": "msg-4284425e12c3"
+    },
+    {
+      "id": "thread-ded5fbf179b9",
+      "subject": "Properly making a xts object from csv file",
+      "message_count": 2,
+      "participants": [
+        "Colton Smith",
+        "Joshua Ulrich"
+      ],
+      "started": "2016-11-15T10:50:28-08:00",
+      "last_reply": "2016-11-15T13:05:07-06:00",
+      "root_message_id": "msg-ded5fbf179b9"
+    },
+    {
+      "id": "thread-0108fd529ae4",
+      "subject": "Quantstrat Exit Signal by Time from Enter",
+      "message_count": 1,
+      "participants": [
+        "Diego Peroni"
+      ],
+      "started": "2016-11-18T10:22:21+01:00",
+      "last_reply": "2016-11-18T10:22:21+01:00",
+      "root_message_id": "msg-0108fd529ae4"
+    },
+    {
+      "id": "thread-2bdc1a0b2683",
+      "subject": "Rblapi",
+      "message_count": 2,
+      "participants": [
+        "Oleg Mubarakshin",
+        "Whit Armstrong"
+      ],
+      "started": "2016-11-21T13:55:42+00:00",
+      "last_reply": "2016-11-21T09:14:54-05:00",
+      "root_message_id": "msg-2bdc1a0b2683"
+    },
+    {
+      "id": "thread-0db25a7e4007",
+      "subject": "Rblapi",
+      "message_count": 1,
+      "participants": [
+        "Oleg Mubarakshin"
+      ],
+      "started": "2016-11-21T14:17:45+00:00",
+      "last_reply": "2016-11-21T14:17:45+00:00",
+      "root_message_id": "msg-0db25a7e4007"
+    }
+  ]
+}

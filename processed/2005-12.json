@@ -1,0 +1,841 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2005-12",
+  "messages": [
+    {
+      "id": "msg-2ae9e2e005a9",
+      "message_id": "<2310043c0512010412j5298187cv4599b4acc056abfc@mail.gmail.com>",
+      "from_name": "¨Tariq Khan",
+      "from_email_hash": "50999f9b0f9bb6abfe9a50684ed3173ff10d7d5d627201aefea6dcd9eb9db230",
+      "date": "2005-12-01T12:12:24Z",
+      "subject": "[R-sig-finance] Kalman Smoothing - time-variant parameters (sspir)",
+      "subject_clean": "Kalman Smoothing - time-variant parameters (sspir)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear R-brains,\n\nI'm rather new to state-space models and would benefit from the extra\nconfidence in using the excellent package sspir.\n\nIn a one-factor model, If I am trying to do a simple regression where\nI assume the intercept is constant and the 'Beta' is changing, how do\nI do that? How do i Initialize the filter (i.e. what is appropriate to\nset m0, and C0 for the example below)?\n\nThe model I want is: y = alpha + beta + err1; beta_(t+1) = beta_t + err2\n\nI thought of the following:\nlibrary(mvtnorm) # (1)\nlibrary(sspir)\n# Let's get some data so we can all try this at home\ndfrm <- data.frame(\n                   y =\nc(0.02,0.04,-0.03,0.02,0,0.01,0.04,0.03,-0.01,0.04,-0.01,0.05,0.04,\n                          \n0.03,0.01,-0.01,-0.01,-0.03,0.02,-0.04,-0.05,-0.02,-0.04,0,0.02,0,\n                         \n-0.01,-0.01,0.01,0.09,0.03,0.03,0.05,0.04,-0.01,0.05,0.03,0.01,\n                          0.04,0.01,-0.01,-0.02,-0.01,-0.01,\n0.06,0.03,0.02,0.03,0.03,0.04,\n                          0.03,0.04,-0.02,-0.03,0.04,0.03,0.05,0.02,0.03,-0.1),\n                   x = c(-0.03,-0.01,0.07,-0.03,-0.07,0.05,0.02,-0.05,-0.04,\n                           -0.02,-0.19,0.07,0.09,0.01,0.01,0,0.05,0,-0.02,-0.09,\n                           -0.12,-0.01,-0.13,0.04,0.04,-0.07,-0.05,-0.03,\n                           -0.01,0.11,0.06,0.03,0.06,0.06,-0.01,0.07,0.01,\n                           \n0,0.07,0.04,-0.02,0,-0.03,0.04,-0.04,-0.01,0.03,0.02,0.05,0.04,\n                            0.05,0.03,0,-0.04,0.05,0.05,0.06,0.02,0.04,-0.06)\n)\nss <- ssm(y ~ tvar(x), time = 1:nrow(dfrm), family=gaussian(link=\"identity\"),\n               data=dfrm)\nsmooth.params <- smoother(kfilter(ss$ss))$m\n\n(1) I read in http://ww.math.aau.dk/~mbn/Teaching/MarkovE05/Lecture3.pdf\nthat this is requred as there is a bug in sspir.\n\nTo what should I set ss$ss$m0 and ss$ss$C0? (I did notice that\nsmoother() replaces these, but it still matters what I initialize it\nto in the first place)\n\nMany thanks!\n\nTariq Khan",
+      "body_snippet": "Dear R-brains,\n\nI'm rather new to state-space models and would benefit from the extra\nconfidence in using the excellent package sspir.\n\nIn a one-factor model, If I am trying to do a simple regression ",
+      "thread_id": "thread-2ae9e2e005a9",
+      "thread_depth": 0,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-6c6c2322b4e1",
+      "message_id": "<878184D41285C04B92FE9DBAD4E86671583C39@SFEXC00002.amtg.NJA.local>",
+      "from_name": "Claus Dethlefsen / Aalborg Sygehus",
+      "from_email_hash": "54f077df8e9cdd0063b4ced3fbb26bad9bf3e8407be35d90baeb0a77dff9c67d",
+      "date": "2005-12-01T17:32:01+01:00",
+      "subject": "[R-sig-finance] Kalman Smoothing - time-variant parameters (sspir)",
+      "subject_clean": "Kalman Smoothing - time-variant parameters (sspir)",
+      "in_reply_to": null,
+      "references": [
+        "<2310043c0512010412j5298187cv4599b4acc056abfc@mail.gmail.com>"
+      ],
+      "body_plain": "Dear Tariq Khan\n \nThe initial conditions m0 and C0 can be specified according to your needs. If you are a Bayesian (as in West&Harrison 1997), you will use m0 and C0 to express your prior information. If you use a vague prior, you will give a high weight to your observations in the beginning, and the influence of the prior will die out fast. \n \nThe values of m0 and C0 could also stem from several time-series and express a random effect of the level of the individual series.\n \nFinally, you may estimate m0 and C0 using maximum likelihood estimation. This is not done in sspir (but the log-likelihood value is provided from a run of the filter).\n \nOne crude way of specifying m0 and C0 would be to use the estimates from a static model, i.e.\n \nss$ss$m0[1:2,] <- coef(lm(y~x,data=dfrm))\nss$ss$C0[1:2,1:2] <- summary(lm(y~x,data=dfrm))$cov.unscaled\nsmooth.params3 <- kfs(ss)$m\nts.plot(t(smooth.params3))\n\nNote that the 'kfs' function is a shortcut for using smoother(kfilter()).\n \nNote also, that your variance parameters are both set to unity. Again, you may discuss how to set these either by previous knowledge or by maximum likelihood estimation. It is set using\n \nss$ss$phi[1]   <- 2 # observational variance\nss$ss$phi[2]   <- .5# variance of the beta-parameter\n \nHope this helps,\n \nClaus\n \n________________________________\nClaus Dethlefsen, Msc, PhD\nStatistiker ved Kardiovaskul?rt Forskningscenter\n\n \nForskningens Hus\nAalborg Sygehus \nSdr. Skovvej 15\n9000 Aalborg\n\nTlf:   9932 6863\nemail: aas.claus.dethlefsen at nja.dk <mailto:aas.claus.dethlefsen at nja.dk> \n\n________________________________\n\nFra: ?Tariq Khan [mailto:tariq.khan at gmail.com]\nSendt: to 01-12-2005 13:12\nTil: R-help at stat.math.ethz.ch; R-sig-finance at stat.math.ethz.ch\nCc: Claus Dethlefsen / Aalborg Sygehus\nEmne: Kalman Smoothing - time-variant parameters (sspir)\n\n\n\nDear R-brains,\n\nI'm rather new to state-space models and would benefit from the extra\nconfidence in using the excellent package sspir.\n\nIn a one-factor model, If I am trying to do a simple regression where\nI assume the intercept is constant and the 'Beta' is changing, how do\nI do that? How do i Initialize the filter (i.e. what is appropriate to\nset m0, and C0 for the example below)?\n\nThe model I want is: y = alpha + beta + err1; beta_(t+1) = beta_t + err2\n\nI thought of the following:\nlibrary(mvtnorm) # (1)\nlibrary(sspir)\n# Let's get some data so we can all try this at home\ndfrm <- data.frame(\n                   y =\nc(0.02,0.04,-0.03,0.02,0,0.01,0.04,0.03,-0.01,0.04,-0.01,0.05,0.04,\n                         \n0.03,0.01,-0.01,-0.01,-0.03,0.02,-0.04,-0.05,-0.02,-0.04,0,0.02,0,\n                        \n-0.01,-0.01,0.01,0.09,0.03,0.03,0.05,0.04,-0.01,0.05,0.03,0.01,\n                          0.04,0.01,-0.01,-0.02,-0.01,-0.01,\n0.06,0.03,0.02,0.03,0.03,0.04,\n                          0.03,0.04,-0.02,-0.03,0.04,0.03,0.05,0.02,0.03,-0.1),\n                   x = c(-0.03,-0.01,0.07,-0.03,-0.07,0.05,0.02,-0.05,-0.04,\n                           -0.02,-0.19,0.07,0.09,0.01,0.01,0,0.05,0,-0.02,-0.09,\n                           -0.12,-0.01,-0.13,0.04,0.04,-0.07,-0.05,-0.03,\n                           -0.01,0.11,0.06,0.03,0.06,0.06,-0.01,0.07,0.01,\n                          \n0,0.07,0.04,-0.02,0,-0.03,0.04,-0.04,-0.01,0.03,0.02,0.05,0.04,\n                            0.05,0.03,0,-0.04,0.05,0.05,0.06,0.02,0.04,-0.06)\n)\nss <- ssm(y ~ tvar(x), time = 1:nrow(dfrm), family=gaussian(link=\"identity\"),\n               data=dfrm)\nsmooth.params <- smoother(kfilter(ss$ss))$m\n\n(1) I read in http://ww.math.aau.dk/~mbn/Teaching/MarkovE05/Lecture3.pdf\nthat this is requred as there is a bug in sspir.\n\nTo what should I set ss$ss$m0 and ss$ss$C0? (I did notice that\nsmoother() replaces these, but it still matters what I initialize it\nto in the first place)\n\nMany thanks!\n\nTariq Khan",
+      "body_snippet": "Dear Tariq Khan\n \nThe initial conditions m0 and C0 can be specified according to your needs. If you are a Bayesian (as in West&Harrison 1997), you will use m0 and C0 to express your prior information.",
+      "thread_id": "thread-2ae9e2e005a9",
+      "thread_depth": 1,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-0a260850fd31",
+      "message_id": "<C619AB04-7A0F-473C-9F03-AE2A8FBFC701@mac.com>",
+      "from_name": "Parlamis Franklin",
+      "from_email_hash": "826922dd3076ce8d018428529d397d245a00356c49bd9b894c780b41f159dcbf",
+      "date": "2005-12-01T19:52:34-10:00",
+      "subject": "[R-sig-finance] rMetrics bug",
+      "subject_clean": "rMetrics bug",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "In method rev.timeDate\n\n > rev(timeSequence(len=20))\n[1] \"Honolulu\"\n[1] [2004-01-09] [2004-01-08] [2004-01-07] [2004-01-06] [2004-01-05]  \n[2004-01-04] [2004-01-03] [2004-01-02]\n[9] [2004-01-01]\n\n\n\nNote the following:\n\n > rev(timeSequence(len=20))@Dim\n[1] 20\n\n > rev(timeSequence(len=20))[15]\n[1] \"Honolulu\"\n[1] [NA]\n\n > rev(timeSequence(len=5))\n[1] \"Honolulu\"\n[1] [NA]         [NA]         [NA]         [NA]         [2004-01-05]  \n[2004-01-04] [2004-01-03] [2004-01-02]\n[9] [2004-01-01]\n\n\n\nClass \"POSIXlt\" is a named list of exactly nine vectors.  hmmmmmm . . .",
+      "body_snippet": "In method rev.timeDate\n\n > rev(timeSequence(len=20))\n[1] \"Honolulu\"\n[1] [2004-01-09] [2004-01-08] [2004-01-07] [2004-01-06] [2004-01-05]  \n[2004-01-04] [2004-01-03] [2004-01-02]\n[9] [2004-01-01]\n\n\n\nNo",
+      "thread_id": "thread-0a260850fd31",
+      "thread_depth": 0,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-35024e044c50",
+      "message_id": "<43900B55.1080002@itp.phys.ethz.ch>",
+      "from_name": "Diethelm Wuertz",
+      "from_email_hash": "db72845f148b28bce223455d9f5dbf705d659fd637f9d0697fb0778a67cfebef",
+      "date": "2005-12-02T08:52:37Z",
+      "subject": "[R-sig-finance] rMetrics bug",
+      "subject_clean": "rMetrics bug",
+      "in_reply_to": "<C619AB04-7A0F-473C-9F03-AE2A8FBFC701@mac.com>",
+      "references": [
+        "<C619AB04-7A0F-473C-9F03-AE2A8FBFC701@mac.com>"
+      ],
+      "body_plain": "# FIX:\n\nrev.timeDate =\nfunction (x)\n{\n    if (Sys.getenv(\"TZ\")[[1]] != \"GMT\")\n        warning(\"Set timezone to GMT!\")\n    if (!inherits(x, \"timeDate\"))\n        stop(\"Wrong class type\")\n    # Replace:\n    # x at Data = rev(x at Data)\n    # with\n    x at Data = x at Data[length(x at Data[[1]]):1]\n    x\n}\n\n# Try:\n\nrev(timeSequence(len=20))\n\n[1] \"Zurich\"\n [1] [2004-01-20] [2004-01-19] [2004-01-18] [2004-01-17] [2004-01-16]\n [6] [2004-01-15] [2004-01-14] [2004-01-13] [2004-01-12] [2004-01-11]\n[11] [2004-01-10] [2004-01-09] [2004-01-08] [2004-01-07] [2004-01-06]\n[16] [2004-01-05] [2004-01-04] [2004-01-03] [2004-01-02] [2004-01-01]\n\n\nBest regards DW\n\n\n\nParlamis Franklin wrote:\n\n>In method rev.timeDate\n>\n> > rev(timeSequence(len=20))\n>[1] \"Honolulu\"\n>[1] [2004-01-09] [2004-01-08] [2004-01-07] [2004-01-06] [2004-01-05]  \n>[2004-01-04] [2004-01-03] [2004-01-02]\n>[9] [2004-01-01]\n>\n>\n>\n>Note the following:\n>\n> > rev(timeSequence(len=20))@Dim\n>[1] 20\n>\n> > rev(timeSequence(len=20))[15]\n>[1] \"Honolulu\"\n>[1] [NA]\n>\n> > rev(timeSequence(len=5))\n>[1] \"Honolulu\"\n>[1] [NA]         [NA]         [NA]         [NA]         [2004-01-05]  \n>[2004-01-04] [2004-01-03] [2004-01-02]\n>[9] [2004-01-01]\n>\n>\n>\n>Class \"POSIXlt\" is a named list of exactly nine vectors.  hmmmmmm . . .\n>\n>_______________________________________________\n>R-sig-finance at stat.math.ethz.ch mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>  \n>",
+      "body_snippet": "# FIX:\n\nrev.timeDate =\nfunction (x)\n{\n    if (Sys.getenv(\"TZ\")[[1]] != \"GMT\")\n        warning(\"Set timezone to GMT!\")\n    if (!inherits(x, \"timeDate\"))\n        stop(\"Wrong class type\")\n    # Replace:\n",
+      "thread_id": "thread-0a260850fd31",
+      "thread_depth": 1,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-e958b4571388",
+      "message_id": "<C5A76BA0CA4D734CA725124C4D6397AC03219493@ibfftce502.de.ad.drkw.net>",
+      "from_name": "Molins, Jordi",
+      "from_email_hash": "b4348808cd91ee43361413747e30089faea929351de8ce0ea31882ebf8def6c6",
+      "date": "2005-12-02T14:15:13+01:00",
+      "subject": "[R-sig-finance] R and exchanges",
+      "subject_clean": "R and exchanges",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I sent a question to the general Help. I received an answer from Patrick\nBurns, and he suggested me to post it here. The question is how to use batch\nfiles that call R in an effective way. More:\n\nWhat I need is to interact with other applications(a connection to\nexchanges, like Eurex, Liffe, CBOT and eventually to something like ESB in\nFX). So, if I get a price from the exchanges, I want that R makes a\ncalculation. But to get R connected to the exchanges is complex, so what I\nhave thought is to have an external program that connects to the exchanges,\nthen gets the prices and saves them to a txt file, then R is opened, the txt\nfile is read, the calculations are performed, and the results are saved into\nanother txt file. Then, another application reads the new txt file and sends\na message to the exchanges.\n\nThis is what I want to do.\n\nDoes anybody have some ideas about it?\n\nThank you!\n\nJordi\n\n\n\n--------------------------------------------------------------------------------\nThe information contained herein is confidential and is inte...{{dropped}}",
+      "body_snippet": "I sent a question to the general Help. I received an answer from Patrick\nBurns, and he suggested me to post it here. The question is how to use batch\nfiles that call R in an effective way. More:\n\nWhat",
+      "thread_id": "thread-e958b4571388",
+      "thread_depth": 0,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-76e5140d636a",
+      "message_id": "<17296.19773.479697.424779@basebud.nulle.part>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2005-12-02T07:33:49-06:00",
+      "subject": "[R-sig-finance] R and exchanges",
+      "subject_clean": "R and exchanges",
+      "in_reply_to": "<C5A76BA0CA4D734CA725124C4D6397AC03219493@ibfftce502.de.ad.drkw.net>",
+      "references": [
+        "<C5A76BA0CA4D734CA725124C4D6397AC03219493@ibfftce502.de.ad.drkw.net>"
+      ],
+      "body_plain": "On 2 December 2005 at 14:15, Molins, Jordi wrote:\n| I sent a question to the general Help. I received an answer from Patrick\n| Burns, and he suggested me to post it here. The question is how to use batch\n\nUmm, why? Nothing finance-specific here.\n\n| files that call R in an effective way. More:\n| \n| What I need is to interact with other applications(a connection to\n| exchanges, like Eurex, Liffe, CBOT and eventually to something like ESB in\n| FX). So, if I get a price from the exchanges, I want that R makes a\n| calculation. But to get R connected to the exchanges is complex, so what I\n| have thought is to have an external program that connects to the exchanges,\n| then gets the prices and saves them to a txt file, then R is opened, the txt\n| file is read, the calculations are performed, and the results are saved into\n| another txt file. Then, another application reads the new txt file and sends\n| a message to the exchanges.\n| \n| This is what I want to do.\n| \n| Does anybody have some ideas about it?\n\nSure. Control R from another app. Python is popular, and there is RPy to\ncall/control R from Python. There is also, as I recall, a Perl package to do\nsomething similar.\n\nOr you just write everything in R as R has basic tcp/ip networking built in.\n\nDirk\n\n-- \nStatistics: The (futile) attempt to offer certainty about uncertainty.\n         -- Roger Koenker, 'Dictionary of Received Ideas of Statistics'",
+      "body_snippet": "On 2 December 2005 at 14:15, Molins, Jordi wrote:\n| I sent a question to the general Help. I received an answer from Patrick\n| Burns, and he suggested me to post it here. The question is how to use ba",
+      "thread_id": "thread-e958b4571388",
+      "thread_depth": 1,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-bce824e6c7a4",
+      "message_id": "<971536df0512020546v2b34de54udcb6a2728b65a286@mail.gmail.com>",
+      "from_name": "Gabor Grothendieck",
+      "from_email_hash": "2252aad0894f89a900da56345b1c4e0414e3b441d448c40b473f7149e06e5a05",
+      "date": "2005-12-02T08:46:06-05:00",
+      "subject": "[R-sig-finance] R and exchanges",
+      "subject_clean": "R and exchanges",
+      "in_reply_to": "<C5A76BA0CA4D734CA725124C4D6397AC03219493@ibfftce502.de.ad.drkw.net>",
+      "references": [
+        "<C5A76BA0CA4D734CA725124C4D6397AC03219493@ibfftce502.de.ad.drkw.net>"
+      ],
+      "body_plain": "See ?socketConnection or if they supply a COM object see the\nRDCOMClient or rcom packages.  In that case there is no need for\nanything beyond R.\n\nOn 12/2/05, Molins, Jordi <Jordi.Molins at drkw.com> wrote:\n> I sent a question to the general Help. I received an answer from Patrick\n> Burns, and he suggested me to post it here. The question is how to use batch\n> files that call R in an effective way. More:\n>\n> What I need is to interact with other applications(a connection to\n> exchanges, like Eurex, Liffe, CBOT and eventually to something like ESB in\n> FX). So, if I get a price from the exchanges, I want that R makes a\n> calculation. But to get R connected to the exchanges is complex, so what I\n> have thought is to have an external program that connects to the exchanges,\n> then gets the prices and saves them to a txt file, then R is opened, the txt\n> file is read, the calculations are performed, and the results are saved into\n> another txt file. Then, another application reads the new txt file and sends\n> a message to the exchanges.\n>\n> This is what I want to do.\n>\n> Does anybody have some ideas about it?\n>\n> Thank you!\n>\n> Jordi\n>\n>\n>\n> --------------------------------------------------------------------------------\n> The information contained herein is confidential and is inte...{{dropped}}\n>\n> _______________________________________________\n> R-sig-finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>",
+      "body_snippet": "See ?socketConnection or if they supply a COM object see the\nRDCOMClient or rcom packages.  In that case there is no need for\nanything beyond R.\n\nOn 12/2/05, Molins, Jordi <Jordi.Molins at drkw.com> w",
+      "thread_id": "thread-e958b4571388",
+      "thread_depth": 1,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-f2d942e05143",
+      "message_id": "<1133531890.c814a61cL.Isella@myrealbox.com>",
+      "from_name": "L.Isella",
+      "from_email_hash": "e83286d14c4fa9f4a44217fdbbf1fb21f4fc76e631493f09faaf675cb0054803",
+      "date": "2005-12-02T13:58:10Z",
+      "subject": "[R-sig-finance] R and C++",
+      "subject_clean": "R and C++",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear All,\nI am learning C++ for financial applications and I am toying around with the \"basic\" routines provided by the financial recipes site http://finance.bi.no/~bernt/gcc_prog/\n\nIt would be useful for me to be able to run some of them under R (e.g. I perform some statistic analysis on some stock data with R and I pass some variable to the C++ routine and get back a result I can use in R).\nI know this is possible, but I wonder whether it is simple to implement (I do not have outstanding expertise in R and I am an absolute beginner in C++).\nBest Regards\n\nLorenzo Isella",
+      "body_snippet": "Dear All,\nI am learning C++ for financial applications and I am toying around with the \"basic\" routines provided by the financial recipes site http://finance.bi.no/~bernt/gcc_prog/\n\nIt would be useful",
+      "thread_id": "thread-f2d942e05143",
+      "thread_depth": 0,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-b07ace707f19",
+      "message_id": "<C5A76BA0CA4D734CA725124C4D6397AC03219498@ibfftce502.de.ad.drkw.net>",
+      "from_name": "Molins, Jordi",
+      "from_email_hash": "b4348808cd91ee43361413747e30089faea929351de8ce0ea31882ebf8def6c6",
+      "date": "2005-12-02T15:09:55+01:00",
+      "subject": "[R-sig-finance] R and exchanges",
+      "subject_clean": "R and exchanges",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Of course, I have access to several databases. The data from the exchange is\na single price, so it does not seem necessary to me to save this price into\na database.\n\nThank you to all replies I have got. If anybody has something to add, please\nfeel free!\n\nJordi\n\n\n> -----Original Message-----\n> From: bogdan romocea [mailto:br44114 at gmail.com]\n> Sent: 02 December 2005 14:59\n> To: Jordi.Molins at drkw.com\n> Cc: r-sig-finance-bounces at stat.math.ethz.ch\n> Subject: RE: [R-sig-finance] R and exchanges\n> \n> \n> IMHO, that may be a (very) poor design, depending on how frequently\n> you want to connect, how much data you get etc. A much more robust\n> solution is to have a DBMS between the data connections and R. R can\n> interact with MySQL, PostgreSQL, Oracle, SQLlite, and in fact\n> depending on the calculations perhaps you don't really need R and can\n> do everything in Python, Perl etc.\n> \n> \n> > -----Original Message-----\n> > From: r-sig-finance-bounces at stat.math.ethz.ch\n> > [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of\n> > Molins, Jordi\n> > Sent: Friday, December 02, 2005 8:15 AM\n> > To: 'r-sig-finance at stat.math.ethz.ch'\n> > Cc: Jordi Molins\n> > Subject: [R-sig-finance] R and exchanges\n> >\n> >\n> > I sent a question to the general Help. I received an answer\n> > from Patrick\n> > Burns, and he suggested me to post it here. The question is\n> > how to use batch\n> > files that call R in an effective way. More:\n> >\n> > What I need is to interact with other applications(a connection to\n> > exchanges, like Eurex, Liffe, CBOT and eventually to\n> > something like ESB in\n> > FX). So, if I get a price from the exchanges, I want that R makes a\n> > calculation. But to get R connected to the exchanges is\n> > complex, so what I\n> > have thought is to have an external program that connects to\n> > the exchanges,\n> > then gets the prices and saves them to a txt file, then R is\n> > opened, the txt\n> > file is read, the calculations are performed, and the results\n> > are saved into\n> > another txt file. Then, another application reads the new txt\n> > file and sends\n> > a message to the exchanges.\n> >\n> > This is what I want to do.\n> >\n> > Does anybody have some ideas about it?\n> >\n> > Thank you!\n> >\n> > Jordi\n> >\n> >\n> >\n> > --------------------------------------------------------------\n> > ------------------\n> > The information contained herein is confidential and is\n> > inte...{{dropped}}\n> >\n> > _______________________________________________\n> > R-sig-finance at stat.math.ethz.ch mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> >\n> \n\n\n--------------------------------------------------------------------------------\nThe information contained herein is confidential and is inte...{{dropped}}",
+      "body_snippet": "Of course, I have access to several databases. The data from the exchange is\na single price, so it does not seem necessary to me to save this price into\na database.\n\nThank you to all replies I have go",
+      "thread_id": "thread-b07ace707f19",
+      "thread_depth": 0,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-2844109f59c2",
+      "message_id": "<4390BFD0.3000707@earthlink.net>",
+      "from_name": "Krishna Kumar",
+      "from_email_hash": "b5342e6f7178c92f67a17437313a28bb14db93175150fd429e207c65fb4f88b0",
+      "date": "2005-12-02T16:42:40-05:00",
+      "subject": "[R-sig-finance] R and C++",
+      "subject_clean": "R and C++",
+      "in_reply_to": "<1133531890.c814a61cL.Isella@myrealbox.com>",
+      "references": [
+        "<1133531890.c814a61cL.Isella@myrealbox.com>"
+      ],
+      "body_plain": "Have you looked at Dirk's  RQuantlib source code that will give you a \ngood idea on how to wrap c++  functions.\nAnd ofcourse the R-ext manual is useful.\n\nBest,\nKris\n\n\n\nL.Isella wrote:\n\n>Dear All,\n>I am learning C++ for financial applications and I am toying around with the \"basic\" routines provided by the financial recipes site http://finance.bi.no/~bernt/gcc_prog/\n>\n>It would be useful for me to be able to run some of them under R (e.g. I perform some statistic analysis on some stock data with R and I pass some variable to the C++ routine and get back a result I can use in R).\n>I know this is possible, but I wonder whether it is simple to implement (I do not have outstanding expertise in R and I am an absolute beginner in C++).\n>Best Regards\n>\n>Lorenzo Isella\n>\n>_______________________________________________\n>R-sig-finance at stat.math.ethz.ch mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>  \n>",
+      "body_snippet": "Have you looked at Dirk's  RQuantlib source code that will give you a \ngood idea on how to wrap c++  functions.\nAnd ofcourse the R-ext manual is useful.\n\nBest,\nKris\n\n\n\nL.Isella wrote:\n\n>Dear All,\n>I a",
+      "thread_id": "thread-f2d942e05143",
+      "thread_depth": 1,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-bd5d4260cc97",
+      "message_id": "<4390CFD5.9060700@pdf.com>",
+      "from_name": "Spencer Graves",
+      "from_email_hash": "0d1725402b5f223aa45a1714f600b741ea6c2ccb2d67d2b94ddab1ed1e80aefd",
+      "date": "2005-12-02T14:51:01-08:00",
+      "subject": "[R-sig-finance] coherency",
+      "subject_clean": "coherency",
+      "in_reply_to": "<6.0.2.0.1.20051127020237.0036ea38@pop.aueb.gr>",
+      "references": [
+        "<6.0.2.0.1.20051127020237.0036ea38@pop.aueb.gr>"
+      ],
+      "body_plain": "I just got 15 hits from 'RSiteSearch(\"cross spectrum\")' and 12 from \n'RSiteSearch(\"coherency\")'.  I doubt if all are relevant to your \nquestion, but the first in each list seems relevant.\n\n\t  If you would like further support from this list, I suggest you first \nreview the \"r-help\" posting guide! \n\"www.R-project.org/posting-guide.html\".  I believe that people who \nfollow that guide tend to get more useful replies quicker.\n\n\t  hope this helps,\n\t  Spencer Graves\n\nsvenier at aueb.gr wrote:\n\n> hello!\n> My name is Stefanos, from Athens.\n> I'm a new user of R and I'm studying multivariate time series. I can't find \n> in the help menu how to calculate the cross spectrum and the coherency of 2 \n> Time Series. Would you like to help me?\n> Thanks\n> \n> _______________________________________________\n> R-sig-finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n\n-- \nSpencer Graves, PhD\nSenior Development Engineer\nPDF Solutions, Inc.\n333 West San Carlos Street Suite 700\nSan Jose, CA 95110, USA\n\nspencer.graves at pdf.com\nwww.pdf.com <http://www.pdf.com>\nTel:  408-938-4420\nFax: 408-280-7915",
+      "body_snippet": "I just got 15 hits from 'RSiteSearch(\"cross spectrum\")' and 12 from \n'RSiteSearch(\"coherency\")'.  I doubt if all are relevant to your \nquestion, but the first in each list seems relevant.\n\n\t  If you w",
+      "thread_id": "thread-bd5d4260cc97",
+      "thread_depth": 0,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-0c19d2fcb2de",
+      "message_id": "<43943EA0.9000509@swissonline.ch>",
+      "from_name": "Adrian Trapletti",
+      "from_email_hash": "8ef317913635f2eb99705d48e347f755fb3f9abcdcaa447bda61b9d2c686fa69",
+      "date": "2005-12-05T14:20:32+01:00",
+      "subject": "[R-sig-finance] R and exchanges",
+      "subject_clean": "R and exchanges",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": ">\n>\n>I sent a question to the general Help. I received an answer from Patrick\n>Burns, and he suggested me to post it here. The question is how to use batch\n>files that call R in an effective way. More:\n>\n>What I need is to interact with other applications(a connection to\n>exchanges, like Eurex, Liffe, CBOT and eventually to something like ESB in\n>FX). So, if I get a price from the exchanges, I want that R makes a\n>calculation. But to get R connected to the exchanges is complex, so what I\n>have thought is to have an external program that connects to the exchanges,\n>then gets the prices and saves them to a txt file, then R is opened, the txt\n>file is read, the calculations are performed, and the results are saved into\n>another txt file. Then, another application reads the new txt file and sends\n>a message to the exchanges.\n>\n>This is what I want to do.\n>\n>Does anybody have some ideas about it?\n>\n>Thank you!\n>\n>Jordi\n>\n>\n>  \n>\nThe companies I (used to) work for typically use(d) the following setup: \nData receiver/collector gets the data over some proprietary API from the \ndata provider (Reuters, Bloomberg,...), attaches filter information \n(e.g., a number between 0 and 1 representing the \"credibility\" of the \ndata; even todays electronic markets produce strange information from \ntime to time) and stores it in a database (e.g., mysql, binary \nfiles,...). Applications like trading systems connect to the data base, \nget the needed information (historical and realtime; for realtime \ndistribution of information it might useful if the DB notifies the \napplications if new data arrives), compute something, and react somehow, \ne.g., send a trading order through another API (FIX or proprietary) to \nthe broker/exchange for execution. The frameworks I have seen so far \nused mainly C, C++ and Java, but it would be no problem to use, e.g, R \nfor the computation engine and use its DB interfaces or Java interfaces etc.\n\nBest\nAdrian",
+      "body_snippet": ">\n>\n>I sent a question to the general Help. I received an answer from Patrick\n>Burns, and he suggested me to post it here. The question is how to use batch\n>files that call R in an effective way. More",
+      "thread_id": "thread-0c19d2fcb2de",
+      "thread_depth": 0,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-a56f8d90f68c",
+      "message_id": "<1878.58.10.34.88.1133839879.squirrel@mail.specere.com>",
+      "from_name": "dkf@specere.com",
+      "from_email_hash": "4d105a33a6ce9af29609dfcc57837a2a18401eab2e131645792505afd85fa43a",
+      "date": "2005-12-06T10:31:19+07:00",
+      "subject": "[R-sig-finance] NIG Option Pricing",
+      "subject_clean": "NIG Option Pricing",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nI have been using the NIG-functions in the fBasics package\ntrying to determine some european call prices using a NIG\ndistribution, but seemed to have hit a wall.\n\nBasically, the process (as I know it) is to determine the\nparameter for the Esscher transform, which is then used in\nadjusting the density function for integrating in a BS=style\nfashion.\n\nA test case with parameters is included.  The results do not\nappear correct as the classic \"W\" shape of \"call(NIG) - call(BS)\"\nis not observed.  further, if you compare the different call\nprices vs. stock/strike, as well as the implicit value - the\nresults are rather odd, as the call(NIG) value is often less\nthan the intrinsic value.\n\nThere are some debugging routines defined in the following\nR-script.\n\nAny help is greatly appreciated.\n\nRegards,\n\n--Dan\n\ntest case and parameters\n------------------------\n\n\nlibrary(fBasics)   # for nig distribution\n\nalpha <- 17.32268\nbeta <- 1.453270\ndelta <- 0.01144148\nmu <- -0.0004846318\n\nmean <- 0.0004780999\nsd <- sqrt(delta*(alpha^2)/(sqrt((alpha^2)-(beta^2))^3))\n\nrf <- 0.04\n\n#  determine the parameter, theta, for the riskneutral process\n#  under the esscher transform\n\nesscher <- function(x) {\n  result <- mu + delta*(sqrt(alpha^2 - (beta + x)^2) - sqrt(alpha^2 -\n(beta + x + 1)^2)) - rf\n  return(result)\n}\n\nlowerlimit <- -alpha - beta\nupperlimit <- alpha - beta - 1\nxmin <- uniroot(esscher, c(lowerlimit, upperlimit), tol = 1.0e-6)\n\ntheta <- xmin$root\n\n# visual test of distributions\n#\n\nshowpdfs <- function() {\n  #\n  #  global: alpha, beta, delta, mu, theta, rf\n  windows()\n\n  span.min = qnig(0.001, alpha, beta, delta, mu)\n  span.max = qnig(0.999, alpha, beta, delta, mu)\n  span <- seq(span.min, span.max, length=200)\n  yfit <- dnig(span, alpha = alpha, beta = beta, delta = delta, mu = mu)\n  yfit2 <- dnig(span, alpha = alpha, beta = beta + theta, delta = delta,\nmu = 0)\n  yfitnorm <- dnorm(span, mean=mean, sd=sd)\n\n  ylim <- log(c(min(yfit), max(yfit)))  # only bounding on fitted\ndistribution\n  xlim <- c(span[1], span[length(span)])\n  plot(span, log(yfit), ylim=ylim, xlim=xlim, type=\"l\", lty=2, col=\"blue\",\nylab=\"\", xlab=\"logreturns\")\n  par(new=TRUE)\n  plot(span, log(yfit2), ylim=ylim, xlim=xlim, type=\"l\", lty=3, col=\"red\",\nylab=\"\", xlab=\"logreturns\")\n  par(new=TRUE)\n  plot(span, log(yfitnorm), ylim=ylim, xlim=xlim, type=\"l\", lty=4,\ncol=\"green\", ylab=\"\", xlab=\"logreturns\")\n  legend(x=\"topleft\", lty=c(2, 3, 4), col=c(\"blue\", \"red\", \"green\"),\nc(\"objective\", \"riskneutral\", \"normal\"))\n}\n\n# define european call under NIG\n\nnigpdf <- function(x) {\n  #\n  #  global: alpha, beta, delta, mu, theta, rf\n  dnig(x, alpha=alpha, beta=beta, delta=delta, mu=mu)\n}\n\ncallnig <- function(stock, strike, maturity) {\n  #\n  #  global: alpha, beta, delta, mu, theta, rf\n  if (maturity <= 0) {\n    return(max(stock - strike, 0))\n  }\n  iblower <- log(strike/stock)\n  ibupper <- Inf\n\n  # adjust distribution estimates\n  muold <- mu\n  mu <- 0\n  delta <- delta*maturity\n  beta <- beta + theta\n  intg2 <- integrate(nigpdf, iblower, ibupper)$value\n  beta <- beta + 1\n  intg1 <- integrate(nigpdf, iblower, ibupper)$value\n  result <- stock*intg1 - strike*exp(-rf*maturity)*intg2\n\n  # unwind adjustments\n  beta <- beta - theta - 1\n  delta <- delta/maturity\n  mu <- muold\n\n  return(result)\n}\n\n# define european call under B&S\n\ncallbs <- function(stock, strike, maturity) {\n  #\n  # global:  sd\n  if (maturity <= 0) {\n    return(max(stock - strike, 0))\n  }\n  d1 <- (log(stock/strike) + ((rf +\n(0.5*(sd^2)))*maturity))/(sd*sqrt(maturity))\n  d2 <- d1 - sd*sqrt(maturity)\n  result <- stock*pnorm(d1) - strike*exp(-rf*maturity)*pnorm(d2)\n\n  return(result)\n}\n\n# define function for evaluating calls\n#\n\npfmt5 <- function(x) {\n  t1 <- sprintf(\"%5g\", x)\n  return(as.numeric(t1))\n}\n\n# plot call vs underlying\n\nplotcall <- function(from=27.5, to=32.5, strike=30, maturity=1) {\n  npoints <- 200\n  sp <- seq(from=from, to=to, length=npoints)\n  cbs <- double(npoints)\n  cnig <- double(npoints)\n  ip <- double(npoints)\n\n  windows()  # open new window for plotting\n\n  for (i in 1:npoints) {\n    cnig[i] <- callnig(sp[i], strike, maturity)\n    cbs[i] <- callbs(sp[i], strike, maturity)\n    ip[i] <- max(sp[i] - strike, 0)   # intrinsic value of call\n  }\n  plot(sp/strike, ip, ylim=c(0,4), ylab=\"\", xlab=\"\",\n    type=\"l\", lty=2, col=\"blue\")\n  par(new=TRUE)\n  plot(sp/strike, cbs, ylim=c(0,4), ylab=\"\", xlab=\"\",\n    type=\"l\", lty=3, col=\"red\")\n  par(new=TRUE)\n  plot(sp/strike, cnig, ylim=c(0,4), ylab=\"call price\", xlab=\"(stock\nprice)/strike\",\n    type=\"l\", lty=4, col=\"green\")\n  legend(x=\"bottomright\", lty=c(2, 3, 4), col=c(\"blue\", \"red\", \"green\"),\nc(\"implicit value\", \"black-scholes\", \"nig\"))\n  y <- 3.7\n  yinc <- 0.15\n  text(0.92, y, adj=0, paste(\"NIG Parameters:\")); y <- y - yinc\n  text(0.93, y, adj=0, substitute(alpha==v, list(v=pfmt5(alpha)))); y <- y\n- yinc\n  text(0.93, y, adj=0, substitute(beta==v, list(v=pfmt5(beta)))); y <- y -\nyinc\n  text(0.93, y, adj=0, substitute(delta==v, list(v=pfmt5(delta)))); y <- y\n- yinc\n  text(0.93, y, adj=0, substitute(mu==v, list(v=pfmt5(mu)))); y <- y - yinc\n  text(0.93, y, adj=0, substitute(theta==v, list(v=pfmt5(theta)))); y <- y\n- yinc\n  y <- y - yinc\n  text(0.92, y, adj=0, paste(\"Normal Parameters:\")); y <- y - yinc\n  text(0.93, y, adj=0, substitute(mu==v, list(v=pfmt5(mean)))); y <- y - yinc\n  text(0.93, y, adj=0, substitute(sigma==v, list(v=pfmt5(sd)))); y <- y -\nyinc\n\n  title(\"call(NIG), call(BS), implicit value vs. stock/strike\")\n}\n\n# plot the difference of the two prices\n\nplotdiff <- function(from=27.5, to=32.5, strike=30, maturity=1) {\n  npoints <- 200\n  sp <- seq(from=from, to=to, length=npoints)\n  cbs <- double(npoints)\n  cnig <- double(npoints)\n  ip <- double(npoints)\n\n  windows()  # open new window for plotting\n\n  for (i in 1:npoints) {\n    cnig[i] <- callnig(sp[i], strike, maturity)\n    cbs[i] <- callbs(sp[i], strike, maturity)\n  }\n  plot((sp/strike), (cnig - cbs), type=\"l\", col=\"red\")\n  y <- -0.2\n  yinc <- 0.025\n  text(0.92, y, adj=0, paste(\"NIG Parameters:\")); y <- y - yinc\n  text(0.93, y, adj=0, substitute(alpha==v, list(v=pfmt5(alpha)))); y <- y\n- yinc\n  text(0.93, y, adj=0, substitute(beta==v, list(v=pfmt5(beta)))); y <- y -\nyinc\n  text(0.93, y, adj=0, substitute(delta==v, list(v=pfmt5(delta)))); y <- y\n- yinc\n  text(0.93, y, adj=0, substitute(mu==v, list(v=pfmt5(mu)))); y <- y - yinc\n  text(0.93, y, adj=0, substitute(theta==v, list(v=pfmt5(theta)))); y <- y\n- yinc\n  y <- y - yinc\n  text(0.92, y, adj=0, paste(\"Normal Parameters:\")); y <- y - yinc\n  text(0.93, y, adj=0, substitute(mu==v, list(v=pfmt5(mean)))); y <- y - yinc\n  text(0.93, y, adj=0, substitute(sigma==v, list(v=pfmt5(sd)))); y <- y -\nyinc\n\n  title(\"call(NIG) - call(BS)\")\n}\n\nplotsurfacediff <- function() {\n\n  windows()\n\n  sp <- seq(from=15, to=45, length=100)\n  call <- matrix(nrow=100, ncol=25)\n  mat <- seq(from=.2, to=10, length=25)\n\n  strike <- 30\n\n  for (idx in 1:25) {\n    for (i in 1:100) {\n      # print(paste(\"idx = \", idx))\n      # print(paste(\"i = \", i))\n      call[i, idx] <- callnig(sp[i], strike, mat[idx]) - callbs(sp[i],\nstrike, mat[idx])\n      # call[i, idx] <- callbs0(sp[i], strike, mat[idx], 0.3, rf, rf)\n      # call[i, idx] <- callbs(sp[i], strike, mat[idx])\n      # call[i, idx] <- callbs2(sp[i], strike, mat[idx])\n      # call[i, idx] <- callnig(sp[i], strike, mat[idx])\n    }\n  }\n\n  persp(sp, mat, call, theta=30, phi=30, expand=0.8, col=\"lightblue\",\nticktype = \"detailed\",\n           xlab = \"stock price\", ylab = \"maturity\", zlab = \"call price\")\n}\n\n#  these just do the default.\n\nplotcall()\n\nplotdiff()\n\nshowpdfs()\n\nplotsurfacediff()",
+      "body_snippet": "Hello,\n\nI have been using the NIG-functions in the fBasics package\ntrying to determine some european call prices using a NIG\ndistribution, but seemed to have hit a wall.\n\nBasically, the process (as I ",
+      "thread_id": "thread-a56f8d90f68c",
+      "thread_depth": 0,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-d2f346d99efe",
+      "message_id": "<1925.58.10.34.88.1133889814.squirrel@mail.specere.com>",
+      "from_name": "dkf@specere.com",
+      "from_email_hash": "4d105a33a6ce9af29609dfcc57837a2a18401eab2e131645792505afd85fa43a",
+      "date": "2005-12-07T00:23:34+07:00",
+      "subject": "[R-sig-finance] NIG Option Pricing",
+      "subject_clean": "NIG Option Pricing",
+      "in_reply_to": "<43964550.8000500@earthlink.net>",
+      "references": [
+        "<1878.58.10.34.88.1133839879.squirrel@mail.specere.com>",
+        "<43964550.8000500@earthlink.net>"
+      ],
+      "body_plain": "Hello,\n\n> I am not sure of a few things you are doing\n>\n\nAs it turns out - neither was I.  I was able to narrow the problem\ndown and identify my programing error.  I apologize for the noise\non the list.\n\nAnyway, to those that might be interested (and to prevent anyone\nelse wasting their time on this).  Basically, my mistake was to\nassume that the default arguments to the function \"nigpdf\" were\nevaluated at runtime. In fact, they are evaluated at the time\nof the function defnition. Hence both integrate calls were\nreturning identical values.  The fix is, change the calls to\nintegrate from:\n\nintg2 <- integrate(nigpdf, iblower, ibupper)$value\n....\nintg2 <- integrate(nigpdf, iblower, ibupper)$value\n\nTo:\n\nintg2 <- integrate(nigpdf, iblower, ibupper,\n  alpha=alpha, beta=beta, delta=delta, mu=0)$value\n....\nintg2 <- integrate(nigpdf, iblower, ibupper,\n  alpha=alpha, beta=beta, delta=delta, mu=0)$value\n\nIn the callnig() function.\n\nRegards,\n\n--Dan\n\n\n> The BS volatility in your function below is what you compute as \"sd\"\n> below I don't think that makes sense. You'd have to\n> imply the bs volatility from NiG call prices to compare NiG to B.S\n>\n> So you imply b.s. volatility and then price with that implied to get the\n> B.S price. Also the reason your implicit values are odd is\n> because \"max\"  by default does the maximum across the list/array/vector\n> object. What you probably want to do is to use \"pmax\" instead.\n>\n> Finally you would find AVT and wim schoutens posting on wilmott helpful.\n> http://www.wilmott.com/messageview.cfm?catid=8&threadid=14313\n>\n> Cheers,\n> Kris\n>\n>",
+      "body_snippet": "Hello,\n\n> I am not sure of a few things you are doing\n>\n\nAs it turns out - neither was I.  I was able to narrow the problem\ndown and identify my programing error.  I apologize for the noise\non the lis",
+      "thread_id": "thread-a56f8d90f68c",
+      "thread_depth": 2,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-63d5d257abc5",
+      "message_id": "<43960E9E.4030502@burns-stat.com>",
+      "from_name": "Patrick Burns",
+      "from_email_hash": "406962932e1b0e9aa889ddffedf6a8e166ef21efd83628c67b1f8e535ee909c2",
+      "date": "2005-12-06T22:20:14Z",
+      "subject": "[R-sig-finance] Version 3 of POP Portfolio Construction Suite released",
+      "subject_clean": "Version 3 of POP Portfolio Construction Suite released",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Version 3 of POP Portfolio Construction Suite is now available.\n\nChanges include:\nNow available for Linux as well as Windows.\n\nFaster optimization, especially when a large number of assets are traded.\n\nMore constraints, most of these are mainly useful for generating random\nportfolios.\n\nAs always, the User's Manual can be educational no matter what software\nyou want to use.\n\nMore details on the Burns Statistics website.\n\nPatrick Burns\npatrick at burns-stat.com\n+44 (0)20 8525 0696\nhttp://www.burns-stat.com\n(home of S Poetry and \"A Guide for the Unwilling S User\")",
+      "body_snippet": "Version 3 of POP Portfolio Construction Suite is now available.\n\nChanges include:\nNow available for Linux as well as Windows.\n\nFaster optimization, especially when a large number of assets are traded.",
+      "thread_id": "thread-63d5d257abc5",
+      "thread_depth": 0,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-692df1a721f0",
+      "message_id": "<43964550.8000500@earthlink.net>",
+      "from_name": "Krishna Kumar",
+      "from_email_hash": "b5342e6f7178c92f67a17437313a28bb14db93175150fd429e207c65fb4f88b0",
+      "date": "2005-12-06T21:13:36-05:00",
+      "subject": "[R-sig-finance] NIG Option Pricing",
+      "subject_clean": "NIG Option Pricing",
+      "in_reply_to": "<1878.58.10.34.88.1133839879.squirrel@mail.specere.com>",
+      "references": [
+        "<1878.58.10.34.88.1133839879.squirrel@mail.specere.com>"
+      ],
+      "body_plain": "I am not sure of a few things you are doing\n\nThe BS volatility in your function below is what you compute as \"sd\"  \nbelow I don't think that makes sense. You'd have to\nimply the bs volatility from NiG call prices to compare NiG to B.S\n\nSo you imply b.s. volatility and then price with that implied to get the \nB.S price. Also the reason your implicit values are odd is\nbecause \"max\"  by default does the maximum across the list/array/vector \nobject. What you probably want to do is to use \"pmax\" instead.\n\nFinally you would find AVT and wim schoutens posting on wilmott helpful.\nhttp://www.wilmott.com/messageview.cfm?catid=8&threadid=14313\n\nCheers,\nKris\n\n\n\n\n\n\n\ndkf at specere.com wrote:\n\n>Hello,\n>\n>I have been using the NIG-functions in the fBasics package\n>trying to determine some european call prices using a NIG\n>distribution, but seemed to have hit a wall.\n>\n>Basically, the process (as I know it) is to determine the\n>parameter for the Esscher transform, which is then used in\n>adjusting the density function for integrating in a BS=style\n>fashion.\n>\n>A test case with parameters is included.  The results do not\n>appear correct as the classic \"W\" shape of \"call(NIG) - call(BS)\"\n>is not observed.  further, if you compare the different call\n>prices vs. stock/strike, as well as the implicit value - the\n>results are rather odd, as the call(NIG) value is often less\n>than the intrinsic value.\n>\n>There are some debugging routines defined in the following\n>R-script.\n>\n>Any help is greatly appreciated.\n>\n>Regards,\n>\n>--Dan\n>\n>test case and parameters\n>------------------------\n>\n>\n>library(fBasics)   # for nig distribution\n>\n>alpha <- 17.32268\n>beta <- 1.453270\n>delta <- 0.01144148\n>mu <- -0.0004846318\n>\n>mean <- 0.0004780999\n>sd <- sqrt(delta*(alpha^2)/(sqrt((alpha^2)-(beta^2))^3))\n>\n>rf <- 0.04\n>\n>#  determine the parameter, theta, for the riskneutral process\n>#  under the esscher transform\n>\n>esscher <- function(x) {\n>  result <- mu + delta*(sqrt(alpha^2 - (beta + x)^2) - sqrt(alpha^2 -\n>(beta + x + 1)^2)) - rf\n>  return(result)\n>}\n>\n>lowerlimit <- -alpha - beta\n>upperlimit <- alpha - beta - 1\n>xmin <- uniroot(esscher, c(lowerlimit, upperlimit), tol = 1.0e-6)\n>\n>theta <- xmin$root\n>\n># visual test of distributions\n>#\n>\n>showpdfs <- function() {\n>  #\n>  #  global: alpha, beta, delta, mu, theta, rf\n>  windows()\n>\n>  span.min = qnig(0.001, alpha, beta, delta, mu)\n>  span.max = qnig(0.999, alpha, beta, delta, mu)\n>  span <- seq(span.min, span.max, length=200)\n>  yfit <- dnig(span, alpha = alpha, beta = beta, delta = delta, mu = mu)\n>  yfit2 <- dnig(span, alpha = alpha, beta = beta + theta, delta = delta,\n>mu = 0)\n>  yfitnorm <- dnorm(span, mean=mean, sd=sd)\n>\n>  ylim <- log(c(min(yfit), max(yfit)))  # only bounding on fitted\n>distribution\n>  xlim <- c(span[1], span[length(span)])\n>  plot(span, log(yfit), ylim=ylim, xlim=xlim, type=\"l\", lty=2, col=\"blue\",\n>ylab=\"\", xlab=\"logreturns\")\n>  par(new=TRUE)\n>  plot(span, log(yfit2), ylim=ylim, xlim=xlim, type=\"l\", lty=3, col=\"red\",\n>ylab=\"\", xlab=\"logreturns\")\n>  par(new=TRUE)\n>  plot(span, log(yfitnorm), ylim=ylim, xlim=xlim, type=\"l\", lty=4,\n>col=\"green\", ylab=\"\", xlab=\"logreturns\")\n>  legend(x=\"topleft\", lty=c(2, 3, 4), col=c(\"blue\", \"red\", \"green\"),\n>c(\"objective\", \"riskneutral\", \"normal\"))\n>}\n>\n># define european call under NIG\n>\n>nigpdf <- function(x) {\n>  #\n>  #  global: alpha, beta, delta, mu, theta, rf\n>  dnig(x, alpha=alpha, beta=beta, delta=delta, mu=mu)\n>}\n>\n>callnig <- function(stock, strike, maturity) {\n>  #\n>  #  global: alpha, beta, delta, mu, theta, rf\n>  if (maturity <= 0) {\n>    return(max(stock - strike, 0))\n>  }\n>  iblower <- log(strike/stock)\n>  ibupper <- Inf\n>\n>  # adjust distribution estimates\n>  muold <- mu\n>  mu <- 0\n>  delta <- delta*maturity\n>  beta <- beta + theta\n>  intg2 <- integrate(nigpdf, iblower, ibupper)$value\n>  beta <- beta + 1\n>  intg1 <- integrate(nigpdf, iblower, ibupper)$value\n>  result <- stock*intg1 - strike*exp(-rf*maturity)*intg2\n>\n>  # unwind adjustments\n>  beta <- beta - theta - 1\n>  delta <- delta/maturity\n>  mu <- muold\n>\n>  return(result)\n>}\n>\n># define european call under B&S\n>\n>callbs <- function(stock, strike, maturity) {\n>  #\n>  # global:  sd\n>  if (maturity <= 0) {\n>    return(max(stock - strike, 0))\n>  }\n>  d1 <- (log(stock/strike) + ((rf +\n>(0.5*(sd^2)))*maturity))/(sd*sqrt(maturity))\n>  d2 <- d1 - sd*sqrt(maturity)\n>  result <- stock*pnorm(d1) - strike*exp(-rf*maturity)*pnorm(d2)\n>\n>  return(result)\n>}\n>\n># define function for evaluating calls\n>#\n>\n>pfmt5 <- function(x) {\n>  t1 <- sprintf(\"%5g\", x)\n>  return(as.numeric(t1))\n>}\n>\n># plot call vs underlying\n>\n>plotcall <- function(from=27.5, to=32.5, strike=30, maturity=1) {\n>  npoints <- 200\n>  sp <- seq(from=from, to=to, length=npoints)\n>  cbs <- double(npoints)\n>  cnig <- double(npoints)\n>  ip <- double(npoints)\n>\n>  windows()  # open new window for plotting\n>\n>  for (i in 1:npoints) {\n>    cnig[i] <- callnig(sp[i], strike, maturity)\n>    cbs[i] <- callbs(sp[i], strike, maturity)\n>    ip[i] <- max(sp[i] - strike, 0)   # intrinsic value of call\n>  }\n>  plot(sp/strike, ip, ylim=c(0,4), ylab=\"\", xlab=\"\",\n>    type=\"l\", lty=2, col=\"blue\")\n>  par(new=TRUE)\n>  plot(sp/strike, cbs, ylim=c(0,4), ylab=\"\", xlab=\"\",\n>    type=\"l\", lty=3, col=\"red\")\n>  par(new=TRUE)\n>  plot(sp/strike, cnig, ylim=c(0,4), ylab=\"call price\", xlab=\"(stock\n>price)/strike\",\n>    type=\"l\", lty=4, col=\"green\")\n>  legend(x=\"bottomright\", lty=c(2, 3, 4), col=c(\"blue\", \"red\", \"green\"),\n>c(\"implicit value\", \"black-scholes\", \"nig\"))\n>  y <- 3.7\n>  yinc <- 0.15\n>  text(0.92, y, adj=0, paste(\"NIG Parameters:\")); y <- y - yinc\n>  text(0.93, y, adj=0, substitute(alpha==v, list(v=pfmt5(alpha)))); y <- y\n>- yinc\n>  text(0.93, y, adj=0, substitute(beta==v, list(v=pfmt5(beta)))); y <- y -\n>yinc\n>  text(0.93, y, adj=0, substitute(delta==v, list(v=pfmt5(delta)))); y <- y\n>- yinc\n>  text(0.93, y, adj=0, substitute(mu==v, list(v=pfmt5(mu)))); y <- y - yinc\n>  text(0.93, y, adj=0, substitute(theta==v, list(v=pfmt5(theta)))); y <- y\n>- yinc\n>  y <- y - yinc\n>  text(0.92, y, adj=0, paste(\"Normal Parameters:\")); y <- y - yinc\n>  text(0.93, y, adj=0, substitute(mu==v, list(v=pfmt5(mean)))); y <- y - yinc\n>  text(0.93, y, adj=0, substitute(sigma==v, list(v=pfmt5(sd)))); y <- y -\n>yinc\n>\n>  title(\"call(NIG), call(BS), implicit value vs. stock/strike\")\n>}\n>\n># plot the difference of the two prices\n>\n>plotdiff <- function(from=27.5, to=32.5, strike=30, maturity=1) {\n>  npoints <- 200\n>  sp <- seq(from=from, to=to, length=npoints)\n>  cbs <- double(npoints)\n>  cnig <- double(npoints)\n>  ip <- double(npoints)\n>\n>  windows()  # open new window for plotting\n>\n>  for (i in 1:npoints) {\n>    cnig[i] <- callnig(sp[i], strike, maturity)\n>    cbs[i] <- callbs(sp[i], strike, maturity)\n>  }\n>  plot((sp/strike), (cnig - cbs), type=\"l\", col=\"red\")\n>  y <- -0.2\n>  yinc <- 0.025\n>  text(0.92, y, adj=0, paste(\"NIG Parameters:\")); y <- y - yinc\n>  text(0.93, y, adj=0, substitute(alpha==v, list(v=pfmt5(alpha)))); y <- y\n>- yinc\n>  text(0.93, y, adj=0, substitute(beta==v, list(v=pfmt5(beta)))); y <- y -\n>yinc\n>  text(0.93, y, adj=0, substitute(delta==v, list(v=pfmt5(delta)))); y <- y\n>- yinc\n>  text(0.93, y, adj=0, substitute(mu==v, list(v=pfmt5(mu)))); y <- y - yinc\n>  text(0.93, y, adj=0, substitute(theta==v, list(v=pfmt5(theta)))); y <- y\n>- yinc\n>  y <- y - yinc\n>  text(0.92, y, adj=0, paste(\"Normal Parameters:\")); y <- y - yinc\n>  text(0.93, y, adj=0, substitute(mu==v, list(v=pfmt5(mean)))); y <- y - yinc\n>  text(0.93, y, adj=0, substitute(sigma==v, list(v=pfmt5(sd)))); y <- y -\n>yinc\n>\n>  title(\"call(NIG) - call(BS)\")\n>}\n>\n>plotsurfacediff <- function() {\n>\n>  windows()\n>\n>  sp <- seq(from=15, to=45, length=100)\n>  call <- matrix(nrow=100, ncol=25)\n>  mat <- seq(from=.2, to=10, length=25)\n>\n>  strike <- 30\n>\n>  for (idx in 1:25) {\n>    for (i in 1:100) {\n>      # print(paste(\"idx = \", idx))\n>      # print(paste(\"i = \", i))\n>      call[i, idx] <- callnig(sp[i], strike, mat[idx]) - callbs(sp[i],\n>strike, mat[idx])\n>      # call[i, idx] <- callbs0(sp[i], strike, mat[idx], 0.3, rf, rf)\n>      # call[i, idx] <- callbs(sp[i], strike, mat[idx])\n>      # call[i, idx] <- callbs2(sp[i], strike, mat[idx])\n>      # call[i, idx] <- callnig(sp[i], strike, mat[idx])\n>    }\n>  }\n>\n>  persp(sp, mat, call, theta=30, phi=30, expand=0.8, col=\"lightblue\",\n>ticktype = \"detailed\",\n>           xlab = \"stock price\", ylab = \"maturity\", zlab = \"call price\")\n>}\n>\n>#  these just do the default.\n>\n>plotcall()\n>\n>plotdiff()\n>\n>showpdfs()\n>\n>plotsurfacediff()\n>\n>_______________________________________________\n>R-sig-finance at stat.math.ethz.ch mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>  \n>",
+      "body_snippet": "I am not sure of a few things you are doing\n\nThe BS volatility in your function below is what you compute as \"sd\"  \nbelow I don't think that makes sense. You'd have to\nimply the bs volatility from NiG",
+      "thread_id": "thread-a56f8d90f68c",
+      "thread_depth": 1,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-099eda25439d",
+      "message_id": "<17302.49916.661338.114070@stat.math.ethz.ch>",
+      "from_name": "Martin Maechler",
+      "from_email_hash": "c2c86f22f78a4ecfe6d0e6b4e2be505a3f5beb0470ea88c903688ac536018a98",
+      "date": "2005-12-07T12:09:48+01:00",
+      "subject": "[R-sig-finance] NIG Option Pricing",
+      "subject_clean": "NIG Option Pricing",
+      "in_reply_to": "<1925.58.10.34.88.1133889814.squirrel@mail.specere.com>",
+      "references": [
+        "<1878.58.10.34.88.1133839879.squirrel@mail.specere.com>",
+        "<43964550.8000500@earthlink.net>",
+        "<1925.58.10.34.88.1133889814.squirrel@mail.specere.com>"
+      ],
+      "body_plain": ">>>>> \"dkf\" == dkf  <dkf at specere.com>\n>>>>>     on Wed, 7 Dec 2005 00:23:34 +0700 (ICT) writes:\n\n    dkf> Hello,\n    >> I am not sure of a few things you are doing\n\n    dkf> As it turns out - neither was I.  I was able to narrow\n    dkf> the problem down and identify my programing error.  I\n    dkf> apologize for the noise on the list.\n\n    dkf> Anyway, to those that might be interested (and to\n    dkf> prevent anyone else wasting their time on this).\n    dkf> Basically, my mistake was to assume that the default\n    dkf> arguments to the function \"nigpdf\" were evaluated at\n    dkf> runtime. In fact, they are evaluated at the time of the\n    dkf> function defnition. \n\nnot really --  since this is not true for any R function!\n\nI think your problem is that you are working with global\nvariables a lot, something which is *very strongly* discouraged....\nIn your case, I think you could pass a list(alpha=.., beta=..)\nto the corresponding functions.\n\nRegards,\nMartin",
+      "body_snippet": ">>>>> \"dkf\" == dkf  <dkf at specere.com>\n>>>>>     on Wed, 7 Dec 2005 00:23:34 +0700 (ICT) writes:\n\n    dkf> Hello,\n    >> I am not sure of a few things you are doing\n\n    dkf> As it turns out - neith",
+      "thread_id": "thread-a56f8d90f68c",
+      "thread_depth": 3,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-c877f12a0175",
+      "message_id": "<800F3C4ADCFCA643A919EF7C140A045A064FF519@LLANQUIHUE.corpgroup.cl>",
+      "from_name": "Ricardo Zambrano Aguilera",
+      "from_email_hash": "20d50b9aeaf54472c6390f0ec74177dc3217487bdf2816d202fe8cf5f3f76e94",
+      "date": "2005-12-07T11:50:50-03:00",
+      "subject": "[R-sig-finance] RV: please ...i need help...",
+      "subject_clean": "RV: please ...i need help...",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "> -----Mensaje original-----\n> De:\tRicardo Zambrano Aguilera \n> Enviado el:\tlunes, 05 de diciembre de 2005 17:06\n> Para:\t'r-sig-finance at stat.math.ethz.ch'\n> Asunto:\tplease ...i need help...\n> \n> hello everyone my name is ricardo and i leave in santiago ,Chile i?m 23 years old, and i?m close to graduated from engineering with mention in stats\n> my problem follows me every time.\n> to graduated i must to do a paper work based in modelling the change type, between different coins. specially dollar - peso ,trought GARCH models, besides i need to create to my bank (the place where i?m doing my thesis), a system to calculate the Var (value at risk), but i have problems to calculate the var in a portfolio standar (just like a regular client of the bank) .   i don?t know, call me a oldie fashion , but i like to work in R, actually  i?m doing my job with the package tseries...\n> BUT i did hear, that the splus 7.0 has a super module called finmetrics...   but i understand that R has a similar module the r-sig-finance it?s true this????????\n> if is true  i would like to have it , can you help me??\n> por favor , le habla un studiante de un pais tercer mundista, en donde el banco no puede comprar la licencia de splus\n> BYE",
+      "body_snippet": "> -----Mensaje original-----\n> De:\tRicardo Zambrano Aguilera \n> Enviado el:\tlunes, 05 de diciembre de 2005 17:06\n> Para:\t'r-sig-finance at stat.math.ethz.ch'\n> Asunto:\tplease ...i need help...\n> \n> he",
+      "thread_id": "thread-c877f12a0175",
+      "thread_depth": 0,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-9fe948cd1e2b",
+      "message_id": "<89C7DEAADB79564DB278694EB2417CCE6995D3@CHOCOLATE.GCRInsight.com>",
+      "from_name": "Schwarz,Paul",
+      "from_email_hash": "3bcee531ce963a2b683d1dfc6552eb08b5a144525370084e888e72257980297e",
+      "date": "2005-12-07T09:07:12-08:00",
+      "subject": "[R-sig-finance] query string tokens for Yahoo finance site",
+      "subject_clean": "query string tokens for Yahoo finance site",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I recognize that this question is more Yahoo-related not directly\nR-related, but I'm trying to better understand some of the details of\nthe yahooImport() function. Specifically, I'm looking for the\ndefinitions and documentation for the query string tokens such as \"&g=\"\netc.  Many of the tokens are readily understandable, e.g., &a= and &g=\nbased on their usage and context. However, I've come across other tokens\nsuch as \"&q=\" and \"&y=\" that are less obvious. I'm curious to know where\nthese tokens are defined and documented? So far I've not been able to\nfind any documentation online at Yahoo or elsewhere which describes the\ndetails of these query strings. So, I'd appreciate any pointers on where\nto look.\n\nThanks.\n\nPaul Schwarz",
+      "body_snippet": "I recognize that this question is more Yahoo-related not directly\nR-related, but I'm trying to better understand some of the details of\nthe yahooImport() function. Specifically, I'm looking for the\nde",
+      "thread_id": "thread-9fe948cd1e2b",
+      "thread_depth": 0,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-05e1fd0b1b96",
+      "message_id": "<F90D76D3C7CC6A41B6E2E6F88CA8252E1CBC1B@se2kexch01.insightful.com>",
+      "from_name": "Guy Yollin",
+      "from_email_hash": "91a8cc8000add1539f8db1856524b69b47fc62257760ad31a69685dfee20e59e",
+      "date": "2005-12-07T09:32:12-08:00",
+      "subject": "[R-sig-finance] query string tokens for Yahoo finance site",
+      "subject_clean": "query string tokens for Yahoo finance site",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Perhaps this website may be of help:\n\nhttp://www.gummy-stuff.org/Yahoo-data.htm\n\n-- Guy\n\n\nGuy Yollin\nSenior Financial Engineer\nInsightful Corporation\nwww.insightful.com\ngyollin at insightful.com\n\n\n-----Original Message-----\nFrom: Schwarz,Paul [mailto:PSchwarz at gcrinsight.com]\nSent: Wednesday, December 07, 2005 9:07 AM\nTo: r-sig-finance at stat.math.ethz.ch\nSubject: [R-sig-finance] query string tokens for Yahoo finance site\n\n\n \nI recognize that this question is more Yahoo-related not directly\nR-related, but I'm trying to better understand some of the details of\nthe yahooImport() function. Specifically, I'm looking for the\ndefinitions and documentation for the query string tokens such as \"&g=\"\netc.  Many of the tokens are readily understandable, e.g., &a= and &g=\nbased on their usage and context. However, I've come across other tokens\nsuch as \"&q=\" and \"&y=\" that are less obvious. I'm curious to know where\nthese tokens are defined and documented? So far I've not been able to\nfind any documentation online at Yahoo or elsewhere which describes the\ndetails of these query strings. So, I'd appreciate any pointers on where\nto look.\n\nThanks.\n\nPaul Schwarz\n\n_______________________________________________\nR-sig-finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance",
+      "body_snippet": "Perhaps this website may be of help:\n\nhttp://www.gummy-stuff.org/Yahoo-data.htm\n\n-- Guy\n\n\nGuy Yollin\nSenior Financial Engineer\nInsightful Corporation\nwww.insightful.com\ngyollin at insightful.com\n\n\n---",
+      "thread_id": "thread-05e1fd0b1b96",
+      "thread_depth": 0,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-d05bd097f23b",
+      "message_id": "<439B08AE.3020501@pdf.com>",
+      "from_name": "Spencer Graves",
+      "from_email_hash": "0d1725402b5f223aa45a1714f600b741ea6c2ccb2d67d2b94ddab1ed1e80aefd",
+      "date": "2005-12-10T08:56:14-08:00",
+      "subject": "[R-sig-finance] RV: please ...i need help...",
+      "subject_clean": "RV: please ...i need help...",
+      "in_reply_to": "<800F3C4ADCFCA643A919EF7C140A045A064FF519@LLANQUIHUE.corpgroup.cl>",
+      "references": [
+        "<800F3C4ADCFCA643A919EF7C140A045A064FF519@LLANQUIHUE.corpgroup.cl>"
+      ],
+      "body_plain": "Just now, RSiteSearch(\"GARCH\") produced for me 258 hits.  The first \nwas a function 'garch' in the 'tseries' package.  At least 9 of the \nfirst 10 might be useful for you.  Similarly, 'help.search(\"GARCH\")' \nidentified capabilities already installed in local copy of R in packages \n  base, cluster, fCalendar, fOptions, fSeries, lattice, MASS, methods, \nstats, tcktk, tseries, and utils.  Some of these may not help you, but \nif you haven't already, I believe you will want to study fCalendar, \nfOptions, and fSeries and Rmetrics (www.rmetrics.org) of which these are \npart.  Rmetrics looks like an open source alternative to Finmetrics. \nI'm told that Finmetrics contains things that Rmetrics does not. \nHowever, Rmetrics looks like it will get much of what you want. \nSimilarly, RSiteSearch(\"value at risk\") produced for me 195 hits, the \nfirst of which looked like it would interest you.\n\n\t  This should help you take the next few steps in your project.  If you \nlater would like more help from this listserve, I encourage you to \nPLEASE do read the posting guide! \n\"www.R-project.org/posting-guide.html\".  I believe it can (a) help you \nfind answers that might not come to you without it, and (b) increase \nyour chances of receiving a quicker, more useful reply.\n\n\t  Buena suerte,\n\t  spencer graves\n-- \nRicardo Zambrano Aguilera wrote:\n\n> \n>>-----Mensaje original-----\n>>De:\tRicardo Zambrano Aguilera \n>>Enviado el:\tlunes, 05 de diciembre de 2005 17:06\n>>Para:\t'r-sig-finance at stat.math.ethz.ch'\n>>Asunto:\tplease ...i need help...\n>>\n>>hello everyone my name is ricardo and i leave in santiago ,Chile i?m 23 years old, \nand i?m close to graduated from engineering with mention in stats\n>>my problem follows me every time.\n>>to graduated i must to do a paper work based in modelling the change type, \nbetween different coins. specially dollar - peso ,trought GARCH models, \nbesides\ni need to create to my bank (the place where i?m doing my thesis), a \nsystem to\ncalculate the Var (value at risk), but i have problems to calculate the \nvar in\na portfolio standar (just like a regular client of the bank) .   i don?t \nknow,\ncall me a oldie fashion , but i like to work in R, actually  i?m doing \nmy job\nwith the package tseries...\n>>BUT i did hear, that the splus 7.0 has a super module called finmetrics...  \n  but i understand that R has a similar module the r-sig-finance it?s \ntrue this????????\n>>if is true  i would like to have it , can you help me??\n>>por favor , le habla un studiante de un pais tercer mundista, en donde el banco no puede comprar la licencia de splus\n>>BYE\n> \n> \n> _______________________________________________\n> R-sig-finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n\n-- \nSpencer Graves, PhD\nSenior Development Engineer\nPDF Solutions, Inc.\n333 West San Carlos Street Suite 700\nSan Jose, CA 95110, USA\n\nspencer.graves at pdf.com\nwww.pdf.com <http://www.pdf.com>\nTel:  408-938-4420\nFax: 408-280-7915",
+      "body_snippet": "Just now, RSiteSearch(\"GARCH\") produced for me 258 hits.  The first \nwas a function 'garch' in the 'tseries' package.  At least 9 of the \nfirst 10 might be useful for you.  Similarly, 'help.search(\"GA",
+      "thread_id": "thread-c877f12a0175",
+      "thread_depth": 1,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-781a3573e84d",
+      "message_id": "<439ECA18.40107@itp.phys.ethz.ch>",
+      "from_name": "Diethelm Wuertz",
+      "from_email_hash": "db72845f148b28bce223455d9f5dbf705d659fd637f9d0697fb0778a67cfebef",
+      "date": "2005-12-13T13:18:16Z",
+      "subject": "[R-sig-finance] Constrained Log-Likelihood with SQP Solver",
+      "subject_clean": "Constrained Log-Likelihood with SQP Solver",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear R-Users,\n\nI'm searching for somebody who can support me or even likes to \ncollaborate with\nme in setting up an R-package for \"constrained maximim log-likelihood\" \nparameter\nestimation.\n\nFor example fitting the parameters of a MA(1)-APARCH(1,1) model for a \ntime series\nof 17'000 points (e.g. the famous Ding-Granger-Engle mode) takes about \n10 minutes\nwith the existing optimization algorithms available under R.\n\nModern state of the art algorithms, like SQP algorithms as implemented \nin Gauss,\nMatlab, Ox, take about a few seconds. I tested this finding with a free \nconstrained\nSQP solver written in FORTRAN under R and found these results confirmed. I\ngot the results in a few seconds instead of a few minutes!\n\nNow I'm looking for a collegue who has the experience in implementing \nFORTRAN\nOptimization Code in R, calling the objective function and optionally \ngradient and\nhessian from R functions. I have already inspected a lot of Fortran, C, \nand R sources\nfrom the base package, but I didn't succeed so far with a reasonable effort.\n\n\nMany thanks in advance\nDiethelm Wuertz",
+      "body_snippet": "Dear R-Users,\n\nI'm searching for somebody who can support me or even likes to \ncollaborate with\nme in setting up an R-package for \"constrained maximim log-likelihood\" \nparameter\nestimation.\n\nFor examp",
+      "thread_id": "thread-781a3573e84d",
+      "thread_depth": 0,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-055484ed1a34",
+      "message_id": "<1134488498.c7e0aafcL.Isella@myrealbox.com>",
+      "from_name": "L.Isella",
+      "from_email_hash": "e83286d14c4fa9f4a44217fdbbf1fb21f4fc76e631493f09faaf675cb0054803",
+      "date": "2005-12-13T15:41:38Z",
+      "subject": "[R-sig-finance] Optimization of Non-Quadratic Functions",
+      "subject_clean": "Optimization of Non-Quadratic Functions",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear All,\nI am trying to implement some portfolio optimization techinique going beyond mean/variance optimization (e.g. including higher order moments in the quantity to maximize or using non-quadratic utilities). Furthermore, I am also interested in applying nonlinear constrains to my portfolio weights.\nFor all these tasks, I need something different from the solve.QP routine I have been using happily so far.\nIs there any specifically designed routine for this kind of problem or should I revert to some general-purpose optimization package?\nAny suggestion is welcome.\n\nBest Regards\n\nLorenzo",
+      "body_snippet": "Dear All,\nI am trying to implement some portfolio optimization techinique going beyond mean/variance optimization (e.g. including higher order moments in the quantity to maximize or using non-quadrati",
+      "thread_id": "thread-055484ed1a34",
+      "thread_depth": 0,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-2834120b4a7f",
+      "message_id": "<20051214134305.GA73479@tehun.pair.com>",
+      "from_name": "Andrew Piskorski",
+      "from_email_hash": "7ba288058383c6a3ea095413cedc140865ba579d780f5f4c61b80cc7b52fb770",
+      "date": "2005-12-14T08:43:06-05:00",
+      "subject": "[R-sig-finance] Constrained Log-Likelihood with SQP Solver",
+      "subject_clean": "Constrained Log-Likelihood with SQP Solver",
+      "in_reply_to": "<439ECA18.40107@itp.phys.ethz.ch>",
+      "references": [
+        "<439ECA18.40107@itp.phys.ethz.ch>"
+      ],
+      "body_plain": "On Tue, Dec 13, 2005 at 01:18:16PM +0000, Diethelm Wuertz wrote:\n\n> Modern state of the art algorithms, like SQP algorithms as\n> implemented in Gauss, Matlab, Ox, take about a few seconds.\n\nI'm curious, to these other languages implement these SQP algorithms\nnatively, or are they too calling underlying Fortran or C libraries?\n(I strongly suspect the latter.)\n\n-- \nAndrew Piskorski <atp at piskorski.com>\nhttp://www.piskorski.com/",
+      "body_snippet": "On Tue, Dec 13, 2005 at 01:18:16PM +0000, Diethelm Wuertz wrote:\n\n> Modern state of the art algorithms, like SQP algorithms as\n> implemented in Gauss, Matlab, Ox, take about a few seconds.\n\nI'm curiou",
+      "thread_id": "thread-781a3573e84d",
+      "thread_depth": 1,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-bfcf465ccb2b",
+      "message_id": "<bcb171920512141529s298f2edds2139ad3bd13b0a28@mail.gmail.com>",
+      "from_name": "Vivek Satsangi",
+      "from_email_hash": "4b7fa5545cdf8df0b2eff1f026b1a4b1f911653da63b37b5638e908fa415cd20",
+      "date": "2005-12-14T18:29:35-05:00",
+      "subject": "[R-sig-finance] R-sig-finance Digest, Vol 19, Issue 6",
+      "subject_clean": "R-sig-finance Digest, Vol 19, Issue 6",
+      "in_reply_to": "<mailman.17.1134558002.5724.r-sig-finance@stat.math.ethz.ch>",
+      "references": [
+        "<mailman.17.1134558002.5724.r-sig-finance@stat.math.ethz.ch>"
+      ],
+      "body_plain": "Hello Lorenzo,\nI am assuming that you are already familiar with the offerings of the\nbook, \"Modern Portfolio Optimization with NuOPT, S-PLUS and S+BAYES\"\n[Springer 2005] at\n\nhttp://www.springer.com/sgw/cda/frontpage/0,,4-40109-22-34952077-0,00.htm\n\nIf not...\nI have not read the whole book (it is above my current level, but I am\nbuilding up to it slowly). However, I understand that this book offers\nvarious other optimizations. It also comes with a 150 day license for\nthe tools it uses, so even if your budget does not allow for SPLUS,\nyou can try the stuff they are doing in there. The only down side is\nthat they do not permit you to translate the packages into R.\n(Although I suppose there is nothing to stop anyone from\nreimplementing the algorithms in R, just not using their code -- I am\nno legal/ethics expert).\n\nHope this helps. If you already knew all this, I am sorry to have\ntaken up your time.\n\nVivek\n>\n> ------------------------------\n>\n> Message: 2\n> Date: Tue, 13 Dec 2005 15:41:38 +0000\n> From: \"L.Isella\" <L.Isella at myrealbox.com>\n> Subject: [R-sig-finance] Optimization of Non-Quadratic Functions\n> To: r-sig-finance at stat.math.ethz.ch\n> Message-ID: <1134488498.c7e0aafcL.Isella at myrealbox.com>\n> Content-Type: text/plain; charset=\"UTF-8\"\n>\n> Dear All,\n> I am trying to implement some portfolio optimization techinique going beyond mean/variance optimization (e.g. including higher order moments in the quantity to maximize or using non-quadratic utilities). Furthermore, I am also interested in applying nonlinear constrains to my portfolio weights.\n> For all these tasks, I need something different from the solve.QP routine I have been using happily so far.\n> Is there any specifically designed routine for this kind of problem or should I revert to some general-purpose optimization package?\n> Any suggestion is welcome.\n>\n> Best Regards\n>\n> Lorenzo\n>\n>\n>\n> ------------------------------\n>\n> _______________________________________________\n> R-sig-finance mailing list\n> R-sig-finance at stat.math.ethz.ch\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>\n> End of R-sig-finance Digest, Vol 19, Issue 6\n> ********************************************\n>\n\n\n--\n-- Vivek Satsangi\nStudent, Rochester, NY USA",
+      "body_snippet": "Hello Lorenzo,\nI am assuming that you are already familiar with the offerings of the\nbook, \"Modern Portfolio Optimization with NuOPT, S-PLUS and S+BAYES\"\n[Springer 2005] at\n\nhttp://www.springer.com/sg",
+      "thread_id": "thread-bfcf465ccb2b",
+      "thread_depth": 0,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-03e1fec3a244",
+      "message_id": "<loom.20051216T093738-612@post.gmane.org>",
+      "from_name": "Max",
+      "from_email_hash": "884f795cd08b28e94b88febd7013cb1db83d250352a71703e6fd92b09e2a2f6c",
+      "date": "2005-12-16T08:45:34Z",
+      "subject": "[R-sig-finance] Constrained Log-Likelihood with SQP Solver",
+      "subject_clean": "Constrained Log-Likelihood with SQP Solver",
+      "in_reply_to": null,
+      "references": [
+        "<439ECA18.40107@itp.phys.ethz.ch>",
+        "<20051214134305.GA73479@tehun.pair.com>"
+      ],
+      "body_plain": "Andrew Piskorski <atp <at> piskorski.com> writes:\n\n> \n> On Tue, Dec 13, 2005 at 01:18:16PM +0000, Diethelm Wuertz wrote:\n> \n> > Modern state of the art algorithms, like SQP algorithms as\n> > implemented in Gauss, Matlab, Ox, take about a few seconds.\n> \n> I'm curious, to these other languages implement these SQP algorithms\n> natively, or are they too calling underlying Fortran or C libraries?\n> (I strongly suspect the latter.)\n> \nI don't know about Gauss and Matlab, but Ox has a native SQP algorithm (in the\nfile src/solveqp.ox).\n\nI would be interested to hear why you suspect that they would implement this\nalgorithm in Fortran or C, btw - wouldn't it be easier to implement/ integrate\nwith the various languages at a higher level?\n\nRegards,\n\nMax\n\nPS: Note that Jurgen Doornik holds the copyright to the file mentioned (and the\nrest of Ox, of course), and expressly disallows translating it into other\ncomputing languages in the copyright notice at the beginning of the file.",
+      "body_snippet": "Andrew Piskorski <atp <at> piskorski.com> writes:\n\n> \n> On Tue, Dec 13, 2005 at 01:18:16PM +0000, Diethelm Wuertz wrote:\n> \n> > Modern state of the art algorithms, like SQP algorithms as\n> > implement",
+      "thread_id": "thread-781a3573e84d",
+      "thread_depth": 2,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-836033e7e707",
+      "message_id": "<20051216133759.GA49679@tehun.pair.com>",
+      "from_name": "Andrew Piskorski",
+      "from_email_hash": "7ba288058383c6a3ea095413cedc140865ba579d780f5f4c61b80cc7b52fb770",
+      "date": "2005-12-16T08:38:02-05:00",
+      "subject": "[R-sig-finance] Constrained Log-Likelihood with SQP Solver",
+      "subject_clean": "Constrained Log-Likelihood with SQP Solver",
+      "in_reply_to": "<loom.20051216T093738-612@post.gmane.org>",
+      "references": [
+        "<loom.20051216T093738-612@post.gmane.org>"
+      ],
+      "body_plain": "On Fri, Dec 16, 2005 at 08:45:34AM +0000, Max wrote:\n\n> I would be interested to hear why you suspect that they would\n> implement this algorithm in Fortran or C, btw - wouldn't it be\n> easier to implement/ integrate with the various languages at a\n> higher level?\n\nFor the same reason that AFAIK nearly all real-world numerical\nlibraries are written in either C or Fortran - for speed.  (I suppose\nthere are probably some such kicking around in compiled Lisp or other\natypical languages, but they seem few and far between.)\n\nC is also often chosen for libraries simply because any other language\nyou'd care about integrates easily with C (by necessity), but\nintegration with other languages doesn't even enter into it here.  The\noriginal poster seemed to be talking about 2 or even 3 orders of\nmagnitude difference in performance, and being quite unhappy with the\nslow runtimes he's seeing now.  That's more than enough speedup to\njustify the added hassle and pain of writing C code.\n\nOf course, I don't know whether R functions he was using were well\nimplemented or not; I was asssuming they are.  But a good C version is\nlikely to be much faster than R anyway.\n\nC (and to a lesser extent Fortran, for numerial stuff) are an\nomnipresent fact of programming life, especially for lower level\nlibraries.  You don't have to like it, but that's the way it is.\n\nI know next to nothing about Ox.  If it is in fact as high level and\nnice to use as R, but much faster, then that's interesting.  Of course\nOx (like K, another reputedly high performance vector-oriented\nlanguage), is closed source, which makes me less interested in\ninvestigating it.  I do kind of wonder how fast A+ is, though.\n\n  http://www.doornik.com/products.html#Ox\n  http://www.aplusdev.org/\n\n-- \nAndrew Piskorski <atp at piskorski.com>\nhttp://www.piskorski.com/",
+      "body_snippet": "On Fri, Dec 16, 2005 at 08:45:34AM +0000, Max wrote:\n\n> I would be interested to hear why you suspect that they would\n> implement this algorithm in Fortran or C, btw - wouldn't it be\n> easier to imple",
+      "thread_id": "thread-781a3573e84d",
+      "thread_depth": 3,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-6aed5e17fe6a",
+      "message_id": "<loom.20051216T144936-433@post.gmane.org>",
+      "from_name": "Max",
+      "from_email_hash": "884f795cd08b28e94b88febd7013cb1db83d250352a71703e6fd92b09e2a2f6c",
+      "date": "2005-12-16T14:21:07Z",
+      "subject": "[R-sig-finance] Constrained Log-Likelihood with SQP Solver",
+      "subject_clean": "Constrained Log-Likelihood with SQP Solver",
+      "in_reply_to": null,
+      "references": [
+        "<loom.20051216T093738-612@post.gmane.org>",
+        "<20051216133759.GA49679@tehun.pair.com>"
+      ],
+      "body_plain": "Andrew Piskorski <atp <at> piskorski.com> writes:\n> For the same reason that AFAIK nearly all real-world numerical\n> libraries are written in either C or Fortran - for speed.\n\nFor the stuff that I write, the bottleneck is usually the function evaluation/\ngradient evaluation, which I do of course implement in C if necessary. (In one\nof my applications, a function evaluation took 5+ mins, with optimised C code...\nand I need to run the maximisation on 30 different series.)\n\nIn this sort of case, it does matter what kind of algorithm you use (because\nthat determines the number of function evaluations), but it doesn't really\nmatter that much what language the algorithm is written in, as the number of\nsteps are typically only a couple of hundred, so that things like slow looping\nin interpreted languages don't really play a role.\n\nThe problem that Diethelm mentioned sounded vaguely similar (I guess for each\nevaluation of the likelihood function, you need to multiply some pretty large\nvectors and matrices).\n\nI guess there must be other types of applications, though, where it is necessary\nto run the optimisation algorithm itself in a low-level language. I was just\nwondering whether you had anything in particular in mind.\n\nOx is fairly high level, although more similar to C/C++ (I guess R is more\nsimilar to Lisp in some ways). It is closed source, though, which I do agree is\na very important drawback. Actually, that's the reason I started using R.\n\nI hadn't heard of A+, it sounds interesting, thanks.",
+      "body_snippet": "Andrew Piskorski <atp <at> piskorski.com> writes:\n> For the same reason that AFAIK nearly all real-world numerical\n> libraries are written in either C or Fortran - for speed.\n\nFor the stuff that I wri",
+      "thread_id": "thread-781a3573e84d",
+      "thread_depth": 4,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-599d459c76de",
+      "message_id": "<NEBBIPHDAMMOKDKPOFFIMEAODOAA.abunn@whrc.org>",
+      "from_name": "Andy Bunn",
+      "from_email_hash": "6f9417c871d55572bb1393f13ea28441cbe599554127261ade40301525fa27da",
+      "date": "2005-12-18T12:39:35-05:00",
+      "subject": "[R-sig-finance] Butterworth low-pass  filter",
+      "subject_clean": "Butterworth low-pass  filter",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi r-sig: I tried this on r-help first a few days ago with no hits, so sorry\nfor xposting....\n\n\n-----Original Message-----\nFrom: Andy Bunn [mailto:abunn at whrc.org]\nSent: Friday, December 16, 2005 11:32 AM\nTo: R-Help\nSubject: Butterworth low-pass filter\n\n\nHas anybody implemented code to extract coefficients for a Butterworth\nlow-pass filter? I know Matlab has it implemented in the signal toolbox. I\nwant to make use of a 10 point Butterworth low-pass filter for smoothing.\n\nIn Matlab the code would look like this:\n% Determine the filter coefficients\n[b,a]=butter(10,0.1)\n% Apply the filter to the input\noutdata = filter (b,a,indata);\n\nThe archives contain similar questions but if somebody responded, they did\nit off-list.\n\nThanks in advance,\nAndy",
+      "body_snippet": "Hi r-sig: I tried this on r-help first a few days ago with no hits, so sorry\nfor xposting....\n\n\n-----Original Message-----\nFrom: Andy Bunn [mailto:abunn at whrc.org]\nSent: Friday, December 16, 2005 11",
+      "thread_id": "thread-599d459c76de",
+      "thread_depth": 0,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-31c11e51260a",
+      "message_id": "<20051224152838.GA23574@lubyanka.local>",
+      "from_name": "Ajay Narottam Shah",
+      "from_email_hash": "44daf6d5b15f2615777d1fb204165d8dd630c3fb70829ad9e4ccbfec8f81cc1c",
+      "date": "2005-12-24T20:58:38+05:30",
+      "subject": "[R-sig-finance] Puzzled in arch estimation",
+      "subject_clean": "Puzzled in arch estimation",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I have attached a time-series r. I find that I am able to use the\ngarch() function in the tseries package to estimate a GARCH(1,1)\nmodel. But it fails to get convergence for the GARCH(1,0) -- i.e.,\nARCH(1) -- model. I seem to think that the latter is actually a simple\nlikelihood function and it's much easier to get convergence for it.\n\nThere's a mysterious statement towards the end of the time-series\nchapter of the MASS book which says that the garch() function requires\nthe series to be mean 0 (a statement which I didn't find in the\ndocumentation of tseries). So I also did this one more way: To first\nestimate an AR(1) model, and focus on the residuals. Once again, I get\nthe same pathology: GARCH(1,1) works but ARCH(1) does not.\n\nI fed the same series to stata and it estimates AR(1)-ARCH(1) easily,\nso this doesn't seem to be a pathological case of bad\ndata. Difficulties in convergence can, of course, always come about in\nrealworld data. I wondered if I'm missing something fundamental.\n\nHere's some code which illustrates my problem --\n\nlibrary(tseries)\n# take the definition of `r' ahead and then say\n\nm.ar1 <- arima(r, order=c(1,0,0))\nm.garch11 <- garch(m.ar1$residual, order=c(1,1)) # Seems to be okay\n# BUT\nm.arch1 <- garch(m.ar1$residual, order=c(1,0))\n# breaks.\n\nAlternatively, equally, one can do:\n\nm.garch11 <- garch(r, order=c(1,1)) # Seems to be okay\n# BUT\nm.arch1 <- garch(r, order=c(1,0))\n# breaks.\n\n    -ans.\n\nr <- c(0, 0.579142, 1.03736, -0.208672, -0.765883, 0.281692,\n-0.397706, 0.328364, -0.125584, -0.193477, -0.0610791, -0.990004,\n-0.71914, -0.829374, -2.08766, 0.756307, -0.637729, 0.134032, 1.63858,\n-0.627174, 0.169323, -1.11391, -1.08862, -1.46264, -1.14154,\n-0.446539, -3.38369, -1.61522, 1.17325, -1.00522, -0.578756,\n-0.677731, -1.83069, -1.39811, -1.74083, 2.51195, -1.13877, -2.06056,\n0.169783, 1.98911, 1.26197, -1.07611, 0.325627, 1.42208, 2.21524,\n-1.28735, -1.10025, 0.235853, 1.10524, -0.555269, -0.104693,\n-0.088162, 0.123343, 0.204409, 1.67633, 0.0161745, 0.5192, 1.87783,\n-0.864954, -0.660769, -0.0564514, -0.844007, -0.492193, -0.705106,\n-0.557051, -1.71258, -0.0664624, -0.614921, 1.09121, 0.214559,\n-0.438513, -0.32201, -1.32279, -0.970354, -0.571795, 0.0379108,\n-1.36068, -1.72062, -0.461166, 1.93922, 1.87047, 0.218172, 2.45879,\n5.45718, 2.66156, -1.85931, 0.679358, 5.04796, 5.24155, -1.41465,\n0.864773, 2.36954, -0.548473, -2.23819, -0.166255, -2.10307, 2.44766,\n0.383161, 0.570884, -0.705994, -0.0057834, -3.45401, 0.69873,\n-0.063715, 0.40676, -0.44536, -0.989944, -1.36045, 0.0988081, 1.61739,\n-0.10033, -0.940164, -2.0354, -1.57128, 1.93312, -0.985401, -0.222106,\n0.329964, 1.76344, 2.34919, -1.21275, 0.959598, 0.848386, 1.01093,\n-0.249911, 2.07488, -0.297048, 0.0197712, -0.398818, 0.681907,\n1.37138, 1.16532, 3.48685, 2.29011, 0.893023, -2.21592, -1.0093,\n4.39966, -2.14394, 0.250645, -0.469434, -0.358823, 2.08695, -0.512225,\n-1.11659, -2.85231, 0.46674, 1.40263, -1.6371, -1.09721, 0.874134,\n1.58375, 0.94534, 1.12451, -1.16305, -2.86807, -0.833724, 0.568613,\n-0.382739, 0.740059, -1.86052, -0.18797, 3.14841, -1.28442, 0.636933,\n1.72372, -0.291713, 0.67605, 1.48735, 0.319893, 0.695452, 0.14971,\n1.80418, 0.388463, 2.33975, -0.897786, -0.288935, -1.1847, 0.124064,\n-1.03658, -0.923538, -1.67069, -0.705635, 0.636449, -0.444643,\n-1.16541, -0.814853, -1.83491, 0.738011, 0.458506, 0.953355, -1.34203,\n-0.196747, 0.990823, -0.739901, 0.369263, -0.910496, 2.24238,\n0.955673, 0.0527268, 0.570173, -3.02393, -2.10133, -0.633178,\n-1.08236, -1.65647, -1.86058, 2.73012, -0.612611, -0.356596,\n-0.062947, 0.311442, 1.25523, -0.895673, -0.12806, -0.554569,\n-0.752702, -0.582504, -1.60638, -2.68886, 0.172043, 2.21104, 0.297798,\n1.04623, -0.363052, 0.557391, 1.21563, -0.119828, 0.305617, 0.769626,\n-1.32803, 0.30639, 1.07178, -0.519918, -1.78013, -1.26352, -0.984705,\n-0.208016, -0.869041, -1.89919, 0.924764, 2.3627, -1.69055,\n-0.0746883, -0.841788, 0.00722487, 0.245336, -1.24108, -1.26723,\n-0.345814, -0.81799, -1.21966, -2.27452, -3.38817, -0.0114423,\n0.0937883, 2.67338, 1.14764, -1.85919, 0.639173, -0.558492,\n-0.0784384, 0.327911, 2.65603, 3.44349, -1.96603, 0.447127, -0.113197,\n-1.02026, -1.86312, -0.28745, -1.84221, -0.966311, -1.71615, 0.955527,\n1.10826, -0.484987, 1.23165, 0.623006, -0.834164, 0.551664, 1.08322,\n-0.718242, -2.36401, -0.77759, -2.26618, 0.226714, 0.377107, -3.13461,\n-0.436373, 0.585825, -1.2202, -1.32789, -2.66419, 1.77069, 0.740183,\n0.0618475, -0.681191, 4.1304, -1.18008, -0.318427, 2.70967, 0.408714,\n1.12908, 0.0209183, 2.72803, -0.269478, 0.232157, 3.0907, -1.40264,\n4.40068, -1.33935, 0.494971, -0.414102, 0.107724, 1.90888, 1.04031,\n2.45243, 0.0356952, 0.873102, 5.17076, -3.15939, -0.760762, -2.50171,\n-1.70327, 2.73174, -0.121642, 2.33087, 1.24574, -0.451202, -1.70538,\n-2.7731, -2.54589, 1.05954, 0.437318, 0.543972, 1.13535, 0.270374,\n1.14478, 0.827591, 0.114819, 0.725794, 1.0495, -1.91509, 1.10306,\n-0.868513, -1.15811, -2.74004, 0.139835, 0.284245, 2.43691, 5.94418,\n4.5823, 0.429739, 0.862927, 1.38657, -0.499968, -4.40244, -2.50635,\n2.08831, -0.719394, 0.336984, 0.233351, -0.772132, -1.16236, 0.261053,\n0.623762, -0.28777, 0.0802815, -0.132263, -8.84046, 0.190874, 3.25022,\n0.83961, -0.959419, -1.01412, 3.89917, -2.15347, 0.499568, -1.00663,\n1.15454, 1.98046, 2.42401, -0.0754575, 1.05593, -0.360108, 0.205935,\n-0.374743, -0.748997, 2.09618, -1.00985, -2.22284, 0.276995,\n-0.382263, 0.919733, -0.0664326, -1.22742, -0.912367, 1.02283,\n0.321089, 0.324831, 0.228659, 0.00475817, -0.845742, -0.461717,\n-0.338018, -0.660004, -0.116925, 0.126662, 1.08465, 1.21585, 1.32809,\n0.822934, 1.11138, 0.0782563, -0.354945, -0.750907, 0.598401, 2.15042,\n1.44702, 1.38239, -0.582526, 0.802297, 1.82725, 0, -0.1251, -0.402241,\n0.138588, 0.569655, 0.540751, 0.124046, 1.92635, 0.67284, 1.85695,\n-0.66042, 0.0987248, -0.527662, -0.951024, 3.14631, 0.210042,\n-1.46736, -2.82809, -0.312184, -0.0295814, -0.135341, -1.39791,\n0.705659, 2.3127, -0.0624831, -1.24949, -0.28732, 0.729361, 0.636465,\n1.95096, 0.888388, 1.45, 1.80306, 1.54323, -1.81852, -1.00531,\n0.111319, -0.789856, -0.308859, -1.35088, -2.17762, -1.74217, 1.47129,\n-1.40356, -1.7977, -1.40148, 0.648943, 1.43528, -2.93111, -2.64789,\n-0.027153, 1.1207, 1.55875, 0.215683, 1.05844, 0.780069, 0.112175,\n-0.432134, -0.0216558, -0.996896, -0.162007, -0.0745238, -0.523228,\n-2.21533, -0.456261, -1.76317, 0.335841, 1.11442, 0.949288, 0.426497,\n0.85646, -0.168926, -0.813049, 1.76508, 2.52396, -0.568844, -1.66028,\n1.09687, 1.54393, 0.805579, 0.879127, -1.1214, -0.435006, -1.56798,\n-1.31104, -1.40426, -8.19628, 6.95738, -1.98433, -0.115247, 0.570326,\n-0.478118, -0.37397, -0.570569, -0.831509, 0.696509, -2.67677,\n-2.18641, 0.249103, -1.48915, -2.19767, 0.736262, 1.05953, -2.46615,\n2.95712, 0.606645, 2.89805, -2.20224, 0.846062, -0.276371, 0.0873574,\n-1.85567, -0.540127, 0.248127, -2.48401, -1.24238, 0.179898,\n-0.876837, 1.5116, 2.2703, 1.0717, -0.341103, 1.83509, 2.21184,\n0.322857, -0.0616421, 0.690114, 1.63988, -1.91819, 1.95525, 0.16662,\n0.461383, 0.500495, -1.15166, 0.30071, -2.30368, -2.31445, -3.72083,\n0.330844, -0.15526, -0.795093, 0.820151, 1.93053, -0.571796,\n0.0938805, -2.00032, -0.560848, -2.41025, -1.93916, -0.365825,\n2.32056, 1.35566, -0.13833, -0.751342, 0.838461, 0.158669, -0.158669,\n-1.2785, -0.499325, -0.23492, 1.85382, 1.74448, -0.287799, 0.875962,\n-0.391724, 1.59245, 0.444731, 2.14139, 0.936674, 1.41941, 3.46963,\n-3.21071, 2.6766, -0.827325, -0.175536, 1.65528, -1.23083, -0.281229,\n-0.509143, 1.19469, -0.657852, 1.83391, 0.221805, 0.343054, 1.29831,\n-0.289539, 2.30189, -1.53312, 0.956018, -1.36855, -0.70927, 2.92919,\n0.632722, 1.3772, 1.15652, 0.0589499, 1.81869, -1.43216, -2.80223,\n3.96121, -0.769763, 1.07602, -0.235815, 0.46283, -0.160921, -2.39888,\n-0.704617, -0.808336, -1.51875, 0.374255, 0.71415, 2.20098, 0.248604,\n-1.32598, -0.934026, -0.107673, -2.44718, -3.42747, 2.21905, -0.76725,\n0.87, 0.173987, 1.7278, -1.33632, 0.0355129, -0.320071, -1.66117,\n-1.22986, -1.42167, -1.1596, -0.888097, -3.29448, 1.39277, -0.669613,\n-3.31631, -2.53823, 2.69413, -3.28434, -0.161102, 1.01424, -5.75916,\n-0.733486, 7.04203, -2.10599, -4.59051, -3.68605, -0.523979, 3.68855,\n2.56989, -0.840296, 2.64234, -0.788051, 0.0636977, -2.40057, -2.12593,\n1.84834, 0.798028, 2.08157, 1.77414, 1.96792, -1.62513, 0.310607,\n0.417796, 3.30588, -0.309227, -2.39112, -1.21476, 0.0207125, -3.29486,\n-1.54223, -2.28101, 1.97078, 2.221, -0.561364, -0.128755, -2.76495,\n0.0220726, 0.137844, -0.519281, -1.13631, -1.55821, -1.40383,\n-0.741345, 1.40274, -0.938758, -1.11135, -2.62019, 0.700287, 3.56218,\n-1.53702, 0.507216, 1.39749, 0.634524, -3.20189, 0.352403, -2.16324,\n0.9481, 0.467747, 2.3411, 2.34956, 1.43815, 0.404758, 0.419658,\n-0.852199, 2.28556, 0.0325857, -0.686539, -0.482298, -0.932807,\n-0.439048, -0.0501407, 1.16345, 2.93636, 0.0160449, -0.756908,\n-2.12392, -0.380512, -7.35853, 0.592946, 3.31426, -3.05447, 0.135529,\n-1.57876, -2.30563, 3.22861, -0.940931, 0.459661, -0.987588, -2.75026,\n0.357959, 0.705979, 3.3565, -0.43276, -0.925131, -0.192065, -0.409368,\n-0.586867, -0.0971345, -0.279789, 0.999978, 1.39527, 2.7971, 0.467304,\n0.0172657, 0.333219, -0.51754, -1.38165, 0.542165, 1.73486, -1.14359,\n0.0462267, -0.940282, -1.15547, -0.686678, -2.07666, -1.46621,\n-0.197129, 0.847359, -0.134606, 0.549519, -0.50055, 1.37355, 2.00784,\n0.924542, 0.415315, 0.912293, 0.645759, -0.738351, -2.17139, 0.766242,\n-2.53314, 0.594436, 2.50663, 0.105036, 0.16317, 0.279102, 2.15408,\n-0.821688, 3.08046, -1.75994, 0.738011, 0.782739, 1.04156, 2.29382,\n2.80961, 3.63583, -0.450485, -2.16926, -0.337549, -0.673298, -2.16519,\n1.12815, -2.22588, 4.5585, -1.05497, -0.76042, 2.23839, -1.68193,\n1.15548, -2.73314, -0.956536, 2.2511, -1.34244, -0.362474, -2.13739,\n0.896136, 3.68368, 0.0625163, 1.05684, -1.63137, 0.454677, 1.05294,\n0.453025, 0.292345, -2.32635, -0.441293, 0.838887, -0.350428,\n-1.38224, 4.17226, 3.45535, 3.4874, -1.01766, 1.26454, 1.66, 0.581275,\n0.0463564, -1.80042, 1.22407, 0.121122, -1.95578, 0.709625, 1.30666,\n-1.09475, -0.240198, 0.249606, 0.931676, -0.950493, -0.746096,\n-1.30241, 1.27396, 2.19923, -1.36355, -5.01828, 1.25763, 0.666588,\n-1.0432, -2.67676, 0.482025, -0.396497, -2.6137, 7.5394, -7.70989,\n2.74898, 0.150807, 0.125499, -1.51648, 0.0356479, -5.29562, 1.29612,\n2.41884, 1.19294, -0.764518, 3.80016, 1.1046, 2.65198, 1.51198,\n2.90225, 1.5147, 0.458037, 2.83575, 1.49131, -1.16087, 0.713655,\n1.7177, -1.13756, -1.82039, 0.500556, 0.744012, -2.15193, -3.9566,\n-0.915812, 4.5902, -0.753516, 0.120056, 1.0169, 1.60583, 2.04806,\n-1.34494, -0.0515952, -1.79653, -1.3223, -0.569549, 2.43769, 2.42645,\n-0.102063, 2.28406, 0.993139, -1.75709, -0.998134, -0.36467, 1.28315,\n-0.0755192, -0.302648, -0.379603, 1.23057, 2.66891, 0.890154,\n0.197187, 0.0281379, 0.796626, 4.77643, 0.462683, 1.0314, -1.31559,\n0.495847, 1.8962, -2.61997, 1.9173, 0.673028, -0.464314, -1.25887,\n-1.23674, 0.779486, 0.423313, -1.1799, -1.58095, -0.353446, 3.16709,\n-0.233989, -0.492407, 0.828123, -1.36495, 0.42285, -0.441939,\n-1.35701, 1.38755, 1.048, 2.95141, -1.35509, 0.170858, 1.64891,\n0.941021, -0.798755, 2.2242, 1.06384, 0.359143, -0.747904, -0.0921104,\n-2.50143, -0.0654355, 1.10303, -0.501182, 1.16792, -0.185953,\n-0.416069, -1.48827, 0.302341, -1.72424, 0.6271, -0.136152, -0.535363,\n2.61976, 0.829612, 1.01415, -1.62402, -0.74766, 2.58742, -0.155565,\n-0.703053, -2.22672, 0.425386, 1.05023, 5.3848, 0.644288, 0.320594,\n-0.0101083, 0.835533, 0.593039, -3.42292, -0.724491, 2.30013,\n-1.65818, -1.6022, 1.35764, -1.64121, -0.83435, -0.208794, -3.14516,\n-3.13785, -4.27351, 4.78148, -0.436321, 0.781019, 2.0546, 0.369402,\n0.116754, 1.29698, 0.0359881, -1.16173, -0.79306, -0.363911,\n-0.405905, 0.883496, -0.176076, 0.979146, 1.4223, 0.977323, -0.644532,\n-1.07391, -0.615765, 0.911432, 1.43697, 0.647366, 1.73729, 0.15928,\n-0.450795, 0.61673, -0.543771, -0.840502, -2.08083, 0.225028, 1.29738,\n-0.0281789, 0.221694, -0.0527398, 4.13367, 0.447805, -1.99169,\n-1.86094, 0.702783, 2.34031, 0.277327, 7.27706, 2.87865, -2.65281,\n1.35684, -0.26618, 1.21064, -3.77215, 3.2718, -0.209476, 0.0832267,\n-0.689477, -0.304509, 1.73687, -2.08602, 1.21056, -0.432874, -1.70004,\n1.09709, -0.299719, -3.36407, 0.213199, 2.45431, 0.62149, 0.11571,\n2.27736, 1.58519, 1.60485, 1.26735, 2.58436, -0.657051, -2.43409,\n0.500931, 1.79548, -1.40469, 2.05694, -0.82748, -2.48306, 2.07685,\n-1.25203, 0.704926, -4.01256, 3.43909, -0.94743, -2.41917, 1.94355,\n0.840403, -2.1609, -1.21356, -2.67791, -2.65865, 0.406043, 3.3293,\n-3.63928, -0.359113, 2.09785, -2.30363, 1.03429, -0.421389, 0.360844,\n-0.662011, -0.56311, -1.36781, 0.411335, -7.20226, 0.457603, 1.26751,\n6.92613, 3.52386, 0.719661, -1.98617, -4.76089, -5.07164, -2.01172,\n-0.698646, 0.758707, -1.97249, -2.07837, 5.48509, -1.34597, -0.733149,\n-5.33703, -1.31347, 4.78471, 2.98636, -4.11545, 0.984116, -1.1234,\n-4.394, -1.6813, 1.2742, 0.583249, 0.366623, -1.40115, -1.98336,\n-2.79906, -0.69993, 0.934852, 0.946233, 2.19589, 2.76077, 2.54541,\n2.61271, -2.3046, 2.94005, 1.09885, 1.21359, 0.603066, 2.30141,\n0.242251, -1.8435, -0.522049, 0.181286, 0.67691, 2.19338, 1.44153,\n0.555585, -2.14276, 0.884125, -1.08431, -1.4057, 0.182384, 1.07377,\n1.50897, -1.41037, 1.60451, 1.06768, 0.971249, -0.607985, 0.0527287,\n-0.52523, 0.58781, 0.969895, -0.703548, -0.847533, -2.01385, -1.12481,\n-1.88353, -0.811193, -1.91042, -5.85803, 2.33637, -2.29843, 1.49082,\n-0.318132, -0.0712504, -0.451179, 0.379878, -0.802824, -0.204561,\n-0.589501, 2.62024, -0.0483173, -1.26828, -1.30746, 0.544007, 2.51385,\n-0.746425, 1.2336, 0.894336, 0.795948, 0.350529, 0.0649117, -0.411821,\n-0.828764, -0.157075, 0.60139, 1.31046, 2.38507, 0.035014, 0.49588,\n0.306077, 0.712855, 0.433527, 0.772918, -0.786652, -0.747905,\n-1.96338, -4.53615, -2.79652, 1.9475, -0.97653, -4.88484, 2.03993,\n-1.9255, 1.9255, -2.04388, 0.413704, 0.810609, 1.22492, -1.01064,\n0.0194571, -1.38701, -2.26244, -3.03606, 0.361274, -2.476, -0.110535,\n-1.49135, -1.92242, 2.61944, 0.500397, -2.42245, 0.740293, 2.6924,\n0.202515, -0.642708, -0.984726, 0.478654, 2.36366, 1.98304, 1.39449,\n-0.145027, 0.522719, 1.59539, 0.248349, -2.42291, -2.57409, 2.83996,\n0.337363, -1.11278, 0.22274, 0.129366, -0.210305, -1.02957, -0.520845,\n0.753731, 2.23568, 1.5719, -0.630544, 0.268467, 0.632777, -0.0470256,\n0.706965, 1.07619, 0.303724, 0.856209, 1.39466, 0.0900394, 1.55901,\n-0.366172, -2.76131, 0.3802, -0.540316, -1.1705, -1.3877, -2.81038,\n-2.44511, 1.33592, 1.66721, 1.1622, -0.734757, 1.38556, 1.51775,\n1.26209, 1.48775, -1.36547, 0.183143, -1.87389, -0.537447, 0.494713,\n0, 0.488411, 0.37438, 0.618317, 1.75713, 1.412, 0.532703, 0.790111,\n0.303357, -2.06854, 2.76678, -0.581524, -0.919134, 1.43903, 0.271597,\n0.324945, -1.18207, 1.78583, 0.728263, -0.249297, -0.787575, 0.154424,\n1.66193, -2.52689, 0.249444, -0.0686255, -0.998574, -1.10085,\n-2.59027, -0.611507, -1.29222, 4.22058, 0.490876, -3.88129, -2.7079,\n1.48718, 0.181934, -2.99127, -4.63246, -6.30954, 5.99602, 1.90356,\n-1.958, -0.575571, -1.3361, 3.04054, -1.63284, -2.23523, 0.0172206,\n1.38936, 2.38691, -0.924506, -4.00344, -0.883529, 0.974935, -1.10242,\n0.259198, -0.992094, -2.26773, -3.34156, -4.00685, 1.9039, 2.12169,\n3.35453, 3.65279, -0.0393279, 0.501363, -0.300516, 0.786396, -1.0091,\n-3.7821, 2.15139, 1.05639, -1.34117, 0.710451, 0.806438, 0.852222,\n0.0261074, -0.374859, -0.389421, 0.0263008, 0.393684, 0.509483,\n2.04642, -0.183154, -0.28605, -0.115506, 0.937294, 0.232957,\n-0.589797, 1.54557, 0.439028, -1.7593, -0.822874, -1.71424, -1.83282,\n-1.03443, 0.00896338, -0.300712, 1.27294, 0.398636, -0.349829,\n0.163996, -1.44979, -2.27231, -0.872562, 1.68744, 0.08659, -0.218898,\n-0.691759, -1.91684, 2.73635, -0.0456059, -0.191772, 1.26256,\n-0.647457, -2.85201, -0.173079, 0.168405, -0.435628, -0.527159,\n1.17756, 1.07623, 1.99627, 0.446762, -0.442239, -0.221855, -1.01593,\n-0.555595, -0.758, -0.65632, 0.177305, -0.781565, -1.02003, -0.161513,\n0.9228, 1.06828, -0.908246, 0.267713, 0.803517, 0.0604693, -0.293385,\n-0.38316, 0.24782, 0.0466897, -0.763774, 1.16906, 0.320268, -0.907764,\n-0.51103, 0.464256, 0.261658, -0.21956, 0.317505, -0.177305,\n-0.299331, -0.309627, -0.982113, -0.542394, 0.0143113, -0.305752,\n-0.855322, -0.086902, -0.174031, -0.972392, -4.10907, -1.07478,\n-5.49996, -5.29714, 3.15409, 1.32423, -1.47987, -5.08952, 1.72353,\n-0.884169, 1.41781, 1.84844, 2.6445, -0.411196, -1.15487, 1.32503,\n0.323067, -1.39277, 1.18482, 2.98449, 1.53545, 0.574324, 0.311883,\n0.811521, 1.5326, -1.45026, 0.47211, -0.025601, 1.70597, -0.201572,\n-0.810377, -0.586542, -1.47899, 0.909567, 2.24843, 0.361519,\n-0.658741, 1.08885, -1.4477, 1.02761, 0.634447, 0.67992, -0.545555,\n1.0291, 1.9401, 3.08507, -1.69476, 0.583895, 0.575799, -0.32525,\n2.01914, -0.421951, -0.48909, -0.341449, -0.164123, 1.14788, 2.46089,\n0.532733, 0.166461, 0.264865, -0.453842, -0.229953, -0.806748,\n-0.99699, -0.511486, -2.01122, 0.117772, -1.05546, -0.223879, -1.3684,\n-1.38739, 1.34387, 2.41309, -0.354719, 0.515112, 1.0783, 2.20904,\n0.359688, 0.882339, -0.641752, -0.417992, -0.882594, 1.93333, -1.4202,\n-0.352492, 1.71861, -1.45756, -0.164797, 0.13735, -0.316188,\n-0.377064, -0.480282, -0.813409, 0.0279981, -0.392689, 0.742006,\n0.579497, -0.440111, -0.24638, 3.55262, -0.238358, 1.1906, 0.691707,\n-0.181332, 0.49457, 1.30412, 0.861496, 1.10598, -1.19654, -1.12373,\n0.339751, 1.18012, 0.167457, 2.03417, -0.0168166, -4.04559, 3.09932,\n-0.0551935, 0.0976293, -0.501894, 1.72895, -0.453649, -1.68121,\n-1.50113, 0.572049, 0.207209, 0.88443, -0.0384772, -1.47755, 0.298993,\n-0.991399, -0.503801, -1.36195, 0.0267094, 0.550403, 0.828746,\n-0.175755, -1.19004, 1.97415, -0.345303, -0.588444, -0.755988,\n1.04186, 0.446957, 0.253264, -1.08304, -1.36715, 0.565993, 0.346036,\n-2.57494, 0.349294, 0.167409, 0.415051, -1.47855, 0.282886, -2.13675,\n0.954285, 0.808159, 0.333296, 0.363984, 0.8817, 0.619308, 0.890795,\n-0.998226, 0.290691, -0.407205, -0.656802, -1.36329, -0.196936,\n-1.5058, -2.36879, -0.372404, -1.79055, 3.84525, -0.403813, -2.33244,\n0.331755, -0.916199, -0.325093, 1.05872, 0.541929, 1.78238, 0.0140941,\n-1.47176, 1.99185, 2.50596, -0.388155, -0.914676, 0.262849, 0.294307,\n-1.28939, -1.12731, 0.670435, -0.70337, -0.065901, -0.609283,\n-1.06688, 0.415722, 0.878302, 1.04856, -0.0842302, 0.173063,\n0.0607349, 0.303122, 0.765363, -0.161861, -0.799261, -1.419, 0.156039,\n-0.973301, -1.15647, -0.328741, 0.843846, -0.519932, -2.3342,\n0.973507, -1.76218, -0.249302, -2.84063, -0.190217, -1.13855,\n-0.182334, -0.125222, -0.308505, 0.886346, 0.35235, 0.253132,\n-1.61759, 0.877061, 0.817895, 0.637239, -0.657863, 0.985179,\n0.0612526, 0.883972, -0.0101163, -0.278601, 0.959167, 0.36609,\n-1.12256, -0.202696, 0.157125, 2.33762, 0.286547, -1.23103, 0.582656,\n0.163727, -1.33748, 0.33605, 0.0300391, 0.27993, -0.968081, -0.632033,\n0.923946, -1.14229, -0.77055, -0.66302, 0.0721687, -0.423445,\n0.397676, -0.0154643, 0.673057, -1.37144, -0.828842, -0.735529, 0,\n0.688408, 0.631674, -0.631674, 0.386787, 1.30606, 0.14407, 0.118188,\n-0.0308182, -0.16967, -0.443528, -0.502631, -0.536502, -1.09756,\n-1.56461, -1.02432, 1.52724, 0.0906836, 1.44512, 0.00525527, 1.11313,\n0.0207857, -0.166407, -0.391104, -0.303506, 0.606094, 0.291288,\n0.956302, 1.88055, 0.654189, 0.475369, 0.711322, 1.12377, 0.591298,\n0.964926, -0.488573, 1.78782, 0.0428602, 1.67611, -1.21533, -1.77876,\n0.917239, 2.25462, -1.04772, 0.475888, 0.567158, 0.675442, 0.850597,\n-0.716054, -0.48334, 0.436966, -0.181063, 0.306222, -0.306222,\n0.832953, 0.899171, 0.328288, -0.588949, 0.141847, 0.606297,\n-0.647458, -0.31613, -0.482993, -0.235441, 0.695487, 0.731699,\n-1.57057, -0.60353, 0.483115, 0.559164, 0.30828, -0.170127, -0.938583,\n0.143902, 0.462792, -1.11432, -1.39639, -1.7577, 0.820601, -0.863978,\n-0.25099, 0.69831, 1.28271, -0.0473911, -0.704027, 1.53485, -0.575175,\n-0.845169, -0.0572355, -0.339315, -0.812329, 2.12022, 0.103896,\n0.470899, 0.122071, 0.0516008, 0.37448, -1.37369, -0.560518, 0.313897,\n0.987557, -0.428791, -1.16366, -0.565325, -0.91219, -1.38162,\n-1.02778, 0.776751, -1.27466, -0.204862, -0.667455, 1.0917, 2.10441,\n0.515616, 0.638393, -2.26723, -0.256765, 0.251833, -1.10586,\n-0.209654, -2.2641, 0.621658, 1.52244, 0.970857, 0.769956, 1.42061,\n-1.30759, -1.30999, -4.33712, -1.29709, 0.147291, 0.78017, -1.89018,\n0.688599, -0.39139, -0.990582, -0.482859, -0.582526, 0.561011,\n0.300784, 0.187532, 0.453976, 0.753839, 0.679934, -0.178759,\n-0.909241, -0.393743, -0.197455, 0.872253, 0.838458, 0.805444,\n1.37098, -0.675382, 0.51597, -0.366065, -0.49191, 0.481579, 1.49207,\n-0.571634, 1.41796, 1.18392, 0.418036, 0.82594, -0.44427, 1.02378,\n1.36182, 1.0906, 0.543247, -1.36851, 0.605218, 0.687222, 0.465007,\n-0.417458, 2.8262, 0.442662, 0.532282, 0.702301, -1.00939, -0.354097,\n1.94349, 0.8727, 0.820737, 0.761167, -0.304656, 0.273791, 0.952409,\n-0.543123, 0.184291, 0.467975, -0.424146, 1.84949, -0.060241,\n0.844357, -0.999429, 0.764412, -1.44352, -1.04713, -2.14566, -0.59326,\n0.884108, 1.80656, 2.02422, 0.553187, 0.47356, 0.699823, 0.240623,\n0.831379, 0.654346, -1.60385, -1.13777, 2.18759, 2.1244, 0.830793,\n0.153996, 0.979195, 0.0681458, 2.66113, -0.289164, 0.756309, 1.04701,\n0.780985, -3.10219, 3.63845, 1.66263, 0.055942, 1.14918, 1.41997,\n0.688059, -1.90184, 0.977296, 1.85491, 1.34602, -0.729362, 0.177519,\n-0.45508, -2.23773, -3.17275, 2.13613, -1.21133, -2.96926, 1.50889,\n-1.46667, 1.92321, 3.24813, -1.08822, 2.16833, 0.932943, 1.2176,\n0.264275, 1.98254, 2.02179, -0.0710239, 0.0507365, 1.57684, 1.38836,\n1.54082, -1.69194, 1.0596, 1.20931, 0.879963, -1.71911, -2.3745,\n-0.826506, -1.59555, 2.39219, 1.05021, -2.43756, -0.239295, 1.12074,\n1.22046, 2.54183, 2.89802, 1.0589, -0.591727, 0.189362, -1.25772,\n0.153771, 0.416191, 0.165369, -1.49826, -1.8848, 0.793387, 1.08825,\n-0.985919, -1.53304, -1.19496, 1.20145, 0.207482, 1.59037, 1.87565,\n1.05179, 2.59112, 0.0512643, 0.72094, 0.280958, -1.7706, 0.0273386,\n1.78205, 0.657203, 0.502618, 0.206228, 1.46372, 0.710945, -0.172936,\n1.30972, 1.2703, 0.594222, -0.495876, 1.58265, 1.55527, 1.99408,\n-0.0426974, 0.34639, 1.71418, 1.75211, 0.458852, -1.45815, -0.517765,\n2.66662, 0.170031, -1.34271, 0.920911, 0.940259, -1.9203, -2.27832,\n1.80923, -2.19933, -3.69341, -3.00988, 4.25984, 3.04641, -2.20827,\n-1.05216, -1.85315, -2.27743, 2.96301, -0.976102, 1.6025, 2.53355,\n0.00265855, 0.569953, -0.328321, 1.48993, -0.00261291, 0.341711,\n-0.190275, -3.08124, -0.304504, -2.42852, 0.724611, -1.91517,\n-1.18225, 1.93495)\n\n-- \nAjay Shah                                      http://www.mayin.org/ajayshah  \najayshah at mayin.org                             http://ajayshahblog.blogspot.com\n<*(:-? - wizard who doesn't know the answer.",
+      "body_snippet": "I have attached a time-series r. I find that I am able to use the\ngarch() function in the tseries package to estimate a GARCH(1,1)\nmodel. But it fails to get convergence for the GARCH(1,0) -- i.e.,\nAR",
+      "thread_id": "thread-31c11e51260a",
+      "thread_depth": 0,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-247ff392484b",
+      "message_id": "<fc.000f464a07adb7813b9aca003b9754f9.7adb782@bus.emory.edu>",
+      "from_name": "Michael Parzen",
+      "from_email_hash": "cf1bead0cf7e965fc10d4d71a80f7ffc900e177303b73fbe7bd666312a1ccb02",
+      "date": "2005-12-25T06:07:05-05:00",
+      "subject": "[R-sig-finance] R-sig-finance Digest, Vol 19, Issue 11",
+      "subject_clean": "R-sig-finance Digest, Vol 19, Issue 11",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I will not be reading email  between Dec 24th and January 1st.",
+      "body_snippet": "I will not be reading email  between Dec 24th and January 1st.",
+      "thread_id": "thread-247ff392484b",
+      "thread_depth": 0,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-30904fc210b7",
+      "message_id": "<fc.000f464a07ae95b73b9aca0061806120.7ae95b8@bus.emory.edu>",
+      "from_name": "Michael Parzen",
+      "from_email_hash": "cf1bead0cf7e965fc10d4d71a80f7ffc900e177303b73fbe7bd666312a1ccb02",
+      "date": "2005-12-26T06:12:34-05:00",
+      "subject": "[R-sig-finance] R-sig-finance Digest, Vol 19, Issue 12",
+      "subject_clean": "R-sig-finance Digest, Vol 19, Issue 12",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I will not be reading email  between Dec 24th and January 1st.",
+      "body_snippet": "I will not be reading email  between Dec 24th and January 1st.",
+      "thread_id": "thread-30904fc210b7",
+      "thread_depth": 0,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-8834e461b74b",
+      "message_id": "<fc.000f464a07af90c63b9aca004ba7146d.7af90c7@bus.emory.edu>",
+      "from_name": "Michael Parzen",
+      "from_email_hash": "cf1bead0cf7e965fc10d4d71a80f7ffc900e177303b73fbe7bd666312a1ccb02",
+      "date": "2005-12-27T06:17:25-05:00",
+      "subject": "[R-sig-finance] R-sig-finance Digest, Vol 19, Issue 13",
+      "subject_clean": "R-sig-finance Digest, Vol 19, Issue 13",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I will not be reading email  between Dec 24th and January 1st.",
+      "body_snippet": "I will not be reading email  between Dec 24th and January 1st.",
+      "thread_id": "thread-8834e461b74b",
+      "thread_depth": 0,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-e30a1884b7b0",
+      "message_id": "<43B4A734.5080104@pdf.com>",
+      "from_name": "Spencer Graves",
+      "from_email_hash": "0d1725402b5f223aa45a1714f600b741ea6c2ccb2d67d2b94ddab1ed1e80aefd",
+      "date": "2005-12-29T19:19:16-08:00",
+      "subject": "[R-sig-finance] Puzzled in arch estimation",
+      "subject_clean": "Puzzled in arch estimation",
+      "in_reply_to": "<20051224152838.GA23574@lubyanka.local>",
+      "references": [
+        "<20051224152838.GA23574@lubyanka.local>"
+      ],
+      "body_plain": "Have you received a reply to this post?  I haven't seen one.\n\n\t  I ran the script you included with your post.  For the garch(1,1) \nmodel, I got an answer with a message \"FALSE CONVERGENCE\".  For the \narch(1,0) model, I got a message, \"Warning: singular information\" with \nparameter estimates that raise questions in my mind about what the \nalgorithm did.  You say the first one \"Seems to be okay\",  but the \nsecond one \"breaks.\"  What do you mean by \"breaks\"?\n\n\t  I also did 'RSiteSearch(\"garch\")'.  This revealed that the fSeries \npackage also has a garch modeling function.  Have you looked at that? \nI'm sorry, but I've done very little with garch, and I don't have the \ntime now to study it more deeply.\n\n\t  If you'd like more help from this listserve, PLEASE do read the \nposting guide! \"www.R-project.org/posting-guide.html\".  Anecdotal \nevidence suggests that posts more consistent with this guide tend to get \nmore useful replies quicker.\n\n\t  hope this helps.\n\t\n\n > sessionInfo()\nR version 2.2.0, 2005-10-06, i386-pc-mingw32\n\nattached base packages:\n[1] \"methods\"   \"stats\"     \"graphics\"  \"grDevices\" \"utils\"     \"datasets\"\n[7] \"base\"\n\nother attached packages:\n  tseries      zoo quadprog\n\"0.10-0\"  \"1.0-3\"  \"1.4-7\"\n >\n\nAjay Narottam Shah wrote:\n\n> I have attached a time-series r. I find that I am able to use the\n> garch() function in the tseries package to estimate a GARCH(1,1)\n> model. But it fails to get convergence for the GARCH(1,0) -- i.e.,\n> ARCH(1) -- model. I seem to think that the latter is actually a simple\n> likelihood function and it's much easier to get convergence for it.\n> \n> There's a mysterious statement towards the end of the time-series\n> chapter of the MASS book which says that the garch() function requires\n> the series to be mean 0 (a statement which I didn't find in the\n> documentation of tseries). So I also did this one more way: To first\n> estimate an AR(1) model, and focus on the residuals. Once again, I get\n> the same pathology: GARCH(1,1) works but ARCH(1) does not.\n> \n> I fed the same series to stata and it estimates AR(1)-ARCH(1) easily,\n> so this doesn't seem to be a pathological case of bad\n> data. Difficulties in convergence can, of course, always come about in\n> realworld data. I wondered if I'm missing something fundamental.\n> \n> Here's some code which illustrates my problem --\n> \n> library(tseries)\n> # take the definition of `r' ahead and then say\n> \n> m.ar1 <- arima(r, order=c(1,0,0))\n> m.garch11 <- garch(m.ar1$residual, order=c(1,1)) # Seems to be okay\n> # BUT\n> m.arch1 <- garch(m.ar1$residual, order=c(1,0))\n> # breaks.\n> \n> Alternatively, equally, one can do:\n> \n> m.garch11 <- garch(r, order=c(1,1)) # Seems to be okay\n> # BUT\n> m.arch1 <- garch(r, order=c(1,0))\n> # breaks.\n> \n>     -ans.\n\n> \n\n-- \nSpencer Graves, PhD\nSenior Development Engineer\nPDF Solutions, Inc.\n333 West San Carlos Street Suite 700\nSan Jose, CA 95110, USA\n\nspencer.graves at pdf.com\nwww.pdf.com <http://www.pdf.com>\nTel:  408-938-4420\nFax: 408-280-7915",
+      "body_snippet": "Have you received a reply to this post?  I haven't seen one.\n\n\t  I ran the script you included with your post.  For the garch(1,1) \nmodel, I got an answer with a message \"FALSE CONVERGENCE\".  For the ",
+      "thread_id": "thread-31c11e51260a",
+      "thread_depth": 1,
+      "month": "2005-12"
+    },
+    {
+      "id": "msg-0353778c128d",
+      "message_id": "<5e64e5be0512300226ie9b8e2el@mail.gmail.com>",
+      "from_name": "Wojciech Slusarski",
+      "from_email_hash": "6530e5ba6ab55c01471a1dcc42f09960509d9cb7fe061538ab2323d62e11ff50",
+      "date": "2005-12-30T11:26:16+01:00",
+      "subject": "[R-sig-finance] Puzzled in arch estimation",
+      "subject_clean": "Puzzled in arch estimation",
+      "in_reply_to": "<43B4A734.5080104@pdf.com>",
+      "references": [
+        "<20051224152838.GA23574@lubyanka.local>",
+        "<43B4A734.5080104@pdf.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20051230/dd9e155b/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20051230/dd9e155b/attachment.pl",
+      "thread_id": "thread-31c11e51260a",
+      "thread_depth": 2,
+      "month": "2005-12"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-2ae9e2e005a9",
+      "subject": "Kalman Smoothing - time-variant parameters (sspir)",
+      "message_count": 2,
+      "participants": [
+        "Claus Dethlefsen / Aalborg Sygehus",
+        "¨Tariq Khan"
+      ],
+      "started": "2005-12-01T12:12:24+00:00",
+      "last_reply": "2005-12-01T17:32:01+01:00",
+      "root_message_id": "msg-2ae9e2e005a9"
+    },
+    {
+      "id": "thread-0a260850fd31",
+      "subject": "rMetrics bug",
+      "message_count": 2,
+      "participants": [
+        "Diethelm Wuertz",
+        "Parlamis Franklin"
+      ],
+      "started": "2005-12-01T19:52:34-10:00",
+      "last_reply": "2005-12-02T08:52:37+00:00",
+      "root_message_id": "msg-0a260850fd31"
+    },
+    {
+      "id": "thread-f2d942e05143",
+      "subject": "R and C++",
+      "message_count": 2,
+      "participants": [
+        "Krishna Kumar",
+        "L.Isella"
+      ],
+      "started": "2005-12-02T13:58:10+00:00",
+      "last_reply": "2005-12-02T16:42:40-05:00",
+      "root_message_id": "msg-f2d942e05143"
+    },
+    {
+      "id": "thread-e958b4571388",
+      "subject": "R and exchanges",
+      "message_count": 3,
+      "participants": [
+        "Dirk Eddelbuettel",
+        "Gabor Grothendieck",
+        "Molins, Jordi"
+      ],
+      "started": "2005-12-02T14:15:13+01:00",
+      "last_reply": "2005-12-02T08:46:06-05:00",
+      "root_message_id": "msg-e958b4571388"
+    },
+    {
+      "id": "thread-bd5d4260cc97",
+      "subject": "coherency",
+      "message_count": 1,
+      "participants": [
+        "Spencer Graves"
+      ],
+      "started": "2005-12-02T14:51:01-08:00",
+      "last_reply": "2005-12-02T14:51:01-08:00",
+      "root_message_id": "msg-bd5d4260cc97"
+    },
+    {
+      "id": "thread-b07ace707f19",
+      "subject": "R and exchanges",
+      "message_count": 1,
+      "participants": [
+        "Molins, Jordi"
+      ],
+      "started": "2005-12-02T15:09:55+01:00",
+      "last_reply": "2005-12-02T15:09:55+01:00",
+      "root_message_id": "msg-b07ace707f19"
+    },
+    {
+      "id": "thread-0c19d2fcb2de",
+      "subject": "R and exchanges",
+      "message_count": 1,
+      "participants": [
+        "Adrian Trapletti"
+      ],
+      "started": "2005-12-05T14:20:32+01:00",
+      "last_reply": "2005-12-05T14:20:32+01:00",
+      "root_message_id": "msg-0c19d2fcb2de"
+    },
+    {
+      "id": "thread-a56f8d90f68c",
+      "subject": "NIG Option Pricing",
+      "message_count": 4,
+      "participants": [
+        "Krishna Kumar",
+        "Martin Maechler",
+        "dkf@specere.com"
+      ],
+      "started": "2005-12-06T10:31:19+07:00",
+      "last_reply": "2005-12-07T12:09:48+01:00",
+      "root_message_id": "msg-a56f8d90f68c"
+    },
+    {
+      "id": "thread-63d5d257abc5",
+      "subject": "Version 3 of POP Portfolio Construction Suite released",
+      "message_count": 1,
+      "participants": [
+        "Patrick Burns"
+      ],
+      "started": "2005-12-06T22:20:14+00:00",
+      "last_reply": "2005-12-06T22:20:14+00:00",
+      "root_message_id": "msg-63d5d257abc5"
+    },
+    {
+      "id": "thread-9fe948cd1e2b",
+      "subject": "query string tokens for Yahoo finance site",
+      "message_count": 1,
+      "participants": [
+        "Schwarz,Paul"
+      ],
+      "started": "2005-12-07T09:07:12-08:00",
+      "last_reply": "2005-12-07T09:07:12-08:00",
+      "root_message_id": "msg-9fe948cd1e2b"
+    },
+    {
+      "id": "thread-05e1fd0b1b96",
+      "subject": "query string tokens for Yahoo finance site",
+      "message_count": 1,
+      "participants": [
+        "Guy Yollin"
+      ],
+      "started": "2005-12-07T09:32:12-08:00",
+      "last_reply": "2005-12-07T09:32:12-08:00",
+      "root_message_id": "msg-05e1fd0b1b96"
+    },
+    {
+      "id": "thread-c877f12a0175",
+      "subject": "RV: please ...i need help...",
+      "message_count": 2,
+      "participants": [
+        "Ricardo Zambrano Aguilera",
+        "Spencer Graves"
+      ],
+      "started": "2005-12-07T11:50:50-03:00",
+      "last_reply": "2005-12-10T08:56:14-08:00",
+      "root_message_id": "msg-c877f12a0175"
+    },
+    {
+      "id": "thread-781a3573e84d",
+      "subject": "Constrained Log-Likelihood with SQP Solver",
+      "message_count": 5,
+      "participants": [
+        "Andrew Piskorski",
+        "Diethelm Wuertz",
+        "Max"
+      ],
+      "started": "2005-12-13T13:18:16+00:00",
+      "last_reply": "2005-12-16T14:21:07+00:00",
+      "root_message_id": "msg-781a3573e84d"
+    },
+    {
+      "id": "thread-055484ed1a34",
+      "subject": "Optimization of Non-Quadratic Functions",
+      "message_count": 1,
+      "participants": [
+        "L.Isella"
+      ],
+      "started": "2005-12-13T15:41:38+00:00",
+      "last_reply": "2005-12-13T15:41:38+00:00",
+      "root_message_id": "msg-055484ed1a34"
+    },
+    {
+      "id": "thread-bfcf465ccb2b",
+      "subject": "R-sig-finance Digest, Vol 19, Issue 6",
+      "message_count": 1,
+      "participants": [
+        "Vivek Satsangi"
+      ],
+      "started": "2005-12-14T18:29:35-05:00",
+      "last_reply": "2005-12-14T18:29:35-05:00",
+      "root_message_id": "msg-bfcf465ccb2b"
+    },
+    {
+      "id": "thread-599d459c76de",
+      "subject": "Butterworth low-pass  filter",
+      "message_count": 1,
+      "participants": [
+        "Andy Bunn"
+      ],
+      "started": "2005-12-18T12:39:35-05:00",
+      "last_reply": "2005-12-18T12:39:35-05:00",
+      "root_message_id": "msg-599d459c76de"
+    },
+    {
+      "id": "thread-31c11e51260a",
+      "subject": "Puzzled in arch estimation",
+      "message_count": 3,
+      "participants": [
+        "Ajay Narottam Shah",
+        "Spencer Graves",
+        "Wojciech Slusarski"
+      ],
+      "started": "2005-12-24T20:58:38+05:30",
+      "last_reply": "2005-12-30T11:26:16+01:00",
+      "root_message_id": "msg-31c11e51260a"
+    },
+    {
+      "id": "thread-247ff392484b",
+      "subject": "R-sig-finance Digest, Vol 19, Issue 11",
+      "message_count": 1,
+      "participants": [
+        "Michael Parzen"
+      ],
+      "started": "2005-12-25T06:07:05-05:00",
+      "last_reply": "2005-12-25T06:07:05-05:00",
+      "root_message_id": "msg-247ff392484b"
+    },
+    {
+      "id": "thread-30904fc210b7",
+      "subject": "R-sig-finance Digest, Vol 19, Issue 12",
+      "message_count": 1,
+      "participants": [
+        "Michael Parzen"
+      ],
+      "started": "2005-12-26T06:12:34-05:00",
+      "last_reply": "2005-12-26T06:12:34-05:00",
+      "root_message_id": "msg-30904fc210b7"
+    },
+    {
+      "id": "thread-8834e461b74b",
+      "subject": "R-sig-finance Digest, Vol 19, Issue 13",
+      "message_count": 1,
+      "participants": [
+        "Michael Parzen"
+      ],
+      "started": "2005-12-27T06:17:25-05:00",
+      "last_reply": "2005-12-27T06:17:25-05:00",
+      "root_message_id": "msg-8834e461b74b"
+    }
+  ]
+}

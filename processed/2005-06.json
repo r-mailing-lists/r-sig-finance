@@ -1,0 +1,163 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2005-06",
+  "messages": [
+    {
+      "id": "msg-24c02d3a2d94",
+      "message_id": "<1119275176.61e79bcL.Isella@myrealbox.com>",
+      "from_name": "L.Isella",
+      "from_email_hash": "e83286d14c4fa9f4a44217fdbbf1fb21f4fc76e631493f09faaf675cb0054803",
+      "date": "2005-06-20T13:46:16Z",
+      "subject": "[R-sig-finance] fPortfolio",
+      "subject_clean": "fPortfolio",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear All,\nI have just started learning R and I am interested in using it for financial applications.\nI am not running the latest release of R and my OS is Ubuntu Linux (almost equal to Debian as far as R is concerned).\nI installed some extra packages to run fPortfolio.\nI may have made some mistake as when I enter library() I get the warning: \nWarning message: \nlibrary '/usr/local/lib/R/site-library' contains no package in: library() \n\nanyway, the fPortfolio library seems to load regularly; the output of library(fPortfolio) does not produce any warnings but only a list of masked packages.\nThen, as a simple test, I form a simple matrix myport containing 3 assets each with a few return values:\n\nmyport\n    V1    V2    V3\n1 0.04 0.020 0.060\n2 0.01 0.060 0.059\n3 0.09 0.014 0.058\n4 0.02 0.017 0.062\n5 0.06 0.019 0.063\n\nNow if I try working out the composition of a portfolio without short selling I do not get a positive answer for certain expected returns e.g.:\n\n> myPortfolio = portfolioMarkowitz(myport, targetReturn = 0.01, title = null, description = null)\nError in .solve.QP(covmat, dvec, Amat, bvec = b0, meq = 2) : \n\tconstraints are inconsistent, no solution!\n\nbut what bothers me is this error message I get when I choose another expected return:\n\n\n> myPortfolio = portfolioMarkowitz(myport, targetReturn = 0.03, title = null, description = null)\nError in portfolioMarkowitz(myport, targetReturn = 0.03, title = null,  : \n\tObject \"pfolio\" not found\n\nAs I wrote, I am still pretty new to R, so I do not know exactly how to deal with it, but it seems to me that I followed closely the example in the fPortfolio documentation, so I do not understand what is going wrong.\nBest Regards\nLorenzo",
+      "body_snippet": "Dear All,\nI have just started learning R and I am interested in using it for financial applications.\nI am not running the latest release of R and my OS is Ubuntu Linux (almost equal to Debian as far a",
+      "thread_id": "thread-24c02d3a2d94",
+      "thread_depth": 0,
+      "month": "2005-06"
+    },
+    {
+      "id": "msg-3e62a52f3275",
+      "message_id": "<00aa01c575b1$fb9f9d10$3a9efea9@renatus>",
+      "from_name": "Renatas Vaiciunas",
+      "from_email_hash": "97861cd54fe4f1679faf8a50ff774d857907b7a3770a3d1dcafd7a61866a9a53",
+      "date": "2005-06-20T19:06:13+03:00",
+      "subject": "[R-sig-finance] (no subject)",
+      "subject_clean": "(no subject)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20050620/6e9076e9/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20050620/6e9076e9/attachment.pl",
+      "thread_id": "thread-3e62a52f3275",
+      "thread_depth": 0,
+      "month": "2005-06"
+    },
+    {
+      "id": "msg-fcdfc165d6d3",
+      "message_id": "<20050620160801.QHLJ10491.tomts33-srv.bellnexxia.net@money9>",
+      "from_name": "Bill Hutchison",
+      "from_email_hash": "9f69ccc247067a261caf170872959efaa13453529306d0934798febedeebb097",
+      "date": "2005-06-20T12:08:04-04:00",
+      "subject": "[R-sig-finance] fPortfolio",
+      "subject_clean": "fPortfolio",
+      "in_reply_to": "<1119275176.61e79bcL.Isella@myrealbox.com>",
+      "references": [],
+      "body_plain": "The pfolio error seems to be a bug, so I have solved it by adding\n\n\tpfolio <- NULL\n\nto the function, and replacing portfolioMarkowitz with my own version.\n\nHere is the full function:\n\nportfolioMarkowitz <- function (x, targetReturn, title = NULL, description =\nNULL) \n{\n    x = as.matrix(x)\n    opt = .portfolio.optim(x = x, pm = targetReturn, covmat = cov(x))\n\t\tpfolio <- NULL #added to fPortfolio original code\n    pfolio$what = \"portfolio\"\n    pfolio$method = \"QP\"\n    pfolio$opt = opt\n    pfolio$pw = opt$pw\n    pfolio$pm = opt$pm\n    pfolio$ps = opt$ps\n    if (is.null(title)) \n        title = \"Mean-Variance Portfolio Optimization\"\n    if (is.null(description)) \n        description = as.character(date())\n    new(\"fPFOLIO\", call = as.call(match.call()), method = \"Quadratic\nProgramming\", \n        model = \"Markowitz Portfolio\", data = as.data.frame(x), \n        pfolio = pfolio, title = as.character(title), description =\nas.character(description))\n} \n\nBill Hutchison\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of L.Isella\nSent: Monday, June 20, 2005 9:46 AM\nTo: r-sig-finance at stat.math.ethz.ch\nSubject: [R-sig-finance] fPortfolio\n\nDear All,\nI have just started learning R and I am interested in using it for financial\napplications.\nI am not running the latest release of R and my OS is Ubuntu Linux (almost\nequal to Debian as far as R is concerned).\nI installed some extra packages to run fPortfolio.\nI may have made some mistake as when I enter library() I get the warning: \nWarning message: \nlibrary '/usr/local/lib/R/site-library' contains no package in: library() \n\nanyway, the fPortfolio library seems to load regularly; the output of\nlibrary(fPortfolio) does not produce any warnings but only a list of masked\npackages.\nThen, as a simple test, I form a simple matrix myport containing 3 assets\neach with a few return values:\n\nmyport\n    V1    V2    V3\n1 0.04 0.020 0.060\n2 0.01 0.060 0.059\n3 0.09 0.014 0.058\n4 0.02 0.017 0.062\n5 0.06 0.019 0.063\n\nNow if I try working out the composition of a portfolio without short\nselling I do not get a positive answer for certain expected returns e.g.:\n\n> myPortfolio = portfolioMarkowitz(myport, targetReturn = 0.01, title = \n> null, description = null)\nError in .solve.QP(covmat, dvec, Amat, bvec = b0, meq = 2) : \n\tconstraints are inconsistent, no solution!\n\nbut what bothers me is this error message I get when I choose another\nexpected return:\n\n\n> myPortfolio = portfolioMarkowitz(myport, targetReturn = 0.03, title = \n> null, description = null)\nError in portfolioMarkowitz(myport, targetReturn = 0.03, title = null,  : \n\tObject \"pfolio\" not found\n\nAs I wrote, I am still pretty new to R, so I do not know exactly how to deal\nwith it, but it seems to me that I followed closely the example in the\nfPortfolio documentation, so I do not understand what is going wrong.\nBest Regards\nLorenzo\n\n_______________________________________________\nR-sig-finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance",
+      "body_snippet": "The pfolio error seems to be a bug, so I have solved it by adding\n\n\tpfolio <- NULL\n\nto the function, and replacing portfolioMarkowitz with my own version.\n\nHere is the full function:\n\nportfolioMarkowi",
+      "thread_id": "thread-24c02d3a2d94",
+      "thread_depth": 1,
+      "month": "2005-06"
+    },
+    {
+      "id": "msg-ac9cc2ee7aaf",
+      "message_id": "<00d201c575b5$ff8f29f0$3a9efea9@renatus>",
+      "from_name": "Renatas Vaiciunas",
+      "from_email_hash": "97861cd54fe4f1679faf8a50ff774d857907b7a3770a3d1dcafd7a61866a9a53",
+      "date": "2005-06-20T19:34:58+03:00",
+      "subject": "[R-sig-finance] (no subject)",
+      "subject_clean": "(no subject)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20050620/b1257dce/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20050620/b1257dce/attachment.pl",
+      "thread_id": "thread-ac9cc2ee7aaf",
+      "thread_depth": 0,
+      "month": "2005-06"
+    },
+    {
+      "id": "msg-335ce5ee3d64",
+      "message_id": "<8C27E77B81BE694C8A3ABDDA40A1E2C80526F746@RGPEX.rogge.co.uk>",
+      "from_name": "Igor Pikovsky",
+      "from_email_hash": "75ff2675711c7036dd6dc72683334c3658330ab1a91ab9b4a8b57cd1eb1e671d",
+      "date": "2005-06-27T11:37:48+01:00",
+      "subject": "[R-sig-finance] Merging timeSeries objects",
+      "subject_clean": "Merging timeSeries objects",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20050627/186ee35f/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20050627/186ee35f/attachment.pl",
+      "thread_id": "thread-335ce5ee3d64",
+      "thread_depth": 0,
+      "month": "2005-06"
+    },
+    {
+      "id": "msg-dd8a11881043",
+      "message_id": "<42C12E27.5080608@few.vu.nl>",
+      "from_name": "Konrad Banachewicz",
+      "from_email_hash": "b4caff5b8f5819e9c0dc8496fd276b7f83890fe55d7663c53334c246ba5f482a",
+      "date": "2005-06-28T13:01:59+02:00",
+      "subject": "[R-sig-finance] R-sig-finance Digest, Vol 13, Issue 6",
+      "subject_clean": "R-sig-finance Digest, Vol 13, Issue 6",
+      "in_reply_to": "<mailman.21.1119952802.1160.r-sig-finance@stat.math.ethz.ch>",
+      "references": [
+        "<mailman.21.1119952802.1160.r-sig-finance@stat.math.ethz.ch>"
+      ],
+      "body_plain": "Dear Igor,\n\n>From: \"Igor Pikovsky\" <Igor.Pikovsky at rogge.co.uk>\n>I have a few questions about timeSeries objects:\n>\n>1. How can I assign names to individual series in a multivariate object?\n>I have tried specifying colNames parameter in timeSeries function, but\n>it had been ignored.\n>\nthat's curious; by timeSeries You mean the ts function from tseries ?\nread.ts is always worth trying (if You can merge the data into one file \nand then\nread it jointly), or You can work with the dse package by Paul Gilbert.\n\n>2. How can I merge together several multivariate timeSeries objects, all\n>having roughly the same dates? The mergeSeries function does something\n>very different, apparently.\n>\ntry ts.union from the stats package - of course the issue of what You \nmean by \"roughly the same dates\"\nremains ...\n\n>3. The documentation mentions that I need to set the environment\n>variable TZ to \"GMT\". I have tried setting TZ, tz, zone and timezone,\n>but am still getting a lot of warnings about timezone from various\n>functions. Sys.date says I have GMT set.\n>\nno clue why You get the error here, sorry\n\n>4. in timeSeries plot, how can I add a legend? Otherwise plotting a\n>multivariate timeSeries is pretty useless...\n>\nextensive description (through a ton of examples :) can be found at  \nAjay Shah's webpage:\nhttp://www.mayin.org/ajayshah/KB/R/\n\nhope this helps,\n\nkonrad",
+      "body_snippet": "Dear Igor,\n\n>From: \"Igor Pikovsky\" <Igor.Pikovsky at rogge.co.uk>\n>I have a few questions about timeSeries objects:\n>\n>1. How can I assign names to individual series in a multivariate object?\n>I have ",
+      "thread_id": "thread-dd8a11881043",
+      "thread_depth": 0,
+      "month": "2005-06"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-24c02d3a2d94",
+      "subject": "fPortfolio",
+      "message_count": 2,
+      "participants": [
+        "Bill Hutchison",
+        "L.Isella"
+      ],
+      "started": "2005-06-20T13:46:16+00:00",
+      "last_reply": "2005-06-20T12:08:04-04:00",
+      "root_message_id": "msg-24c02d3a2d94"
+    },
+    {
+      "id": "thread-3e62a52f3275",
+      "subject": "(no subject)",
+      "message_count": 1,
+      "participants": [
+        "Renatas Vaiciunas"
+      ],
+      "started": "2005-06-20T19:06:13+03:00",
+      "last_reply": "2005-06-20T19:06:13+03:00",
+      "root_message_id": "msg-3e62a52f3275"
+    },
+    {
+      "id": "thread-ac9cc2ee7aaf",
+      "subject": "(no subject)",
+      "message_count": 1,
+      "participants": [
+        "Renatas Vaiciunas"
+      ],
+      "started": "2005-06-20T19:34:58+03:00",
+      "last_reply": "2005-06-20T19:34:58+03:00",
+      "root_message_id": "msg-ac9cc2ee7aaf"
+    },
+    {
+      "id": "thread-335ce5ee3d64",
+      "subject": "Merging timeSeries objects",
+      "message_count": 1,
+      "participants": [
+        "Igor Pikovsky"
+      ],
+      "started": "2005-06-27T11:37:48+01:00",
+      "last_reply": "2005-06-27T11:37:48+01:00",
+      "root_message_id": "msg-335ce5ee3d64"
+    },
+    {
+      "id": "thread-dd8a11881043",
+      "subject": "R-sig-finance Digest, Vol 13, Issue 6",
+      "message_count": 1,
+      "participants": [
+        "Konrad Banachewicz"
+      ],
+      "started": "2005-06-28T13:01:59+02:00",
+      "last_reply": "2005-06-28T13:01:59+02:00",
+      "root_message_id": "msg-dd8a11881043"
+    }
+  ]
+}

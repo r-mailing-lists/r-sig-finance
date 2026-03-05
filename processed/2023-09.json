@@ -1,0 +1,55 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2023-09",
+  "messages": [
+    {
+      "id": "msg-1aee3d89d5d6",
+      "message_id": "<CABXq32scZRsnsn7qWd6FroMiMQUizXa9=NoLnG6X=nmihZUSQg@mail.gmail.com>",
+      "from_name": "Oleg Mubarakshin",
+      "from_email_hash": "2bd633481e9caad599f1a5853d54fdb3bfa7ae0ee78fae2ffef006f062a24de3",
+      "date": "2023-09-19T23:36:59+01:00",
+      "subject": "[R-SIG-Finance] Rblpapi / getBars / eventType",
+      "subject_clean": "Rblpapi / getBars / eventType",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Dirk and all,\n\nIt's said that for getBars:\neventType = c(\"TRADE\", \"BID\", \"ASK\")\n\nWhat is the 'eventType' exactly?\n\nThe results for different types look confusing:\n\neventType = \"TRADE\"\n\n> head(x)                times  open  high   low close numEvents volume   value\n1 2023-03-08 01:00:00 81.91 82.27 81.87 82.19        77     79 6480.73\n2 2023-03-08 01:15:00 82.20 82.20 82.10 82.10         2      2  164.30\n3 2023-03-08 01:30:00 82.11 82.19 82.03 82.03        62     63 5173.13\n4 2023-03-08 01:45:00 82.13 82.19 82.06 82.14        23     23 1888.74\n5 2023-03-08 02:00:00 82.06 82.21 82.05 82.20        27     31 2546.49\n6 2023-03-08 02:15:00 82.22 82.22 82.22 82.22         1      1   82.22\n\n\neventType = \"BID\"\n\n> head(x)                times  open  high   low close numEvents volume     value\n1 2023-03-08 00:50:01 81.73 82.07 81.67 82.06      1413   8667  710390.1\n2 2023-03-08 01:05:01 82.06 82.25 82.05 82.19      2663  19367 1590846.2\n3 2023-03-08 01:20:01 82.19 82.20 82.03 82.17      1867  14048 1153414.9\n4 2023-03-08 01:35:01 82.17 82.18 82.00 82.06      1483  11796  968171.6\n5 2023-03-08 01:50:01 82.05 82.16 82.03 82.13      1677  15189 1247051.2\n6 2023-03-08 02:05:01 82.13 82.21 82.10 82.14      1176  12131  996505.2\n\n\neventType = \"ASK\"\n\n> head(x)                times  open  high   low close numEvents volume     value\n1 2023-03-08 00:50:01 81.81 82.10 81.75 82.09      1440   9533  781562.4\n2 2023-03-08 01:05:01 82.09 82.29 82.07 82.23      3739  37173 3055594.0\n3 2023-03-08 01:20:01 82.23 82.23 82.06 82.20      2268  17855 1466788.4\n4 2023-03-08 01:35:01 82.20 82.20 82.01 82.08      1856  15223 1249880.9\n5 2023-03-08 01:50:01 82.08 82.20 82.06 82.17      1495  12756 1047894.9\n6 2023-03-08 02:05:01 82.17 82.23 82.13 82.17      1487  16442 1351371.2\n\n\n\nCode was:\nx <- getBars(security = \"COQ3 Comdty\",\n             eventType = c(\"TRADE\", \"BID\", \"ASK\")[1],\n             barInterval = 15,\n             startTime = as.POSIXct(\"2023-03-03\"),\n             endTime = as.POSIXct(\"2023-07-16\"),\n             options = NULL,\n             verbose = FALSE,\n             returnAs = getOption(\"blpType\", \"matrix\"),\n             tz = Sys.getenv(\"TZ\", unset = \"UTC\"),\n             con = bb.con)\n\n\nThanks.\n\n-- \nKind regards,\nOleg\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Dirk and all,\n\nIt's said that for getBars:\neventType = c(\"TRADE\", \"BID\", \"ASK\")\n\nWhat is the 'eventType' exactly?\n\nThe results for different types look confusing:\n\neventType = \"TRADE\"\n\n> head(x)   ",
+      "thread_id": "thread-1aee3d89d5d6",
+      "thread_depth": 0,
+      "month": "2023-09"
+    },
+    {
+      "id": "msg-20d5cd1fac3e",
+      "message_id": "<CAA3Wa=tSLynK426b+6pwaaWk+m858QUdFZeUcfMPQ2wi574s6w@mail.gmail.com>",
+      "from_name": "John Laing",
+      "from_email_hash": "b1ce4756fcb333e2c52d4075e3673b510c930cc17d62e0842947d12cd545a11a",
+      "date": "2023-09-19T21:42:20-04:00",
+      "subject": "[R-SIG-Finance] Rblpapi / getBars / eventType",
+      "subject_clean": "Rblpapi / getBars / eventType",
+      "in_reply_to": "<CABXq32scZRsnsn7qWd6FroMiMQUizXa9=NoLnG6X=nmihZUSQg@mail.gmail.com>",
+      "references": [
+        "<CABXq32scZRsnsn7qWd6FroMiMQUizXa9=NoLnG6X=nmihZUSQg@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Oleg,\n\nThe eventType refers to anything that happens in the market for a security.\nA trade is obvious, but for bid/ask I believe an event is any time that\nside of the market changes (either quantity or level). You could confirm\nthis with the helpdesk, as the documentation is not really clear.\n\nHope that helps,\nJL\n\nOn Tue, Sep 19, 2023 at 6:37?PM Oleg Mubarakshin <oleg.mubarakshin at gmail.com>\nwrote:\n\n> Hi Dirk and all,\n>\n> It's said that for getBars:\n> eventType = c(\"TRADE\", \"BID\", \"ASK\")\n>\n> What is the 'eventType' exactly?\n>\n> The results for different types look confusing:\n>\n> eventType = \"TRADE\"\n>\n> > head(x)                times  open  high   low close numEvents volume\n>  value\n> 1 2023-03-08 01:00:00 81.91 82.27 81.87 82.19        77     79 6480.73\n> 2 2023-03-08 01:15:00 82.20 82.20 82.10 82.10         2      2  164.30\n> 3 2023-03-08 01:30:00 82.11 82.19 82.03 82.03        62     63 5173.13\n> 4 2023-03-08 01:45:00 82.13 82.19 82.06 82.14        23     23 1888.74\n> 5 2023-03-08 02:00:00 82.06 82.21 82.05 82.20        27     31 2546.49\n> 6 2023-03-08 02:15:00 82.22 82.22 82.22 82.22         1      1   82.22\n>\n>\n> eventType = \"BID\"\n>\n> > head(x)                times  open  high   low close numEvents volume\n>  value\n> 1 2023-03-08 00:50:01 81.73 82.07 81.67 82.06      1413   8667  710390.1\n> 2 2023-03-08 01:05:01 82.06 82.25 82.05 82.19      2663  19367 1590846.2\n> 3 2023-03-08 01:20:01 82.19 82.20 82.03 82.17      1867  14048 1153414.9\n> 4 2023-03-08 01:35:01 82.17 82.18 82.00 82.06      1483  11796  968171.6\n> 5 2023-03-08 01:50:01 82.05 82.16 82.03 82.13      1677  15189 1247051.2\n> 6 2023-03-08 02:05:01 82.13 82.21 82.10 82.14      1176  12131  996505.2\n>\n>\n> eventType = \"ASK\"\n>\n> > head(x)                times  open  high   low close numEvents volume\n>  value\n> 1 2023-03-08 00:50:01 81.81 82.10 81.75 82.09      1440   9533  781562.4\n> 2 2023-03-08 01:05:01 82.09 82.29 82.07 82.23      3739  37173 3055594.0\n> 3 2023-03-08 01:20:01 82.23 82.23 82.06 82.20      2268  17855 1466788.4\n> 4 2023-03-08 01:35:01 82.20 82.20 82.01 82.08      1856  15223 1249880.9\n> 5 2023-03-08 01:50:01 82.08 82.20 82.06 82.17      1495  12756 1047894.9\n> 6 2023-03-08 02:05:01 82.17 82.23 82.13 82.17      1487  16442 1351371.2\n>\n>\n>\n> Code was:\n> x <- getBars(security = \"COQ3 Comdty\",\n>              eventType = c(\"TRADE\", \"BID\", \"ASK\")[1],\n>              barInterval = 15,\n>              startTime = as.POSIXct(\"2023-03-03\"),\n>              endTime = as.POSIXct(\"2023-07-16\"),\n>              options = NULL,\n>              verbose = FALSE,\n>              returnAs = getOption(\"blpType\", \"matrix\"),\n>              tz = Sys.getenv(\"TZ\", unset = \"UTC\"),\n>              con = bb.con)\n>\n>\n> Thanks.\n>\n> --\n> Kind regards,\n> Oleg\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Oleg,\n\nThe eventType refers to anything that happens in the market for a security.\nA trade is obvious, but for bid/ask I believe an event is any time that\nside of the market changes (either quantit",
+      "thread_id": "thread-1aee3d89d5d6",
+      "thread_depth": 1,
+      "month": "2023-09"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-1aee3d89d5d6",
+      "subject": "Rblpapi / getBars / eventType",
+      "message_count": 2,
+      "participants": [
+        "John Laing",
+        "Oleg Mubarakshin"
+      ],
+      "started": "2023-09-19T23:36:59+01:00",
+      "last_reply": "2023-09-19T21:42:20-04:00",
+      "root_message_id": "msg-1aee3d89d5d6"
+    }
+  ]
+}

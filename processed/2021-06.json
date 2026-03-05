@@ -1,0 +1,84 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2021-06",
+  "messages": [
+    {
+      "id": "msg-f4d2e6af5818",
+      "message_id": "<78192887.268372.1623752678650@mail.yahoo.com>",
+      "from_name": "Doumbia Souleymane",
+      "from_email_hash": "3aaf02fa92e9492d34aa64f472c4723baf1f12e6a78b542765ce47022a934662",
+      "date": "2021-06-15T10:24:38Z",
+      "subject": "[R-SIG-Finance] Cumulative Impulse Response Function for Garch models",
+      "subject_clean": "Cumulative Impulse Response Function for Garch models",
+      "in_reply_to": null,
+      "references": [
+        "<78192887.268372.1623752678650.ref@mail.yahoo.com>"
+      ],
+      "body_plain": "Dear all,\nIs there a package that allows to plot the Cumulative IRF for garch models ? Rugarch packages?does not.\nThank you in advance.\nRegards,?\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,\nIs there a package that allows to plot the Cumulative IRF for garch models ? Rugarch packages?does not.\nThank you in advance.\nRegards,?\n\n\n\t[[alternative HTML version deleted]]",
+      "thread_id": "thread-f4d2e6af5818",
+      "thread_depth": 0,
+      "month": "2021-06"
+    },
+    {
+      "id": "msg-e852bcfaab23",
+      "message_id": "<CA+oJuEEv+fDCsArmXo1ciKvsQPs9mOYfqAEiUkeZ=g3o+1oogA@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "3e375900f97169bfcb61fc4fdc48bafc91349f60a4f7a4813c93bbe535a52a19",
+      "date": "2021-06-15T07:56:25-04:00",
+      "subject": "[R-SIG-Finance] Return.portfolio contribution documentation incorrect.",
+      "subject_clean": "Return.portfolio contribution documentation incorrect.",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "So, I'm trying to replicate Return.portfolio, since I intend to port it\nover into Python, and while I understand most of the calculations, there's\none thing that bugs me, namely contribution. Here's my MRE:\n\ngetSymbols(c('SPY', 'TLT'), from = '1990-01-01')\n\nR = na.omit(cbind(Return.calculate(Ad(SPY)), Return.calculate(Ad(TLT))))\nR_na <- cbind(Return.calculate(Ad(SPY)), Return.calculate(Ad(TLT)))\n\nout <- Return.portfolio(R = R,\n                        weights = c(1, .6), verbose = TRUE, rebalance_on =\nNA, contribution = FALSE)\n\nr_calc <- cbind(R, 0)\ncumprods <- cumprod(1+r_calc)\n\n# EOP.Value\neop.value <- cumprods * matrix(rep(c(1, .6, -.6), nrow(tmp)), ncol = 3,\nbyrow = TRUE)\nprint(tail(round(eop.value-out$EOP.Value), 6))\n\n\n# BOP.Value\nbop.value <- eop.value/(1+r_calc)\nprint(tail(round(bop.value-out$BOP.Value), 6))\n\n\n# EOP.Weight\neop.weight <- eop.value/rowSums(eop.value)\nprint(tail(round(eop.weight-out$EOP.Weight), 6))\n\n# BOP.Weight\nbop.weight <- bop.value/rowSums(bop.value)\nprint(tail(round(bop.weight-out$BOP.Weight), 6))\n\nIn all cases, everything matches up besides the contributions. When I\nimplement what's defined in the functionality, namely:\n\ncontribution: The per period contribution to portfolio return of each\nasset. Contribution is calculated as BOP weight times the period's return\ndivided by BOP value. Period contributions are summed across the individual\nassets to calculate portfolio return\n\nSo, contribution should be:\n\ncontrib <- bop.weight*r_calc/bop.value\n\nWhich gives me the following result:\n\ntail(contrib)\n\n            SPY.Adjusted  TLT.Adjusted X0\n2021-06-07 -1.200836e-04 -0.0003804248  0\n2021-06-08  2.642538e-05  0.0008710532  0\n2021-06-09 -1.845971e-04  0.0010924038  0\n2021-06-10  5.746216e-04  0.0007415750  0\n2021-06-11  2.031949e-04 -0.0001984059  0\n2021-06-14  2.750417e-04 -0.0009408983  0\n\nYet, the *actual* contribution, as defined by Return.portfolio, is:\n\n tail(out$contribution)\n            SPY.Adjusted  TLT.Adjusted Residual\n2021-06-07 -0.0008054887 -0.0007500412        0\n2021-06-08  0.0001770824  0.0017120802        0\n2021-06-09 -0.0012372908  0.0021622383        0\n2021-06-10  0.0038457437  0.0014807881        0\n2021-06-11  0.0013662344 -0.0003985565        0\n2021-06-14  0.0018523718 -0.0018870209        0\n\nWhich clearly does not match.\n\nIs the documentation incorrect, or am I misunderstanding something?\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "So, I'm trying to replicate Return.portfolio, since I intend to port it\nover into Python, and while I understand most of the calculations, there's\none thing that bugs me, namely contribution. Here's m",
+      "thread_id": "thread-e852bcfaab23",
+      "thread_depth": 0,
+      "month": "2021-06"
+    },
+    {
+      "id": "msg-b2f827810fe0",
+      "message_id": "<CY4PR08MB346203417E7C72F9C19DFE18B9309@CY4PR08MB3462.namprd08.prod.outlook.com>",
+      "from_name": "Eric Zivot",
+      "from_email_hash": "3f7374f1c5eab31f7f5fa0e14f86e9cda5ed6ed36208a6689993e738b8d5a846",
+      "date": "2021-06-15T20:34:33Z",
+      "subject": "[R-SIG-Finance] Return.portfolio contribution documentation incorrect.",
+      "subject_clean": "Return.portfolio contribution documentation incorrect.",
+      "in_reply_to": "<CA+oJuEEv+fDCsArmXo1ciKvsQPs9mOYfqAEiUkeZ=g3o+1oogA@mail.gmail.com>",
+      "references": [
+        "<CA+oJuEEv+fDCsArmXo1ciKvsQPs9mOYfqAEiUkeZ=g3o+1oogA@mail.gmail.com>"
+      ],
+      "body_plain": "Hey Ilya,\nI go over the Return.portfolio() calculations by hand in my online computational finance book (see https://bookdown.org/compfinezbook/introcompfinr/portfolios-and-portfolio-returns.html ). This might help you find out where you are going wrong with your calculations below. \nCheers,\nEric\n\n-----Original Message-----\nFrom: R-SIG-Finance <r-sig-finance-bounces at r-project.org> On Behalf Of Ilya Kipnis\nSent: Tuesday, June 15, 2021 4:56 AM\nTo: r-sig-finance <r-sig-finance at r-project.org>\nSubject: [R-SIG-Finance] Return.portfolio contribution documentation incorrect.\n\nSo, I'm trying to replicate Return.portfolio, since I intend to port it over into Python, and while I understand most of the calculations, there's one thing that bugs me, namely contribution. Here's my MRE:\n\ngetSymbols(c('SPY', 'TLT'), from = '1990-01-01')\n\nR = na.omit(cbind(Return.calculate(Ad(SPY)), Return.calculate(Ad(TLT)))) R_na <- cbind(Return.calculate(Ad(SPY)), Return.calculate(Ad(TLT)))\n\nout <- Return.portfolio(R = R,\n                        weights = c(1, .6), verbose = TRUE, rebalance_on = NA, contribution = FALSE)\n\nr_calc <- cbind(R, 0)\ncumprods <- cumprod(1+r_calc)\n\n# EOP.Value\neop.value <- cumprods * matrix(rep(c(1, .6, -.6), nrow(tmp)), ncol = 3, byrow = TRUE) print(tail(round(eop.value-out$EOP.Value), 6))\n\n\n# BOP.Value\nbop.value <- eop.value/(1+r_calc)\nprint(tail(round(bop.value-out$BOP.Value), 6))\n\n\n# EOP.Weight\neop.weight <- eop.value/rowSums(eop.value) print(tail(round(eop.weight-out$EOP.Weight), 6))\n\n# BOP.Weight\nbop.weight <- bop.value/rowSums(bop.value) print(tail(round(bop.weight-out$BOP.Weight), 6))\n\nIn all cases, everything matches up besides the contributions. When I implement what's defined in the functionality, namely:\n\ncontribution: The per period contribution to portfolio return of each asset. Contribution is calculated as BOP weight times the period's return divided by BOP value. Period contributions are summed across the individual assets to calculate portfolio return\n\nSo, contribution should be:\n\ncontrib <- bop.weight*r_calc/bop.value\n\nWhich gives me the following result:\n\ntail(contrib)\n\n            SPY.Adjusted  TLT.Adjusted X0\n2021-06-07 -1.200836e-04 -0.0003804248  0\n2021-06-08  2.642538e-05  0.0008710532  0\n2021-06-09 -1.845971e-04  0.0010924038  0\n2021-06-10  5.746216e-04  0.0007415750  0\n2021-06-11  2.031949e-04 -0.0001984059  0\n2021-06-14  2.750417e-04 -0.0009408983  0\n\nYet, the *actual* contribution, as defined by Return.portfolio, is:\n\n tail(out$contribution)\n            SPY.Adjusted  TLT.Adjusted Residual\n2021-06-07 -0.0008054887 -0.0007500412        0\n2021-06-08  0.0001770824  0.0017120802        0\n2021-06-09 -0.0012372908  0.0021622383        0\n2021-06-10  0.0038457437  0.0014807881        0\n2021-06-11  0.0013662344 -0.0003985565        0\n2021-06-14  0.0018523718 -0.0018870209        0\n\nWhich clearly does not match.\n\nIs the documentation incorrect, or am I misunderstanding something?\n\n\t[[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Hey Ilya,\nI go over the Return.portfolio() calculations by hand in my online computational finance book (see https://bookdown.org/compfinezbook/introcompfinr/portfolios-and-portfolio-returns.html ). T",
+      "thread_id": "thread-e852bcfaab23",
+      "thread_depth": 1,
+      "month": "2021-06"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-e852bcfaab23",
+      "subject": "Return.portfolio contribution documentation incorrect.",
+      "message_count": 2,
+      "participants": [
+        "Eric Zivot",
+        "Ilya Kipnis"
+      ],
+      "started": "2021-06-15T07:56:25-04:00",
+      "last_reply": "2021-06-15T20:34:33+00:00",
+      "root_message_id": "msg-e852bcfaab23"
+    },
+    {
+      "id": "thread-f4d2e6af5818",
+      "subject": "Cumulative Impulse Response Function for Garch models",
+      "message_count": 1,
+      "participants": [
+        "Doumbia Souleymane"
+      ],
+      "started": "2021-06-15T10:24:38+00:00",
+      "last_reply": "2021-06-15T10:24:38+00:00",
+      "root_message_id": "msg-f4d2e6af5818"
+    }
+  ]
+}

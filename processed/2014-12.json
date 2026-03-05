@@ -1,0 +1,821 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2014-12",
+  "messages": [
+    {
+      "id": "msg-c120df261778",
+      "message_id": "<20141201145150.GA9702@robsch.eu>",
+      "from_name": "Robert Schien",
+      "from_email_hash": "9992aa2520c6b13faf25970f4fc88a897cb7e69f670eab320801f4889eb845c5",
+      "date": "2014-12-01T15:51:50+01:00",
+      "subject": "[R-SIG-Finance] IBrokers question",
+      "subject_clean": "IBrokers question",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nI have some questions concerning the IBrokers package.\n\nI want to sample some tick data into a data frame or time series.\n\nWhat I do is the following:\n\nlibrary(IBrokers)\niws <- ibgConnect()\nequity <- twsEquity(\"GS\")\nreqMktData(tws,equity)\n\nNow my questions is: How can I access the individual data\nlike tickprice, ask, bid etc?\n\nI know that I can create an eWrapper structure and modify\nthe individual functions.\n\nmywrapper <- eWrapper()\nmywrapper$tickPrice <- function(msg, timestamp, file, ...) {cat(\"tickPrice\",msg)}              \nreqMktData(tws,equity,eventWrapper=mywrapper)\n\nBut where are the interesting market data hidden and how can I access them?\nThis has probably to do with the .data environment and the get.data\nmethod. But how does it work exactly?\nThe vignette is not quite clear to me.\n\n\nThank you in advance.\n\nGreetings\nRobert",
+      "body_snippet": "Hello,\n\nI have some questions concerning the IBrokers package.\n\nI want to sample some tick data into a data frame or time series.\n\nWhat I do is the following:\n\nlibrary(IBrokers)\niws <- ibgConnect()\neq",
+      "thread_id": "thread-c120df261778",
+      "thread_depth": 0,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-16f6fa8adace",
+      "message_id": "<CAOGDGTZ0bmGqkYY9VJCgxDEuvyh7QGuZYv9sBUKhnPHKsh2vNg@mail.gmail.com>",
+      "from_name": "cen six",
+      "from_email_hash": "66e7b5f1ba0780b9e554ec83b3dbe3bc6320c2a08d2925e4143adc4f3bd0d33c",
+      "date": "2014-12-01T17:24:17+01:00",
+      "subject": "[R-SIG-Finance] IBrokers question",
+      "subject_clean": "IBrokers question",
+      "in_reply_to": "<20141201145150.GA9702@robsch.eu>",
+      "references": [
+        "<20141201145150.GA9702@robsch.eu>"
+      ],
+      "body_plain": "You could look at the code for\n\neWrapper.MktData.CSV\n\n\nto see how to do something more useful with the datastream other than just\ncat'ing it to output ...\n\n\nmywrapper <- eWrapper()\nmywrapper$tickPrice <- function(msg, timestamp, file, ...) {\ncat(\"tickPrice\",msg)\n... do something useful, ie. store it somewhere, etc...\n}\nreqMktData(tws,equity,eventWrapper=mywrapper)\n\nOn Mon, Dec 1, 2014 at 3:51 PM, Robert Schien <robsch at robsch.eu> wrote:\n\n>\n> Hello,\n>\n> I have some questions concerning the IBrokers package.\n>\n> I want to sample some tick data into a data frame or time series.\n>\n> What I do is the following:\n>\n> library(IBrokers)\n> iws <- ibgConnect()\n> equity <- twsEquity(\"GS\")\n> reqMktData(tws,equity)\n>\n> Now my questions is: How can I access the individual data\n> like tickprice, ask, bid etc?\n>\n> I know that I can create an eWrapper structure and modify\n> the individual functions.\n>\n> mywrapper <- eWrapper()\n> mywrapper$tickPrice <- function(msg, timestamp, file, ...)\n> {cat(\"tickPrice\",msg)}\n> reqMktData(tws,equity,eventWrapper=mywrapper)\n>\n> But where are the interesting market data hidden and how can I access them?\n> This has probably to do with the .data environment and the get.data\n> method. But how does it work exactly?\n> The vignette is not quite clear to me.\n>\n>\n> Thank you in advance.\n>\n> Greetings\n> Robert\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "You could look at the code for\n\neWrapper.MktData.CSV\n\n\nto see how to do something more useful with the datastream other than just\ncat'ing it to output ...\n\n\nmywrapper <- eWrapper()\nmywrapper$tickPrice",
+      "thread_id": "thread-c120df261778",
+      "thread_depth": 1,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-6333488a1840",
+      "message_id": "<957971195.8617.1417557442078.JavaMail.help@alum.mit.edu>",
+      "from_name": "Nicholas Manganaro",
+      "from_email_hash": "2ac1ef51e63863f977092a661ed5896ba73ea4a56f1ac46e858a48ba998bec3a",
+      "date": "2014-12-02T16:57:22-05:00",
+      "subject": "[R-SIG-Finance] Optimization of ARFIMA in rugarch - Quick question and context",
+      "subject_clean": "Optimization of ARFIMA in rugarch - Quick question and context",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Question:\nIs there a way to query the Nyblom joint statistic result out of an ARFIMAfit class object, the way there is for a uGARCHfit class object?\n\nContext:\nI am running an analysis on subsets from 12 return time series from the Fama/French Factors files (source: http://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html) which evidence skewed Student t distributions.\nI initially used autoarfima from the rugarch package using the nlminb solver, which generated results for some of the series, but not some others. I sequentially tried the other available solvers on the entire set of series to see if they would identify ARMA models for more of these sets. \nAs I hope you can see in the table below the results were mixed. Some observations:\n?\tThere was no solver that found ARMA coefficients for all sectors (not necessarily a problem);\n?\tFor many sectors, the values estimated for the orders of p and q for AR and MA varied across the solvers; and\n?\tNone of the solvers consistently provided either the lowest BIC or AIC score for the results across all sectors.\n\n\t\t\t\t\tSolver\t\t\t\n\t\t\t\t\t\t\t\t\t\n\t\tnlminb\t\tsolnp\t\tgosolnp\tnloptr\n\t\tAR\tMA\tAR\tMA\tAR\tMA\tAR\tMA\n        Manuf  \t4\t4\t4\t4\t5\t4\t4\t4\n\tOther  \tNA\tNA\tNA\tNA\t0\t1\t0\t1\n\tMoney  NA\tNA\tNA\tNA\tNA\tNA\tNA\tNA\n\tChems  0\t5\t0\t5\t0\t5\t0\t5\n\tNoDur  \tNA\tNA\tNA\tNA\tNA\tNA\tNA\tNA\n\tShops  \tNA\tNA\tNA\tNA\t3\t4\tNA\tNA\n\tDurbl  \t0\t1\t5\t5\t5\t5\t5\t3\n\tBusEq  \t5\t3\t5\t3\t5\t3\t5\t2\n\tHlth   \tNA\tNA\tNA\tNA\t0\t5\tNA\tNA\n\tTelcm  \t5\t0\t5\t5\t5\t5\t5\t0\n\tUtils  \t3\t4\t3\t4\t0\t5\t3\t4\n\tEnrgy  \t0\t1\t5\t3\t4\t3\t5\t3\n\tMkt.RF \t5\t3\t3\t2\tNA\tNA\tNA\tNA\n\n\nWhile I understand that the Nyblom test is an indicator of the stability of the results across a series, within the model results for a sector from the available solvers, a higher Nyblom joint statistic qualitatively seems to indicate higher quality test results across a number of tests, including the coefficient t statistics and the Ljung-Box results per sector. As a result, I was thinking I might use the Nyblom joint statistic as an indicator in automating the selection of the desired model from possible alternatives, but do not see how to query out that result for further testing as an indicator, although I can see it as part of the $fit object. \n\nPlease let me know if there is either such a capability for the ARFIMAfit class that I may have overlooked, or a function I might call to generate the joint Nyblom statistic and critical values using the zoo time series data and the existing autoarfima results on hand.\n\nThanks.\n\n-Nick",
+      "body_snippet": "Question:\nIs there a way to query the Nyblom joint statistic result out of an ARFIMAfit class object, the way there is for a uGARCHfit class object?\n\nContext:\nI am running an analysis on subsets from ",
+      "thread_id": "thread-6333488a1840",
+      "thread_depth": 0,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-d1ca9f963f38",
+      "message_id": "<547E3CCE.9080006@4dscape.com>",
+      "from_name": "alexios ghalanos",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2014-12-02T22:27:26Z",
+      "subject": "[R-SIG-Finance] Optimization of ARFIMA in rugarch - Quick question and context",
+      "subject_clean": "Optimization of ARFIMA in rugarch - Quick question and context",
+      "in_reply_to": "<957971195.8617.1417557442078.JavaMail.help@alum.mit.edu>",
+      "references": [
+        "<957971195.8617.1417557442078.JavaMail.help@alum.mit.edu>"
+      ],
+      "body_plain": "The returned list from autoarfima has 2 slots, 'fit' and 'rank.matrix'. \nThe former is of class ARFIMAfit, and though not exported to work with \nit, you can use\n\n >rugarch:::.nyblomTest(fit).\n\nIf you provide some additional details (i.e. reproducible code and which \ndata you are using...monthly/daily,value-weighted or equally weighted) \nthen we might be able to provide some additional help.\n\nRegards,\n\nAlexios\n\nOn 02/12/2014 21:57, Nicholas Manganaro wrote:\n> Question:\n> Is there a way to query the Nyblom joint statistic result out of an ARFIMAfit class object, the way there is for a uGARCHfit class object?\n>\n> Context:\n> I am running an analysis on subsets from 12 return time series from the Fama/French Factors files (source: http://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html) which evidence skewed Student t distributions.\n> I initially used autoarfima from the rugarch package using the nlminb solver, which generated results for some of the series, but not some others. I sequentially tried the other available solvers on the entire set of series to see if they would identify ARMA models for more of these sets.\n> As I hope you can see in the table below the results were mixed. Some observations:\n> ?\tThere was no solver that found ARMA coefficients for all sectors (not necessarily a problem);\n> ?\tFor many sectors, the values estimated for the orders of p and q for AR and MA varied across the solvers; and\n> ?\tNone of the solvers consistently provided either the lowest BIC or AIC score for the results across all sectors.\n>\n> \t\t\t\t\tSolver\t\t\t\n> \t\t\t\t\t\t\t\t\t\n> \t\tnlminb\t\tsolnp\t\tgosolnp\tnloptr\n> \t\tAR\tMA\tAR\tMA\tAR\tMA\tAR\tMA\n>          Manuf  \t4\t4\t4\t4\t5\t4\t4\t4\n> \tOther  \tNA\tNA\tNA\tNA\t0\t1\t0\t1\n> \tMoney  NA\tNA\tNA\tNA\tNA\tNA\tNA\tNA\n> \tChems  0\t5\t0\t5\t0\t5\t0\t5\n> \tNoDur  \tNA\tNA\tNA\tNA\tNA\tNA\tNA\tNA\n> \tShops  \tNA\tNA\tNA\tNA\t3\t4\tNA\tNA\n> \tDurbl  \t0\t1\t5\t5\t5\t5\t5\t3\n> \tBusEq  \t5\t3\t5\t3\t5\t3\t5\t2\n> \tHlth   \tNA\tNA\tNA\tNA\t0\t5\tNA\tNA\n> \tTelcm  \t5\t0\t5\t5\t5\t5\t5\t0\n> \tUtils  \t3\t4\t3\t4\t0\t5\t3\t4\n> \tEnrgy  \t0\t1\t5\t3\t4\t3\t5\t3\n> \tMkt.RF \t5\t3\t3\t2\tNA\tNA\tNA\tNA\n>\n>\n> While I understand that the Nyblom test is an indicator of the stability of the results across a series, within the model results for a sector from the available solvers, a higher Nyblom joint statistic qualitatively seems to indicate higher quality test results across a number of tests, including the coefficient t statistics and the Ljung-Box results per sector. As a result, I was thinking I might use the Nyblom joint statistic as an indicator in automating the selection of the desired model from possible alternatives, but do not see how to query out that result for further testing as an indicator, although I can see it as part of the $fit object.\n>\n> Please let me know if there is either such a capability for the ARFIMAfit class that I may have overlooked, or a function I might call to generate the joint Nyblom statistic and critical values using the zoo time series data and the existing autoarfima results on hand.\n>\n> Thanks.\n>\n> -Nick\n>\n>\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>",
+      "body_snippet": "The returned list from autoarfima has 2 slots, 'fit' and 'rank.matrix'. \nThe former is of class ARFIMAfit, and though not exported to work with \nit, you can use\n\n >rugarch:::.nyblomTest(fit).\n\nIf you ",
+      "thread_id": "thread-6333488a1840",
+      "thread_depth": 1,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-26c740d66227",
+      "message_id": "<2084435915.8916.1417577096275.JavaMail.help@alum.mit.edu>",
+      "from_name": "Nicholas Manganaro",
+      "from_email_hash": "2ac1ef51e63863f977092a661ed5896ba73ea4a56f1ac46e858a48ba998bec3a",
+      "date": "2014-12-02T22:24:56-05:00",
+      "subject": "[R-SIG-Finance] Optimization of ARFIMA in rugarch - Quick question and context",
+      "subject_clean": "Optimization of ARFIMA in rugarch - Quick question and context",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Alexios,\nThank you for your concise answer. I had seen the function nyblom available for use with the uCARCHfit objects. It does not seem to work with ARFIMAfit objects in the same way the identified methods do (please see below for a sample).  However, I have not yet found the key to running nyblomTest on the ARFIMAfit object that results from running the following code snippit:\n\n## optimization methods = \"nlminb\", \"solnp\", \"gosolnp\", \"nloptr\"\n\nsolv <- c(\"nlminb\",\"solnp\",\"gosolnp\",\"nloptr\") \nauto_nloptr <- list()\nfor (i in 1:z)\n{\nauto_nlminb[[i]] <- try(autoarfima(Z.std[,i], ar.max = 5, ma.max = 5, criterion = \"BIC\",\nmethod = \"full\", arfima = FALSE, include.mean = NULL,\ndistribution.model = \"sstd\", solver = solv[1], return.all = FALSE),\nsilent = TRUE)\n}\n\nThis process eventually provides ARFIMAfit objects as list members for the sectors for which an optimized solution was found. I ran it solver by solver, creating 4 lists of objects. These solver-specific lists were then made members of a list object which I have been querying, as indicated in the following: \n\nAIC.array[j,k] <- infocriteria(varMod[[k]][[j]]$fit)[1]\n\nWhere j is the sector, k is the solver and varMod is the list of lists of ARFIMAFit objects mentioned earlier.\n\nDetails:\nR 3.1.2, platform = i386-w64-mingw32/i386, OS = Win 7 SP1\nAssume rugarch and zoo are loaded. Z.std is a zoo object of subsets of the monthly return series identified in the previous message with start and end points that are uniform across sectors and with no NA entries. They have been standardized to have 0 mean and st. dev = 1. The data are unweighted as they are submitted to the autoarfima function. The variable z represents the number of sectors, equivalent to the number of series in Z.std.\n\nI hope that is enough detail to help you help me with this. \nI look forward to your response.\nRegards,\nNick\n\n-----Original Message-----\nFrom: alexios ghalanos [mailto:alexios at 4dscape.com] \nSent: Tuesday, December 02, 2014 5:27 PM\nTo: Nicholas Manganaro; r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] Optimization of ARFIMA in rugarch - Quick question and context\n\nThe returned list from autoarfima has 2 slots, 'fit' and 'rank.matrix'. \nThe former is of class ARFIMAfit, and though not exported to work with it, you can use\n\n >rugarch:::.nyblomTest(fit).\n\nIf you provide some additional details (i.e. reproducible code and which data you are using...monthly/daily,value-weighted or equally weighted) then we might be able to provide some additional help.\n\nRegards,\n\nAlexios\n\nOn 02/12/2014 21:57, Nicholas Manganaro wrote:\n> Question:\n> Is there a way to query the Nyblom joint statistic result out of an ARFIMAfit class object, the way there is for a uGARCHfit class object?\n>\n> Context:\n> I am running an analysis on subsets from 12 return time series from the Fama/French Factors files (source: http://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html) which evidence skewed Student t distributions.\n> I initially used autoarfima from the rugarch package using the nlminb solver, which generated results for some of the series, but not some others. I sequentially tried the other available solvers on the entire set of series to see if they would identify ARMA models for more of these sets.\n> As I hope you can see in the table below the results were mixed. Some observations:\n> ?\tThere was no solver that found ARMA coefficients for all sectors (not necessarily a problem);\n> ?\tFor many sectors, the values estimated for the orders of p and q for AR and MA varied across the solvers; and\n> ?\tNone of the solvers consistently provided either the lowest BIC or AIC score for the results across all sectors.\n>\n> \t\t\t\t\tSolver\t\t\t\n> \t\t\t\t\t\t\t\t\t\n> \t\tnlminb\t\tsolnp\t\tgosolnp\tnloptr\n> \t\tAR\tMA\tAR\tMA\tAR\tMA\tAR\tMA\n>          Manuf  \t4\t4\t4\t4\t5\t4\t4\t4\n> \tOther  \tNA\tNA\tNA\tNA\t0\t1\t0\t1\n> \tMoney  NA\tNA\tNA\tNA\tNA\tNA\tNA\tNA\n> \tChems  0\t5\t0\t5\t0\t5\t0\t5\n> \tNoDur  \tNA\tNA\tNA\tNA\tNA\tNA\tNA\tNA\n> \tShops  \tNA\tNA\tNA\tNA\t3\t4\tNA\tNA\n> \tDurbl  \t0\t1\t5\t5\t5\t5\t5\t3\n> \tBusEq  \t5\t3\t5\t3\t5\t3\t5\t2\n> \tHlth   \tNA\tNA\tNA\tNA\t0\t5\tNA\tNA\n> \tTelcm  \t5\t0\t5\t5\t5\t5\t5\t0\n> \tUtils  \t3\t4\t3\t4\t0\t5\t3\t4\n> \tEnrgy  \t0\t1\t5\t3\t4\t3\t5\t3\n> \tMkt.RF \t5\t3\t3\t2\tNA\tNA\tNA\tNA\n>\n>\n> While I understand that the Nyblom test is an indicator of the stability of the results across a series, within the model results for a sector from the available solvers, a higher Nyblom joint statistic qualitatively seems to indicate higher quality test results across a number of tests, including the coefficient t statistics and the Ljung-Box results per sector. As a result, I was thinking I might use the Nyblom joint statistic as an indicator in automating the selection of the desired model from possible alternatives, but do not see how to query out that result for further testing as an indicator, although I can see it as part of the $fit object.\n>\n> Please let me know if there is either such a capability for the ARFIMAfit class that I may have overlooked, or a function I might call to generate the joint Nyblom statistic and critical values using the zoo time series data and the existing autoarfima results on hand.\n>\n> Thanks.\n>\n> -Nick\n>\n>\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list \n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>",
+      "body_snippet": "Alexios,\nThank you for your concise answer. I had seen the function nyblom available for use with the uCARCHfit objects. It does not seem to work with ARFIMAfit objects in the same way the identified ",
+      "thread_id": "thread-26c740d66227",
+      "thread_depth": 0,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-3789ff1921ce",
+      "message_id": "<81086660-2886-4EC6-B94C-FFF4E1A18A33@my.bristol.ac.uk>",
+      "from_name": "Marco Sun",
+      "from_email_hash": "b4df5e5874029fe68ef3e5fee11dc782e9f9a316d9bbe24b2aacfb21362fc9e9",
+      "date": "2014-12-04T15:32:12+08:00",
+      "subject": "[R-SIG-Finance] how to rename stock codes?",
+      "subject_clean": "how to rename stock codes?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello Sage R people,\n\n \n\nI am able to retrieve data and rename the stock code one by one through quantmod package as the following:\n\n \n\nsymbols<-c(\"AAPL\",\"MSFT\")\n\nstockcodes<-c(\"A\",\"B\")\n\nsetSymbolLookup(A=list(name=\"AAPL\",src=\"yahoo\"))\n\ngetSymbols(\"A\")\n\nsetSymbolLookup(B=list(name=?MSFT\",src=\"yahoo\"))\n\n\ngetSymbols(?B\")\n\n \n\n \n\nHowever, the same logic is not approachable in the ?mass production era? like this:\n\n \n\nfor (i in 1:2)\n\n{\n\n  getSymbolLookup(stockcodes[i]=list(name=symbols[i],src=\"yahoo\"))\n\n  getSymbols(\"stockcodes[i]\")\n\n}\n\n \n\nI guess the problem lies in stockcodes[i] as indicated in red. Any comment would be appreciated.\n\n\n\nThanks in advance,\n\n\n\nMarco \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello Sage R people,\n\n \n\nI am able to retrieve data and rename the stock code one by one through quantmod package as the following:\n\n \n\nsymbols<-c(\"AAPL\",\"MSFT\")\n\nstockcodes<-c(\"A\",\"B\")\n\nsetSymbolLook",
+      "thread_id": "thread-3789ff1921ce",
+      "thread_depth": 0,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-0655e7a7a980",
+      "message_id": "<3702B467-C11B-4E66-AB51-E009166EA559@my.bristol.ac.uk>",
+      "from_name": "Marco Sun",
+      "from_email_hash": "b4df5e5874029fe68ef3e5fee11dc782e9f9a316d9bbe24b2aacfb21362fc9e9",
+      "date": "2014-12-04T15:57:41+08:00",
+      "subject": "[R-SIG-Finance] Fwd: how to rename stock codes?",
+      "subject_clean": "how to rename stock codes?",
+      "in_reply_to": null,
+      "references": [
+        "<81086660-2886-4EC6-B94C-FFF4E1A18A33@my.bristol.ac.uk>"
+      ],
+      "body_plain": "Ok, I?ve found a previous solution here https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100722/1ca9df46/attachment.pl\n\nBegin forwarded message:\n\n> From: Marco Sun <hs13322 at my.bristol.ac.uk>\n> Subject: how to rename stock codes?\n> Date: 4 December 2014 03:32:12 pm GMT+8\n> To: r-sig-finance at r-project.org\n> \n> Hello Sage R people,\n> \n>  \n> \n> I am able to retrieve data and rename the stock code one by one through quantmod package as the following:\n> \n>  \n> \n> symbols<-c(\"AAPL\",\"MSFT\")\n> \n> stockcodes<-c(\"A\",\"B\")\n> \n> setSymbolLookup(A=list(name=\"AAPL\",src=\"yahoo\"))\n> \n> getSymbols(\"A\")\n> \n> setSymbolLookup(B=list(name=?MSFT\",src=\"yahoo\"))\n> \n> \n> getSymbols(?B\")\n> \n>  \n> \n>  \n> \n> However, the same logic is not approachable in the ?mass production era? like this:\n> \n>  \n> \n> for (i in 1:2)\n> \n> {\n> \n>   getSymbolLookup(stockcodes[i]=list(name=symbols[i],src=\"yahoo\"))\n> \n>   getSymbols(\"stockcodes[i]\")\n> \n> }\n> \n>  \n> \n> I guess the problem lies in stockcodes[i] as indicated in red. Any comment would be appreciated.\n> \n> \n> \n> Thanks in advance,\n> \n> \n> \n> Marco \n> \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Ok, I?ve found a previous solution here https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100722/1ca9df46/attachment.pl\n\nBegin forwarded message:\n\n> From: Marco Sun <hs13322 at my.bristol.ac.",
+      "thread_id": "thread-3789ff1921ce",
+      "thread_depth": 1,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-77776fec38a4",
+      "message_id": "<ABF60DD4-DAB4-4F05-9EC5-0BC7EBC29912@my.bristol.ac.uk>",
+      "from_name": "Marco Sun",
+      "from_email_hash": "b4df5e5874029fe68ef3e5fee11dc782e9f9a316d9bbe24b2aacfb21362fc9e9",
+      "date": "2014-12-04T16:58:30+08:00",
+      "subject": "[R-SIG-Finance] rename a large number of stock codes",
+      "subject_clean": "rename a large number of stock codes",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi, sorry for the previous emails, I am now opening a new topic to demonstrate my problem clearly.\n\n \n\nI wish to retrieve a bunch of Chinese stock through getSymbols.\n\n \n\nsymbols<-c(\"600089.SS\",\"600202.SS\")\n\ngetSymbols(symbols)\n\n \n\nThese stock codes are not easily recognised nor being processed in further analysis, i.e. R does not recognise 600089.SS, instead, it recognises `600089.SS`.\n\n \n\n> 600089.SS\n\nError: unexpected symbol in \"600089.SS\"\n\n \n\n> class(`600089.SS`)\n\n[1] \"xts\" \"zoo\"\n\n`\n\nTherefore, I wish to replace symbols with some simple tickers called stockcodes. I can easily replace the name of 600089.SS via:\n\n \n\nstockcodes<-c(\"TBDG\",\"HKT\")\n\nTBDG<-`600089.SS`\n\n \n\nHowever, it could take a lot while if I have a large portfolio and I do have a well-diversified portfolio under analysis.\n\n \n\nAnother approach came up to me was using setSymbolLookup like this:\n\n \n\n> setSymbolLookup(TBDG=list(name=\"600089.SS\"))\n\n> getSymbols(\"TBDG\")\n\n[1] \"TBDG\"\n\n \n\nBut I got error when I was trying to use for loop as the following:\n\n \n\nfor(i in 1:2)\n\n{\n\n setSymbolLookup(stockcodes[i]=list(name=symbols[i]))\n\n getSymbols(stockcodes[i])\n\n}\n\n \n\nAny comment would be appreciated.\n\n \n\nCheers,\n\n \n\nMarco\n\n \n\n \n\n \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi, sorry for the previous emails, I am now opening a new topic to demonstrate my problem clearly.\n\n \n\nI wish to retrieve a bunch of Chinese stock through getSymbols.\n\n \n\nsymbols<-c(\"600089.SS\",\"60020",
+      "thread_id": "thread-77776fec38a4",
+      "thread_depth": 0,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-ccf335a7c29b",
+      "message_id": "<CAH+4RFt1V8vKprC4wMOhEmbZYNSfESp=yBea_rXEFA60Utsujw@mail.gmail.com>",
+      "from_name": "Nick White",
+      "from_email_hash": "755b954b2e1da59d788f98fd9781ed277833818df2c256f74e3b2a68f37cdcb8",
+      "date": "2014-12-04T21:36:00+11:00",
+      "subject": "[R-SIG-Finance] rename a large number of stock codes",
+      "subject_clean": "rename a large number of stock codes",
+      "in_reply_to": "<ABF60DD4-DAB4-4F05-9EC5-0BC7EBC29912@my.bristol.ac.uk>",
+      "references": [
+        "<ABF60DD4-DAB4-4F05-9EC5-0BC7EBC29912@my.bristol.ac.uk>"
+      ],
+      "body_plain": "Hi Marco,\n\nWhen calling stocks with numerical tickers (like most Asia ex-Japan\nmarkets) in R, you should typically reassign them using `get` when working\ninteractively -- or `assign`.\n\nIn this case, you might want to have something like\n\nTBEA <- get(\"600089.SS\")\n\nNow you have a simple text named variable in the environment to work with.\nie:\n\n> head(TBEA)\n           600089.SS.Open 600089.SS.High 600089.SS.Low 600089.SS.Close\n600089.SS.Volume 600089.SS.Adjusted\n2007-01-01          14.19          14.53         13.78           14.03\n           0               2.54\n2007-01-02          14.19          14.53         13.78           14.03\n           0               2.54\n2007-01-03          14.19          14.53         13.78           14.03\n           0               2.54\n2007-01-04          14.22          15.11         14.03           14.58\n    75563100               2.64\n2007-01-05          14.59          16.03         14.46           16.03\n    72978600               2.90\n2007-01-08          16.05          16.60         15.85           16.16\n    41251600               2.93\n\nYou can extend this to a large group of tickers using a for loop (though\nit's not the only way).\n\nIn the spirit of how you wrote the question, though, you could do something\nlike this:\n\n# Put your numerical tickers in a variable, `num.code`\n\n> num.code <- c(\"600089.SS\",\"600202.SS\")\n\n# Put their text equivalents in a different variable, `text.code`\n\n> text.code <- c(\"TBEA\",\"HAC\")\n\n#make a data.frame of the two\n\ncode.frame <- data.frame(num.code,text.code,stringsAsFactors=FALSE)\n\n> code.frame\n   num.code text.code\n1 600089.SS      TBEA\n2 600202.SS       HAC\n\n# now call your Symbols\n\n> getSymbols(code.frame$num.code)\n\n# and now run a simple for loop to `assign` the numerical codes to the text\ncodes\n\n> for (i in 1:length(code.frame)){\n\n\nassign(code.frame$text.code[i],get(code.frame$num.code[i]),envir=.GlobalEnv)\n}\n\n\n# You will now have two variables, TBEA and HAC which are `xts` objects\nthat you can now manipulate how you wish\n\n> str(TBEA)\nAn ?xts? object on 2007-01-01/2014-12-03 containing:\n  Data: num [1:2041, 1:6] 14.2 14.2 14.2 14.2 14.6 ...\n - attr(*, \"dimnames\")=List of 2\n  ..$ : NULL\n  ..$ : chr [1:6] \"600089.SS.Open\" \"600089.SS.High\" \"600089.SS.Low\"\n\"600089.SS.Close\" ...\n  Indexed by objects of class: [Date] TZ: UTC\n  xts Attributes:\nList of 2\n $ src    : chr \"yahoo\"\n $ updated: POSIXct[1:1], format: \"2014-12-04 21:24:39\"\n\nHope that helps,\n\nn.\n\n\n\n\n\n\nOn Thu, Dec 4, 2014 at 7:58 PM, Marco Sun <hs13322 at my.bristol.ac.uk> wrote:\n\n> Hi, sorry for the previous emails, I am now opening a new topic to\n> demonstrate my problem clearly.\n>\n>\n>\n> I wish to retrieve a bunch of Chinese stock through getSymbols.\n>\n>\n>\n> symbols<-c(\"600089.SS\",\"600202.SS\")\n>\n> getSymbols(symbols)\n>\n>\n>\n> These stock codes are not easily recognised nor being processed in further\n> analysis, i.e. R does not recognise 600089.SS, instead, it recognises\n> `600089.SS`.\n>\n>\n>\n> > 600089.SS\n>\n> Error: unexpected symbol in \"600089.SS\"\n>\n>\n>\n> > class(`600089.SS`)\n>\n> [1] \"xts\" \"zoo\"\n>\n> `\n>\n> Therefore, I wish to replace symbols with some simple tickers called\n> stockcodes. I can easily replace the name of 600089.SS via:\n>\n>\n>\n> stockcodes<-c(\"TBDG\",\"HKT\")\n>\n> TBDG<-`600089.SS`\n>\n>\n>\n> However, it could take a lot while if I have a large portfolio and I do\n> have a well-diversified portfolio under analysis.\n>\n>\n>\n> Another approach came up to me was using setSymbolLookup like this:\n>\n>\n>\n> > setSymbolLookup(TBDG=list(name=\"600089.SS\"))\n>\n> > getSymbols(\"TBDG\")\n>\n> [1] \"TBDG\"\n>\n>\n>\n> But I got error when I was trying to use for loop as the following:\n>\n>\n>\n> for(i in 1:2)\n>\n> {\n>\n>  setSymbolLookup(stockcodes[i]=list(name=symbols[i]))\n>\n>  getSymbols(stockcodes[i])\n>\n> }\n>\n>\n>\n> Any comment would be appreciated.\n>\n>\n>\n> Cheers,\n>\n>\n>\n> Marco\n>\n>\n>\n>\n>\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Marco,\n\nWhen calling stocks with numerical tickers (like most Asia ex-Japan\nmarkets) in R, you should typically reassign them using `get` when working\ninteractively -- or `assign`.\n\nIn this case, y",
+      "thread_id": "thread-77776fec38a4",
+      "thread_depth": 1,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-d9dd00fd90db",
+      "message_id": "<54804265.50808@4dscape.com>",
+      "from_name": "alexios ghalanos",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2014-12-04T11:15:49Z",
+      "subject": "[R-SIG-Finance] Optimization of ARFIMA in rugarch - Quick question and context",
+      "subject_clean": "Optimization of ARFIMA in rugarch - Quick question and context",
+      "in_reply_to": "<!&!AAAAAAAAAAAYAAAAAAAAAFe0/wttMmpLr60Kt5zUQK7CgAAAEAAAACvIP/GiQ2hKjiQDYETR3FwBAAAAAA==@verizon.net>",
+      "references": [
+        "<2084435915.8916.1417577096275.JavaMail.help@alum.mit.edu>",
+        "<!&!AAAAAAAAAAAYAAAAAAAAAFe0/wttMmpLr60Kt5zUQK7CgAAAEAAAACvIP/GiQ2hKjiQDYETR3FwBAAAAAA==@verizon.net>"
+      ],
+      "body_plain": "Nicholas,\n\nEmail me off list with the details and I may have some time to look at \nthis over the next few days.\n\nAlexios\n\nOn 04/12/2014 04:56, Nicholas Manganaro wrote:\n> Alexios,\n> I determined how to apply rugarch:::.nyblomTest, and have pulled the results.\n> Thanks, again.\n> I do not have a cloud storage locker, so I did not want to send out the data file to everyone on the list, although I'd appreciate someone having a look at my next few steps. Commentary would be welcome.\n> -Nick\n>\n> -----Original Message-----\n> From: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On Behalf Of Nicholas Manganaro\n> Sent: Tuesday, December 02, 2014 10:25 PM\n> To: alexios ghalanos\n> Cc: r-sig-finance at r-project.org\n> Subject: Re: [R-SIG-Finance] Optimization of ARFIMA in rugarch - Quick question and context\n>\n> Alexios,\n> Thank you for your concise answer. I had seen the function nyblom available for use with the uCARCHfit objects. It does not seem to work with ARFIMAfit objects in the same way the identified methods do (please see below for a sample).  However, I have not yet found the key to running nyblomTest on the ARFIMAfit object that results from running the following code snippit:\n>\n> ## optimization methods = \"nlminb\", \"solnp\", \"gosolnp\", \"nloptr\"\n>\n> solv <- c(\"nlminb\",\"solnp\",\"gosolnp\",\"nloptr\")\n> auto_nloptr <- list()\n> for (i in 1:z)\n> {\n> auto_nlminb[[i]] <- try(autoarfima(Z.std[,i], ar.max = 5, ma.max = 5, criterion = \"BIC\", method = \"full\", arfima = FALSE, include.mean = NULL, distribution.model = \"sstd\", solver = solv[1], return.all = FALSE), silent = TRUE) }\n>\n> This process eventually provides ARFIMAfit objects as list members for the sectors for which an optimized solution was found. I ran it solver by solver, creating 4 lists of objects. These solver-specific lists were then made members of a list object which I have been querying, as indicated in the following:\n>\n> AIC.array[j,k] <- infocriteria(varMod[[k]][[j]]$fit)[1]\n>\n> Where j is the sector, k is the solver and varMod is the list of lists of ARFIMAFit objects mentioned earlier.\n>\n> Details:\n> R 3.1.2, platform = i386-w64-mingw32/i386, OS = Win 7 SP1 Assume rugarch and zoo are loaded. Z.std is a zoo object of subsets of the monthly return series identified in the previous message with start and end points that are uniform across sectors and with no NA entries. They have been standardized to have 0 mean and st. dev = 1. The data are unweighted as they are submitted to the autoarfima function. The variable z represents the number of sectors, equivalent to the number of series in Z.std.\n>\n> I hope that is enough detail to help you help me with this.\n> I look forward to your response.\n> Regards,\n> Nick\n>\n> -----Original Message-----\n> From: alexios ghalanos [mailto:alexios at 4dscape.com]\n> Sent: Tuesday, December 02, 2014 5:27 PM\n> To: Nicholas Manganaro; r-sig-finance at r-project.org\n> Subject: Re: [R-SIG-Finance] Optimization of ARFIMA in rugarch - Quick question and context\n>\n> The returned list from autoarfima has 2 slots, 'fit' and 'rank.matrix'.\n> The former is of class ARFIMAfit, and though not exported to work with it, you can use\n>\n>   >rugarch:::.nyblomTest(fit).\n>\n> If you provide some additional details (i.e. reproducible code and which data you are using...monthly/daily,value-weighted or equally weighted) then we might be able to provide some additional help.\n>\n> Regards,\n>\n> Alexios\n>\n> On 02/12/2014 21:57, Nicholas Manganaro wrote:\n>> Question:\n>> Is there a way to query the Nyblom joint statistic result out of an ARFIMAfit class object, the way there is for a uGARCHfit class object?\n>>\n>> Context:\n>> I am running an analysis on subsets from 12 return time series from the Fama/French Factors files (source: http://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html) which evidence skewed Student t distributions.\n>> I initially used autoarfima from the rugarch package using the nlminb solver, which generated results for some of the series, but not some others. I sequentially tried the other available solvers on the entire set of series to see if they would identify ARMA models for more of these sets.\n>> As I hope you can see in the table below the results were mixed. Some observations:\n>> ?\tThere was no solver that found ARMA coefficients for all sectors (not necessarily a problem);\n>> ?\tFor many sectors, the values estimated for the orders of p and q for AR and MA varied across the solvers; and\n>> ?\tNone of the solvers consistently provided either the lowest BIC or AIC score for the results across all sectors.\n>>\n>> \t\t\t\t\tSolver\t\t\t\n>> \t\t\t\t\t\t\t\t\t\n>> \t\tnlminb\t\tsolnp\t\tgosolnp\tnloptr\n>> \t\tAR\tMA\tAR\tMA\tAR\tMA\tAR\tMA\n>>           Manuf  \t4\t4\t4\t4\t5\t4\t4\t4\n>> \tOther  \tNA\tNA\tNA\tNA\t0\t1\t0\t1\n>> \tMoney  NA\tNA\tNA\tNA\tNA\tNA\tNA\tNA\n>> \tChems  0\t5\t0\t5\t0\t5\t0\t5\n>> \tNoDur  \tNA\tNA\tNA\tNA\tNA\tNA\tNA\tNA\n>> \tShops  \tNA\tNA\tNA\tNA\t3\t4\tNA\tNA\n>> \tDurbl  \t0\t1\t5\t5\t5\t5\t5\t3\n>> \tBusEq  \t5\t3\t5\t3\t5\t3\t5\t2\n>> \tHlth   \tNA\tNA\tNA\tNA\t0\t5\tNA\tNA\n>> \tTelcm  \t5\t0\t5\t5\t5\t5\t5\t0\n>> \tUtils  \t3\t4\t3\t4\t0\t5\t3\t4\n>> \tEnrgy  \t0\t1\t5\t3\t4\t3\t5\t3\n>> \tMkt.RF \t5\t3\t3\t2\tNA\tNA\tNA\tNA\n>>\n>>\n>> While I understand that the Nyblom test is an indicator of the stability of the results across a series, within the model results for a sector from the available solvers, a higher Nyblom joint statistic qualitatively seems to indicate higher quality test results across a number of tests, including the coefficient t statistics and the Ljung-Box results per sector. As a result, I was thinking I might use the Nyblom joint statistic as an indicator in automating the selection of the desired model from possible alternatives, but do not see how to query out that result for further testing as an indicator, although I can see it as part of the $fit object.\n>>\n>> Please let me know if there is either such a capability for the ARFIMAfit class that I may have overlooked, or a function I might call to generate the joint Nyblom statistic and critical values using the zoo time series data and the existing autoarfima results on hand.\n>>\n>> Thanks.\n>>\n>> -Nick\n>>\n>>\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n>>\n>\n>\n>",
+      "body_snippet": "Nicholas,\n\nEmail me off list with the details and I may have some time to look at \nthis over the next few days.\n\nAlexios\n\nOn 04/12/2014 04:56, Nicholas Manganaro wrote:\n> Alexios,\n> I determined how t",
+      "thread_id": "thread-d9dd00fd90db",
+      "thread_depth": 0,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-2de56b3965d8",
+      "message_id": "<B507608A-9BFF-494C-94DB-774AB15BDB3F@my.bristol.ac.uk>",
+      "from_name": "Marco Sun",
+      "from_email_hash": "b4df5e5874029fe68ef3e5fee11dc782e9f9a316d9bbe24b2aacfb21362fc9e9",
+      "date": "2014-12-05T11:50:04+08:00",
+      "subject": "[R-SIG-Finance] rename a large number of stock codes",
+      "subject_clean": "rename a large number of stock codes",
+      "in_reply_to": "<CAH+4RFt1V8vKprC4wMOhEmbZYNSfESp=yBea_rXEFA60Utsujw@mail.gmail.com>",
+      "references": [
+        "<ABF60DD4-DAB4-4F05-9EC5-0BC7EBC29912@my.bristol.ac.uk>",
+        "<CAH+4RFt1V8vKprC4wMOhEmbZYNSfESp=yBea_rXEFA60Utsujw@mail.gmail.com>"
+      ],
+      "body_plain": "Hey Nick,\n\nGorgeous! This perfectly answers my question. Thank you very much!\n\nBest,\n\nMarco\n\nOn 4 Dec 2014, at 06:36 pm, Nick White <n-e-w at qtradr.net> wrote:\n\n> Hi Marco,\n> \n> When calling stocks with numerical tickers (like most Asia ex-Japan markets) in R, you should typically reassign them using `get` when working interactively -- or `assign`.\n> \n> In this case, you might want to have something like\n> \n> TBEA <- get(\"600089.SS\")\n> \n> Now you have a simple text named variable in the environment to work with. ie:\n> \n> > head(TBEA)\n>            600089.SS.Open 600089.SS.High 600089.SS.Low 600089.SS.Close 600089.SS.Volume 600089.SS.Adjusted\n> 2007-01-01          14.19          14.53         13.78           14.03                0               2.54\n> 2007-01-02          14.19          14.53         13.78           14.03                0               2.54\n> 2007-01-03          14.19          14.53         13.78           14.03                0               2.54\n> 2007-01-04          14.22          15.11         14.03           14.58         75563100               2.64\n> 2007-01-05          14.59          16.03         14.46           16.03         72978600               2.90\n> 2007-01-08          16.05          16.60         15.85           16.16         41251600               2.93\n> \n> You can extend this to a large group of tickers using a for loop (though it's not the only way). \n> \n> In the spirit of how you wrote the question, though, you could do something like this:\n> \n> # Put your numerical tickers in a variable, `num.code`\n> \n> > num.code <- c(\"600089.SS\",\"600202.SS\")\n> \n> # Put their text equivalents in a different variable, `text.code`\n> \n> > text.code <- c(\"TBEA\",\"HAC\")\n> \n> #make a data.frame of the two\n> \n> code.frame <- data.frame(num.code,text.code,stringsAsFactors=FALSE)\n> \n> > code.frame\n>    num.code text.code\n> 1 600089.SS      TBEA\n> 2 600202.SS       HAC\n> \n> # now call your Symbols\n> \n> > getSymbols(code.frame$num.code)\n> \n> # and now run a simple for loop to `assign` the numerical codes to the text codes\n> \n> > for (i in 1:length(code.frame)){\n>   \n>   assign(code.frame$text.code[i],get(code.frame$num.code[i]),envir=.GlobalEnv)\n> }\n> \n> \n> # You will now have two variables, TBEA and HAC which are `xts` objects that you can now manipulate how you wish\n> \n> > str(TBEA)\n> An ?xts? object on 2007-01-01/2014-12-03 containing:\n>   Data: num [1:2041, 1:6] 14.2 14.2 14.2 14.2 14.6 ...\n>  - attr(*, \"dimnames\")=List of 2\n>   ..$ : NULL\n>   ..$ : chr [1:6] \"600089.SS.Open\" \"600089.SS.High\" \"600089.SS.Low\" \"600089.SS.Close\" ...\n>   Indexed by objects of class: [Date] TZ: UTC\n>   xts Attributes:  \n> List of 2\n>  $ src    : chr \"yahoo\"\n>  $ updated: POSIXct[1:1], format: \"2014-12-04 21:24:39\"\n> \n> Hope that helps,\n> \n> n.\n> \n> \n> \n> \n> \n> \n> On Thu, Dec 4, 2014 at 7:58 PM, Marco Sun <hs13322 at my.bristol.ac.uk> wrote:\n> Hi, sorry for the previous emails, I am now opening a new topic to demonstrate my problem clearly.\n> \n> \n> \n> I wish to retrieve a bunch of Chinese stock through getSymbols.\n> \n> \n> \n> symbols<-c(\"600089.SS\",\"600202.SS\")\n> \n> getSymbols(symbols)\n> \n> \n> \n> These stock codes are not easily recognised nor being processed in further analysis, i.e. R does not recognise 600089.SS, instead, it recognises `600089.SS`.\n> \n> \n> \n> > 600089.SS\n> \n> Error: unexpected symbol in \"600089.SS\"\n> \n> \n> \n> > class(`600089.SS`)\n> \n> [1] \"xts\" \"zoo\"\n> \n> `\n> \n> Therefore, I wish to replace symbols with some simple tickers called stockcodes. I can easily replace the name of 600089.SS via:\n> \n> \n> \n> stockcodes<-c(\"TBDG\",\"HKT\")\n> \n> TBDG<-`600089.SS`\n> \n> \n> \n> However, it could take a lot while if I have a large portfolio and I do have a well-diversified portfolio under analysis.\n> \n> \n> \n> Another approach came up to me was using setSymbolLookup like this:\n> \n> \n> \n> > setSymbolLookup(TBDG=list(name=\"600089.SS\"))\n> \n> > getSymbols(\"TBDG\")\n> \n> [1] \"TBDG\"\n> \n> \n> \n> But I got error when I was trying to use for loop as the following:\n> \n> \n> \n> for(i in 1:2)\n> \n> {\n> \n>  setSymbolLookup(stockcodes[i]=list(name=symbols[i]))\n> \n>  getSymbols(stockcodes[i])\n> \n> }\n> \n> \n> \n> Any comment would be appreciated.\n> \n> \n> \n> Cheers,\n> \n> \n> \n> Marco\n> \n> \n> \n> \n> \n> \n>         [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n> \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hey Nick,\n\nGorgeous! This perfectly answers my question. Thank you very much!\n\nBest,\n\nMarco\n\nOn 4 Dec 2014, at 06:36 pm, Nick White <n-e-w at qtradr.net> wrote:\n\n> Hi Marco,\n> \n> When calling stocks w",
+      "thread_id": "thread-77776fec38a4",
+      "thread_depth": 2,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-7dd53aab206f",
+      "message_id": "<54816A17.6090003@karthik.in>",
+      "from_name": "Karthik Raju",
+      "from_email_hash": "abf20b0276440d0f62804533c7631a4d5cfef17c39629ae5f62549983e8b5bad",
+      "date": "2014-12-05T13:47:27+05:30",
+      "subject": "[R-SIG-Finance] Preparing data for Superior predictive ability (SPA) test",
+      "subject_clean": "Preparing data for Superior predictive ability (SPA) test",
+      "in_reply_to": "<54799E15.1010309@braverock.com>",
+      "references": [
+        "<5478071D.1060304@karthik.in>",
+        "<5479412D.7090106@karthik.in>",
+        "<54799E15.1010309@braverock.com>"
+      ],
+      "body_plain": "Sorry Brian, I misunderstood your last reply.\n\nIntent: Evaluate forecasting accuracy of autoregressive models\nApproach: Apply Superior Predictive Ability (SPA) test in the ?ttrTests? \npackage to assess the forecasting accuracy\nVersion: R ver. 3.0.2 (2013-09-25) - \"Frisbee Sailing\"\nEditor: R Studio ver. 0.98.1091\nrugarch package: 1.3-4\nttrTests package: 1.7\nCode: http://dropbox.unl.edu/uploads/20141219/e61f31203e15e90d/sample.zip\n\nI am lost and looking for some direction on how to use a loss function \nseries to evaluate the efficacy of volatility forecasts between models \nfm1 through fm5 using the SPA test in the \"ttrTests\" package.\n\nMy attempt is as follows:\n\nspa <- dataSnoop(MeanSquareError,bSamples=1000,test=\"SPA\")\n\n# The structure of \"MeanSquareError\" loss function series is as follows:\nDay   msefm1      msefm2    ..  msefm5\nT+1   0.0000464   0.0000411 ..  0.0000407\nT+2   0.0000461   0.0000421 ..  0.0000428\n...\nT+49  0.0000174   0.0000653 ..  0.0001126\nT+50  0.0000174   0.0000657 ..  0.0001138\n\nMy code is structured as follows:\n\n# To load the sample data in the \"rugarch\" package\ndata(sp500ret)\n\n# To specify the desired autoregressive models\nmodel1 = ugarchspec(variance.model = list(model = \"sGARCH\",garchOrder = \nc(1, 1)), distribution.model = \"std\")\nmodel2 = ugarchspec(variance.model = list(model = \"gjrGARCH\",garchOrder \n= c(1, 1)), distribution.model = \"std\")\nmodel3 = ugarchspec(variance.model = list(model = \"sGARCH\",garchOrder = \nc(1, 1)), distribution.model = \"std\")\nmodel4 = ugarchspec(variance.model = list(model = \"csGARCH\",garchOrder = \nc(1, 1)), distribution.model = \"std\")\nmodel5 = ugarchspec(variance.model = list(model = \"apARCH\",garchOrder = \nc(1, 1)), distribution.model = \"std\")\n\n# To estimate the autoregressive models specified\nm1 = ugarchfit(sp500ret, spec = model1)\nm2 = ugarchfit(sp500ret, spec = model2)\nm3 = ugarchfit(sp500ret, spec = model3)\nm4 = ugarchfit(sp500ret, spec = model4)\nm5 = ugarchfit(sp500ret, spec = model5)\n\n# To forecast the volatility for next 50 days with the parameters \nestimated above\nfm1 = ugarchforecast(m1,data=NULL,n.ahead=50, n.roll= 0, out.sample = 0)\nfm2 = ugarchforecast(m2,data=NULL,n.ahead=50, n.roll= 0, out.sample = 0)\nfm3 = ugarchforecast(m3,data=NULL,n.ahead=50, n.roll= 0, out.sample = 0)\nfm4 = ugarchforecast(m4,data=NULL,n.ahead=50, n.roll= 0, out.sample = 0)\nfm5 = ugarchforecast(m5,data=NULL,n.ahead=50, n.roll= 0, out.sample = 0)\n\nI used the extractor function \"sigma\" in the \"rugarch\" package to \nextract the conditional standard deviation of the forecasts fm1 through \nfm5, which is then fed to a spreadsheet to estimate the Mean Square \nError (MSE) loss function series for the 50 days.\n\n# The MSE loss function series is then imported into R.\nMeanSquareError <- read.csv(\"F:/MeanSquareError.csv\")\n\nNow, how do I go about using this ?MeanSquareError? loss function series \nsuch as this: spa<-dataSnoop(MeanSquareError, bSamples=1000, \ntest=\"SPA\")? Please note that I am not looking to convert \n?MeanSquareError.csv?  into R-data, rather I am searching for a way to \napply the SPA test.\n\nThank you for your time.\n\nKarthik\n\nBrian G. Peterson wrote on 2014-11-29 03:51 PM +0530:\n> I asked you a reproducible example, and instead, you're asking the list\n> to do a bunch of work to replicate your code for you.\n>\n> Please respect the time of the list members, and provide a few lines of\n> code, so that we can *run* your example code and then *help you* with\n> your problem.\n>\n> Brian\n>\n> On 11/28/2014 09:44 PM, Karthik Raju wrote:\n>> Hello Brian,\n>>\n>> Thank you for your response.\n>>\n>> I will explain my work with an example.\n>>\n>> - I have logarithmic returns computed from daily closing values of a\n>> stock market index for a period of 500 days.\n>>\n>> - The logarithmic returns are used in the \"rugarch\" package to fit the\n>> following models,\n>> Model-1 - GARCH (1,1)\n>> Model-2 - GJR-GARCH (1,1)\n>> Model-3 - EGARCH (1,1)\n>> Model-4 - IGARCH (1,1)\n>> Model-5 - APARCH (1,1)\n>>\n>> - Then, using \"rugarch\", forecasted one step ahead volatility with each\n>> of the above model parameters for an out-of-sample period of 100 days.\n>>\n>> - The forecasted 100 days \"sigma\" values of each model is extracted from\n>> R to a worksheet and used against true volatility proxy to compute the\n>> loss functions.\n>>\n>> - The structure of loss function data for each model is an univariate\n>> series for the forecasted period (100 days).\n>>\n>> - For example, the structure of Mean Square Error (MSE) loss function\n>> looks like,\n>>\n>> Forecasts    MSE_GARCH   MSE_GJR   . .  MSE_APARCH\n>> Day 1        0.008548    0.005509  . .  0.00412\n>> Day 2        0.008655    0.005498  . .  0.00414\n>> Day 3        0.008759    0.005488  . .  0.004156\n>> Day 4        0.008861    0.005478  . .  0.004169\n>> .        .        .          . .  .\n>> .        .        .          . .  .\n>> .        .        .          . .  .\n>> Day 99        0.008759    0.005488  . .  0.004156\n>> Day 100        0.008861    0.005478  . .  0.004169\n>>\n>> - Similarly, the loss functions like Mean Absolute Error, Mean Absolute\n>> Percentage Error etc. are in the same structure, which are then imported\n>> into R.\n>>\n>> - Now, by using each of this loss function data series,  one at a time,\n>> in the \"ttrTests\" package, I want to know how to compute the SPA test\n>> for the following combinations?\n>>\n>> Benchmark model GARCH (1,1)      Vs rest of 4 models\n>> Benchmark model GJR GARCH (1,1)      Vs rest of 4 models\n>> Benchmark model EGARCH (1,1)      Vs rest of 4 models\n>> Benchmark model IGARCH (1,1)      Vs rest of 4 models\n>> Benchmark model APARCH (1,1)      Vs rest of 4 models\n>>\n>> Best,\n>> Karthik\n>>\n>>> Please follow the posting guide\n>>>\n>>> http://www.r-project.org/posting-guide.html\n>>>\n>>> and provide a reproducible example.  For instance, you could repeat your\n>>> 'n' samples using some of the test data from rugarch.\n>>>\n>>> It is very difficult for others to help you if we don't know the format\n>>> your data is in *now*.\n>>>\n>>> Regards,\n>>>\n>>> Brian\n>>>> On 11/27/2014 11:24 PM, Karthik Raju wrote:\n>>>>\n>>>> Hello,\n>>>>\n>>>> Can anyone please let me know how to prepare data to compute Superior\n>>>> predictive ability (SPA) test in R?\n>>>>\n>>>> I am working on forecasting volatility in stock markets, the context is,\n>>>>\n>>>> 1) I used \"rugarch\" package to forecast the volatility using \"n\"\n>>>> autoregressive models.\n>>>>\n>>>> 3) Extracted \"sigma\" values from the forecasts of those \"n\" models and\n>>>> used it in a worksheet against realized volatility to calculate daily\n>>>> loss functions for each model, say, MSE, MAE, RMSE etc.\n>>>>\n>>>> 3) I want to compute the SPA test statistics using \"ttrTests\" package\n>>>> and find the SPA test p-values for a benchmark model against \"n\"\n>>>> alternatives. How to prepare data for this purpose?\n>>>>\n>>>> Thanks,\n>>>> Karthik\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.",
+      "body_snippet": "Sorry Brian, I misunderstood your last reply.\n\nIntent: Evaluate forecasting accuracy of autoregressive models\nApproach: Apply Superior Predictive Ability (SPA) test in the ?ttrTests? \npackage to asses",
+      "thread_id": "thread-7dd53aab206f",
+      "thread_depth": 0,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-350105363a60",
+      "message_id": "<CAPPM_gQ5+Tqm20ZWBZhBhKdgO21+Bg+EUTTeRS+GTDcuk3CBZQ@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2014-12-07T17:00:52-06:00",
+      "subject": "[R-SIG-Finance] Reply to: How can I get Japanese Stock Daily Data in R?",
+      "subject_clean": "Reply to: How can I get Japanese Stock Daily Data in R?",
+      "in_reply_to": "<CACySJQU1TsuSCHhKstc1u0DZKPachaLRh=qQ3pjxYjEtyktXfQ@mail.gmail.com>",
+      "references": [
+        "<CACySJQU1TsuSCHhKstc1u0DZKPachaLRh=qQ3pjxYjEtyktXfQ@mail.gmail.com>"
+      ],
+      "body_plain": "On Sun, Oct 19, 2014 at 6:30 AM, Wouter Thielen <wouter at morannon.org> wrote:\n> Sorry for not being able to reply directly to the related thread, because I\n> was getting mails in daily batches. I have updated my settings for this.\n>\n> I did make an R script to be included in the quantmod package, but I\n> haven't received any feedback from the community. The script can be found\n> here: https://github.com/wthielen/YJStocks/blob/master/getSymbols.yahooj.R\n>\n> To be able to use it in this shape, you need to do the following:\n> - Include the quantmod library first: library(quantmod)\n> - Load getSymbols.R file from the quantmod source, for some internal\n> dependencies\n> - Pass any \"missing\" arguments that would be coming from the main\n> getSymbols() call: verbose and auto.assign\n>\n> An example routine would be:\n>\n> library(quantmod)\n> source(\"/path/to/quantmodpackage/pkg/R/getSymbols.R\")\n> source(\"/path/to/getSymbols.yahooj.R\")\n> getSymbols.yahooj(\"3048.T\", verbose=TRUE, auto.assign=TRUE)\n>\n> And then you will see it downloading daily stock data for Biccamera, and\n> assigning it to the \"YJ3048.T\" xts object.\n>\n> I hope it will be included into the getSymbols.R file from the quantmod\n> package, so that it becomes a standard function.\n>\nI think this is something that can be directly included in quantmod.\nBut for that to happen, you also need a corresponding .Rd file.  It\nwould be very helpful if you could also provide that file, and even\nmore helpful if you ensure that quantmod still passes R CMD check\nafter your incorporate your changes.\n\n> Hope this helps!\n>\n> --\n> Wouter Thielen\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Sun, Oct 19, 2014 at 6:30 AM, Wouter Thielen <wouter at morannon.org> wrote:\n> Sorry for not being able to reply directly to the related thread, because I\n> was getting mails in daily batches. I ha",
+      "thread_id": "thread-350105363a60",
+      "thread_depth": 0,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-e0e8e5b598d9",
+      "message_id": "<CADMJJm-zU_0y07xLOqV9SeOnfevzs87jdt-UhumM1MP_198+rQ@mail.gmail.com>",
+      "from_name": "Lasse Thorst",
+      "from_email_hash": "69c0bc56badd425f54cd2658c6ebc88bc76b85b1c6e3e821d1f15ae7e9536900",
+      "date": "2014-12-09T08:15:21+01:00",
+      "subject": "[R-SIG-Finance] Violation of underlying assumptions - ARMA-GARCH",
+      "subject_clean": "Violation of underlying assumptions - ARMA-GARCH",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I am estimating an ARMA-GARCH model using QMLE\n(Quasi-Maxiumum-likelihood-estimation). However, I have some trouble - when\nI do test to see if the residuals are uncorrelated - a Weighted Ljung-Box\ntest - this is rejected. So, it looks like my residuals have serial\ncorrelation.\n\nI am unsure if this is violation of the underlying assumptions - and what\neffects it would have on my results.\n\nFor example, what effect does this have on my estimates? And the strong\nconsistency of the estimates? And asymptotic normality of the QMLE?\n\nI am using GARCH-models by Francq & Zakoian - I think it might be in here,\nbut I am having some trouble understanding it.\n\nRegards,\n\nNote: I've posted this on stats.exchange as well, but haven't had any luck\nyet.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I am estimating an ARMA-GARCH model using QMLE\n(Quasi-Maxiumum-likelihood-estimation). However, I have some trouble - when\nI do test to see if the residuals are uncorrelated - a Weighted Ljung-Box\ntes",
+      "thread_id": "thread-e0e8e5b598d9",
+      "thread_depth": 0,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-7839a51eaabd",
+      "message_id": "<CA+jBJn6tCHvGB4saJC21Y9=Z-N98EvjR7a-5u1G88-hX1jBUXA@mail.gmail.com>",
+      "from_name": "Luca Trapin",
+      "from_email_hash": "720dd02b690f775c837aebab3fd7c449e2e7db2ce72bcc08c6a4e3d263695476",
+      "date": "2014-12-09T15:44:15+01:00",
+      "subject": "[R-SIG-Finance] Rugarch external regressor estimation",
+      "subject_clean": "Rugarch external regressor estimation",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI'd like to use \"rugarch\" package to fit GARCH models with external\nregressors. I decided to run a simulation prior to analyze the empirical\ndata, in order to understand how to set the garch specification correctly.\n\nI generate random samples with \"ugarchpath\" and then plot the estimates of\nthe parameters obtained with \"ugarchfit\". I use EGARCH with a dummy\nvariable to avoid prolems with the parameter constraints in the\nmaximization procedure.\n\nAlthough the estimator for the GARCH parameters is consistent, it seems to\nbe not consistent when adding the external regressor.\n\nI used the following code:\n\nd <- as.matrix(c(rep(0,2000),rep(1,2000)))\npar <- matrix(0,100,5)\nfor (i in 1:100){\n  specsim <- ugarchspec(variance.model=list(model=\"eGARCH\",\ngarchOrder=c(1,1),\n                                            external.regressors=d),\n                     mean.model=list(armaOrder=c(0,0), include.mean=FALSE),\n                     fixed.pars=list(omega=-0.15, alpha1=-0.05, beta1=0.95,\n                                     gamma1=0.1,vxreg1=0.1))\n  sim <- ugarchpath(specsim, n.sim=4000)\n  r <- fitted(sim)\n  specfit <-\nugarchspec(variance.model=list(model=\"eGARCH\",garchOrder=c(1,1),\n                                            external.regressors=d),\n                     mean.model=list(armaOrder=c(0,0),include.mean=F))\n  fit <- ugarchfit(specfit,r)\n  par[i,] <- as.matrix(coef(fit))\n}\n\nAm I missing something?\n\nBest Regards,\nLuca\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI'd like to use \"rugarch\" package to fit GARCH models with external\nregressors. I decided to run a simulation prior to analyze the empirical\ndata, in order to understand how to set the garch spec",
+      "thread_id": "thread-7839a51eaabd",
+      "thread_depth": 0,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-19b960dd747e",
+      "message_id": "<CAK7-yAi23sxfCkf_Xpszau89GwCmfhD0FmDNoMSODPKkK49aVg@mail.gmail.com>",
+      "from_name": "Ivan Popivanov",
+      "from_email_hash": "edf86c5dbf4c6207c7a747ef8c66665e78d5890929cf2586b5cfba2dcb5c556f",
+      "date": "2014-12-09T19:30:26Z",
+      "subject": "[R-SIG-Finance] [rugarch:realGARCH] A good proxy for close to close volatility?",
+      "subject_clean": "[rugarch:realGARCH] A good proxy for close to close volatility?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nI am trying to use the realGARCH model, but whatever I tried passing as\nrealized volatility gives spikes in sigmas here and there (sometimes more\nthan 1).\n\nMy questions are:\n\n1. Can large sigmas be avoided with this model?\n2. If daily (close to close) returns are used as the data for the fit, what\ncan be used as a reasonable estimate for the realized volatility? Does it\nmake sense to use some volatility estimate based on OHLC data?\n\nThanks in advance,\nIvan\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\nI am trying to use the realGARCH model, but whatever I tried passing as\nrealized volatility gives spikes in sigmas here and there (sometimes more\nthan 1).\n\nMy questions are:\n\n1. Can large sigm",
+      "thread_id": "thread-19b960dd747e",
+      "thread_depth": 0,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-d1fcf7516264",
+      "message_id": "<CAJFvkcfKaH+gkbjQRafBZZeouxdv2EYKtV3FLiQEUP6JNzaocw@mail.gmail.com>",
+      "from_name": "Gei Lin",
+      "from_email_hash": "cd526ad143553bfdcf0e30eca6d76bb2d9c53aa0a6b5bef6979735276e8fe65f",
+      "date": "2014-12-10T12:52:34-05:00",
+      "subject": "[R-SIG-Finance] Bug in ruleOrderProc - txnfees is not a numeric?",
+      "subject_clean": "Bug in ruleOrderProc - txnfees is not a numeric?",
+      "in_reply_to": "<52D55B7E.6030409@braverock.com>",
+      "references": [
+        "<CAK7-yAh8Yh3oHANcvyyp3R1dwbRY-904b8rkF=FG4T3rkVpbHQ@mail.gmail.com>",
+        "<52D54914.4040609@braverock.com>",
+        "<CAK7-yAiZRM=3Ss2_3RrHZ1BA-EJdTSxO+8kYywOaE-JZ3zaTcA@mail.gmail.com>",
+        "<52D55B7E.6030409@braverock.com>"
+      ],
+      "body_plain": "I ran into this same problem and have a proposed patch. As Ivan proposed,\nit appears to be related to the splitting transactions to cross position\nvalues over 0. Any strategy with rules that create orders crossing\npositions through 0 will fail on its eventual call to addTxn, even if you\ndefine TxnFees = 0 on the ruleSignal (because it is carried around\ninternally as.character to support txnFUNs)\n\nIt looks like the problem lies in blotter::addTxn rather than\nquantstrat::ruleOrderProc. If we move the txnfee evaluation before\nsplitting the transactions we will have a valid numeric rather than a\ncharacter in the '/' operation. I made this change in my dev version and it\nlooks like it works.\n\naddTxn <- function(Portfolio, Symbol, TxnDate, TxnQty, TxnPrice, ...,\nTxnFees=0, allowRebates=FALSE, ConMult=NULL, verbose=TRUE, eps=1e-06)\n\n<snip>\n\n    # FUNCTION\n    # Coerce the transaction fees to a function if a string was supplied\n\n    if(is.character(TxnFees)) {\n        TF <- try(match.fun(TxnFees), silent=TRUE)\n        if (!inherits(TF,\"try-error\")) TxnFees<-TF\n    }\n    # Compute transaction fees if a function was supplied\n    if (is.function(TxnFees)) {\n      txnfees <- TxnFees(TxnQty, TxnPrice, Symbol)\n    } else {\n      txnfees<- as.numeric(TxnFees)\n    }\n\n    if(is.null(txnfees) | is.na(txnfees)) txnfees = 0\n    if(txnfees>0 && !isTRUE(allowRebates)) stop('Positive Transaction\nFees should only be used in the case of broker/exchange rebates for\nTxnFees ',TxnFees,'. See Documentation.')\n\naddTxn has a block of code that evaluates the transaction fees if a\nfunction was passed in, or casts it as as.numeric. Quantstrat will pass in\nargument TxnFees as an xts of characters. Before TxnFees can be evaluated,\nan attempt to split the transaction into two pieces is made.\n\n   # split transactions that would cross through zero\n    if(PrevPosQty!=0 && sign(PrevPosQty+TxnQty)!=sign(PrevPosQty) &&\nPrevPosQty!=-TxnQty){*        txnFeeQty=TxnFees/abs(TxnQty) #\ncalculate fees pro-rata by quantity*\n        addTxn(Portfolio=pname, Symbol=Symbol, TxnDate=TxnDate,\nTxnQty=-PrevPosQty, TxnPrice=TxnPrice, ...,\n                TxnFees = txnFeeQty*abs(PrevPosQty), ConMult =\nConMult, verbose = verbose, eps=eps)\n        TxnDate=TxnDate+2*eps #transactions need unique timestamps, so\nincrement a bit\n        TxnQty=TxnQty+PrevPosQty\n        PrevPosQty=0\n        TxnFees=txnFeeQty*abs(TxnQty+PrevPosQty)\n    }\n\nAt this stage TxnFees is still a character. This / operator is what is\ncreating the error:\n\nError in `/.default`(TxnFees, abs(TxnQty)) :\n  non-numeric argument to binary operator\n\nSwitching the order of these two blocks of code and changing\n\n*txnFeeQty=TxnFees/abs(TxnQty)*\n\nTo\n\n*txnFeeQty=txnfees/abs(TxnQty)*\n\nshould fix it.\n\n2014-01-14 10:45 GMT-05:00 Brian G. Peterson <brian at braverock.com>:\n\n> Ivan,\n>\n> Thanks for the reproducible example.  We'll investigate.\n>\n> Brian\n>\n> On 01/14/2014 09:28 AM, Ivan Popivanov wrote:\n>\n>> Hi Brian,\n>>\n>> return(as.numeric(res)) - same thing, I tried it before posting here.\n>> There is no problem if I use return(100*sign(orderqty)), which indicates\n>> the path dependency I was trying to imply. The problem doesn't seem to\n>> occur for long only positions - it gotta be switching. I believe, the\n>> problem is outside os.all.equity. Notice, it has a lot of debug output\n>> and it clearly indicates that the function returns, and returns a\n>> numeric before the problem is hit. For me it's easy to repro it\n>> (although it takes longer) with the attached script (it needs some\n>> adjustments). The problem is hit for 2001-04-08. I don't touch txnFees\n>> anywhere in my code, so I have no control over this behaviour - it needs\n>> to be type casted somewhere - from what you are saying - taking the type\n>> into account.\n>>\n>> Thanks for the comments about the testing.\n>>\n>> Can you point me to code which computes the portfolio size as you\n>> suggested?\n>>\n>>  From my experience, it's often needed to be able to show the strategy\n>> performance over years, with all the system on. That's an area quanstrat\n>> lacks - both in terms of examples and testing (I am pretty sure this is\n>> a regression since the last time I looked at it).\n>>\n>> Thanks,\n>> Ivan\n>>\n>>\n>>\n>>\n>> On Tue, Jan 14, 2014 at 9:26 AM, Brian G. Peterson <brian at braverock.com\n>> <mailto:brian at braverock.com>> wrote:\n>>\n>>     You don't actually include how you're calculating txnfees, and your\n>>     example is not reproducible, so I'm forced to guess.\n>>\n>>     try\n>>\n>>       return(as.numeric(res))\n>>\n>>     in your function.\n>>\n>>     As noted in the documentation, txnFees can be a string name of a\n>>     function, so forcing it to as.numeric is a really bad idea.\n>>\n>>     I'll also note that you don't need to call updatePortf every time.\n>>     That's extremely expensive by comparison to just adding up the\n>>     realized P&L (from closed transaction) and Unrealized P&L (from your\n>>     open position) yourself.  You should also be aware that this\n>>     approach (or yours) will only capture equity changes in a single\n>>     instrument (since instruments are processed one at a time).\n>>\n>>     Most literature on evaluating trading strategies (see e.g. Aronson\n>>     or Tomasini and Jaekle) tends to do system design on fixed trade\n>>     sizes because it is much easier to evaluate whether or not your\n>>     system really has any edge, or is just participating in market\n>>     drift.  I tend to separate the order sizing decisions till very late\n>>     in the strategy development process.\n>>\n>>     Regards,\n>>\n>>     Brian\n>>\n>>\n>>     On 01/13/2014 07:15 PM, Ivan Popivanov wrote:\n>>\n>>         It only happens when I use a custom function to compute the\n>>         position size,\n>>         but it won't happen with a constant size. So it may have\n>>         something to do\n>>         with the splitting of orders. My function uses all available\n>> equity\n>>         rounding up - it's at the end. I get the following error:\n>>\n>>         Error in `/.default`(TxnFees, abs(TxnQty)) :\n>>             non-numeric argument to binary operator\n>>\n>>         It seems that the fault is in ruleOrderProc, the caller of addTxn,\n>>         whereabouts txnfees is indeed an xts object. To me the fix is to\n>>         pass\n>>         as.numeric(txnfees) to addTxn.\n>>\n>>         Regards,\n>>         Ivan\n>>\n>>         PS: Is my osAllEquity a good way to implement the compounding\n>>         growth or is\n>>         there a better alternative? I think it's worth having an example\n>> to\n>>         illustrate this functionality.\n>>\n>>         osAllEquity = function(\n>>                 timestamp,\n>>                 orderqty,\n>>         portfolio.name <http://portfolio.name>,\n>>                 symbol,\n>>                 ...)\n>>         {\n>>              verbose = TRUE\n>>              # verbose = FALSE\n>>\n>>              if(verbose) cat(\"\\n=====\")\n>>              if(verbose) cat(paste( \"\\n\", timestamp, sep=\"\"))\n>>\n>>              if(verbose) cat(paste( \"\\n   orderqty=\", orderqty, sep=\"\"))\n>>              portfolio = updatePortf(Portfolio=portfoli__o.name\n>>         <http://portfolio.name>, Dates=paste('::',\n>>         as.Date(timestamp), sep=''))\n>>              # end.eq = getEndEq(portfolio.name <http://portfolio.name>,\n>>         as.Date(timestamp))\n>>              # print( end.eq )\n>>              pnl = sum(getPortfolio(portfolio.__name\n>>         <http://portfolio.name>)$summary$Net.Trading.PL\n>>         <http://Net.Trading.PL>)\n>>              end.eq = initEq + pnl\n>>              if(verbose) cat(paste( \"\\n   pnl=\", pnl, sep=\"\"))\n>>              if(verbose) cat(paste( \"\\n   equity=\", end.eq, sep=\"\"))\n>>              close.price = as.numeric(Cl(mktdata[__timestamp,]))\n>>              if(verbose) cat(paste(\"\\n   close price=\", close.price,\n>>         sep=\"\"))\n>>              res = as.numeric( ceiling( end.eq / close.price ) ) * sign(\n>>         orderqty )\n>>              if(verbose) cat(paste(\"\\n   qty=\", res, sep=\"\"))\n>>              if(verbose) cat(\"\\n=====\\n\")\n>>              # return(sign(orderqty*1000))\n>>              # res = 1000*sign(orderqty)\n>>              return(res)\n>>         }\n>>\n>>                  [[alternative HTML version deleted]]\n>>\n>>         _________________________________________________\n>>         R-SIG-Finance at r-project.org <mailto:R-SIG-Finance at r-project.org>\n>>         mailing list\n>>         https://stat.ethz.ch/mailman/__listinfo/r-sig-finance\n>>         <https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\n>>         -- Subscriber-posting only. If you want to post, subscribe first.\n>>         -- Also note that this is not the r-help list where general R\n>>         questions should go.\n>>\n>>\n>>     --\n>>     Brian G. Peterson\n>>     http://braverock.com/brian/\n>>     Ph: 773-459-4973 <tel:773-459-4973>\n>>     IM: bgpbraverock\n>>\n>>     _________________________________________________\n>>     R-SIG-Finance at r-project.org <mailto:R-SIG-Finance at r-project.org>\n>>     mailing list\n>>     https://stat.ethz.ch/mailman/__listinfo/r-sig-finance\n>>     <https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\n>>     -- Subscriber-posting only. If you want to post, subscribe first.\n>>     -- Also note that this is not the r-help list where general R\n>>     questions should go.\n>>\n>>\n>>\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n>>\n> --\n> Brian G. Peterson\n> http://braverock.com/brian/\n> Ph: 773-459-4973\n> IM: bgpbraverock\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\n\n-- \n\n?*Don't quit. Suffer now and live the rest of your life as a champion.*?\n\n                                                -\nMuhammad Ali*?*\n*?*\n\n?*The world is full of obvious things which nobody by any chance observes.*?\n\n                                                -\nSir Arthur Conan Doyle*?*\n*?*\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I ran into this same problem and have a proposed patch. As Ivan proposed,\nit appears to be related to the splitting transactions to cross position\nvalues over 0. Any strategy with rules that create or",
+      "thread_id": "thread-d1fcf7516264",
+      "thread_depth": 0,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-ab6ad1c423b2",
+      "message_id": "<CALQudT-LSEQbmgt5+=ZKoK+dNqZPdV6a=U41BO4LnR0p96sqYQ@mail.gmail.com>",
+      "from_name": "Derek Wong",
+      "from_email_hash": "8078884757a61edbe7650ffa2c74b6c91c0c8059a30a8350c615bf1993fe0bc6",
+      "date": "2014-12-11T15:31:48+08:00",
+      "subject": "[R-SIG-Finance] Using a custom Spread to execute onto the 2 underlying instruments - Quantstrat Help",
+      "subject_clean": "Using a custom Spread to execute onto the 2 underlying instruments - Quantstrat Help",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello\n\nI am having problems with using a spread to generate signals and rules\nbut then execute individually on the underlying. In my example case, I\nam taking the SP500 E-mini future (ES) and the Dow E-mini future (YM)\ncalculating a custom spread function then using that for signal\ngeneration using rolling std dev and mean for thresholds. There is not\nvery much documentation or demos on spreads and other synthetics that\nare available in the Financial Instrument Package. Example code below.\n\nI run into problems in the backtest runs and it runs the trade rules\nfor every symbol in the portfolio, symb1 (ES), symb2(YM), and the\ncustom spread symb1.symb2. I was expecting it to just run on\nsymb1.symb2 and by using the RuleSignal symbol field and specify\n\"symb1\" and \"symb2\" for execution it would then execute on the\nunderlying themselves. Instead quantstrat applystrategy goes through\nsymb1, symb2, and symb1.symb2 and places trades on everything.\n\nIs it possible to use a custom spread to execute on the underlying, if\nso how? Am I mis-specifying or misusing  the RuleSignal symbol\nidentifier field? because I am specifically stating I want to execute\nsymb1 long and symb2 short for a given signal or vice versa. I am not\nspecifying the symb1.symb2 at all for any of the RuleSignal executions\nbut they do trade.\n\n\nThanks\n\nDerek\n\n\n\n\n# attempt to create a pairs trading strategy using a spread from\nFinancial Instrument package.\n# Based on a Notional Spread and Standard Devations from the rolling mean\n\nrequire(quantstrat)\nrequire(Quandl)\nrequire(quantmod)\n#### Data Prep ####\n\n#get data from Quandl\nsymb1 <- Quandl(\"CHRIS/CME_ES1\", type = \"xts\",\ntrim_start=\"2010-01-01\", trim_end=\"2014-11-17\")\nsymb2 <- Quandl(\"CHRIS/CME_YM1\", type = \"xts\",\ntrim_start=\"2010-01-01\", trim_end=\"2014-11-17\")\n\n#Trim and Format  - Using settlement as Close value\nsymb1 <- symb1[,c(1,2,3,6)]\nsymb2 <- symb2[,c(1,2,3,6)]\n\ncolnames(symb1) <- c(\"Open\", \"High\", \"Low\", \"Close\")\ncolnames(symb2) <- c(\"Open\", \"High\", \"Low\", \"Close\")\n\n#Clean data so only dates where both trades exist\nmerge <- cbind(symb1, symb2)\ndates <- index(merge[complete.cases(merge),])\nsymb1<- symb1[dates]\nsymb2<- symb2[dates]\n\n# -----------------------STRATEGY-------------------\n#clean variables for reruns\nsuppressWarnings(rm(\"order_book.bbands\",pos=.strategy))\nsuppressWarnings(rm(\"account.bbands\",\"portfolio.bbands\",pos=.blotter))\nsuppressWarnings(rm(\"account.st\",\"portfolio.st\",\"stock.str\",\"stratBBands\",\"initDate\",\"initEq\",'start_t','end_t'))\n\n#Initial values / parameters\ninitDate= index(symb1)[1]-1\ninitEq=100000\n\nSD = 2 # how many standard deviations\nN = 20 # length of moving average\n\n#Initialize FinancialInstrument Objects\n\ncurrency('USD')\n\nfuture( primary_id = \"symb1\",\n        currency = \"USD\",\n        tick_size = .25,\n        multiplier = 50)\n\nfuture( primary_id = \"symb2\",\n        currency = \"USD\",\n        tick_size = 1,\n        multiplier = 5)\n\n#Create Spread Series\ncalcRatio <- function(x) {\n  #returns the ratio of notional close prices for 2 symbols\n  x1 <- get(x[1])\n  x2 <- get(x[2])\n  mult1 <- getInstrument(x[1])$multiplier\n  mult2 <- getInstrument(x[2])$multiplier\n  rat.Op <- ((mult1 * Op(x1))) / (mult2 * Op(x2))\n  rat.Hi <- ((mult1 * Hi(x1))) / (mult2 * Hi(x2))\n  rat.Lo <- ((mult1 * Lo(x1))) / (mult2 * Lo(x2))\n  rat.Cl <- ((mult1 * Cl(x1))) / (mult2 * Cl(x2))\n  ratio <- cbind(rat.Op, rat.Hi, rat.Lo, rat.Cl)\n  colnames(ratio) <- c(\"Open\", \"High\", \"Low\", \"Close\")\n  return(ratio)\n}\n\nRatio <- calcRatio(c(\"symb1\", \"symb2\"))\n\n#Initialize Spread (using notional ratio as hedge ratio)\nspread(primary_id = \"symb1.symb2\",\n       currency = \"USD\",\n       members = c(\"symb1\", \"symb2\"),\n       memberratio = list(1, as.numeric(-Cl(Ratio))) )\n\n#Notional Ratio is also spread for trading\nsymb1.symb2 <- Ratio\n\n#name strings\nportfolio.st = 'bbands'\naccount.st = 'bbands'\n\n#initialization of strategy objects ----\ninitPortf(portfolio.st, #portfolio Initiatlization\n          symbols = c(\"symb1.symb2\", \"symb1\", \"symb2\"),\n          initDate = initDate,\n          currency = \"USD\",\n          initPosQty = 0)\n\ninitAcct(account.st, #account initialization\n         portfolios = portfolio.st,\n         initDate = initDate,\n         initEq = initEq)\n\ninitOrders(portfolio = portfolio.st, #orders initialize\n           initDate = initDate)\n\naddPosLimit( portfolio = portfolio.st, # add position limit rules\n             symbol = 'symb1.symb2',\n             timestamp = initDate,\n             maxpos = 1,\n             longlevels = 1,\n             minpos = -1)\n\naddPosLimit( portfolio = portfolio.st, # add position limit rules\n             symbol = 'symb1',\n             timestamp = initDate,\n             maxpos = 2,\n             longlevels = 1,\n             minpos = -2)\n\naddPosLimit( portfolio = portfolio.st, # add position limit rules\n             symbol = 'symb2',\n             timestamp = initDate,\n             maxpos = 2,\n             longlevels = 1,\n             minpos = -2)\n\nstratBBands <- strategy(\"bbands\") # strategy object init\n\n# Indicator\nstratBBands <- add.indicator(\n  strategy = stratBBands,\n  name = \"BBands\",\n  arguments = list(\n    HLC = quote(HLC(mktdata)),\n    n = N,\n    sd = SD,\n    maType = \"SMA\"),\n  label = \"BBands\")\n\n# #Indi Debug\n# summary(stratBBands)\n# start_t <- Sys.time()\n# applyIndicators( strategy = stratBBands, mktdata = Ratio)\n# end_t<-Sys.time()\n# print(\"strat execution time:\")\n# print(end_t-start_t)\n\n# Add signals:\nstratBBands <- add.signal(\n  strategy = stratBBands,\n  name = \"sigCrossover\",\n  arguments = list(\n    columns = c(\"Close\",\"up.BBands\"),\n    relationship = \"gt\"),\n  label = \"Cl.gt.UpperBand\")\n\nstratBBands <- add.signal(\n  strategy = stratBBands,\n  name = \"sigCrossover\",\n  arguments = list(\n    columns = c(\"Close\",\"dn.BBands\"),\n    relationship = \"lt\"),\n  label = \"Cl.lt.LowerBand\")\n\nstratBBands <- add.signal(\n  strategy = stratBBands,\n  name = \"sigCrossover\",\n  arguments = list(\n    columns = c(\"High\",\"Low\", \"mavg.BBands\"),\n    relationship = \"op\"),\n  label = \"Cross.Mid\")\n\n# #Signal Debug\n# summary(stratBBands)\n# start_t <- Sys.time()\n# applySignals(strategy = stratBBands, mktdata =\napplyIndicators(strategy = stratBBands, mktdata = Ratio))\n# end_t<-Sys.time()\n# print(\"strat execution time:\")\n# print(end_t-start_t)\n\n# Rules -----\n\n#Entry\n\nstratBBands <- add.rule (\n  strategy = stratBBands,\n  name = \"ruleSignal\",\n  arguments = list(\n    sigcol = \"Cl.gt.UpperBand\",\n    sigval = TRUE,\n    orderqty = -1,\n    ordertype = \"market\",\n    orderside = \"short\",\n    symbol = \"symb1\",\n    replace = TRUE,\n    osFUN = osMaxPos),\n  type = \"enter\",\n  label = \"ShortSpread_symb1\")\n\nstratBBands <- add.rule (\n  strategy = stratBBands,\n  name = \"ruleSignal\",\n  arguments = list(\n    sigcol = \"Cl.gt.UpperBand\",\n    sigval = TRUE,\n    orderqty = 1,\n    ordertype = \"market\",\n    orderside = \"long\",\n    symbol = \"symb2\",\n    replace = TRUE,\n    osFUN = osMaxPos),\n  type = \"enter\",\n  label = \"ShortSpread_symb2\")\n\nstratBBands <- add.rule (\n  strategy = stratBBands,\n  name = \"ruleSignal\",\n  arguments = list(\n    sigcol = \"Cl.lt.LowerBand\",\n    sigval = TRUE,\n    orderqty = 1,\n    ordertype = \"market\",\n    orderside = \"long\"\n    symbol = \"symb1\",\n    replace = TRUE,\n    osFUN = osMaxPos),\n  type = \"enter\",\n  label = \"LongSpread_symb1\")\n\nstratBBands <- add.rule (\n  strategy = stratBBands,\n  name = \"ruleSignal\",\n  arguments = list(\n    sigcol = \"Cl.lt.LowerBand\",\n    sigval = TRUE,\n    orderqty = -1,\n    ordertype = \"market\",\n    orderside = \"short\",\n    symbol = \"symb2\",\n    replace = TRUE,\n    osFUN = osMaxPos),\n  type = \"enter\",\n  label = \"LongSpread_symb2\")\n\n# Exit\nstratBBands <- add.rule(\n  strategy = stratBBands,\n  name = \"ruleSignal\",\n  arguments = list(\n    sigcol = \"Cross.Mid\",\n    sigval = TRUE,\n    orderqty = \"all\",\n    ordertype = \"market\",\n    TxnFees = 0,\n    replace = TRUE),\n  type = \"exit\",\n  label = \"Exit\")\n\n\nsummary(stratBBands)\n\n# Strategy Execution ----\nstart_t<-Sys.time()\nout<-try(applyStrategy(strategy=stratBBands ,\n                       portfolios=\"bbands\"))\nend_t<-Sys.time()\nprint(\"strat execution time:\")\nprint(end_t-start_t)\n\n# update portfolio\nstart_t<-Sys.time()\nupdatePortf(Portfolio='bbands',Dates=paste('::',as.Date(Sys.time()),sep=''))\nend_t<-Sys.time()\nprint(\"updatePortf execution time:\")\nprint(end_t-start_t)\n\n#Chart\nchart.Posn(Portfolio='bbands',Symbol=\"symb1\")\nplot(add_BBands(on=1,sd=SD,n=N))\nchart.Posn(Portfolio='bbands',Symbol=\"symb2\")\nplot(add_BBands(on=1,sd=SD,n=N))\nchart.Posn(Portfolio='bbands',Symbol=\"symb1.symb2\")\nplot(add_BBands(on=1,sd=SD,n=N))\n\n#Stats\nbook <- getOrderBook(\"bbands\")\nstats <- tradeStats(\"bbands\")\nrets <- PortfReturns(\"bbands\")\nport <- getPortfolio(\"bbands\")",
+      "body_snippet": "Hello\n\nI am having problems with using a spread to generate signals and rules\nbut then execute individually on the underlying. In my example case, I\nam taking the SP500 E-mini future (ES) and the Dow ",
+      "thread_id": "thread-ab6ad1c423b2",
+      "thread_depth": 0,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-44cf218d54fe",
+      "message_id": "<CADgEnDmLEE5Q3pHVErUgpEkg+PSwQjtd_H2UGCyCMBn0u9Korw@mail.gmail.com>",
+      "from_name": "Raghuraman Ramachandran",
+      "from_email_hash": "79bd41ea953db2004bb58fadd97feef1d6911f9ae01e8c3e15320c472bfa9014",
+      "date": "2014-12-12T12:05:11Z",
+      "subject": "[R-SIG-Finance] Interactive Brokers - Adjustable trailing stop using API?",
+      "subject_clean": "Interactive Brokers - Adjustable trailing stop using API?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear R -finance Gurus\n\nHas anyone been able to mimic the interactive brokers adjustable stop\nloss order type in TWS in an API setting please?\n\nBasically, it is a conditional trailing stop order where as an example:\n\nIf I go long at 100, i have an initial stop (market or limit) at say\n95 but if market rises to 105 I like the stop to trail by say $2 (so\nthe new stop becomes 103 etc) and so on. I also thought in the lines\nof leaving an OCA order where the first order is a simple stop limit\nat 95 but not able to proceed in the second order in the IB setting.\nCan someone help please?\n\nMany thx\nRaghu",
+      "body_snippet": "Dear R -finance Gurus\n\nHas anyone been able to mimic the interactive brokers adjustable stop\nloss order type in TWS in an API setting please?\n\nBasically, it is a conditional trailing stop order where ",
+      "thread_id": "thread-44cf218d54fe",
+      "thread_depth": 0,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-d1dc675fe389",
+      "message_id": "<20141215143138.GA15975@robsch.eu>",
+      "from_name": "Robert Schien",
+      "from_email_hash": "9992aa2520c6b13faf25970f4fc88a897cb7e69f670eab320801f4889eb845c5",
+      "date": "2014-12-15T15:31:38+01:00",
+      "subject": "[R-SIG-Finance] selecting specific rows from an xts object",
+      "subject_clean": "selecting specific rows from an xts object",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nI have a questions concerning the xts package.\n\nHow can I select rows for specific times from a xts series?\nI know tthat one select a range with the help of \"T\", for example\nx[\"T09:30:00/T09:40:00\"]\n\nBut how can I select only the rows an 09:30:00 ?\nx[\"T09:30:00/T09:30:00\"] does not work. This delivers the\nwhole time series.\nx[\"T09:30:00\"] does not work, too. It delivers no rows at all.\n\nSo, how can I do, what I want?\nI didn't find anything in the xts documentation.\n\nThank you in advance.\n\nGreetings\nRobert",
+      "body_snippet": "Hello,\n\nI have a questions concerning the xts package.\n\nHow can I select rows for specific times from a xts series?\nI know tthat one select a range with the help of \"T\", for example\nx[\"T09:30:00/T09:4",
+      "thread_id": "thread-d1dc675fe389",
+      "thread_depth": 0,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-e3e70320bfd2",
+      "message_id": "<CAKC0Bhma5fFx0yi5KNn9ZOnCWqbF8OmL7e7-2FaXSK3EABV4cg@mail.gmail.com>",
+      "from_name": "Andreas Voellenklee",
+      "from_email_hash": "c4aa9ac7845bcf79c3a76f8453c15bd98c2cfedbedf8ea77e7d12c4ce805bd21",
+      "date": "2014-12-15T15:56:14+01:00",
+      "subject": "[R-SIG-Finance] selecting specific rows from an xts object",
+      "subject_clean": "selecting specific rows from an xts object",
+      "in_reply_to": "<20141215143138.GA15975@robsch.eu>",
+      "references": [
+        "<20141215143138.GA15975@robsch.eu>"
+      ],
+      "body_plain": "Hello Robert,\n\nlook at the help page ?indexClass\n\nThis should work:\n\nx[.indexhour(x) == 9 & .indexmin(x) == 30 & .indexsec(x)==0]\n\nregards,\n\nAndreas\n\n2014-12-15 15:31 GMT+01:00 Robert Schien <robsch at robsch.eu>:\n>\n>\n> Hello,\n>\n> I have a questions concerning the xts package.\n>\n> How can I select rows for specific times from a xts series?\n> I know tthat one select a range with the help of \"T\", for example\n> x[\"T09:30:00/T09:40:00\"]\n>\n> But how can I select only the rows an 09:30:00 ?\n> x[\"T09:30:00/T09:30:00\"] does not work. This delivers the\n> whole time series.\n> x[\"T09:30:00\"] does not work, too. It delivers no rows at all.\n>\n> So, how can I do, what I want?\n> I didn't find anything in the xts documentation.\n>\n> Thank you in advance.\n>\n> Greetings\n> Robert\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello Robert,\n\nlook at the help page ?indexClass\n\nThis should work:\n\nx[.indexhour(x) == 9 & .indexmin(x) == 30 & .indexsec(x)==0]\n\nregards,\n\nAndreas\n\n2014-12-15 15:31 GMT+01:00 Robert Schien <robsch a",
+      "thread_id": "thread-d1dc675fe389",
+      "thread_depth": 1,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-897c191ec4ee",
+      "message_id": "<9DE405308A6AA24AA794B76282C6C00F52336C566F@HQ-POST1>",
+      "from_name": "David Reiner",
+      "from_email_hash": "5e67dbcf5971ea159b92493cc24577d7d5e4fc915f49ff03951f2fc786043a77",
+      "date": "2014-12-15T09:33:10-06:00",
+      "subject": "[R-SIG-Finance] selecting specific rows from an xts object",
+      "subject_clean": "selecting specific rows from an xts object",
+      "in_reply_to": "<20141215143138.GA15975@robsch.eu>",
+      "references": [
+        "<20141215143138.GA15975@robsch.eu>"
+      ],
+      "body_plain": "If you include the date, or use fractional seconds to create an interval, it should work.\nxts uses half open/half closed intervals so [\"T09:30:00/T09:30:00\"] is empty.\n\n> (nobj <- xts(1:5, as.POSIXct('2014-12-15 09:30')+(-2):2))\n                    [,1]\n2014-12-15 09:29:58    1\n2014-12-15 09:29:59    2\n2014-12-15 09:30:00    3\n2014-12-15 09:30:01    4\n2014-12-15 09:30:02    5\n> nobj[\"2014-12-15 09:30:00\"]\n                    [,1]\n2014-12-15 09:30:00    3\n> nobj[\"T09:29:59.5/T09:30:00.5\"]\n                    [,1]\n2014-12-15 09:30:00    3\nHTH,\n-- David\n\n\n-----Original Message-----\nFrom: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On Behalf Of Robert Schien\nSent: Monday, December 15, 2014 8:32 AM\nTo: r-sig-finance at r-project.org\nSubject: [R-SIG-Finance] selecting specific rows from an xts object\n\n\nHello,\n\nI have a questions concerning the xts package.\n\nHow can I select rows for specific times from a xts series?\nI know tthat one select a range with the help of \"T\", for example\nx[\"T09:30:00/T09:40:00\"]\n\nBut how can I select only the rows an 09:30:00 ?\nx[\"T09:30:00/T09:30:00\"] does not work. This delivers the\nwhole time series.\nx[\"T09:30:00\"] does not work, too. It delivers no rows at all.\n\nSo, how can I do, what I want?\nI didn't find anything in the xts documentation.\n\nThank you in advance.\n\nGreetings\nRobert\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\nThis e-mail and any materials attached hereto, including, without limitation, all content hereof and thereof (collectively, \"XR Content\") are confidential and proprietary to XR Trading, LLC (\"XR\") and/or its affiliates, and are protected by intellectual property laws.  Without the prior written consent of XR, the XR Content may not (i) be disclosed to any third party or (ii) be reproduced or otherwise used by anyone other than current employees of XR or its affiliates, on behalf of XR or its affiliates.\n\nTHE XR CONTENT IS PROVIDED AS IS, WITHOUT REPRESENTATIONS OR WARRANTIES OF ANY KIND.  TO THE MAXIMUM EXTENT PERMISSIBLE UNDER APPLICABLE LAW, XR HEREBY DISCLAIMS ANY AND ALL WARRANTIES, EXPRESS AND IMPLIED, RELATING TO THE XR CONTENT, AND NEITHER XR NOR ANY OF ITS AFFILIATES SHALL IN ANY EVENT BE LIABLE FOR ANY DAMAGES OF ANY NATURE WHATSOEVER, INCLUDING, BUT NOT LIMITED TO, DIRECT, INDIRECT, CONSEQUENTIAL, SPECIAL AND PUNITIVE DAMAGES, LOSS OF PROFITS AND TRADING LOSSES, RESULTING FROM ANY PERSON'S USE OR RELIANCE UPON, OR INABILITY TO USE, ANY XR CONTENT, EVEN IF XR IS ADVISED OF THE POSSIBILITY OF SUCH DAMAGES OR IF SUCH DAMAGES WERE FORESEEABLE.",
+      "body_snippet": "If you include the date, or use fractional seconds to create an interval, it should work.\nxts uses half open/half closed intervals so [\"T09:30:00/T09:30:00\"] is empty.\n\n> (nobj <- xts(1:5, as.POSIXct(",
+      "thread_id": "thread-d1dc675fe389",
+      "thread_depth": 1,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-46511e79a6e1",
+      "message_id": "<CA+oJuEGkr74rj2qncvkdxu9hBzf8Gy5UgCvhPJHQiEOF3qLTTw@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "82540aa84df90b083b58f5752a77274af680540119bfecc0c0436c59ddd13e5c",
+      "date": "2014-12-19T21:15:11-05:00",
+      "subject": "[R-SIG-Finance] Help replicating a paper",
+      "subject_clean": "Help replicating a paper",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I'm not sure this question gets posed often on this list, but here goes...\n\nI'm trying to emulate the results from SSRN id2450017 aka Momentum,\nMarkowitz, and Smart Beta by W.J. Keller. My issue is that for a weighting\nalgorithm, it often only invests in one assets, no assets, or very few\nassets. Furthermore, while using the 9 sector spiders, my results are\npretty terrible, and certainly nothing worthy of publishing in a paper, so\nI know there's a mistake on my end somewhere, but I'm not quite sure where.\n\nHere's the link to the paper:\n\nhttp://papers.ssrn.com/sol3/papers.cfm?abstract_id=2450017\n\nAnd my implementation of the MAA algorithm (special case at the moment,\nwill generalize later). I'm hoping my comments will help make the code\neasier to follow.\n\n*****************************\n\nrequire(quantmod)\nrequire(PerformanceAnalytics)\n\n#Use 9 sector spiders\nsuffix <- c(\"Y\", \"P\", \"E\", \"F\", \"V\", \"I\", \"B\", \"K\", \"U\")\nsymbols <- paste0(\"XL\", suffix)\ngetSymbols(symbols, from=\"1990-01-01\")\nprices <- list()\nfor(i in 1:length(symbols)) {\n  prices[[i]] <- Ad(get(symbols[i]))\n}\nprices <- do.call(cbind, prices)\n\nrets <- Return.calculate(prices)\nrets <- rets[-1,] #remove first row of NAs\n\nweights <- list()\ndates <- list()\nmonthlyEndpoints <- endpoints(rets, on = \"months\")\nfor(i in 2:(length(monthlyEndpoints) - 4)) {\n\n  #subset returns and define mktRets as average daily returns\n  returnsData <- rets[monthlyEndpoints[i]:monthlyEndpoints[i+4],]\n  mktRets <- xts(rowMeans(returnsData), order.by=index(returnsData))\n\n  #raw computed values -- annualized variance, cumulative returns\n  #correlation to average daily returns, and annualized variance of\n  #average daily returns\n  variances <- as.numeric(StdDev.annualized(returnsData)^2)\n  cumRets <- as.numeric(Return.cumulative(returnsData))\n  cors <- as.numeric(cor(returnsData, mktRets))\n  mktVar <- as.numeric(StdDev.annualized(mktRets) ^ 2)\n\n  #shrink asset variances to the average by 50%\n  #shrink cumulative returns to the average by 50%\n  #shrink correlations to the average by 50%\n  #shrink market variance to zero by 50%\n  #see Keller (June 2014 Table 1 pg. 8)\n  shrunkVariances <- (variances + mean(variances)) / 2\n  shrunkCumRets <- (cumRets + mean(cumRets)) / 2\n  shrunkCors <- (cors+mean(cors))/2\n  shrunkMktVar <- mktVar/2\n\n  #values computed from shrunken values\n  #define beta as shrunken variances * shrunken correlations / shrunken\nmarket variance\n  #define idiosyncratic variances as shrunken variances minus shrunken\nmarket variance * beta\n  #see Keller (June 2014 under A.4)\n  betas <- shrunkVariances*shrunkCors/shrunkMktVar\n  idiosyncraticVars <- shrunkVariances-shrunkMktVar*betas\n\n  #compute asset treynors\n  assetTreynors <- shrunkCumRets/betas\n\n  #set initial threshold to zero\n  longs <- assetTreynors > 0\n\n  converge <- FALSE\n  while(!converge) {\n    old <- longs\n\n    #implement equation A.6 from Keller (June 2014)\n    newTreynorThreshNum <- shrunkMktVar * sum(old * shrunkCumRets * betas /\nidiosyncraticVars)\n    newTreynorThreshDenom <- 1 + shrunkMktVar * sum(old * betas * betas /\nidiosyncraticVars)\n    newTreynorThresh <- newTreynorThreshNum/newTreynorThreshDenom\n\n    #assets remaining are those that have a higher initial treynor ratio\n    longs <- assetTreynors > newTreynorThresh\n\n    #if our assets are the same as they were before the computation of the\nnew threshold, end\n    if(sum(old - longs)==0) {\n      converge <- TRUE\n    }\n  }\n\n  #after convergence, allocate weights according to w_i~(1-t/t_i)*r_i/s_i\nand normalize\n  longs <-\nlongs*(1-newTreynorThresh/assetTreynors)*shrunkCumRets/idiosyncraticVars\n  longs <- longs/sum(longs)\n\n  weights[[i]] <-longs\n  dates[[i]] <- as.character(index(returnsData)[nrow(returnsData)])\n}\n\n#set up weights xts\nweights <- do.call(rbind, weights)\ndates <- do.call(rbind, dates)\nweights <- xts(weights, order.by=as.Date(dates))\nweights[is.na(weights)] <- 0\ncolnames(weights) <- colnames(rets)\n\n#for dates without investment, invest in risk-free\nrets$riskFree <- 0\nweights$riskFree <- rep(1, nrow(weights))-rowSums(weights)\n\n#results are pretty terrible\ntest <- Return.rebalancing(R = rets, weights = weights)\ncharts.PerformanceSummary(test)\nplot(log(cumprod(1+test)))\nReturn.annualized(test) #less than 5%\nmaxDrawdown(test) #greater than 30%\n\n#Often invests in one security\nhead(round(weights, 3), 20)\n\n*******************************\nThank you for any help ahead of time.\n\n-Ilya\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I'm not sure this question gets posed often on this list, but here goes...\n\nI'm trying to emulate the results from SSRN id2450017 aka Momentum,\nMarkowitz, and Smart Beta by W.J. Keller. My issue is th",
+      "thread_id": "thread-46511e79a6e1",
+      "thread_depth": 0,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-757d6d87752c",
+      "message_id": "<CAK7-yAjQ1Hmxpqwp9ONvwcbC3bdYraRRTvmyiyX3vV7EvCXXoA@mail.gmail.com>",
+      "from_name": "Ivan Popivanov",
+      "from_email_hash": "edf86c5dbf4c6207c7a747ef8c66665e78d5890929cf2586b5cfba2dcb5c556f",
+      "date": "2014-12-20T05:05:25Z",
+      "subject": "[R-SIG-Finance] Prototyped support for \"partial\" and parallelism to rollapply.xts",
+      "subject_clean": "Prototyped support for \"partial\" and parallelism to rollapply.xts",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I needed these two features, and thought they might be useful in general,\nso I spent some extra time implementing them on top xts, see the\nattachments. Not sure whether I managed to cover all cases, but it should\nbe a solid start if you decide adding them to the package.\n\nNote: Only the Unix form of parallelism (mclapply from parallel) is\nsupported, but that's mainly for expedience. Adding support for parSapply\nis feasible, but it usually leads to more cumbersome interfaces.\n\nRegards,\nIvan\n-------------- next part --------------\nAn HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20141220/ab879a5d/attachment.html>\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: rollapply.xts.R\nType: text/x-r-source\nSize: 6536 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20141220/ab879a5d/attachment.bin>\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: rollapply.xts.R.orig\nType: application/octet-stream\nSize: 6539 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20141220/ab879a5d/attachment.obj>",
+      "body_snippet": "I needed these two features, and thought they might be useful in general,\nso I spent some extra time implementing them on top xts, see the\nattachments. Not sure whether I managed to cover all cases, b",
+      "thread_id": "thread-757d6d87752c",
+      "thread_depth": 0,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-aeea470c9d60",
+      "message_id": "<CAPPM_gQPDnTKs6ona6pgu+bf-LQUynhYKJfhYNZA8anmG_fMaA@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2014-12-21T15:21:46-06:00",
+      "subject": "[R-SIG-Finance] Prototyped support for \"partial\" and parallelism to rollapply.xts",
+      "subject_clean": "Prototyped support for \"partial\" and parallelism to rollapply.xts",
+      "in_reply_to": "<CAK7-yAjQ1Hmxpqwp9ONvwcbC3bdYraRRTvmyiyX3vV7EvCXXoA@mail.gmail.com>",
+      "references": [
+        "<CAK7-yAjQ1Hmxpqwp9ONvwcbC3bdYraRRTvmyiyX3vV7EvCXXoA@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Ivan,\n\nThanks for the contributions!  Did you happen to test the partial=TRUE\noutput versus rollapply.zoo?  Also, can you share your use case for\nrunning rollapply in parallel?\n\nBest,\nJosh\n\nOn Fri, Dec 19, 2014 at 11:05 PM, Ivan Popivanov\n<ivan.popivanov at gmail.com> wrote:\n> I needed these two features, and thought they might be useful in general, so\n> I spent some extra time implementing them on top xts, see the attachments.\n> Not sure whether I managed to cover all cases, but it should be a solid\n> start if you decide adding them to the package.\n>\n> Note: Only the Unix form of parallelism (mclapply from parallel) is\n> supported, but that's mainly for expedience. Adding support for parSapply is\n> feasible, but it usually leads to more cumbersome interfaces.\n>\n> Regards,\n> Ivan\n>\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "Hi Ivan,\n\nThanks for the contributions!  Did you happen to test the partial=TRUE\noutput versus rollapply.zoo?  Also, can you share your use case for\nrunning rollapply in parallel?\n\nBest,\nJosh\n\nOn Fri,",
+      "thread_id": "thread-757d6d87752c",
+      "thread_depth": 1,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-7deef6170221",
+      "message_id": "<CAPPM_gSMBM3UzaseqFbQvO3asPZ0AjA5B4uH3cv51xHHr6-g6w@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2014-12-21T15:55:00-06:00",
+      "subject": "[R-SIG-Finance] Using a custom Spread to execute onto the 2 underlying instruments - Quantstrat Help",
+      "subject_clean": "Using a custom Spread to execute onto the 2 underlying instruments - Quantstrat Help",
+      "in_reply_to": "<CALQudT-LSEQbmgt5+=ZKoK+dNqZPdV6a=U41BO4LnR0p96sqYQ@mail.gmail.com>",
+      "references": [
+        "<CALQudT-LSEQbmgt5+=ZKoK+dNqZPdV6a=U41BO4LnR0p96sqYQ@mail.gmail.com>"
+      ],
+      "body_plain": "On Thu, Dec 11, 2014 at 1:31 AM, Derek Wong <treydog999 at gmail.com> wrote:\n> Hello\n>\n> I am having problems with using a spread to generate signals and rules\n> but then execute individually on the underlying. In my example case, I\n> am taking the SP500 E-mini future (ES) and the Dow E-mini future (YM)\n> calculating a custom spread function then using that for signal\n> generation using rolling std dev and mean for thresholds. There is not\n> very much documentation or demos on spreads and other synthetics that\n> are available in the Financial Instrument Package. Example code below.\n>\n> I run into problems in the backtest runs and it runs the trade rules\n> for every symbol in the portfolio, symb1 (ES), symb2(YM), and the\n> custom spread symb1.symb2. I was expecting it to just run on\n> symb1.symb2 and by using the RuleSignal symbol field and specify\n> \"symb1\" and \"symb2\" for execution it would then execute on the\n> underlying themselves. Instead quantstrat applystrategy goes through\n> symb1, symb2, and symb1.symb2 and places trades on everything.\n>\n?applyStrategy says that it will apply the strategy to every symbol in\nthe portfolio, so I'm not sure why you expected it to only run on one\nsymbol in the portfolio.\n\n> Is it possible to use a custom spread to execute on the underlying, if\n> so how? Am I mis-specifying or misusing  the RuleSignal symbol\n> identifier field? because I am specifically stating I want to execute\n> symb1 long and symb2 short for a given signal or vice versa. I am not\n> specifying the symb1.symb2 at all for any of the RuleSignal executions\n> but they do trade.\n>\nOne thing you could try:\nRemove the synthetic spread from your portfolio object, and just use\nthe synthetic spread data to manually create signals for each of the\nunderlyings.  Then call applyRules for each underlying and pass your\nsignals via the signals argument to applyRules.\n\nOr, perhaps better still, you could keep only the synthetic spread in\nyour portfolio, since your rules create orders on the underlyings.\nThen you might be able to leave the rest of your data unchanged.\n\nNote that both suggestions are just off the top of my head, since I\ndon't have a Quandl token.  Let me know if either of those suggestions\nhelp.\n\n>\n> Thanks\n>\n> Derek\n>\n>\n>\n>\n> # attempt to create a pairs trading strategy using a spread from\n> Financial Instrument package.\n> # Based on a Notional Spread and Standard Devations from the rolling mean\n>\n> require(quantstrat)\n> require(Quandl)\n> require(quantmod)\n> #### Data Prep ####\n>\n> #get data from Quandl\n> symb1 <- Quandl(\"CHRIS/CME_ES1\", type = \"xts\",\n> trim_start=\"2010-01-01\", trim_end=\"2014-11-17\")\n> symb2 <- Quandl(\"CHRIS/CME_YM1\", type = \"xts\",\n> trim_start=\"2010-01-01\", trim_end=\"2014-11-17\")\n>\n> #Trim and Format  - Using settlement as Close value\n> symb1 <- symb1[,c(1,2,3,6)]\n> symb2 <- symb2[,c(1,2,3,6)]\n>\n> colnames(symb1) <- c(\"Open\", \"High\", \"Low\", \"Close\")\n> colnames(symb2) <- c(\"Open\", \"High\", \"Low\", \"Close\")\n>\n> #Clean data so only dates where both trades exist\n> merge <- cbind(symb1, symb2)\n> dates <- index(merge[complete.cases(merge),])\n> symb1<- symb1[dates]\n> symb2<- symb2[dates]\n>\n> # -----------------------STRATEGY-------------------\n> #clean variables for reruns\n> suppressWarnings(rm(\"order_book.bbands\",pos=.strategy))\n> suppressWarnings(rm(\"account.bbands\",\"portfolio.bbands\",pos=.blotter))\n> suppressWarnings(rm(\"account.st\",\"portfolio.st\",\"stock.str\",\"stratBBands\",\"initDate\",\"initEq\",'start_t','end_t'))\n>\n> #Initial values / parameters\n> initDate= index(symb1)[1]-1\n> initEq=100000\n>\n> SD = 2 # how many standard deviations\n> N = 20 # length of moving average\n>\n> #Initialize FinancialInstrument Objects\n>\n> currency('USD')\n>\n> future( primary_id = \"symb1\",\n>         currency = \"USD\",\n>         tick_size = .25,\n>         multiplier = 50)\n>\n> future( primary_id = \"symb2\",\n>         currency = \"USD\",\n>         tick_size = 1,\n>         multiplier = 5)\n>\n> #Create Spread Series\n> calcRatio <- function(x) {\n>   #returns the ratio of notional close prices for 2 symbols\n>   x1 <- get(x[1])\n>   x2 <- get(x[2])\n>   mult1 <- getInstrument(x[1])$multiplier\n>   mult2 <- getInstrument(x[2])$multiplier\n>   rat.Op <- ((mult1 * Op(x1))) / (mult2 * Op(x2))\n>   rat.Hi <- ((mult1 * Hi(x1))) / (mult2 * Hi(x2))\n>   rat.Lo <- ((mult1 * Lo(x1))) / (mult2 * Lo(x2))\n>   rat.Cl <- ((mult1 * Cl(x1))) / (mult2 * Cl(x2))\n>   ratio <- cbind(rat.Op, rat.Hi, rat.Lo, rat.Cl)\n>   colnames(ratio) <- c(\"Open\", \"High\", \"Low\", \"Close\")\n>   return(ratio)\n> }\n>\n> Ratio <- calcRatio(c(\"symb1\", \"symb2\"))\n>\n> #Initialize Spread (using notional ratio as hedge ratio)\n> spread(primary_id = \"symb1.symb2\",\n>        currency = \"USD\",\n>        members = c(\"symb1\", \"symb2\"),\n>        memberratio = list(1, as.numeric(-Cl(Ratio))) )\n>\n> #Notional Ratio is also spread for trading\n> symb1.symb2 <- Ratio\n>\n> #name strings\n> portfolio.st = 'bbands'\n> account.st = 'bbands'\n>\n> #initialization of strategy objects ----\n> initPortf(portfolio.st, #portfolio Initiatlization\n>           symbols = c(\"symb1.symb2\", \"symb1\", \"symb2\"),\n>           initDate = initDate,\n>           currency = \"USD\",\n>           initPosQty = 0)\n>\n> initAcct(account.st, #account initialization\n>          portfolios = portfolio.st,\n>          initDate = initDate,\n>          initEq = initEq)\n>\n> initOrders(portfolio = portfolio.st, #orders initialize\n>            initDate = initDate)\n>\n> addPosLimit( portfolio = portfolio.st, # add position limit rules\n>              symbol = 'symb1.symb2',\n>              timestamp = initDate,\n>              maxpos = 1,\n>              longlevels = 1,\n>              minpos = -1)\n>\n> addPosLimit( portfolio = portfolio.st, # add position limit rules\n>              symbol = 'symb1',\n>              timestamp = initDate,\n>              maxpos = 2,\n>              longlevels = 1,\n>              minpos = -2)\n>\n> addPosLimit( portfolio = portfolio.st, # add position limit rules\n>              symbol = 'symb2',\n>              timestamp = initDate,\n>              maxpos = 2,\n>              longlevels = 1,\n>              minpos = -2)\n>\n> stratBBands <- strategy(\"bbands\") # strategy object init\n>\n> # Indicator\n> stratBBands <- add.indicator(\n>   strategy = stratBBands,\n>   name = \"BBands\",\n>   arguments = list(\n>     HLC = quote(HLC(mktdata)),\n>     n = N,\n>     sd = SD,\n>     maType = \"SMA\"),\n>   label = \"BBands\")\n>\n> # #Indi Debug\n> # summary(stratBBands)\n> # start_t <- Sys.time()\n> # applyIndicators( strategy = stratBBands, mktdata = Ratio)\n> # end_t<-Sys.time()\n> # print(\"strat execution time:\")\n> # print(end_t-start_t)\n>\n> # Add signals:\n> stratBBands <- add.signal(\n>   strategy = stratBBands,\n>   name = \"sigCrossover\",\n>   arguments = list(\n>     columns = c(\"Close\",\"up.BBands\"),\n>     relationship = \"gt\"),\n>   label = \"Cl.gt.UpperBand\")\n>\n> stratBBands <- add.signal(\n>   strategy = stratBBands,\n>   name = \"sigCrossover\",\n>   arguments = list(\n>     columns = c(\"Close\",\"dn.BBands\"),\n>     relationship = \"lt\"),\n>   label = \"Cl.lt.LowerBand\")\n>\n> stratBBands <- add.signal(\n>   strategy = stratBBands,\n>   name = \"sigCrossover\",\n>   arguments = list(\n>     columns = c(\"High\",\"Low\", \"mavg.BBands\"),\n>     relationship = \"op\"),\n>   label = \"Cross.Mid\")\n>\n> # #Signal Debug\n> # summary(stratBBands)\n> # start_t <- Sys.time()\n> # applySignals(strategy = stratBBands, mktdata =\n> applyIndicators(strategy = stratBBands, mktdata = Ratio))\n> # end_t<-Sys.time()\n> # print(\"strat execution time:\")\n> # print(end_t-start_t)\n>\n> # Rules -----\n>\n> #Entry\n>\n> stratBBands <- add.rule (\n>   strategy = stratBBands,\n>   name = \"ruleSignal\",\n>   arguments = list(\n>     sigcol = \"Cl.gt.UpperBand\",\n>     sigval = TRUE,\n>     orderqty = -1,\n>     ordertype = \"market\",\n>     orderside = \"short\",\n>     symbol = \"symb1\",\n>     replace = TRUE,\n>     osFUN = osMaxPos),\n>   type = \"enter\",\n>   label = \"ShortSpread_symb1\")\n>\n> stratBBands <- add.rule (\n>   strategy = stratBBands,\n>   name = \"ruleSignal\",\n>   arguments = list(\n>     sigcol = \"Cl.gt.UpperBand\",\n>     sigval = TRUE,\n>     orderqty = 1,\n>     ordertype = \"market\",\n>     orderside = \"long\",\n>     symbol = \"symb2\",\n>     replace = TRUE,\n>     osFUN = osMaxPos),\n>   type = \"enter\",\n>   label = \"ShortSpread_symb2\")\n>\n> stratBBands <- add.rule (\n>   strategy = stratBBands,\n>   name = \"ruleSignal\",\n>   arguments = list(\n>     sigcol = \"Cl.lt.LowerBand\",\n>     sigval = TRUE,\n>     orderqty = 1,\n>     ordertype = \"market\",\n>     orderside = \"long\"\n>     symbol = \"symb1\",\n>     replace = TRUE,\n>     osFUN = osMaxPos),\n>   type = \"enter\",\n>   label = \"LongSpread_symb1\")\n>\n> stratBBands <- add.rule (\n>   strategy = stratBBands,\n>   name = \"ruleSignal\",\n>   arguments = list(\n>     sigcol = \"Cl.lt.LowerBand\",\n>     sigval = TRUE,\n>     orderqty = -1,\n>     ordertype = \"market\",\n>     orderside = \"short\",\n>     symbol = \"symb2\",\n>     replace = TRUE,\n>     osFUN = osMaxPos),\n>   type = \"enter\",\n>   label = \"LongSpread_symb2\")\n>\n> # Exit\n> stratBBands <- add.rule(\n>   strategy = stratBBands,\n>   name = \"ruleSignal\",\n>   arguments = list(\n>     sigcol = \"Cross.Mid\",\n>     sigval = TRUE,\n>     orderqty = \"all\",\n>     ordertype = \"market\",\n>     TxnFees = 0,\n>     replace = TRUE),\n>   type = \"exit\",\n>   label = \"Exit\")\n>\n>\n> summary(stratBBands)\n>\n> # Strategy Execution ----\n> start_t<-Sys.time()\n> out<-try(applyStrategy(strategy=stratBBands ,\n>                        portfolios=\"bbands\"))\n> end_t<-Sys.time()\n> print(\"strat execution time:\")\n> print(end_t-start_t)\n>\n> # update portfolio\n> start_t<-Sys.time()\n> updatePortf(Portfolio='bbands',Dates=paste('::',as.Date(Sys.time()),sep=''))\n> end_t<-Sys.time()\n> print(\"updatePortf execution time:\")\n> print(end_t-start_t)\n>\n> #Chart\n> chart.Posn(Portfolio='bbands',Symbol=\"symb1\")\n> plot(add_BBands(on=1,sd=SD,n=N))\n> chart.Posn(Portfolio='bbands',Symbol=\"symb2\")\n> plot(add_BBands(on=1,sd=SD,n=N))\n> chart.Posn(Portfolio='bbands',Symbol=\"symb1.symb2\")\n> plot(add_BBands(on=1,sd=SD,n=N))\n>\n> #Stats\n> book <- getOrderBook(\"bbands\")\n> stats <- tradeStats(\"bbands\")\n> rets <- PortfReturns(\"bbands\")\n> port <- getPortfolio(\"bbands\")\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Thu, Dec 11, 2014 at 1:31 AM, Derek Wong <treydog999 at gmail.com> wrote:\n> Hello\n>\n> I am having problems with using a spread to generate signals and rules\n> but then execute individually on the u",
+      "thread_id": "thread-ab6ad1c423b2",
+      "thread_depth": 1,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-a171c02a809c",
+      "message_id": "<CA+oJuEH-fyRxf-Nx3VhXgqkFieL9kpdt0htQaUXT9dV+JHdZnA@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "82540aa84df90b083b58f5752a77274af680540119bfecc0c0436c59ddd13e5c",
+      "date": "2014-12-21T18:25:35-05:00",
+      "subject": "[R-SIG-Finance] Using a custom Spread to execute onto the 2 underlying instruments - Quantstrat Help",
+      "subject_clean": "Using a custom Spread to execute onto the 2 underlying instruments - Quantstrat Help",
+      "in_reply_to": "<CALQudT-LSEQbmgt5+=ZKoK+dNqZPdV6a=U41BO4LnR0p96sqYQ@mail.gmail.com>",
+      "references": [
+        "<CALQudT-LSEQbmgt5+=ZKoK+dNqZPdV6a=U41BO4LnR0p96sqYQ@mail.gmail.com>"
+      ],
+      "body_plain": "Actually, I have another suggestion if you're doing synthetic spreads and\nwant to execute on the underlyings--precompute your signals on both\ninstruments, and even though they are different values (EG if my long\nsignal goes 0, 1, 0, my short signal will go 0, -1, 0), and then use a\nthreshold rule on the synthetic signal.\n\nSee this post on my blog:\n\nhttp://quantstrattrader.wordpress.com/2014/11/07/predicting-high-yield-with-spy-a-two-part-post-2/\n, namely the second part, on pre-computing values.\n\n-Ilya\n\nOn Thu, Dec 11, 2014 at 2:31 AM, Derek Wong <treydog999 at gmail.com> wrote:\n\n> Hello\n>\n> I am having problems with using a spread to generate signals and rules\n> but then execute individually on the underlying. In my example case, I\n> am taking the SP500 E-mini future (ES) and the Dow E-mini future (YM)\n> calculating a custom spread function then using that for signal\n> generation using rolling std dev and mean for thresholds. There is not\n> very much documentation or demos on spreads and other synthetics that\n> are available in the Financial Instrument Package. Example code below.\n>\n> I run into problems in the backtest runs and it runs the trade rules\n> for every symbol in the portfolio, symb1 (ES), symb2(YM), and the\n> custom spread symb1.symb2. I was expecting it to just run on\n> symb1.symb2 and by using the RuleSignal symbol field and specify\n> \"symb1\" and \"symb2\" for execution it would then execute on the\n> underlying themselves. Instead quantstrat applystrategy goes through\n> symb1, symb2, and symb1.symb2 and places trades on everything.\n>\n> Is it possible to use a custom spread to execute on the underlying, if\n> so how? Am I mis-specifying or misusing  the RuleSignal symbol\n> identifier field? because I am specifically stating I want to execute\n> symb1 long and symb2 short for a given signal or vice versa. I am not\n> specifying the symb1.symb2 at all for any of the RuleSignal executions\n> but they do trade.\n>\n>\n> Thanks\n>\n> Derek\n>\n>\n>\n>\n> # attempt to create a pairs trading strategy using a spread from\n> Financial Instrument package.\n> # Based on a Notional Spread and Standard Devations from the rolling mean\n>\n> require(quantstrat)\n> require(Quandl)\n> require(quantmod)\n> #### Data Prep ####\n>\n> #get data from Quandl\n> symb1 <- Quandl(\"CHRIS/CME_ES1\", type = \"xts\",\n> trim_start=\"2010-01-01\", trim_end=\"2014-11-17\")\n> symb2 <- Quandl(\"CHRIS/CME_YM1\", type = \"xts\",\n> trim_start=\"2010-01-01\", trim_end=\"2014-11-17\")\n>\n> #Trim and Format  - Using settlement as Close value\n> symb1 <- symb1[,c(1,2,3,6)]\n> symb2 <- symb2[,c(1,2,3,6)]\n>\n> colnames(symb1) <- c(\"Open\", \"High\", \"Low\", \"Close\")\n> colnames(symb2) <- c(\"Open\", \"High\", \"Low\", \"Close\")\n>\n> #Clean data so only dates where both trades exist\n> merge <- cbind(symb1, symb2)\n> dates <- index(merge[complete.cases(merge),])\n> symb1<- symb1[dates]\n> symb2<- symb2[dates]\n>\n> # -----------------------STRATEGY-------------------\n> #clean variables for reruns\n> suppressWarnings(rm(\"order_book.bbands\",pos=.strategy))\n> suppressWarnings(rm(\"account.bbands\",\"portfolio.bbands\",pos=.blotter))\n> suppressWarnings(rm(\"account.st\",\"portfolio.st\n> \",\"stock.str\",\"stratBBands\",\"initDate\",\"initEq\",'start_t','end_t'))\n>\n> #Initial values / parameters\n> initDate= index(symb1)[1]-1\n> initEq=100000\n>\n> SD = 2 # how many standard deviations\n> N = 20 # length of moving average\n>\n> #Initialize FinancialInstrument Objects\n>\n> currency('USD')\n>\n> future( primary_id = \"symb1\",\n>         currency = \"USD\",\n>         tick_size = .25,\n>         multiplier = 50)\n>\n> future( primary_id = \"symb2\",\n>         currency = \"USD\",\n>         tick_size = 1,\n>         multiplier = 5)\n>\n> #Create Spread Series\n> calcRatio <- function(x) {\n>   #returns the ratio of notional close prices for 2 symbols\n>   x1 <- get(x[1])\n>   x2 <- get(x[2])\n>   mult1 <- getInstrument(x[1])$multiplier\n>   mult2 <- getInstrument(x[2])$multiplier\n>   rat.Op <- ((mult1 * Op(x1))) / (mult2 * Op(x2))\n>   rat.Hi <- ((mult1 * Hi(x1))) / (mult2 * Hi(x2))\n>   rat.Lo <- ((mult1 * Lo(x1))) / (mult2 * Lo(x2))\n>   rat.Cl <- ((mult1 * Cl(x1))) / (mult2 * Cl(x2))\n>   ratio <- cbind(rat.Op, rat.Hi, rat.Lo, rat.Cl)\n>   colnames(ratio) <- c(\"Open\", \"High\", \"Low\", \"Close\")\n>   return(ratio)\n> }\n>\n> Ratio <- calcRatio(c(\"symb1\", \"symb2\"))\n>\n> #Initialize Spread (using notional ratio as hedge ratio)\n> spread(primary_id = \"symb1.symb2\",\n>        currency = \"USD\",\n>        members = c(\"symb1\", \"symb2\"),\n>        memberratio = list(1, as.numeric(-Cl(Ratio))) )\n>\n> #Notional Ratio is also spread for trading\n> symb1.symb2 <- Ratio\n>\n> #name strings\n> portfolio.st = 'bbands'\n> account.st = 'bbands'\n>\n> #initialization of strategy objects ----\n> initPortf(portfolio.st, #portfolio Initiatlization\n>           symbols = c(\"symb1.symb2\", \"symb1\", \"symb2\"),\n>           initDate = initDate,\n>           currency = \"USD\",\n>           initPosQty = 0)\n>\n> initAcct(account.st, #account initialization\n>          portfolios = portfolio.st,\n>          initDate = initDate,\n>          initEq = initEq)\n>\n> initOrders(portfolio = portfolio.st, #orders initialize\n>            initDate = initDate)\n>\n> addPosLimit( portfolio = portfolio.st, # add position limit rules\n>              symbol = 'symb1.symb2',\n>              timestamp = initDate,\n>              maxpos = 1,\n>              longlevels = 1,\n>              minpos = -1)\n>\n> addPosLimit( portfolio = portfolio.st, # add position limit rules\n>              symbol = 'symb1',\n>              timestamp = initDate,\n>              maxpos = 2,\n>              longlevels = 1,\n>              minpos = -2)\n>\n> addPosLimit( portfolio = portfolio.st, # add position limit rules\n>              symbol = 'symb2',\n>              timestamp = initDate,\n>              maxpos = 2,\n>              longlevels = 1,\n>              minpos = -2)\n>\n> stratBBands <- strategy(\"bbands\") # strategy object init\n>\n> # Indicator\n> stratBBands <- add.indicator(\n>   strategy = stratBBands,\n>   name = \"BBands\",\n>   arguments = list(\n>     HLC = quote(HLC(mktdata)),\n>     n = N,\n>     sd = SD,\n>     maType = \"SMA\"),\n>   label = \"BBands\")\n>\n> # #Indi Debug\n> # summary(stratBBands)\n> # start_t <- Sys.time()\n> # applyIndicators( strategy = stratBBands, mktdata = Ratio)\n> # end_t<-Sys.time()\n> # print(\"strat execution time:\")\n> # print(end_t-start_t)\n>\n> # Add signals:\n> stratBBands <- add.signal(\n>   strategy = stratBBands,\n>   name = \"sigCrossover\",\n>   arguments = list(\n>     columns = c(\"Close\",\"up.BBands\"),\n>     relationship = \"gt\"),\n>   label = \"Cl.gt.UpperBand\")\n>\n> stratBBands <- add.signal(\n>   strategy = stratBBands,\n>   name = \"sigCrossover\",\n>   arguments = list(\n>     columns = c(\"Close\",\"dn.BBands\"),\n>     relationship = \"lt\"),\n>   label = \"Cl.lt.LowerBand\")\n>\n> stratBBands <- add.signal(\n>   strategy = stratBBands,\n>   name = \"sigCrossover\",\n>   arguments = list(\n>     columns = c(\"High\",\"Low\", \"mavg.BBands\"),\n>     relationship = \"op\"),\n>   label = \"Cross.Mid\")\n>\n> # #Signal Debug\n> # summary(stratBBands)\n> # start_t <- Sys.time()\n> # applySignals(strategy = stratBBands, mktdata =\n> applyIndicators(strategy = stratBBands, mktdata = Ratio))\n> # end_t<-Sys.time()\n> # print(\"strat execution time:\")\n> # print(end_t-start_t)\n>\n> # Rules -----\n>\n> #Entry\n>\n> stratBBands <- add.rule (\n>   strategy = stratBBands,\n>   name = \"ruleSignal\",\n>   arguments = list(\n>     sigcol = \"Cl.gt.UpperBand\",\n>     sigval = TRUE,\n>     orderqty = -1,\n>     ordertype = \"market\",\n>     orderside = \"short\",\n>     symbol = \"symb1\",\n>     replace = TRUE,\n>     osFUN = osMaxPos),\n>   type = \"enter\",\n>   label = \"ShortSpread_symb1\")\n>\n> stratBBands <- add.rule (\n>   strategy = stratBBands,\n>   name = \"ruleSignal\",\n>   arguments = list(\n>     sigcol = \"Cl.gt.UpperBand\",\n>     sigval = TRUE,\n>     orderqty = 1,\n>     ordertype = \"market\",\n>     orderside = \"long\",\n>     symbol = \"symb2\",\n>     replace = TRUE,\n>     osFUN = osMaxPos),\n>   type = \"enter\",\n>   label = \"ShortSpread_symb2\")\n>\n> stratBBands <- add.rule (\n>   strategy = stratBBands,\n>   name = \"ruleSignal\",\n>   arguments = list(\n>     sigcol = \"Cl.lt.LowerBand\",\n>     sigval = TRUE,\n>     orderqty = 1,\n>     ordertype = \"market\",\n>     orderside = \"long\"\n>     symbol = \"symb1\",\n>     replace = TRUE,\n>     osFUN = osMaxPos),\n>   type = \"enter\",\n>   label = \"LongSpread_symb1\")\n>\n> stratBBands <- add.rule (\n>   strategy = stratBBands,\n>   name = \"ruleSignal\",\n>   arguments = list(\n>     sigcol = \"Cl.lt.LowerBand\",\n>     sigval = TRUE,\n>     orderqty = -1,\n>     ordertype = \"market\",\n>     orderside = \"short\",\n>     symbol = \"symb2\",\n>     replace = TRUE,\n>     osFUN = osMaxPos),\n>   type = \"enter\",\n>   label = \"LongSpread_symb2\")\n>\n> # Exit\n> stratBBands <- add.rule(\n>   strategy = stratBBands,\n>   name = \"ruleSignal\",\n>   arguments = list(\n>     sigcol = \"Cross.Mid\",\n>     sigval = TRUE,\n>     orderqty = \"all\",\n>     ordertype = \"market\",\n>     TxnFees = 0,\n>     replace = TRUE),\n>   type = \"exit\",\n>   label = \"Exit\")\n>\n>\n> summary(stratBBands)\n>\n> # Strategy Execution ----\n> start_t<-Sys.time()\n> out<-try(applyStrategy(strategy=stratBBands ,\n>                        portfolios=\"bbands\"))\n> end_t<-Sys.time()\n> print(\"strat execution time:\")\n> print(end_t-start_t)\n>\n> # update portfolio\n> start_t<-Sys.time()\n>\n> updatePortf(Portfolio='bbands',Dates=paste('::',as.Date(Sys.time()),sep=''))\n> end_t<-Sys.time()\n> print(\"updatePortf execution time:\")\n> print(end_t-start_t)\n>\n> #Chart\n> chart.Posn(Portfolio='bbands',Symbol=\"symb1\")\n> plot(add_BBands(on=1,sd=SD,n=N))\n> chart.Posn(Portfolio='bbands',Symbol=\"symb2\")\n> plot(add_BBands(on=1,sd=SD,n=N))\n> chart.Posn(Portfolio='bbands',Symbol=\"symb1.symb2\")\n> plot(add_BBands(on=1,sd=SD,n=N))\n>\n> #Stats\n> book <- getOrderBook(\"bbands\")\n> stats <- tradeStats(\"bbands\")\n> rets <- PortfReturns(\"bbands\")\n> port <- getPortfolio(\"bbands\")\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Actually, I have another suggestion if you're doing synthetic spreads and\nwant to execute on the underlyings--precompute your signals on both\ninstruments, and even though they are different values (EG",
+      "thread_id": "thread-ab6ad1c423b2",
+      "thread_depth": 1,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-0934dcd7f913",
+      "message_id": "<CAK7-yAgKZ22XX1JV9wActt2JtF=R-k-5nEF4n=ahpYNHyZz14w@mail.gmail.com>",
+      "from_name": "Ivan Popivanov",
+      "from_email_hash": "edf86c5dbf4c6207c7a747ef8c66665e78d5890929cf2586b5cfba2dcb5c556f",
+      "date": "2014-12-22T03:32:10Z",
+      "subject": "[R-SIG-Finance] Prototyped support for \"partial\" and parallelism to rollapply.xts",
+      "subject_clean": "Prototyped support for \"partial\" and parallelism to rollapply.xts",
+      "in_reply_to": null,
+      "references": [
+        "<CAK7-yAjQ1Hmxpqwp9ONvwcbC3bdYraRRTvmyiyX3vV7EvCXXoA@mail.gmail.com>",
+        "<CAPPM_gQPDnTKs6ona6pgu+bf-LQUynhYKJfhYNZA8anmG_fMaA@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Joshua,\n\nI did test some basic scenarios (mean) and compared against the results\nfrom runMean. Tested by.column=T/F, partial=T/F, cores=1/4. I didn't create\ntest cases though. Certainly more testing is needed.\n\nAs for the usage scenario, I was coding non-trivial filter on an indicator\nand first got tired converting forth and back to zoo. The parallelism came\nlater, when I noticed my filter taking quite a while (minutes at this\nstage, but that will grow later) to compute. The filter takes all history\nat each step (partial=T, width=NROW(data)), then does some sampling (using\none of the data columns decides which points are of interest) and then\npasses the sample to some logic, which is also expensive to compute (ML).\n\nRegards,\nIvan\n\nOn Sun Dec 21 2014 at 16:22:06 Joshua Ulrich <josh.m.ulrich at gmail.com>\nwrote:\n\n> Hi Ivan,\n>\n> Thanks for the contributions!  Did you happen to test the partial=TRUE\n> output versus rollapply.zoo?  Also, can you share your use case for\n> running rollapply in parallel?\n>\n> Best,\n> Josh\n>\n> On Fri, Dec 19, 2014 at 11:05 PM, Ivan Popivanov\n> <ivan.popivanov at gmail.com> wrote:\n> > I needed these two features, and thought they might be useful in\n> general, so\n> > I spent some extra time implementing them on top xts, see the\n> attachments.\n> > Not sure whether I managed to cover all cases, but it should be a solid\n> > start if you decide adding them to the package.\n> >\n> > Note: Only the Unix form of parallelism (mclapply from parallel) is\n> > supported, but that's mainly for expedience. Adding support for\n> parSapply is\n> > feasible, but it usually leads to more cumbersome interfaces.\n> >\n> > Regards,\n> > Ivan\n> >\n>\n> --\n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Joshua,\n\nI did test some basic scenarios (mean) and compared against the results\nfrom runMean. Tested by.column=T/F, partial=T/F, cores=1/4. I didn't create\ntest cases though. Certainly more testin",
+      "thread_id": "thread-757d6d87752c",
+      "thread_depth": 2,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-50b322caab92",
+      "message_id": "<CALQudT-hhd8yEqWdwSQR-5BovfLDEfLC9SSfD4Je6rZ652VCrw@mail.gmail.com>",
+      "from_name": "Derek Wong",
+      "from_email_hash": "8078884757a61edbe7650ffa2c74b6c91c0c8059a30a8350c615bf1993fe0bc6",
+      "date": "2014-12-22T11:50:43+08:00",
+      "subject": "[R-SIG-Finance] Using a custom Spread to execute onto the 2 underlying instruments - Quantstrat Help",
+      "subject_clean": "Using a custom Spread to execute onto the 2 underlying instruments - Quantstrat Help",
+      "in_reply_to": "<CAPPM_gSMBM3UzaseqFbQvO3asPZ0AjA5B4uH3cv51xHHr6-g6w@mail.gmail.com>",
+      "references": [
+        "<CALQudT-LSEQbmgt5+=ZKoK+dNqZPdV6a=U41BO4LnR0p96sqYQ@mail.gmail.com>",
+        "<CAPPM_gSMBM3UzaseqFbQvO3asPZ0AjA5B4uH3cv51xHHr6-g6w@mail.gmail.com>"
+      ],
+      "body_plain": "Hi Joshua,\n\nI thought that applyStrategy would not execute orders against the\nsynthetic because i was explicitly stating which symbols I wanted\norders put against. However orders were executing against it anyway. I\nwouldn't mind if applyStrategy went through the symbols data but never\nplaced an order on it. Thank you for the suggestions I will give them\na try. I appreciate your answers.\n\nDerek\n\nOn Mon, Dec 22, 2014 at 5:55 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> On Thu, Dec 11, 2014 at 1:31 AM, Derek Wong <treydog999 at gmail.com> wrote:\n>> Hello\n>>\n>> I am having problems with using a spread to generate signals and rules\n>> but then execute individually on the underlying. In my example case, I\n>> am taking the SP500 E-mini future (ES) and the Dow E-mini future (YM)\n>> calculating a custom spread function then using that for signal\n>> generation using rolling std dev and mean for thresholds. There is not\n>> very much documentation or demos on spreads and other synthetics that\n>> are available in the Financial Instrument Package. Example code below.\n>>\n>> I run into problems in the backtest runs and it runs the trade rules\n>> for every symbol in the portfolio, symb1 (ES), symb2(YM), and the\n>> custom spread symb1.symb2. I was expecting it to just run on\n>> symb1.symb2 and by using the RuleSignal symbol field and specify\n>> \"symb1\" and \"symb2\" for execution it would then execute on the\n>> underlying themselves. Instead quantstrat applystrategy goes through\n>> symb1, symb2, and symb1.symb2 and places trades on everything.\n>>\n> ?applyStrategy says that it will apply the strategy to every symbol in\n> the portfolio, so I'm not sure why you expected it to only run on one\n> symbol in the portfolio.\n>\n>> Is it possible to use a custom spread to execute on the underlying, if\n>> so how? Am I mis-specifying or misusing  the RuleSignal symbol\n>> identifier field? because I am specifically stating I want to execute\n>> symb1 long and symb2 short for a given signal or vice versa. I am not\n>> specifying the symb1.symb2 at all for any of the RuleSignal executions\n>> but they do trade.\n>>\n> One thing you could try:\n> Remove the synthetic spread from your portfolio object, and just use\n> the synthetic spread data to manually create signals for each of the\n> underlyings.  Then call applyRules for each underlying and pass your\n> signals via the signals argument to applyRules.\n>\n> Or, perhaps better still, you could keep only the synthetic spread in\n> your portfolio, since your rules create orders on the underlyings.\n> Then you might be able to leave the rest of your data unchanged.\n>\n> Note that both suggestions are just off the top of my head, since I\n> don't have a Quandl token.  Let me know if either of those suggestions\n> help.\n>\n>>\n>> Thanks\n>>\n>> Derek\n>>\n>>\n>>\n>>\n>> # attempt to create a pairs trading strategy using a spread from\n>> Financial Instrument package.\n>> # Based on a Notional Spread and Standard Devations from the rolling mean\n>>\n>> require(quantstrat)\n>> require(Quandl)\n>> require(quantmod)\n>> #### Data Prep ####\n>>\n>> #get data from Quandl\n>> symb1 <- Quandl(\"CHRIS/CME_ES1\", type = \"xts\",\n>> trim_start=\"2010-01-01\", trim_end=\"2014-11-17\")\n>> symb2 <- Quandl(\"CHRIS/CME_YM1\", type = \"xts\",\n>> trim_start=\"2010-01-01\", trim_end=\"2014-11-17\")\n>>\n>> #Trim and Format  - Using settlement as Close value\n>> symb1 <- symb1[,c(1,2,3,6)]\n>> symb2 <- symb2[,c(1,2,3,6)]\n>>\n>> colnames(symb1) <- c(\"Open\", \"High\", \"Low\", \"Close\")\n>> colnames(symb2) <- c(\"Open\", \"High\", \"Low\", \"Close\")\n>>\n>> #Clean data so only dates where both trades exist\n>> merge <- cbind(symb1, symb2)\n>> dates <- index(merge[complete.cases(merge),])\n>> symb1<- symb1[dates]\n>> symb2<- symb2[dates]\n>>\n>> # -----------------------STRATEGY-------------------\n>> #clean variables for reruns\n>> suppressWarnings(rm(\"order_book.bbands\",pos=.strategy))\n>> suppressWarnings(rm(\"account.bbands\",\"portfolio.bbands\",pos=.blotter))\n>> suppressWarnings(rm(\"account.st\",\"portfolio.st\",\"stock.str\",\"stratBBands\",\"initDate\",\"initEq\",'start_t','end_t'))\n>>\n>> #Initial values / parameters\n>> initDate= index(symb1)[1]-1\n>> initEq=100000\n>>\n>> SD = 2 # how many standard deviations\n>> N = 20 # length of moving average\n>>\n>> #Initialize FinancialInstrument Objects\n>>\n>> currency('USD')\n>>\n>> future( primary_id = \"symb1\",\n>>         currency = \"USD\",\n>>         tick_size = .25,\n>>         multiplier = 50)\n>>\n>> future( primary_id = \"symb2\",\n>>         currency = \"USD\",\n>>         tick_size = 1,\n>>         multiplier = 5)\n>>\n>> #Create Spread Series\n>> calcRatio <- function(x) {\n>>   #returns the ratio of notional close prices for 2 symbols\n>>   x1 <- get(x[1])\n>>   x2 <- get(x[2])\n>>   mult1 <- getInstrument(x[1])$multiplier\n>>   mult2 <- getInstrument(x[2])$multiplier\n>>   rat.Op <- ((mult1 * Op(x1))) / (mult2 * Op(x2))\n>>   rat.Hi <- ((mult1 * Hi(x1))) / (mult2 * Hi(x2))\n>>   rat.Lo <- ((mult1 * Lo(x1))) / (mult2 * Lo(x2))\n>>   rat.Cl <- ((mult1 * Cl(x1))) / (mult2 * Cl(x2))\n>>   ratio <- cbind(rat.Op, rat.Hi, rat.Lo, rat.Cl)\n>>   colnames(ratio) <- c(\"Open\", \"High\", \"Low\", \"Close\")\n>>   return(ratio)\n>> }\n>>\n>> Ratio <- calcRatio(c(\"symb1\", \"symb2\"))\n>>\n>> #Initialize Spread (using notional ratio as hedge ratio)\n>> spread(primary_id = \"symb1.symb2\",\n>>        currency = \"USD\",\n>>        members = c(\"symb1\", \"symb2\"),\n>>        memberratio = list(1, as.numeric(-Cl(Ratio))) )\n>>\n>> #Notional Ratio is also spread for trading\n>> symb1.symb2 <- Ratio\n>>\n>> #name strings\n>> portfolio.st = 'bbands'\n>> account.st = 'bbands'\n>>\n>> #initialization of strategy objects ----\n>> initPortf(portfolio.st, #portfolio Initiatlization\n>>           symbols = c(\"symb1.symb2\", \"symb1\", \"symb2\"),\n>>           initDate = initDate,\n>>           currency = \"USD\",\n>>           initPosQty = 0)\n>>\n>> initAcct(account.st, #account initialization\n>>          portfolios = portfolio.st,\n>>          initDate = initDate,\n>>          initEq = initEq)\n>>\n>> initOrders(portfolio = portfolio.st, #orders initialize\n>>            initDate = initDate)\n>>\n>> addPosLimit( portfolio = portfolio.st, # add position limit rules\n>>              symbol = 'symb1.symb2',\n>>              timestamp = initDate,\n>>              maxpos = 1,\n>>              longlevels = 1,\n>>              minpos = -1)\n>>\n>> addPosLimit( portfolio = portfolio.st, # add position limit rules\n>>              symbol = 'symb1',\n>>              timestamp = initDate,\n>>              maxpos = 2,\n>>              longlevels = 1,\n>>              minpos = -2)\n>>\n>> addPosLimit( portfolio = portfolio.st, # add position limit rules\n>>              symbol = 'symb2',\n>>              timestamp = initDate,\n>>              maxpos = 2,\n>>              longlevels = 1,\n>>              minpos = -2)\n>>\n>> stratBBands <- strategy(\"bbands\") # strategy object init\n>>\n>> # Indicator\n>> stratBBands <- add.indicator(\n>>   strategy = stratBBands,\n>>   name = \"BBands\",\n>>   arguments = list(\n>>     HLC = quote(HLC(mktdata)),\n>>     n = N,\n>>     sd = SD,\n>>     maType = \"SMA\"),\n>>   label = \"BBands\")\n>>\n>> # #Indi Debug\n>> # summary(stratBBands)\n>> # start_t <- Sys.time()\n>> # applyIndicators( strategy = stratBBands, mktdata = Ratio)\n>> # end_t<-Sys.time()\n>> # print(\"strat execution time:\")\n>> # print(end_t-start_t)\n>>\n>> # Add signals:\n>> stratBBands <- add.signal(\n>>   strategy = stratBBands,\n>>   name = \"sigCrossover\",\n>>   arguments = list(\n>>     columns = c(\"Close\",\"up.BBands\"),\n>>     relationship = \"gt\"),\n>>   label = \"Cl.gt.UpperBand\")\n>>\n>> stratBBands <- add.signal(\n>>   strategy = stratBBands,\n>>   name = \"sigCrossover\",\n>>   arguments = list(\n>>     columns = c(\"Close\",\"dn.BBands\"),\n>>     relationship = \"lt\"),\n>>   label = \"Cl.lt.LowerBand\")\n>>\n>> stratBBands <- add.signal(\n>>   strategy = stratBBands,\n>>   name = \"sigCrossover\",\n>>   arguments = list(\n>>     columns = c(\"High\",\"Low\", \"mavg.BBands\"),\n>>     relationship = \"op\"),\n>>   label = \"Cross.Mid\")\n>>\n>> # #Signal Debug\n>> # summary(stratBBands)\n>> # start_t <- Sys.time()\n>> # applySignals(strategy = stratBBands, mktdata =\n>> applyIndicators(strategy = stratBBands, mktdata = Ratio))\n>> # end_t<-Sys.time()\n>> # print(\"strat execution time:\")\n>> # print(end_t-start_t)\n>>\n>> # Rules -----\n>>\n>> #Entry\n>>\n>> stratBBands <- add.rule (\n>>   strategy = stratBBands,\n>>   name = \"ruleSignal\",\n>>   arguments = list(\n>>     sigcol = \"Cl.gt.UpperBand\",\n>>     sigval = TRUE,\n>>     orderqty = -1,\n>>     ordertype = \"market\",\n>>     orderside = \"short\",\n>>     symbol = \"symb1\",\n>>     replace = TRUE,\n>>     osFUN = osMaxPos),\n>>   type = \"enter\",\n>>   label = \"ShortSpread_symb1\")\n>>\n>> stratBBands <- add.rule (\n>>   strategy = stratBBands,\n>>   name = \"ruleSignal\",\n>>   arguments = list(\n>>     sigcol = \"Cl.gt.UpperBand\",\n>>     sigval = TRUE,\n>>     orderqty = 1,\n>>     ordertype = \"market\",\n>>     orderside = \"long\",\n>>     symbol = \"symb2\",\n>>     replace = TRUE,\n>>     osFUN = osMaxPos),\n>>   type = \"enter\",\n>>   label = \"ShortSpread_symb2\")\n>>\n>> stratBBands <- add.rule (\n>>   strategy = stratBBands,\n>>   name = \"ruleSignal\",\n>>   arguments = list(\n>>     sigcol = \"Cl.lt.LowerBand\",\n>>     sigval = TRUE,\n>>     orderqty = 1,\n>>     ordertype = \"market\",\n>>     orderside = \"long\"\n>>     symbol = \"symb1\",\n>>     replace = TRUE,\n>>     osFUN = osMaxPos),\n>>   type = \"enter\",\n>>   label = \"LongSpread_symb1\")\n>>\n>> stratBBands <- add.rule (\n>>   strategy = stratBBands,\n>>   name = \"ruleSignal\",\n>>   arguments = list(\n>>     sigcol = \"Cl.lt.LowerBand\",\n>>     sigval = TRUE,\n>>     orderqty = -1,\n>>     ordertype = \"market\",\n>>     orderside = \"short\",\n>>     symbol = \"symb2\",\n>>     replace = TRUE,\n>>     osFUN = osMaxPos),\n>>   type = \"enter\",\n>>   label = \"LongSpread_symb2\")\n>>\n>> # Exit\n>> stratBBands <- add.rule(\n>>   strategy = stratBBands,\n>>   name = \"ruleSignal\",\n>>   arguments = list(\n>>     sigcol = \"Cross.Mid\",\n>>     sigval = TRUE,\n>>     orderqty = \"all\",\n>>     ordertype = \"market\",\n>>     TxnFees = 0,\n>>     replace = TRUE),\n>>   type = \"exit\",\n>>   label = \"Exit\")\n>>\n>>\n>> summary(stratBBands)\n>>\n>> # Strategy Execution ----\n>> start_t<-Sys.time()\n>> out<-try(applyStrategy(strategy=stratBBands ,\n>>                        portfolios=\"bbands\"))\n>> end_t<-Sys.time()\n>> print(\"strat execution time:\")\n>> print(end_t-start_t)\n>>\n>> # update portfolio\n>> start_t<-Sys.time()\n>> updatePortf(Portfolio='bbands',Dates=paste('::',as.Date(Sys.time()),sep=''))\n>> end_t<-Sys.time()\n>> print(\"updatePortf execution time:\")\n>> print(end_t-start_t)\n>>\n>> #Chart\n>> chart.Posn(Portfolio='bbands',Symbol=\"symb1\")\n>> plot(add_BBands(on=1,sd=SD,n=N))\n>> chart.Posn(Portfolio='bbands',Symbol=\"symb2\")\n>> plot(add_BBands(on=1,sd=SD,n=N))\n>> chart.Posn(Portfolio='bbands',Symbol=\"symb1.symb2\")\n>> plot(add_BBands(on=1,sd=SD,n=N))\n>>\n>> #Stats\n>> book <- getOrderBook(\"bbands\")\n>> stats <- tradeStats(\"bbands\")\n>> rets <- PortfReturns(\"bbands\")\n>> port <- getPortfolio(\"bbands\")\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n>\n>\n>\n> --\n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "Hi Joshua,\n\nI thought that applyStrategy would not execute orders against the\nsynthetic because i was explicitly stating which symbols I wanted\norders put against. However orders were executing agains",
+      "thread_id": "thread-ab6ad1c423b2",
+      "thread_depth": 2,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-9aa977c9ecbf",
+      "message_id": "<CALQudT9BwdcWSRDtsTM6LCXobE0LmWt_t9CjTh=jamUj3zPwmQ@mail.gmail.com>",
+      "from_name": "Derek Wong",
+      "from_email_hash": "8078884757a61edbe7650ffa2c74b6c91c0c8059a30a8350c615bf1993fe0bc6",
+      "date": "2014-12-30T16:50:55+08:00",
+      "subject": "[R-SIG-Finance] Period.Unrealized.PL always sums to 0 after a transaction, why? - Blotter/ Quantstrat",
+      "subject_clean": "Period.Unrealized.PL always sums to 0 after a transaction, why? - Blotter/ Quantstrat",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi\n\nI have been diving into the workings of blotter just to understand it\nbetter. I have been using the bbands.R demo that is in the quantstrat\nproject. It is actually a number that will sum with all of the\nprevious Period.Unrealized.PL to make it sum to 0. Shouldn't the\nPeriod.Unrealized.PL for a bar with a transaction to exit be 0,\nassuming you exit at the close price?  or in the bbands.R example the\nprevious day 2007-03-20 close price is 94.50 the next day is 95.36.\nShouldn't 86 be the result not -54? I am not saying the result is\nincorrect, I am just trying to figure out the logic behind the\ncalculations.\n\nTo get the portfolio PL sheet run bbands.R from r-forge then\n\nport <- getPortfolio(portfolio.st)\nView(port$symbols$IBM$posPL)\nsum(port$symbols$IBM$posPL$Period.Unrealized.PL)\n\n\nThank you and happy new year.\n\nDerek",
+      "body_snippet": "Hi\n\nI have been diving into the workings of blotter just to understand it\nbetter. I have been using the bbands.R demo that is in the quantstrat\nproject. It is actually a number that will sum with all ",
+      "thread_id": "thread-9aa977c9ecbf",
+      "thread_depth": 0,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-090d6bd24f15",
+      "message_id": "<54A27E06.1060303@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2014-12-30T04:27:18-06:00",
+      "subject": "[R-SIG-Finance] Period.Unrealized.PL always sums to 0 after a transaction, why? - Blotter/ Quantstrat",
+      "subject_clean": "Period.Unrealized.PL always sums to 0 after a transaction, why? - Blotter/ Quantstrat",
+      "in_reply_to": "<CALQudT9BwdcWSRDtsTM6LCXobE0LmWt_t9CjTh=jamUj3zPwmQ@mail.gmail.com>",
+      "references": [
+        "<CALQudT9BwdcWSRDtsTM6LCXobE0LmWt_t9CjTh=jamUj3zPwmQ@mail.gmail.com>"
+      ],
+      "body_plain": "On 12/30/2014 02:50 AM, Derek Wong wrote:\n> I have been diving into the workings of blotter just to understand it\n> better. I have been using the bbands.R demo that is in the quantstrat\n> project. It is actually a number that will sum with all of the\n> previous Period.Unrealized.PL to make it sum to 0. Shouldn't the\n> Period.Unrealized.PL for a bar with a transaction to exit be 0,\n> assuming you exit at the close price?  or in the bbands.R example the\n> previous day 2007-03-20 close price is 94.50 the next day is 95.36.\n> Shouldn't 86 be the result not -54? I am not saying the result is\n> incorrect, I am just trying to figure out the logic behind the\n> calculations.\n>\n> To get the portfolio PL sheet run bbands.R from r-forge then\n>\n> port <- getPortfolio(portfolio.st)\n> View(port$symbols$IBM$posPL)\n> sum(port$symbols$IBM$posPL$Period.Unrealized.PL)\n\nUnrealized P&L is exactly what it says it is.  Once you realize that P&L \n(on a transaction), then the unrealized P&L flat to flat has to sum to \nzero. if it did not, then you'd double-count unrealized and realized P&L.\n\nIn the last period, the period with a transaction, you need to back out \nany residual unrealized P&L and move it to the realized column.\n\nPut another way, portfolio value is the sum of realized P&L from trades, \nposition average cost for open positions, and any any unrealized P&L \nfrom open position.\n\nSo, back to your example from the bbands demo.\n\non 2007-03-20 your cumulative Net.Trading.PL and Period.Unrealized.PL \nwas 54, all of it from your unrealized gains.\n\non 2007-03-21 you close the position for 140 realized gain\n\nThe proceeds from that transaction, for period 2007-03-21, need to back \nout the 54 unrealized (since you've already accumulated it), for a gross \nprofit in column Gross.Trading.PL (from the transaction realized P&L) on \nthis period of 86.  (there's the 86 you're looking for in your question).\n\nPart of this is a result of double entry accounting, where debits and \ncredits need to add up.  Another part of this is the nature of portfolio \naccounting, where period gains and losses are attributed to your account \nvalue each day.  all the money you gained or lost each day was reflected \nin the cumulative totals of your account value, so that has to still \nmake sense on the day you close the transaction, and you do that by \nbacking out the accumulated unrealized gain when you realize it.\n\nRegards,\n\nBrian\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
+      "body_snippet": "On 12/30/2014 02:50 AM, Derek Wong wrote:\n> I have been diving into the workings of blotter just to understand it\n> better. I have been using the bbands.R demo that is in the quantstrat\n> project. It ",
+      "thread_id": "thread-9aa977c9ecbf",
+      "thread_depth": 1,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-60d80c04a95a",
+      "message_id": "<CAK2H+ed_q8VvnfC+xnLchP05_vbdf4nngU6KugdzTE8B9trVRQ@mail.gmail.com>",
+      "from_name": "Mark Knecht",
+      "from_email_hash": "60c26093da6ef493629140d820b18c224125bb61884589ce4143ff939051ea92",
+      "date": "2014-12-31T09:52:37-08:00",
+      "subject": "[R-SIG-Finance] Quantitative Trading with R: Understanding Mathematical and ...",
+      "subject_clean": "Quantitative Trading with R: Understanding Mathematical and ...",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I wonder if anyone has had a chance to read this book prior to it's\navailability on Amazon next week?\n\nhttp://www.amazon.com/gp/product/1137354070\n\nIt appears to be the author's first book.\n\nCheers,\nMark",
+      "body_snippet": "I wonder if anyone has had a chance to read this book prior to it's\navailability on Amazon next week?\n\nhttp://www.amazon.com/gp/product/1137354070\n\nIt appears to be the author's first book.\n\nCheers,\nM",
+      "thread_id": "thread-60d80c04a95a",
+      "thread_depth": 0,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-0ceb71274591",
+      "message_id": "<21668.20148.817274.888017@max.nulle.part>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2014-12-31T13:29:56-06:00",
+      "subject": "[R-SIG-Finance] Quantitative Trading with R: Understanding\tMathematical and ...",
+      "subject_clean": "Quantitative Trading with R: Understanding\tMathematical and ...",
+      "in_reply_to": "<CAK2H+ed_q8VvnfC+xnLchP05_vbdf4nngU6KugdzTE8B9trVRQ@mail.gmail.com>",
+      "references": [
+        "<CAK2H+ed_q8VvnfC+xnLchP05_vbdf4nngU6KugdzTE8B9trVRQ@mail.gmail.com>"
+      ],
+      "body_plain": "On 31 December 2014 at 09:52, Mark Knecht wrote:\n| I wonder if anyone has had a chance to read this book prior to it's\n| availability on Amazon next week?\n| \n| http://www.amazon.com/gp/product/1137354070\n| \n| It appears to be the author's first book.\n\nHarry was kind enough to send me a courtesy copy which I received yesterday.\n\nThat said, I have not read it cover to cover.  But the [few] spot checks I\nmanaged to do looked fine.  \n\nDirk\n\n-- \nhttp://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 31 December 2014 at 09:52, Mark Knecht wrote:\n| I wonder if anyone has had a chance to read this book prior to it's\n| availability on Amazon next week?\n| \n| http://www.amazon.com/gp/product/1137354",
+      "thread_id": "thread-60d80c04a95a",
+      "thread_depth": 1,
+      "month": "2014-12"
+    },
+    {
+      "id": "msg-29f0024f2e33",
+      "message_id": "<CA+oJuEHovLtCGSxyq5nMaU+8S8w8DFmXQ=fPZzrQYp9rgQYBJQ@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "82540aa84df90b083b58f5752a77274af680540119bfecc0c0436c59ddd13e5c",
+      "date": "2014-12-31T15:03:53-05:00",
+      "subject": "[R-SIG-Finance] Quantitative Trading with R: Understanding Mathematical and ...",
+      "subject_clean": "Quantitative Trading with R: Understanding Mathematical and ...",
+      "in_reply_to": "<21668.20148.817274.888017@max.nulle.part>",
+      "references": [
+        "<CAK2H+ed_q8VvnfC+xnLchP05_vbdf4nngU6KugdzTE8B9trVRQ@mail.gmail.com>",
+        "<21668.20148.817274.888017@max.nulle.part>"
+      ],
+      "body_plain": "For those that care to look, I wrote the quantstrat chapter.\n\nOn Wed, Dec 31, 2014 at 2:29 PM, Dirk Eddelbuettel <edd at debian.org> wrote:\n\n>\n> On 31 December 2014 at 09:52, Mark Knecht wrote:\n> | I wonder if anyone has had a chance to read this book prior to it's\n> | availability on Amazon next week?\n> |\n> | http://www.amazon.com/gp/product/1137354070\n> |\n> | It appears to be the author's first book.\n>\n> Harry was kind enough to send me a courtesy copy which I received\n> yesterday.\n>\n> That said, I have not read it cover to cover.  But the [few] spot checks I\n> managed to do looked fine.\n>\n> Dirk\n>\n> --\n> http://dirk.eddelbuettel.com | @eddelbuettel | edd at debian.org\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "For those that care to look, I wrote the quantstrat chapter.\n\nOn Wed, Dec 31, 2014 at 2:29 PM, Dirk Eddelbuettel <edd at debian.org> wrote:\n\n>\n> On 31 December 2014 at 09:52, Mark Knecht wrote:\n> | I ",
+      "thread_id": "thread-60d80c04a95a",
+      "thread_depth": 2,
+      "month": "2014-12"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-c120df261778",
+      "subject": "IBrokers question",
+      "message_count": 2,
+      "participants": [
+        "Robert Schien",
+        "cen six"
+      ],
+      "started": "2014-12-01T15:51:50+01:00",
+      "last_reply": "2014-12-01T17:24:17+01:00",
+      "root_message_id": "msg-c120df261778"
+    },
+    {
+      "id": "thread-6333488a1840",
+      "subject": "Optimization of ARFIMA in rugarch - Quick question and context",
+      "message_count": 2,
+      "participants": [
+        "Nicholas Manganaro",
+        "alexios ghalanos"
+      ],
+      "started": "2014-12-02T16:57:22-05:00",
+      "last_reply": "2014-12-02T22:27:26+00:00",
+      "root_message_id": "msg-6333488a1840"
+    },
+    {
+      "id": "thread-26c740d66227",
+      "subject": "Optimization of ARFIMA in rugarch - Quick question and context",
+      "message_count": 1,
+      "participants": [
+        "Nicholas Manganaro"
+      ],
+      "started": "2014-12-02T22:24:56-05:00",
+      "last_reply": "2014-12-02T22:24:56-05:00",
+      "root_message_id": "msg-26c740d66227"
+    },
+    {
+      "id": "thread-d9dd00fd90db",
+      "subject": "Optimization of ARFIMA in rugarch - Quick question and context",
+      "message_count": 1,
+      "participants": [
+        "alexios ghalanos"
+      ],
+      "started": "2014-12-04T11:15:49+00:00",
+      "last_reply": "2014-12-04T11:15:49+00:00",
+      "root_message_id": "msg-d9dd00fd90db"
+    },
+    {
+      "id": "thread-3789ff1921ce",
+      "subject": "how to rename stock codes?",
+      "message_count": 2,
+      "participants": [
+        "Marco Sun"
+      ],
+      "started": "2014-12-04T15:32:12+08:00",
+      "last_reply": "2014-12-04T15:57:41+08:00",
+      "root_message_id": "msg-3789ff1921ce"
+    },
+    {
+      "id": "thread-77776fec38a4",
+      "subject": "rename a large number of stock codes",
+      "message_count": 3,
+      "participants": [
+        "Marco Sun",
+        "Nick White"
+      ],
+      "started": "2014-12-04T16:58:30+08:00",
+      "last_reply": "2014-12-05T11:50:04+08:00",
+      "root_message_id": "msg-77776fec38a4"
+    },
+    {
+      "id": "thread-7dd53aab206f",
+      "subject": "Preparing data for Superior predictive ability (SPA) test",
+      "message_count": 1,
+      "participants": [
+        "Karthik Raju"
+      ],
+      "started": "2014-12-05T13:47:27+05:30",
+      "last_reply": "2014-12-05T13:47:27+05:30",
+      "root_message_id": "msg-7dd53aab206f"
+    },
+    {
+      "id": "thread-350105363a60",
+      "subject": "Reply to: How can I get Japanese Stock Daily Data in R?",
+      "message_count": 1,
+      "participants": [
+        "Joshua Ulrich"
+      ],
+      "started": "2014-12-07T17:00:52-06:00",
+      "last_reply": "2014-12-07T17:00:52-06:00",
+      "root_message_id": "msg-350105363a60"
+    },
+    {
+      "id": "thread-e0e8e5b598d9",
+      "subject": "Violation of underlying assumptions - ARMA-GARCH",
+      "message_count": 1,
+      "participants": [
+        "Lasse Thorst"
+      ],
+      "started": "2014-12-09T08:15:21+01:00",
+      "last_reply": "2014-12-09T08:15:21+01:00",
+      "root_message_id": "msg-e0e8e5b598d9"
+    },
+    {
+      "id": "thread-7839a51eaabd",
+      "subject": "Rugarch external regressor estimation",
+      "message_count": 1,
+      "participants": [
+        "Luca Trapin"
+      ],
+      "started": "2014-12-09T15:44:15+01:00",
+      "last_reply": "2014-12-09T15:44:15+01:00",
+      "root_message_id": "msg-7839a51eaabd"
+    },
+    {
+      "id": "thread-19b960dd747e",
+      "subject": "[rugarch:realGARCH] A good proxy for close to close volatility?",
+      "message_count": 1,
+      "participants": [
+        "Ivan Popivanov"
+      ],
+      "started": "2014-12-09T19:30:26+00:00",
+      "last_reply": "2014-12-09T19:30:26+00:00",
+      "root_message_id": "msg-19b960dd747e"
+    },
+    {
+      "id": "thread-d1fcf7516264",
+      "subject": "Bug in ruleOrderProc - txnfees is not a numeric?",
+      "message_count": 1,
+      "participants": [
+        "Gei Lin"
+      ],
+      "started": "2014-12-10T12:52:34-05:00",
+      "last_reply": "2014-12-10T12:52:34-05:00",
+      "root_message_id": "msg-d1fcf7516264"
+    },
+    {
+      "id": "thread-ab6ad1c423b2",
+      "subject": "Using a custom Spread to execute onto the 2 underlying instruments - Quantstrat Help",
+      "message_count": 4,
+      "participants": [
+        "Derek Wong",
+        "Ilya Kipnis",
+        "Joshua Ulrich"
+      ],
+      "started": "2014-12-11T15:31:48+08:00",
+      "last_reply": "2014-12-22T11:50:43+08:00",
+      "root_message_id": "msg-ab6ad1c423b2"
+    },
+    {
+      "id": "thread-44cf218d54fe",
+      "subject": "Interactive Brokers - Adjustable trailing stop using API?",
+      "message_count": 1,
+      "participants": [
+        "Raghuraman Ramachandran"
+      ],
+      "started": "2014-12-12T12:05:11+00:00",
+      "last_reply": "2014-12-12T12:05:11+00:00",
+      "root_message_id": "msg-44cf218d54fe"
+    },
+    {
+      "id": "thread-d1dc675fe389",
+      "subject": "selecting specific rows from an xts object",
+      "message_count": 3,
+      "participants": [
+        "Andreas Voellenklee",
+        "David Reiner",
+        "Robert Schien"
+      ],
+      "started": "2014-12-15T15:31:38+01:00",
+      "last_reply": "2014-12-15T09:33:10-06:00",
+      "root_message_id": "msg-d1dc675fe389"
+    },
+    {
+      "id": "thread-46511e79a6e1",
+      "subject": "Help replicating a paper",
+      "message_count": 1,
+      "participants": [
+        "Ilya Kipnis"
+      ],
+      "started": "2014-12-19T21:15:11-05:00",
+      "last_reply": "2014-12-19T21:15:11-05:00",
+      "root_message_id": "msg-46511e79a6e1"
+    },
+    {
+      "id": "thread-757d6d87752c",
+      "subject": "Prototyped support for \"partial\" and parallelism to rollapply.xts",
+      "message_count": 3,
+      "participants": [
+        "Ivan Popivanov",
+        "Joshua Ulrich"
+      ],
+      "started": "2014-12-20T05:05:25+00:00",
+      "last_reply": "2014-12-22T03:32:10+00:00",
+      "root_message_id": "msg-757d6d87752c"
+    },
+    {
+      "id": "thread-9aa977c9ecbf",
+      "subject": "Period.Unrealized.PL always sums to 0 after a transaction, why? - Blotter/ Quantstrat",
+      "message_count": 2,
+      "participants": [
+        "Brian G. Peterson",
+        "Derek Wong"
+      ],
+      "started": "2014-12-30T16:50:55+08:00",
+      "last_reply": "2014-12-30T04:27:18-06:00",
+      "root_message_id": "msg-9aa977c9ecbf"
+    },
+    {
+      "id": "thread-60d80c04a95a",
+      "subject": "Quantitative Trading with R: Understanding Mathematical and ...",
+      "message_count": 3,
+      "participants": [
+        "Dirk Eddelbuettel",
+        "Ilya Kipnis",
+        "Mark Knecht"
+      ],
+      "started": "2014-12-31T09:52:37-08:00",
+      "last_reply": "2014-12-31T15:03:53-05:00",
+      "root_message_id": "msg-60d80c04a95a"
+    }
+  ]
+}

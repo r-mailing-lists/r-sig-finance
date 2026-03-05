@@ -1,0 +1,1041 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2007-04",
+  "messages": [
+    {
+      "id": "msg-a12f835e7097",
+      "message_id": "<17f3d5a40704030448i149b708g4ede4c0bcaebe30f@mail.gmail.com>",
+      "from_name": "Tormod Sætre",
+      "from_email_hash": "a94cd86f23c25a468b4cdf26462a976fe6f08733f02f892506c96dd855110584",
+      "date": "2007-04-03T11:48:13Z",
+      "subject": "[R-SIG-Finance]  get.hist.quote",
+      "subject_clean": "get.hist.quote",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": ">>All of a sudden get.hist.quote cease to function, i switched to zoo after i\n>>totally failed to get yahooImport to work. I've been using the below R\n>>snippet for weeks without any problems what so ever.\n\n><snip>\n\n>>Error in if (!quiet && dat[n] != start) cat(format(dat[n], \"time series\n>>starts %Y-%m-%d\\n\")) :\n>>          missing value where TRUE/FALSE needed\n\n>This is because Yahoo recently changed the date format of its CSV files from\n>\"%d-%m-%y\" to \"%Y-%m-%d\".  All that needs to be changed in 'get.hist.quote'\n>is this line of code:\n>from: dat <- as.Date(dat, \"%d-%b-%Y\")\n>to: dat <- as.Date(dat, \"%Y-%m-%d\")\n\n>Other similar functions (e.g. 'yahooImport') will likely have the same\n>problem.\n\nYes - or at least I can't get yahooImport to work. I have tried to fix\nit by manipulating the function, but with no success. Can anyone help\nme?\n\nRegards\n\nTormod S?tre",
+      "body_snippet": ">>All of a sudden get.hist.quote cease to function, i switched to zoo after i\n>>totally failed to get yahooImport to work. I've been using the below R\n>>snippet for weeks without any problems what so ",
+      "thread_id": "thread-a12f835e7097",
+      "thread_depth": 0,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-9f11723443fa",
+      "message_id": "<Pine.LNX.4.61.0704051136460.2925@mgmt.iisc.ernet.in>",
+      "from_name": "Mukhopadyay.C",
+      "from_email_hash": "9295d3edee10a99fbb77aa0afffd7a1da85b48485a0fea638ff35576bc64e9b6",
+      "date": "2007-04-05T11:41:35+05:30",
+      "subject": "[R-SIG-Finance] Problems in fSeries 240.10068",
+      "subject_clean": "Problems in fSeries 240.10068",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi:\n\nI am unable to use any function in fSeries 240.10068.\nFor example,\ngarchFit(ts(ret)~arma(1,1)+garch(1,1))\nis giving\nError in eval(expr, envir, enclos) : could not find function \n\".modelSeries\"\nsource(\"/usr/local/lib/R/library/fSeries/demo/xmpDWChapter034.R\")\nis giving\nError in parse(file, n = -1, NULL, \"?\") : syntax error at\n1096:       )\n1097:     )\narmaFit(x ~ arma(2, 1)) is giving\nError in eval(expr, envir, enclos) : object \"package\" not found\n\nCan someone please help? Thanks in advance.",
+      "body_snippet": "Hi:\n\nI am unable to use any function in fSeries 240.10068.\nFor example,\ngarchFit(ts(ret)~arma(1,1)+garch(1,1))\nis giving\nError in eval(expr, envir, enclos) : could not find function \n\".modelSeries\"\nso",
+      "thread_id": "thread-9f11723443fa",
+      "thread_depth": 0,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-41d169a7a6dc",
+      "message_id": "<BAY134-F29701172B6F3A2AC64CD86C5640@phx.gbl>",
+      "from_name": "William Ferreira",
+      "from_email_hash": "d316a5e53ab1c149284caef60519cfd2b59c948210cb700a481393c16cd37c89",
+      "date": "2007-04-06T14:18:29+01:00",
+      "subject": "[R-SIG-Finance] Interpretation of results from ca.jo in urca package",
+      "subject_clean": "Interpretation of results from ca.jo in urca package",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello\n\nI am using the ca.jo function in urca 1.0-9 running inside R-2.4.1. I have \nbeen performing cointegration analysis on log stock-price time series; I am \nlooking for co-integration between pairs of stocks. I am not testing the \nlog-price of the stock explicitly for I(1), as I am taking it as a given. \nNonetheless I sometimes get results of the form:\n\n######################\n# Johansen-Procedure #\n######################\n\nTest type: trace statistic , without linear trend and constant in \ncointegration\n\nEigenvalues (lambda):\n[1] 1.662315e-02 6.273138e-03 2.383972e-18\n\nValues of teststatistic and critical values of test:\n\n          test 10pct  5pct  1pct\nr <= 1 |  7.05  2.82  3.96  6.94\nr = 0  | 25.82 13.34 15.20 19.31\n\n\nwhich lead me to reject the hypothesis of at most one cointegrating vector, \nand therefore that all the variables must be I(0), which is not the case. \nAny idea what might be going wrong?\n\nSecondly, when I get a result which means I cannot reject (at the 5% level) \nthe likelihood of more than 1 co-integrating vectors (ie. the original \nseries were I(1)), then which matrix should I use to generate a series of \nresiduals; is it PI?, for example:\n\n######################\n# Johansen-Procedure #\n######################\n\nTest type: trace statistic , without linear trend and constant in \ncointegration\n\nEigenvalues (lambda):\n[1] 2.198524e-02 3.078562e-03 9.978092e-18\n\nValues of teststatistic and critical values of test:\n\n          test 10pct  5pct  1pct\nr <= 1 |  3.45  2.82  3.96  6.94\nr = 0  | 28.35 13.34 15.20 19.31\n\nEigenvectors, normalised to first column:\n(These are the cointegration relations)\n\n           datai.l1  dataj.l1   constant\ndatai.l1  1.0000000  1.000000  1.0000000\ndataj.l1 -0.4417583 -0.565435  0.7770033\nconstant -0.8937223 -0.431884 -9.0212883\n\nWeights W:\n(This is the loading matrix)\n\n            datai.l1      dataj.l1      constant\ndatai.d -0.035998263 -0.0009870617 -3.549719e-17\ndataj.d  0.004612461 -0.0021116569 -2.171292e-17\n\n(my print-out)\n\n[1] \"PI\"\n            datai.l1      dataj.l1     constant\ndatai.d -0.036985325  0.0164606502  0.032598747\ndataj.d  0.002500804 -0.0008435882 -0.003210269\n\nbecause sometimes I get very different looking residual series depending on \nwhether I use the first or second row of PI to construct the series. \nSometimes the residual series looks like a straight line which never crosses \nzero when I use row one, and for row two looks like a classic AR(m) series \nmean-reverting around zero (which is what I would expect), or vice-versa. \nCan anyone explain what is going on ?\n\nCaveat: this is my first time using R (or any other s/w) to apply \ntheoretical results to real data.\n\nKind regards\n\nBill",
+      "body_snippet": "Hello\n\nI am using the ca.jo function in urca 1.0-9 running inside R-2.4.1. I have \nbeen performing cointegration analysis on log stock-price time series; I am \nlooking for co-integration between pairs",
+      "thread_id": "thread-41d169a7a6dc",
+      "thread_depth": 0,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-e38e9ebab252",
+      "message_id": "<1HZqnc-293CAi0@fwd27.aul.t-online.de>",
+      "from_name": "Sandy.Lucka at t-online.de",
+      "from_email_hash": "44c0272e6af4bec15dd69fe909c64277ca0adc3aefff2803ad94d69b0bf49770",
+      "date": "2007-04-06T17:56:28+02:00",
+      "subject": "[R-SIG-Finance] R-SIG-Finance Digest, Vol 35, Issue 1",
+      "subject_clean": "R-SIG-Finance Digest, Vol 35, Issue 1",
+      "in_reply_to": "<mailman.17.1175767210.10478.r-sig-finance@stat.math.ethz.ch>",
+      "references": [
+        "<mailman.17.1175767210.10478.r-sig-finance@stat.math.ethz.ch>"
+      ],
+      "body_plain": "Hi, maybe you should try:\n\nmodel<-~arma(1,1)+~garch(1,1)\ngarchFit(model, data)\n\n@ armaFit(x ~ arma(2, 1)) I don't this expression\nmaybe try \n\narima(data, order=c(2,0,1))",
+      "body_snippet": "Hi, maybe you should try:\n\nmodel<-~arma(1,1)+~garch(1,1)\ngarchFit(model, data)\n\n@ armaFit(x ~ arma(2, 1)) I don't this expression\nmaybe try \n\narima(data, order=c(2,0,1))",
+      "thread_id": "thread-e38e9ebab252",
+      "thread_depth": 0,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-ba8b3369c2be",
+      "message_id": "<00cd01c7786d$725c04b0$6701a8c0@LAPTOP>",
+      "from_name": "Ryan Sheftel",
+      "from_email_hash": "27809792311b635cdae46e9f71b571c3a0fbb4f3b31c5357234163c3e3f405d7",
+      "date": "2007-04-06T13:03:05-04:00",
+      "subject": "[R-SIG-Finance] R and FinCad",
+      "subject_clean": "R and FinCad",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "This is my first post to this list, so apologies in advance if I am doing\nsomething wrong.\n\nMy question is if anyone has wrapped the C++ SDK version of FinCad Developer\nhttp://www.fincad.com/ into R. I am aware that it is possible, but also that\neach function must be wrapped individually. I wanted to know if anyone had\nbegun this process and we could share the code/work. I know that RMetrics\nand QuantLib exist and are open source, but they do not have enough of the\nanalytics yet to be a complete solution.\n\nThanks,\nRyan",
+      "body_snippet": "This is my first post to this list, so apologies in advance if I am doing\nsomething wrong.\n\nMy question is if anyone has wrapped the C++ SDK version of FinCad Developer\nhttp://www.fincad.com/ into R. ",
+      "thread_id": "thread-ba8b3369c2be",
+      "thread_depth": 0,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-3fd6ef3e6c56",
+      "message_id": "<SANCTUMFISERVER8dWM0000071e@sanctumfi.com>",
+      "from_name": "Robert Sams",
+      "from_email_hash": "67252a45820598ec41cf5f10749a914db54058236b66f8a0728ab05064f156e1",
+      "date": "2007-04-10T14:04:21+01:00",
+      "subject": "[R-SIG-Finance] R and FinCad",
+      "subject_clean": "R and FinCad",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Ryan,\n\nI've considered this and have corresponded with one of fincad's\ndevelopers regarding R wrappers to the developer kit. I'll email the\ncorrespondence to you directly as it contains allot of useful sample\ncode.\n\nDo you want to do this on windows or linux? I might be interested in\nworking with you on this.. need to decide whether I need it enough to\nwarrant the cost (around 15k usd, if i remember correctly).\n\nRegards,\nRobert \n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Ryan\nSheftel\nSent: 06 April 2007 18:03\nTo: r-sig-finance at stat.math.ethz.ch\nSubject: [R-SIG-Finance] R and FinCad\n\nThis is my first post to this list, so apologies in advance if I am\ndoing something wrong.\n\nMy question is if anyone has wrapped the C++ SDK version of FinCad\nDeveloper http://www.fincad.com/ into R. I am aware that it is possible,\nbut also that each function must be wrapped individually. I wanted to\nknow if anyone had begun this process and we could share the code/work.\nI know that RMetrics and QuantLib exist and are open source, but they do\nnot have enough of the analytics yet to be a complete solution.\n\nThanks,\nRyan\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.",
+      "body_snippet": "Hi Ryan,\n\nI've considered this and have corresponded with one of fincad's\ndevelopers regarding R wrappers to the developer kit. I'll email the\ncorrespondence to you directly as it contains allot of us",
+      "thread_id": "thread-3fd6ef3e6c56",
+      "thread_depth": 0,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-737a3687f6ef",
+      "message_id": "<fa03ca340704100940y2da7092bi6adcdba175820d40@mail.gmail.com>",
+      "from_name": "manos par",
+      "from_email_hash": "8f8b8a9c19936e3bfcaa3475813dbba5a1803adcb8d19493af2e91d5d6599434",
+      "date": "2007-04-10T19:40:30+03:00",
+      "subject": "[R-SIG-Finance]  Problems in fSeries 240.10068",
+      "subject_clean": "Problems in fSeries 240.10068",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070410/2be4a070/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070410/2be4a070/attachment.pl",
+      "thread_id": "thread-737a3687f6ef",
+      "thread_depth": 0,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-2be7eb65d767",
+      "message_id": "<2B5F7FE391C7F04D8A683918D7BAD6EF17A1BA@server15.corp.guzman.com>",
+      "from_name": "Brian Wu",
+      "from_email_hash": "3a25a899fbfcd07733c5657a346e3d8d77d83fbd5420500add41eed7bb87d918",
+      "date": "2007-04-10T14:32:51-04:00",
+      "subject": "[R-SIG-Finance]   Question about re-order the dataframe",
+      "subject_clean": "Question about re-order the dataframe",
+      "in_reply_to": "<fa03ca340704100940y2da7092bi6adcdba175820d40@mail.gmail.com>",
+      "references": [],
+      "body_plain": "Hi, \nI have a data.frame as following,\n\n     \t   DATE TICKER    CLOSE\n1  2000-06-30      A 73.75000\n2  2000-07-07      A 67.43750\n3  2000-07-14      A 76.87500\n4  2000-07-21      A 47.50000\n5  2000-07-28      A 41.31250\n6  2000-06-30     BB 24.98000\n7  2000-07-07     BB 23.60500\n8  2000-07-14     BB 28.91750\n9  2000-07-21     BB 27.73000\n10 2000-07-28     BB 26.16750\n11 2000-06-30   \tCC 11.86500\n12 2000-07-07   \tCC 11.67750\n13 2000-07-14   \tCC 11.55250\n14 2000-07-21   \tCC 11.49000\n15 2000-07-28   \tCC 11.61500\n16 2000-06-30    \tDD 4.15625\n17 2000-07-07     DD 4.62500\n18 2000-07-14     DD  4.68750\n19 2000-07-21    \tDD 4.56250\n20 2000-07-28     DD 4.18750\n\nI wanna generate a matrix based on this data.frame has the TICKER as row nams and DATE as column names.\nThe matrix should be look like this:\n\t\n\t2000-06-30\t2000-07-07\t2000-07-14\t2000-07-21\t2000-07-28\nA \t73.75000\t 67.43750\t 76.87500 \t47.50000\t 41.31250\nBB\t.....\nCC\t.....\nDD\t.....\n\nIs there any easy way to do that?\nOne problem is there maybe TICKER doesn't have 5 CLOSEs.\n\nThanks for any suggestion!!!\n\nBrian",
+      "body_snippet": "Hi, \nI have a data.frame as following,\n\n     \t   DATE TICKER    CLOSE\n1  2000-06-30      A 73.75000\n2  2000-07-07      A 67.43750\n3  2000-07-14      A 76.87500\n4  2000-07-21      A 47.50000\n5  2000-07",
+      "thread_id": "thread-737a3687f6ef",
+      "thread_depth": 1,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-fe960fd2553f",
+      "message_id": "<971536df0704101204l6ba1cf76he221a42e0450e68c@mail.gmail.com>",
+      "from_name": "Gabor Grothendieck",
+      "from_email_hash": "2252aad0894f89a900da56345b1c4e0414e3b441d448c40b473f7149e06e5a05",
+      "date": "2007-04-10T15:04:18-04:00",
+      "subject": "[R-SIG-Finance] Question about re-order the dataframe",
+      "subject_clean": "Question about re-order the dataframe",
+      "in_reply_to": "<2B5F7FE391C7F04D8A683918D7BAD6EF17A1BA@server15.corp.guzman.com>",
+      "references": [
+        "<fa03ca340704100940y2da7092bi6adcdba175820d40@mail.gmail.com>",
+        "<2B5F7FE391C7F04D8A683918D7BAD6EF17A1BA@server15.corp.guzman.com>"
+      ],
+      "body_plain": "Use merge.  You can omit the varying= argument and the line before\nthe merge statement if you are not too fussy about the column names.\n\nDF <- head(DF, 19) # last ticker now only has 4 closes\nDATE.names <- unique(as.character(DF$DATE))\nreshape(DF, direction = \"wide\", idvar = \"TICKER\", timevar = \"DATE\",\n   varying = list(DATE.names))\n\n\nOn 4/10/07, Brian Wu <bwu at guzman.com> wrote:\n> Hi,\n> I have a data.frame as following,\n>\n>           DATE TICKER    CLOSE\n> 1  2000-06-30      A 73.75000\n> 2  2000-07-07      A 67.43750\n> 3  2000-07-14      A 76.87500\n> 4  2000-07-21      A 47.50000\n> 5  2000-07-28      A 41.31250\n> 6  2000-06-30     BB 24.98000\n> 7  2000-07-07     BB 23.60500\n> 8  2000-07-14     BB 28.91750\n> 9  2000-07-21     BB 27.73000\n> 10 2000-07-28     BB 26.16750\n> 11 2000-06-30           CC 11.86500\n> 12 2000-07-07           CC 11.67750\n> 13 2000-07-14           CC 11.55250\n> 14 2000-07-21           CC 11.49000\n> 15 2000-07-28           CC 11.61500\n> 16 2000-06-30           DD 4.15625\n> 17 2000-07-07     DD 4.62500\n> 18 2000-07-14     DD  4.68750\n> 19 2000-07-21           DD 4.56250\n> 20 2000-07-28     DD 4.18750\n>\n> I wanna generate a matrix based on this data.frame has the TICKER as row nams and DATE as column names.\n> The matrix should be look like this:\n>\n>        2000-06-30      2000-07-07      2000-07-14      2000-07-21      2000-07-28\n> A       73.75000         67.43750        76.87500       47.50000         41.31250\n> BB      .....\n> CC      .....\n> DD      .....\n>\n> Is there any easy way to do that?\n> One problem is there maybe TICKER doesn't have 5 CLOSEs.\n>\n> Thanks for any suggestion!!!\n>\n> Brian\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>",
+      "body_snippet": "Use merge.  You can omit the varying= argument and the line before\nthe merge statement if you are not too fussy about the column names.\n\nDF <- head(DF, 19) # last ticker now only has 4 closes\nDATE.nam",
+      "thread_id": "thread-737a3687f6ef",
+      "thread_depth": 2,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-03af44aab8fb",
+      "message_id": "<Pine.LNX.4.61.0704111241100.2480@mgmt.iisc.ernet.in>",
+      "from_name": "Mukhopadyay.C",
+      "from_email_hash": "9295d3edee10a99fbb77aa0afffd7a1da85b48485a0fea638ff35576bc64e9b6",
+      "date": "2007-04-11T12:46:21+05:30",
+      "subject": "[R-SIG-Finance] Problems in fSeries 240.10068",
+      "subject_clean": "Problems in fSeries 240.10068",
+      "in_reply_to": "<fa03ca340704100940y2da7092bi6adcdba175820d40@mail.gmail.com>",
+      "references": [
+        "<fa03ca340704100940y2da7092bi6adcdba175820d40@mail.gmail.com>"
+      ],
+      "body_plain": "Thanks for the input. Yes, the previous version fSeries 201.10060\nworks fine. However in this version one cannot simultaneously fit\nan ARMA-GARCH model. One has to first fit ARMA and then fit GARCH\nto its residuals separately which is not same as ARMA-GARCH. Thus\nany help in this regard (with say fSeries 201.10060 or the tseries\npackage) will be highly appreciated.\n\n\nOn Tue, 10 Apr 2007, manos par wrote:\n\n> Well, I have the same problem on my 2.4.1 R installation and I can't figure\n> out what I'm doing wrong (To be honest I hope Wurtz did something wrong when\n> programming...)\n>\n> I rolled back to my previous fSeries package and everything is OK\n>\n> \t[[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n> -- \n> This message has been scanned for viruses and\n> dangerous content by MailScanner, and is\n> believed to be clean.\n>",
+      "body_snippet": "Thanks for the input. Yes, the previous version fSeries 201.10060\nworks fine. However in this version one cannot simultaneously fit\nan ARMA-GARCH model. One has to first fit ARMA and then fit GARCH\nto",
+      "thread_id": "thread-737a3687f6ef",
+      "thread_depth": 1,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-4dbf209bad1c",
+      "message_id": "<20070411174441.GA86316@tehun.pair.com>",
+      "from_name": "Andrew Piskorski",
+      "from_email_hash": "7ba288058383c6a3ea095413cedc140865ba579d780f5f4c61b80cc7b52fb770",
+      "date": "2007-04-11T13:44:41-04:00",
+      "subject": "[R-SIG-Finance] R and FinCad",
+      "subject_clean": "R and FinCad",
+      "in_reply_to": "<00cd01c7786d$725c04b0$6701a8c0@LAPTOP>",
+      "references": [
+        "<00cd01c7786d$725c04b0$6701a8c0@LAPTOP>"
+      ],
+      "body_plain": "On Fri, Apr 06, 2007 at 01:03:05PM -0400, Ryan Sheftel wrote:\n\n> My question is if anyone has wrapped the C++ SDK version of FinCad Developer\n> http://www.fincad.com/ into R. I am aware that it is possible, but also that\n\nI'm not familiar with FinCad.  Could you comment on what you've found\nto be its particular strengths vs. weaknesses?  And perhaps\ncompare/contrast it to other libraries out there, e.g. TIPS for bonds,\nor NAG for stuff that's not necessarily finance specific?\n\nAlso, how do they license FinCad, and what's its ballpark cost?  (They\ndon't seem to have that info on their website.)\n\n  http://tipsinc.com/prods.htm\n  http://www.nag.co.uk/\n\n-- \nAndrew Piskorski <atp at piskorski.com>\nhttp://www.piskorski.com/",
+      "body_snippet": "On Fri, Apr 06, 2007 at 01:03:05PM -0400, Ryan Sheftel wrote:\n\n> My question is if anyone has wrapped the C++ SDK version of FinCad Developer\n> http://www.fincad.com/ into R. I am aware that it is pos",
+      "thread_id": "thread-ba8b3369c2be",
+      "thread_depth": 1,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-0303703dcc2f",
+      "message_id": "<1aa19fc00704111925q74b41750r49564b3ea3f41d62@mail.gmail.com>",
+      "from_name": "Yong Xiao",
+      "from_email_hash": "a2daa61f902fe3b39068e32f01b971ed3bcb5986e222d89b4015beed49269fad",
+      "date": "2007-04-12T10:25:07+08:00",
+      "subject": "[R-SIG-Finance] R and FinCad",
+      "subject_clean": "R and FinCad",
+      "in_reply_to": "<SANCTUMFISERVER8dWM0000071e@sanctumfi.com>",
+      "references": [
+        "<SANCTUMFISERVER8dWM0000071e@sanctumfi.com>"
+      ],
+      "body_plain": "FinCad can be used to price derivatives. It's distributed in Excel lib\n(FinCad XL) and C++ lib.\n\nBy the way, Ryan and Robert, do you have any commnet on FinCad? I\nrecently used FinCad to price a CMS spread note, but found the price\nmuch different from the dealer's quotes.\n\nRegards,\nYong\n\nOn 4/10/07, Robert Sams <robert at sanctumfi.com> wrote:\n> Hi Ryan,\n>\n> I've considered this and have corresponded with one of fincad's\n> developers regarding R wrappers to the developer kit. I'll email the\n> correspondence to you directly as it contains allot of useful sample\n> code.\n>\n> Do you want to do this on windows or linux? I might be interested in\n> working with you on this.. need to decide whether I need it enough to\n> warrant the cost (around 15k usd, if i remember correctly).\n>\n> Regards,\n> Robert\n>\n> -----Original Message-----\n> From: r-sig-finance-bounces at stat.math.ethz.ch\n> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Ryan\n> Sheftel\n> Sent: 06 April 2007 18:03\n> To: r-sig-finance at stat.math.ethz.ch\n> Subject: [R-SIG-Finance] R and FinCad\n>\n> This is my first post to this list, so apologies in advance if I am\n> doing something wrong.\n>\n> My question is if anyone has wrapped the C++ SDK version of FinCad\n> Developer http://www.fincad.com/ into R. I am aware that it is possible,\n> but also that each function must be wrapped individually. I wanted to\n> know if anyone had begun this process and we could share the code/work.\n> I know that RMetrics and QuantLib exist and are open source, but they do\n> not have enough of the analytics yet to be a complete solution.\n>\n> Thanks,\n> Ryan\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>",
+      "body_snippet": "FinCad can be used to price derivatives. It's distributed in Excel lib\n(FinCad XL) and C++ lib.\n\nBy the way, Ryan and Robert, do you have any commnet on FinCad? I\nrecently used FinCad to price a CMS s",
+      "thread_id": "thread-3fd6ef3e6c56",
+      "thread_depth": 1,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-c33a476937a3",
+      "message_id": "<SANCTUMFISERVERQT4500000b70@sanctumfi.com>",
+      "from_name": "Robert Sams",
+      "from_email_hash": "67252a45820598ec41cf5f10749a914db54058236b66f8a0728ab05064f156e1",
+      "date": "2007-04-12T13:08:12+01:00",
+      "subject": "[R-SIG-Finance] R and FinCad",
+      "subject_clean": "R and FinCad",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I've used FinCadXL for over a year. So far, all calculations approximate\nreasonably well to bloomberg analytics and dealer valuations (although I\nuse it primarily for pricing vanilla swaps, swaptions, and bond math).\nIt is the most comprehensive function suite for interest rate\nderivatives and benefits from being (I think) the most widely used\nlibrary in the industry. Documentation is reasonably good.\n\nBut it is a binary-only library. The world would be a better place if\nthere was critical mass behind something like QuantLib.\n\nRobert\n\n-----Original Message-----\nFrom: Yong Xiao [mailto:yxiaomail at gmail.com] \nSent: 12 April 2007 03:25\nTo: Robert Sams\nCc: Ryan Sheftel; r-sig-finance at stat.math.ethz.ch\nSubject: Re: [R-SIG-Finance] R and FinCad\n\nFinCad can be used to price derivatives. It's distributed in Excel lib\n(FinCad XL) and C++ lib.\n\nBy the way, Ryan and Robert, do you have any commnet on FinCad? I\nrecently used FinCad to price a CMS spread note, but found the price\nmuch different from the dealer's quotes.\n\nRegards,\nYong\n\nOn 4/10/07, Robert Sams <robert at sanctumfi.com> wrote:\n> Hi Ryan,\n>\n> I've considered this and have corresponded with one of fincad's \n> developers regarding R wrappers to the developer kit. I'll email the \n> correspondence to you directly as it contains allot of useful sample \n> code.\n>\n> Do you want to do this on windows or linux? I might be interested in \n> working with you on this.. need to decide whether I need it enough to \n> warrant the cost (around 15k usd, if i remember correctly).\n>\n> Regards,\n> Robert\n>\n> -----Original Message-----\n> From: r-sig-finance-bounces at stat.math.ethz.ch\n> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Ryan \n> Sheftel\n> Sent: 06 April 2007 18:03\n> To: r-sig-finance at stat.math.ethz.ch\n> Subject: [R-SIG-Finance] R and FinCad\n>\n> This is my first post to this list, so apologies in advance if I am \n> doing something wrong.\n>\n> My question is if anyone has wrapped the C++ SDK version of FinCad \n> Developer http://www.fincad.com/ into R. I am aware that it is \n> possible, but also that each function must be wrapped individually. I \n> wanted to know if anyone had begun this process and we could share the\ncode/work.\n> I know that RMetrics and QuantLib exist and are open source, but they \n> do not have enough of the analytics yet to be a complete solution.\n>\n> Thanks,\n> Ryan\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list \n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list \n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>",
+      "body_snippet": "I've used FinCadXL for over a year. So far, all calculations approximate\nreasonably well to bloomberg analytics and dealer valuations (although I\nuse it primarily for pricing vanilla swaps, swaptions,",
+      "thread_id": "thread-c33a476937a3",
+      "thread_depth": 0,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-ca317280324d",
+      "message_id": "<20070412141659.GA10157@eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2007-04-12T09:16:59-05:00",
+      "subject": "[R-SIG-Finance] R and FinCad",
+      "subject_clean": "R and FinCad",
+      "in_reply_to": "<SANCTUMFISERVERQT4500000b70@sanctumfi.com>",
+      "references": [
+        "<SANCTUMFISERVERQT4500000b70@sanctumfi.com>"
+      ],
+      "body_plain": "On Thu, Apr 12, 2007 at 01:08:12PM +0100, Robert Sams wrote:\n> I've used FinCadXL for over a year. So far, all calculations approximate\n> reasonably well to bloomberg analytics and dealer valuations (although I\n> use it primarily for pricing vanilla swaps, swaptions, and bond math).\n> It is the most comprehensive function suite for interest rate\n> derivatives and benefits from being (I think) the most widely used\n> library in the industry. Documentation is reasonably good.\n> \n> But it is a binary-only library. The world would be a better place if\n> there was critical mass behind something like QuantLib.\n\nThere really should be!!  The Quantlibbers just sent out something\nlike a call for 'wider participation' on the -devel list.  \n\nMy RQuantLib project was always meant as 'proof of concept' only -- if\nfolks want to contribute I am more than happy to include their code,\nor to replace mine.  Dominick's rather nice additions are a good\nexample.\n\nAlso, Joe Wang did some fabulous work with the _automated_ SWIG glue\nthat provides essentially _all_ QL functions directly to R. Still not\nthat easy to use and somewhat heavy on memory but way more than a start.\n\nSo if a few people would make a serious push, we could have some\nreally sharp R/QL integration in a matter of weeks.  Some C++ needed,\nof course, but doable on both major OS flavours.\n\nDirk\n\n-- \nHell, there are no rules here - we're trying to accomplish something. \n                                                  -- Thomas A. Edison",
+      "body_snippet": "On Thu, Apr 12, 2007 at 01:08:12PM +0100, Robert Sams wrote:\n> I've used FinCadXL for over a year. So far, all calculations approximate\n> reasonably well to bloomberg analytics and dealer valuations (",
+      "thread_id": "thread-c33a476937a3",
+      "thread_depth": 1,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-e7db62c427fd",
+      "message_id": "<007001c77d6e$3142bb80$6701a8c0@LAPTOP>",
+      "from_name": "Ryan Sheftel",
+      "from_email_hash": "27809792311b635cdae46e9f71b571c3a0fbb4f3b31c5357234163c3e3f405d7",
+      "date": "2007-04-12T21:51:01-04:00",
+      "subject": "[R-SIG-Finance] R and FinCad",
+      "subject_clean": "R and FinCad",
+      "in_reply_to": "<20070412141659.GA10157@eddelbuettel.com>",
+      "references": [
+        "<SANCTUMFISERVERQT4500000b70@sanctumfi.com>",
+        "<20070412141659.GA10157@eddelbuettel.com>"
+      ],
+      "body_plain": "First thanks for everyone's responses. I will try to hit all of the\nquestions in one email:\n\n1) FinCAD is a commercially available library of financial functions that is\navailable in Excel form\n(http://www.fincad.com/default.asp?id=2000&s=Products&n=FINCAD%20XL) and a\ndeveloper library\n(http://www.fincad.com/default.asp?id=2100&s=Products&n=Fincad%20Developer).\n\n2) Online they have a list of functions that they offer and the User Guide:\nhttp://www.fincad.com/default.asp?id=17300&s=Support&n=References\n\n3) They have competitors in the space, (http://www.techhackers.com/) FinCAD\nis just the one I have used in the past and have found to be the best for my\nuses.\n\n4) The cost is about $3,500 for the Excel license, and the developer code is\nabout $15k for the base and then I think you pay per user. Certainly not\ncheap, but in the world of trading  technology the numbers are small.\n\n5) What does FinCAD have that is good, in my mind the following:\n\ta) Extensive product coverage (interest rates, options, and credit)\n\tb) their functions conform to market standards\n\tc) as a firm I found them very responsive\n\td) documentation is clearly written and usable to non-technologists\n\n6) Price matching. Generally speaking any pricing formula that is not closed\nform will mean that any two sources (FinCAD v. dealers) will have different\nprices, because the price is model based and require assumptions. For\nexample Bermudian options, no 2 dealers will agree on the price. Also having\nworked at a dealer, I can say that there is no reason to assume that dealer\npricing is \"correct\". I have seen plenty of bad code, and in some ways when\nyou only have one captive customer (your in-house desk), the quality control\nis going to be less than a FinCAD or QuantLib with many eyes. Either way, I\nthink FinCAD has enough users that any bad pricing is corrected.\n\nOK, so where does that take us. Several people have expressed similar\ninterest in R<>FinCAD connection, so perhaps Eric and myself can co-ordinate\nsomething where we share the effort.\n\nAll that said, I definitely think something like QuantLib is a better long\nterm solution. The blockage for me is:\n\n\ta) There is no modeling for credit, which is 1/2 of what we do\n\tb) The documentation is written for programmers from what I can see,\nso deploying it to end users means writing user docs. (if I am wrong please\ndirect me, I tried to search for it). Difficult to tell from the docs what\nthe financial math behind the functions is.\n\nWe would like to assist in making QuantLib the best solution so that it has\nthe models, and the R connectivity. Can someone recommend the lists or sites\nwe should connect with to get involved? Thanks.\n\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Dirk\nEddelbuettel\nSent: Thursday, April 12, 2007 10:17 AM\nTo: Robert Sams\nCc: r-sig-finance at stat.math.ethz.ch; Yong Xiao\nSubject: Re: [R-SIG-Finance] R and FinCad\n\nOn Thu, Apr 12, 2007 at 01:08:12PM +0100, Robert Sams wrote:\n> I've used FinCadXL for over a year. So far, all calculations \n> approximate reasonably well to bloomberg analytics and dealer \n> valuations (although I use it primarily for pricing vanilla swaps,\nswaptions, and bond math).\n> It is the most comprehensive function suite for interest rate \n> derivatives and benefits from being (I think) the most widely used \n> library in the industry. Documentation is reasonably good.\n> \n> But it is a binary-only library. The world would be a better place if \n> there was critical mass behind something like QuantLib.\n\nThere really should be!!  The Quantlibbers just sent out something like a\ncall for 'wider participation' on the -devel list.  \n\nMy RQuantLib project was always meant as 'proof of concept' only -- if folks\nwant to contribute I am more than happy to include their code, or to replace\nmine.  Dominick's rather nice additions are a good example.\n\nAlso, Joe Wang did some fabulous work with the _automated_ SWIG glue that\nprovides essentially _all_ QL functions directly to R. Still not that easy\nto use and somewhat heavy on memory but way more than a start.\n\nSo if a few people would make a serious push, we could have some really\nsharp R/QL integration in a matter of weeks.  Some C++ needed, of course,\nbut doable on both major OS flavours.\n\nDirk\n\n--\nHell, there are no rules here - we're trying to accomplish something. \n                                                  -- Thomas A. Edison\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.",
+      "body_snippet": "First thanks for everyone's responses. I will try to hit all of the\nquestions in one email:\n\n1) FinCAD is a commercially available library of financial functions that is\navailable in Excel form\n(http:",
+      "thread_id": "thread-c33a476937a3",
+      "thread_depth": 2,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-94a2adbb0530",
+      "message_id": "<149162.28276.qm@web35414.mail.mud.yahoo.com>",
+      "from_name": "John McHenry",
+      "from_email_hash": "3ede77c296078fdfc17f557ea0c7fb5a67fc63ec37b21939d1b671aca1dc698a",
+      "date": "2007-04-14T10:10:09-07:00",
+      "subject": "[R-SIG-Finance] Dynamic Conditional Correlation (Engle's model)?",
+      "subject_clean": "Dynamic Conditional Correlation (Engle's model)?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070414/02768eae/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070414/02768eae/attachment.pl",
+      "thread_id": "thread-94a2adbb0530",
+      "thread_depth": 0,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-4b82b63052ff",
+      "message_id": "<200704151141.21909.brian@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2007-04-15T11:41:21-05:00",
+      "subject": "[R-SIG-Finance] PerformanceAnalytics R package for Performance and Risk Analysis (v0.9.4)",
+      "subject_clean": "PerformanceAnalytics R package for Performance and Risk Analysis (v0.9.4)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "PerformanceAnalytics R package for Performance and Risk Analysis\n\nWe are pleased to release for the use and review of our peers and mentors\nthis R package of econometric tools for performance and risk analysis.\n\nThis version, v0.9.4, is the second public release of the \nPerformanceAnalytics package, and the first release to CRAN. This version \nadds significantly to the documentation and examples over that included \nwith version 0.9.3.  We have also added a few additional utility and \nwrapper functions where we felt they would be of general utility.\n\nPerformanceAnalytics R package version 0.9.4 (v1.0rc2)\n\nEconometric tools for performance and risk analysis.\n\nDescription:\nLibrary of econometric functions for performance and risk analysis of\nfinancial portfolios. This library aims to aid practitioners and\nresearchers in using the latest research in analysis of both normal and\nnon-normal return streams.\n\nWe created this library to include functionality that has been appearing\nin the academic literature on performance analysis and risk over the past\nseveral years, but had no functional equivalent in R.  In doing so, we\nalso found it valuable to have wrapper functions for functionality easily\nreplicated in R, so that we could access that functionality using a\nfunction with defaults and naming consistent with common usage in the\nfinance literature. The package covers Performance Analysis, Risk\nAnalysis (with a separate treatment of VaR), Summary Tables of related\nstatistics, Charts and Graphs, a variety of Wrappers and Utility\nfunctions, and some thoughts on work yet to be done.\n\nThis R package contains over 80 original functions, and several\nadditional wrappers to simplify parameters or provide accessible names\nfor other functionality.\n\nI suggest that you start with the summary documentation, either via the\nattached PerformanceAnalytics-package.pdf\nor as HTML or PDF with links here:\nhttp://braverock.com/brian/R/PerformanceAnalytics-package.html\nhttp://braverock.com/brian/R/PerformanceAnalytics-package.pdf\n\nBelow please find the index summary of all the functions included in the\ndocumentation.\n\nRegards,\n\n    - Brian\n\n             \n#########################################################################\nPerformanceAnalytics package index:\n\n-- A --\nActivePremium               Active Premium\napply.fromstart             calculate a function over an expanding window\n                            always starting from the beginning of the\n                            series\napply.rolling               calculate a function over a rolling window\n-- B --\nBetaCoK                     systematic kurtosis of an asset to the initial \n                            portfolio\nBetaCoKurtosis              systematic kurtosis of an asset to the initial \n                            portfolio\nBetaCoS                     systematic skewness of an asset to an initial \n                            portfolio\nBetaCoSkewness              systematic skewness of an asset to an initial \n                            portfolio\nBetaCoV                     systematic beta of an asset to an initial \n                            portfolio\nBetaCoVariance              systematic beta of an asset to an initial \n                            portfolio\n-- C --\nCalculateReturns            calculate simple or compound returns from \n                            prices\nCAPM.alpha                  calculate CAPM alpha\nCAPM.beta                   calculate CAPM beta\nCAPM.CML                    utility functions for CAPM CML, SML, and \n                            RiskPremium\nCAPM.RiskPremium            utility functions for CAPM CML, SML, and \n                            RiskPremium\nCAPM.SML.slope              utility functions for CAPM CML, SML, and \n                            RiskPremium\nCAPM.utils                  utility functions for CAPM CML, SML, and \n                            RiskPremium\nchart.Bar                   wrapper for barchart of returns\nchart.BarVaR                Periodic returns in a bar chart with\n                            risk metric overlay\nchart.Boxplot               box whiskers plot wrapper, with sensible \n                            defaults\nchart.Correlation           correlation matrix chart\nchart.Correlation.color     correlation matrix chart, in color\nchart.CumReturns            Cumulates and graphs a set of periodic returns\nchart.Drawdown              Time series chart of drawdowns through time\nchart.Histogram             histogram of returns\nchart.QQPlot                wrapper for qq.plot, with sensible defaults\nchart.RegressionDiagnostics     regression diagnostics charts\nchart.RelativePerformance   relative performance chart between multiple\n                            return series\nchart.RiskReturnScatter     scatter chart of returns vs risk for comparing\n                            multiple instruments\nchart.RollingCorrelation    chart rolling correlation fo multiple assets\nchart.RollingMean           chart the rolling mean return\nchart.RollingPerformance    wrapper to create a chart of rolling \n                            performance metrics in a line chart\nchart.RollingRegression     A wrapper to create charts of relative \n                            regression performance through time\nchart.Scatter               wrapper to draw scatter plot with sensible\n                            defaults\nchart.TimeSeries            Creates a time series chart with some \n                            extensions\ncharts.PerformanceSummary   Create combined wealth index, period \n                            performance, and drawdown chart\ncharts.RollingPerformance   rolling performance chart\ncharts.RollingRegression    A wrapper to create charts of relative \n                            regression performance through time\ncheckData                   check input data type and format to normalize\n                            to desired output type\ncheckDataMatrix             check input data type and format to normalize\ncheckDataVector             check input data type and format to normalize\ncheckDataZoo                check input data type and format to normalize\nCoKurtosis                  calculate the co-moment for kurtosis of two \n                            assets\nCoSkewness                  calculate the co-moment for skewness of two                                                         \n                            assets\ncummax.column               wrapper to calculate cummax on all columns\n                            in a matrix\ncumprod.column              wrapper to calculate cumprod on all columns\n                            in a matrix\n-- D --\ndownload.RiskFree           download 13-week US Treasury Bill Prices and\n                            calculate 13-week US Treasury Bill returns\ndownload.SP500PriceReturns  download S & P Prices and calculate S & P \n                            returns\nDownsideDeviation           function for downside risk of the return\n                            distribution\nDrawdowns                   Find the drawdowns and drawdown levels in a\n                            timeseries\n-- E --\nedhec                       EDHEC-Risk Hedge Fund Style Indices data\n-- F --\nfindDrawdowns               Find the drawdowns and drawdown levels in a\n                            timeseries.\n-- I --\nInformationRatio            InformationRatio = ActivePremium/TrackingError\n-- K --\nKellyRatio                  calculate Kelly criterion ratio (leverage or\n                            bet size) for a strategy\n-- M --\nmaxDrawdown                 caclulate the maximum drawdown from peak \n                            equity\nmean.utils                  calculate attributes relative to the mean of\n                            the observation series given, including \n                            geometric, stderr, LCL and UCL\nmodifiedVaR                 calculate various Value at Risk (VaR) measures\nmodSharpe                   calculate a modified Sharpe Ratio of \n                            Return/modVaR\nmoment.fourth               calculate the fourth mathematical moment of\n                            the return function\nmoment.third                calculate the third mathematical moment of the\n                            return function\n-- O --\nOmega                       calculate Omega for a return series\n-- P --\nPerformanceAnalytics        Econometric tools for performance and risk \n                            analysis.\n-- R --\nReturn.annualized           calculate an annualized return for comparing\n                            instruments with different length history\nReturn.cumulative           calculate a compounded (geometric) cumulative \n                            return\nReturn.excess               Calculates the returns of an asset in excess\n                            of the given risk free rate\nrollingCorrelation          rolling training period covariance/correlation\nrollingFunction             wrapper to apply functions over a rolling \n                            period\nrollingRegression           Rolling Regression on Returns\nrollingStat                 wrapper to apply any function over a rolling\n                            time window\n-- S --\nSemiDeviation               deviation below the mean of the return \n                            distribution\nSemiVariance                deviation below the mean of the return \n                            distribution\nSharpeRatio                 Sharpe Ratio\nSharpeRatio.annualized      calculate annualized Sharpe Ratio\nSharpeRatio.modified        calculate a modified Sharpe Ratio of \n                            Return/modVaR\nsortDrawdowns               order list of drawdowns from worst to best\nSortinoRatio                calculate Sortino Ratio of performance over\n                            downside risk\nstatsTable                  wrapper function for combining arbitrary \n                            function list into a table\nstd                         Standard Deviation of Monthly Returns\nStdDev                      Standard Deviation of Monthly Returns\nStdDev.annualized           calculate an annualized Standard Deviation\nSystematicBeta              systematic beta of an asset to an initial\n                            portfolio\nSystematicKurtosis          systematic kurtosis of an asset to the\n                            initial portfolio\nSystematicSkewness          systematic skewness of an asset to an\n                            initial portfolio\nSystematicVariance          systematic beta of an asset to an initial\n                            portfolio\n-- T --\ntable.AnnualizedReturns     Annualized Returns Summary\ntable.CAPM                  Asset-Pricing Model Summary\ntable.Correlation           calculate correlalations of multicolumn data\ntable.DownsideRisk          Downside Risk Summary\ntable.Drawdowns             Worst Drawdowns Summary\ntable.HigherMoments         Higher Moments Summary\ntable.MonthlyReturns        Monthly Returns Summary\ntable.Returns               Monthly and Calendar year Return table\ntable.RollingPeriods        Rolling Periods Summary\nTrackingError               Calculate Tracking Error of returns against a\n                            benchmark\nTreynorRatio                calculate Treynor Ratio of excess return over\n                            CAPM beta\n-- U --\nUpDownRatios                calculate metrics on up and down markets for\n                            the benchmark asset\n-- V --\nVaR                         calculate various Value at Risk (VaR) measures\nVaR.Beyond                  calculate BVaR or loss Beyond traditional \nmean-VaR\nVaR.CornishFisher           calculate various Value at Risk (VaR) measures\nVaR.Marginal                Calculate the Marginal VaR of each element\n                            of a portfolio\nVaR.mean                    calculate various Value at Risk (VaR) measures\nVaR.traditional             calculate various Value at Risk (VaR) measures\n\n#########################################################################\n R (http://r-project.org/) Econometrics for Performance and Risk Analysis\n\n Copyright (c) 2004-2007 Peter Carl and Brian G. Peterson\n\n This library is distributed under the GNU Public License (GPL)\n for full details see the file COPYING\n#########################################################################\n\nfor reference, the first release post may be found here:\nhttps://stat.ethz.ch/pipermail/r-sig-finance/2007q1/001285.html\n\n-- \nBrian G. Peterson\n+1 773-459-4973 mobile\nhttp://braverock.com/brian/resume-quant.pdf\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: PerformanceAnalytics-package.pdf\nType: application/pdf\nSize: 193706 bytes\nDesc: not available\nUrl : https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070415/7b191387/attachment.pdf \n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: PerformanceAnalytics_0.9.4.tar.gz\nType: application/x-tgz\nSize: 105496 bytes\nDesc: not available\nUrl : https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070415/7b191387/attachment.bin",
+      "body_snippet": "PerformanceAnalytics R package for Performance and Risk Analysis\n\nWe are pleased to release for the use and review of our peers and mentors\nthis R package of econometric tools for performance and risk",
+      "thread_id": "thread-4b82b63052ff",
+      "thread_depth": 0,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-e02cabc23823",
+      "message_id": "<17954.33181.357049.331712@mithrandir.hornik.net>",
+      "from_name": "Kurt Hornik",
+      "from_email_hash": "af316eba824f81591e5ba568c47fb6a236f37dc698deeb0a0c2e83a757893f95",
+      "date": "2007-04-15T21:48:45+02:00",
+      "subject": "[R-SIG-Finance] PerformanceAnalytics R package for Performance and Risk Analysis (v0.9.4)",
+      "subject_clean": "PerformanceAnalytics R package for Performance and Risk Analysis (v0.9.4)",
+      "in_reply_to": "<200704151141.21909.brian@braverock.com>",
+      "references": [
+        "<200704151141.21909.brian@braverock.com>"
+      ],
+      "body_plain": ">>>>> Brian G Peterson writes:\n\n> PerformanceAnalytics R package for Performance and Risk Analysis\n> We are pleased to release for the use and review of our peers and mentors\n> this R package of econometric tools for performance and risk analysis.\n\n> This version, v0.9.4, is the second public release of the \n> PerformanceAnalytics package, and the first release to CRAN. This version \n> adds significantly to the documentation and examples over that included \n> with version 0.9.3.  We have also added a few additional utility and \n> wrapper functions where we felt they would be of general utility.\n\n> PerformanceAnalytics R package version 0.9.4 (v1.0rc2)\n\nMany thanks for your submission.  When I run R CMD check, I get\n\n* checking S3 generic/method consistency ... WARNING\nmean:\n  function(x, ...)\nmean.LCL:\n  function(x, ci)\n\nmean:\n  function(x, ...)\nmean.UCL:\n  function(x, ci)\n\nSee section 'Generic functions and methods' of the 'Writing R Extensions'\nmanual.\n\n* checking for missing documentation entries ... WARNING\nUndocumented code objects:\n  allsymbols bluefocus bluemono bond.dates bond.labels closedsymbols\n  cycles.dates dark6equal dark8equal equity.dates equity.labels\n  fillsymbols greenfocus greenmono grey6mono grey8mono legend\n  linesymbols macro.dates macro.labels opensymbols rainbow10equal\n  rainbow12equal rainbow6equal rainbow8equal redfocus redmono\n  rich10equal rich12equal rich6equal rich8equal risk.dates risk.labels\n  set6equal set8equal tim10equal tim12equal tim6equal tim8equal\nUndocumented data sets:\n  managers.zoo\nAll user-level objects in a package should have documentation entries.\nSee the chapter 'Writing R documentation files' in manual 'Writing R\nExtensions'.\n\n\nCan you pls fix these problems and reupload?\n\nAlso, maybe you could take care of\n\n* checking Rd \\usage sections ... WARNING\nS3 methods shown with full name in documentation object 'cummax.column':\n  cummax.column\n\nS3 methods shown with full name in documentation object 'cumprod.column':\n  cumprod.column\n\nS3 methods shown with full name in documentation object 'mean.utils':\n  mean.geometric mean.stderr mean.UCL mean.LCL\n\nThe \\usage entries for S3 methods should use the \\method markup and not\ntheir full name.\nSee the chapter 'Writing R documentation files' in manual 'Writing R\nExtensions'.\n\nBest\n-k",
+      "body_snippet": ">>>>> Brian G Peterson writes:\n\n> PerformanceAnalytics R package for Performance and Risk Analysis\n> We are pleased to release for the use and review of our peers and mentors\n> this R package of econo",
+      "thread_id": "thread-4b82b63052ff",
+      "thread_depth": 1,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-1c74b10b82b4",
+      "message_id": "<462335BA.8000104@mx.uni-saarland.de>",
+      "from_name": "Martin Becker",
+      "from_email_hash": "8a794d4333ae3023243e5dff553a8cd66c9c6e691f585985662cb4f3aa75242f",
+      "date": "2007-04-16T10:37:14+02:00",
+      "subject": "[R-SIG-Finance] PerformanceAnalytics R package for Performance and\tRisk Analysis (v0.9.4)",
+      "subject_clean": "PerformanceAnalytics R package for Performance and\tRisk Analysis (v0.9.4)",
+      "in_reply_to": "<200704151141.21909.brian@braverock.com>",
+      "references": [
+        "<200704151141.21909.brian@braverock.com>"
+      ],
+      "body_plain": "Just to bridge the gap until Windows-builds on CRAN are available:\n\nhttp://www.saar-gate.net/download/PerformanceAnalytics_0.9.4.zip\n\nRegards,\n\n  Martin",
+      "body_snippet": "Just to bridge the gap until Windows-builds on CRAN are available:\n\nhttp://www.saar-gate.net/download/PerformanceAnalytics_0.9.4.zip\n\nRegards,\n\n  Martin",
+      "thread_id": "thread-4b82b63052ff",
+      "thread_depth": 1,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-78e0397088d0",
+      "message_id": "<OFF2DDD09F.0EBBC007-ONC12572BF.00390F9C-C12572BF.00390F9C@fr.world.socgen>",
+      "from_name": "taoufik.zizi at sgcib.com",
+      "from_email_hash": "142e2009ac41c19434b6484c326c357351fd4362407bd1df731e8794bebc2289",
+      "date": "2007-04-16T12:23:15+02:00",
+      "subject": "[R-SIG-Finance] Taoufik ZIZI doesn't work any longer for SG.",
+      "subject_clean": "Taoufik ZIZI doesn't work any longer for SG.",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I will be out of the office starting  16/04/2007 and will not return until\n31/12/2007.\n\nDon't hesitate to contact me on my personal address:\ntaoufik.zizi at centraliens.net\n*************************************************************************\nThis message and any attachments (the \"message\") are confide...{{dropped}}",
+      "body_snippet": "I will be out of the office starting  16/04/2007 and will not return until\n31/12/2007.\n\nDon't hesitate to contact me on my personal address:\ntaoufik.zizi at centraliens.net\n***************************",
+      "thread_id": "thread-78e0397088d0",
+      "thread_depth": 0,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-edc2cbfb21ac",
+      "message_id": "<39B7E7009F2DD840AA747934AB551E690154B016@exnsw1-arm.nsw.csiro.au>",
+      "from_name": "David.Miron at csiro.au",
+      "from_email_hash": "a1e3fa2a26630a07d6f0ba56991e66a81ce0791d4ef53b56346bb808588fd1da",
+      "date": "2007-04-17T15:48:40+10:00",
+      "subject": "[R-SIG-Finance]  Problems in fSeries 240.10068",
+      "subject_clean": "Problems in fSeries 240.10068",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070417/493e53ce/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070417/493e53ce/attachment.pl",
+      "thread_id": "thread-edc2cbfb21ac",
+      "thread_depth": 0,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-ac83ec44ea07",
+      "message_id": "<4624D215.4040604@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2007-04-17T08:56:37-05:00",
+      "subject": "[R-SIG-Finance] PerformanceAnalytics R package for Performance and\tRisk Analysis (v0.9.4)",
+      "subject_clean": "PerformanceAnalytics R package for Performance and\tRisk Analysis (v0.9.4)",
+      "in_reply_to": "<200704151141.21909.brian@braverock.com>",
+      "references": [
+        "<200704151141.21909.brian@braverock.com>"
+      ],
+      "body_plain": "Brian G. Peterson wrote:\n> PerformanceAnalytics R package for Performance and Risk Analysis\n> \n> We are pleased to release for the use and review of our peers and mentors\n> this R package of econometric tools for performance and risk analysis.\n> \n> This version, v0.9.4, is the second public release of the \n> PerformanceAnalytics package, and the first release to CRAN. This version \n> adds significantly to the documentation and examples over that included \n> with version 0.9.3.  We have also added a few additional utility and \n> wrapper functions where we felt they would be of general utility.\n> \n> PerformanceAnalytics R package version 0.9.4 (v1.0rc2)\n> \n> Econometric tools for performance and risk analysis.\n<... SNIP ...>\n\nPackage now on CRAN in source form here:\n\nhttp://cran.r-project.org/src/contrib/Descriptions/PerformanceAnalytics.html\n\nno sign of binaries for Windows or OS X yet, so the Windows binary from \nMartin is still the best bet for now.  Binaries for other platforms \nshould appear at the link above as the CRAN binary maintainers compile \nand test them.\n\nRegards,\n\n   - Brian",
+      "body_snippet": "Brian G. Peterson wrote:\n> PerformanceAnalytics R package for Performance and Risk Analysis\n> \n> We are pleased to release for the use and review of our peers and mentors\n> this R package of econometr",
+      "thread_id": "thread-4b82b63052ff",
+      "thread_depth": 1,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-2272002c086a",
+      "message_id": "<BAY113-F13B556506AE26211EAFAA7EE510@phx.gbl>",
+      "from_name": "Murali Menon",
+      "from_email_hash": "32027d831afee4d8d2888a637e52a4b5a6ba412aa422cc72b3391d3ac321a34e",
+      "date": "2007-04-17T14:28:30Z",
+      "subject": "[R-SIG-Finance] How to produce vector of correlation matrices",
+      "subject_clean": "How to produce vector of correlation matrices",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Folks,\n\nI have a matrix of equity returns with rownames as dates and colnames as \nstock codes. I'd like to compute\na rolling vector of correlation matrices, one matrix for each date. Is there \na nifty way to accomplish this?\n\nE.g if my matrix is\n\n\t\tAAA\tBBB\tCCC\tDDD\tEEE\n01/01/2007\t10%\t60%\t49%\t99%\t99%\n02/01/2007\t42%\t91%\t72%\t57%\t79%\n03/01/2007\t25%\t100%\t76%\t40%\t17%\n04/01/2007\t99%\t98%\t81%\t100%\t13%\n05/01/2007\t74%\t49%\t85%\t24%\t69%\n06/01/2007\t9%\t43%\t57%\t57%\t1%\n07/01/2007\t77%\t53%\t84%\t70%\t57%\n08/01/2007\t98%\t66%\t24%\t28%\t77%\n09/01/2007\t1%\t43%\t72%\t82%\t1%\n10/01/2007\t14%\t22%\t18%\t43%\t27%\n11/01/2007\t15%\t5%\t62%\t34%\t3%\n12/01/2007\t70%\t63%\t59%\t92%\t57%\n13/01/2007\t27%\t58%\t12%\t31%\t68%\n14/01/2007\t15%\t90%\t48%\t16%\t66%\n15/01/2007\t86%\t6%\t52%\t95%\t3%\n\nand I take a roll period of 10 days, my vector of correlation matrices might \nlook like:\n\n10/01/2007:\n\n\tAAA\tBBB\tCCC\tDDD\tEEE\nAAA\t1.00\t0.38\t0.19\t-0.17\t0.29\nBBB\t0.38\t1.00\t0.44\t0.16\t0.10\nCCC\t0.19\t0.44\t1.00\t0.26\t-0.15\nDDD\t-0.17\t0.16\t0.26\t1.00\t-0.11\nEEE\t0.29\t0.10\t-0.15\t-0.11\t1.00\n\n11/01/2007:\n\n\tAAA\tBBB\tCCC\tDDD\tEEE\nAAA\t1.00\t0.47\t0.14\t0.07\t0.61\nBBB\t0.47\t1.00\t0.37\t0.32\t0.30\nCCC\t0.14\t0.37\t1.00\t0.41\t-0.06\nDDD\t0.07\t0.32\t0.41\t1.00\t-0.38\nEEE\t0.61\t0.30\t-0.06\t-0.38\t1.00\n\netc.\n\nI looked at the fMultivar and fPortfolio packages which do funky stuff with \nreturn series,\nbut they (as far as I can tell) produce an overall covariance matrix, not a \nrolling one as I need.\n\nThanks,\n\nMurali\nPS: Of course, if my equity returns looked as they do above, I'd have \nretired aeons ago :-)\n\n_________________________________________________________________\n\n$771/month*",
+      "body_snippet": "Folks,\n\nI have a matrix of equity returns with rownames as dates and colnames as \nstock codes. I'd like to compute\na rolling vector of correlation matrices, one matrix for each date. Is there \na nifty",
+      "thread_id": "thread-2272002c086a",
+      "thread_depth": 0,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-acee4a820643",
+      "message_id": "<BAY113-F25CA2DE29A61EEC958F631EE510@phx.gbl>",
+      "from_name": "Murali Menon",
+      "from_email_hash": "32027d831afee4d8d2888a637e52a4b5a6ba412aa422cc72b3391d3ac321a34e",
+      "date": "2007-04-17T15:22:38Z",
+      "subject": "[R-SIG-Finance] How to produce vector of correlation matrices",
+      "subject_clean": "How to produce vector of correlation matrices",
+      "in_reply_to": "<OF7AAF359C.04079269-ONC12572C0.00510323-C12572C0.00515F41@hsbc.fr>",
+      "references": [],
+      "body_plain": "Hi Guillaume,\n\nThanks for this. I couldn't get your lapply() code to work as is because of \nthe following error:\n\nError in FUN(X[[1]], ...) : unused argument(s) (function (i, X, win)\n\nbut the following did the trick:\n\n>res <- lapply(vec, function(i) cor(X[(i - win + 1) : i, ]))\n\nwhere 'win' and 'X' were as per your definitions.\n\nCheers,\nMurali\n\n\n\n\n>From: guillaume.nicoulaud at halbis.com\n>To: \"Murali Menon\" <feanor0 at hotmail.com>\n>Subject: R?f. : [R-SIG-Finance] How to produce vector of correlation \n>matrices\n>Date: Tue, 17 Apr 2007 16:48:39 +0200\n>\n># with X, your matrix\n>\n>\n>stp = 10   # step\n>\n>win = 260  # window\n>\n>\n>\n>vec <- seq(win, nrow(X), by = stp)\n>\n>lapply(vec, function(i, X, win) { cor( X[(i-win+1):i, ] ) }, X = X, win = \n>win ) -> res\n>\n>\n>\n># \"res\" should be a list of correlation matrices\n>\n>\n>\n>Guillaume NICOULAUD\n>Halbis Capital Management (France)\n>Strategy & Quantitative Analysis\n>\n>Halbis Capital Management (France)\n>75419 Paris Cedex 08\n>Tel. :   +33 (0) 1 58 13 99 97\n>Mob :  +33 (0) 6 87 84 97 75\n>guillaume.nicoulaud at halbis.com\n>www.halbis.com\n>\n>\n>\n>\n>\n>                                                         Pour :   \n>r-sig-finance at stat.math.ethz.ch\n>                                                         cc :\n>                                                         Objet :  \n>[R-SIG-Finance] How to produce vector of correlation matrices\n>              \"Murali Menon\" <feanor0 at hotmail.com>\n>              Envoy? par :\n>              r-sig-finance-bounces at stat.math.ethz.\n>              ch\n>\n>\n>              17/04/2007 16:28\n>\n>\n>\n>\n>\n>\n>Folks,\n>\n>I have a matrix of equity returns with rownames as dates and colnames as\n>stock codes. I'd like to compute\n>a rolling vector of correlation matrices, one matrix for each date. Is \n>there\n>a nifty way to accomplish this?\n>\n>E.g if my matrix is\n>\n>                          AAA         BBB         CCC         DDD         \n>EEE\n>01/01/2007         10%         60%         49%         99%         99%\n>02/01/2007         42%         91%         72%         57%         79%\n>03/01/2007         25%         100%        76%         40%         17%\n>04/01/2007         99%         98%         81%         100%        13%\n>05/01/2007         74%         49%         85%         24%         69%\n>06/01/2007         9%          43%         57%         57%         1%\n>07/01/2007         77%         53%         84%         70%         57%\n>08/01/2007         98%         66%         24%         28%         77%\n>09/01/2007         1%          43%         72%         82%         1%\n>10/01/2007         14%         22%         18%         43%         27%\n>11/01/2007         15%         5%          62%         34%         3%\n>12/01/2007         70%         63%         59%         92%         57%\n>13/01/2007         27%         58%         12%         31%         68%\n>14/01/2007         15%         90%         48%         16%         66%\n>15/01/2007         86%         6%          52%         95%         3%\n>\n>and I take a roll period of 10 days, my vector of correlation matrices \n>might\n>look like:\n>\n>10/01/2007:\n>\n>              AAA         BBB         CCC         DDD         EEE\n>AAA          1.00        0.38        0.19        -0.17             0.29\n>BBB          0.38        1.00        0.44        0.16        0.10\n>CCC          0.19        0.44        1.00        0.26        -0.15\n>DDD          -0.17             0.16        0.26        1.00        -0.11\n>EEE          0.29        0.10        -0.15             -0.11             \n>1.00\n>\n>11/01/2007:\n>\n>              AAA         BBB         CCC         DDD         EEE\n>AAA          1.00        0.47        0.14        0.07        0.61\n>BBB          0.47        1.00        0.37        0.32        0.30\n>CCC          0.14        0.37        1.00        0.41        -0.06\n>DDD          0.07        0.32        0.41        1.00        -0.38\n>EEE          0.61        0.30        -0.06             -0.38             \n>1.00\n>\n>etc.\n>\n>I looked at the fMultivar and fPortfolio packages which do funky stuff with\n>return series,\n>but they (as far as I can tell) produce an overall covariance matrix, not a\n>rolling one as I need.\n>\n>Thanks,\n>\n>Murali\n>PS: Of course, if my equity returns looked as they do above, I'd have\n>retired aeons ago :-)\n>\n>_________________________________________________________________\n>\n>$771/month*\n>\n>_______________________________________________\n>R-SIG-Finance at stat.math.ethz.ch mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>-- Subscriber-posting only.\n>-- If you want to post, subscribe first.\n>\n>\n>\n>\n>Les informations contenues dans ce message sont confidentielles et peuvent \n>constituer des informations privilegiees. Si vous n etes pas le \n>destinataire de ce message, il vous est interdit de le copier, de le faire \n>suivre, de le divulguer ou d en utiliser tout ou partie. Si vous avez recu \n>ce message par erreur, merci de le supprimer de votre systeme, ainsi que \n>toutes ses copies, et d en avertir immediatement l expediteur par message \n>de retour.\n>Il est impossible de garantir que les communications par messagerie \n>electronique arrivent en temps utile, sont securisees ou denuees de toute \n>erreur ou virus. En consequence, l expediteur n accepte aucune \n>responsabilite du fait des erreurs ou omissions qui pourraient en resulter.\n>--- ----------------------------------------------------- ---\n>The information contained in this e-mail is confidential. It may also be \n>legally privileged. If you are not the addressee you may not copy, forward, \n>disclose or use any part of it. If you have received this message in error, \n>please delete it and all copies from your system and notify the sender \n>immediately by return e-mail.\n>E-mail communications cannot be guaranteed to be timely secure, error or \n>virus-free. The sender does not accept liability for any errors or \n>omissions which arise as a result.\n>\n\n_________________________________________________________________\nDownload Messenger. Join the i?m Initiative. Help make a difference today.",
+      "body_snippet": "Hi Guillaume,\n\nThanks for this. I couldn't get your lapply() code to work as is because of \nthe following error:\n\nError in FUN(X[[1]], ...) : unused argument(s) (function (i, X, win)\n\nbut the followin",
+      "thread_id": "thread-acee4a820643",
+      "thread_depth": 0,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-897aab85f420",
+      "message_id": "<971536df0704170910j7b20056fhd797d5038b1072d9@mail.gmail.com>",
+      "from_name": "Gabor Grothendieck",
+      "from_email_hash": "2252aad0894f89a900da56345b1c4e0414e3b441d448c40b473f7149e06e5a05",
+      "date": "2007-04-17T12:10:39-04:00",
+      "subject": "[R-SIG-Finance] How to produce vector of correlation matrices",
+      "subject_clean": "How to produce vector of correlation matrices",
+      "in_reply_to": "<BAY113-F13B556506AE26211EAFAA7EE510@phx.gbl>",
+      "references": [
+        "<BAY113-F13B556506AE26211EAFAA7EE510@phx.gbl>"
+      ],
+      "body_plain": "Use embed.data.frame from this post:\nhttp://finzi.psych.upenn.edu/R/Rhelp02a/archive/38589.html\n\nThe first group of lines creates the data frame, DF,\nand the last two lines lapply cor and set the names.\n\nLines.raw <- \"AAA     BBB     CCC     DDD     EEE\n01/01/2007      10%     60%     49%     99%     99%\n02/01/2007      42%     91%     72%     57%     79%\n03/01/2007      25%     100%    76%     40%     17%\n04/01/2007      99%     98%     81%     100%    13%\n05/01/2007      74%     49%     85%     24%     69%\n06/01/2007      9%      43%     57%     57%     1%\n07/01/2007      77%     53%     84%     70%     57%\n08/01/2007      98%     66%     24%     28%     77%\n09/01/2007      1%      43%     72%     82%     1%\n10/01/2007      14%     22%     18%     43%     27%\n11/01/2007      15%     5%      62%     34%     3%\n12/01/2007      70%     63%     59%     92%     57%\n13/01/2007      27%     58%     12%     31%     68%\n14/01/2007      15%     90%     48%     16%     66%\n15/01/2007      86%     6%      52%     95%     3%\"\nLines <- readLines(textConnection(Lines.raw))\nLines <- gsub(\"%\", \"\", Lines)\nDF <- read.table(textConnection(Lines), header = TRUE)\n\nL <- lapply(embed.data.frame(DF, 10), cor)\nnames(L) <- head(rownames(DF), length(L))\n\n\n\nOn 4/17/07, Murali Menon <feanor0 at hotmail.com> wrote:\n> Folks,\n>\n> I have a matrix of equity returns with rownames as dates and colnames as\n> stock codes. I'd like to compute\n> a rolling vector of correlation matrices, one matrix for each date. Is there\n> a nifty way to accomplish this?\n>\n> E.g if my matrix is\n>\n>                AAA     BBB     CCC     DDD     EEE\n> 01/01/2007      10%     60%     49%     99%     99%\n> 02/01/2007      42%     91%     72%     57%     79%\n> 03/01/2007      25%     100%    76%     40%     17%\n> 04/01/2007      99%     98%     81%     100%    13%\n> 05/01/2007      74%     49%     85%     24%     69%\n> 06/01/2007      9%      43%     57%     57%     1%\n> 07/01/2007      77%     53%     84%     70%     57%\n> 08/01/2007      98%     66%     24%     28%     77%\n> 09/01/2007      1%      43%     72%     82%     1%\n> 10/01/2007      14%     22%     18%     43%     27%\n> 11/01/2007      15%     5%      62%     34%     3%\n> 12/01/2007      70%     63%     59%     92%     57%\n> 13/01/2007      27%     58%     12%     31%     68%\n> 14/01/2007      15%     90%     48%     16%     66%\n> 15/01/2007      86%     6%      52%     95%     3%\n>\n> and I take a roll period of 10 days, my vector of correlation matrices might\n> look like:\n>\n> 10/01/2007:\n>\n>        AAA     BBB     CCC     DDD     EEE\n> AAA     1.00    0.38    0.19    -0.17   0.29\n> BBB     0.38    1.00    0.44    0.16    0.10\n> CCC     0.19    0.44    1.00    0.26    -0.15\n> DDD     -0.17   0.16    0.26    1.00    -0.11\n> EEE     0.29    0.10    -0.15   -0.11   1.00\n>\n> 11/01/2007:\n>\n>        AAA     BBB     CCC     DDD     EEE\n> AAA     1.00    0.47    0.14    0.07    0.61\n> BBB     0.47    1.00    0.37    0.32    0.30\n> CCC     0.14    0.37    1.00    0.41    -0.06\n> DDD     0.07    0.32    0.41    1.00    -0.38\n> EEE     0.61    0.30    -0.06   -0.38   1.00\n>\n> etc.\n>\n> I looked at the fMultivar and fPortfolio packages which do funky stuff with\n> return series,\n> but they (as far as I can tell) produce an overall covariance matrix, not a\n> rolling one as I need.\n>\n> Thanks,\n>\n> Murali\n> PS: Of course, if my equity returns looked as they do above, I'd have\n> retired aeons ago :-)\n>\n> _________________________________________________________________\n>\n> $771/month*\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>",
+      "body_snippet": "Use embed.data.frame from this post:\nhttp://finzi.psych.upenn.edu/R/Rhelp02a/archive/38589.html\n\nThe first group of lines creates the data frame, DF,\nand the last two lines lapply cor and set the name",
+      "thread_id": "thread-2272002c086a",
+      "thread_depth": 1,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-cbe8316680f2",
+      "message_id": "<000c01c781ad$4f58e660$d901010a@iperezv>",
+      "from_name": "Ignacio Perez Velez",
+      "from_email_hash": "090af6e76327c83dccc5bd12aec22f549b4f7814f2cc6c365205c2e49e242a61",
+      "date": "2007-04-18T06:32:55-05:00",
+      "subject": "[R-SIG-Finance] GEV Parameters",
+      "subject_clean": "GEV Parameters",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070418/ccd09430/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070418/ccd09430/attachment.pl",
+      "thread_id": "thread-cbe8316680f2",
+      "thread_depth": 0,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-f9db1ff0f9a1",
+      "message_id": "<16C0E682FFDFB24380A267946EC12A3302E7AF79@m0116.s-mxs.net>",
+      "from_name": "Stampfl Bernd 0969 SPI",
+      "from_email_hash": "74d6a41a043459239427ab9b2fc01a629a3313331663e2262efd7b364ea78da0",
+      "date": "2007-04-20T16:53:05+02:00",
+      "subject": "[R-SIG-Finance] Filler necessary",
+      "subject_clean": "Filler necessary",
+      "in_reply_to": "<1aa19fc00704111925q74b41750r49564b3ea3f41d62@mail.gmail.com>",
+      "references": [
+        "<SANCTUMFISERVER8dWM0000071e@sanctumfi.com>",
+        "<1aa19fc00704111925q74b41750r49564b3ea3f41d62@mail.gmail.com>"
+      ],
+      "body_plain": "I was writing a simple code to compare different Moving Averages (using\nrollmean).\n\nCODE:\n**************************************************************\nFX.Window.A <- 5\n\nFX.Window.B <- 20\n\nFX.Window.Max <- 100\n\n \n\nFX.Price <- read.csv(\"MAFX.csv\")\n\nFX.Price <- na.omit(FX.Price[,2])\n\n#summary(FX.Price)\n\n \n\n#FX.Date <-  na.omit(FX.Price[,1])\n\n#FX.Date\n\nFX.Date <- \"2007-01-11\"\n\nFX.Price <- zooreg(FX.Price,start=as.Date(FX.Date))\n\n \n\nMean.Result = c()\n\n  for(i in 1:FX.Window.Max){\n\n    FX.Window.A[i+1] <- rollmean(FX.Price,FX.Window.A[i])\n\n    Mean.Result[i]=FX.Window.A[i+1]\n\n}\n\n \n\nRollmean.A <- rollmean(FX.Price,FX.Window.A)\n\nRollmean.B <- rollmean(FX.Price,FX.Window.B)\n**************************************************************\n\nI tried to open a vector for storing the results but I got an error\nmessage - 'cause the longer the windows the less results you get. \n\nDo you know some ways to fill the missing data?\n\nHope you can help me guys. I just switched to R and therefore a\nsemi-novice.\n\nThanks a lot.\n\nBern",
+      "body_snippet": "I was writing a simple code to compare different Moving Averages (using\nrollmean).\n\nCODE:\n**************************************************************\nFX.Window.A <- 5\n\nFX.Window.B <- 20\n\nFX.Window.",
+      "thread_id": "thread-3fd6ef3e6c56",
+      "thread_depth": 2,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-63cb9bb1fc59",
+      "message_id": "<10199718.post@talk.nabble.com>",
+      "from_name": "genx",
+      "from_email_hash": "988c3969ea449636bf2ecddd29c8339bbfcb5e69ff8c63a59eb73ef6bfb6e73c",
+      "date": "2007-04-26T05:55:11-07:00",
+      "subject": "[R-SIG-Finance] [R-sig-finance] troubles with the weights in the VaR function",
+      "subject_clean": "troubles with the weights in the VaR function",
+      "in_reply_to": "<455B2F290064F967@>",
+      "references": [
+        "<455B2F290064F967@>"
+      ],
+      "body_plain": "I have the same problem with vectors of different length, most packages don't\nknow how to scale and adjust timeseries / vectors of different length. It\nwould be a welcome contribution to R Finance if any programmer out there\ncould solve this problem in an easy way.\n\n\nManu do a dim(vector) to check length of your vectors / matrices that you\nwant to compare. As an example, if i want to calculate the annualized\nstandard deviation (sigma) for n-periods i do the following on each vector,\nthis example vector is days.\n\nsd(vector[(length(vector)-n):length(vector)]) * sqrt(252)\n\n\n\nKind regards\ngenx, Dura Mater\n\n\n\nmanu-25 wrote:\n> \n> hi there\n> \n> i have some troubles with VaR ( value at risk function)\n> to be more specific, with the weights in the VaR function\n> \n> \n> when i run the example:\n> equalWeights = rep(1/4, 4)\n> alpha = 0.10\n> # Value at Risk:\n> VaR(myAssets, equalWeights, alpha)\n> \n> everything is ok\n> \n> \n> \n> BUT \n> \n> when i read my own data set, and try to have my own weights, i have the\n> following message :\n> \n> Erreur dans `names<-.default`(`*tmp*`, value = \"VaR\") : \n>         attribut 'names' [1] doit ?tre de m?me longueur que le vecteur [0]\n> \n> which can be translated as:\n> \n> error in `names<-.default`(`*tmp*`, value = \"VaR\") : \n> \tattribute 'names' [1] must have the same length as vector [0]\n> \n> \n> \n> i have no idea of what it means\n> :-(\n> \n> \n> i printed the names of my data, and it was exactely the same as the names\n> in the VaR example\n> \n> \n> \n> when returning this message, R returns at the same time the computation of\n> the VaR, but using the default (equal weights); in my case it is not\n> possible to have different weights :-(\n> \n> \n> \n> \n> did anyone face the same problem?\n> if yes, how to solve it\n> \n> \n> thx in advance\n> \n> \n> regards\n> \n> \n> manu\n> \n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> \n> \n\n-- \nView this message in context: http://www.nabble.com/troubles-with-the-weights-in-the-VaR-function-tf2785155.html#a10199718\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "I have the same problem with vectors of different length, most packages don't\nknow how to scale and adjust timeseries / vectors of different length. It\nwould be a welcome contribution to R Finance if ",
+      "thread_id": "thread-63cb9bb1fc59",
+      "thread_depth": 0,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-5cdc66949ef8",
+      "message_id": "<971536df0704260809m3dea5148yb76c57c3854adba6@mail.gmail.com>",
+      "from_name": "Gabor Grothendieck",
+      "from_email_hash": "2252aad0894f89a900da56345b1c4e0414e3b441d448c40b473f7149e06e5a05",
+      "date": "2007-04-26T11:09:00-04:00",
+      "subject": "[R-SIG-Finance] [R-sig-finance] troubles with the weights in the VaR function",
+      "subject_clean": "troubles with the weights in the VaR function",
+      "in_reply_to": "<10199718.post@talk.nabble.com>",
+      "references": [
+        "<10199718.post@talk.nabble.com>"
+      ],
+      "body_plain": "On 4/26/07, genx <info at genetrix.se> wrote:\n>\n> I have the same problem with vectors of different length, most packages don't\n> know how to scale and adjust timeseries / vectors of different length. It\n> would be a welcome contribution to R Finance if any programmer out there\n> could solve this problem in an easy way.\n>\n\nAll of the major time series classes handle series of different lengths.\n\na <- ts(1:3); b <- ts(12:15, start = 2)\na + b\na == b\n\nlibrary(zoo)\naz <- as.zoo(a); bz <- as.zoo(b)\naz + bz\naz == bz",
+      "body_snippet": "On 4/26/07, genx <info at genetrix.se> wrote:\n>\n> I have the same problem with vectors of different length, most packages don't\n> know how to scale and adjust timeseries / vectors of different length.",
+      "thread_id": "thread-63cb9bb1fc59",
+      "thread_depth": 1,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-cb9012a6e17f",
+      "message_id": "<E1HhC2F-000072-00@smtp06.web.de>",
+      "from_name": "Arne Krombach",
+      "from_email_hash": "8e1d0b0b2022b89e2b30250c2aa0999338a7cb01730fbbe066dfb4908ef1d515",
+      "date": "2007-04-27T00:02:24+02:00",
+      "subject": "[R-SIG-Finance] Cox, Ingersoll, Ross/Vasicek parameter estimation via Kalman-Filter (SSPIR)",
+      "subject_clean": "Cox, Ingersoll, Ross/Vasicek parameter estimation via Kalman-Filter (SSPIR)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070427/b2adf8d2/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070427/b2adf8d2/attachment.pl",
+      "thread_id": "thread-cb9012a6e17f",
+      "thread_depth": 0,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-3ccfc2f7cd1c",
+      "message_id": "<D3AEEDA31E57474B840BEBC25A8A834401956FEA@NYWEXMB23.msad.ms.com>",
+      "from_name": "Leeds, Mark (IED)",
+      "from_email_hash": "a1e6041ece9dc8cbeab18bc5539a57753153f5981e8a50252c34e98b37c3d2ee",
+      "date": "2007-04-26T18:07:10-04:00",
+      "subject": "[R-SIG-Finance] Cox, Ingersoll, Ross/Vasicek parameter estimation via Kalman-Filter (SSPIR)",
+      "subject_clean": "Cox, Ingersoll, Ross/Vasicek parameter estimation via Kalman-Filter (SSPIR)",
+      "in_reply_to": "<E1HhC2F-000072-00@smtp06.web.de>",
+      "references": [
+        "<E1HhC2F-000072-00@smtp06.web.de>"
+      ],
+      "body_plain": "harvey, ruiz and shepard ( 1992 ) have a paper on how to transform a\nstochastic volatility model to a state space form.\nMaybe there is a reference there or an idea for how to do the same for\nCIR ? My guess is that it's\nbeen done by someone somewhere but that's thew most I can tell you.\n\n\t\nmark\n\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Arne\nKrombach\nSent: Thursday, April 26, 2007 6:02 PM\nTo: r-sig-finance at stat.math.ethz.ch\nSubject: [R-SIG-Finance] Cox, Ingersoll,Ross/Vasicek parameter\nestimation via Kalman-Filter (SSPIR)\n\nDear R-Users,\n\n \n\nI am trying to estimate the parameters for a CIR 1-/2-/3-Factor model\nvia Kalman filtering. The idea was to do it via the package SSPIR, but I\nhave problems to transform the CIR state space form into the SSPIR\nsyntax.\nActually, I am not quite sure if this is possible at all. \n\n \n\nDid anybody already realise a CIR/Vasicek -parameter estimation via R? \n\n \n\nTo get an idea how a CIR-1-factor state space form looks like (Y= vector\nof zerobond-yields with the maturities tau at month t):\n\n \n\nY(t,tau)= ( -1/tau * log A(tau) ) + (1/tau * B(tau) * x(t) + e\n\n \n\nWhere :\n\n \n\nA(tau) = [(2 * h * e^( a + lambda + h) * tau/2) / (2 * h + (a + lambda +\nh)\n* (e^(tau * h) - 1)] ^(2 * b/ sigma^2)\n\nB(tau) = [(2 * (e^(tau * h)  -1)) / 2 * h + (a + lambda + h) * (e^(tau *\nh)\n- 1)]\n\nh = sqrt[(a + lambda)^2 + 2*sigma^2] \n\n \n\nwhich means that, besides the time varying factor x, the parameters a,\nb, sigma, and lambda have to be estimated via Kalman filtering.\n\n \n\nIs it possible to implement this in SSPIR? If you have any other\nsuggests or if you already implement comparable models in R, I would be\nvery grateful for your help.\n\n \n\nKind Regards,\n\n \n\nArne Krombach\n\n\n\t[[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.\n--------------------------------------------------------\n\nThis is not an offer (or solicitation of an offer) to buy/se...{{dropped}}",
+      "body_snippet": "harvey, ruiz and shepard ( 1992 ) have a paper on how to transform a\nstochastic volatility model to a state space form.\nMaybe there is a reference there or an idea for how to do the same for\nCIR ? My ",
+      "thread_id": "thread-cb9012a6e17f",
+      "thread_depth": 1,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-79fe8965563e",
+      "message_id": "<000701c7886a$91e19720$02000002@zivotd800>",
+      "from_name": "Eric Zivot",
+      "from_email_hash": "1af1f898d9c468b05e686da9e60bce6b8a0d98f0ec7e822cde24d9d8b3634a20",
+      "date": "2007-04-26T18:22:48-07:00",
+      "subject": "[R-SIG-Finance] Cox, Ingersoll, Ross/Vasicek parameter estimation via Kalman-Filter (SSPIR)",
+      "subject_clean": "Cox, Ingersoll, Ross/Vasicek parameter estimation via Kalman-Filter (SSPIR)",
+      "in_reply_to": "<E1HhC2F-000072-00@smtp06.web.de>",
+      "references": [],
+      "body_plain": "In my survey paper http://faculty.washington.edu/ezivot/statespacesurvey.pdf\n, I have an example of estimating a simple Vasicek model using state space\nmethods in splus. With the more complicated CIR process the Kalman filter\nrecursions have to be modified because the state vector influences the\nvariance of the process.\nez\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Arne Krombach\nSent: Thursday, April 26, 2007 3:02 PM\nTo: r-sig-finance at stat.math.ethz.ch\nSubject: [R-SIG-Finance] Cox, Ingersoll,Ross/Vasicek parameter estimation\nvia Kalman-Filter (SSPIR)\n\nDear R-Users,\n\n \n\nI am trying to estimate the parameters for a CIR 1-/2-/3-Factor model via\nKalman filtering. The idea was to do it via the package SSPIR, but I have\nproblems to transform the CIR state space form into the SSPIR syntax.\nActually, I am not quite sure if this is possible at all. \n\n \n\nDid anybody already realise a CIR/Vasicek -parameter estimation via R? \n\n \n\nTo get an idea how a CIR-1-factor state space form looks like (Y= vector of\nzerobond-yields with the maturities tau at month t):\n\n \n\nY(t,tau)= ( -1/tau * log A(tau) ) + (1/tau * B(tau) * x(t) + e\n\n \n\nWhere :\n\n \n\nA(tau) = [(2 * h * e^( a + lambda + h) * tau/2) / (2 * h + (a + lambda + h)\n* (e^(tau * h) - 1)] ^(2 * b/ sigma^2)\n\nB(tau) = [(2 * (e^(tau * h)  -1)) / 2 * h + (a + lambda + h) * (e^(tau * h)\n- 1)]\n\nh = sqrt[(a + lambda)^2 + 2*sigma^2] \n\n \n\nwhich means that, besides the time varying factor x, the parameters a, b,\nsigma, and lambda have to be estimated via Kalman filtering.\n\n \n\nIs it possible to implement this in SSPIR? If you have any other suggests or\nif you already implement comparable models in R, I would be very grateful\nfor your help.\n\n \n\nKind Regards,\n\n \n\nArne Krombach\n\n\n\t[[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.",
+      "body_snippet": "In my survey paper http://faculty.washington.edu/ezivot/statespacesurvey.pdf\n, I have an example of estimating a simple Vasicek model using state space\nmethods in splus. With the more complicated CIR ",
+      "thread_id": "thread-cb9012a6e17f",
+      "thread_depth": 1,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-de49e11a26eb",
+      "message_id": "<200704262053.39303.brian@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2007-04-26T20:53:39-05:00",
+      "subject": "[R-SIG-Finance] Cox, Ingersoll, Ross/Vasicek parameter estimation via Kalman-Filter (SSPIR)",
+      "subject_clean": "Cox, Ingersoll, Ross/Vasicek parameter estimation via Kalman-Filter (SSPIR)",
+      "in_reply_to": "<E1HhC2F-000072-00@smtp06.web.de>",
+      "references": [
+        "<E1HhC2F-000072-00@smtp06.web.de>"
+      ],
+      "body_plain": "On Thursday 26 April 2007 17:02, Arne Krombach wrote:\n> I am trying to estimate the parameters for a CIR 1-/2-/3-Factor model\n> via Kalman filtering. The idea was to do it via the package SSPIR, but\n> I have problems to transform the CIR state space form into the SSPIR\n> syntax. Actually, I am not quite sure if this is possible at all.\n>\n> Did anybody already realise a CIR/Vasicek -parameter estimation via R?\n>\n> To get an idea how a CIR-1-factor state space form looks like (Y=\n> vector of zerobond-yields with the maturities tau at month t):\n>\n> Y(t,tau)= ( -1/tau * log A(tau) ) + (1/tau * B(tau) * x(t) + e\n>\n> Where :\n>\n> A(tau) = [(2 * h * e^( a + lambda + h) * tau/2) / (2 * h + (a + lambda\n> + h) * (e^(tau * h) - 1)] ^(2 * b/ sigma^2)\n>\n> B(tau) = [(2 * (e^(tau * h)  -1)) / 2 * h + (a + lambda + h) * (e^(tau\n> * h) - 1)]\n>\n> h = sqrt[(a + lambda)^2 + 2*sigma^2]\n>\n> which means that, besides the time varying factor x, the parameters a,\n> b, sigma, and lambda have to be estimated via Kalman filtering.\n>\n> Is it possible to implement this in SSPIR? If you have any other\n> suggests or if you already implement comparable models in R, I would be\n> very grateful for your help.\n\nI've previously used the sde package to model CIR and Vasicek processes \nfor term structure problems:\n\nhttp://cran.r-project.org/doc/packages/sde.pdf\n\nRegards,\n\n   - Brian\n\n-- \n773-459-4973 mobile\nhttp://braverock.com/brian/resume-quant.pdf",
+      "body_snippet": "On Thursday 26 April 2007 17:02, Arne Krombach wrote:\n> I am trying to estimate the parameters for a CIR 1-/2-/3-Factor model\n> via Kalman filtering. The idea was to do it via the package SSPIR, but\n>",
+      "thread_id": "thread-cb9012a6e17f",
+      "thread_depth": 1,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-240f7d1b2ad7",
+      "message_id": "<OFE67D5D15.C36E654F-ON652572CA.00221947-652572CA.00223EFE@ccilindia.co.in>",
+      "from_name": "gyadav at ccilindia.co.in",
+      "from_email_hash": "ad8f84eae85519238e323e31b1e6fcd68b6a15b393c76052a09504a4b7f2a928",
+      "date": "2007-04-27T11:44:40+05:30",
+      "subject": "[R-SIG-Finance] Cox, Ingersoll, Ross/Vasicek parameter \testimation \tviaKalman-Filter (SSPIR)",
+      "subject_clean": "Cox, Ingersoll, Ross/Vasicek parameter \testimation \tviaKalman-Filter (SSPIR)",
+      "in_reply_to": "<E1HhC2F-000072-00@smtp06.web.de>",
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070427/8c77779a/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070427/8c77779a/attachment.pl",
+      "thread_id": "thread-cb9012a6e17f",
+      "thread_depth": 1,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-e3ab409115ab",
+      "message_id": "<d0f55a670704270000u53a12a06o5ee4b617ff1b135c@mail.gmail.com>",
+      "from_name": "Thomas Steiner",
+      "from_email_hash": "750a3ff6af0be6db83d42f3a17b989a218e2ddb0dbf78cb7571168f5e4791c04",
+      "date": "2007-04-27T09:00:25+02:00",
+      "subject": "[R-SIG-Finance] Cox, Ingersoll, Ross/Vasicek parameter estimation via Kalman-Filter (SSPIR)",
+      "subject_clean": "Cox, Ingersoll, Ross/Vasicek parameter estimation via Kalman-Filter (SSPIR)",
+      "in_reply_to": "<E1HhC2F-000072-00@smtp06.web.de>",
+      "references": [
+        "<E1HhC2F-000072-00@smtp06.web.de>"
+      ],
+      "body_plain": "Arne,\ntogether with Martin Keller-Ressel we did estimations of the Vasicek\nand CIR termstructure, based on today's yield curve (so this is\ndifferent from your approach). We used R for the estimation. Let me\nknow if you are further interested (eg in some code).\nWe recognized that the yield curves of these (and every other affine\nmodel) models do just allow for three different shapes, even if you\nallow for jumps. You can get the preprint at\nhttp://www.fam.tuwien.ac.at/~thomas/getfile.php?file=yieldcurves\nThomas",
+      "body_snippet": "Arne,\ntogether with Martin Keller-Ressel we did estimations of the Vasicek\nand CIR termstructure, based on today's yield curve (so this is\ndifferent from your approach). We used R for the estimation. ",
+      "thread_id": "thread-cb9012a6e17f",
+      "thread_depth": 1,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-683e17d44d3d",
+      "message_id": "<d0f55a670704270043w801a4f1g8a537a630437b0cc@mail.gmail.com>",
+      "from_name": "Thomas Steiner",
+      "from_email_hash": "750a3ff6af0be6db83d42f3a17b989a218e2ddb0dbf78cb7571168f5e4791c04",
+      "date": "2007-04-27T09:43:14+02:00",
+      "subject": "[R-SIG-Finance] Cox, Ingersoll, Ross/Vasicek parameter estimation viaKalman-Filter (SSPIR)",
+      "subject_clean": "Cox, Ingersoll, Ross/Vasicek parameter estimation viaKalman-Filter (SSPIR)",
+      "in_reply_to": "<OFE67D5D15.C36E654F-ON652572CA.00221947-652572CA.00223EFE@ccilindia.co.in>",
+      "references": [
+        "<E1HhC2F-000072-00@smtp06.web.de>",
+        "<OFE67D5D15.C36E654F-ON652572CA.00221947-652572CA.00223EFE@ccilindia.co.in>"
+      ],
+      "body_plain": "Hi Gyadav,\n\nI had close look at your code, I understood a lot, but not everything.\nAnyway it looks nice.\n\nWhy do you execute this in a loop 10000 times? You don't want to crate\nso many plot, don't you? ;)\nis Years==seq(from=0,to=10,length=301) ?\nWhy do you do all this \"rep\"lication? vector+real=vector!?\nDid I understand this correctly that you simulate short rates (=spot\nrates) and then the corresponding yield curve? Why do you do this with\na simulation? You could calculate the term structure from you\nparameters immediately!\n\nbest,\nThomas",
+      "body_snippet": "Hi Gyadav,\n\nI had close look at your code, I understood a lot, but not everything.\nAnyway it looks nice.\n\nWhy do you execute this in a loop 10000 times? You don't want to crate\nso many plot, don't you",
+      "thread_id": "thread-cb9012a6e17f",
+      "thread_depth": 2,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-d267502c3fc3",
+      "message_id": "<10215187.post@talk.nabble.com>",
+      "from_name": "genx",
+      "from_email_hash": "988c3969ea449636bf2ecddd29c8339bbfcb5e69ff8c63a59eb73ef6bfb6e73c",
+      "date": "2007-04-27T01:31:48-07:00",
+      "subject": "[R-SIG-Finance] [R-sig-finance] troubles with the weights in the VaR function",
+      "subject_clean": "troubles with the weights in the VaR function",
+      "in_reply_to": "<971536df0704260809m3dea5148yb76c57c3854adba6@mail.gmail.com>",
+      "references": [
+        "<455B2F290064F967@>",
+        "<10199718.post@talk.nabble.com>",
+        "<971536df0704260809m3dea5148yb76c57c3854adba6@mail.gmail.com>"
+      ],
+      "body_plain": "Thank you for you reply,\n\ni am a novice when it comes to CRAN R, i haven't looked much outside\nrMetrics so far.\nMy recurring problem is daily financial data of different length, the\nprocedure you\ndescribe below are two separate ways to align timeseries or should it be\ndone as one\ncommand? If it has to be done in two stages as you describe it is a very\ntime consuming\nway to handle all the financial data that, i guess anyone, would put to use\nin finance R.\n\nKind regards\n\n\nGabor Grothendieck wrote:\n> \n> On 4/26/07, genx <info at genetrix.se> wrote:\n>>\n>> I have the same problem with vectors of different length, most packages\n>> don't\n>> know how to scale and adjust timeseries / vectors of different length. It\n>> would be a welcome contribution to R Finance if any programmer out there\n>> could solve this problem in an easy way.\n>>\n> \n> All of the major time series classes handle series of different lengths.\n> \n> a <- ts(1:3); b <- ts(12:15, start = 2)\n> a + b\n> a == b\n> \n> library(zoo)\n> az <- as.zoo(a); bz <- as.zoo(b)\n> az + bz\n> az == bz\n> \n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.\n> \n> \n\n-- \nView this message in context: http://www.nabble.com/troubles-with-the-weights-in-the-VaR-function-tf2785155.html#a10215187\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "Thank you for you reply,\n\ni am a novice when it comes to CRAN R, i haven't looked much outside\nrMetrics so far.\nMy recurring problem is daily financial data of different length, the\nprocedure you\ndesc",
+      "thread_id": "thread-63cb9bb1fc59",
+      "thread_depth": 2,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-ec5e0527dce5",
+      "message_id": "<OF07B8D1B0.62349DED-ON652572CA.003AC2BE-652572CA.003B3937@ccilindia.co.in>",
+      "from_name": "gyadav at ccilindia.co.in",
+      "from_email_hash": "ad8f84eae85519238e323e31b1e6fcd68b6a15b393c76052a09504a4b7f2a928",
+      "date": "2007-04-27T16:17:29+05:30",
+      "subject": "[R-SIG-Finance] Cox, Ingersoll, Ross/Vasicek parameter \t\testimationviaKalman-Filter (SSPIR)",
+      "subject_clean": "Cox, Ingersoll, Ross/Vasicek parameter \t\testimationviaKalman-Filter (SSPIR)",
+      "in_reply_to": "<d0f55a670704270043w801a4f1g8a537a630437b0cc@mail.gmail.com>",
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070427/6fba73a6/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070427/6fba73a6/attachment.pl",
+      "thread_id": "thread-cb9012a6e17f",
+      "thread_depth": 3,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-4d513690787f",
+      "message_id": "<971536df0704270429k5c6cdac7uce281decb0410b@mail.gmail.com>",
+      "from_name": "Gabor Grothendieck",
+      "from_email_hash": "2252aad0894f89a900da56345b1c4e0414e3b441d448c40b473f7149e06e5a05",
+      "date": "2007-04-27T07:29:20-04:00",
+      "subject": "[R-SIG-Finance] [R-sig-finance] troubles with the weights in the VaR function",
+      "subject_clean": "troubles with the weights in the VaR function",
+      "in_reply_to": "<10215187.post@talk.nabble.com>",
+      "references": [
+        "<10199718.post@talk.nabble.com>",
+        "<971536df0704260809m3dea5148yb76c57c3854adba6@mail.gmail.com>",
+        "<10215187.post@talk.nabble.com>"
+      ],
+      "body_plain": "the code shows two examples.  The first using \"ts\" class series and the\nsecond with \"zoo\" series.\n\nOn 4/27/07, genx <info at genetrix.se> wrote:\n>\n> Thank you for you reply,\n>\n> i am a novice when it comes to CRAN R, i haven't looked much outside\n> rMetrics so far.\n> My recurring problem is daily financial data of different length, the\n> procedure you\n> describe below are two separate ways to align timeseries or should it be\n> done as one\n> command? If it has to be done in two stages as you describe it is a very\n> time consuming\n> way to handle all the financial data that, i guess anyone, would put to use\n> in finance R.\n>\n> Kind regards\n>\n>\n> Gabor Grothendieck wrote:\n> >\n> > On 4/26/07, genx <info at genetrix.se> wrote:\n> >>\n> >> I have the same problem with vectors of different length, most packages\n> >> don't\n> >> know how to scale and adjust timeseries / vectors of different length. It\n> >> would be a welcome contribution to R Finance if any programmer out there\n> >> could solve this problem in an easy way.\n> >>\n> >\n> > All of the major time series classes handle series of different lengths.\n> >\n> > a <- ts(1:3); b <- ts(12:15, start = 2)\n> > a + b\n> > a == b\n> >\n> > library(zoo)\n> > az <- as.zoo(a); bz <- as.zoo(b)\n> > az + bz\n> > az == bz\n> >\n> > _______________________________________________\n> > R-SIG-Finance at stat.math.ethz.ch mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only.\n> > -- If you want to post, subscribe first.\n> >\n> >\n>\n> --\n> View this message in context: http://www.nabble.com/troubles-with-the-weights-in-the-VaR-function-tf2785155.html#a10215187\n> Sent from the Rmetrics mailing list archive at Nabble.com.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>",
+      "body_snippet": "the code shows two examples.  The first using \"ts\" class series and the\nsecond with \"zoo\" series.\n\nOn 4/27/07, genx <info at genetrix.se> wrote:\n>\n> Thank you for you reply,\n>\n> i am a novice when it ",
+      "thread_id": "thread-63cb9bb1fc59",
+      "thread_depth": 3,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-2ddce487c2ad",
+      "message_id": "<200704270825.08260.brian@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2007-04-27T08:25:07-05:00",
+      "subject": "[R-SIG-Finance] [R-sig-finance] troubles with the weights in the VaR function",
+      "subject_clean": "troubles with the weights in the VaR function",
+      "in_reply_to": "<10215187.post@talk.nabble.com>",
+      "references": [
+        "<455B2F290064F967@>",
+        "<971536df0704260809m3dea5148yb76c57c3854adba6@mail.gmail.com>",
+        "<10215187.post@talk.nabble.com>"
+      ],
+      "body_plain": "On Friday 27 April 2007 03:31, genx wrote:\n> i am a novice when it comes to CRAN R, i haven't looked much outside\n> rMetrics so far.\n> My recurring problem is daily financial data of different length, the \n> procedure you describe below are two separate ways to align timeseries\n> or should it be done as one command? \n> If it has to be done in two stages as you describe it is a \n> very time consuming\n> way to handle all the financial data that, i guess anyone, would put to\n> use in finance R.\n\nNon-aligned timeseries data is *always* a problem, in any statistical \nlanguage or data environment which I have ever been introduced to.\n\nAs Gabor points out, all timeseries classes in R can handle timeseries of \ndifferent lengths.  In the zoo library, there are many na.rm function \nparameters to tell zoo what you want to do with missing data.  See the \nzoo documentation for more information, but I assume in most cases with \ndaily data, you'd want to use na.contiguous or na.interp to fill in the \nblanks.  Of course, this all depends on your data, and what you are \ntrying to accomplish.\n\nRegards,\n\n   - Brian\n\n-- \n773-459-4973 mobile\nhttp://braverock.com/brian/resume-quant.pdf",
+      "body_snippet": "On Friday 27 April 2007 03:31, genx wrote:\n> i am a novice when it comes to CRAN R, i haven't looked much outside\n> rMetrics so far.\n> My recurring problem is daily financial data of different length,",
+      "thread_id": "thread-63cb9bb1fc59",
+      "thread_depth": 3,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-a01ae5f56621",
+      "message_id": "<880FC76516FCB644807A5DD42611A6A208B04F0D@ucpfexh01.ucpcrp.pt>",
+      "from_name": "Pedro Silva",
+      "from_email_hash": "254e02e194523b5a23f42d0e083034a9e3a0b3d49ebc0698bd4069d39836afc5",
+      "date": "2007-04-27T14:47:28+01:00",
+      "subject": "[R-SIG-Finance]  Cox, Ingersoll, Ross/Vasicek parameter",
+      "subject_clean": "Cox, Ingersoll, Ross/Vasicek parameter",
+      "in_reply_to": "<mailman.17.1177668007.20473.r-sig-finance@stat.math.ethz.ch>",
+      "references": [],
+      "body_plain": "Hi,\n\nI did have the same problem and was not able to use the SSPIR or the\nsde packages for the CIR model (for Vasicek's the SSPIR worked fine for me)\nbecause the sde package assumes that the volatility is constant and although the SSPIR allows the user to define a function to specify\na time-varying volatility, as far as I can tell there is no way to\nmake the volatility dependent on the value of the state variable, as assumed by the CIR model.\n\nSo, I've programmed myself a small function, (in the bottom\nof this message) which I called kalmanf, to perform the kalman\nrecursions with a state-dependent volatility. See if that is\nuseful to you (any feed-back is also very welcomed).\n\nNote however that kalmanf does not estimate any parameter by itself,\nonly takes a set of parameters as given, together with the output of \na state-space model, and returns the output likelihood and, if required,\nsome additional information. In order to estimate the model parameters\nyou will need to combine the likelihood computations given by kalmanf with some optimization procedure using R optimization tools such as the optim or nlminb R routines. I've been trying that approach with mixed success, mainly because the likelihood function is very irregular and with many\nlocal maxima and to get some reasonably credible values for the maximum-likelihood parameters, the optimization needs to be started many times from\ndifferent starting points. \n\nI'll be very interested in hearing the experiences of anybody else who tried to solve the same problem.\n\nBest regards,\n\nA. Pedro Duarte Silva,\nAssociate Professor,\nFac. Economia e Gest?o.\nUniv. Cat?lica Portuguesa at Porto\nPORTO  PORTUGAL        \n\n\nKalmanf <- function(F,H,G=NULL,Qt,Qtpar,R,Yt,ut=NULL,z0=NULL,P0=NULL,result=\"all\")  {\n\n#   Runs the Kalman filter for the model\n\n#   Yt = H Zt + R wt\n#   Zt = F Zt-1 + G ut + Qt et      \n\n#   where Zt represents the unobserved state vector, \n#   and wt, et are independent gaussian white noise vectors \n#\n\n#   Written by A. Pedro Duarte Silva\n#   Faculdade de Econmia e Gestao - Univ. Catolica Portuguesa / Porto\n#   April 2007\n\n#   Parameters:\n#\n#   F       --  transition matrix (constant)\n#   H       --  measurement coefficients matrix (constant)\n#   G       --  coefficients of exogenous interventions (constant)\n#   Qt      --  function that returns variable Choleski decompositions of the \n#               var-cov matrix for the noise in the transition equation  \n#   Qt      --  Fixed parameters (other than Zt) passed to the Qt function\n#   R       --  matrix with the Choleski decomposition of var-cov for the noise   \n#               in the measurement equation  \n#   Yt      --  matrix with the system output\n#   ut      --  matrix (or vector) with system inputs (interventions)\n#   z0      --  vector with initial values for the state vector\n#               set to 0 by default\n#   P0      --  matrix with initial values for var-cov of the state vector\n#               set to \"a large (diag(100)) value\", representing difuse priors, by default\n#   result  --  nature and amount of output returned\n\n\n#   Value:\n\n#   if result=\"all\" a list with four components\n#       like  -- -1 times the log-likelihood\n#       liket -- a vector with the observation contributions to the log-likelihood\n#       pred  -- an array with the conditional means of Yt at time t-1      \n#       Ytcov -- an array with the conditional var-cov of Yt at time t-1      \n\n#   if result=\"like\" -1 times the log-likelihood\n\n\n#            Parameter initializations \n\n    if (is.matrix(Yt)) {\n    \tT <- nrow(Yt)                   # number of periods\n\tp <- ncol(Yt)   \t\t# dimension of the output\n    }\n    else {\n\tT <- length(Yt)\n\tp <- 1      \n    }    \n    if (is.matrix(F)) n <- nrow(F)     # dimension of the state vector\n    else n <- 1 \n\n    if (!is.matrix(H)) dim(H) <- c(p,n)\n\n#           Allocate memory\n\n    FYt   <- matrix(nrow=T,ncol=p)  \t# Yt one-step forecasts (mean)\n    SigY  <- array(dim=c(T,p,p))    \t# Yt one-step forecasts (var-cov) \n    Sigw  <- matrix(nrow=p,ncol=p)  \t# Var-Cov of the residuals in the measurement equation\n    Rwt   <- array(dim=p)           \t# Yt residuals\n    At    <- matrix(nrow=n,ncol=p)      # Auxiliary matrix (= FPt H' SigYt^(-1) )\n    c     <- matrix(nrow=T,ncol=n)\t# constants in the transition equations\n    Zt    <- array(dim=n)          \t# state vectors \n    FZt   <- array(dim=n)   \t\t# Zt one-step forecasts (mean)\n    Qtet  <- array(dim=n)          \t# Zt residuals\n    Pt    <- matrix(nrow=n,ncol=n)  \t# Var-cov of the state vectors\n    FPt   <- matrix(nrow=n,ncol=n)  \t# Zt one-step forecasts (var-cov)\n    Sige  <- matrix(nrow=n,ncol=n)  \t# Var-Cov of the residuals in the transition equation (at time t)\n    lt    <- array(dim=T)               # time t contribution to the log-lokelihood\t\n\n#            Further Initializations \n\n    if (is.null(G)) c[] <- 0\n    else  c    <- ut %*% t(G) \n    Sigw  <- R %*% t(R)\n    loglikcnst <- -0.5*( p*log(2*pi) )\n\n    if (is.null(z0)) Zt[] <- 0\n    else  Zt <- z0\n    if (is.null(P0)) Pt <- diag(100,n,n)\n    else Pt <- P0\n\n#            Perform the Kalman recursions\n\n    for (t in 1:T)   {\n\n\tSiget <- Qt(Qtpar,Zt) %*% t(Qt(Qtpar,Zt))\n        FZt <- F %*% Zt + c[t,]\n        FPt <- F %*% Pt %*% t(F) + Siget\n  \tFYt[t,] <- H %*% FZt\n  \tRwt <- Yt[t,] - FYt[t,]\n\tSigY[t,,] <- H %*% FPt %*% t(H) + Sigw\n  \tAt <- FPt %*% t(solve(SigY[t,,],H))\n  \tQtet <- At %*% Rwt\n       \tZt <- FZt + Qtet\n  \tPt <- FPt - At %*% SigY[t,,] %*% t(At)\n   \tlt[t] <- loglikcnst -0.5*( log(det(SigY[t,,])) + Rwt %*% solve(SigY[t,,],Rwt) )\n    }\n\n#           Compute the log-likelihood and return the results  \n\n    logLik <- sum(lt)\n    if (result == \"like\") return(-logLik) \n    if (result == \"all\")  return(list(like=-logLik,liket=lt,pred=FYt,Ytcov=SigY)) \n}\n\n\n\nMessage: 3\nDate: Fri, 27 Apr 2007 00:02:24 +0200\nFrom: \"Arne Krombach\" <arne.krombach at web.de>\nSubject: [R-SIG-Finance] Cox, Ingersoll,\tRoss/Vasicek parameter\n\testimation via Kalman-Filter (SSPIR)\nTo: <r-sig-finance at stat.math.ethz.ch>\nMessage-ID: <E1HhC2F-000072-00 at smtp06.web.de>\nContent-Type: text/plain\n\nDear R-Users,\n\n \n\nI am trying to estimate the parameters for a CIR 1-/2-/3-Factor model via\nKalman filtering. The idea was to do it via the package SSPIR, but I have\nproblems to transform the CIR state space form into the SSPIR syntax.\nActually, I am not quite sure if this is possible at all. \n\n \n\nDid anybody already realise a CIR/Vasicek -parameter estimation via R? \n\n \n\nTo get an idea how a CIR-1-factor state space form looks like (Y= vector of\nzerobond-yields with the maturities tau at month t):\n\n \n\nY(t,tau)= ( -1/tau * log A(tau) ) + (1/tau * B(tau) * x(t) + e\n\n \n\nWhere :\n\n \n\nA(tau) = [(2 * h * e^( a + lambda + h) * tau/2) / (2 * h + (a + lambda + h)\n* (e^(tau * h) - 1)] ^(2 * b/ sigma^2)\n\nB(tau) = [(2 * (e^(tau * h)  -1)) / 2 * h + (a + lambda + h) * (e^(tau * h)\n- 1)]\n\nh = sqrt[(a + lambda)^2 + 2*sigma^2] \n\n \n\nwhich means that, besides the time varying factor x, the parameters a, b,\nsigma, and lambda have to be estimated via Kalman filtering.\n\n \n\nIs it possible to implement this in SSPIR? If you have any other suggests or\nif you already implement comparable models in R, I would be very grateful\nfor your help.\n\n \n\nKind Regards,\n\n \n\nArne Krombach\n\n\n\nEsta mensagem (incluindo quaisquer anexos) pode conter informa??o confidencial ou legalmente protegida para uso exclusivo do destinat?rio. Se n?o for o destinat?rio pretendido da mesma, n?o dever? fazer uso, copiar, distribuir ou revelar o seu conte?do (incluindo quaisquer anexos) a terceiros, sem a devida autoriza??o. Se recebeu esta mensagem por engano, por favor informe o emissor, por e-mail e elimine-a imediatamente. Obrigado.\n\nThis message may contain confidential information or privile...{{dropped}}",
+      "body_snippet": "Hi,\n\nI did have the same problem and was not able to use the SSPIR or the\nsde packages for the CIR model (for Vasicek's the SSPIR worked fine for me)\nbecause the sde package assumes that the volatilit",
+      "thread_id": "thread-a01ae5f56621",
+      "thread_depth": 0,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-c8b37f5dba2e",
+      "message_id": "<2F912B4F-964A-4E88-B29B-0D63B6C389C1@unimi.it>",
+      "from_name": "stefano iacus",
+      "from_email_hash": "01be6412e8f757040268a7a1e0493160e362e221b339410d4861d3d4189ad837",
+      "date": "2007-04-28T08:09:29+02:00",
+      "subject": "[R-SIG-Finance] Cox, Ingersoll, Ross/Vasicek parameter \testimation \tviaKalman-Filter (SSPIR)",
+      "subject_clean": "Cox, Ingersoll, Ross/Vasicek parameter \testimation \tviaKalman-Filter (SSPIR)",
+      "in_reply_to": "<OFE67D5D15.C36E654F-ON652572CA.00221947-652572CA.00223EFE@ccilindia.co.in>",
+      "references": [
+        "<OFE67D5D15.C36E654F-ON652572CA.00221947-652572CA.00223EFE@ccilindia.co.in>"
+      ],
+      "body_plain": "as for the sde package (never finished, me culpa) I suggest to use a  \nsmarter simulation scheme then default method which is Euler+Error  \nPrediction. In particular for CIR you might want to use the exact law  \nof the increments (i.e. the exact transition density). To speed up MC  \nanalysis, you can use parameter \"M\" which generates for the same  \nmodel, M independent trajectories returning  a mts object (instead of  \na simple ts one)\n\nI don't know if this is useful for your problem though.\n\nstefano\n\nOn 27/apr/07, at 08:14, gyadav at ccilindia.co.in wrote:\n\n>\n> Hi\n>\n> According to my little understanding of finance. I tried to implement\n> vasicek model for the term structure taking help of some paper  \n> which had\n> mathematica code. I can only help with the code which wrote in R.  \n> Please\n> have a look at it and the library was 'sde' which Mr. Brian has also\n> reflected :-) cheers\n> ###################VASICEK MODEL##############################\n> alpha2<-0.03\n> gamma2<-0.06\n> sigma2<--0.02\n> delta1<-0.0001\n> Lambda2<-0.667 # comes from Sharpe's Ratio\n> T2<-10\n> ls()\n>\n>\n> #\n> Years<-read.csv(\"C:\\\\input_VAS.csv\") #data containing 301 lines  \n> starting\n> from 0 to 10 with an constant increment\n>\n> set.seed(2)\n> for ( i in 1:100){\n>         for (j in 1:100) {\n>                 d<-expression(alpha2*(gamma2 - x))\n>                 s<-expression(sigma2)\n>  sde.sim(X0=0.03,t0=0,N=300,delta=0.0001,sigma=s,drift=d)->SpotRates #\n> having 301 entries\n> #               length(SpotRates)\n>                 RInfinity1<- (gamma1 + ((sigma1*Lambda)/alpha1) -\n> ((sigma1*sigma1)/(alpha1*alpha1)))\n>                 RInfinity<-rep(RInfinity1,length(SpotRates))\n>                 alpha1<-rep(alpha2,length(SpotRates))\n>                 gamma1<-rep(gamma2,length(SpotRates))\n>                 sigma1<-rep(sigma2,length(SpotRates))\n>                 Lambda1<-rep(Lambda2,length(SpotRates))\n>                 T1<-rep(T2,length(SpotRates))\n>                 #ls()\n>                 X1<-((1/alpha1)*(1 - exp(-1*alpha1*(T1 -\n> Years)))*(RInfinity - SpotRates))\n>                 X2<- ((T1 - Years)*RInfinity)\n>                 X3<-((sigma1*sigma1)*(1 - exp(-1*alpha1*(T1 -  \n> Years)))*(1\n> - exp(-1*alpha1*(T1 - years)))/(4*alpha1*alpha1*alpha1)  )\n>                 Price <-  exp( X1 - X2 - X3)\n>                 #####\n>                 #Rates<-if(Years=0.0) SpotRates else -log(Price,exp \n> (1))/T\n>                 #plot(x=Years,y=Rates)\n>                 #plot(SpotRates,main=\"VAS Process\")\n>         }#j\n>         sigma2<-sigma2 + 0.0006\n> }#i stdev\n> write.csv(SpotRates,\"C:\\\\vas.csv\")\n> help(\"log\")\n>\n> HTH\n> -gaurav\n>\n>\n>\n> \"Arne Krombach\" <arne.krombach at web.de>\n> Sent by: r-sig-finance-bounces at stat.math.ethz.ch\n> 27-04-07 03:32 AM\n>\n> To\n> <r-sig-finance at stat.math.ethz.ch>\n> cc\n>\n> Subject\n> [R-SIG-Finance] Cox, Ingersoll,Ross/Vasicek parameter estimation via\n> Kalman-Filter (SSPIR)\n>\n>\n>\n>\n>\n>\n> Dear R-Users,\n>\n>\n>\n> I am trying to estimate the parameters for a CIR 1-/2-/3-Factor  \n> model via\n> Kalman filtering. The idea was to do it via the package SSPIR, but  \n> I have\n> problems to transform the CIR state space form into the SSPIR syntax.\n> Actually, I am not quite sure if this is possible at all.\n>\n>\n>\n> Did anybody already realise a CIR/Vasicek -parameter estimation via R?\n>\n>\n>\n> To get an idea how a CIR-1-factor state space form looks like (Y=  \n> vector\n> of\n> zerobond-yields with the maturities tau at month t):\n>\n>\n>\n> Y(t,tau)= ( -1/tau * log A(tau) ) + (1/tau * B(tau) * x(t) + e\n>\n>\n>\n> Where :\n>\n>\n>\n> A(tau) = [(2 * h * e^( a + lambda + h) * tau/2) / (2 * h + (a +  \n> lambda +\n> h)\n> * (e^(tau * h) - 1)] ^(2 * b/ sigma^2)\n>\n> B(tau) = [(2 * (e^(tau * h)  -1)) / 2 * h + (a + lambda + h) * (e^ \n> (tau *\n> h)\n> - 1)]\n>\n> h = sqrt[(a + lambda)^2 + 2*sigma^2]\n>\n>\n>\n> which means that, besides the time varying factor x, the parameters  \n> a, b,\n> sigma, and lambda have to be estimated via Kalman filtering.\n>\n>\n>\n> Is it possible to implement this in SSPIR? If you have any other  \n> suggests\n> or\n> if you already implement comparable models in R, I would be very  \n> grateful\n> for your help.\n>\n>\n>\n> Kind Regards,\n>\n>\n>\n> Arne Krombach\n>\n>\n>                  [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.\n>\n>\n>\n> ====================================================================== \n> ======================\n> DISCLAIMER AND CONFIDENTIALITY CAUTION:\\ \\ This message and ... \n> {{dropped}}\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.",
+      "body_snippet": "as for the sde package (never finished, me culpa) I suggest to use a  \nsmarter simulation scheme then default method which is Euler+Error  \nPrediction. In particular for CIR you might want to use the ",
+      "thread_id": "thread-cb9012a6e17f",
+      "thread_depth": 2,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-bde1c274388f",
+      "message_id": "<10231268.post@talk.nabble.com>",
+      "from_name": "genx",
+      "from_email_hash": "988c3969ea449636bf2ecddd29c8339bbfcb5e69ff8c63a59eb73ef6bfb6e73c",
+      "date": "2007-04-28T02:27:03-07:00",
+      "subject": "[R-SIG-Finance] [R-sig-finance] troubles with the weights in the VaR function",
+      "subject_clean": "troubles with the weights in the VaR function",
+      "in_reply_to": "<971536df0704260809m3dea5148yb76c57c3854adba6@mail.gmail.com>",
+      "references": [
+        "<455B2F290064F967@>",
+        "<10199718.post@talk.nabble.com>",
+        "<971536df0704260809m3dea5148yb76c57c3854adba6@mail.gmail.com>"
+      ],
+      "body_plain": "I use financial data from Yahoo and it is of low quality i.e dirty but still\nvery popular since it's free. As an example, i want to compare the Swedish\nstocks ABB, Ericsson and Skanska to the Stockholm OMX30 Index using various\nmeasures available in rmetrics and the performanceanalytics packages. The\ndownload procedure looks like this for each symbol which should result in\nfour vectors with the same length:\n\nOMX30 <- get.hist.quote(\"^OMX\",start=(today <- Sys.Date())-700, quote =\nc(\"Close\"), provider = c(\"yahoo\"), retclass = c(\"zoo\"))\n\n> dim(OMX30)\n[1] 451   1\n> dim(ABB)\n[1] 489   1\n> dim(ERIC)\n[1] 491   1\n> dim(SKAB)\n[1] 491   1\n\n\nSolution - a Bloomberg terminal with high quality data?\n\n\n\nGabor Grothendieck wrote:\n> \n> On 4/26/07, genx <info at genetrix.se> wrote:\n>>\n>> I have the same problem with vectors of different length, most packages\n>> don't\n>> know how to scale and adjust timeseries / vectors of different length. It\n>> would be a welcome contribution to R Finance if any programmer out there\n>> could solve this problem in an easy way.\n>>\n> \n> All of the major time series classes handle series of different lengths.\n> \n> a <- ts(1:3); b <- ts(12:15, start = 2)\n> a + b\n> a == b\n> \n> library(zoo)\n> az <- as.zoo(a); bz <- as.zoo(b)\n> az + bz\n> az == bz\n> \n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.\n> \n> \n\n-- \nView this message in context: http://www.nabble.com/troubles-with-the-weights-in-the-VaR-function-tf2785155.html#a10231268\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "I use financial data from Yahoo and it is of low quality i.e dirty but still\nvery popular since it's free. As an example, i want to compare the Swedish\nstocks ABB, Ericsson and Skanska to the Stockhol",
+      "thread_id": "thread-63cb9bb1fc59",
+      "thread_depth": 2,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-a414ea9bb86c",
+      "message_id": "<200704280613.36861.brian@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2007-04-28T06:13:36-05:00",
+      "subject": "[R-SIG-Finance] [R-sig-finance] troubles with the weights in the VaR function",
+      "subject_clean": "troubles with the weights in the VaR function",
+      "in_reply_to": "<10231268.post@talk.nabble.com>",
+      "references": [
+        "<455B2F290064F967@>",
+        "<971536df0704260809m3dea5148yb76c57c3854adba6@mail.gmail.com>",
+        "<10231268.post@talk.nabble.com>"
+      ],
+      "body_plain": "On Saturday 28 April 2007 04:27, genx wrote:\n> I use financial data from Yahoo and it is of low quality i.e dirty but\n> still very popular since it's free. As an example, i want to compare\n> the Swedish stocks ABB, Ericsson and Skanska to the Stockholm OMX30\n> Index using various measures available in rmetrics and the\n> performanceanalytics packages. The download procedure looks like this\n> for each symbol which should result in four vectors with the same\n> length:\n>\n> OMX30 <- get.hist.quote(\"^OMX\",start=(today <- Sys.Date())-700, quote =\n> c(\"Close\"), provider = c(\"yahoo\"), retclass = c(\"zoo\"))\n>\n> > dim(OMX30)\n> [1] 451   1\n> > dim(ABB)\n> [1] 489   1\n> > dim(ERIC)\n> [1] 491   1\n> > dim(SKAB)\n> [1] 491   1\n\nWith free data sources, for indexes in particular, they often only have \nmonthly data back beyond a certain point.\n\nOne trick here is to use the length of your shortest vector.  If your data \nsource doesn't have data for a particular series back far enough, then \nuse the start date of your shortest series as the start date for \nretrieving all the other series.\n\nAnother option, as I mentioned in my post yesterday, would be to use \nna.contiguous or one of the other NA handlers with zoo.  get.hist.quote \nreturns zoo objects.  So, if you combine all your historical data in one \nzoo object with multiple data columns, one of the na. methods should \nallow you to get back only the aligned series.\n\n> Solution - a Bloomberg terminal with high quality data?\n\nThis will help, but it won't eliminate your problem, in R or any other \nenvironment.  For researchers who need really clean historical data over \nvery long time periods, data from CRSP is often used, but this makes \nBloomberg look cheap.\n\nRegards,\n\n   - Brian\n-- \n773-459-4973 mobile\nhttp://braverock.com/brian/resume-quant.pdf",
+      "body_snippet": "On Saturday 28 April 2007 04:27, genx wrote:\n> I use financial data from Yahoo and it is of low quality i.e dirty but\n> still very popular since it's free. As an example, i want to compare\n> the Swedi",
+      "thread_id": "thread-63cb9bb1fc59",
+      "thread_depth": 3,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-d8802ed58577",
+      "message_id": "<645496.58599.qm@web30811.mail.mud.yahoo.com>",
+      "from_name": "Rich Ghazarian",
+      "from_email_hash": "b224aa5de2ffd6fa62b8a57abdd12873d341a2c231dc222fb7488eb57fa5080a",
+      "date": "2007-04-28T07:26:24-07:00",
+      "subject": "[R-SIG-Finance] Yet another GARCH-T question",
+      "subject_clean": "Yet another GARCH-T question",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "What is the best way to fit a Student\nT GARCH, I have looked at previous postings, and they require a  formula\n\ni.e.\n\n\n\ngarchFit(formula, data, init.rec = c(\"mci\",\n\"uev\"), delta = 2, skew = 1,\n\nshape = 4, cond.dist = c(\"dnorm\",\n\"dsnorm\", \"dged\", \"dsged\", \"dstd\",\n\"dsstd\"),....\n\n\n\nIs there a quick way to get this done?\n\nI have the following; How do I convert\nit to a Student T GARCH\n\n\n\n fit <- garch(GHRT, order=c(1,1))\n\n\n\nI have tried the following and I can't\nget it to work.\n\n\n\n> garchFit(formula.var = ~garch(1,\n1), series=GHRT, cond.dist =\"dstd\")\n\nError in .modelSeries(fake = FALSE,\nlhs = TRUE) : \n\n        argument\n\"formula\" is missing, with no default\n\n\n\n\n\nAlso I can not find help on the following.\n\nGarchDistributionFits(fSeries) Parameter\nFit of a Distribution",
+      "body_snippet": "What is the best way to fit a Student\nT GARCH, I have looked at previous postings, and they require a  formula\n\ni.e.\n\n\n\ngarchFit(formula, data, init.rec = c(\"mci\",\n\"uev\"), delta = 2, skew = 1,\n\nshape ",
+      "thread_id": "thread-d8802ed58577",
+      "thread_depth": 0,
+      "month": "2007-04"
+    },
+    {
+      "id": "msg-5145470d3667",
+      "message_id": "<10241460.post@talk.nabble.com>",
+      "from_name": "genx",
+      "from_email_hash": "988c3969ea449636bf2ecddd29c8339bbfcb5e69ff8c63a59eb73ef6bfb6e73c",
+      "date": "2007-04-29T05:40:23-07:00",
+      "subject": "[R-SIG-Finance] [R-sig-finance] troubles with the weights in the VaR function",
+      "subject_clean": "troubles with the weights in the VaR function",
+      "in_reply_to": "<971536df0704270429k5c6cdac7uce281decb0410b@mail.gmail.com>",
+      "references": [
+        "<455B2F290064F967@>",
+        "<10199718.post@talk.nabble.com>",
+        "<971536df0704260809m3dea5148yb76c57c3854adba6@mail.gmail.com>",
+        "<10215187.post@talk.nabble.com>",
+        "<971536df0704270429k5c6cdac7uce281decb0410b@mail.gmail.com>"
+      ],
+      "body_plain": "Well, after browsing the zoo documentation i found a wealth of information,\nit's all there.\nSolving my problem with differenth length of the benchmark index and stocks\ni want to\ncompare the zoo documentation suggested the following\n\nzoo(x, order.by = index(x), frequency = NULL)\n\n\nFull documentation here:\nhttp://rss.acs.unt.edu/Rdoc/library/zoo/html/zoo.html\n\nThank you\n\n\n\nGabor Grothendieck wrote:\n> \n> the code shows two examples.  The first using \"ts\" class series and the\n> second with \"zoo\" series.\n> \n> On 4/27/07, genx <info at genetrix.se> wrote:\n>>\n>> Thank you for you reply,\n>>\n>> i am a novice when it comes to CRAN R, i haven't looked much outside\n>> rMetrics so far.\n>> My recurring problem is daily financial data of different length, the\n>> procedure you\n>> describe below are two separate ways to align timeseries or should it be\n>> done as one\n>> command? If it has to be done in two stages as you describe it is a very\n>> time consuming\n>> way to handle all the financial data that, i guess anyone, would put to\n>> use\n>> in finance R.\n>>\n>> Kind regards\n>>\n>>\n>> Gabor Grothendieck wrote:\n>> >\n>> > On 4/26/07, genx <info at genetrix.se> wrote:\n>> >>\n>> >> I have the same problem with vectors of different length, most\n>> packages\n>> >> don't\n>> >> know how to scale and adjust timeseries / vectors of different length.\n>> It\n>> >> would be a welcome contribution to R Finance if any programmer out\n>> there\n>> >> could solve this problem in an easy way.\n>> >>\n>> >\n>> > All of the major time series classes handle series of different\n>> lengths.\n>> >\n>> > a <- ts(1:3); b <- ts(12:15, start = 2)\n>> > a + b\n>> > a == b\n>> >\n>> > library(zoo)\n>> > az <- as.zoo(a); bz <- as.zoo(b)\n>> > az + bz\n>> > az == bz\n>> >\n>> > _______________________________________________\n>> > R-SIG-Finance at stat.math.ethz.ch mailing list\n>> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> > -- Subscriber-posting only.\n>> > -- If you want to post, subscribe first.\n>> >\n>> >\n>>\n>> --\n>> View this message in context:\n>> http://www.nabble.com/troubles-with-the-weights-in-the-VaR-function-tf2785155.html#a10215187\n>> Sent from the Rmetrics mailing list archive at Nabble.com.\n>>\n>> _______________________________________________\n>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only.\n>> -- If you want to post, subscribe first.\n>>\n> \n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.\n> \n> \n\n-- \nView this message in context: http://www.nabble.com/troubles-with-the-weights-in-the-VaR-function-tf2785155.html#a10241460\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "Well, after browsing the zoo documentation i found a wealth of information,\nit's all there.\nSolving my problem with differenth length of the benchmark index and stocks\ni want to\ncompare the zoo docume",
+      "thread_id": "thread-63cb9bb1fc59",
+      "thread_depth": 4,
+      "month": "2007-04"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-a12f835e7097",
+      "subject": "get.hist.quote",
+      "message_count": 1,
+      "participants": [
+        "Tormod Sætre"
+      ],
+      "started": "2007-04-03T11:48:13+00:00",
+      "last_reply": "2007-04-03T11:48:13+00:00",
+      "root_message_id": "msg-a12f835e7097"
+    },
+    {
+      "id": "thread-9f11723443fa",
+      "subject": "Problems in fSeries 240.10068",
+      "message_count": 1,
+      "participants": [
+        "Mukhopadyay.C"
+      ],
+      "started": "2007-04-05T11:41:35+05:30",
+      "last_reply": "2007-04-05T11:41:35+05:30",
+      "root_message_id": "msg-9f11723443fa"
+    },
+    {
+      "id": "thread-ba8b3369c2be",
+      "subject": "R and FinCad",
+      "message_count": 2,
+      "participants": [
+        "Andrew Piskorski",
+        "Ryan Sheftel"
+      ],
+      "started": "2007-04-06T13:03:05-04:00",
+      "last_reply": "2007-04-11T13:44:41-04:00",
+      "root_message_id": "msg-ba8b3369c2be"
+    },
+    {
+      "id": "thread-41d169a7a6dc",
+      "subject": "Interpretation of results from ca.jo in urca package",
+      "message_count": 1,
+      "participants": [
+        "William Ferreira"
+      ],
+      "started": "2007-04-06T14:18:29+01:00",
+      "last_reply": "2007-04-06T14:18:29+01:00",
+      "root_message_id": "msg-41d169a7a6dc"
+    },
+    {
+      "id": "thread-e38e9ebab252",
+      "subject": "R-SIG-Finance Digest, Vol 35, Issue 1",
+      "message_count": 1,
+      "participants": [
+        "Sandy.Lucka at t-online.de"
+      ],
+      "started": "2007-04-06T17:56:28+02:00",
+      "last_reply": "2007-04-06T17:56:28+02:00",
+      "root_message_id": "msg-e38e9ebab252"
+    },
+    {
+      "id": "thread-3fd6ef3e6c56",
+      "subject": "R and FinCad",
+      "message_count": 3,
+      "participants": [
+        "Robert Sams",
+        "Stampfl Bernd 0969 SPI",
+        "Yong Xiao"
+      ],
+      "started": "2007-04-10T14:04:21+01:00",
+      "last_reply": "2007-04-20T16:53:05+02:00",
+      "root_message_id": "msg-3fd6ef3e6c56"
+    },
+    {
+      "id": "thread-737a3687f6ef",
+      "subject": "Problems in fSeries 240.10068",
+      "message_count": 4,
+      "participants": [
+        "Brian Wu",
+        "Gabor Grothendieck",
+        "Mukhopadyay.C",
+        "manos par"
+      ],
+      "started": "2007-04-10T19:40:30+03:00",
+      "last_reply": "2007-04-11T12:46:21+05:30",
+      "root_message_id": "msg-737a3687f6ef"
+    },
+    {
+      "id": "thread-c33a476937a3",
+      "subject": "R and FinCad",
+      "message_count": 3,
+      "participants": [
+        "Dirk Eddelbuettel",
+        "Robert Sams",
+        "Ryan Sheftel"
+      ],
+      "started": "2007-04-12T13:08:12+01:00",
+      "last_reply": "2007-04-12T21:51:01-04:00",
+      "root_message_id": "msg-c33a476937a3"
+    },
+    {
+      "id": "thread-94a2adbb0530",
+      "subject": "Dynamic Conditional Correlation (Engle's model)?",
+      "message_count": 1,
+      "participants": [
+        "John McHenry"
+      ],
+      "started": "2007-04-14T10:10:09-07:00",
+      "last_reply": "2007-04-14T10:10:09-07:00",
+      "root_message_id": "msg-94a2adbb0530"
+    },
+    {
+      "id": "thread-4b82b63052ff",
+      "subject": "PerformanceAnalytics R package for Performance and Risk Analysis (v0.9.4)",
+      "message_count": 4,
+      "participants": [
+        "Brian G. Peterson",
+        "Kurt Hornik",
+        "Martin Becker"
+      ],
+      "started": "2007-04-15T11:41:21-05:00",
+      "last_reply": "2007-04-17T08:56:37-05:00",
+      "root_message_id": "msg-4b82b63052ff"
+    },
+    {
+      "id": "thread-78e0397088d0",
+      "subject": "Taoufik ZIZI doesn't work any longer for SG.",
+      "message_count": 1,
+      "participants": [
+        "taoufik.zizi at sgcib.com"
+      ],
+      "started": "2007-04-16T12:23:15+02:00",
+      "last_reply": "2007-04-16T12:23:15+02:00",
+      "root_message_id": "msg-78e0397088d0"
+    },
+    {
+      "id": "thread-2272002c086a",
+      "subject": "How to produce vector of correlation matrices",
+      "message_count": 2,
+      "participants": [
+        "Gabor Grothendieck",
+        "Murali Menon"
+      ],
+      "started": "2007-04-17T14:28:30+00:00",
+      "last_reply": "2007-04-17T12:10:39-04:00",
+      "root_message_id": "msg-2272002c086a"
+    },
+    {
+      "id": "thread-acee4a820643",
+      "subject": "How to produce vector of correlation matrices",
+      "message_count": 1,
+      "participants": [
+        "Murali Menon"
+      ],
+      "started": "2007-04-17T15:22:38+00:00",
+      "last_reply": "2007-04-17T15:22:38+00:00",
+      "root_message_id": "msg-acee4a820643"
+    },
+    {
+      "id": "thread-edc2cbfb21ac",
+      "subject": "Problems in fSeries 240.10068",
+      "message_count": 1,
+      "participants": [
+        "David.Miron at csiro.au"
+      ],
+      "started": "2007-04-17T15:48:40+10:00",
+      "last_reply": "2007-04-17T15:48:40+10:00",
+      "root_message_id": "msg-edc2cbfb21ac"
+    },
+    {
+      "id": "thread-cbe8316680f2",
+      "subject": "GEV Parameters",
+      "message_count": 1,
+      "participants": [
+        "Ignacio Perez Velez"
+      ],
+      "started": "2007-04-18T06:32:55-05:00",
+      "last_reply": "2007-04-18T06:32:55-05:00",
+      "root_message_id": "msg-cbe8316680f2"
+    },
+    {
+      "id": "thread-63cb9bb1fc59",
+      "subject": "troubles with the weights in the VaR function",
+      "message_count": 8,
+      "participants": [
+        "Brian G. Peterson",
+        "Gabor Grothendieck",
+        "genx"
+      ],
+      "started": "2007-04-26T05:55:11-07:00",
+      "last_reply": "2007-04-29T05:40:23-07:00",
+      "root_message_id": "msg-63cb9bb1fc59"
+    },
+    {
+      "id": "thread-cb9012a6e17f",
+      "subject": "Cox, Ingersoll, Ross/Vasicek parameter estimation via Kalman-Filter (SSPIR)",
+      "message_count": 9,
+      "participants": [
+        "Arne Krombach",
+        "Brian G. Peterson",
+        "Eric Zivot",
+        "Leeds, Mark (IED)",
+        "Thomas Steiner",
+        "gyadav at ccilindia.co.in",
+        "stefano iacus"
+      ],
+      "started": "2007-04-27T00:02:24+02:00",
+      "last_reply": "2007-04-28T08:09:29+02:00",
+      "root_message_id": "msg-cb9012a6e17f"
+    },
+    {
+      "id": "thread-a01ae5f56621",
+      "subject": "Cox, Ingersoll, Ross/Vasicek parameter",
+      "message_count": 1,
+      "participants": [
+        "Pedro Silva"
+      ],
+      "started": "2007-04-27T14:47:28+01:00",
+      "last_reply": "2007-04-27T14:47:28+01:00",
+      "root_message_id": "msg-a01ae5f56621"
+    },
+    {
+      "id": "thread-d8802ed58577",
+      "subject": "Yet another GARCH-T question",
+      "message_count": 1,
+      "participants": [
+        "Rich Ghazarian"
+      ],
+      "started": "2007-04-28T07:26:24-07:00",
+      "last_reply": "2007-04-28T07:26:24-07:00",
+      "root_message_id": "msg-d8802ed58577"
+    }
+  ]
+}

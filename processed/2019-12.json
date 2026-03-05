@@ -1,0 +1,36 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2019-12",
+  "messages": [
+    {
+      "id": "msg-8c4003cab366",
+      "message_id": "<CA+oJuEEfc3dGeBUMr6a9B1wv5qp=6LN0UTNnwPuiWMAP1TLfcQ@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "3e375900f97169bfcb61fc4fdc48bafc91349f60a4f7a4813c93bbe535a52a19",
+      "date": "2019-12-03T14:55:35-05:00",
+      "subject": "[R-SIG-Finance] How to lag Return.portfolio a day?",
+      "subject_clean": "How to lag Return.portfolio a day?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "So, quick question in case this is already implemented in Return.portfolio,\nbut this is something that's been bugging me for a while now.\n\nSay you're backtesting a momentum strategy, with your rebalance dates being\nmonthly endpoints. While in a perfect world, you'd get your closing data at\nthe close and have time to rebalance the strategy right then and there, in\nthe real world, you might not have closing data until the next morning--or\nyou're a large fund that takes a day to move capital into position, or\nwhatever other real-world constraint.\n\nFor instance, here's an obligatory minimum reproducible example:\n\nposRets <- rep(.003, 63)\nposRets <- cbind(posRets, 0)\nposRets <- xts(posRets, order.by=as.Date(c(1:63)))\nwts <- rbind(c(0,1), c(1,0), c(0,1), c(1,0))\ntmp <- endpoints(posRets)\ntmp[1] <- 1\nwts <- xts(wts, order.by=index(posRets)[tmp])\nout <- Return.portfolio(R = posRets, weights = wts)\n\nNow, given that the weights are allocated at the end of every month, if we\nhave a 1-day lag to account for execution, I'd expect the first day of each\nnew month to be identical to the day before it. That is, if the previous\nmonth had a zero return because it was invested in the second asset, then\nthe first day of the new month should also have a zero return, and vice\nversa.\n\nThis is not the case.\n\n[image: image.png]\n\nIs there a lag setting in Return.portfolio to account for this, or should I\nwrite the function myself?\n\n-------------- next part --------------\nAn HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20191203/8093c9e7/attachment.html>\n\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: image.png\nType: image/png\nSize: 11622 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20191203/8093c9e7/attachment.png>",
+      "body_snippet": "So, quick question in case this is already implemented in Return.portfolio,\nbut this is something that's been bugging me for a while now.\n\nSay you're backtesting a momentum strategy, with your rebalan",
+      "thread_id": "thread-8c4003cab366",
+      "thread_depth": 0,
+      "month": "2019-12"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-8c4003cab366",
+      "subject": "How to lag Return.portfolio a day?",
+      "message_count": 1,
+      "participants": [
+        "Ilya Kipnis"
+      ],
+      "started": "2019-12-03T14:55:35-05:00",
+      "last_reply": "2019-12-03T14:55:35-05:00",
+      "root_message_id": "msg-8c4003cab366"
+    }
+  ]
+}

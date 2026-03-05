@@ -1,0 +1,506 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2017-04",
+  "messages": [
+    {
+      "id": "msg-af8d32f8272e",
+      "message_id": "<CAE64KY+zKB89wVAC9kUspnu5N-OjystGQdsNLWRj2hRgTEN8DA@mail.gmail.com>",
+      "from_name": "Jon Golenbock",
+      "from_email_hash": "052ed831bd7b09962c4e4d7be1908cf7a29f0f32a945a46a83615d55ce891a51",
+      "date": "2017-04-05T08:54:40-04:00",
+      "subject": "[R-SIG-Finance] Rblpapi package data limits?",
+      "subject_clean": "Rblpapi package data limits?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi, I was hoping somebody might be a regular user of this package to\ninteract with Bloomberg terminal. I've been having an issue pulling\nhistorical data, it seems to cut off at a seemingly arbitrary point --\n\n\nlibrary(rRblpapi)\nlibrary(dplyr)\nlibrary(purrr)\nlibrary(lubridate)\nlibrary(magrittr)\n\nstriplist <- c(\"NGK7\",\"NGM7\", \"NGN7\",\"NGQ7\", \"NGU7\",\"NGV7\",\"NGX7\")\nstriplist <- paste(striplist, \"Comdty\")\n\n\ndf <- striplist %>%\n  map(~ getBars(., barInterval = 60 *24,startTime =\nfloor_date(Sys.time(),\"day\") - days(300))) %>%\n  map(~select(., times, close))\nnames(df) <- striplist\n\n\nthis should be producing close data for 300 days, yet you will see that the\ndata only goes back 140.\n\nAnybody run into this before, should I have expected this?\n\nThanks,\nJon\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi, I was hoping somebody might be a regular user of this package to\ninteract with Bloomberg terminal. I've been having an issue pulling\nhistorical data, it seems to cut off at a seemingly arbitrary p",
+      "thread_id": "thread-af8d32f8272e",
+      "thread_depth": 0,
+      "month": "2017-04"
+    },
+    {
+      "id": "msg-12e326bffc76",
+      "message_id": "<1491397409.23236.5.camel@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2017-04-05T08:03:29-05:00",
+      "subject": "[R-SIG-Finance] Rblpapi package data limits?",
+      "subject_clean": "Rblpapi package data limits?",
+      "in_reply_to": "<CAE64KY+zKB89wVAC9kUspnu5N-OjystGQdsNLWRj2hRgTEN8DA@mail.gmail.com>",
+      "references": [
+        "<CAE64KY+zKB89wVAC9kUspnu5N-OjystGQdsNLWRj2hRgTEN8DA@mail.gmail.com>"
+      ],
+      "body_plain": "On Wed, 2017-04-05 at 08:54 -0400, Jon Golenbock wrote:\n> Hi, I was hoping somebody might be a regular user of this package to\n> interact with Bloomberg terminal. I've been having an issue pulling\n> historical data, it seems to cut off at a seemingly arbitrary point\n> --\n> \n> \n> library(rRblpapi)\n> library(dplyr)\n> library(purrr)\n> library(lubridate)\n> library(magrittr)\n> \n> striplist <- c(\"NGK7\",\"NGM7\", \"NGN7\",\"NGQ7\", \"NGU7\",\"NGV7\",\"NGX7\")\n> striplist <- paste(striplist, \"Comdty\")\n> \n> \n> df <- striplist %>%\n> ? map(~ getBars(., barInterval = 60 *24,startTime =\n> floor_date(Sys.time(),\"day\") - days(300))) %>%\n> ? map(~select(., times, close))\n> names(df) <- striplist\n\n\nMany people do not use the 'tidyverse', especially in finance where\ndata is often very large and ultimately needs to be a 'wide' time\nseries and one tends to do more matrix math than factor munging.\n\nPlease create a *minimal* reproducible example using *just* the Rblpapi\npackage. It will make it easier for others to help you.\n\n\n> this should be producing close data for 300 days, yet you will see\n> that the\n> data only goes back 140.\n> \n> Anybody run into this before, should I have expected this?\n> \n> Thanks,\n> Jon\n>",
+      "body_snippet": "On Wed, 2017-04-05 at 08:54 -0400, Jon Golenbock wrote:\n> Hi, I was hoping somebody might be a regular user of this package to\n> interact with Bloomberg terminal. I've been having an issue pulling\n> h",
+      "thread_id": "thread-af8d32f8272e",
+      "thread_depth": 1,
+      "month": "2017-04"
+    },
+    {
+      "id": "msg-b93e95bcdbb8",
+      "message_id": "<CAE64KYL51++CfzeVqXsrf8U5CGNaey=4Ydruwx_c1j+267oqKQ@mail.gmail.com>",
+      "from_name": "Jon Golenbock",
+      "from_email_hash": "052ed831bd7b09962c4e4d7be1908cf7a29f0f32a945a46a83615d55ce891a51",
+      "date": "2017-04-05T09:10:25-04:00",
+      "subject": "[R-SIG-Finance] Rblpapi package data limits?",
+      "subject_clean": "Rblpapi package data limits?",
+      "in_reply_to": "<1491397409.23236.5.camel@braverock.com>",
+      "references": [
+        "<CAE64KY+zKB89wVAC9kUspnu5N-OjystGQdsNLWRj2hRgTEN8DA@mail.gmail.com>",
+        "<1491397409.23236.5.camel@braverock.com>"
+      ],
+      "body_plain": "Sorry!\n\n getBars(\"NGX7 Comdty\",barInterval = 60 *24,startTime =\nas.POSIXct('2015-04-01'))\n\ndata only goes back to 9/20/16 for me. When I look up the ticker on the\nterminal, i get data back to 2/19/2008.\n\nOn Wed, Apr 5, 2017 at 9:03 AM, Brian G. Peterson <brian at braverock.com>\nwrote:\n\n> On Wed, 2017-04-05 at 08:54 -0400, Jon Golenbock wrote:\n> > Hi, I was hoping somebody might be a regular user of this package to\n> > interact with Bloomberg terminal. I've been having an issue pulling\n> > historical data, it seems to cut off at a seemingly arbitrary point\n> > --\n> >\n> >\n> > library(rRblpapi)\n> > library(dplyr)\n> > library(purrr)\n> > library(lubridate)\n> > library(magrittr)\n> >\n> > striplist <- c(\"NGK7\",\"NGM7\", \"NGN7\",\"NGQ7\", \"NGU7\",\"NGV7\",\"NGX7\")\n> > striplist <- paste(striplist, \"Comdty\")\n> >\n> >\n> > df <- striplist %>%\n> >   map(~ getBars(., barInterval = 60 *24,startTime =\n> > floor_date(Sys.time(),\"day\") - days(300))) %>%\n> >   map(~select(., times, close))\n> > names(df) <- striplist\n>\n>\n> Many people do not use the 'tidyverse', especially in finance where\n> data is often very large and ultimately needs to be a 'wide' time\n> series and one tends to do more matrix math than factor munging.\n>\n> Please create a *minimal* reproducible example using *just* the Rblpapi\n> package. It will make it easier for others to help you.\n>\n>\n> > this should be producing close data for 300 days, yet you will see\n> > that the\n> > data only goes back 140.\n> >\n> > Anybody run into this before, should I have expected this?\n> >\n> > Thanks,\n> > Jon\n> >\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Sorry!\n\n getBars(\"NGX7 Comdty\",barInterval = 60 *24,startTime =\nas.POSIXct('2015-04-01'))\n\ndata only goes back to 9/20/16 for me. When I look up the ticker on the\nterminal, i get data back to 2/19/200",
+      "thread_id": "thread-af8d32f8272e",
+      "thread_depth": 2,
+      "month": "2017-04"
+    },
+    {
+      "id": "msg-4931c05520be",
+      "message_id": "<CAMi=pg5cw5JVMFzYsLtRDiJ3249b2hmo2fmsyURud4Fo0pKcRA@mail.gmail.com>",
+      "from_name": "Whit Armstrong",
+      "from_email_hash": "9f0af921ac5e402b55cb0593a435b87162faa6caa4eef5ccb3498c95d81634d0",
+      "date": "2017-04-05T09:26:49-04:00",
+      "subject": "[R-SIG-Finance] Rblpapi package data limits?",
+      "subject_clean": "Rblpapi package data limits?",
+      "in_reply_to": "<CAE64KYL51++CfzeVqXsrf8U5CGNaey=4Ydruwx_c1j+267oqKQ@mail.gmail.com>",
+      "references": [
+        "<CAE64KY+zKB89wVAC9kUspnu5N-OjystGQdsNLWRj2hRgTEN8DA@mail.gmail.com>",
+        "<1491397409.23236.5.camel@braverock.com>",
+        "<CAE64KYL51++CfzeVqXsrf8U5CGNaey=4Ydruwx_c1j+267oqKQ@mail.gmail.com>"
+      ],
+      "body_plain": "talk to your rep or helpdesk... you or your employer has paid a lot of\nmoney for that privilege.\n\nas far as I know, they limit bar data to a very short lookback.  if you're\npulling daily data, you can pull the full history, however, you'll have to\nuse the tickers with two digit years, as the commodity tickers will repeat.\nor use the rolling tickers.\n\n-Whit\n\n\n\n\n\nOn Wed, Apr 5, 2017 at 9:10 AM, Jon Golenbock <jongolenbock at gmail.com>\nwrote:\n\n> Sorry!\n>\n>  getBars(\"NGX7 Comdty\",barInterval = 60 *24,startTime =\n> as.POSIXct('2015-04-01'))\n>\n> data only goes back to 9/20/16 for me. When I look up the ticker on the\n> terminal, i get data back to 2/19/2008.\n>\n> On Wed, Apr 5, 2017 at 9:03 AM, Brian G. Peterson <brian at braverock.com>\n> wrote:\n>\n> > On Wed, 2017-04-05 at 08:54 -0400, Jon Golenbock wrote:\n> > > Hi, I was hoping somebody might be a regular user of this package to\n> > > interact with Bloomberg terminal. I've been having an issue pulling\n> > > historical data, it seems to cut off at a seemingly arbitrary point\n> > > --\n> > >\n> > >\n> > > library(rRblpapi)\n> > > library(dplyr)\n> > > library(purrr)\n> > > library(lubridate)\n> > > library(magrittr)\n> > >\n> > > striplist <- c(\"NGK7\",\"NGM7\", \"NGN7\",\"NGQ7\", \"NGU7\",\"NGV7\",\"NGX7\")\n> > > striplist <- paste(striplist, \"Comdty\")\n> > >\n> > >\n> > > df <- striplist %>%\n> > >   map(~ getBars(., barInterval = 60 *24,startTime =\n> > > floor_date(Sys.time(),\"day\") - days(300))) %>%\n> > >   map(~select(., times, close))\n> > > names(df) <- striplist\n> >\n> >\n> > Many people do not use the 'tidyverse', especially in finance where\n> > data is often very large and ultimately needs to be a 'wide' time\n> > series and one tends to do more matrix math than factor munging.\n> >\n> > Please create a *minimal* reproducible example using *just* the Rblpapi\n> > package. It will make it easier for others to help you.\n> >\n> >\n> > > this should be producing close data for 300 days, yet you will see\n> > > that the\n> > > data only goes back 140.\n> > >\n> > > Anybody run into this before, should I have expected this?\n> > >\n> > > Thanks,\n> > > Jon\n> > >\n> >\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "talk to your rep or helpdesk... you or your employer has paid a lot of\nmoney for that privilege.\n\nas far as I know, they limit bar data to a very short lookback.  if you're\npulling daily data, you can",
+      "thread_id": "thread-af8d32f8272e",
+      "thread_depth": 3,
+      "month": "2017-04"
+    },
+    {
+      "id": "msg-1093d8d67e31",
+      "message_id": "<5453DE43-FDCF-4098-A187-DF225465679D@gmail.com>",
+      "from_name": "chidley.ryan at gmail.com",
+      "from_email_hash": "cd1a335476319e43956d5697555406b6a7c7e5fca41b4c723ee725d39ef2206d",
+      "date": "2017-04-05T15:29:46+02:00",
+      "subject": "[R-SIG-Finance] Rblpapi package data limits?",
+      "subject_clean": "Rblpapi package data limits?",
+      "in_reply_to": "<CAE64KY+zKB89wVAC9kUspnu5N-OjystGQdsNLWRj2hRgTEN8DA@mail.gmail.com>",
+      "references": [
+        "<CAE64KY+zKB89wVAC9kUspnu5N-OjystGQdsNLWRj2hRgTEN8DA@mail.gmail.com>"
+      ],
+      "body_plain": "bloomberg doesn't store intraday data more than 140 days. the result is the same for any API you use to access the data\n\n\n\nSent from my iPhone\n\n> On Apr 5, 2017, at 14:54, Jon Golenbock <jongolenbock at gmail.com> wrote:\n> \n> Hi, I was hoping somebody might be a regular user of this package to\n> interact with Bloomberg terminal. I've been having an issue pulling\n> historical data, it seems to cut off at a seemingly arbitrary point --\n> \n> \n> library(rRblpapi)\n> library(dplyr)\n> library(purrr)\n> library(lubridate)\n> library(magrittr)\n> \n> striplist <- c(\"NGK7\",\"NGM7\", \"NGN7\",\"NGQ7\", \"NGU7\",\"NGV7\",\"NGX7\")\n> striplist <- paste(striplist, \"Comdty\")\n> \n> \n> df <- striplist %>%\n>  map(~ getBars(., barInterval = 60 *24,startTime =\n> floor_date(Sys.time(),\"day\") - days(300))) %>%\n>  map(~select(., times, close))\n> names(df) <- striplist\n> \n> \n> this should be producing close data for 300 days, yet you will see that the\n> data only goes back 140.\n> \n> Anybody run into this before, should I have expected this?\n> \n> Thanks,\n> Jon\n> \n>    [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "bloomberg doesn't store intraday data more than 140 days. the result is the same for any API you use to access the data\n\n\n\nSent from my iPhone\n\n> On Apr 5, 2017, at 14:54, Jon Golenbock <jongolenbock ",
+      "thread_id": "thread-af8d32f8272e",
+      "thread_depth": 1,
+      "month": "2017-04"
+    },
+    {
+      "id": "msg-28243f225857",
+      "message_id": "<CAE64KY+zSFThFKwAc6dZ81DDhJdkchBtr==6qJ8RP3K2RcXbmw@mail.gmail.com>",
+      "from_name": "Jon Golenbock",
+      "from_email_hash": "052ed831bd7b09962c4e4d7be1908cf7a29f0f32a945a46a83615d55ce891a51",
+      "date": "2017-04-05T09:46:26-04:00",
+      "subject": "[R-SIG-Finance] Rblpapi package data limits?",
+      "subject_clean": "Rblpapi package data limits?",
+      "in_reply_to": "<5453DE43-FDCF-4098-A187-DF225465679D@gmail.com>",
+      "references": [
+        "<CAE64KY+zKB89wVAC9kUspnu5N-OjystGQdsNLWRj2hRgTEN8DA@mail.gmail.com>",
+        "<5453DE43-FDCF-4098-A187-DF225465679D@gmail.com>"
+      ],
+      "body_plain": "a-ha. Thank you.\n\nfor anyone interested I used bdh to get what I was after --\n\nbdh(\"NGX7 Comdty\", c(\"Open\",\"High\",\"Low\",\"PX_Last\"),start.date = Sys.Date()\n- days(300))\n\nOn Wed, Apr 5, 2017 at 9:29 AM, <chidley.ryan at gmail.com> wrote:\n\n> bloomberg doesn't store intraday data more than 140 days. the result is\n> the same for any API you use to access the data\n>\n>\n>\n> Sent from my iPhone\n>\n> > On Apr 5, 2017, at 14:54, Jon Golenbock <jongolenbock at gmail.com> wrote:\n> >\n> > Hi, I was hoping somebody might be a regular user of this package to\n> > interact with Bloomberg terminal. I've been having an issue pulling\n> > historical data, it seems to cut off at a seemingly arbitrary point --\n> >\n> >\n> > library(rRblpapi)\n> > library(dplyr)\n> > library(purrr)\n> > library(lubridate)\n> > library(magrittr)\n> >\n> > striplist <- c(\"NGK7\",\"NGM7\", \"NGN7\",\"NGQ7\", \"NGU7\",\"NGV7\",\"NGX7\")\n> > striplist <- paste(striplist, \"Comdty\")\n> >\n> >\n> > df <- striplist %>%\n> >  map(~ getBars(., barInterval = 60 *24,startTime =\n> > floor_date(Sys.time(),\"day\") - days(300))) %>%\n> >  map(~select(., times, close))\n> > names(df) <- striplist\n> >\n> >\n> > this should be producing close data for 300 days, yet you will see that\n> the\n> > data only goes back 140.\n> >\n> > Anybody run into this before, should I have expected this?\n> >\n> > Thanks,\n> > Jon\n> >\n> >    [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "a-ha. Thank you.\n\nfor anyone interested I used bdh to get what I was after --\n\nbdh(\"NGX7 Comdty\", c(\"Open\",\"High\",\"Low\",\"PX_Last\"),start.date = Sys.Date()\n- days(300))\n\nOn Wed, Apr 5, 2017 at 9:29 AM,",
+      "thread_id": "thread-af8d32f8272e",
+      "thread_depth": 2,
+      "month": "2017-04"
+    },
+    {
+      "id": "msg-d2221ab2cb86",
+      "message_id": "<CAFLRcn1cac16kMb-usUkPBH6OTRyk7A9Mc+k0NYab4Ru+Tu26A@mail.gmail.com>",
+      "from_name": "John Klingensmith",
+      "from_email_hash": "c86efa31407318e890927f354215998b8b5945ce41c2453d740eb16e2fb3333b",
+      "date": "2017-04-06T16:47:24-04:00",
+      "subject": "[R-SIG-Finance] Moving Limit orders",
+      "subject_clean": "Moving Limit orders",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n I am using the following packages quantstrat, IKTrading, DSTrading, along\nwith some other misc packages (see code).  I am having trouble\nunderstanding entering moving limits (kind of like trailing stops) to close\nthe position.\n\nWhen I enter a long (short) trade, I want a limit to close the position to\nequal the moving average of the high (low).  I want the limit price to\nequal the current value of the moving average I am targeting - for long\ntrade: SMA.highMA,  and for short trades: SMA.lowMA\n\nI do plan to enter exit orders and stops, but I have not gotten that far\nyet.\n\n\nHere is my code:\n\nrequire(quantstrat)\nrequire(IKTrading)\nrequire(DSTrading)\nlibrary(xlsx)\nlibrary(dygraphs)\nlibrary(htmltools)\nlibrary(knitr)\n\noptions(warn=1)\n\nrm(list=ls(.blotter), envir = .blotter)\n\ninitDate = \"2000-01-01\"\nfrom = \"2012-01-01\"\nto = \"2017-02-22\"\n\ncurrency('USD')\nSys.setenv(TZ=\"UTC\")\n\n#get symbols and set symbol currency and multiplyer\n\nsymbols <- \"SPY\"\nsuppressMessages(getSymbols(symbols, from = from, to = to))\n\nstock(symbols, currency = \"USD\", multiplyer=1)\n\n#trade sizing and initial equity settings\ntradeSize <- 100000\ninitEq <- tradeSize*length(symbols)\n\n\nstrategy.st <- portfolio.st <- account.st <- \"RSI_MR\"\nrm.strat(portfolio.st)\nrm.strat(strategy.st)\n\ninitPortf(portfolio.st, symbols=symbols,initDate=initDate,currency=\"USD\")\ninitAcct(account.st, portfolio = portfolio.st,initDate=initDate,\n         currency = \"USD\",initEq = initEq)\ninitOrders(portfolio.st,initDate=initDate)\nstrategy(strategy.st,store=TRUE)\n\nMaxPos <- 1\nlvls <- 1\n\naddPosLimit(portfolio=portfolio.st, timestamp=initDate, symbol=symbols,\n            maxpos=MaxPos, longlevels=lvls, minpos=-MaxPos,\nshortlevels=lvls)\n\n#parameters\nnRSI = 3\nlowerThreshold = 15\nupperThreshold = 85\nlowerMinThreshold = 5\nupperMaxThreshold = 95\nnSMAofRSI = 5\nnMaHi = 5\nnMaLo = 5\n\nnATR = 14\nxATR = 3\n\n##rsi.sma <- SMA(RSI(Cl(SPY),3),5, label = \"rsima\")\n\n#indicators\nadd.indicator(strategy.st,name = \"RSI\",\n              arguments = list(price = quote(Cl(mktdata)),n = nRSI),\n              label = \"rsi\")\n\nadd.indicator(strategy.st,name = \"SMA\",\n              arguments = list(x = quote(RSI(Cl(SPY),nRSI)), n = nSMAofRSI),\n              label = \"rsiMA\")\n\nadd.indicator(strategy.st,name = \"SMA\",\n              arguments = list(x = quote(Hi(mktdata)),n = nMaHi),\n              label = \"highMA\")\n\nadd.indicator(strategy.st,name = \"SMA\",\n              arguments = list(x = quote(Lo(mktdata)),n = nMaLo),\n              label = \"lowMA\")\n\nadd.indicator(strategy.st, name = \"ATR\",\n              arguments=list(HLC = quote(HLC(mktdata)), n=nATR),\n              label = \"atr\" )\n'/\ntest <- applyIndicators(strategy.st, mktdata = OHLC(SPY))\nhead(test,10)\n'\n\n#Signals\n\n#Enter Long Signal 1\nadd.signal(strategy.st, name = \"sigThreshold\",\n           arguments = list(column = \"rsiMA\", threshold = lowerThreshold,\n                            relationship = \"lt\", cross=FALSE),\n           label = \"rsiMAlowerThreshold\")\n\n#Enter Long Signal 2\nadd.signal(strategy.st, name = \"sigThreshold\",\n           arguments = list(column = \"rsiMA\", threshold = lowerMinThreshold,\n                            relationship = \"gt\", cross=FALSE),\n           label = \"rsiMAlowerMINThreshold\")\n\n#Enter Long Signal 1&2\nadd.signal(strategy.st, name=\"sigAND\",\n           arguments=list(columns=c(\"rsiMAlowerThreshold\",\n                                    \"rsiMAlowerMINThreshold\"), cross=TRUE),\n           label=\"longEntry\")\n\n#Enter Short Signal 1\nadd.signal(strategy.st, name = \"sigThreshold\",\n           arguments = list(column = \"rsiMA\", threshold = upperThreshold,\n                            relationship = \"gt\", cross=FALSE),\n           label = \"rsiMAupperThreshold\")\n\n#Enter Short Signal 2\nadd.signal(strategy.st, name = \"sigThreshold\",\n           arguments = list(column = \"rsiMA\", threshold = upperMaxThreshold,\n                            relationship = \"lt\", cross=FALSE),\n           label = \"rsiMAmaxThreshold\")\n\n#Enter Short Signal 1&2\nadd.signal(strategy.st, name=\"sigAND\",\n           arguments=list(columns=c(\"rsiMAupperThreshold\",\n\"rsiMAmaxThreshold\"),\n                          cross=TRUE),\n           label=\"shortEntry\")\n\n#Exit Long Signal\nadd.signal(strategy.st, name = \"sigComparison\",\n           arguments = list(columns = c(\"High\", \"highMA\"), relationship =\n\"gt\"),\n           label = \"normalExitLongFilter\")\n\n#Exit Short Signal\nadd.signal(strategy.st, name = \"sigComparison\",\n           arguments = list(columns = c(\"Low\", \"lowMA\"), relationship =\n\"lt\"),\n           label = \"normalExitShortFilter\")\n\n\n#Rules\n#LONG RULES\nadd.rule(strategy.st, name=\"ruleSignal\",\n         arguments = list(sigcol = \"longEntry\",\n                          sigval = TRUE,\n                          orderqty = 1,\n                          ordertype = \"market\",\n                          orderside = \"long\",\n                          replace = FALSE,\n                          prefer = \"Open\",\n                          osFUN = \"osMaxPos\",\n                          orderset=\"ocolong\"),\n         type = \"enter\", path.dep = TRUE,\n         label = \"enterLong1\")\n\nadd.rule(strategy.st, name=\"ruleSignal\",\n         arguments=list(sigcol=\"longEntry\",\n                        sigval=TRUE,\n                        ordertype=\"limit\",\n                        orderside=\"long\",\n                        replace=FALSE,\n                        orderqty='all',\n                        prefer = 'SMA.highMA',\n                        #threshold = quote('SMA.highMA'),\n                        #order.price=quote(mktdata$SMA.lowMA[timestamp]),\n                        orderset=\"ocolong\"),\n         type=\"chain\",\n         parent=\"enterLong1\",\n         label=\"takeProfitLong\",\n         path.dep=TRUE)\n\n\n\n#SHORT RULES\nadd.rule(strategy.st, name=\"ruleSignal\",\n         arguments = list(sigcol = \"shortEntry\",\n                          sigval = TRUE,\n                          orderqty = -1,\n                          ordertype = \"market\",\n                          orderside = \"short\",\n                          replace = FALSE,\n                          prefer = \"Open\",\n                          osFUN = \"osMaxPos\",\n                          orderset=\"ocoshort\"),\n         type = \"enter\", path.dep = TRUE,\n         label = \"enterShort1\")\n\nadd.rule(strategy.st, name=\"ruleSignal\",\n         arguments=list(sigcol=\"shortEntry\",\n                        sigval=TRUE,\n                        ordertype=\"limit\",\n                        orderside=\"short\",\n                        replace=FALSE,\n                        orderqty='all',\n                        prefer = 'SMA.lowMA',\n                        #threshold = quote('SMA.lowMA'),\n                        #order.price=quote(mktdata$SMA.lowMA[timestamp]),\n                        orderset=\"ocoshort\"),\n         type=\"chain\",\n         parent=\"enterShort1\",\n         label=\"takeProfitShort\",\n         path.dep=TRUE)\n\n\n#apply strategy\nt1 <- Sys.time()\nout <- applyStrategy(strategy=strategy.st,portfolios=portfolio.st)\nt2 <- Sys.time()\nprint(t2-t1)\n\n#set up analytics\nupdatePortf(portfolio.st)\ndateRange <- time(getPortfolio(portfolio.st)$summary)[-1]\nupdateAcct(portfolio.st,dateRange)\nupdateEndEq(account.st)\n\n\nAny help is appreciated!\nBest,\n John\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n I am using the following packages quantstrat, IKTrading, DSTrading, along\nwith some other misc packages (see code).  I am having trouble\nunderstanding entering moving limits (kind of like trailin",
+      "thread_id": "thread-d2221ab2cb86",
+      "thread_depth": 0,
+      "month": "2017-04"
+    },
+    {
+      "id": "msg-872953e2a2e8",
+      "message_id": "<001901d2af1f$87a2b500$96e81f00$@verizon.net>",
+      "from_name": "Victor Montanez",
+      "from_email_hash": "46bc597340844cf0ae11d5afb904a90e83de0acbfc2d87576ff75585e4ab725c",
+      "date": "2017-04-06T17:48:29-04:00",
+      "subject": "[R-SIG-Finance] Moving Limit orders",
+      "subject_clean": "Moving Limit orders",
+      "in_reply_to": "<CAFLRcn1cac16kMb-usUkPBH6OTRyk7A9Mc+k0NYab4Ru+Tu26A@mail.gmail.com>",
+      "references": [
+        "<CAFLRcn1cac16kMb-usUkPBH6OTRyk7A9Mc+k0NYab4Ru+Tu26A@mail.gmail.com>"
+      ],
+      "body_plain": "Anyone has a complete system so I can test and play with? Thanks.\n\n-----Original Message-----\nFrom: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On Behalf\nOf John Klingensmith\nSent: Thursday, April 06, 2017 4:47 PM\nTo: r-sig-finance <r-sig-finance at r-project.org>\nSubject: [R-SIG-Finance] Moving Limit orders\n\nHi,\n I am using the following packages quantstrat, IKTrading, DSTrading, along\nwith some other misc packages (see code).  I am having trouble understanding\nentering moving limits (kind of like trailing stops) to close the position.\n\nWhen I enter a long (short) trade, I want a limit to close the position to\nequal the moving average of the high (low).  I want the limit price to equal\nthe current value of the moving average I am targeting - for long\ntrade: SMA.highMA,  and for short trades: SMA.lowMA\n\nI do plan to enter exit orders and stops, but I have not gotten that far\nyet.\n\n\nHere is my code:\n\nrequire(quantstrat)\nrequire(IKTrading)\nrequire(DSTrading)\nlibrary(xlsx)\nlibrary(dygraphs)\nlibrary(htmltools)\nlibrary(knitr)\n\noptions(warn=1)\n\nrm(list=ls(.blotter), envir = .blotter)\n\ninitDate = \"2000-01-01\"\nfrom = \"2012-01-01\"\nto = \"2017-02-22\"\n\ncurrency('USD')\nSys.setenv(TZ=\"UTC\")\n\n#get symbols and set symbol currency and multiplyer\n\nsymbols <- \"SPY\"\nsuppressMessages(getSymbols(symbols, from = from, to = to))\n\nstock(symbols, currency = \"USD\", multiplyer=1)\n\n#trade sizing and initial equity settings tradeSize <- 100000 initEq <-\ntradeSize*length(symbols)\n\n\nstrategy.st <- portfolio.st <- account.st <- \"RSI_MR\"\nrm.strat(portfolio.st)\nrm.strat(strategy.st)\n\ninitPortf(portfolio.st, symbols=symbols,initDate=initDate,currency=\"USD\")\ninitAcct(account.st, portfolio = portfolio.st,initDate=initDate,\n         currency = \"USD\",initEq = initEq)\ninitOrders(portfolio.st,initDate=initDate)\nstrategy(strategy.st,store=TRUE)\n\nMaxPos <- 1\nlvls <- 1\n\naddPosLimit(portfolio=portfolio.st, timestamp=initDate, symbol=symbols,\n            maxpos=MaxPos, longlevels=lvls, minpos=-MaxPos,\nshortlevels=lvls)\n\n#parameters\nnRSI = 3\nlowerThreshold = 15\nupperThreshold = 85\nlowerMinThreshold = 5\nupperMaxThreshold = 95\nnSMAofRSI = 5\nnMaHi = 5\nnMaLo = 5\n\nnATR = 14\nxATR = 3\n\n##rsi.sma <- SMA(RSI(Cl(SPY),3),5, label = \"rsima\")\n\n#indicators\nadd.indicator(strategy.st,name = \"RSI\",\n              arguments = list(price = quote(Cl(mktdata)),n = nRSI),\n              label = \"rsi\")\n\nadd.indicator(strategy.st,name = \"SMA\",\n              arguments = list(x = quote(RSI(Cl(SPY),nRSI)), n = nSMAofRSI),\n              label = \"rsiMA\")\n\nadd.indicator(strategy.st,name = \"SMA\",\n              arguments = list(x = quote(Hi(mktdata)),n = nMaHi),\n              label = \"highMA\")\n\nadd.indicator(strategy.st,name = \"SMA\",\n              arguments = list(x = quote(Lo(mktdata)),n = nMaLo),\n              label = \"lowMA\")\n\nadd.indicator(strategy.st, name = \"ATR\",\n              arguments=list(HLC = quote(HLC(mktdata)), n=nATR),\n              label = \"atr\" )\n'/\ntest <- applyIndicators(strategy.st, mktdata = OHLC(SPY))\nhead(test,10)\n'\n\n#Signals\n\n#Enter Long Signal 1\nadd.signal(strategy.st, name = \"sigThreshold\",\n           arguments = list(column = \"rsiMA\", threshold = lowerThreshold,\n                            relationship = \"lt\", cross=FALSE),\n           label = \"rsiMAlowerThreshold\")\n\n#Enter Long Signal 2\nadd.signal(strategy.st, name = \"sigThreshold\",\n           arguments = list(column = \"rsiMA\", threshold = lowerMinThreshold,\n                            relationship = \"gt\", cross=FALSE),\n           label = \"rsiMAlowerMINThreshold\")\n\n#Enter Long Signal 1&2\nadd.signal(strategy.st, name=\"sigAND\",\n           arguments=list(columns=c(\"rsiMAlowerThreshold\",\n                                    \"rsiMAlowerMINThreshold\"), cross=TRUE),\n           label=\"longEntry\")\n\n#Enter Short Signal 1\nadd.signal(strategy.st, name = \"sigThreshold\",\n           arguments = list(column = \"rsiMA\", threshold = upperThreshold,\n                            relationship = \"gt\", cross=FALSE),\n           label = \"rsiMAupperThreshold\")\n\n#Enter Short Signal 2\nadd.signal(strategy.st, name = \"sigThreshold\",\n           arguments = list(column = \"rsiMA\", threshold = upperMaxThreshold,\n                            relationship = \"lt\", cross=FALSE),\n           label = \"rsiMAmaxThreshold\")\n\n#Enter Short Signal 1&2\nadd.signal(strategy.st, name=\"sigAND\",\n           arguments=list(columns=c(\"rsiMAupperThreshold\",\n\"rsiMAmaxThreshold\"),\n                          cross=TRUE),\n           label=\"shortEntry\")\n\n#Exit Long Signal\nadd.signal(strategy.st, name = \"sigComparison\",\n           arguments = list(columns = c(\"High\", \"highMA\"), relationship =\n\"gt\"),\n           label = \"normalExitLongFilter\")\n\n#Exit Short Signal\nadd.signal(strategy.st, name = \"sigComparison\",\n           arguments = list(columns = c(\"Low\", \"lowMA\"), relationship =\n\"lt\"),\n           label = \"normalExitShortFilter\")\n\n\n#Rules\n#LONG RULES\nadd.rule(strategy.st, name=\"ruleSignal\",\n         arguments = list(sigcol = \"longEntry\",\n                          sigval = TRUE,\n                          orderqty = 1,\n                          ordertype = \"market\",\n                          orderside = \"long\",\n                          replace = FALSE,\n                          prefer = \"Open\",\n                          osFUN = \"osMaxPos\",\n                          orderset=\"ocolong\"),\n         type = \"enter\", path.dep = TRUE,\n         label = \"enterLong1\")\n\nadd.rule(strategy.st, name=\"ruleSignal\",\n         arguments=list(sigcol=\"longEntry\",\n                        sigval=TRUE,\n                        ordertype=\"limit\",\n                        orderside=\"long\",\n                        replace=FALSE,\n                        orderqty='all',\n                        prefer = 'SMA.highMA',\n                        #threshold = quote('SMA.highMA'),\n                        #order.price=quote(mktdata$SMA.lowMA[timestamp]),\n                        orderset=\"ocolong\"),\n         type=\"chain\",\n         parent=\"enterLong1\",\n         label=\"takeProfitLong\",\n         path.dep=TRUE)\n\n\n\n#SHORT RULES\nadd.rule(strategy.st, name=\"ruleSignal\",\n         arguments = list(sigcol = \"shortEntry\",\n                          sigval = TRUE,\n                          orderqty = -1,\n                          ordertype = \"market\",\n                          orderside = \"short\",\n                          replace = FALSE,\n                          prefer = \"Open\",\n                          osFUN = \"osMaxPos\",\n                          orderset=\"ocoshort\"),\n         type = \"enter\", path.dep = TRUE,\n         label = \"enterShort1\")\n\nadd.rule(strategy.st, name=\"ruleSignal\",\n         arguments=list(sigcol=\"shortEntry\",\n                        sigval=TRUE,\n                        ordertype=\"limit\",\n                        orderside=\"short\",\n                        replace=FALSE,\n                        orderqty='all',\n                        prefer = 'SMA.lowMA',\n                        #threshold = quote('SMA.lowMA'),\n                        #order.price=quote(mktdata$SMA.lowMA[timestamp]),\n                        orderset=\"ocoshort\"),\n         type=\"chain\",\n         parent=\"enterShort1\",\n         label=\"takeProfitShort\",\n         path.dep=TRUE)\n\n\n#apply strategy\nt1 <- Sys.time()\nout <- applyStrategy(strategy=strategy.st,portfolios=portfolio.st)\nt2 <- Sys.time()\nprint(t2-t1)\n\n#set up analytics\nupdatePortf(portfolio.st)\ndateRange <- time(getPortfolio(portfolio.st)$summary)[-1]\nupdateAcct(portfolio.st,dateRange)\nupdateEndEq(account.st)\n\n\nAny help is appreciated!\nBest,\n John\n\n\t[[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions\nshould go.",
+      "body_snippet": "Anyone has a complete system so I can test and play with? Thanks.\n\n-----Original Message-----\nFrom: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On Behalf\nOf John Klingensmith\nSent: T",
+      "thread_id": "thread-d2221ab2cb86",
+      "thread_depth": 1,
+      "month": "2017-04"
+    },
+    {
+      "id": "msg-fe2d78aa89d0",
+      "message_id": "<73a7433c-7617-4e4d-a403-c1c8716a2bf7@me.com>",
+      "from_name": "Jason Hart",
+      "from_email_hash": "8b556620772a14aa9de23a6fe90137023b3f2ef08221c02ab22d56ba68b0b3bf",
+      "date": "2017-04-07T01:36:25Z",
+      "subject": "[R-SIG-Finance] Performanceanalytics -- table.calendarreturns question",
+      "subject_clean": "Performanceanalytics -- table.calendarreturns question",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello - I'm hoping someone has solved this already but I am trying to run the table.calendarreturns function in performanceanalytics for many funds and then export the data to a csv file (I'm interested in comparing monthly returns between funds). ?The code itself runs fine, it's the presentation in the CSV file that's a problem. ?I'd like to have the output for each fund show up vertically on top of each other in the csv file the exact same way the output shows up in the console after the code is run. ? ?Right now the way the data is exported all the monthly returns for the funds show up in one long horizontal row for each year. ?Evidently I need to add another line or two of code to manipulate the data for export\n\nThanks for any help!\n\nHere's an example along w/ a sample data template\nlibrary(PerformanceAnalytics)\nlibrary(timeSeries)\nlibrary(fPortfolio)\nlibrary(quantmod)\nlibrary(caTools)\n\nreturns <- read.csv(\"example.csv\")\nlct <- Sys.getlocale(\"LC_TIME\"); Sys.setlocale(\"LC_TIME\", \"C\")\nreturns[,1] = as.Date(as.character(returns[,1]),format=\"%d-%b-%y\") \nSys.setlocale(\"LC_TIME\", lct)\n\nreturns.saved <- returns ## Saves the data if it needs to be reset later.\nstart.date <- returns[,1][1] ##Default start date; use this when you want entire data set\nTickerListexcel <- colnames(returns[,-1])\n\n#Creating time series object\nreturns = timeSeries(returns[,-1], charvec = returns[,1])\n#colnames(returns) <- abbreviate(colnames(returns),minlength=6)\nstr(returns)\nreturns\n\n###CALENDAR RETURNS LOOP FOR MANY FUNDS\n# Calendar Tables\ncal.list <- list()\nfor (i in 1:dim(returns)[2]) {\ncal.list[[i]] <- table.CalendarReturns(returns[,i], digits=2, as.perc = TRUE)\n}\nnames(cal.list) <- TickerListexcel\nwrite.csv(cal.list,file=\"Calendar Year Returns.csv\")\n\n-------------- next part --------------\nAn HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20170407/3d0a062c/attachment.html>\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: example.csv\nType: application/vnd.ms-excel\nSize: 16334 bytes\nDesc: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20170407/3d0a062c/attachment.xlb>",
+      "body_snippet": "Hello - I'm hoping someone has solved this already but I am trying to run the table.calendarreturns function in performanceanalytics for many funds and then export the data to a csv file (I'm interest",
+      "thread_id": "thread-fe2d78aa89d0",
+      "thread_depth": 0,
+      "month": "2017-04"
+    },
+    {
+      "id": "msg-aa5c6c83eef5",
+      "message_id": "<87wpaweyqb.fsf@enricoschumann.net>",
+      "from_name": "Enrico Schumann",
+      "from_email_hash": "6e2b07dfece9903edd38ae5f89516e6019180d40f61f8bc93b0510f5f6c6ba17",
+      "date": "2017-04-07T22:42:20+02:00",
+      "subject": "[R-SIG-Finance] Performanceanalytics -- table.calendarreturns question",
+      "subject_clean": "Performanceanalytics -- table.calendarreturns question",
+      "in_reply_to": "<73a7433c-7617-4e4d-a403-c1c8716a2bf7@me.com> (Jason Hart's message of \"Fri, 07 Apr 2017 01:36:25 +0000 (GMT)\")",
+      "references": [
+        "<73a7433c-7617-4e4d-a403-c1c8716a2bf7@me.com>"
+      ],
+      "body_plain": "On Fri, 07 Apr 2017, Jason Hart writes:\n\n> Hello - I'm hoping someone has solved this already but I am trying to run the table.calendarreturns function in\n> performanceanalytics for many funds and then export the data to a csv file (I'm interested in comparing monthly\n> returns between funds).  The code itself runs fine, it's the presentation in the CSV file that's a problem.  I'd\n> like to have the output for each fund show up vertically on top of each other in the csv file the exact same way\n> the output shows up in the console after the code is run.    Right now the way the data is exported all the\n> monthly returns for the funds show up in one long horizontal row for each year.  Evidently I need to add another\n> line or two of code to manipulate the data for export\n>\n> Thanks for any help!\n>\n> Here's an example along w/ a sample data template\n> library(PerformanceAnalytics)\n> library(timeSeries)\n> library(fPortfolio)\n> library(quantmod)\n> library(caTools)\n>\n> returns <- read.csv(\"example.csv\")\n> lct <- Sys.getlocale(\"LC_TIME\"); Sys.setlocale(\"LC_TIME\", \"C\")\n> returns[,1] = as.Date(as.character(returns[,1]),format=\"%d-%b-%y\")\n> Sys.setlocale(\"LC_TIME\", lct)\n>\n> returns.saved <- returns ## Saves the data if it needs to be reset later.\n> start.date <- returns[,1][1] ##Default start date; use this when you want entire data set\n> TickerListexcel <- colnames(returns[,-1])\n>\n> #Creating time series object\n> returns = timeSeries(returns[,-1], charvec = returns[,1])\n> #colnames(returns) <- abbreviate(colnames(returns),minlength=6)\n> str(returns)\n> returns\n>\n> ###CALENDAR RETURNS LOOP FOR MANY FUNDS\n> # Calendar Tables\n> cal.list <- list()\n> for (i in 1:dim(returns)[2]) {\n> cal.list[[i]] <- table.CalendarReturns(returns[,i], digits=2, as.perc = TRUE)\n> }\n> names(cal.list) <- TickerListexcel\n> write.csv(cal.list,file=\"Calendar Year Returns.csv\")\n>\n\nDo you mean the output of print(returns) or of\nprint(cal.list)?\n\nIn either case, if you want to store the results as\nthey show up in the console, you could use\n?capture.output, as in\n\n   capture.output(cal.list, file = \"returns.txt\")\n\n\n-- \nEnrico Schumann\nLucerne, Switzerland\nhttp://enricoschumann.net",
+      "body_snippet": "On Fri, 07 Apr 2017, Jason Hart writes:\n\n> Hello - I'm hoping someone has solved this already but I am trying to run the table.calendarreturns function in\n> performanceanalytics for many funds and the",
+      "thread_id": "thread-fe2d78aa89d0",
+      "thread_depth": 1,
+      "month": "2017-04"
+    },
+    {
+      "id": "msg-a785b18b0886",
+      "message_id": "<CY4PR14MB1367AFA6E8DD06261F5C0CCFB10F0@CY4PR14MB1367.namprd14.prod.outlook.com>",
+      "from_name": "Michael Chen",
+      "from_email_hash": "1c2c255e59bf0c174c7dded04d366810c8580a0f22f821c371683eef170d13d3",
+      "date": "2017-04-08T08:58:48Z",
+      "subject": "[R-SIG-Finance] A quick custom data question",
+      "subject_clean": "A quick custom data question",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\n\nI didn't get a satisfactory answer after searching the archives.  I just like to know how do we access market data other than OHLC? for example:\n\n\n\nhead(J.DCE)\n               Open     High      Low    Close Volume hmmState\n2010-01-04 2886.193 2886.193 2811.193 2833.193      0        1\n2010-01-05 2886.193 2886.193 2811.193 2833.193      0        1\n2010-01-06 2886.193 2886.193 2811.193 2833.193      0        1\n2010-01-07 2886.193 2886.193 2811.193 2833.193      0        1\n2010-01-08 2886.193 2886.193 2811.193 2833.193      0        1\n2010-01-11 2886.193 2886.193 2811.193 2833.193      0        1\n\n\n\n\n\n\n\nIn my quantstrat set up,  I simply set up this as an indicator:\n\n\nadd.indicator(strategy.st, name = \"getHMM\",\n              arguments = list(x = quote(getPrice( mktdata, prefer = \"hmmState\"))),\n              label = \"HMMState\")\n\n\ngetHMM is a simple function I wrote to pass on the data as an indicator, anyhow the error occurs at the getting data part:\n\n\n> test <- applyIndicators(strategy.st,  OHLC(J.DCE))\n\n[cid:8fd55500-6086-462a-9497-66ddfba6c0e0] Show Traceback\n\n[cid:f10ca1b2-aa9d-4283-afe3-337661d8b54a] Rerun with Debug\n\nError in getPrice(mktdata, prefer = \"hmmState\") :\n  subscript out of bounds, no price was discernible from the data\n\n\n\nThe data was converted to an xts for quantstrat.  I am probably making a simple error somewhere, would someone please point it out to me, thanks.   Also, is there a better way to or a more correct way to access custom data easily for quantstrat indicators/signals??\n\n\nthanks\n-------------- next part --------------\nAn HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20170408/1ba52578/attachment.html>\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: pastedImage.png\nType: image/png\nSize: 98 bytes\nDesc: pastedImage.png\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20170408/1ba52578/attachment.png>\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: pastedImage.png\nType: image/png\nSize: 180 bytes\nDesc: pastedImage.png\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20170408/1ba52578/attachment-0001.png>",
+      "body_snippet": "Hi,\n\n\nI didn't get a satisfactory answer after searching the archives.  I just like to know how do we access market data other than OHLC? for example:\n\n\n\nhead(J.DCE)\n               Open     High      ",
+      "thread_id": "thread-a785b18b0886",
+      "thread_depth": 0,
+      "month": "2017-04"
+    },
+    {
+      "id": "msg-4df7b8c0213d",
+      "message_id": "<20674fdd-626b-e294-f8f6-5dea62d7b197@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2017-04-08T05:13:04-05:00",
+      "subject": "[R-SIG-Finance] A quick custom data question",
+      "subject_clean": "A quick custom data question",
+      "in_reply_to": "<CY4PR14MB1367AFA6E8DD06261F5C0CCFB10F0@CY4PR14MB1367.namprd14.prod.outlook.com>",
+      "references": [
+        "<CY4PR14MB1367AFA6E8DD06261F5C0CCFB10F0@CY4PR14MB1367.namprd14.prod.outlook.com>"
+      ],
+      "body_plain": "On 04/08/2017 03:58 AM, Michael Chen wrote:\n> Hi,\n>\n>\n> I didn't get a satisfactory answer after searching the archives.  I just\n> like to know how do we access market data other than OHLC? for example:\n>\n>\n>\n> head(J.DCE)                Open     High      Low    Close Volume hmmState\n> 2010-01-04 2886.193 2886.193 2811.193 2833.193      0        1\n> 2010-01-05 2886.193 2886.193 2811.193 2833.193      0        1\n> 2010-01-06 2886.193 2886.193 2811.193 2833.193      0        1\n> 2010-01-07 2886.193 2886.193 2811.193 2833.193      0        1\n> 2010-01-08 2886.193 2886.193 2811.193 2833.193      0        1\n> 2010-01-11 2886.193 2886.193 2811.193 2833.193      0        1\n>\n>\n>\n> In my quantstrat set up,  I simply set up this as an indicator:\n>\n>\n> add.indicator(strategy.st, name = \"getHMM\",\n>               arguments = list(x = quote(getPrice( mktdata, prefer =\n> \"hmmState\"))),\n>               label = \"HMMState\")\n>\n>\n> getHMM is a simple function I wrote to pass on the data as an indicator,\n> anyhow the error occurs at the getting data part:\n>\n>\n>> test <- applyIndicators(strategy.st, OHLC(J.DCE))\n> Show Traceback\n> Rerun with Debug\n> Error in getPrice(mktdata, prefer = \"hmmState\") : subscript out of\n> bounds, no price was discernible from the data\n>\n>\n> The data was converted to an xts for quantstrat.  I am probably making a\n> simple error somewhere, would someone please point it out to me,\n> thanks.   Also, is there a better way to or a more correct way to access\n> custom data easily for quantstrat indicators/signals??\n\nThe list doesn't terribly like HTML posts.\n\nAnyway, it seems likely that your problem is here:\n\nOHLC(J.DCE)\n\nwhen you call applyIndicators.\n\nYou're only passing in the OHLC columns.\n\njust test applyIndicators with\n\napplyIndicators(strategy.st, mktdata=J.DCE)\n\nand getPrice should be able to find your column in your getHMM function.\n\nEven simpler, since the data is already there, and being passed into to \nthe apply* functions with the original data is to simply refer to the \ncolumn in whatever other indicator needs it, or in your signal \nfunctions.  I don't see a need for a custom indicator function at all.\n\nIn any case, from your non-reproducible example, and just reading the \ncode, the main problem appears to be your call to OHLC(), which will \nstrip your other columns.  Skip that, and things should be fine.\n\nRegards,\n\nBrian\n\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
+      "body_snippet": "On 04/08/2017 03:58 AM, Michael Chen wrote:\n> Hi,\n>\n>\n> I didn't get a satisfactory answer after searching the archives.  I just\n> like to know how do we access market data other than OHLC? for exampl",
+      "thread_id": "thread-a785b18b0886",
+      "thread_depth": 1,
+      "month": "2017-04"
+    },
+    {
+      "id": "msg-f04ee094cfe9",
+      "message_id": "<CAE64KY+uD2ENhpTJbVRePGTpA3upgS7xURv_ArGdsvkjBeyqnQ@mail.gmail.com>",
+      "from_name": "Jon Golenbock",
+      "from_email_hash": "052ed831bd7b09962c4e4d7be1908cf7a29f0f32a945a46a83615d55ce891a51",
+      "date": "2017-04-18T10:31:59-04:00",
+      "subject": "[R-SIG-Finance] quanstrat exit rules",
+      "subject_clean": "quanstrat exit rules",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi, trying to get a handle on quantstrat and was hoping somebody could\nexplain the what I'm doing wrong.\n\nThe strategy itself is simple enough (and just for testing purposes - buy\nwhen RSI goes below 30, sell back out when RSI goes above 70.\n\nWhat is unintended, is that short trades (exit) are processed before long\ntrades (entry) ever are. Why is this happening?\n\nAlso, I was playing around with order sizing - it seems like one should be\nable to specify \"all\" for exit trades, but that doesn't seem to work for me\nwhen I make the substitution in the below code... the issues may be\nrelated, though, so I am putting this on the back burner for now.\n\nAny help appreciated, and thanks in advance.\n\nJon\n\n----\n\nrm(list=ls(.blotter), envir=.blotter)\nrm(list=ls(.strategy), envir=.strategy)\n.blotter <- new.env()\n.strategy <- new.env()\n\n\n\n\ninitEq <- 5000\nn <- 14\nnSMA <- 200\ndays_count <- 100\ninitDate <- Sys.Date()-days(days_count + 1)\n.orderqty = 100\n\n\n\n\n\nsymbols <- getSymbols(c(\"AAPL\",\"QQQ\"))\n\n\ncurrency(\"USD\")\nSys.setenv(TZ=\"UTC\")\nstock(symbols, currency=\"USD\", multiplier=1)\n\nstrategy.st <- 'teststrat'\nportfolio.st <- 'teststrat'\naccount.st <- 'teststrat'\ninitPortf(portfolio.st, symbols = symbols, initDate=initDate,currency='USD')\ninitAcct(account.st, portfolios=portfolio.st, initDate=initDate,\ninitEq=initEq, currency='USD')\ninitOrders(portfolio=portfolio.st, initDate=initDate)\n\n\n\nstrategy(name = strategy.st,\n         store = TRUE)\n\n\n\n\n\n\n\nadd.indicator(\n  strategy = strategy.st,\n  name = 'RSI',\n  arguments = list(price=quote(Cl(mktdata)),n=n),\n  label = \"rsi\")\n\n\nadd.signal(\n  strategy = strategy.st,\n  name = 'sigThreshold',\n  arguments=list(\n    threshold = 30,\n    column = \"rsi\",\n    relationship=\"lt\",\n    cross = TRUE),\n  label = \"RSI_long\"\n)\n\nadd.signal(\n  strategy = strategy.st,\n  name = 'sigThreshold',\n  arguments=list(\n    threshold = 70,\n    column = \"rsi\",\n    relationship=\"gt\",\n    cross = TRUE),\n  label = \"RSI_short\"\n)\n\n\n\nadd.rule(\n  strategy=strategy.st,\n  name='ruleSignal',\n  arguments=list(\n    sigcol='RSI_long',\n    sigval = TRUE,\n    orderside = 'long',\n    ordertype='market',\n    orderqty=.orderqty,\n    replace=FALSE\n  ),\n  type='enter',\n  label='Enterlong',\n  path.dep = TRUE\n)\n\nadd.rule(\n  strategy=strategy.st,\n  name='ruleSignal',\n  arguments=list(\n    sigcol='RSI_short',\n    sigval = TRUE,\n    orderside = 'short',\n    ordertype='market',\n    orderqty=75,\n    replace=TRUE\n  ),\n  type=\"exit\",\n  label='Exitlong',\n  path.dep = TRUE\n\n)\n\n\nt1<-Sys.time()\nout<-applyStrategy(strategy=strategy.st,portfolios = portfolio.st)\nt2<-Sys.time()\nprint(t2-t1)\nget.orderbook(portfolio.st)\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi, trying to get a handle on quantstrat and was hoping somebody could\nexplain the what I'm doing wrong.\n\nThe strategy itself is simple enough (and just for testing purposes - buy\nwhen RSI goes below ",
+      "thread_id": "thread-f04ee094cfe9",
+      "thread_depth": 0,
+      "month": "2017-04"
+    },
+    {
+      "id": "msg-6775495367b9",
+      "message_id": "<1492526686.3006.9.camel@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2017-04-18T09:44:46-05:00",
+      "subject": "[R-SIG-Finance] quanstrat exit rules",
+      "subject_clean": "quanstrat exit rules",
+      "in_reply_to": "<CAE64KY+uD2ENhpTJbVRePGTpA3upgS7xURv_ArGdsvkjBeyqnQ@mail.gmail.com>",
+      "references": [
+        "<CAE64KY+uD2ENhpTJbVRePGTpA3upgS7xURv_ArGdsvkjBeyqnQ@mail.gmail.com>"
+      ],
+      "body_plain": "Change side to long in your exit rule.\n\nYou're not going short, you're selling a long position.  Those are\ndifferent things.  Going short in an equity requires a margin account\nand a short locate at least, and will incur interest charges on the\nborrow. \n\nIn any case, your strategy is trying to enter long, and then exit your\nlong position.  Both the entry and exit orders are on the same\nside='long' of the market.\n\nSee the demo script rsi.R in the demo directory for a long/short\nversion of the same idea.\n\nThe other thing that is likely tripping you up is rule order.  Rules\nare evaluated in a specific order, as described in the documentation\nfor add.rule and other places.  exits are evaluated before entries.\n\nRegards,\n\nBrian\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock\n\nOn Tue, 2017-04-18 at 10:31 -0400, Jon Golenbock wrote:\n> Hi, trying to get a handle on quantstrat and was hoping somebody\n> could\n> explain the what I'm doing wrong.\n> \n> The strategy itself is simple enough (and just for testing purposes -\n> buy\n> when RSI goes below 30, sell back out when RSI goes above 70.\n> \n> What is unintended, is that short trades (exit) are processed before\n> long\n> trades (entry) ever are. Why is this happening?\n> \n> Also, I was playing around with order sizing - it seems like one\n> should be\n> able to specify \"all\" for exit trades, but that doesn't seem to work\n> for me\n> when I make the substitution in the below code... the issues may be\n> related, though, so I am putting this on the back burner for now.\n> \n> Any help appreciated, and thanks in advance.\n> \n> Jon\n> \n> ----\n> \n> rm(list=ls(.blotter), envir=.blotter)\n> rm(list=ls(.strategy), envir=.strategy)\n> .blotter <- new.env()\n> .strategy <- new.env()\n> \n> \n> \n> \n> initEq <- 5000\n> n <- 14\n> nSMA <- 200\n> days_count <- 100\n> initDate <- Sys.Date()-days(days_count + 1)\n> .orderqty = 100\n> \n> \n> \n> \n> \n> symbols <- getSymbols(c(\"AAPL\",\"QQQ\"))\n> \n> \n> currency(\"USD\")\n> Sys.setenv(TZ=\"UTC\")\n> stock(symbols, currency=\"USD\", multiplier=1)\n> \n> strategy.st <- 'teststrat'\n> portfolio.st <- 'teststrat'\n> account.st <- 'teststrat'\n> initPortf(portfolio.st, symbols = symbols,\n> initDate=initDate,currency='USD')\n> initAcct(account.st, portfolios=portfolio.st, initDate=initDate,\n> initEq=initEq, currency='USD')\n> initOrders(portfolio=portfolio.st, initDate=initDate)\n> \n> \n> \n> strategy(name = strategy.st,\n> ?????????store = TRUE)\n> \n> \n> \n> \n> \n> \n> \n> add.indicator(\n> ? strategy = strategy.st,\n> ? name = 'RSI',\n> ? arguments = list(price=quote(Cl(mktdata)),n=n),\n> ? label = \"rsi\")\n> \n> \n> add.signal(\n> ? strategy = strategy.st,\n> ? name = 'sigThreshold',\n> ? arguments=list(\n> ????threshold = 30,\n> ????column = \"rsi\",\n> ????relationship=\"lt\",\n> ????cross = TRUE),\n> ? label = \"RSI_long\"\n> )\n> \n> add.signal(\n> ? strategy = strategy.st,\n> ? name = 'sigThreshold',\n> ? arguments=list(\n> ????threshold = 70,\n> ????column = \"rsi\",\n> ????relationship=\"gt\",\n> ????cross = TRUE),\n> ? label = \"RSI_short\"\n> )\n> \n> \n> \n> add.rule(\n> ? strategy=strategy.st,\n> ? name='ruleSignal',\n> ? arguments=list(\n> ????sigcol='RSI_long',\n> ????sigval = TRUE,\n> ????orderside = 'long',\n> ????ordertype='market',\n> ????orderqty=.orderqty,\n> ????replace=FALSE\n> ? ),\n> ? type='enter',\n> ? label='Enterlong',\n> ? path.dep = TRUE\n> )\n> \n> add.rule(\n> ? strategy=strategy.st,\n> ? name='ruleSignal',\n> ? arguments=list(\n> ????sigcol='RSI_short',\n> ????sigval = TRUE,\n> ????orderside = 'short',\n> ????ordertype='market',\n> ????orderqty=75,\n> ????replace=TRUE\n> ? ),\n> ? type=\"exit\",\n> ? label='Exitlong',\n> ? path.dep = TRUE\n> \n> )\n> \n> \n> t1<-Sys.time()\n> out<-applyStrategy(strategy=strategy.st,portfolios = portfolio.st)\n> t2<-Sys.time()\n> print(t2-t1)\n> get.orderbook(portfolio.st)\n> \n> \t[[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R\n> questions should go.",
+      "body_snippet": "Change side to long in your exit rule.\n\nYou're not going short, you're selling a long position.  Those are\ndifferent things.  Going short in an equity requires a margin account\nand a short locate at l",
+      "thread_id": "thread-f04ee094cfe9",
+      "thread_depth": 1,
+      "month": "2017-04"
+    },
+    {
+      "id": "msg-172e6819f44f",
+      "message_id": "<CACOcrKZQBVyRs5DfH7j3TXPT0yxotuH5_r9PGiY67LqM=-FwvA@mail.gmail.com>",
+      "from_name": "Keith Sabol",
+      "from_email_hash": "cc9e0d7026f628a20aeda1a6297e459ec82462f6360d8065d8995e19e46d0abc",
+      "date": "2017-04-20T11:59:41-06:00",
+      "subject": "[R-SIG-Finance] quantmod getSymbols() failing on Yahoo",
+      "subject_clean": "quantmod getSymbols() failing on Yahoo",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I've been using getSymbols() to retrieve data from Yahoo for some time\nwithout difficulty.  Recently, I've been getting this error:\n\ngetSymbols(\"IBM\")\nError in download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,\n :\n  cannot open URL '\nhttp://ichart.finance.yahoo.com/table.csv?s=IBM&a=0&b=01&c=2007&d=3&e=20&f=2017&g=d&q=q&y=0&z=IBM&x=.csv\n'\n\n\nPasting this url into my browser works as expected:\n\nhttps://ichart.finance.yahoo.com/table.csv?s=IBM&a=0&b=01&c=2007&d=3&e=20&f=2017&g=d&q=q&y=0&z=IBM&x=.csv\n\n\nCan someone suggest how I might find/edit the line in the quantmod code\nthat would enable me to to switch to HTTPS until the package catches up?\n\nThanks, in advance, for any assistance.\n\nKeith\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I've been using getSymbols() to retrieve data from Yahoo for some time\nwithout difficulty.  Recently, I've been getting this error:\n\ngetSymbols(\"IBM\")\nError in download.file(paste(yahoo.URL, \"s=\", Sym",
+      "thread_id": "thread-172e6819f44f",
+      "thread_depth": 0,
+      "month": "2017-04"
+    },
+    {
+      "id": "msg-6a4960ba5504",
+      "message_id": "<CAPPM_gQVKAom9F0G7q0oxjPLEHTzAq2H_BPF2H=-gEWeT_xyFA@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2017-04-20T13:01:09-05:00",
+      "subject": "[R-SIG-Finance] quantmod getSymbols() failing on Yahoo",
+      "subject_clean": "quantmod getSymbols() failing on Yahoo",
+      "in_reply_to": "<CACOcrKZQBVyRs5DfH7j3TXPT0yxotuH5_r9PGiY67LqM=-FwvA@mail.gmail.com>",
+      "references": [
+        "<CACOcrKZQBVyRs5DfH7j3TXPT0yxotuH5_r9PGiY67LqM=-FwvA@mail.gmail.com>"
+      ],
+      "body_plain": "On Thu, Apr 20, 2017 at 12:59 PM, Keith Sabol <sabolkj at gmail.com> wrote:\n> I've been using getSymbols() to retrieve data from Yahoo for some time\n> without difficulty.  Recently, I've been getting this error:\n>\n> getSymbols(\"IBM\")\n> Error in download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,\n>  :\n>   cannot open URL '\n> http://ichart.finance.yahoo.com/table.csv?s=IBM&a=0&b=01&c=2007&d=3&e=20&f=2017&g=d&q=q&y=0&z=IBM&x=.csv\n> '\n>\n>\n> Pasting this url into my browser works as expected:\n>\n> https://ichart.finance.yahoo.com/table.csv?s=IBM&a=0&b=01&c=2007&d=3&e=20&f=2017&g=d&q=q&y=0&z=IBM&x=.csv\n>\n>\n> Can someone suggest how I might find/edit the line in the quantmod code\n> that would enable me to to switch to HTTPS until the package catches up?\n>\nThe package caught up yesterday.  You need to upgrade to quantmod 0.4-8 on CRAN.\n\n> Thanks, in advance, for any assistance.\n>\n> Keith\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2017 | www.rinfinance.com",
+      "body_snippet": "On Thu, Apr 20, 2017 at 12:59 PM, Keith Sabol <sabolkj at gmail.com> wrote:\n> I've been using getSymbols() to retrieve data from Yahoo for some time\n> without difficulty.  Recently, I've been getting ",
+      "thread_id": "thread-172e6819f44f",
+      "thread_depth": 1,
+      "month": "2017-04"
+    },
+    {
+      "id": "msg-2390d6e08a81",
+      "message_id": "<D453101E-BB7C-4433-9A62-09ABEFCC6681@gmail.com>",
+      "from_name": "Keith Sabol",
+      "from_email_hash": "cc9e0d7026f628a20aeda1a6297e459ec82462f6360d8065d8995e19e46d0abc",
+      "date": "2017-04-20T14:57:22-06:00",
+      "subject": "[R-SIG-Finance] quantmod getSymbols() failing on Yahoo",
+      "subject_clean": "quantmod getSymbols() failing on Yahoo",
+      "in_reply_to": "<CA+ckjv3jfY=vqGJH=mCDg5o263Qqs7UcOnEaUXYWWO-TXiZGdg@mail.gmail.com>",
+      "references": [
+        "<CACOcrKZQBVyRs5DfH7j3TXPT0yxotuH5_r9PGiY67LqM=-FwvA@mail.gmail.com>",
+        "<CA+ckjv3jfY=vqGJH=mCDg5o263Qqs7UcOnEaUXYWWO-TXiZGdg@mail.gmail.com>"
+      ],
+      "body_plain": "Marco,\nUpdating your version of quantmod, as suggested by Josh, should work. Did for me. \n\nKeith\n\n> On Apr 20, 2017, at 1:44 PM, Magicaltats Bianchi <marcolondonuk at gmail.com> wrote:\n> \n> I have in fact experienced exactly the same identical situation. Don't really understand where the problem is coming from, let alone figuring out what to do to resolve it! Any suggestions welcome. Marco\n> \n>> On 20 Apr 2017 7:00 p.m., \"Keith Sabol\" <sabolkj at gmail.com> wrote:\n>> I've been using getSymbols() to retrieve data from Yahoo for some time\n>> without difficulty.  Recently, I've been getting this error:\n>> \n>> getSymbols(\"IBM\")\n>> Error in download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,\n>>  :\n>>   cannot open URL '\n>> http://ichart.finance.yahoo.com/table.csv?s=IBM&a=0&b=01&c=2007&d=3&e=20&f=2017&g=d&q=q&y=0&z=IBM&x=.csv\n>> '\n>> \n>> \n>> Pasting this url into my browser works as expected:\n>> \n>> https://ichart.finance.yahoo.com/table.csv?s=IBM&a=0&b=01&c=2007&d=3&e=20&f=2017&g=d&q=q&y=0&z=IBM&x=.csv\n>> \n>> \n>> Can someone suggest how I might find/edit the line in the quantmod code\n>> that would enable me to to switch to HTTPS until the package catches up?\n>> \n>> Thanks, in advance, for any assistance.\n>> \n>> Keith\n>> \n>>         [[alternative HTML version deleted]]\n>> \n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Marco,\nUpdating your version of quantmod, as suggested by Josh, should work. Did for me. \n\nKeith\n\n> On Apr 20, 2017, at 1:44 PM, Magicaltats Bianchi <marcolondonuk at gmail.com> wrote:\n> \n> I have in ",
+      "thread_id": "thread-2390d6e08a81",
+      "thread_depth": 0,
+      "month": "2017-04"
+    },
+    {
+      "id": "msg-fd841a01b74c",
+      "message_id": "<CAPPM_gR3wcYg0ZhJ5Bfh8sUk4g0WwaL-J-Y-hOJtBkFXFY4hww@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2017-04-20T16:03:30-05:00",
+      "subject": "[R-SIG-Finance] quantmod getSymbols() failing on Yahoo",
+      "subject_clean": "quantmod getSymbols() failing on Yahoo",
+      "in_reply_to": "<D453101E-BB7C-4433-9A62-09ABEFCC6681@gmail.com>",
+      "references": [
+        "<CACOcrKZQBVyRs5DfH7j3TXPT0yxotuH5_r9PGiY67LqM=-FwvA@mail.gmail.com>",
+        "<CA+ckjv3jfY=vqGJH=mCDg5o263Qqs7UcOnEaUXYWWO-TXiZGdg@mail.gmail.com>",
+        "<D453101E-BB7C-4433-9A62-09ABEFCC6681@gmail.com>"
+      ],
+      "body_plain": "On Thu, Apr 20, 2017 at 3:57 PM, Keith Sabol <sabolkj at gmail.com> wrote:\n> Marco,\n> Updating your version of quantmod, as suggested by Josh, should work. Did for me.\n>\n> Keith\n>\n>> On Apr 20, 2017, at 1:44 PM, Magicaltats Bianchi <marcolondonuk at gmail.com> wrote:\n>>\n>> I have in fact experienced exactly the same identical situation. Don't really understand where the problem is coming from, let alone figuring out what to do to resolve it! Any suggestions welcome. Marco\n\nIf you're interested in what happened, there are details in the GitHub issue:\nhttps://github.com/joshuaulrich/quantmod/issues/149\n\n>>\n>>> On 20 Apr 2017 7:00 p.m., \"Keith Sabol\" <sabolkj at gmail.com> wrote:\n>>> I've been using getSymbols() to retrieve data from Yahoo for some time\n>>> without difficulty.  Recently, I've been getting this error:\n>>>\n>>> getSymbols(\"IBM\")\n>>> Error in download.file(paste(yahoo.URL, \"s=\", Symbols.name, \"&a=\", from.m,\n>>>  :\n>>>   cannot open URL '\n>>> http://ichart.finance.yahoo.com/table.csv?s=IBM&a=0&b=01&c=2007&d=3&e=20&f=2017&g=d&q=q&y=0&z=IBM&x=.csv\n>>> '\n>>>\n>>>\n>>> Pasting this url into my browser works as expected:\n>>>\n>>> https://ichart.finance.yahoo.com/table.csv?s=IBM&a=0&b=01&c=2007&d=3&e=20&f=2017&g=d&q=q&y=0&z=IBM&x=.csv\n>>>\n>>>\n>>> Can someone suggest how I might find/edit the line in the quantmod code\n>>> that would enable me to to switch to HTTPS until the package catches up?\n>>>\n>>> Thanks, in advance, for any assistance.\n>>>\n>>> Keith\n>>>\n>>>         [[alternative HTML version deleted]]\n>>>\n>>> _______________________________________________\n>>> R-SIG-Finance at r-project.org mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>> -- Also note that this is not the r-help list where general R questions should go.\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2017 | www.rinfinance.com",
+      "body_snippet": "On Thu, Apr 20, 2017 at 3:57 PM, Keith Sabol <sabolkj at gmail.com> wrote:\n> Marco,\n> Updating your version of quantmod, as suggested by Josh, should work. Did for me.\n>\n> Keith\n>\n>> On Apr 20, 2017, ",
+      "thread_id": "thread-2390d6e08a81",
+      "thread_depth": 1,
+      "month": "2017-04"
+    },
+    {
+      "id": "msg-6a927309caca",
+      "message_id": "<6d94b61d-c43b-9350-3c8c-94d4145c2a82@ztsdb.org>",
+      "from_name": "Leonardo Silvestri",
+      "from_email_hash": "0861b0104295f4ad3aecae5d469ff8104da84f53f29c95ed4de50b55337e57db",
+      "date": "2017-04-20T17:32:50-04:00",
+      "subject": "[R-SIG-Finance] A time-series DBMS for R users",
+      "subject_clean": "A time-series DBMS for R users",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI'd like to announce the alpha release of ztsdb, an open-source \ntime-series database management system that is very tightly integrated \nwith R. It should be well-suited for handling financial time-series \ndata, so potentially of interest to some of you.\n\nThe query and manipulation language of ztsdb is a subset of R which \nmakes it possible to integrate ztsdb seamlessly with R. For example, \nfrom an R session, given a connection 'c1' to a remote ztsdb instance \nand a time-series 'z' on that remote instance, one can query the \ndatabase from the R command line with unquoted expressions. Here are a \nfew examples:\n\n## get z's last 6 observations (translates to an 'xts' time series):\nc1 ? tail(z)\n\n## get the 2016 subset of 'z':\nc1 ? z[as.interval(\"+2016-01-01 00:00:00 America/New_York -> 2017-01-01 \n00:00:00 America/New_York-\"), ]\n\n## get the 2016 median-minute aggregation of 'z' and assign it to 'mm':\nmm <- c1 ? { start <- as.time(\"2016-01-01 12:00:00 America/New_York\")\n              end <- `+`(start, as.period(\"1y\"), tz=\"America/New_York\")\n              s <- seq(from=start, to=end, by=as.duration(\"00:01:00\"))\n              align(z, s, method=\"median\") }\n\nIt has a coherent and rich representation of date/time with nanosecond \nprecision and built-in time-zone awareness.\n\nAdditional features include seamless connectivity with other ztsdb \ndatabase instances, continuous/streaming updates and C/C++ fast data \nappend operations.\n\nMore information can be found here:\n- project website: http://www.ztsdb.org/\n- release notes: http://www.ztsdb.org/blog/blog-2016-12-30-first.html\n- Gitlab ztsdb project page: https://gitlab.com/lsilvest/ztsdb\n- Gitlab R package project page: https://gitlab.com/lsilvest/rztsdb\n- Docker repo: https://hub.docker.com/r/lsilvest/ztsdb/\n\nLeo",
+      "body_snippet": "Hi,\n\nI'd like to announce the alpha release of ztsdb, an open-source \ntime-series database management system that is very tightly integrated \nwith R. It should be well-suited for handling financial ti",
+      "thread_id": "thread-6a927309caca",
+      "thread_depth": 0,
+      "month": "2017-04"
+    },
+    {
+      "id": "msg-648917e2ef97",
+      "message_id": "<CAFLRcn1nnJe6wSog3uJYub6DTzLsu0ip0fOe6ASDoTsUOeMWFQ@mail.gmail.com>",
+      "from_name": "John Klingensmith",
+      "from_email_hash": "c86efa31407318e890927f354215998b8b5945ce41c2453d740eb16e2fb3333b",
+      "date": "2017-04-24T13:38:02-04:00",
+      "subject": "[R-SIG-Finance] Luxor Demo Question",
+      "subject_clean": "Luxor Demo Question",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n Does anyone know the purpose behind why the parameters in the Luxor demo\nare preceded by dots?\n\n# optimization range\n.FastSMA = (1:30)\n.SlowSMA = (20:80)\n\n\nIt seems to make them hidden, which also makes them difficult to remove.\nThanks,\n John\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n Does anyone know the purpose behind why the parameters in the Luxor demo\nare preceded by dots?\n\n# optimization range\n.FastSMA = (1:30)\n.SlowSMA = (20:80)\n\n\nIt seems to make them hidden, which als",
+      "thread_id": "thread-648917e2ef97",
+      "thread_depth": 0,
+      "month": "2017-04"
+    },
+    {
+      "id": "msg-e3d2052c8d38",
+      "message_id": "<963d2da7-65a5-3ac4-d099-01b8304ef3cb@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2017-04-24T13:14:56-05:00",
+      "subject": "[R-SIG-Finance] Luxor Demo Question",
+      "subject_clean": "Luxor Demo Question",
+      "in_reply_to": "<CAFLRcn1nnJe6wSog3uJYub6DTzLsu0ip0fOe6ASDoTsUOeMWFQ@mail.gmail.com>",
+      "references": [
+        "<CAFLRcn1nnJe6wSog3uJYub6DTzLsu0ip0fOe6ASDoTsUOeMWFQ@mail.gmail.com>"
+      ],
+      "body_plain": "On 04/24/2017 12:38 PM, John Klingensmith wrote:\n> Hi,\n>  Does anyone know the purpose behind why the parameters in the Luxor demo\n> are preceded by dots?\n>\n> # optimization range\n> .FastSMA = (1:30)\n> .SlowSMA = (20:80)\n>\n>\n> It seems to make them hidden, which also makes them difficult to remove.\n\nThey're just named parameters with dots in the name.  They are used in \nthe parameter demos.\n\nYou can easily see hidden objects with\n\nls(all=TRUE)\n\nand can remove any named object:\n\nrm(.FastSMA)\n\nwith or without a dot.\n\nRegards,\n\nBrian",
+      "body_snippet": "On 04/24/2017 12:38 PM, John Klingensmith wrote:\n> Hi,\n>  Does anyone know the purpose behind why the parameters in the Luxor demo\n> are preceded by dots?\n>\n> # optimization range\n> .FastSMA = (1:30)\n",
+      "thread_id": "thread-648917e2ef97",
+      "thread_depth": 1,
+      "month": "2017-04"
+    },
+    {
+      "id": "msg-91c2cbe42f9d",
+      "message_id": "<CAFLRcn0W5cf57px2V08MBKWE4MYj6xnkFkdmRNb_ERkv4t2XmA@mail.gmail.com>",
+      "from_name": "John Klingensmith",
+      "from_email_hash": "c86efa31407318e890927f354215998b8b5945ce41c2453d740eb16e2fb3333b",
+      "date": "2017-04-24T15:46:48-04:00",
+      "subject": "[R-SIG-Finance] Luxor Demo Question",
+      "subject_clean": "Luxor Demo Question",
+      "in_reply_to": "<963d2da7-65a5-3ac4-d099-01b8304ef3cb@braverock.com>",
+      "references": [
+        "<CAFLRcn1nnJe6wSog3uJYub6DTzLsu0ip0fOe6ASDoTsUOeMWFQ@mail.gmail.com>",
+        "<963d2da7-65a5-3ac4-d099-01b8304ef3cb@braverock.com>"
+      ],
+      "body_plain": "Brian,\n  Thanks.  So there is no particular reason why they were made as hidden\nparameters?\n\nBest,\n John\n\nOn Mon, Apr 24, 2017 at 2:14 PM, Brian G. Peterson <brian at braverock.com>\nwrote:\n\n> On 04/24/2017 12:38 PM, John Klingensmith wrote:\n>\n>> Hi,\n>>  Does anyone know the purpose behind why the parameters in the Luxor demo\n>> are preceded by dots?\n>>\n>> # optimization range\n>> .FastSMA = (1:30)\n>> .SlowSMA = (20:80)\n>>\n>>\n>> It seems to make them hidden, which also makes them difficult to remove.\n>>\n>\n> They're just named parameters with dots in the name.  They are used in the\n> parameter demos.\n>\n> You can easily see hidden objects with\n>\n> ls(all=TRUE)\n>\n> and can remove any named object:\n>\n> rm(.FastSMA)\n>\n> with or without a dot.\n>\n> Regards,\n>\n> Brian\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Brian,\n  Thanks.  So there is no particular reason why they were made as hidden\nparameters?\n\nBest,\n John\n\nOn Mon, Apr 24, 2017 at 2:14 PM, Brian G. Peterson <brian at braverock.com>\nwrote:\n\n> On 04/24",
+      "thread_id": "thread-648917e2ef97",
+      "thread_depth": 2,
+      "month": "2017-04"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-af8d32f8272e",
+      "subject": "Rblpapi package data limits?",
+      "message_count": 6,
+      "participants": [
+        "Brian G. Peterson",
+        "Jon Golenbock",
+        "Whit Armstrong",
+        "chidley.ryan at gmail.com"
+      ],
+      "started": "2017-04-05T08:54:40-04:00",
+      "last_reply": "2017-04-05T09:46:26-04:00",
+      "root_message_id": "msg-af8d32f8272e"
+    },
+    {
+      "id": "thread-d2221ab2cb86",
+      "subject": "Moving Limit orders",
+      "message_count": 2,
+      "participants": [
+        "John Klingensmith",
+        "Victor Montanez"
+      ],
+      "started": "2017-04-06T16:47:24-04:00",
+      "last_reply": "2017-04-06T17:48:29-04:00",
+      "root_message_id": "msg-d2221ab2cb86"
+    },
+    {
+      "id": "thread-fe2d78aa89d0",
+      "subject": "Performanceanalytics -- table.calendarreturns question",
+      "message_count": 2,
+      "participants": [
+        "Enrico Schumann",
+        "Jason Hart"
+      ],
+      "started": "2017-04-07T01:36:25+00:00",
+      "last_reply": "2017-04-07T22:42:20+02:00",
+      "root_message_id": "msg-fe2d78aa89d0"
+    },
+    {
+      "id": "thread-a785b18b0886",
+      "subject": "A quick custom data question",
+      "message_count": 2,
+      "participants": [
+        "Brian G. Peterson",
+        "Michael Chen"
+      ],
+      "started": "2017-04-08T08:58:48+00:00",
+      "last_reply": "2017-04-08T05:13:04-05:00",
+      "root_message_id": "msg-a785b18b0886"
+    },
+    {
+      "id": "thread-f04ee094cfe9",
+      "subject": "quanstrat exit rules",
+      "message_count": 2,
+      "participants": [
+        "Brian G. Peterson",
+        "Jon Golenbock"
+      ],
+      "started": "2017-04-18T10:31:59-04:00",
+      "last_reply": "2017-04-18T09:44:46-05:00",
+      "root_message_id": "msg-f04ee094cfe9"
+    },
+    {
+      "id": "thread-172e6819f44f",
+      "subject": "quantmod getSymbols() failing on Yahoo",
+      "message_count": 2,
+      "participants": [
+        "Joshua Ulrich",
+        "Keith Sabol"
+      ],
+      "started": "2017-04-20T11:59:41-06:00",
+      "last_reply": "2017-04-20T13:01:09-05:00",
+      "root_message_id": "msg-172e6819f44f"
+    },
+    {
+      "id": "thread-2390d6e08a81",
+      "subject": "quantmod getSymbols() failing on Yahoo",
+      "message_count": 2,
+      "participants": [
+        "Joshua Ulrich",
+        "Keith Sabol"
+      ],
+      "started": "2017-04-20T14:57:22-06:00",
+      "last_reply": "2017-04-20T16:03:30-05:00",
+      "root_message_id": "msg-2390d6e08a81"
+    },
+    {
+      "id": "thread-6a927309caca",
+      "subject": "A time-series DBMS for R users",
+      "message_count": 1,
+      "participants": [
+        "Leonardo Silvestri"
+      ],
+      "started": "2017-04-20T17:32:50-04:00",
+      "last_reply": "2017-04-20T17:32:50-04:00",
+      "root_message_id": "msg-6a927309caca"
+    },
+    {
+      "id": "thread-648917e2ef97",
+      "subject": "Luxor Demo Question",
+      "message_count": 3,
+      "participants": [
+        "Brian G. Peterson",
+        "John Klingensmith"
+      ],
+      "started": "2017-04-24T13:38:02-04:00",
+      "last_reply": "2017-04-24T15:46:48-04:00",
+      "root_message_id": "msg-648917e2ef97"
+    }
+  ]
+}

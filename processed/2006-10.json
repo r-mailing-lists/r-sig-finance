@@ -1,0 +1,1226 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2006-10",
+  "messages": [
+    {
+      "id": "msg-34467903720d",
+      "message_id": "<eg3ia6$9cb$1@sea.gmane.org>",
+      "from_name": "Joe Byers",
+      "from_email_hash": "4714326de2b9458e8463057abecfdc3e5d2e5670d783fd5d12cf25ab0dedee18",
+      "date": "2006-10-05T13:19:23-05:00",
+      "subject": "[R-SIG-Finance] isBizday question",
+      "subject_clean": "isBizday question",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I have the following code to create a calendar time sequence to perform \na simulation\nMTMDate<-'2006-09-25';\nlastDay<-'2007-03-31';\ntraj<-500;\n##############end input section\ndt<-1/365;\n\n#build calendar\ncalday<-timeSequence(from = MTMDate, to = lastDay,by = \n\"day\",FinCenter='America/Eastern')\n#get rid of holidays and weekends\ncalday<-calday[isBizday(calday,holidays=holiday.NYSE())];\n\nThe problem is that the holidays are only eliminated for the current \nyear, 2006, not the next year 2007.\n\nDoes anyone have a suggestion that I can use to get the isBizday method \nto also see the multiple years for the holidays?\n\nThank you\nJoe",
+      "body_snippet": "I have the following code to create a calendar time sequence to perform \na simulation\nMTMDate<-'2006-09-25';\nlastDay<-'2007-03-31';\ntraj<-500;\n##############end input section\ndt<-1/365;\n\n#build calend",
+      "thread_id": "thread-34467903720d",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-ac8088a88d04",
+      "message_id": "<45255375.3060202@itp.phys.ethz.ch>",
+      "from_name": "Diethelm Wuertz",
+      "from_email_hash": "db72845f148b28bce223455d9f5dbf705d659fd637f9d0697fb0778a67cfebef",
+      "date": "2006-10-05T20:48:21+02:00",
+      "subject": "[R-SIG-Finance] isBizday question",
+      "subject_clean": "isBizday question",
+      "in_reply_to": "<eg3ia6$9cb$1@sea.gmane.org>",
+      "references": [
+        "<eg3ia6$9cb$1@sea.gmane.org>"
+      ],
+      "body_plain": "Joe Byers wrote:\n\n>I have the following code to create a calendar time sequence to perform \n>a simulation\n>MTMDate<-'2006-09-25';\n>lastDay<-'2007-03-31';\n>traj<-500;\n>##############end input section\n>dt<-1/365;\n>\n>#build calendar\n>calday<-timeSequence(from = MTMDate, to = lastDay,by = \n>\"day\",FinCenter='America/Eastern')\n>#get rid of holidays and weekends\n>calday<-calday[isBizday(calday,holidays=holiday.NYSE())];\n>  \n>\nYou have to set the year,  e.g.\n\n > holiday.NYSE()\n[1] \"America/New_York\"\n[1] [2006-01-02] [2006-01-16] [2006-02-20] [2006-04-14] [2006-05-29] \n[2006-07-04]\n[7] [2006-09-04] [2006-11-23] [2006-12-25]\n > holiday.NYSE(2005:2006)\n[1] \"America/New_York\"\n [1] [2005-01-17] [2005-02-21] [2005-03-25] [2005-05-30] [2005-07-04] \n[2005-09-05]\n [7] [2005-11-24] [2005-12-26] [2006-01-02] [2006-01-16] [2006-02-20] \n[2006-04-14]\n[13] [2006-05-29] [2006-07-04] [2006-09-04] [2006-11-23] [2006-12-25]\n > help(holiday.NYSE)\n\n\nregards DW\n\n>The problem is that the holidays are only eliminated for the current \n>year, 2006, not the next year 2007.\n>  \n>\nthat's not true read the help page.\n\n>Does anyone have a suggestion that I can use to get the isBizday method \n>to also see the multiple years for the holidays?\n>\n>Thank you\n>Joe\n>\n>_______________________________________________\n>R-SIG-Finance at stat.math.ethz.ch mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>  \n>",
+      "body_snippet": "Joe Byers wrote:\n\n>I have the following code to create a calendar time sequence to perform \n>a simulation\n>MTMDate<-'2006-09-25';\n>lastDay<-'2007-03-31';\n>traj<-500;\n>##############end input section\n>",
+      "thread_id": "thread-34467903720d",
+      "thread_depth": 1,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-bbf505ad9889",
+      "message_id": "<45256B81.80608@utulsa.edu>",
+      "from_name": "Joe Byers",
+      "from_email_hash": "4714326de2b9458e8463057abecfdc3e5d2e5670d783fd5d12cf25ab0dedee18",
+      "date": "2006-10-05T15:30:57-05:00",
+      "subject": "[R-SIG-Finance] isBizday question",
+      "subject_clean": "isBizday question",
+      "in_reply_to": "<45255375.3060202@itp.phys.ethz.ch>",
+      "references": [
+        "<eg3ia6$9cb$1@sea.gmane.org>",
+        "<45255375.3060202@itp.phys.ethz.ch>"
+      ],
+      "body_plain": "Diethelm,\n\nthank you for your reply.\n\nIn reference to your comment below,\nas I specified the holidays=holidays.NYSE(), it only calculates for the \ndefault function parameters.  I read that in the document pages, just \ndid not understand it until I reviewed the results and the code for the \ntwo functions.\n\nI figured out something that works, I just wonder if there is a simpler \nmethod.  I used the atoms and factor methods to get the factor levels of \nmy years.  I replaced the line of code that contains isBizday with\n#as.numeric(factor(atoms(calday)$Y)@levels)\ncalday<-calday[isBizday(calday,  \nholidays=holiday.NYSE(as.numeric(factor(atoms(calday)$Y)@levels)))]\n\nThank you\nJoe\n\n\n\nDiethelm Wuertz wrote:\n> Joe Byers wrote:\n>\n>> I have the following code to create a calendar time sequence to \n>> perform a simulation\n>> MTMDate<-'2006-09-25';\n>> lastDay<-'2007-03-31';\n>> traj<-500;\n>> ##############end input section\n>> dt<-1/365;\n>>\n>> #build calendar\n>> calday<-timeSequence(from = MTMDate, to = lastDay,by = \n>> \"day\",FinCenter='America/Eastern')\n>> #get rid of holidays and weekends\n>> calday<-calday[isBizday(calday,holidays=holiday.NYSE())];\n>>  \n>>\n> You have to set the year,  e.g.\n>\n> > holiday.NYSE()\n> [1] \"America/New_York\"\n> [1] [2006-01-02] [2006-01-16] [2006-02-20] [2006-04-14] [2006-05-29] \n> [2006-07-04]\n> [7] [2006-09-04] [2006-11-23] [2006-12-25]\n> > holiday.NYSE(2005:2006)\n> [1] \"America/New_York\"\n> [1] [2005-01-17] [2005-02-21] [2005-03-25] [2005-05-30] [2005-07-04] \n> [2005-09-05]\n> [7] [2005-11-24] [2005-12-26] [2006-01-02] [2006-01-16] [2006-02-20] \n> [2006-04-14]\n> [13] [2006-05-29] [2006-07-04] [2006-09-04] [2006-11-23] [2006-12-25]\n> > help(holiday.NYSE)\n>\n>\n> regards DW\n>\n>> The problem is that the holidays are only eliminated for the current \n>> year, 2006, not the next year 2007.\n>>  \n>>\n>\n>\n>> Does anyone have a suggestion that I can use to get the isBizday \n>> method to also see the multiple years for the holidays?\n>>\n>> Thank you\n>> Joe\n>>\n>> _______________________________________________\n>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>\n>>  \n>>\n>\n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: joe-byers.vcf\nType: text/x-vcard\nSize: 295 bytes\nDesc: not available\nUrl : https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061005/83d5a5ef/attachment.vcf",
+      "body_snippet": "Diethelm,\n\nthank you for your reply.\n\nIn reference to your comment below,\nas I specified the holidays=holidays.NYSE(), it only calculates for the \ndefault function parameters.  I read that in the docu",
+      "thread_id": "thread-34467903720d",
+      "thread_depth": 2,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-9dfbde8564e0",
+      "message_id": "<45266130.6080406@gmx.ch>",
+      "from_name": "-",
+      "from_email_hash": "e29927d4049b95e754274da4110445ee9ea49e3f259f9346133ba256b1cb1e94",
+      "date": "2006-10-06T15:59:12+02:00",
+      "subject": "[R-SIG-Finance] error message when loading package fSeries",
+      "subject_clean": "error message when loading package fSeries",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "When I try to load the package fSeries I get the following error message \nin a window (in German):\n\n\"Der Prozedureinsprungpunkt 'signal' wurde in der DLL 'R.dll' nicht \ngefunden.\"\n\nIn the R-Interface it says:\n\n\"Fehler in dyn.load(x, as.logical(local), as.logical(now)) :\n         kann shared library \n'C:/Programme/R/R-2.4.0/library/fBasics/libs/fBasics.dll' nicht laden:\n  LoadLibrary failure:  Die angegebene Prozedur wurde nicht gefunden.\n\nFehler: Paket 'fBasics' konnte nicht geladen werden\"\n\nI have no clue what this means.\n\nAny help is greatly appreciated.\n\n\n\nThank you, MD.",
+      "body_snippet": "When I try to load the package fSeries I get the following error message \nin a window (in German):\n\n\"Der Prozedureinsprungpunkt 'signal' wurde in der DLL 'R.dll' nicht \ngefunden.\"\n\nIn the R-Interface ",
+      "thread_id": "thread-9dfbde8564e0",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-b5d9113f0cda",
+      "message_id": "<45266A6A.2070705@gmx.ch>",
+      "from_name": "-",
+      "from_email_hash": "e29927d4049b95e754274da4110445ee9ea49e3f259f9346133ba256b1cb1e94",
+      "date": "2006-10-06T16:38:34+02:00",
+      "subject": "[R-SIG-Finance]  error message when loading package fSeries",
+      "subject_clean": "error message when loading package fSeries",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I forgot to write that I use R version 2.4.0 for Windows and that other \nRmetrics packages like fBasics or fCalender produce the same error messages.\n\nThanks.\n\nMarius",
+      "body_snippet": "I forgot to write that I use R version 2.4.0 for Windows and that other \nRmetrics packages like fBasics or fCalender produce the same error messages.\n\nThanks.\n\nMarius",
+      "thread_id": "thread-b5d9113f0cda",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-d260660b3abb",
+      "message_id": "<4526D4B3.3010608@itp.phys.ethz.ch>",
+      "from_name": "Diethelm Wuertz",
+      "from_email_hash": "db72845f148b28bce223455d9f5dbf705d659fd637f9d0697fb0778a67cfebef",
+      "date": "2006-10-07T00:12:03+02:00",
+      "subject": "[R-SIG-Finance] error message when loading package fSeries",
+      "subject_clean": "error message when loading package fSeries",
+      "in_reply_to": "<45266130.6080406@gmx.ch>",
+      "references": [
+        "<45266130.6080406@gmx.ch>"
+      ],
+      "body_plain": "- wrote:\n\nSorry, the Rmetrics Packages are not yet ready for 2.4.0. They will become\nupdated during the next week. Many Thanks\nDiethelm Wuertz\n\n>When I try to load the package fSeries I get the following error message \n>in a window (in German):\n>\n>\"Der Prozedureinsprungpunkt 'signal' wurde in der DLL 'R.dll' nicht \n>gefunden.\"\n>\n>In the R-Interface it says:\n>\n>\"Fehler in dyn.load(x, as.logical(local), as.logical(now)) :\n>         kann shared library \n>'C:/Programme/R/R-2.4.0/library/fBasics/libs/fBasics.dll' nicht laden:\n>  LoadLibrary failure:  Die angegebene Prozedur wurde nicht gefunden.\n>\n>Fehler: Paket 'fBasics' konnte nicht geladen werden\"\n>\n>I have no clue what this means.\n>\n>Any help is greatly appreciated.\n>\n>\n>\n>Thank you, MD.\n>\n>_______________________________________________\n>R-SIG-Finance at stat.math.ethz.ch mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>  \n>",
+      "body_snippet": "- wrote:\n\nSorry, the Rmetrics Packages are not yet ready for 2.4.0. They will become\nupdated during the next week. Many Thanks\nDiethelm Wuertz\n\n>When I try to load the package fSeries I get the follow",
+      "thread_id": "thread-9dfbde8564e0",
+      "thread_depth": 1,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-b0c34b3eb620",
+      "message_id": "<17702.58771.406827.609438@basebud.nulle.part>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2006-10-06T18:24:03-05:00",
+      "subject": "[R-SIG-Finance] error message when loading package fSeries",
+      "subject_clean": "error message when loading package fSeries",
+      "in_reply_to": "<4526D4B3.3010608@itp.phys.ethz.ch>",
+      "references": [
+        "<45266130.6080406@gmx.ch>",
+        "<4526D4B3.3010608@itp.phys.ethz.ch>"
+      ],
+      "body_plain": "On 7 October 2006 at 00:12, Diethelm Wuertz wrote:\n| - wrote:\n| \n| Sorry, the Rmetrics Packages are not yet ready for 2.4.0. They will become\n| updated during the next week. Many Thanks\n\nFWIW they continue to work under Linux.\n\nedd at basebud:~> R\n\nR version 2.4.0 (2006-10-03)\nCopyright (C) 2006 The R Foundation for Statistical Computing\nISBN 3-900051-07-0\n\nR is free software and comes with ABSOLUTELY NO WARRANTY.\nYou are welcome to redistribute it under certain conditions.\nType 'license()' or 'licence()' for distribution details.\n\nR is a collaborative project with many contributors.\nType 'contributors()' for more information and\n'citation()' on how to cite R or R packages in publications.\n\nType 'demo()' for some demos, 'help()' for on-line help, or\n'help.start()' for an HTML browser interface to help.\nType 'q()' to quit R.\n\n[Previously saved workspace restored]\n\n> library(fSeries)\nLoading required package: fBasics\n\nRmetrics, (C) 1999-2005, Diethelm Wuertz, GPL\nfBasics: Markets and Basic Statistics\nLoading required package: fCalendar\n\nRmetrics, (C) 1999-2005, Diethelm Wuertz, GPL\nfCalendar: Time, Date and Calendar Tools\n\nRmetrics, (C) 1999-2005, Diethelm Wuertz, GPL\nfSeries: The Dynamical Process Behind Financial Markets\n>                                                                           \n\nDirk\n\n\n| Diethelm Wuertz\n| \n| >When I try to load the package fSeries I get the following error message \n| >in a window (in German):\n| >\n| >\"Der Prozedureinsprungpunkt 'signal' wurde in der DLL 'R.dll' nicht \n| >gefunden.\"\n| >\n| >In the R-Interface it says:\n| >\n| >\"Fehler in dyn.load(x, as.logical(local), as.logical(now)) :\n| >         kann shared library \n| >'C:/Programme/R/R-2.4.0/library/fBasics/libs/fBasics.dll' nicht laden:\n| >  LoadLibrary failure:  Die angegebene Prozedur wurde nicht gefunden.\n| >\n| >Fehler: Paket 'fBasics' konnte nicht geladen werden\"\n| >\n| >I have no clue what this means.\n| >\n| >Any help is greatly appreciated.\n| >\n| >\n| >\n| >Thank you, MD.\n| >\n| >_______________________________________________\n| >R-SIG-Finance at stat.math.ethz.ch mailing list\n| >https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n| >\n| >  \n| >\n| \n| _______________________________________________\n| R-SIG-Finance at stat.math.ethz.ch mailing list\n| https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n\n-- \nHell, there are no rules here - we're trying to accomplish something. \n                                                  -- Thomas A. Edison",
+      "body_snippet": "On 7 October 2006 at 00:12, Diethelm Wuertz wrote:\n| - wrote:\n| \n| Sorry, the Rmetrics Packages are not yet ready for 2.4.0. They will become\n| updated during the next week. Many Thanks\n\nFWIW they con",
+      "thread_id": "thread-9dfbde8564e0",
+      "thread_depth": 2,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-5d7ea530d91d",
+      "message_id": "<000001c6eae5$fa5172d0$0100a8c0@ESCRITORIO>",
+      "from_name": "VitorTeixeira",
+      "from_email_hash": "729009768fec26239d3a0bc9d203f4093c36572aae415c14bdce6360110e640f",
+      "date": "2006-10-08T15:28:08+01:00",
+      "subject": "[R-SIG-Finance] Error in if (Y > 0) { : missing value where TRUE/FALSE needed",
+      "subject_clean": "Error in if (Y > 0) { : missing value where TRUE/FALSE needed",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061008/962b295e/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061008/962b295e/attachment.pl",
+      "thread_id": "thread-5d7ea530d91d",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-7eea76414335",
+      "message_id": "<OF26745E0E.2E0FC7BF-ON65257202.0042DC33-652571FF.00431358@ccilindia.co.in>",
+      "from_name": "gyadav at ccilindia.co.in",
+      "from_email_hash": "ad8f84eae85519238e323e31b1e6fcd68b6a15b393c76052a09504a4b7f2a928",
+      "date": "2006-10-09T17:41:23+05:30",
+      "subject": "[R-SIG-Finance] regarding bootstrapping",
+      "subject_clean": "regarding bootstrapping",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061009/e2e6626f/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061009/e2e6626f/attachment.pl",
+      "thread_id": "thread-7eea76414335",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-b658919b428f",
+      "message_id": "<200610090829.43003.brian@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2006-10-09T08:29:42-05:00",
+      "subject": "[R-SIG-Finance] regarding bootstrapping",
+      "subject_clean": "regarding bootstrapping",
+      "in_reply_to": "<OF26745E0E.2E0FC7BF-ON65257202.0042DC33-652571FF.00431358@ccilindia.co.in>",
+      "references": [
+        "<OF26745E0E.2E0FC7BF-ON65257202.0042DC33-652571FF.00431358@ccilindia.co.in>"
+      ],
+      "body_plain": "On Monday 09 October 2006 07:11, gyadav at ccilindia.co.in wrote:\n> I just want to know how to make yield curve by bootstrapping using R.\n> Please give me some subject-matter links and code links.\n> Especially the Spot Yield Curve and YTM Curve.\n\nCould you be a little more specific about what you're trying to do?  If \nyou're trying to get current yield curves, there are simpler fitting \nmethods than bootstrapping (or just take it off Bloomberg).  Any \nintroductory R/S statistics text will give you several fitting options. \nIf you're trying to forecast yield curve, what are you using as forecast \nrates?  If, for example, you're using futures prices, then again you have \nmany simpler fitting mechanisms than bootstapping.  If you've got a more \ncomplicated forecast range, then bootstrapping may be appropriate.\n\nInside R, try \n\nhelp.search (\"bootstrap\")\n\nand look at the examples most appropriate to your problem.\n\nRegards,\n\n - Brian",
+      "body_snippet": "On Monday 09 October 2006 07:11, gyadav at ccilindia.co.in wrote:\n> I just want to know how to make yield curve by bootstrapping using R.\n> Please give me some subject-matter links and code links.\n> E",
+      "thread_id": "thread-7eea76414335",
+      "thread_depth": 1,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-9eaeb4b7ba06",
+      "message_id": "<F9F2A641C593D7408925574C05A7BE77131645@rhopost.rhotrading.com>",
+      "from_name": "davidr at rhotrading.com",
+      "from_email_hash": "4998ec2d52ffe0c535ce902387987bbb6e981a3c144c9feae07c8ce7b5869756",
+      "date": "2006-10-09T10:25:32-05:00",
+      "subject": "[R-SIG-Finance] regarding bootstrapping",
+      "subject_clean": "regarding bootstrapping",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Yield curve bootstrapping and statistical bootstrapping are not really\nrelated.\nYield curve bootstrapping is constructing a yield curve from market\ninstruments' prices (deposit rates or [L]ibors, Eurocurrency prices,\nswaps.)\nThere are so many ways of doing it, that I suspect you will have to do\nit yourself to get something suitable for your particular situation.\nYou could start with one of the 'big' finance texts that covers it in\nsome detail, such as Hull.\n\nGood luck!\n\nDavid L. Reiner\nRho Trading Securities, LLC\nChicago  IL  60605\n312-362-4963\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Brian G.\nPeterson\nSent: Monday, October 09, 2006 8:30 AM\nTo: r-sig-finance at stat.math.ethz.ch\nSubject: Re: [R-SIG-Finance] regarding bootstrapping\n\nOn Monday 09 October 2006 07:11, gyadav at ccilindia.co.in wrote:\n> I just want to know how to make yield curve by bootstrapping using R.\n> Please give me some subject-matter links and code links.\n> Especially the Spot Yield Curve and YTM Curve.\n\nCould you be a little more specific about what you're trying to do?  If \nyou're trying to get current yield curves, there are simpler fitting \nmethods than bootstrapping (or just take it off Bloomberg).  Any \nintroductory R/S statistics text will give you several fitting options. \nIf you're trying to forecast yield curve, what are you using as forecast\n\nrates?  If, for example, you're using futures prices, then again you\nhave \nmany simpler fitting mechanisms than bootstapping.  If you've got a more\n\ncomplicated forecast range, then bootstrapping may be appropriate.\n\nInside R, try \n\nhelp.search (\"bootstrap\")\n\nand look at the examples most appropriate to your problem.\n\nRegards,\n\n - Brian\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance",
+      "body_snippet": "Yield curve bootstrapping and statistical bootstrapping are not really\nrelated.\nYield curve bootstrapping is constructing a yield curve from market\ninstruments' prices (deposit rates or [L]ibors, Euro",
+      "thread_id": "thread-9eaeb4b7ba06",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-491597f2aebf",
+      "message_id": "<d0f55a670610090848gd8ddd19w2985b7ec0c908a26@mail.gmail.com>",
+      "from_name": "Thomas Steiner",
+      "from_email_hash": "750a3ff6af0be6db83d42f3a17b989a218e2ddb0dbf78cb7571168f5e4791c04",
+      "date": "2006-10-09T17:48:35+02:00",
+      "subject": "[R-SIG-Finance] regarding bootstrapping",
+      "subject_clean": "regarding bootstrapping",
+      "in_reply_to": "<OF26745E0E.2E0FC7BF-ON65257202.0042DC33-652571FF.00431358@ccilindia.co.in>",
+      "references": [
+        "<OF26745E0E.2E0FC7BF-ON65257202.0042DC33-652571FF.00431358@ccilindia.co.in>"
+      ],
+      "body_plain": "Gaurav,\n\nsome time ago I asked a very similar question. I got some very helpful\nanswers and some lines of code. Perhaps you want to read this (after\nconsulting Hull and the others):\nhttps://stat.ethz.ch/pipermail/r-sig-finance/2006q1/000682.html\n\nIf you want to see some of my \"present\" code, just let me know.\n\nYours,\nThomas",
+      "body_snippet": "Gaurav,\n\nsome time ago I asked a very similar question. I got some very helpful\nanswers and some lines of code. Perhaps you want to read this (after\nconsulting Hull and the others):\nhttps://stat.ethz.",
+      "thread_id": "thread-7eea76414335",
+      "thread_depth": 1,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-1aa283f4d118",
+      "message_id": "<OFCBC74165.F3DF81E6-ON65257203.001E2E76-65257203.001EB9C1@ccilindia.co.in>",
+      "from_name": "gyadav at ccilindia.co.in",
+      "from_email_hash": "ad8f84eae85519238e323e31b1e6fcd68b6a15b393c76052a09504a4b7f2a928",
+      "date": "2006-10-10T11:04:21+05:30",
+      "subject": "[R-SIG-Finance] regarding bootstrapping",
+      "subject_clean": "regarding bootstrapping",
+      "in_reply_to": "<F9F2A641C593D7408925574C05A7BE77131645@rhopost.rhotrading.com>",
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061010/015fd941/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061010/015fd941/attachment.pl",
+      "thread_id": "thread-9eaeb4b7ba06",
+      "thread_depth": 1,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-330bbfac902f",
+      "message_id": "<OFC80A015F.B5FE411D-ON65257203.001F22F0-65257203.0025310A@ccilindia.co.in>",
+      "from_name": "gyadav at ccilindia.co.in",
+      "from_email_hash": "ad8f84eae85519238e323e31b1e6fcd68b6a15b393c76052a09504a4b7f2a928",
+      "date": "2006-10-10T12:14:59+05:30",
+      "subject": "[R-SIG-Finance]  regarding bootstrapping... REVISITED",
+      "subject_clean": "regarding bootstrapping... REVISITED",
+      "in_reply_to": "<d0f55a670610090848gd8ddd19w2985b7ec0c908a26@mail.gmail.com>",
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061010/077a8b39/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061010/077a8b39/attachment.pl",
+      "thread_id": "thread-7eea76414335",
+      "thread_depth": 2,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-61cf684b694a",
+      "message_id": "<OFD15F7096.EE168F43-ON65257203.00269C3C-65257203.0026D111@ccilindia.co.in>",
+      "from_name": "gyadav at ccilindia.co.in",
+      "from_email_hash": "ad8f84eae85519238e323e31b1e6fcd68b6a15b393c76052a09504a4b7f2a928",
+      "date": "2006-10-10T12:32:44+05:30",
+      "subject": "[R-SIG-Finance] ERRATA: Re: [R] regarding bootstrapping... REVISITED",
+      "subject_clean": "ERRATA: Re: [R] regarding bootstrapping... REVISITED",
+      "in_reply_to": "<OFC80A015F.B5FE411D-ON65257203.001F22F0-65257203.0025310A@ccil india.co.in>",
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061010/78aceab9/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061010/78aceab9/attachment.pl",
+      "thread_id": "thread-61cf684b694a",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-bcff00686897",
+      "message_id": "<200610100618.12185.brian@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2006-10-10T06:18:12-05:00",
+      "subject": "[R-SIG-Finance] regarding bootstrapping... REVISITED",
+      "subject_clean": "regarding bootstrapping... REVISITED",
+      "in_reply_to": "<OFC80A015F.B5FE411D-ON65257203.001F22F0-65257203.0025310A@ccilindia.co.in>",
+      "references": [
+        "<OFC80A015F.B5FE411D-ON65257203.001F22F0-65257203.0025310A@ccilindia.co.in>"
+      ],
+      "body_plain": "On Tuesday 10 October 2006 00:25, gyadav at ccilindia.co.in wrote:\n> i am trying to build a spot yield curve for fixed income market\n> specifically bonds. i was told by my contacts that this can be done\n> best by bootstrapping.\n\n\nOn Tuesday 10 October 2006 01:44, gyadav at ccilindia.co.in wrote:\n> I went through the thread(\n> https://stat.ethz.ch/pipermail/r-sig-finance/2006q1/000682.html which\n> concerns with swaps). Yeah it is correct that i would like to quote\n> both David and Krishna that the curve interpolation may vary\n> considerably (for e.g. any polynomial/parametric fit is very different\n> from and curve fitting whether it is free hand or by NURBS ( complex\n> version of Basis Splines ZZZzzz). My problem is that i want to know how\n> can i generate spot curve using bootstrap method in R.Further, even if\n> you do not have fixed maturity bonds i.e. when you need to create\n> fictitious or virtual paper of varied fixed maturities like 1 month, 6\n> month, 1 year, 5 year, 10 year ..... so that you can create a spot\n> curve from the traded points which may be like as follows.... for e.g.\n\nGaurav,\n\nI believe we're all saying the same thing.  \n\nDavid has correctly pointed out that to simply discuss \"bootstrapping a \nyield curve\" does not necessarily imply the use of a statistical \n\"bootstrap\" method to build your curve, although it does not necessarily \nrule it out either.  Kris in the earlier thread provided code for an \ninterpolation/fit method using the discount rate. Thomas used a different \nmethod.  Kris also provided reference to several papers that could be \nused to construct other methods, and pointed out that the choice of \nmethod will change your estimates, possibly significantly. My point was \nthat you will need to test any fitting method against the specific \nproblem that you have, and that a statistical bootstrap may or may not be \nappropriate to your problem. The input data you have available will help \nyou determine the best fitting method to use.\n\nBoth Thomas' code and Kris' code look like they will do a credible job of \nfitting a yield curve.  Perhaps you should consider testing those methods \nagainst your problem, so that you could identify deficiencies that those \nmethods may have in your specific implementation.  Then we could discuss \napproaches here that might address the specific deficiencies that you \nidentify.\n\nRegards,\n\n   - Brian",
+      "body_snippet": "On Tuesday 10 October 2006 00:25, gyadav at ccilindia.co.in wrote:\n> i am trying to build a spot yield curve for fixed income market\n> specifically bonds. i was told by my contacts that this can be do",
+      "thread_id": "thread-7eea76414335",
+      "thread_depth": 3,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-d76639123ae4",
+      "message_id": "<F9F2A641C593D7408925574C05A7BE7713166A@rhopost.rhotrading.com>",
+      "from_name": "davidr at rhotrading.com",
+      "from_email_hash": "4998ec2d52ffe0c535ce902387987bbb6e981a3c144c9feae07c8ce7b5869756",
+      "date": "2006-10-10T09:23:15-05:00",
+      "subject": "[R-SIG-Finance] regarding bootstrapping... REVISITED",
+      "subject_clean": "regarding bootstrapping... REVISITED",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "It is possible that the constant maturity treasury curve constructed\ndaily by the NY Fed will serve your needs. (You didn't say what you were\ntrying to accomplish AFAICS.) \nYou can get history at\nhttp://www.federalreserve.gov/releases/h15/data.htm . Look for 'Treasury\nconstant maturities'. They used to hand-fit a curve, but now they use an\nalgorithm (which is documented somewhere I don't remember.)\n\nHTH\n\nDavid L. Reiner\nRho Trading Securities, LLC\nChicago  IL  60605\n312-362-4963\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Brian G.\nPeterson\nSent: Tuesday, October 10, 2006 6:18 AM\nTo: r-sig-finance at stat.math.ethz.ch\nSubject: Re: [R-SIG-Finance] regarding bootstrapping... REVISITED\n\nOn Tuesday 10 October 2006 00:25, gyadav at ccilindia.co.in wrote:\n> i am trying to build a spot yield curve for fixed income market\n> specifically bonds. i was told by my contacts that this can be done\n> best by bootstrapping.\n\n\nOn Tuesday 10 October 2006 01:44, gyadav at ccilindia.co.in wrote:\n> I went through the thread(\n> https://stat.ethz.ch/pipermail/r-sig-finance/2006q1/000682.html which\n> concerns with swaps). Yeah it is correct that i would like to quote\n> both David and Krishna that the curve interpolation may vary\n> considerably (for e.g. any polynomial/parametric fit is very different\n> from and curve fitting whether it is free hand or by NURBS ( complex\n> version of Basis Splines ZZZzzz). My problem is that i want to know\nhow\n> can i generate spot curve using bootstrap method in R.Further, even if\n> you do not have fixed maturity bonds i.e. when you need to create\n> fictitious or virtual paper of varied fixed maturities like 1 month, 6\n> month, 1 year, 5 year, 10 year ..... so that you can create a spot\n> curve from the traded points which may be like as follows.... for e.g.\n\nGaurav,\n\nI believe we're all saying the same thing.  \n\nDavid has correctly pointed out that to simply discuss \"bootstrapping a \nyield curve\" does not necessarily imply the use of a statistical \n\"bootstrap\" method to build your curve, although it does not necessarily\n\nrule it out either.  Kris in the earlier thread provided code for an \ninterpolation/fit method using the discount rate. Thomas used a\ndifferent \nmethod.  Kris also provided reference to several papers that could be \nused to construct other methods, and pointed out that the choice of \nmethod will change your estimates, possibly significantly. My point was \nthat you will need to test any fitting method against the specific \nproblem that you have, and that a statistical bootstrap may or may not\nbe \nappropriate to your problem. The input data you have available will help\n\nyou determine the best fitting method to use.\n\nBoth Thomas' code and Kris' code look like they will do a credible job\nof \nfitting a yield curve.  Perhaps you should consider testing those\nmethods \nagainst your problem, so that you could identify deficiencies that those\n\nmethods may have in your specific implementation.  Then we could discuss\n\napproaches here that might address the specific deficiencies that you \nidentify.\n\nRegards,\n\n   - Brian\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance",
+      "body_snippet": "It is possible that the constant maturity treasury curve constructed\ndaily by the NY Fed will serve your needs. (You didn't say what you were\ntrying to accomplish AFAICS.) \nYou can get history at\nhttp",
+      "thread_id": "thread-d76639123ae4",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-451faf3e4abc",
+      "message_id": "<000e01c6ec77$fe0631c0$0100a8c0@ESCRITORIO>",
+      "from_name": "VitorTeixeira",
+      "from_email_hash": "729009768fec26239d3a0bc9d203f4093c36572aae415c14bdce6360110e640f",
+      "date": "2006-10-10T15:25:50+01:00",
+      "subject": "[R-SIG-Finance] Error message",
+      "subject_clean": "Error message",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061010/5a290e82/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061010/5a290e82/attachment.pl",
+      "thread_id": "thread-451faf3e4abc",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-a48a4986bab6",
+      "message_id": "<17707.44798.20178.525561@basebud.nulle.part>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2006-10-10T09:32:30-05:00",
+      "subject": "[R-SIG-Finance] Error message",
+      "subject_clean": "Error message",
+      "in_reply_to": "<000e01c6ec77$fe0631c0$0100a8c0@ESCRITORIO>",
+      "references": [
+        "<000e01c6ec77$fe0631c0$0100a8c0@ESCRITORIO>"
+      ],
+      "body_plain": "On 10 October 2006 at 15:25, VitorTeixeira wrote:\n| Hi.\n|  \n| I have this error message:\n|  \n| Error in if (Y > 0) { : missing value where TRUE/FALSE needed\n|  \n| when I?m trying to run this code.\n\nWe know as you already told us two days ago.  \n\nI'd start by examining my data and remove __missing values__ as the code you\nare using apparently does not digests data containing missing values.  The\nsummary(), is.finite() and which() functions may all be of help here.\n\nI am not familiar with the function itself so this may be of limited actual\nhelp to you. \n\nGood luck, Dirk\n\n\n-- \nHell, there are no rules here - we're trying to accomplish something. \n                                                  -- Thomas A. Edison",
+      "body_snippet": "On 10 October 2006 at 15:25, VitorTeixeira wrote:\n| Hi.\n|  \n| I have this error message:\n|  \n| Error in if (Y > 0) { : missing value where TRUE/FALSE needed\n|  \n| when I?m trying to run this code.\n\nWe",
+      "thread_id": "thread-451faf3e4abc",
+      "thread_depth": 1,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-eeb00051c7d8",
+      "message_id": "<OFA37CA706.84AC2939-ON65257204.002A2B7E-65257203.002B1AAD@ccilindia.co.in>",
+      "from_name": "gyadav at ccilindia.co.in",
+      "from_email_hash": "ad8f84eae85519238e323e31b1e6fcd68b6a15b393c76052a09504a4b7f2a928",
+      "date": "2006-10-11T13:19:35+05:30",
+      "subject": "[R-SIG-Finance] Some bond basics... please help",
+      "subject_clean": "Some bond basics... please help",
+      "in_reply_to": "<200610100618.12185.brian@braverock.com>",
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061011/8f351444/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061011/8f351444/attachment.pl",
+      "thread_id": "thread-7eea76414335",
+      "thread_depth": 4,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-d26554abf56b",
+      "message_id": "<20061011103322.64590.qmail@web34202.mail.mud.yahoo.com>",
+      "from_name": "Jan-Paul Roodbol",
+      "from_email_hash": "c21ab30ef6bb8f8c3ecb0a2a403b19c4487cff03033f71bf1c3c5da6723232dd",
+      "date": "2006-10-11T11:33:22+01:00",
+      "subject": "[R-SIG-Finance] Some ANOVA and data matrix basics... please help",
+      "subject_clean": "Some ANOVA and data matrix basics... please help",
+      "in_reply_to": "<OFA37CA706.84AC2939-ON65257204.002A2B7E-65257203.002B1AAD@ccilindia.co.in>",
+      "references": [],
+      "body_plain": "Friendly greetings\n\nI have been told about the power and flexibility of R.\n However, I'm not good at programming, and a mediocre\nstatistician at best.  I think I'm best at asking\nrelevant questions and interpreting replies.\nI hope you can help me with my data analysis.\n\nI have 65 months of data\n20 different variables\n159 companies\nNine different classification systems (call them A, B,\nC\n I) of the 159 companies, so each of the 159\ncompanies has 9 different classifcations.\n\nI want to test which classification system is the\n'best'\nTo do this, I apply ANOVA to a specific classication\nsystem, one at a time (A, B,  \n I)\nIn this way I see if the groupings in a specific\nclassification system are significantly better (I want\nthe variance in each group to be low, and \nthe variance between groups high.)\n\nI want to do the ANOVA test for all 20 variables\nFor each month individually, as well as for the\naverage\nFor 9 classification systems\n\nSo the question is: \nUsing R\nHow do I code this so that it automatically reads a\ndifferent column, and uses a different classification\nsystem.\nAlso, how do I store the output in a matrix\n\nThank you in advance for your help\n\nKind regards\n\nJan-Paul",
+      "body_snippet": "Friendly greetings\n\nI have been told about the power and flexibility of R.\n However, I'm not good at programming, and a mediocre\nstatistician at best.  I think I'm best at asking\nrelevant questions an",
+      "thread_id": "thread-7eea76414335",
+      "thread_depth": 5,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-c5a6c565320a",
+      "message_id": "<200610110559.22313.brian@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2006-10-11T05:59:22-05:00",
+      "subject": "[R-SIG-Finance] Some ANOVA and data matrix basics... please help",
+      "subject_clean": "Some ANOVA and data matrix basics... please help",
+      "in_reply_to": "<20061011103322.64590.qmail@web34202.mail.mud.yahoo.com>",
+      "references": [
+        "<20061011103322.64590.qmail@web34202.mail.mud.yahoo.com>"
+      ],
+      "body_plain": "On Wednesday 11 October 2006 05:33, Jan-Paul Roodbol wrote:\n> I want to do the ANOVA test for all 20 variables\n> For each month individually, as well as for the\n> average For 9 classification systems\n\nOne online reference that looks particularly relevant to your query is:\n\"Practical Regression and Anova in R\" by Julian J. Faraway, available \nhere:\nhttp://www.stat.lsa.umich.edu/~faraway/book/pra.pdf\nOr, his updated book\n\"Linear Models with R\"\nhttp://www.stat.lsa.umich.edu/~faraway/LMR/\nwhich I use regularly as a reference.\n\nYour questions also contain elements of \"how do I do simple things in R\" \nthat would be covered by any of the introductory R/S texts.\n\n> How do I code this so that it automatically reads a\n> different column, and uses a different classification\n> system.\n\nI assume with a set of nested loops that vary the indices.\n\n> Also, how do I store the output in a matrix\n\nprobably by using c(), cbind(), and rbind() in some combination to collect \nyour results.\n\nRegards,\n\n   - Brian",
+      "body_snippet": "On Wednesday 11 October 2006 05:33, Jan-Paul Roodbol wrote:\n> I want to do the ANOVA test for all 20 variables\n> For each month individually, as well as for the\n> average For 9 classification systems\n",
+      "thread_id": "thread-7eea76414335",
+      "thread_depth": 6,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-de30686f85c4",
+      "message_id": "<d0f55a670610120513u726b0e42g37c05ad613e1cb9a@mail.gmail.com>",
+      "from_name": "Thomas Steiner",
+      "from_email_hash": "750a3ff6af0be6db83d42f3a17b989a218e2ddb0dbf78cb7571168f5e4791c04",
+      "date": "2006-10-12T14:13:26+02:00",
+      "subject": "[R-SIG-Finance] regarding bootstrapping... REVISITED",
+      "subject_clean": "regarding bootstrapping... REVISITED",
+      "in_reply_to": "<F9F2A641C593D7408925574C05A7BE7713166A@rhopost.rhotrading.com>",
+      "references": [
+        "<F9F2A641C593D7408925574C05A7BE7713166A@rhopost.rhotrading.com>"
+      ],
+      "body_plain": "> You can get history at\n> http://www.federalreserve.gov/releases/h15/data.htm . Look for 'Treasury\n> constant maturities'. They used to hand-fit a curve, but now they use an\n> algorithm (which is documented somewhere I don't remember.)\n\nfind it (briefly) here (cubic splines):\nhttp://www.treas.gov/offices/domestic-finance/debt-management/interest-rate/yieldmethod.html\nThomas",
+      "body_snippet": "> You can get history at\n> http://www.federalreserve.gov/releases/h15/data.htm . Look for 'Treasury\n> constant maturities'. They used to hand-fit a curve, but now they use an\n> algorithm (which is doc",
+      "thread_id": "thread-d76639123ae4",
+      "thread_depth": 1,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-63b636b426d3",
+      "message_id": "<20061016113633.82480.qmail@web26612.mail.ukl.yahoo.com>",
+      "from_name": "bechir raggad",
+      "from_email_hash": "b6a2a6e063127514bd97c4362078d4a83aea4aa2346cbe4bfc2c17a6b1dd7df6",
+      "date": "2006-10-16T13:36:33+02:00",
+      "subject": "[R-SIG-Finance] DCC-MGARCH",
+      "subject_clean": "DCC-MGARCH",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061016/a4e842a4/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061016/a4e842a4/attachment.pl",
+      "thread_id": "thread-63b636b426d3",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-2473ec0963fc",
+      "message_id": "<GPEPLHOKJEHOCLMBOODGKEBDGNAA.tjohnson@covad.net>",
+      "from_name": "Tom Johnson",
+      "from_email_hash": "1bb9e42221af7bf448b6879696bc254395e85cca1d92c839a6b2a9e7d7c0f356",
+      "date": "2006-10-18T21:23:57-07:00",
+      "subject": "[R-SIG-Finance]  R Implementation of FIX",
+      "subject_clean": "R Implementation of FIX",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Does anyone please know of an example of R (or S-Plus) code being used to\nimplement the FIX (\"Financial Information eXchange\") protocol for\ncommunicating securities transactions between two parties?  I only know of\nimplementations in C++, Visual Basic, Delphi, Java, etc.  Thanking you for\nany leads,  Tom",
+      "body_snippet": "Does anyone please know of an example of R (or S-Plus) code being used to\nimplement the FIX (\"Financial Information eXchange\") protocol for\ncommunicating securities transactions between two parties?  ",
+      "thread_id": "thread-2473ec0963fc",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-929617652841",
+      "message_id": "<b4d88c800610190752r46f4a224kd8dd05fbc25f4aaf@mail.gmail.com>",
+      "from_name": "Felipe Santos",
+      "from_email_hash": "56371709588afecc74fce7287221d6585b8d12c1b816c0e5af7193db0339aa57",
+      "date": "2006-10-19T11:52:23-03:00",
+      "subject": "[R-SIG-Finance] predict.Arima question",
+      "subject_clean": "predict.Arima question",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061019/749bd6a8/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061019/749bd6a8/attachment.pl",
+      "thread_id": "thread-929617652841",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-857e7bdb40a6",
+      "message_id": "<f2e3401f0610190850q577b1e12x8274cef7c7002b39@mail.gmail.com>",
+      "from_name": "Paul DeBruicker",
+      "from_email_hash": "99bd59dd6b0e9b03a00794db5e86f25f952a219eb5721b9842610430c68a558a",
+      "date": "2006-10-19T11:50:41-04:00",
+      "subject": "[R-SIG-Finance] No fMultivar Windows Binary on CRAN, installation alternatives?",
+      "subject_clean": "No fMultivar Windows Binary on CRAN, installation alternatives?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Without a Windows binary on CRAN, is there a way to install fMultivar\non an XP box running R 2.4?\n\nI can unzip and untar the package source, but don't yet have a\ncompiler to build the appropriate files.  Is that my only option or am\nI missing another viable alternative?\n\nIs it expected that there will be a Windows binary for fMultivar at\nsome point in the future?\n\n\nThanks for what clarification you can provide.\n\n\nPaul",
+      "body_snippet": "Without a Windows binary on CRAN, is there a way to install fMultivar\non an XP box running R 2.4?\n\nI can unzip and untar the package source, but don't yet have a\ncompiler to build the appropriate file",
+      "thread_id": "thread-857e7bdb40a6",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-c9b92363d99b",
+      "message_id": "<4537F988.5050206@buseco.monash.edu.au>",
+      "from_name": "Rob Hyndman",
+      "from_email_hash": "4359c851432bfc20e36b5ecce6d98a32213e7d9735341752c86c5814ca300557",
+      "date": "2006-10-20T08:17:44+10:00",
+      "subject": "[R-SIG-Finance] predict.Arima question",
+      "subject_clean": "predict.Arima question",
+      "in_reply_to": "<b4d88c800610190752r46f4a224kd8dd05fbc25f4aaf@mail.gmail.com>",
+      "references": [
+        "<b4d88c800610190752r46f4a224kd8dd05fbc25f4aaf@mail.gmail.com>"
+      ],
+      "body_plain": "Unfortunately you can't do this using the arima() or predict() functions \nin the stats package. However, you can do what you want using the \narima() function in the forecast package (available on CRAN). There is \nalso a function best.arima() which selects the best model according to \nAIC, BIC or AICc.\n\nBest wishes,\nRob\n\nFelipe Santos wrote:\n> Hi,\n> \n> I am trying to forecast a model using predict.Arima\n> \n> I found arima model for a data set: x={x1,x2,x3,...,x(t)}\n> \n> arima_model = arima(x,order=c(1,0,1))\n> \n> I am forecasting the next N lags using predict:\n> \n> arima_pred = predict(arima_model,n.ahead = N, se.fit=T)\n> \n> If I have one more point in my series, let's say x(t+1). I do not want to\n> recalibrate themodel, I just want to forecast the next N-1 lags  using the\n> same model for x={x1,x2,...x(t)} but without recalibrate arima.\n> \n> How to do it using arima + predict.Arima ?\n> \n> My problem is that I am trying to fit arima models by brute force ( trying\n> lots of combinations for p and q and chosing the best model by AIC and BIC )\n> I have a big time series and I am running calibration for some sub-sequence\n> and I trying to forecast some points. I repeat this process for the next\n> contiguous subsequence and try to forecast again, until the big series end.\n> \n> Thanks\n> Felipe\n> \n> \t[[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n\n-- \n__________________________________________________\nProfessor Rob J Hyndman\nDepartment of Econometrics & Business Statistics,\nMonash University, VIC 3800, Australia\nhttp://www.robhyndman.info/",
+      "body_snippet": "Unfortunately you can't do this using the arima() or predict() functions \nin the stats package. However, you can do what you want using the \narima() function in the forecast package (available on CRAN",
+      "thread_id": "thread-929617652841",
+      "thread_depth": 1,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-5732ba190b81",
+      "message_id": "<4537FFF9.5060205@buseco.monash.edu.au>",
+      "from_name": "Rob Hyndman",
+      "from_email_hash": "4359c851432bfc20e36b5ecce6d98a32213e7d9735341752c86c5814ca300557",
+      "date": "2006-10-20T08:45:13+10:00",
+      "subject": "[R-SIG-Finance] No fMultivar Windows Binary on CRAN, installation alternatives?",
+      "subject_clean": "No fMultivar Windows Binary on CRAN, installation alternatives?",
+      "in_reply_to": "<f2e3401f0610190850q577b1e12x8274cef7c7002b39@mail.gmail.com>",
+      "references": [
+        "<f2e3401f0610190850q577b1e12x8274cef7c7002b39@mail.gmail.com>"
+      ],
+      "body_plain": "Download the 2.3 version at\nhttp://cran.r-project.org/bin/windows/contrib/2.3/fMultivar_221.10065.zip\n\nPaul DeBruicker wrote:\n> Without a Windows binary on CRAN, is there a way to install fMultivar\n> on an XP box running R 2.4?\n> \n> I can unzip and untar the package source, but don't yet have a\n> compiler to build the appropriate files.  Is that my only option or am\n> I missing another viable alternative?\n> \n> Is it expected that there will be a Windows binary for fMultivar at\n> some point in the future?\n> \n> \n> Thanks for what clarification you can provide.\n> \n> \n> Paul\n> \n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n\n-- \n__________________________________________________\nProfessor Rob J Hyndman\nDepartment of Econometrics & Business Statistics,\nMonash University, VIC 3800, Australia\nhttp://www.robhyndman.info/",
+      "body_snippet": "Download the 2.3 version at\nhttp://cran.r-project.org/bin/windows/contrib/2.3/fMultivar_221.10065.zip\n\nPaul DeBruicker wrote:\n> Without a Windows binary on CRAN, is there a way to install fMultivar\n> ",
+      "thread_id": "thread-857e7bdb40a6",
+      "thread_depth": 1,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-24c8e8a1d234",
+      "message_id": "<ehas1p$kbn$1@sea.gmane.org>",
+      "from_name": "Joe W. Byers",
+      "from_email_hash": "e1aa583256d11ba78af5a6887fcae67b982413f48693fce4f20c06207a6fdfe0",
+      "date": "2006-10-20T11:04:08-05:00",
+      "subject": "[R-SIG-Finance] Help with date arithmetic",
+      "subject_clean": "Help with date arithmetic",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I have the following day\ndts<-('02/08/2002');\nI want to return a vector of character dates by adding 1 to the current \nday and adding the number of non business days for a weekend and/or \nholiday if they occur to get the following results\n\nshould.be.results<-('02/09/2002','02/12/2002');\n\nI can handle the first calculation but I can not find how to increment \nthe date for non business days.\n\nresults<-c(format.Date(as.date(dts,order='mdy')+1,'%m/%d/%Y'),\n\tI need help  here);\n\nI have review the fCalendar docs and others.  I have also created a time \nsequence for this project where I removed the non-business days using \nthe isBizday method.  Any help is greatly appreciated.\nThank you\nJoe",
+      "body_snippet": "I have the following day\ndts<-('02/08/2002');\nI want to return a vector of character dates by adding 1 to the current \nday and adding the number of non business days for a weekend and/or \nholiday if t",
+      "thread_id": "thread-24c8e8a1d234",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-70f0c71c922b",
+      "message_id": "<ehb0k2$8d0$1@sea.gmane.org>",
+      "from_name": "Joe W. Byers",
+      "from_email_hash": "e1aa583256d11ba78af5a6887fcae67b982413f48693fce4f20c06207a6fdfe0",
+      "date": "2006-10-20T12:22:09-05:00",
+      "subject": "[R-SIG-Finance] Adding NYMEX to holidays calendar",
+      "subject_clean": "Adding NYMEX to holidays calendar",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Rmetrics\n\nCan anyone help me create a new holidays calendar method like \nholidaysNYSE() for NYMEX holidays.  The only difference is the holidays \nfor Independence day and thanks giving.\nIndependence Day\n\tMonday, July 3*\n\tTuesday, July 4\n\t(Electronic trading closed Sunday and Monday, July 2 and 3; reopens \n6:00 PM, July 4)\nThanksgiving\n\tThursday, November 23\n\tFriday, November 24\n\t(NYMEX ClearPort? and CME Globex? open both days)\n\nNYMEX is closed on Monday July 3rd this year since the 4th is on a \nTuesday and Friday the day following Thanksgiving.  This will end in \n2007 according to NYMEX.  The Independence day holiday I think will \nobserve Friday as a holiday when the 4th is on a Thurs but, according to \nNYMEX they are not sure for 2007.  Also the webpage \nhttp://www.nymex.com/holida_schedu.aspx notes that Christmas eve will \nbecome a holiday in 2007 but expirations will not change.  I am sending \ntheir customer service a request to post a document with the holiday \nrules as well as these tables for those of us who worry about a \nderivatives calendar.\n\nThank you\nJoe",
+      "body_snippet": "Rmetrics\n\nCan anyone help me create a new holidays calendar method like \nholidaysNYSE() for NYMEX holidays.  The only difference is the holidays \nfor Independence day and thanks giving.\nIndependence D",
+      "thread_id": "thread-70f0c71c922b",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-d5e341f77a33",
+      "message_id": "<453941C3.4@pdf.com>",
+      "from_name": "Spencer Graves",
+      "from_email_hash": "0d1725402b5f223aa45a1714f600b741ea6c2ccb2d67d2b94ddab1ed1e80aefd",
+      "date": "2006-10-21T06:38:11+09:00",
+      "subject": "[R-SIG-Finance] Some bond basics... please help",
+      "subject_clean": "Some bond basics... please help",
+      "in_reply_to": "<OFA37CA706.84AC2939-ON65257204.002A2B7E-65257203.002B1AAD@ccilindia.co.in>",
+      "references": [
+        "<OFA37CA706.84AC2939-ON65257204.002A2B7E-65257203.002B1AAD@ccilindia.co.in>"
+      ],
+      "body_plain": "RSiteSearch(\"bond\") produced 135 hits for me just now, and  \nRSiteSearch(\"bond\", \"function\") produced 22.  If you'd like further help \nfrom this listserve, please provide commented, minimal, self-contained, \nreproducible code describing something you've tried and why it did not \nmeet your needs (as suggested in the posting guide \n\"www.R-project.org/posting-guide.html\").\n\n      Hope this helps. \n      Spencer Graves\n\ngyadav at ccilindia.co.in wrote:\n> hi All,\n>\n> Can I do something like this, really wondering \n>\n> I have a securities details like this :\n>\n> Security Name : Xa\n> Coupon : 6.322%  = Xb\n> Yield : 5.6% = Xc\n> Maturity : 12-Aug-2010 = Xd\n> Settlement Date : 10-Oct-2006 = Xe\n>\n> Can I find the zero coupon price like this P1 = price(Xe, Xd, Xc, 0%) \n> where all details are same as the abov security except the coupon which is \n> zero. Further, then I find the Yield with This Price P1 which i get as Y1 \n> (Y1 = yield(Xe, Xd, P1, 0%). \n>\n> Is Y1 a zero coupon bond equivalent yield ???\n>\n>\n> Thanks in advance,\n> -Gaurav\n>\n>\n>\n>    Sayonara With Smile & With Warm Regards :-)\n>\n>   G a u r a v   Y a d a v\n>   Senior Executive Officer,\n>   Economic Research & Surveillance Department,\n>   Clearing Corporation Of India Limited.\n>\n>   Address: 5th, 6th, 7th Floor, Trade Wing 'C',  Kamala City, S.B. Marg, \n> Mumbai - 400 013\n>   Telephone(Office): - +91 022 6663 9398 ,  Mobile(Personal) (0)9821286118\n>   Email(Office) :- gyadav at ccilindia.co.in ,  Email(Personal) :- \n> emailtogauravyadav at gmail.com\n>\n>\n> ============================================================================================\n> DISCLAIMER AND CONFIDENTIALITY CAUTION:\\ \\ This message and ...{{dropped}}\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>",
+      "body_snippet": "RSiteSearch(\"bond\") produced 135 hits for me just now, and  \nRSiteSearch(\"bond\", \"function\") produced 22.  If you'd like further help \nfrom this listserve, please provide commented, minimal, self-cont",
+      "thread_id": "thread-7eea76414335",
+      "thread_depth": 5,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-342ad108698f",
+      "message_id": "<200610201803.11520.brian@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2006-10-20T18:03:11-05:00",
+      "subject": "[R-SIG-Finance] Some bond basics... please help",
+      "subject_clean": "Some bond basics... please help",
+      "in_reply_to": "<453941C3.4@pdf.com>",
+      "references": [
+        "<OFA37CA706.84AC2939-ON65257204.002A2B7E-65257203.002B1AAD@ccilindia.co.in>",
+        "<453941C3.4@pdf.com>"
+      ],
+      "body_plain": "On Friday 20 October 2006 16:38, Spencer Graves wrote:\n> If you'd like further help\n> from this listserve, please provide commented, minimal, self-contained,\n> reproducible code describing something you've tried and why it did not\n> meet your needs (as suggested in the posting guide\n\nI believe that the original poster solved his problem via simple \ninterpolation in one case and spline fitting in a more complicated case.  \nI believe that he was really looking for a pointer on how one might fit a \nyield curve, which several people provided, and as I understand it, he \nsolved his problem already.\n\nNevertheless, there are no widely available functions that I am aware of \nthat have been published in R specifically for calculating a yield curve \non a group of bonds.  The eagerly awaited fBonds package has not yet been \nreleased.  So, the interested analyst must resort to generic fitting \nmethods already available in R, as several of us indicated to the OP.\n\nRegards,\n\n  - Brian",
+      "body_snippet": "On Friday 20 October 2006 16:38, Spencer Graves wrote:\n> If you'd like further help\n> from this listserve, please provide commented, minimal, self-contained,\n> reproducible code describing something y",
+      "thread_id": "thread-7eea76414335",
+      "thread_depth": 6,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-460e2a104d4f",
+      "message_id": "<45395ADB.9030300@pdf.com>",
+      "from_name": "Spencer Graves",
+      "from_email_hash": "0d1725402b5f223aa45a1714f600b741ea6c2ccb2d67d2b94ddab1ed1e80aefd",
+      "date": "2006-10-21T08:25:15+09:00",
+      "subject": "[R-SIG-Finance] Some bond basics... please help",
+      "subject_clean": "Some bond basics... please help",
+      "in_reply_to": "<200610201803.11520.brian@braverock.com>",
+      "references": [
+        "<OFA37CA706.84AC2939-ON65257204.002A2B7E-65257203.002B1AAD@ccilindia.co.in>",
+        "<453941C3.4@pdf.com>",
+        "<200610201803.11520.brian@braverock.com>"
+      ],
+      "body_plain": "Hi, Brian:  Thanks.  I missed the replies;  I should have looked more \ncarefully.  Thanks again.  Spencer Graves\n\nBrian G. Peterson wrote:\n> On Friday 20 October 2006 16:38, Spencer Graves wrote:\n>   \n>> If you'd like further help\n>> from this listserve, please provide commented, minimal, self-contained,\n>> reproducible code describing something you've tried and why it did not\n>> meet your needs (as suggested in the posting guide\n>>     \n>\n> I believe that the original poster solved his problem via simple \n> interpolation in one case and spline fitting in a more complicated case.  \n> I believe that he was really looking for a pointer on how one might fit a \n> yield curve, which several people provided, and as I understand it, he \n> solved his problem already.\n>\n> Nevertheless, there are no widely available functions that I am aware of \n> that have been published in R specifically for calculating a yield curve \n> on a group of bonds.  The eagerly awaited fBonds package has not yet been \n> released.  So, the interested analyst must resort to generic fitting \n> methods already available in R, as several of us indicated to the OP.\n>\n> Regards,\n>\n>   - Brian\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>",
+      "body_snippet": "Hi, Brian:  Thanks.  I missed the replies;  I should have looked more \ncarefully.  Thanks again.  Spencer Graves\n\nBrian G. Peterson wrote:\n> On Friday 20 October 2006 16:38, Spencer Graves wrote:\n>   ",
+      "thread_id": "thread-7eea76414335",
+      "thread_depth": 7,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-28edbd983a09",
+      "message_id": "<6.2.1.2.2.20061021132005.023aec18@pop.pipeline.com>",
+      "from_name": "Frederick Novomestky",
+      "from_email_hash": "832e7e2b7f6e597e48404048397acadd75de80f0df1aeb61e3cfc14798ea3a44",
+      "date": "2006-10-21T13:23:25-04:00",
+      "subject": "[R-SIG-Finance] Some bond basics... please help",
+      "subject_clean": "Some bond basics... please help",
+      "in_reply_to": "<200610201803.11520.brian@braverock.com>",
+      "references": [
+        "<OFA37CA706.84AC2939-ON65257204.002A2B7E-65257203.002B1AAD@ccilindia.co.in>",
+        "<453941C3.4@pdf.com>",
+        "<200610201803.11520.brian@braverock.com>"
+      ],
+      "body_plain": "To all:\n\nThis semester I am teaching a course on Term Structure modeling and \nadvanced interest rate derivatives.  To support the empirical work, I am \ndeveloping a package fTermStructure that am building as we go along.  It's \nnot fully ready for submission to R, but can do so.\n\nRegards\n\nFred Novomestky\nIndustry Professor\nDepartment of Financial Engineering\nPolytechnic University\n6 Metrotech Center\nBrooklyn, NY 11201 USA\nVox: 1.718.260.3436\nFax: 1.718.260.3874\nUniversity email: fnovomes at poly.edu\n\nThe package includes the valuation of pure discount and fixed rate coupon \npaying bonds, bootstrap construction of spot curves, yield to maturity \ncalculation, forward rate curve construction from spot rates and, by this \nweek, Nelson Siegel function estimation.\n\nAt 07:03 PM 10/20/2006, Brian G. Peterson wrote:\n>On Friday 20 October 2006 16:38, Spencer Graves wrote:\n> > If you'd like further help\n> > from this listserve, please provide commented, minimal, self-contained,\n> > reproducible code describing something you've tried and why it did not\n> > meet your needs (as suggested in the posting guide\n>\n>I believe that the original poster solved his problem via simple\n>interpolation in one case and spline fitting in a more complicated case.\n>I believe that he was really looking for a pointer on how one might fit a\n>yield curve, which several people provided, and as I understand it, he\n>solved his problem already.\n>\n>Nevertheless, there are no widely available functions that I am aware of\n>that have been published in R specifically for calculating a yield curve\n>on a group of bonds.  The eagerly awaited fBonds package has not yet been\n>released.  So, the interested analyst must resort to generic fitting\n>methods already available in R, as several of us indicated to the OP.\n>\n>Regards,\n>\n>   - Brian\n>\n>_______________________________________________\n>R-SIG-Finance at stat.math.ethz.ch mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n\nFrederick Novomestky, Ph.D.\nNovomestky Associates\n41 Eastover Drive\nEast Northport, NY 11731-4330\nVox: 1.631.368.0701\nFax: 1.631.368.1696\n\nConfidentiality Notice: This electronic mail transmission, i...{{dropped}}",
+      "body_snippet": "To all:\n\nThis semester I am teaching a course on Term Structure modeling and \nadvanced interest rate derivatives.  To support the empirical work, I am \ndeveloping a package fTermStructure that am buil",
+      "thread_id": "thread-7eea76414335",
+      "thread_depth": 7,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-a45124b89445",
+      "message_id": "<ehdsh4$gt2$1@sea.gmane.org>",
+      "from_name": "Joe W. Byers",
+      "from_email_hash": "e1aa583256d11ba78af5a6887fcae67b982413f48693fce4f20c06207a6fdfe0",
+      "date": "2006-10-21T14:30:43-05:00",
+      "subject": "[R-SIG-Finance] Help with date arithmetic",
+      "subject_clean": "Help with date arithmetic",
+      "in_reply_to": "<ehas1p$kbn$1@sea.gmane.org>",
+      "references": [
+        "<ehas1p$kbn$1@sea.gmane.org>"
+      ],
+      "body_plain": "All here is what I came up with to increment over non-business days and \nNYSE holidays.  I would appreciate any help in refining this code to be \nmore generic for use with vectors, more date formats, and other \nholidays.  It is extremely slow to run this function over a large time \nsequence.  I think I could change the code from using fCalendar \ntimesequence() to using the date.mdy()$year for part of the code, but I \nam still learning these things in R.\n\n#function call\nBizday.increment('09/25/04',1)\n\n# Created by: Joe W. Byers\n# Date: 10/20/06\n#Method to increment a give date to the next business day given \nholidayNYSE() holidays\nBizday.increment<-function(data,inc=1,format='%m/%d/%Y'){\n\t#need to add date coersion if data numeric\n\t# need to add ability to perform over a vector and return all increments\n\t# need to add ability to perform with different holidays beside NYSE\n\tLoop=T; # set loop test\n\tans<-format.Date(as.date(data,order='mdy')+inc,format)\n\twhile(Loop==T){\n\t\tt1<-isBizday(timeSequence(from=ans,to=ans,format=format),\n\t\t\tholidays=holidayNYSE(as.numeric(\n\t\t\tfactor(atoms(timeSequence(from=ans,to=ans,format=format)\n\t\t\t)$Y)@levels)))\n\t\tif (t1==T) {Loop=F}\n\t\telse {ans<-format.Date(as.date(ans,order='mdy')+inc,format)}\n\t}\n\tans\n}\nThank you\nJoe\n\nJoe W. Byers wrote:\n> I have the following day\n> dts<-('02/08/2002');\n> I want to return a vector of character dates by adding 1 to the current \n> day and adding the number of non business days for a weekend and/or \n> holiday if they occur to get the following results\n> \n> should.be.results<-('02/09/2002','02/12/2002');\n> \n> I can handle the first calculation but I can not find how to increment \n> the date for non business days.\n> \n> results<-c(format.Date(as.date(dts,order='mdy')+1,'%m/%d/%Y'),\n> \tI need help  here);\n> \n> I have review the fCalendar docs and others.  I have also created a time \n> sequence for this project where I removed the non-business days using \n> the isBizday method.  Any help is greatly appreciated.\n> Thank you\n> Joe\n>",
+      "body_snippet": "All here is what I came up with to increment over non-business days and \nNYSE holidays.  I would appreciate any help in refining this code to be \nmore generic for use with vectors, more date formats, ",
+      "thread_id": "thread-24c8e8a1d234",
+      "thread_depth": 1,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-32469a0baced",
+      "message_id": "<200610211608.47615.kb2qzv@poczta.wp.pl>",
+      "from_name": "Andy (Lists)",
+      "from_email_hash": "e1d737f18daa63c6129887d1f2a064f051aaa90bfec34c1740cf8f3c13b1a2a5",
+      "date": "2006-10-21T16:08:47-05:00",
+      "subject": "[R-SIG-Finance] How to try technical indicators, fMultivar",
+      "subject_clean": "How to try technical indicators, fMultivar",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\nPlease bear with me while I try to figure out how R and RMetrics work.\nI would like to try out the fMultivar package to see how well it can display \ndifferent technical indicators.  I have no experience in R.\n\nThe data file named WIG20.mst looks like this:\n<Ticker>,<Date>,<Open>,<High>,<Low>,<Close>,<Volume>\n[...]\nWIG20,20051021,2324.18,2338.45,2312.07,2323.23,890642.379\nWIG20,20051024,2322.77,2357.95,2322.77,2339.41,763810.167\nWIG20,20051025,2353.27,2372.36,2344.46,2360.77,654536.990\nWIG20,20051026,2373.50,2380.10,2310.39,2340.24,807947.585\nWIG20,20051027,2291.66,2307.86,2285.16,2302.53,711165.288\nWIG20,20051028,2283.72,2320.37,2273.49,2316.55,538880.205\n[...]\nIt contains data from the year 1994 to-date. The obove is just an exerpt.\n\nSo in R I used read.csv() function to create the object \"wig20\".\nwig20 = read.csv(\"WIG20.mst\")\n\nSo far so good but when I check the object \"wig20\" I can see that it looks a \nlittle different than what the original file:\nwig20\n2851     WIG20      20051024 2322.77 2357.95 2322.77  2339.41  763810.17\n2852     WIG20      20051025 2353.27 2372.36 2344.46  2360.77  654536.99\n2853     WIG20      20051026 2373.50 2380.10 2310.39  2340.24  807947.58\n2854     WIG20      20051027 2291.66 2307.86 2285.16  2302.53  711165.29\n2855     WIG20      20051028 2283.72 2320.37 2273.49  2316.55  538880.20\n\nWhat are those numbers before the ticker value WIG20? I hope this is something \nthat I can just ignore. But it would be good to know what they are.\n\nNext I would like to display both the price plot and below the price one of \nthe technical indicators plot in a manner similar to what other stock market \nanalysis software does.  For example price plot with MACD below it?\n\nI know that there exists a function called plotOHLC or ohlcPlot but have no \nclue how to start plotting. I can imagine I need to tell the software the \ndate range and then the cells of data to be plotted. Could I see some \nexamples of that based on the data file I provided?\n\nThanks a lot for any clues.\n\nAndy",
+      "body_snippet": "Hi,\nPlease bear with me while I try to figure out how R and RMetrics work.\nI would like to try out the fMultivar package to see how well it can display \ndifferent technical indicators.  I have no expe",
+      "thread_id": "thread-32469a0baced",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-4176b0fd0a5a",
+      "message_id": "<17722.36298.863123.337929@gargle.gargle.HOWL>",
+      "from_name": "David Kane",
+      "from_email_hash": "859af176ce8fb4a0488f28335bc79fbb4b2eda8c22f6b21ae893f02d8aaaa624",
+      "date": "2006-10-21T17:14:50-04:00",
+      "subject": "[R-SIG-Finance] How to try technical indicators, fMultivar",
+      "subject_clean": "How to try technical indicators, fMultivar",
+      "in_reply_to": "<200610211608.47615.kb2qzv@poczta.wp.pl>",
+      "references": [
+        "<200610211608.47615.kb2qzv@poczta.wp.pl>"
+      ],
+      "body_plain": "Andy (Lists) writes:\n > So far so good but when I check the object \"wig20\" I can see that it looks a \n > little different than what the original file:\n > wig20\n > 2851     WIG20      20051024 2322.77 2357.95 2322.77  2339.41  763810.17\n > 2852     WIG20      20051025 2353.27 2372.36 2344.46  2360.77  654536.99\n > 2853     WIG20      20051026 2373.50 2380.10 2310.39  2340.24  807947.58\n > 2854     WIG20      20051027 2291.66 2307.86 2285.16  2302.53  711165.29\n > 2855     WIG20      20051028 2283.72 2320.37 2273.49  2316.55  538880.20\n > \n > What are those numbers before the ticker value WIG20? I hope this is something \n > that I can just ignore. But it would be good to know what they are.\n\nThey look like row numbers to me. I think that you need to go through\nAn Introduction to R before you proceed any further. Once you have\nthat basic understanding of the software, you can ask more questions.\n\nGood luck and welcome to R!\n\nDave Kane",
+      "body_snippet": "Andy (Lists) writes:\n > So far so good but when I check the object \"wig20\" I can see that it looks a \n > little different than what the original file:\n > wig20\n > 2851     WIG20      20051024 2322.77 ",
+      "thread_id": "thread-32469a0baced",
+      "thread_depth": 1,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-f01bd8a2a716",
+      "message_id": "<65cc7bdf0610220745y2506191fgd0d1fa95884c1e45@mail.gmail.com>",
+      "from_name": "tom soyer",
+      "from_email_hash": "b2a1e5bfc5ce504da592ec04818e064a20f3bbb6c64d855b51c7fb7e08579c17",
+      "date": "2006-10-22T09:45:11-05:00",
+      "subject": "[R-SIG-Finance] Where is the R Finance website?",
+      "subject_clean": "Where is the R Finance website?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061022/99f61518/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061022/99f61518/attachment.pl",
+      "thread_id": "thread-f01bd8a2a716",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-792c023e0174",
+      "message_id": "<971536df0610220801s7cf922bod13e61501f1dcc7@mail.gmail.com>",
+      "from_name": "Gabor Grothendieck",
+      "from_email_hash": "2252aad0894f89a900da56345b1c4e0414e3b441d448c40b473f7149e06e5a05",
+      "date": "2006-10-22T11:01:48-04:00",
+      "subject": "[R-SIG-Finance] Where is the R Finance website?",
+      "subject_clean": "Where is the R Finance website?",
+      "in_reply_to": "<65cc7bdf0610220745y2506191fgd0d1fa95884c1e45@mail.gmail.com>",
+      "references": [
+        "<65cc7bdf0610220745y2506191fgd0d1fa95884c1e45@mail.gmail.com>"
+      ],
+      "body_plain": "The Task Views summarize which packages might be\nrelevant and some packages have their own web sites.\n   http://cran.r-project.org/src/contrib/Views/\nWithin the task view click on each package and\nif there is a URL entry on its page then that will\ngenerally be its home page.\n\nOn 10/22/06, tom soyer <tom.soyer at gmail.com> wrote:\n> Hi,\n>\n> Does R SIG Finance have its own website? If not, then are there\n> websites that focus on using R for financial analysis?\n>\n> Thanks,\n>\n> Tom\n>\n>        [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>",
+      "body_snippet": "The Task Views summarize which packages might be\nrelevant and some packages have their own web sites.\n   http://cran.r-project.org/src/contrib/Views/\nWithin the task view click on each package and\nif ",
+      "thread_id": "thread-f01bd8a2a716",
+      "thread_depth": 1,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-09d77778677f",
+      "message_id": "<65cc7bdf0610220911u3ea155baye688e0a567749d92@mail.gmail.com>",
+      "from_name": "tom soyer",
+      "from_email_hash": "b2a1e5bfc5ce504da592ec04818e064a20f3bbb6c64d855b51c7fb7e08579c17",
+      "date": "2006-10-22T11:11:17-05:00",
+      "subject": "[R-SIG-Finance] Where is the R Finance website?",
+      "subject_clean": "Where is the R Finance website?",
+      "in_reply_to": "<971536df0610220801s7cf922bod13e61501f1dcc7@mail.gmail.com>",
+      "references": [
+        "<65cc7bdf0610220745y2506191fgd0d1fa95884c1e45@mail.gmail.com>",
+        "<971536df0610220801s7cf922bod13e61501f1dcc7@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061022/1d580774/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061022/1d580774/attachment.pl",
+      "thread_id": "thread-f01bd8a2a716",
+      "thread_depth": 2,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-10b317483c17",
+      "message_id": "<17723.56651.325204.866791@basebud.nulle.part>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2006-10-22T16:06:19-05:00",
+      "subject": "[R-SIG-Finance] Where is the R Finance website?",
+      "subject_clean": "Where is the R Finance website?",
+      "in_reply_to": "<971536df0610220801s7cf922bod13e61501f1dcc7@mail.gmail.com>",
+      "references": [
+        "<65cc7bdf0610220745y2506191fgd0d1fa95884c1e45@mail.gmail.com>",
+        "<971536df0610220801s7cf922bod13e61501f1dcc7@mail.gmail.com>"
+      ],
+      "body_plain": "On 22 October 2006 at 11:01, Gabor Grothendieck wrote:\n| The Task Views summarize which packages might be\n| relevant and some packages have their own web sites.\n|    http://cran.r-project.org/src/contrib/Views/\n| Within the task view click on each package and\n| if there is a URL entry on its page then that will\n| generally be its home page.\n\nYes, thanks for mentioning the task view. Also, at the bottom is a\n'catch-all' list of relevant R/Finance website.  If anybody has further\nsuggestions, please send them along to me so that I can add them to the\ntaskview page.\n\nDirk  \n \n-- \nHell, there are no rules here - we're trying to accomplish something. \n                                                  -- Thomas A. Edison",
+      "body_snippet": "On 22 October 2006 at 11:01, Gabor Grothendieck wrote:\n| The Task Views summarize which packages might be\n| relevant and some packages have their own web sites.\n|    http://cran.r-project.org/src/cont",
+      "thread_id": "thread-f01bd8a2a716",
+      "thread_depth": 2,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-f1e35004950d",
+      "message_id": "<453C004C.7040908@utulsa.edu>",
+      "from_name": "Joe W. Byers",
+      "from_email_hash": "e1aa583256d11ba78af5a6887fcae67b982413f48693fce4f20c06207a6fdfe0",
+      "date": "2006-10-22T18:35:40-05:00",
+      "subject": "[R-SIG-Finance] Help with date arithmetic",
+      "subject_clean": "Help with date arithmetic",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Mark,\n\nNot off base.  I do have a calendar that is only business days created \nto set up a simulation.\n\nI am working on a simulation of Natural gas prices that has spot, \nbalance of the month, and forward prices for each business day.  The \nproblem I am addressing is that NG spot and balmo trade on a business \nday, but the commodity transfers title on the flow days, or one day \nafter the trade date for the spot.  The balmo contract is interesting \nbecause it starts flowing on the next day after spot gas flows. \nBusiness days are easy, spot flows one business day after the \ntransaction, and balmo flows 2 business days after the transaction.  But \non the last business day of a week, spot gas is traded for the next \nthree days, two non business and one business day (Sat-Mon).  So, balmo \ndoes not start flowing till the following Tues or four days.  If there \nis a holiday anywhere in here, it has to be handled to get balmo \ncorrect.  Because spot and balmo have different flow start dates each \ntrading day, I have to calculate them instead of using the specified \ncontract month as with the NYMEX futures contracts.  The flow date for \nspot and balmo is basically the same as a futures contract month here. \nAnother thing to remember with NYMEX NG 1 contract for next Jan is \n10000MMBTU and it flow or in delivered in 1/31 of a contract increments \nstarting on Jan 1st.\n\nEquities, fixed income, and others are easy.  Transaction days, \nexpiration days, settlement days all line up nice and neatly for \nanalysis.  Commodities not so, and carry charges can be significant \nsometimes.  Commodities violate our wonderful Black-scholes world we \nassume exists.\n\nI maybe can use the calendar that I have created and select the first \nbusiness day greater than the trade date I have for the spot and also \nthe second for the balmo.  Still a loop, but I may be able to prebuild a \nmatrix for these contracts easier than the function I have.\n\nSo you are not off base.  You gave me another idea to try.\n\nThank you very much\nJoe\n\nLeeds, Mark (IED) wrote:\n > Joe : I'm just jumping in so excuse me if I'm totally off base. It seems\n > like youa re writing code to jump form one date to the next business\n > day.\n > I'm sure youa re clever and close tog etting it working but whren I do (\n > or did ) in the past to dela with this problem\n > Is just have a series out there that represents only business days. For\n > example, if you pull ibm's data from\n > Yahoo or wherever, it is only\n > Going to come back with business dzy dates.\n >\n > If you need to do the same thing for japan, pull \"toyota\" from somewhere\n > ( maybe yahoo also ? ) and it will only come back with\n > business day dates for japan.  Anyway, this was always my easy solution\n > but you may have some reason why you can't do it hat way.\n > Your code is way beyond my level of knowledge of R so I can't help you\n > with it.\n >\n >\n >\n > -----Original Message-----\n > From: r-sig-finance-bounces at stat.math.ethz.ch\n > [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Joe W.\n > Byers\n > Sent: Saturday, October 21, 2006 3:31 PM\n > To: r-sig-finance at stat.math.ethz.ch\n > Subject: Re: [R-SIG-Finance] Help with date arithmetic\n >\n > All here is what I came up with to increment over non-business days and\n > NYSE holidays.  I would appreciate any help in refining this code to be\n > more generic for use with vectors, more date formats, and other\n > holidays.  It is extremely slow to run this function over a large time\n > sequence.  I think I could change the code from using fCalendar\n > timesequence() to using the date.mdy()$year for part of the code, but I\n > am still learning these things in R.\n >\n > #function call\n > Bizday.increment('09/25/04',1)\n >\n > # Created by: Joe W. Byers\n > # Date: 10/20/06\n > #Method to increment a give date to the next business day given\n > holidayNYSE() holidays\n > Bizday.increment<-function(data,inc=1,format='%m/%d/%Y'){\n > \t#need to add date coersion if data numeric\n > \t# need to add ability to perform over a vector and return all\n > increments\n > \t# need to add ability to perform with different holidays beside\n > NYSE\n > \tLoop=T; # set loop test\n > \tans<-format.Date(as.date(data,order='mdy')+inc,format)\n > \twhile(Loop==T){\n > \t\n > t1<-isBizday(timeSequence(from=ans,to=ans,format=format),\n > \t\t\tholidays=holidayNYSE(as.numeric(\n > \t\n > factor(atoms(timeSequence(from=ans,to=ans,format=format)\n > \t\t\t)$Y)@levels)))\n > \t\tif (t1==T) {Loop=F}\n > \t\telse\n > {ans<-format.Date(as.date(ans,order='mdy')+inc,format)}\n > \t}\n > \tans\n > }\n > Thank you\n > Joe\n >\n > Joe W. Byers wrote:\n >> I have the following day\n >> dts<-('02/08/2002');\n >> I want to return a vector of character dates by adding 1 to the\n >> current day and adding the number of non business days for a weekend\n >> and/or holiday if they occur to get the following results\n >>\n >> should.be.results<-('02/09/2002','02/12/2002');\n >>\n >> I can handle the first calculation but I can not find how to increment\n >\n >> the date for non business days.\n >>\n >> results<-c(format.Date(as.date(dts,order='mdy')+1,'%m/%d/%Y'),\n >> \tI need help  here);\n >>\n >> I have review the fCalendar docs and others.  I have also created a\n >> time sequence for this project where I removed the non-business days\n >> using the isBizday method.  Any help is greatly appreciated.\n >> Thank you\n >> Joe\n >>\n >\n > _______________________________________________\n > R-SIG-Finance at stat.math.ethz.ch mailing list\n > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n > --------------------------------------------------------\n >\n > This is not an offer (or solicitation of an offer) to buy/sell the \nsecurities/instruments mentioned or an official confirmation.  Morgan \nStanley may deal as principal in or own or act as market maker for \nsecurities/instruments mentioned or may advise the issuers.  This is not \nresearch and is not from MS Research but it may refer to a research \nanalyst/research report.  Unless indicated, these views are the author's \nand may differ from those of Morgan Stanley research or others in the \nFirm.  We do not represent this is accurate or complete and we may not \nupdate this.  Past performance is not indicative of future returns.  For \nadditional information, research reports and important disclosures, \ncontact me or see https://secure.ms.com/servlet/cls.  You should not use \ne-mail to request, authorize or effect the purchase or sale of any \nsecurity or instrument, to send transfer instructions, or to effect any \nother transactions.  We cannot guarantee that any such requests received \nvia e-mail will be processed in a timely manner.  This communication is \nsolely for the addressee(s) and may contain confidential information. \nWe do not waive confidentiality by mistransmission.  Contact me if you \ndo not wish to receive these communications.  In the UK, this \ncommunication is directed in the UK to those persons who are market \ncounterparties or intermediate customers (as defined in the UK Financial \nServices Authority's rules).",
+      "body_snippet": "Mark,\n\nNot off base.  I do have a calendar that is only business days created \nto set up a simulation.\n\nI am working on a simulation of Natural gas prices that has spot, \nbalance of the month, and for",
+      "thread_id": "thread-f1e35004950d",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-19d7cca20d48",
+      "message_id": "<453D9BAE.4010100@pdf.com>",
+      "from_name": "Spencer Graves",
+      "from_email_hash": "0d1725402b5f223aa45a1714f600b741ea6c2ccb2d67d2b94ddab1ed1e80aefd",
+      "date": "2006-10-23T21:50:54-07:00",
+      "subject": "[R-SIG-Finance] DCC-MGARCH",
+      "subject_clean": "DCC-MGARCH",
+      "in_reply_to": "<20061016113633.82480.qmail@web26612.mail.ukl.yahoo.com>",
+      "references": [
+        "<20061016113633.82480.qmail@web26612.mail.ukl.yahoo.com>"
+      ],
+      "body_plain": "RSiteSearch(\"MGARCH\") returned 10 hits. Have you reviewed these to see \nif any can handle \"dynamic conditional correlation\"? If not, I would \nthink that some of what is available could be modified or extended \nwithout excessive difficulty to do what you want. Similarly, Google \nreturned 43 hits for \"DCC-MGARCH\". Have you reviewed those to see what \nsoftware they used? Depending on the language in which these other \nalgorithms have been programmed, it might not be too difficult to either \nlink from R to it, if it is written in a standard compiled language, or \nto translate the code into R, if it is something like Matlab.\n\nIf you'd like further help from this listserve, please provide \ncommented, minimal, self-contained, reproducible code, as suggested in \nthe posting guide \"www.R-project.org/posting-guide.html\".\n\nHope this helps.\nSpencer Graves\n\nbechir raggad wrote:\n> Hi,\n>     I?m interested in application of DCC-MGARCH (DCC Engle(2002), Tse and Tsui (2002)) for some financial and economic data. \n>   Would you tell me if  there any existing codes on Splus, R or Gauss?\n>\n>     Thank you\n>\n>\n>  \t\t\n> ---------------------------------\n>\n> \t[[alternative HTML version deleted]]\n>\n>   \n> ------------------------------------------------------------------------\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>",
+      "body_snippet": "RSiteSearch(\"MGARCH\") returned 10 hits. Have you reviewed these to see \nif any can handle \"dynamic conditional correlation\"? If not, I would \nthink that some of what is available could be modified or ",
+      "thread_id": "thread-63b636b426d3",
+      "thread_depth": 1,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-ac2d1d6050df",
+      "message_id": "<000301c6f904$3025b200$5f5c1997@y6c3m0>",
+      "from_name": "Citta Francesco",
+      "from_email_hash": "811696c6418366b687bfb9302ab53c1ac6aed961ccf437b4dde3b00ae017ac16",
+      "date": "2006-10-26T15:39:11+02:00",
+      "subject": "[R-SIG-Finance] R-SIG-Finance Digest, Vol 29, Issue 9",
+      "subject_clean": "R-SIG-Finance Digest, Vol 29, Issue 9",
+      "in_reply_to": null,
+      "references": [
+        "<mailman.17.1161079206.11307.r-sig-finance@stat.math.ethz.ch>"
+      ],
+      "body_plain": "I have your same problem... I hope to help you at least with the DCC-MGARCH.\nFirst, if you have Matlab in the Sheppard's homepage you can find a very\ninteresting package about DCC, it covers only the simmetric and simpler DCC\nmodel.\nFor Gauss you can read the paper \"International Stock Markets Interactions\nand Conditional Correlations\" wrote by Savva, send him an email and ask the\nmost recent version and the GAUSS code (christos.savva at manchester.ac.uk).\nIn R I find the estimation very hard. You can start visting the Patrick\nBurn's homepage: http://www.burns-stat.com/ and download the paper called\n\"Multivariate GARCH with Only Univariate Estimation\". Alternatively or in\naddition, you can visit the Vehbi Sinan's homepage:\nhttp://www.vsthost.com/old/vstDocs/projects/R/mgarchBEKK/\nIt is usefull for the BEKK estimation but reading the documentation it seems\nthat it is possible to extend this estimation to the DCC model but I am not\nable...\nIf you find something about DCC tell me...\nGood luck\n----- Original Message -----\nFrom: <r-sig-finance-request at stat.math.ethz.ch>\nTo: <r-sig-finance at stat.math.ethz.ch>\nSent: Tuesday, October 17, 2006 12:00 PM\nSubject: R-SIG-Finance Digest, Vol 29, Issue 9\n\n\n> Send R-SIG-Finance mailing list submissions to\n> r-sig-finance at stat.math.ethz.ch\n>\n> To subscribe or unsubscribe via the World Wide Web, visit\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> or, via email, send a message with subject or body 'help' to\n> r-sig-finance-request at stat.math.ethz.ch\n>\n> You can reach the person managing the list at\n> r-sig-finance-owner at stat.math.ethz.ch\n>\n> When replying, please edit your Subject line so it is more specific\n> than \"Re: Contents of R-SIG-Finance digest...\"\n>\n>\n> Today's Topics:\n>\n>   1. DCC-MGARCH (bechir raggad)\n>\n>\n> ----------------------------------------------------------------------\n>\n> Message: 1\n> Date: Mon, 16 Oct 2006 13:36:33 +0200 (CEST)\n> From: bechir raggad <raggadbechir at yahoo.fr>\n> Subject: [R-SIG-Finance] DCC-MGARCH\n> To: r-sig-finance at stat.math.ethz.ch\n> Message-ID: <20061016113633.82480.qmail at web26612.mail.ukl.yahoo.com>\n> Content-Type: text/plain\n>\n> Hi,\n>    I'm interested in application of DCC-MGARCH (DCC Engle(2002), Tse and\n> Tsui (2002)) for some financial and economic data.\n>  Would you tell me if  there any existing codes on Splus, R or Gauss?\n>\n>    Thank you\n>\n>\n>\n> ---------------------------------\n>\n> [[alternative HTML version deleted]]\n>\n>\n>\n> ------------------------------\n>\n> _______________________________________________\n> R-SIG-Finance mailing list\n> R-SIG-Finance at stat.math.ethz.ch\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>\n> End of R-SIG-Finance Digest, Vol 29, Issue 9\n> ********************************************",
+      "body_snippet": "I have your same problem... I hope to help you at least with the DCC-MGARCH.\nFirst, if you have Matlab in the Sheppard's homepage you can find a very\ninteresting package about DCC, it covers only the ",
+      "thread_id": "thread-ac2d1d6050df",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-d39da0647de8",
+      "message_id": "<4540F413.7080908@pdf.com>",
+      "from_name": "Spencer Graves",
+      "from_email_hash": "0d1725402b5f223aa45a1714f600b741ea6c2ccb2d67d2b94ddab1ed1e80aefd",
+      "date": "2006-10-26T10:44:51-07:00",
+      "subject": "[R-SIG-Finance] R Implementation of FIX",
+      "subject_clean": "R Implementation of FIX",
+      "in_reply_to": "<GPEPLHOKJEHOCLMBOODGKEBDGNAA.tjohnson@covad.net>",
+      "references": [
+        "<GPEPLHOKJEHOCLMBOODGKEBDGNAA.tjohnson@covad.net>"
+      ],
+      "body_plain": "I'm not familiar with the \"Financial Information eXchange\" \nprotocol, but RSiteSearch(\"financial information exchange\") produced 5 \nhits for me just now.  Two of these referenced HighFrequencyDataTools \n{fCalendar} and MarketStatistics {fBasics}.  RSiteSearch(\"download\", \n\"functions\") produced 75 hits, and h(\"download financial data\", \n\"functions\") returned only 4 hits. \n\n      If you'd like further help from this list, please submit another \npost.  When you do, please outline very briefly what you've tried and \ninclude a simple, self-contained example of something that seemed the \nclosest to what you want, explaining its deficiencies. \n\n      Hope this helps. \n      Spencer Graves\n\nTom Johnson wrote:\n> Does anyone please know of an example of R (or S-Plus) code being used to\n> implement the FIX (\"Financial Information eXchange\") protocol for\n> communicating securities transactions between two parties?  I only know of\n> implementations in C++, Visual Basic, Delphi, Java, etc.  Thanking you for\n> any leads,  Tom\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>",
+      "body_snippet": "I'm not familiar with the \"Financial Information eXchange\" \nprotocol, but RSiteSearch(\"financial information exchange\") produced 5 \nhits for me just now.  Two of these referenced HighFrequencyDataTool",
+      "thread_id": "thread-2473ec0963fc",
+      "thread_depth": 1,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-24826dcdccb7",
+      "message_id": "<17728.63529.790498.336394@basebud.nulle.part>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2006-10-26T13:02:17-05:00",
+      "subject": "[R-SIG-Finance] R Implementation of FIX",
+      "subject_clean": "R Implementation of FIX",
+      "in_reply_to": "<GPEPLHOKJEHOCLMBOODGKEBDGNAA.tjohnson@covad.net>",
+      "references": [
+        "<GPEPLHOKJEHOCLMBOODGKEBDGNAA.tjohnson@covad.net>"
+      ],
+      "body_plain": "On 18 October 2006 at 21:23, Tom Johnson wrote:\n| Does anyone please know of an example of R (or S-Plus) code being used to\n| implement the FIX (\"Financial Information eXchange\") protocol for\n| communicating securities transactions between two parties?  I only know of\n| implementations in C++, Visual Basic, Delphi, Java, etc.  Thanking you for\n| any leads,  Tom\n\nYour best best, IMHO, is to take one of those C++ libraries and to write some\nR glue code.  Or to higher someone who can do it for you.\n\nThere are numerous example packages on CRAN which do exactly that: provide R\naccess to and from external libraries, often written in C, C++ or Fortran.\n\nDirk\n\n-- \nHell, there are no rules here - we're trying to accomplish something. \n                                                  -- Thomas A. Edison",
+      "body_snippet": "On 18 October 2006 at 21:23, Tom Johnson wrote:\n| Does anyone please know of an example of R (or S-Plus) code being used to\n| implement the FIX (\"Financial Information eXchange\") protocol for\n| commun",
+      "thread_id": "thread-2473ec0963fc",
+      "thread_depth": 1,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-2abd692dbb9e",
+      "message_id": "<200610261317.08962.brian@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2006-10-26T13:17:08-05:00",
+      "subject": "[R-SIG-Finance] R Implementation of FIX",
+      "subject_clean": "R Implementation of FIX",
+      "in_reply_to": "<4540F413.7080908@pdf.com>",
+      "references": [
+        "<GPEPLHOKJEHOCLMBOODGKEBDGNAA.tjohnson@covad.net>",
+        "<4540F413.7080908@pdf.com>"
+      ],
+      "body_plain": "On Thursday 26 October 2006 12:44, Spencer Graves wrote:\n> I'm not familiar with the \"Financial Information eXchange\"\n> protocol, but RSiteSearch(\"financial information exchange\") produced 5\n> hits for me just now. ?Two of these referenced HighFrequencyDataTools\n> {fCalendar} and MarketStatistics {fBasics}. ?RSiteSearch(\"download\",\n> \"functions\") produced 75 hits, and h(\"download financial data\",\n> \"functions\") returned only 4 hits.\n\nFIX is a protocol used most often for data feeds from exchanges or \nclearing brokers.  Generally, it is used for high-frequency order and \nconfirmation data on transactions, although the protocol also contains \ndata types for a number of other types of records, including tick data.  \nI am not aware of and could not locate an R implementation of FIX.\n\nI think Dirk's suggestion to use one of the C/C++ FIX libraries and glue \nit to R is probably the correct one.  You may wish to consider an open \nFIX implementation like QuickFIX, which is probably the most widely used \nand best tested open source implementation of FIX.\n\nhttp://www.quickfixengine.org/\n\nHopefully, if you manage to implement an R wrapper around a FIX library, \nyou will consider sharing it with the community so that no one else will \nhave your problem in the future.\n\nRegards,\n\n   - Brian",
+      "body_snippet": "On Thursday 26 October 2006 12:44, Spencer Graves wrote:\n> I'm not familiar with the \"Financial Information eXchange\"\n> protocol, but RSiteSearch(\"financial information exchange\") produced 5\n> hits fo",
+      "thread_id": "thread-2473ec0963fc",
+      "thread_depth": 2,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-61f1d76b7124",
+      "message_id": "<4544139F.8000502@pdf.com>",
+      "from_name": "Spencer Graves",
+      "from_email_hash": "0d1725402b5f223aa45a1714f600b741ea6c2ccb2d67d2b94ddab1ed1e80aefd",
+      "date": "2006-10-28T19:36:15-07:00",
+      "subject": "[R-SIG-Finance] Adding NYMEX to holidays calendar",
+      "subject_clean": "Adding NYMEX to holidays calendar",
+      "in_reply_to": "<ehb0k2$8d0$1@sea.gmane.org>",
+      "references": [
+        "<ehb0k2$8d0$1@sea.gmane.org>"
+      ],
+      "body_plain": "What level of help do you need?  Have you tried listing the \nfunction 'holidayNYSE', making a local copy, then editing it do what you \nwant?  After you've tried that, please send the results to Diethelm \nWuertz and me.  If you can't make it work, please explain the problem. \n\n      Hope this helps. \n      Spencer Graves\n\nJoe W. Byers wrote:\n> Rmetrics\n>\n> Can anyone help me create a new holidays calendar method like \n> holidaysNYSE() for NYMEX holidays.  The only difference is the holidays \n> for Independence day and thanks giving.\n> Independence Day\n> \tMonday, July 3*\n> \tTuesday, July 4\n> \t(Electronic trading closed Sunday and Monday, July 2 and 3; reopens \n> 6:00 PM, July 4)\n> Thanksgiving\n> \tThursday, November 23\n> \tFriday, November 24\n> \t(NYMEX ClearPort? and CME Globex? open both days)\n>\n> NYMEX is closed on Monday July 3rd this year since the 4th is on a \n> Tuesday and Friday the day following Thanksgiving.  This will end in \n> 2007 according to NYMEX.  The Independence day holiday I think will \n> observe Friday as a holiday when the 4th is on a Thurs but, according to \n> NYMEX they are not sure for 2007.  Also the webpage \n> http://www.nymex.com/holida_schedu.aspx notes that Christmas eve will \n> become a holiday in 2007 but expirations will not change.  I am sending \n> their customer service a request to post a document with the holiday \n> rules as well as these tables for those of us who worry about a \n> derivatives calendar.\n>\n> Thank you\n> Joe\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>",
+      "body_snippet": "What level of help do you need?  Have you tried listing the \nfunction 'holidayNYSE', making a local copy, then editing it do what you \nwant?  After you've tried that, please send the results to Diethe",
+      "thread_id": "thread-70f0c71c922b",
+      "thread_depth": 1,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-924fc5d498a5",
+      "message_id": "<45441DCA.6090808@utulsa.edu>",
+      "from_name": "Joe Byers",
+      "from_email_hash": "4714326de2b9458e8463057abecfdc3e5d2e5670d783fd5d12cf25ab0dedee18",
+      "date": "2006-10-28T22:19:38-05:00",
+      "subject": "[R-SIG-Finance] Adding NYMEX to holidays calendar",
+      "subject_clean": "Adding NYMEX to holidays calendar",
+      "in_reply_to": "<4544139F.8000502@pdf.com>",
+      "references": [
+        "<ehb0k2$8d0$1@sea.gmane.org>",
+        "<4544139F.8000502@pdf.com>"
+      ],
+      "body_plain": "Spencer,\n\nI will look at the code for holidayNYSE.  I had several conversations \nwith NYMEX right after I posted my message so I wanted to make sure I \nhad a handle on their upcoming changes for 2007.  These changes will \nrequire several test within the holiday method.  I also need to get the \na couple of years from NYMEX and compare to NYSE to see how much they \nwill differ for the current holidays and the proposed changes.  I have \ngiven NYMEX rmetrics links and quantlib links to the calendar libraries \nof these two software packages along with links to other calendar rules \nposted for NYSE, NERC,... in hopes that NYMEX will post the actual rules \nthey use for their holiday calendars.  This would alleviate me from \nimplying the rules.  Even if NYMEX would say we follow the \"Federal \nholidays\" and any others would help minimize assumptions on my part.\n\nI will see what I can come up with and send to you both.\n\nThank you for your reply.\n\nJoe\n\n\nSpencer Graves wrote:\n>      What level of help do you need?  Have you tried listing the \n> function 'holidayNYSE', making a local copy, then editing it do what \n> you want?  After you've tried that, please send the results to \n> Diethelm Wuertz and me.  If you can't make it work, please explain the \n> problem.\n>      Hope this helps.      Spencer Graves\n>\n> Joe W. Byers wrote:\n>> Rmetrics\n>>\n>> Can anyone help me create a new holidays calendar method like \n>> holidaysNYSE() for NYMEX holidays.  The only difference is the \n>> holidays for Independence day and thanks giving.\n>> Independence Day\n>>     Monday, July 3*\n>>     Tuesday, July 4\n>>     (Electronic trading closed Sunday and Monday, July 2 and 3; \n>> reopens 6:00 PM, July 4)\n>> Thanksgiving\n>>     Thursday, November 23\n>>     Friday, November 24\n>>     (NYMEX ClearPort? and CME Globex? open both days)\n>>\n>> NYMEX is closed on Monday July 3rd this year since the 4th is on a \n>> Tuesday and Friday the day following Thanksgiving.  This will end in \n>> 2007 according to NYMEX.  The Independence day holiday I think will \n>> observe Friday as a holiday when the 4th is on a Thurs but, according \n>> to NYMEX they are not sure for 2007.  Also the webpage \n>> http://www.nymex.com/holida_schedu.aspx notes that Christmas eve will \n>> become a holiday in 2007 but expirations will not change.  I am \n>> sending their customer service a request to post a document with the \n>> holiday rules as well as these tables for those of us who worry about \n>> a derivatives calendar.\n>>\n>> Thank you\n>> Joe\n>>\n>> _______________________________________________\n>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>   \n-------------- next part --------------\nA non-text attachment was scrubbed...\nName: joe-byers.vcf\nType: text/x-vcard\nSize: 104 bytes\nDesc: not available\nUrl : https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061028/5137a564/attachment.vcf",
+      "body_snippet": "Spencer,\n\nI will look at the code for holidayNYSE.  I had several conversations \nwith NYMEX right after I posted my message so I wanted to make sure I \nhad a handle on their upcoming changes for 2007.",
+      "thread_id": "thread-70f0c71c922b",
+      "thread_depth": 2,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-680df9ed6f1d",
+      "message_id": "<GPEPLHOKJEHOCLMBOODGKEKMGNAA.tjohnson@covad.net>",
+      "from_name": "Tom Johnson",
+      "from_email_hash": "1bb9e42221af7bf448b6879696bc254395e85cca1d92c839a6b2a9e7d7c0f356",
+      "date": "2006-10-30T12:05:21-08:00",
+      "subject": "[R-SIG-Finance] R Implementation of FIX",
+      "subject_clean": "R Implementation of FIX",
+      "in_reply_to": "<mailman.17.1161943206.32467.r-sig-finance@stat.math.ethz.ch>",
+      "references": [],
+      "body_plain": "After review, the R wrapper with FIX would appear best, but a gui interface\nwill do instead.  Thank you, Tom\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch]On Behalf Of\nr-sig-finance-request at stat.math.ethz.ch\nSent: Friday, October 27, 2006 03:00\nTo: r-sig-finance at stat.math.ethz.ch\nSubject: R-SIG-Finance Digest, Vol 29, Issue 15\n\n\nSend R-SIG-Finance mailing list submissions to\n\tr-sig-finance at stat.math.ethz.ch\n\nTo subscribe or unsubscribe via the World Wide Web, visit\n\thttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\nor, via email, send a message with subject or body 'help' to\n\tr-sig-finance-request at stat.math.ethz.ch\n\nYou can reach the person managing the list at\n\tr-sig-finance-owner at stat.math.ethz.ch\n\nWhen replying, please edit your Subject line so it is more specific\nthan \"Re: Contents of R-SIG-Finance digest...\"\n\n\nToday's Topics:\n\n   1. Re: R-SIG-Finance Digest, Vol 29, Issue 9 (Citta Francesco)\n   2. Re: R Implementation of FIX (Spencer Graves)\n   3. Re: R Implementation of FIX (Dirk Eddelbuettel)\n   4. Re: R Implementation of FIX (Brian G. Peterson)\n\n\n----------------------------------------------------------------------\n\nMessage: 1\nDate: Thu, 26 Oct 2006 15:39:11 +0200\nFrom: \"Citta Francesco\" <fcitta at inwind.it>\nSubject: Re: [R-SIG-Finance] R-SIG-Finance Digest, Vol 29, Issue 9\nTo: <r-sig-finance at stat.math.ethz.ch>\nMessage-ID: <000301c6f904$3025b200$5f5c1997 at y6c3m0>\nContent-Type: text/plain;\tcharset=\"iso-8859-1\"\n\nI have your same problem... I hope to help you at least with the DCC-MGARCH.\nFirst, if you have Matlab in the Sheppard's homepage you can find a very\ninteresting package about DCC, it covers only the simmetric and simpler DCC\nmodel.\nFor Gauss you can read the paper \"International Stock Markets Interactions\nand Conditional Correlations\" wrote by Savva, send him an email and ask the\nmost recent version and the GAUSS code (christos.savva at manchester.ac.uk).\nIn R I find the estimation very hard. You can start visting the Patrick\nBurn's homepage: http://www.burns-stat.com/ and download the paper called\n\"Multivariate GARCH with Only Univariate Estimation\". Alternatively or in\naddition, you can visit the Vehbi Sinan's homepage:\nhttp://www.vsthost.com/old/vstDocs/projects/R/mgarchBEKK/\nIt is usefull for the BEKK estimation but reading the documentation it seems\nthat it is possible to extend this estimation to the DCC model but I am not\nable...\nIf you find something about DCC tell me...\nGood luck\n----- Original Message -----\nFrom: <r-sig-finance-request at stat.math.ethz.ch>\nTo: <r-sig-finance at stat.math.ethz.ch>\nSent: Tuesday, October 17, 2006 12:00 PM\nSubject: R-SIG-Finance Digest, Vol 29, Issue 9\n\n\n> Send R-SIG-Finance mailing list submissions to\n> r-sig-finance at stat.math.ethz.ch\n>\n> To subscribe or unsubscribe via the World Wide Web, visit\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> or, via email, send a message with subject or body 'help' to\n> r-sig-finance-request at stat.math.ethz.ch\n>\n> You can reach the person managing the list at\n> r-sig-finance-owner at stat.math.ethz.ch\n>\n> When replying, please edit your Subject line so it is more specific\n> than \"Re: Contents of R-SIG-Finance digest...\"\n>\n>\n> Today's Topics:\n>\n>   1. DCC-MGARCH (bechir raggad)\n>\n>\n> ----------------------------------------------------------------------\n>\n> Message: 1\n> Date: Mon, 16 Oct 2006 13:36:33 +0200 (CEST)\n> From: bechir raggad <raggadbechir at yahoo.fr>\n> Subject: [R-SIG-Finance] DCC-MGARCH\n> To: r-sig-finance at stat.math.ethz.ch\n> Message-ID: <20061016113633.82480.qmail at web26612.mail.ukl.yahoo.com>\n> Content-Type: text/plain\n>\n> Hi,\n>    I'm interested in application of DCC-MGARCH (DCC Engle(2002), Tse and\n> Tsui (2002)) for some financial and economic data.\n>  Would you tell me if  there any existing codes on Splus, R or Gauss?\n>\n>    Thank you\n>\n>\n>\n> ---------------------------------\n>\n> [[alternative HTML version deleted]]\n>\n>\n>\n> ------------------------------\n>\n> _______________________________________________\n> R-SIG-Finance mailing list\n> R-SIG-Finance at stat.math.ethz.ch\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>\n> End of R-SIG-Finance Digest, Vol 29, Issue 9\n> ********************************************\n\n\n\n------------------------------\n\nMessage: 2\nDate: Thu, 26 Oct 2006 10:44:51 -0700\nFrom: Spencer Graves <spencer.graves at pdf.com>\nSubject: Re: [R-SIG-Finance] R Implementation of FIX\nTo: Tom Johnson <tjohnson at covad.net>\nCc: r-sig-finance at stat.math.ethz.ch\nMessage-ID: <4540F413.7080908 at pdf.com>\nContent-Type: text/plain; charset=ISO-8859-1; format=flowed\n\n      I'm not familiar with the \"Financial Information eXchange\"\nprotocol, but RSiteSearch(\"financial information exchange\") produced 5\nhits for me just now.  Two of these referenced HighFrequencyDataTools\n{fCalendar} and MarketStatistics {fBasics}.  RSiteSearch(\"download\",\n\"functions\") produced 75 hits, and h(\"download financial data\",\n\"functions\") returned only 4 hits.\n\n      If you'd like further help from this list, please submit another\npost.  When you do, please outline very briefly what you've tried and\ninclude a simple, self-contained example of something that seemed the\nclosest to what you want, explaining its deficiencies.\n\n      Hope this helps.\n      Spencer Graves\n\nTom Johnson wrote:\n> Does anyone please know of an example of R (or S-Plus) code being used to\n> implement the FIX (\"Financial Information eXchange\") protocol for\n> communicating securities transactions between two parties?  I only know of\n> implementations in C++, Visual Basic, Delphi, Java, etc.  Thanking you for\n> any leads,  Tom\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n\n\n\n------------------------------\n\nMessage: 3\nDate: Thu, 26 Oct 2006 13:02:17 -0500\nFrom: Dirk Eddelbuettel <edd at debian.org>\nSubject: Re: [R-SIG-Finance] R Implementation of FIX\nTo: \"Tom Johnson\" <tjohnson at covad.net>\nCc: r-sig-finance at stat.math.ethz.ch\nMessage-ID: <17728.63529.790498.336394 at basebud.nulle.part>\nContent-Type: text/plain; charset=us-ascii\n\n\nOn 18 October 2006 at 21:23, Tom Johnson wrote:\n| Does anyone please know of an example of R (or S-Plus) code being used to\n| implement the FIX (\"Financial Information eXchange\") protocol for\n| communicating securities transactions between two parties?  I only know of\n| implementations in C++, Visual Basic, Delphi, Java, etc.  Thanking you for\n| any leads,  Tom\n\nYour best best, IMHO, is to take one of those C++ libraries and to write\nsome\nR glue code.  Or to higher someone who can do it for you.\n\nThere are numerous example packages on CRAN which do exactly that: provide R\naccess to and from external libraries, often written in C, C++ or Fortran.\n\nDirk\n\n--\nHell, there are no rules here - we're trying to accomplish something.\n                                                  -- Thomas A. Edison\n\n\n\n------------------------------\n\nMessage: 4\nDate: Thu, 26 Oct 2006 13:17:08 -0500\nFrom: \"Brian G. Peterson\" <brian at braverock.com>\nSubject: Re: [R-SIG-Finance] R Implementation of FIX\nTo: r-sig-finance at stat.math.ethz.ch\nCc: Tom Johnson <tjohnson at covad.net>\nMessage-ID: <200610261317.08962.brian at braverock.com>\nContent-Type: text/plain;  charset=\"iso-8859-1\"\n\nOn Thursday 26 October 2006 12:44, Spencer Graves wrote:\n> I'm not familiar with the \"Financial Information eXchange\"\n> protocol, but RSiteSearch(\"financial information exchange\") produced 5\n> hits for me just now. ?Two of these referenced HighFrequencyDataTools\n> {fCalendar} and MarketStatistics {fBasics}. ?RSiteSearch(\"download\",\n> \"functions\") produced 75 hits, and h(\"download financial data\",\n> \"functions\") returned only 4 hits.\n\nFIX is a protocol used most often for data feeds from exchanges or\nclearing brokers.  Generally, it is used for high-frequency order and\nconfirmation data on transactions, although the protocol also contains\ndata types for a number of other types of records, including tick data.\nI am not aware of and could not locate an R implementation of FIX.\n\nI think Dirk's suggestion to use one of the C/C++ FIX libraries and glue\nit to R is probably the correct one.  You may wish to consider an open\nFIX implementation like QuickFIX, which is probably the most widely used\nand best tested open source implementation of FIX.\n\nhttp://www.quickfixengine.org/\n\nHopefully, if you manage to implement an R wrapper around a FIX library,\nyou will consider sharing it with the community so that no one else will\nhave your problem in the future.\n\nRegards,\n\n   - Brian\n\n\n\n------------------------------\n\n_______________________________________________\nR-SIG-Finance mailing list\nR-SIG-Finance at stat.math.ethz.ch\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n\n\nEnd of R-SIG-Finance Digest, Vol 29, Issue 15",
+      "body_snippet": "After review, the R wrapper with FIX would appear best, but a gui interface\nwill do instead.  Thank you, Tom\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-",
+      "thread_id": "thread-680df9ed6f1d",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-57c6d537a2ef",
+      "message_id": "<4053699F3E4AD04BA536A5F6BB81A2CFF91FCA@UXEXMBU116.academic.windsor>",
+      "from_name": "Xiaochen Sun",
+      "from_email_hash": "1742e8152ebe1b75971318ff86b8bc747c8350db873ff016b1d5a41956cbcc93",
+      "date": "2006-10-30T23:33:31Z",
+      "subject": "[R-SIG-Finance] 3-D graphing in quantile curve",
+      "subject_clean": "3-D graphing in quantile curve",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear list, \n\nI have a problem on my research project. I have three time series data, u1, u2 and v, I get the conditional distribution F1(u2|u1)and F2(v|u1) first, then produce the quantile curve by using formula: y = qgev(pnorm(rho*qnormF1(u2|u1)+sqrt(1-rho^2)*qnorm(P))),xi,mu,sigma)\nP,here is the different quantile: 0.05,0.1,0.5,0.9,0.95.\n\nI wonder how could I produce 3-dimentional graph?\n\nI have tried scatterplot3d(u1,u2,y), any other method?\n\nAppreciate for any reply.\n\nThanks\nMc",
+      "body_snippet": "Dear list, \n\nI have a problem on my research project. I have three time series data, u1, u2 and v, I get the conditional distribution F1(u2|u1)and F2(v|u1) first, then produce the quantile curve by us",
+      "thread_id": "thread-57c6d537a2ef",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-b25ce76cf5cf",
+      "message_id": "<4546D4A7.7040600@buseco.monash.edu.au>",
+      "from_name": "Rob Hyndman",
+      "from_email_hash": "75b382c839f6d90799f1b3f3752b0aad38427839fd3d536aee69cfe711810472",
+      "date": "2006-10-31T15:44:23+11:00",
+      "subject": "[R-SIG-Finance] 3-D graphing in quantile curve",
+      "subject_clean": "3-D graphing in quantile curve",
+      "in_reply_to": "<4053699F3E4AD04BA536A5F6BB81A2CFF91FCA@UXEXMBU116.academic.windsor>",
+      "references": [
+        "<4053699F3E4AD04BA536A5F6BB81A2CFF91FCA@UXEXMBU116.academic.windsor>"
+      ],
+      "body_plain": "One solution is to use coplot() which is a wonderful, but underused, function in \nR/S+.\n\nAnother possibility is try the function plot.cde() in the hdrcde package. This \nis designed for plotting conditional density estimates. But it could probably be \nfooled into plotting conditional quantile estimates without too much difficulty. \nIt will handle one or two conditioning variables. The plots are either stacked \ndensities or highest density region strips.\n\nOr you could try persp(), image(), contour(), etc.\n\nBest wishes,\nRob\n\n\n\nXiaochen Sun wrote:\n> Dear list, \n> \n> I have a problem on my research project. I have three time series data, u1, u2 and v, I get the conditional distribution F1(u2|u1)and F2(v|u1) first, then produce the quantile curve by using formula: y = qgev(pnorm(rho*qnormF1(u2|u1)+sqrt(1-rho^2)*qnorm(P))),xi,mu,sigma)\n> P,here is the different quantile: 0.05,0.1,0.5,0.9,0.95.\n> \n> I wonder how could I produce 3-dimentional graph?\n> \n> I have tried scatterplot3d(u1,u2,y), any other method?\n> \n> Appreciate for any reply.\n> \n> Thanks\n> Mc\n> \n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n\n-- \n__________________________________________________\nProfessor Rob J Hyndman\nDepartment of Econometrics & Business Statistics,\nMonash University, VIC 3800, Australia\nhttp://www.robhyndman.info/",
+      "body_snippet": "One solution is to use coplot() which is a wonderful, but underused, function in \nR/S+.\n\nAnother possibility is try the function plot.cde() in the hdrcde package. This \nis designed for plotting condit",
+      "thread_id": "thread-57c6d537a2ef",
+      "thread_depth": 1,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-f1545f24e7d7",
+      "message_id": "<4546D8BA.9080806@comcast.net>",
+      "from_name": "jk",
+      "from_email_hash": "a1c2da59c778f5d10e3c82d9d0880c57fc3cd7f1332f7f115e98fda08a5772bc",
+      "date": "2006-10-31T00:01:46-05:00",
+      "subject": "[R-SIG-Finance] beginner asks:",
+      "subject_clean": "beginner asks:",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "below is from an available online textbook.  as an experienced user can \nsee, the below text is \"how\" to determine %s of winning come-out rolls \n(7 or 11) in a 1000 games of craps.  I cannot figure out how to stick \nthis query into R correctly.  at the first prompt i make the vector of \nlength 1000 filled with 0s called \"wins\"\ni hit enter.\nget a fresh prompt, so far so good. But the rest of the example in the \nbook does not seem to paste so simply.\nWhat is frustrating is the first example in this book shows the prompt \nat each line. So it's clear what to type and where. But in this one, \nonly the second example, i've tried a dozen variations always with the \ncorrect text sequentially to no avail.  syntax errors.  I'd sure be \ngrateful for some guidance.  thanks, john kuhn\n\n\nNow we have to figure out how to simulate the Come-out roll and decide \nwhether\nthe shooter wins. Clearly, we begin by simulating the roll of two dice. \nSo our snippet\nexpands to\n# make a vector of length 1000, filled with 0?s\nwins <- rep ( 0, 1000 )\nfor ( i in 1:1000 ) {\nd <- sample ( 1:6, 2, replace=T )\nif ( sum(d) == 7 || sum(d) == 11 ) wins[i] <- 1\n}sum ( wins ) # print the number of wins",
+      "body_snippet": "below is from an available online textbook.  as an experienced user can \nsee, the below text is \"how\" to determine %s of winning come-out rolls \n(7 or 11) in a 1000 games of craps.  I cannot figure ou",
+      "thread_id": "thread-f1545f24e7d7",
+      "thread_depth": 0,
+      "month": "2006-10"
+    },
+    {
+      "id": "msg-e55af4de2870",
+      "message_id": "<e8e755250610302150u4092fffap8e56c4b3681fe581@mail.gmail.com>",
+      "from_name": "Jeff Ryan",
+      "from_email_hash": "4c11198e12fc267ae3e3c06487930e8e9dd8ef89399ad783a1835a1dd01ce593",
+      "date": "2006-10-30T23:50:29-06:00",
+      "subject": "[R-SIG-Finance] beginner asks:",
+      "subject_clean": "beginner asks:",
+      "in_reply_to": "<4546D8BA.9080806@comcast.net>",
+      "references": [
+        "<4546D8BA.9080806@comcast.net>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061030/52aca4bf/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061030/52aca4bf/attachment.pl",
+      "thread_id": "thread-f1545f24e7d7",
+      "thread_depth": 1,
+      "month": "2006-10"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-34467903720d",
+      "subject": "isBizday question",
+      "message_count": 3,
+      "participants": [
+        "Diethelm Wuertz",
+        "Joe Byers"
+      ],
+      "started": "2006-10-05T13:19:23-05:00",
+      "last_reply": "2006-10-05T15:30:57-05:00",
+      "root_message_id": "msg-34467903720d"
+    },
+    {
+      "id": "thread-9dfbde8564e0",
+      "subject": "error message when loading package fSeries",
+      "message_count": 3,
+      "participants": [
+        "-",
+        "Diethelm Wuertz",
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2006-10-06T15:59:12+02:00",
+      "last_reply": "2006-10-06T18:24:03-05:00",
+      "root_message_id": "msg-9dfbde8564e0"
+    },
+    {
+      "id": "thread-b5d9113f0cda",
+      "subject": "error message when loading package fSeries",
+      "message_count": 1,
+      "participants": [
+        "-"
+      ],
+      "started": "2006-10-06T16:38:34+02:00",
+      "last_reply": "2006-10-06T16:38:34+02:00",
+      "root_message_id": "msg-b5d9113f0cda"
+    },
+    {
+      "id": "thread-5d7ea530d91d",
+      "subject": "Error in if (Y > 0) { : missing value where TRUE/FALSE needed",
+      "message_count": 1,
+      "participants": [
+        "VitorTeixeira"
+      ],
+      "started": "2006-10-08T15:28:08+01:00",
+      "last_reply": "2006-10-08T15:28:08+01:00",
+      "root_message_id": "msg-5d7ea530d91d"
+    },
+    {
+      "id": "thread-9eaeb4b7ba06",
+      "subject": "regarding bootstrapping",
+      "message_count": 2,
+      "participants": [
+        "davidr at rhotrading.com",
+        "gyadav at ccilindia.co.in"
+      ],
+      "started": "2006-10-09T10:25:32-05:00",
+      "last_reply": "2006-10-10T11:04:21+05:30",
+      "root_message_id": "msg-9eaeb4b7ba06"
+    },
+    {
+      "id": "thread-7eea76414335",
+      "subject": "regarding bootstrapping",
+      "message_count": 12,
+      "participants": [
+        "Brian G. Peterson",
+        "Frederick Novomestky",
+        "Jan-Paul Roodbol",
+        "Spencer Graves",
+        "Thomas Steiner",
+        "gyadav at ccilindia.co.in"
+      ],
+      "started": "2006-10-09T17:41:23+05:30",
+      "last_reply": "2006-10-21T13:23:25-04:00",
+      "root_message_id": "msg-7eea76414335"
+    },
+    {
+      "id": "thread-d76639123ae4",
+      "subject": "regarding bootstrapping... REVISITED",
+      "message_count": 2,
+      "participants": [
+        "Thomas Steiner",
+        "davidr at rhotrading.com"
+      ],
+      "started": "2006-10-10T09:23:15-05:00",
+      "last_reply": "2006-10-12T14:13:26+02:00",
+      "root_message_id": "msg-d76639123ae4"
+    },
+    {
+      "id": "thread-61cf684b694a",
+      "subject": "ERRATA: Re: [R] regarding bootstrapping... REVISITED",
+      "message_count": 1,
+      "participants": [
+        "gyadav at ccilindia.co.in"
+      ],
+      "started": "2006-10-10T12:32:44+05:30",
+      "last_reply": "2006-10-10T12:32:44+05:30",
+      "root_message_id": "msg-61cf684b694a"
+    },
+    {
+      "id": "thread-451faf3e4abc",
+      "subject": "Error message",
+      "message_count": 2,
+      "participants": [
+        "Dirk Eddelbuettel",
+        "VitorTeixeira"
+      ],
+      "started": "2006-10-10T15:25:50+01:00",
+      "last_reply": "2006-10-10T09:32:30-05:00",
+      "root_message_id": "msg-451faf3e4abc"
+    },
+    {
+      "id": "thread-63b636b426d3",
+      "subject": "DCC-MGARCH",
+      "message_count": 2,
+      "participants": [
+        "Spencer Graves",
+        "bechir raggad"
+      ],
+      "started": "2006-10-16T13:36:33+02:00",
+      "last_reply": "2006-10-23T21:50:54-07:00",
+      "root_message_id": "msg-63b636b426d3"
+    },
+    {
+      "id": "thread-2473ec0963fc",
+      "subject": "R Implementation of FIX",
+      "message_count": 4,
+      "participants": [
+        "Brian G. Peterson",
+        "Dirk Eddelbuettel",
+        "Spencer Graves",
+        "Tom Johnson"
+      ],
+      "started": "2006-10-18T21:23:57-07:00",
+      "last_reply": "2006-10-26T13:17:08-05:00",
+      "root_message_id": "msg-2473ec0963fc"
+    },
+    {
+      "id": "thread-857e7bdb40a6",
+      "subject": "No fMultivar Windows Binary on CRAN, installation alternatives?",
+      "message_count": 2,
+      "participants": [
+        "Paul DeBruicker",
+        "Rob Hyndman"
+      ],
+      "started": "2006-10-19T11:50:41-04:00",
+      "last_reply": "2006-10-20T08:45:13+10:00",
+      "root_message_id": "msg-857e7bdb40a6"
+    },
+    {
+      "id": "thread-929617652841",
+      "subject": "predict.Arima question",
+      "message_count": 2,
+      "participants": [
+        "Felipe Santos",
+        "Rob Hyndman"
+      ],
+      "started": "2006-10-19T11:52:23-03:00",
+      "last_reply": "2006-10-20T08:17:44+10:00",
+      "root_message_id": "msg-929617652841"
+    },
+    {
+      "id": "thread-24c8e8a1d234",
+      "subject": "Help with date arithmetic",
+      "message_count": 2,
+      "participants": [
+        "Joe W. Byers"
+      ],
+      "started": "2006-10-20T11:04:08-05:00",
+      "last_reply": "2006-10-21T14:30:43-05:00",
+      "root_message_id": "msg-24c8e8a1d234"
+    },
+    {
+      "id": "thread-70f0c71c922b",
+      "subject": "Adding NYMEX to holidays calendar",
+      "message_count": 3,
+      "participants": [
+        "Joe Byers",
+        "Joe W. Byers",
+        "Spencer Graves"
+      ],
+      "started": "2006-10-20T12:22:09-05:00",
+      "last_reply": "2006-10-28T22:19:38-05:00",
+      "root_message_id": "msg-70f0c71c922b"
+    },
+    {
+      "id": "thread-32469a0baced",
+      "subject": "How to try technical indicators, fMultivar",
+      "message_count": 2,
+      "participants": [
+        "Andy (Lists)",
+        "David Kane"
+      ],
+      "started": "2006-10-21T16:08:47-05:00",
+      "last_reply": "2006-10-21T17:14:50-04:00",
+      "root_message_id": "msg-32469a0baced"
+    },
+    {
+      "id": "thread-f01bd8a2a716",
+      "subject": "Where is the R Finance website?",
+      "message_count": 4,
+      "participants": [
+        "Dirk Eddelbuettel",
+        "Gabor Grothendieck",
+        "tom soyer"
+      ],
+      "started": "2006-10-22T09:45:11-05:00",
+      "last_reply": "2006-10-22T16:06:19-05:00",
+      "root_message_id": "msg-f01bd8a2a716"
+    },
+    {
+      "id": "thread-f1e35004950d",
+      "subject": "Help with date arithmetic",
+      "message_count": 1,
+      "participants": [
+        "Joe W. Byers"
+      ],
+      "started": "2006-10-22T18:35:40-05:00",
+      "last_reply": "2006-10-22T18:35:40-05:00",
+      "root_message_id": "msg-f1e35004950d"
+    },
+    {
+      "id": "thread-ac2d1d6050df",
+      "subject": "R-SIG-Finance Digest, Vol 29, Issue 9",
+      "message_count": 1,
+      "participants": [
+        "Citta Francesco"
+      ],
+      "started": "2006-10-26T15:39:11+02:00",
+      "last_reply": "2006-10-26T15:39:11+02:00",
+      "root_message_id": "msg-ac2d1d6050df"
+    },
+    {
+      "id": "thread-680df9ed6f1d",
+      "subject": "R Implementation of FIX",
+      "message_count": 1,
+      "participants": [
+        "Tom Johnson"
+      ],
+      "started": "2006-10-30T12:05:21-08:00",
+      "last_reply": "2006-10-30T12:05:21-08:00",
+      "root_message_id": "msg-680df9ed6f1d"
+    },
+    {
+      "id": "thread-57c6d537a2ef",
+      "subject": "3-D graphing in quantile curve",
+      "message_count": 2,
+      "participants": [
+        "Rob Hyndman",
+        "Xiaochen Sun"
+      ],
+      "started": "2006-10-30T23:33:31+00:00",
+      "last_reply": "2006-10-31T15:44:23+11:00",
+      "root_message_id": "msg-57c6d537a2ef"
+    },
+    {
+      "id": "thread-f1545f24e7d7",
+      "subject": "beginner asks:",
+      "message_count": 2,
+      "participants": [
+        "Jeff Ryan",
+        "jk"
+      ],
+      "started": "2006-10-31T00:01:46-05:00",
+      "last_reply": "2006-10-30T23:50:29-06:00",
+      "root_message_id": "msg-f1545f24e7d7"
+    }
+  ]
+}

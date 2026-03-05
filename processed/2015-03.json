@@ -1,0 +1,1073 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2015-03",
+  "messages": [
+    {
+      "id": "msg-7a444af7f839",
+      "message_id": "<CAM8W6CZJwFh49BtXOuUgS6K_fCT=TbNS0p-zTgPOanVznixo+Q@mail.gmail.com>",
+      "from_name": "Alex Badoi",
+      "from_email_hash": "398ac9dfe80e2343544244cd6348262b90aeda1382caada889324f9531043ef2",
+      "date": "2015-03-03T19:55:42+01:00",
+      "subject": "[R-SIG-Finance] [Q] How to omit NA values in TTR package + Jeff Cooper's 5 day MOM",
+      "subject_clean": "[Q] How to omit NA values in TTR package + Jeff Cooper's 5 day MOM",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi everyone,\n\nI am working on a trading system based on Jeff Cooper's 5 day Momentum.\n\nhttp://www.maxdown.org/e-books-list/the-5-day-momentum-method-by-jeff-cooper_4fa8l.html\n\nI am new to R and still familiarising myself with a lot of the functions\nbut i am slowly piecing it together. The code bellow contains all the\ncalculations necessary for the above strategy.\n\nI have the following problems:\n\n1. NA Values are making my code useless as it stops half way through. I\nneed to run this on a few hundred stocks. It works perfectly with no NA\nvalues. I tried to use na.omit and na.rm=T.\n\nAlternatively i am looking for a way through which i could search through\nmy stockData environment for vectors containing NA values and remove these\nvectors entirely before running it through the following code.\n\nError:\n\nError in runSum(x, n) : NA/NaN/Inf in foreign function call (arg 1)\n7 runSum(x, n)\n6 runMean(x, n)\n5 SMA(structure(c(NA, NA, NA, NA, NA, NA, NA, 29.75, 34.6666666666667,\n22.75, 22.75, 26.25, 52.5, 45.5, 52.5, 45.5, 52.5, 52.5, 52.5,\n59.5, 59.5, 59.5, 35, 35, 35, 35, 59, 59, 59, 59, 59, 66, 59,\n66, 117, 117, 117, 117, 131, 117, 131, 131, 72.5, 43.25, 39.75,  ...\n4 do.call(maType, c(list(fastK), list(n = nFastD, ...)))\n3 stoch(try.xts(x[, c(2, 3, 6)], error = as.matrix), nFastK = 8,\n    na.action = na.exclude)\n2 FUN(X[[9L]], ...)\n1 lapply(stockData, MOM)\n\n\n\nCode:\n\nstockData <- new.env()\ngetSymbols(ticker_names , env = stockData, src=\"yahoo\")\n\n\"MOM\" <- function(x){\n\n# Price Adj.\nprice <- x[,c(6)]\n\n# DIp      DIn       DX      ADX\nadx <- ADX(try.xts(x[,c(2,3,6)], error=as.matrix), n =14)\n    DIp <- adx$DIp\n    DIn <- adx$DIn\n    Adx <- adx$ADX\n# dn     mavg       up      pctB\nbbands <- BBands(try.xts(x[,c(2,3,6)], error=as.matrix), n =14, sd=1.8)\n    down <- bbands$dn\n    up <- bbands$up\n\nsma <- SMA(try.xts(x[,c(6)], error=as.matrix), n = 20)\n\n# rsi\nrsi <- RSI(try.xts(x[,c(6)], error=as.matrix), n = 14)\n\n# fastK     fastD     slowD\nstochastics <- stoch(try.xts(x[,c(2,3,6)], error=as.matrix), nFastK = 8)\n    fastK <- stochastics$fastK\n\n# results\nresult <- cbind( price, DIp, DIn, Adx, down, up, sma, rsi, fastK )\nlastresult <- do.call(\"rbind\", list(last(result)))\nwrite.table(lastresult, file = \"MOM.csv\", append = T, col.names = F, sep=\n\",\")\nprint(last(result))\n}\n\n# Loop function on data #\nlapply (stockData, MOM)\n\nI spend the last few hours searching for a solution but with little\nsuccess. Thank you in advance if you can help.\n\nAlex\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi everyone,\n\nI am working on a trading system based on Jeff Cooper's 5 day Momentum.\n\nhttp://www.maxdown.org/e-books-list/the-5-day-momentum-method-by-jeff-cooper_4fa8l.html\n\nI am new to R and still ",
+      "thread_id": "thread-7a444af7f839",
+      "thread_depth": 0,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-8129570d9b17",
+      "message_id": "<CA+oJuEHWe2CHoBJNnrz4Q-iE8vMFyk4=dCZdfAuZfZNO1Nw9_Q@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "82540aa84df90b083b58f5752a77274af680540119bfecc0c0436c59ddd13e5c",
+      "date": "2015-03-03T13:58:30-05:00",
+      "subject": "[R-SIG-Finance] [Q] How to omit NA values in TTR package + Jeff Cooper's 5 day MOM",
+      "subject_clean": "[Q] How to omit NA values in TTR package + Jeff Cooper's 5 day MOM",
+      "in_reply_to": "<CAM8W6CZJwFh49BtXOuUgS6K_fCT=TbNS0p-zTgPOanVznixo+Q@mail.gmail.com>",
+      "references": [
+        "<CAM8W6CZJwFh49BtXOuUgS6K_fCT=TbNS0p-zTgPOanVznixo+Q@mail.gmail.com>"
+      ],
+      "body_plain": "Read my quantstrat posts.\nOn Mar 3, 2015 1:56 PM, \"Alex Badoi\" <alex.badoi1 at gmail.com> wrote:\n\n> Hi everyone,\n>\n> I am working on a trading system based on Jeff Cooper's 5 day Momentum.\n>\n>\n> http://www.maxdown.org/e-books-list/the-5-day-momentum-method-by-jeff-cooper_4fa8l.html\n>\n> I am new to R and still familiarising myself with a lot of the functions\n> but i am slowly piecing it together. The code bellow contains all the\n> calculations necessary for the above strategy.\n>\n> I have the following problems:\n>\n> 1. NA Values are making my code useless as it stops half way through. I\n> need to run this on a few hundred stocks. It works perfectly with no NA\n> values. I tried to use na.omit and na.rm=T.\n>\n> Alternatively i am looking for a way through which i could search through\n> my stockData environment for vectors containing NA values and remove these\n> vectors entirely before running it through the following code.\n>\n> Error:\n>\n> Error in runSum(x, n) : NA/NaN/Inf in foreign function call (arg 1)\n> 7 runSum(x, n)\n> 6 runMean(x, n)\n> 5 SMA(structure(c(NA, NA, NA, NA, NA, NA, NA, 29.75, 34.6666666666667,\n> 22.75, 22.75, 26.25, 52.5, 45.5, 52.5, 45.5, 52.5, 52.5, 52.5,\n> 59.5, 59.5, 59.5, 35, 35, 35, 35, 59, 59, 59, 59, 59, 66, 59,\n> 66, 117, 117, 117, 117, 131, 117, 131, 131, 72.5, 43.25, 39.75,  ...\n> 4 do.call(maType, c(list(fastK), list(n = nFastD, ...)))\n> 3 stoch(try.xts(x[, c(2, 3, 6)], error = as.matrix), nFastK = 8,\n>     na.action = na.exclude)\n> 2 FUN(X[[9L]], ...)\n> 1 lapply(stockData, MOM)\n>\n>\n>\n> Code:\n>\n> stockData <- new.env()\n> getSymbols(ticker_names , env = stockData, src=\"yahoo\")\n>\n> \"MOM\" <- function(x){\n>\n> # Price Adj.\n> price <- x[,c(6)]\n>\n> # DIp      DIn       DX      ADX\n> adx <- ADX(try.xts(x[,c(2,3,6)], error=as.matrix), n =14)\n>     DIp <- adx$DIp\n>     DIn <- adx$DIn\n>     Adx <- adx$ADX\n> # dn     mavg       up      pctB\n> bbands <- BBands(try.xts(x[,c(2,3,6)], error=as.matrix), n =14, sd=1.8)\n>     down <- bbands$dn\n>     up <- bbands$up\n>\n> sma <- SMA(try.xts(x[,c(6)], error=as.matrix), n = 20)\n>\n> # rsi\n> rsi <- RSI(try.xts(x[,c(6)], error=as.matrix), n = 14)\n>\n> # fastK     fastD     slowD\n> stochastics <- stoch(try.xts(x[,c(2,3,6)], error=as.matrix), nFastK = 8)\n>     fastK <- stochastics$fastK\n>\n> # results\n> result <- cbind( price, DIp, DIn, Adx, down, up, sma, rsi, fastK )\n> lastresult <- do.call(\"rbind\", list(last(result)))\n> write.table(lastresult, file = \"MOM.csv\", append = T, col.names = F, sep=\n> \",\")\n> print(last(result))\n> }\n>\n> # Loop function on data #\n> lapply (stockData, MOM)\n>\n> I spend the last few hours searching for a solution but with little\n> success. Thank you in advance if you can help.\n>\n> Alex\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Read my quantstrat posts.\nOn Mar 3, 2015 1:56 PM, \"Alex Badoi\" <alex.badoi1 at gmail.com> wrote:\n\n> Hi everyone,\n>\n> I am working on a trading system based on Jeff Cooper's 5 day Momentum.\n>\n>\n> http:",
+      "thread_id": "thread-7a444af7f839",
+      "thread_depth": 1,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-88a02e0721a5",
+      "message_id": "<54F60734.3030805@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2015-03-03T13:10:44-06:00",
+      "subject": "[R-SIG-Finance] [Q] How to omit NA values in TTR package + Jeff Cooper's 5 day MOM",
+      "subject_clean": "[Q] How to omit NA values in TTR package + Jeff Cooper's 5 day MOM",
+      "in_reply_to": "<CAM8W6CZJwFh49BtXOuUgS6K_fCT=TbNS0p-zTgPOanVznixo+Q@mail.gmail.com>",
+      "references": [
+        "<CAM8W6CZJwFh49BtXOuUgS6K_fCT=TbNS0p-zTgPOanVznixo+Q@mail.gmail.com>"
+      ],
+      "body_plain": "On 03/03/2015 12:55 PM, Alex Badoi wrote:\n> 1. NA Values are making my code useless as it stops half way through. I\n> need to run this on a few hundred stocks. It works perfectly with no NA\n> values. I tried to use na.omit and na.rm=T.\n\nuse try() in your MOM function, and return either an answer or an empty \nresult.\n\n> Alternatively i am looking for a way through which i could search through\n> my stockData environment for vectors containing NA values and remove these\n> vectors entirely before running it through the following code.\n\nThese aren't vectors, they're xts objects.\n\nfor a given xts object x\n\nany(is.na(x))\n\nwill return TRUE or FALSE\n\nSo you could loop through the list something like this:\n\nfor (symbol in ls(pos=stockData)){\n   if(any(is.na(stockData[[symbol]])) rm(symbol,pos=stockData)\n}\n\nbut it seems that try() and making your MOM function more robust is \nlikely to be a better answer.\n\nRegards,\n\nBrian\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
+      "body_snippet": "On 03/03/2015 12:55 PM, Alex Badoi wrote:\n> 1. NA Values are making my code useless as it stops half way through. I\n> need to run this on a few hundred stocks. It works perfectly with no NA\n> values. ",
+      "thread_id": "thread-7a444af7f839",
+      "thread_depth": 1,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-785efecdbe00",
+      "message_id": "<CAPPM_gTVTy2DWxf9A7RD09c3kgdNS1pqH17A76CFfXNSY9ZpfQ@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-03-03T13:11:41-06:00",
+      "subject": "[R-SIG-Finance] [Q] How to omit NA values in TTR package + Jeff Cooper's 5 day MOM",
+      "subject_clean": "[Q] How to omit NA values in TTR package + Jeff Cooper's 5 day MOM",
+      "in_reply_to": "<CAM8W6CZJwFh49BtXOuUgS6K_fCT=TbNS0p-zTgPOanVznixo+Q@mail.gmail.com>",
+      "references": [
+        "<CAM8W6CZJwFh49BtXOuUgS6K_fCT=TbNS0p-zTgPOanVznixo+Q@mail.gmail.com>"
+      ],
+      "body_plain": "On Tue, Mar 3, 2015 at 12:55 PM, Alex Badoi <alex.badoi1 at gmail.com> wrote:\n> Hi everyone,\n>\n> I am working on a trading system based on Jeff Cooper's 5 day Momentum.\n>\n> http://www.maxdown.org/e-books-list/the-5-day-momentum-method-by-jeff-cooper_4fa8l.html\n>\n> I am new to R and still familiarising myself with a lot of the functions\n> but i am slowly piecing it together. The code bellow contains all the\n> calculations necessary for the above strategy.\n>\n> I have the following problems:\n>\n> 1. NA Values are making my code useless as it stops half way through. I\n> need to run this on a few hundred stocks. It works perfectly with no NA\n> values. I tried to use na.omit and na.rm=T.\n>\n> Alternatively i am looking for a way through which i could search through\n> my stockData environment for vectors containing NA values and remove these\n> vectors entirely before running it through the following code.\n>\n> Error:\n>\n> Error in runSum(x, n) : NA/NaN/Inf in foreign function call (arg 1)\n> 7 runSum(x, n)\n> 6 runMean(x, n)\n> 5 SMA(structure(c(NA, NA, NA, NA, NA, NA, NA, 29.75, 34.6666666666667,\n> 22.75, 22.75, 26.25, 52.5, 45.5, 52.5, 45.5, 52.5, 52.5, 52.5,\n> 59.5, 59.5, 59.5, 35, 35, 35, 35, 59, 59, 59, 59, 59, 66, 59,\n> 66, 117, 117, 117, 117, 131, 117, 131, 131, 72.5, 43.25, 39.75,  ...\n> 4 do.call(maType, c(list(fastK), list(n = nFastD, ...)))\n> 3 stoch(try.xts(x[, c(2, 3, 6)], error = as.matrix), nFastK = 8,\n>     na.action = na.exclude)\n> 2 FUN(X[[9L]], ...)\n> 1 lapply(stockData, MOM)\n>\nYou say NA values are causing the problems, but the error says it's an\nNA, NaN, or Inf.  na.omit will not remove Inf, so that's likely the\nproblem.  Use !is.finite to find non-finite values in your data.\n\n>\n>\n> Code:\n>\n> stockData <- new.env()\n> getSymbols(ticker_names , env = stockData, src=\"yahoo\")\n>\n> \"MOM\" <- function(x){\n>\n> # Price Adj.\n> price <- x[,c(6)]\n>\n> # DIp      DIn       DX      ADX\n> adx <- ADX(try.xts(x[,c(2,3,6)], error=as.matrix), n =14)\n>     DIp <- adx$DIp\n>     DIn <- adx$DIn\n>     Adx <- adx$ADX\n> # dn     mavg       up      pctB\n> bbands <- BBands(try.xts(x[,c(2,3,6)], error=as.matrix), n =14, sd=1.8)\n>     down <- bbands$dn\n>     up <- bbands$up\n>\n> sma <- SMA(try.xts(x[,c(6)], error=as.matrix), n = 20)\n>\n> # rsi\n> rsi <- RSI(try.xts(x[,c(6)], error=as.matrix), n = 14)\n>\n> # fastK     fastD     slowD\n> stochastics <- stoch(try.xts(x[,c(2,3,6)], error=as.matrix), nFastK = 8)\n>     fastK <- stochastics$fastK\n>\n> # results\n> result <- cbind( price, DIp, DIn, Adx, down, up, sma, rsi, fastK )\n> lastresult <- do.call(\"rbind\", list(last(result)))\n> write.table(lastresult, file = \"MOM.csv\", append = T, col.names = F, sep=\n> \",\")\n> print(last(result))\n> }\n>\n> # Loop function on data #\n> lapply (stockData, MOM)\n>\nThere is no reason for you to call try.xts.  As ?try.xts says, it (and\nreclass) are meant for developers... and TTR functions already call\ntry.xts internally, so you don't need to.\n\nIt's also really bad practice to subset columns by number.  Use column\nnames, or the convenience functions in quantmod (e.g. Cl(), Op(),\netc.)\n\n> I spend the last few hours searching for a solution but with little\n> success. Thank you in advance if you can help.\n>\n> Alex\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Tue, Mar 3, 2015 at 12:55 PM, Alex Badoi <alex.badoi1 at gmail.com> wrote:\n> Hi everyone,\n>\n> I am working on a trading system based on Jeff Cooper's 5 day Momentum.\n>\n> http://www.maxdown.org/e-bo",
+      "thread_id": "thread-7a444af7f839",
+      "thread_depth": 1,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-eeb4a49daf79",
+      "message_id": "<CALGfFMZZ5ivyMSjXO1tVDe+0h8Zon5-jNQ2Ct3M5DBp4gOWGjw@mail.gmail.com>",
+      "from_name": "Gareth McEwan",
+      "from_email_hash": "cfa0172017ac0e8052b596af0b2b8efec1c345e8c6449002f5db383bf074048e",
+      "date": "2015-03-04T16:58:43+02:00",
+      "subject": "[R-SIG-Finance] Help specifying \"ugarchsim\" function",
+      "subject_clean": "Help specifying \"ugarchsim\" function",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi there\n\nI was wondering if someone can help me correctly specify the \"ugarchsim( )\"\nfunction?\n\nI used an external regressor in the variance equation, and 2 external\nregressors in the mean equation, as follows:\n\ndata <- diff(log(price series))\n\nspec <- ugarchspec(variance.model = list(model = \"gjrGARCH\", garchOrder =\nc(1,1),\n          submodel = NULL, *external.regressors = matrix(c5, ncol = 1)*,\nvariance.targeting = T),\n          mean.model = list(armaOrder = c(0,0), include.mean = T,\n          *external.regressors = matrix(c(c1, c2), ncol = 2)*,\n          arfima = F, archpow = 1, archm = F), distribution.model = \"sstd\")\n\n*garchfit.GMC1* <- ugarchfit(spec = spec, data = data, solver = \"hybrid\")\n\nI then work through SPD fitting to get the associated uniform variates.\nThey go through a copula fitting procedure, with\nother variables, from which I later generate random variates (using\n\"rMvdc\"). I then transform, say, column 4 of the\nrandom variates matrix back to uniform variates to standardized residuals,\ncontained in a \"qspd\" object, *nf.SPD.sim.4*\n\nI wish to correctly specify the \"ugarchsim\" function. I put the\npre-recorded innovations in the \"custom.dist\" slot, but I\nam not sure how (or if) I should use \"pre-sampled external regressor data\nfor use with models which were defined with\nsuch (mexsimdata for conditional mean and vexsimdata for conditional\nvariance)\".\n\nnf.sim.GMC1.SPD.1 <- ugarchsim(*garchfit.GMC1*, n.sim = 100000, m.sim = 1,\n          startMethod = \"sample\", n.start = 0,\n          custom.dist = list(name = \"sample\", distfit = matrix(\n*nf.SPD.sim.4*, ncol = 1), type = \"z\"))\n\nCan anybody help me?\n\nAlso, please note: length(regressor data) = length(c5) = length(c1) =\nlength(c2) used in \"ugarchspec\" = 241, whereas the\nnumber of observations I wish to simulate = 100,000.\n\nMany thanks\nGareth\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi there\n\nI was wondering if someone can help me correctly specify the \"ugarchsim( )\"\nfunction?\n\nI used an external regressor in the variance equation, and 2 external\nregressors in the mean equation, ",
+      "thread_id": "thread-eeb4a49daf79",
+      "thread_depth": 0,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-0540bea83fa9",
+      "message_id": "<CA+xwsbswbo3952v0pa2uSZX2rL=J0MSPwxqTPi=cENaZnx=qoQ@mail.gmail.com>",
+      "from_name": "Fernando Martins Diniz",
+      "from_email_hash": "9960bf624175ceeb02db646509d39b09807a17f805bff199d6bdf754208682fe",
+      "date": "2015-03-06T11:11:54-03:00",
+      "subject": "[R-SIG-Finance] rmgarch - dccforecast function",
+      "subject_clean": "rmgarch - dccforecast function",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear R users,\n\nI am using the dccforecast function in the package rmgarch.\nIn the future I will the result to run a portfolio backtest.\nFor this reason I am doing the calculations in a loop.\n\n\nrollingDCCmatrix <-\n    function(data, eligibleAssets, from, to)\n    {\n\n        #Data is timeSeries of returns\n        #eligibleAssets a list which contains for each loop i the assets\nnames\n        #Time window : from and to\n\n        DCCmatrix <- list()\n        garch11.spec = ugarchspec(mean.model = list(armaOrder = c(0,0)),\n                                  variance.model = list(garchOrder = c(1,1),\n                                                        model = \"sGARCH\"),\n                                  distribution.model = \"norm\")\n\n\n        for (i in 1:length(from)) {\n\n            #Separating the series\n            assetsNames <- eligibleAssets[[i]]\n            series <- window(data[, assetsNames], start = from[i], end =\nto[i])\n\n            #How many assets\n            nAssets <- length(assetsNames)\n\n            # The DCC specification - GARCH(1,1) for conditional\ncorrelations\n            dcc.garch11.spec = dccspec(uspec = multispec( replicate(nAssets,\n\ngarch11.spec) ),\n                                       dccOrder = c(1,1),\n                                       distribution = \"mvnorm\")\n            # Estimating\n            dcc.fit = dccfit(dcc.garch11.spec, series,\n                             fit.control = list(eval.se = FALSE))\n            dcc.fcst = dccforecast(dcc.fit, n.ahead=1)\n            loopDCC <- rcov(dcc.fcst)\n            DCCmatrix[[i]] <- loopDCC\n\n            print(i)\n        }\n\n        # Compose Result:\n        ans <- DCCmatrix\n\n        # Return Value:\n        invisible(ans)\n    }\n\nI run this function. After hundreds (690) loops I get the following  error\n(and its traceback):\n\nError in last(rcor(fit, type = \"Q\"), mo) :\n  error in the evaluation of the argument 'x' in the method of selection\nfor the function 'last': 'Error in 1:m : argument of length 0\n'\n6 last(rcor(fit, type = \"Q\"), mo)\n5 .dccforecastm(fit, n.ahead = n.ahead, n.roll = n.roll, external.forecasts\n= exf,\n    cluster = cluster, realizedVol = fit at mfit$realizedVol, ...)\n4 .dccforecast(fit, n.ahead = n.ahead, n.roll = n.roll, external.forecasts\n= external.forecasts,\n    cluster = cluster, ...)\n3 dccforecast(dcc.fit, n.ahead = 1)\n2 dccforecast(dcc.fit, n.ahead = 1)\n1 rollingDCCmatrix(Brasil_returns, eligibleAssets, Brasil_from,\n    Brasil_to)\n\nI believe it is a strange error due to the fact I made daily windows and\nthe loop just behind worked fine. The eligible assets are the same and the\ntime window is the same size and have no NAs values. I looked in the source\ncode but sadly I am not very good programmer to see for myself where I got\nit wrong.\n\nI run the R-3.1.2 and the last update of rmgach.\nSorry for not providing a reproducible code. If it is necessary I may\nprovide the data used (need one authorization first).\n\nCan anyone help me?\nThanks in advance.\n\nFernando Martins Diniz  - martinsdiniz at gmail.com\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear R users,\n\nI am using the dccforecast function in the package rmgarch.\nIn the future I will the result to run a portfolio backtest.\nFor this reason I am doing the calculations in a loop.\n\n\nrolling",
+      "thread_id": "thread-0540bea83fa9",
+      "thread_depth": 0,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-f47be24edf8e",
+      "message_id": "<54F9C981.3040706@4dscape.com>",
+      "from_name": "alexios",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2015-03-06T15:36:33Z",
+      "subject": "[R-SIG-Finance] rmgarch - dccforecast function",
+      "subject_clean": "rmgarch - dccforecast function",
+      "in_reply_to": "<CA+xwsbswbo3952v0pa2uSZX2rL=J0MSPwxqTPi=cENaZnx=qoQ@mail.gmail.com>",
+      "references": [
+        "<CA+xwsbswbo3952v0pa2uSZX2rL=J0MSPwxqTPi=cENaZnx=qoQ@mail.gmail.com>"
+      ],
+      "body_plain": "There is really not enough information to say what has happened.\nIt appears likely that on the window (690) you mention the model did not \nconverge. You should take a look at the resulting fit object,\nand possibly check for non-convergence (in which case, set solver\nto \"gosolnp\")...assuming your returns data is of reasonable size, clean \nof NA's and does not have \"huge\" spikes/outliers.\n\nAlexios\n\nOn 06/03/2015 14:11, Fernando Martins Diniz wrote:\n> Dear R users,\n>\n> I am using the dccforecast function in the package rmgarch.\n> In the future I will the result to run a portfolio backtest.\n> For this reason I am doing the calculations in a loop.\n>\n>\n> rollingDCCmatrix <-\n>      function(data, eligibleAssets, from, to)\n>      {\n>\n>          #Data is timeSeries of returns\n>          #eligibleAssets a list which contains for each loop i the assets\n> names\n>          #Time window : from and to\n>\n>          DCCmatrix <- list()\n>          garch11.spec = ugarchspec(mean.model = list(armaOrder = c(0,0)),\n>                                    variance.model = list(garchOrder = c(1,1),\n>                                                          model = \"sGARCH\"),\n>                                    distribution.model = \"norm\")\n>\n>\n>          for (i in 1:length(from)) {\n>\n>              #Separating the series\n>              assetsNames <- eligibleAssets[[i]]\n>              series <- window(data[, assetsNames], start = from[i], end =\n> to[i])\n>\n>              #How many assets\n>              nAssets <- length(assetsNames)\n>\n>              # The DCC specification - GARCH(1,1) for conditional\n> correlations\n>              dcc.garch11.spec = dccspec(uspec = multispec( replicate(nAssets,\n>\n> garch11.spec) ),\n>                                         dccOrder = c(1,1),\n>                                         distribution = \"mvnorm\")\n>              # Estimating\n>              dcc.fit = dccfit(dcc.garch11.spec, series,\n>                               fit.control = list(eval.se = FALSE))\n>              dcc.fcst = dccforecast(dcc.fit, n.ahead=1)\n>              loopDCC <- rcov(dcc.fcst)\n>              DCCmatrix[[i]] <- loopDCC\n>\n>              print(i)\n>          }\n>\n>          # Compose Result:\n>          ans <- DCCmatrix\n>\n>          # Return Value:\n>          invisible(ans)\n>      }\n>\n> I run this function. After hundreds (690) loops I get the following  error\n> (and its traceback):\n>\n> Error in last(rcor(fit, type = \"Q\"), mo) :\n>    error in the evaluation of the argument 'x' in the method of selection\n> for the function 'last': 'Error in 1:m : argument of length 0\n> '\n> 6 last(rcor(fit, type = \"Q\"), mo)\n> 5 .dccforecastm(fit, n.ahead = n.ahead, n.roll = n.roll, external.forecasts\n> = exf,\n>      cluster = cluster, realizedVol = fit at mfit$realizedVol, ...)\n> 4 .dccforecast(fit, n.ahead = n.ahead, n.roll = n.roll, external.forecasts\n> = external.forecasts,\n>      cluster = cluster, ...)\n> 3 dccforecast(dcc.fit, n.ahead = 1)\n> 2 dccforecast(dcc.fit, n.ahead = 1)\n> 1 rollingDCCmatrix(Brasil_returns, eligibleAssets, Brasil_from,\n>      Brasil_to)\n>\n> I believe it is a strange error due to the fact I made daily windows and\n> the loop just behind worked fine. The eligible assets are the same and the\n> time window is the same size and have no NAs values. I looked in the source\n> code but sadly I am not very good programmer to see for myself where I got\n> it wrong.\n>\n> I run the R-3.1.2 and the last update of rmgach.\n> Sorry for not providing a reproducible code. If it is necessary I may\n> provide the data used (need one authorization first).\n>\n> Can anyone help me?\n> Thanks in advance.\n>\n> Fernando Martins Diniz  - martinsdiniz at gmail.com\n>\n> \t[[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>\n>",
+      "body_snippet": "There is really not enough information to say what has happened.\nIt appears likely that on the window (690) you mention the model did not \nconverge. You should take a look at the resulting fit object,",
+      "thread_id": "thread-0540bea83fa9",
+      "thread_depth": 1,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-59a200a2802a",
+      "message_id": "<B5458590-D580-4A23-9615-BC1880F690EC@icloud.com>",
+      "from_name": "david hilton shanabrook",
+      "from_email_hash": "0e9de11cddb1d3920ceecdcbbdecb51e36b8ac6f1666b76f480bd8c368332e7a",
+      "date": "2015-03-07T09:56:44-05:00",
+      "subject": "[R-SIG-Finance] Calculating ROI correctly and using chart.CumReturns()",
+      "subject_clean": "Calculating ROI correctly and using chart.CumReturns()",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I am trying to calculate return on investment for stocks. I think this is right, but don?t know how to test for accuracy. The code calculates several things: return on investment: (close to close), buy on close sell next day on open, short sell, short sell day trading. Maybe this will make it clearer:\n\n          library(quantmod)\n         library(PerformanceAnalytics)\n        getSymbols('F', src='yahoo',from='2015-01-01')\n        data <- get('F')\n        adjD <- adjustOHLC(data, symbol.name='F')\n        \n        #calculate normal investment return\n        clcl <- Delt(Lag(Cl(adjD)), Cl(adjD), type='log')\n        chart.CumReturns(clcl)\n        \n        #then to calculate returns from previous day close to next day open\n        clop <-  Delt(Lag(Cl(adjD)), Op(adjD), type='log')\n        chart.CumReturns(clop)\n        \n        #then to calculate stock short\n        clopSh <-  Delt(Cl(adjD), Lag(Cl(adjD)), type='log')\n        chart.CumReturns(clopSh)\n        \n        #then to calculate day trade short, stock open to close\n        opclSh <-  Delt(Cl(adjD), Op(adjD), type='log')\n        chart.CumReturns(opclSh)\n\nSuggestions? Especially concerned how I am calculating short sell.\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I am trying to calculate return on investment for stocks. I think this is right, but don?t know how to test for accuracy. The code calculates several things: return on investment: (close to close), bu",
+      "thread_id": "thread-59a200a2802a",
+      "thread_depth": 0,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-a6ecb6c141be",
+      "message_id": "<54FD9CC4.4080609@avignon.inra.fr>",
+      "from_name": "Olivier MARTIN",
+      "from_email_hash": "617f6d2e38c23ceb8c74bd6a5077dab4b29c7025a75f33fc4ee25b338d11e1ca",
+      "date": "2015-03-09T14:14:44+01:00",
+      "subject": "[R-SIG-Finance] quantmod EMA and SMA",
+      "subject_clean": "quantmod EMA and SMA",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi all,\n\nI compare the serie from the function EMA() and the one from addEMA()\n\n\u0001\u0001\u0001getSymbols(\"^FCHI\")\nM7=EMA(Cl(FCHI),7)\ncandleChart(FCHI,theme=\"white\",subset=\"2015\",TA=NULL)\naddEMA(7)\naddTA(M7,on=-1)\n\nI don't understant why I don't obtain the same serie with the two \nfunctions...\nReagrds,\nOlivier.",
+      "body_snippet": "Hi all,\n\nI compare the serie from the function EMA() and the one from addEMA()\n\n\u0001\u0001\u0001getSymbols(\"^FCHI\")\nM7=EMA(Cl(FCHI),7)\ncandleChart(FCHI,theme=\"white\",subset=\"2015\",TA=NULL)\naddEMA(7)\naddTA(M7,on=-1",
+      "thread_id": "thread-a6ecb6c141be",
+      "thread_depth": 0,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-5498f44434b6",
+      "message_id": "<CAPPM_gS5WVFY-04gCs4DEJ44gbGCzvPpLC0f6VEMXG9+wztgpA@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-03-09T09:04:53-05:00",
+      "subject": "[R-SIG-Finance] quantmod EMA and SMA",
+      "subject_clean": "quantmod EMA and SMA",
+      "in_reply_to": "<54FD9CC4.4080609@avignon.inra.fr>",
+      "references": [
+        "<54FD9CC4.4080609@avignon.inra.fr>"
+      ],
+      "body_plain": "On Mon, Mar 9, 2015 at 8:14 AM, Olivier MARTIN\n<Olivier.Martin at avignon.inra.fr> wrote:\n> Hi all,\n>\n> I compare the serie from the function EMA() and the one from addEMA()\n>\n>   getSymbols(\"^FCHI\")\n> M7=EMA(Cl(FCHI),7)\n> candleChart(FCHI,theme=\"white\",subset=\"2015\",TA=NULL)\n> addEMA(7)\n> addTA(M7,on=-1)\n>\n> I don't understant why I don't obtain the same serie with the two\n> functions...\n\nM7 is calculated using the close price.  You didn't specify which\ncolumn to use in the addEMA call, so it used the first column--the\nopen.\n\n> Reagrds,\n> Olivier.\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Mon, Mar 9, 2015 at 8:14 AM, Olivier MARTIN\n<Olivier.Martin at avignon.inra.fr> wrote:\n> Hi all,\n>\n> I compare the serie from the function EMA() and the one from addEMA()\n>\n>   getSymbols(\"^FCHI\")\n",
+      "thread_id": "thread-a6ecb6c141be",
+      "thread_depth": 1,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-384eaf42b1be",
+      "message_id": "<CAM0JZ3=O0YSy8U3GqBiq27=wXXkJLPHY4X7Q9B2QvsX-8irNcA@mail.gmail.com>",
+      "from_name": "Thomas Fuller",
+      "from_email_hash": "3b021161fd989322bc154aa1ec05003531fe2816e6e657e0af3d1cbc6bbe2eed",
+      "date": "2015-03-11T09:01:32-04:00",
+      "subject": "[R-SIG-Finance] CUSIP Data question and a sneak-peak at two packages",
+      "subject_clean": "CUSIP Data question and a sneak-peak at two packages",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi Folks,\n\nI have been exploring the development of another package -- this one would\nallow R users to acquire CUSIP data directly from CUSIP Global Services\n(CGS) however, due to a number of business concerns, I'd like to see if\npeople actually want to use this package before progressing further with\nthis project.\n\nI have a simple three-question survey below which will give you the\nopportunity to register your interest:\n\nhttps://www.surveymonkey.com/r/BVDJQPN\n\nIf anyone wants to use this package I encourage you to get in touch with me\nand let me know.\n\nQuestions and comments are welcomed,\n\nTom\n\n-----\n\nPS. Below are links to two packages currently under development and both\nare available under the LGPL license. I do welcome feedback if you find\neither of these to be useful or interesting.\n\n*R Package for the Infinispan API* -- this package is fairly well-developed:\n\nhttps://coherentlogic.com/middleware-development/r-infinispan-api/\n\n*R Package for the Groovy Scripting Language* -- this package works but I\nneed to simplify it in a few places:\n\nhttps://coherentlogic.com/middleware-development/r-package-for-the-groovy-language/\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Folks,\n\nI have been exploring the development of another package -- this one would\nallow R users to acquire CUSIP data directly from CUSIP Global Services\n(CGS) however, due to a number of business",
+      "thread_id": "thread-384eaf42b1be",
+      "thread_depth": 0,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-e1f0859f080b",
+      "message_id": "<A29A84E40742CB43BBAE51703694429A702D3039E3@WNSP3NSLXMBV1.nsli.net>",
+      "from_name": "Chien, Josh-CH",
+      "from_email_hash": "c6305c92615bca689361e4c3e18c4373bd6affd91f87ef3ec79a146f0a1e5c12",
+      "date": "2015-03-12T15:08:43+08:00",
+      "subject": "[R-SIG-Finance] Kalman Filter Method in R library to Estimate and Forecast the Diebold-Li Yield Curve",
+      "subject_clean": "Kalman Filter Method in R library to Estimate and Forecast the Diebold-Li Yield Curve",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear R users,\nI'm working on this paper and need to implement model.\nChoose R as my development tool.\nAnyone know where I can find this library ?\nThanks a lot.\n\n\nPs. Diebold, F.X., Rudebusch, G.D. and Aruoba, B. (2006), \"The Macroeconomy and the Yield Curve: A Dynamic Latent Factor Approach\", Journal of Econometrics, 131, 309-338.\n\n______________________________________\nJOSH CHIEN\nRisk Analytics & Projects\nEnterprise Risk Management (ERM) Dept.\nNan Shan Life Insurance Co.\nEmail: Josh-CH.Chien at NANSHAN.com.tw<mailto:Matt-CM.Tsao at NANSHAN.com.tw>\nDID: +886-2-8758-9522\n\n\n________________________________\n\"NOTICE: The e-mail, and any attachments thereto, may co...{{dropped:12}}",
+      "body_snippet": "Dear R users,\nI'm working on this paper and need to implement model.\nChoose R as my development tool.\nAnyone know where I can find this library ?\nThanks a lot.\n\n\nPs. Diebold, F.X., Rudebusch, G.D. and",
+      "thread_id": "thread-e1f0859f080b",
+      "thread_depth": 0,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-10bb4b63d015",
+      "message_id": "<B5BC21349ABA43469A96094854B1F776D934A145@GLSPW3217.corp.statestr.com>",
+      "from_name": "Shimura, Tetsuro",
+      "from_email_hash": "bfb01525d40a4f513f75a2a1e6f1f645460913b3a75b6180912c7027030c0d9e",
+      "date": "2015-03-12T07:36:47Z",
+      "subject": "[R-SIG-Finance] Kalman Filter Method in R library to Estimate and Forecast the Diebold-Li Yield Curve",
+      "subject_clean": "Kalman Filter Method in R library to Estimate and Forecast the Diebold-Li Yield Curve",
+      "in_reply_to": "<A29A84E40742CB43BBAE51703694429A702D3039E3@WNSP3NSLXMBV1.nsli.net>",
+      "references": [
+        "<A29A84E40742CB43BBAE51703694429A702D3039E3@WNSP3NSLXMBV1.nsli.net>"
+      ],
+      "body_plain": "Dear Josh-Ch,\n\nI haven't applied for yield curve estimation, but you can find Kalman Filter Method in dlm package produced by Giovanni Petris.\nHe wrote a book titled \"Dynamic Liner Models with R\" with others and showed the use of the package for term structure estimation. In this section, he referred the paper you listed below.\n\n\nThanks,\n\nTetsuro Shimura\n\n\n\n-----Original Message-----\nFrom: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On Behalf Of Chien, Josh-CH\nSent: Thursday, March 12, 2015 4:09 PM\nTo: r-sig-finance at r-project.org\nSubject: [R-SIG-Finance] Kalman Filter Method in R library to Estimate and Forecast the Diebold-Li Yield Curve\n\nDear R users,\nI'm working on this paper and need to implement model.\nChoose R as my development tool.\nAnyone know where I can find this library ?\nThanks a lot.\n\n\nPs. Diebold, F.X., Rudebusch, G.D. and Aruoba, B. (2006), \"The Macroeconomy and the Yield Curve: A Dynamic Latent Factor Approach\", Journal of Econometrics, 131, 309-338.\n\n______________________________________\nJOSH CHIEN\nRisk Analytics & Projects\nEnterprise Risk Management (ERM) Dept.\nNan Shan Life Insurance Co.\nEmail: Josh-CH.Chien at NANSHAN.com.tw<mailto:Matt-CM.Tsao at NANSHAN.com.tw>\nDID: +886-2-8758-9522\n\n\n________________________________\n\"NOTICE: The e-mail, and any attachments thereto, may co...{{dropped:9}}",
+      "body_snippet": "Dear Josh-Ch,\n\nI haven't applied for yield curve estimation, but you can find Kalman Filter Method in dlm package produced by Giovanni Petris.\nHe wrote a book titled \"Dynamic Liner Models with R\" with",
+      "thread_id": "thread-e1f0859f080b",
+      "thread_depth": 1,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-c9d01cf9cb8f",
+      "message_id": "<1102533779.402998.1426156174369.JavaMail.yahoo@mail.yahoo.com>",
+      "from_name": "Pankaj K Agarwal",
+      "from_email_hash": "0cbb0f9165a5f6176569cf3596bb8d4666fe7d2828a40590fd539fc0758d58e0",
+      "date": "2015-03-12T10:29:34Z",
+      "subject": "[R-SIG-Finance] [r-sig-finance] analyzing monthly portfolio holdings of 250 funds across 10 years.",
+      "subject_clean": "analyzing monthly portfolio holdings of 250 funds across 10 years.",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear all,I am working on monthly portfolio holdings data of about 250 Indian equity mutual funds. The analysis includes computing active share for each of these funds. Has someone handled this kind of analysis? Kindly suggest package and tips.?Thanks and Regards,Pankaj K Agarwal\n+91-94153 97472http://in.linkedin.com/in/pankajkagarwal/\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,I am working on monthly portfolio holdings data of about 250 Indian equity mutual funds. The analysis includes computing active share for each of these funds. Has someone handled this kind of",
+      "thread_id": "thread-c9d01cf9cb8f",
+      "thread_depth": 0,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-da856dca4647",
+      "message_id": "<CAH+4RFt+E99dgdhaEp8gYpg8pa45oGCc48N3A43qZ+=CXq6=RA@mail.gmail.com>",
+      "from_name": "Nick White",
+      "from_email_hash": "755b954b2e1da59d788f98fd9781ed277833818df2c256f74e3b2a68f37cdcb8",
+      "date": "2015-03-12T21:42:22+11:00",
+      "subject": "[R-SIG-Finance] [r-sig-finance] analyzing monthly portfolio holdings of 250 funds across 10 years.",
+      "subject_clean": "analyzing monthly portfolio holdings of 250 funds across 10 years.",
+      "in_reply_to": "<1102533779.402998.1426156174369.JavaMail.yahoo@mail.yahoo.com>",
+      "references": [
+        "<1102533779.402998.1426156174369.JavaMail.yahoo@mail.yahoo.com>"
+      ],
+      "body_plain": "Perhaps you might provide us with some more details of what it is you're\nlooking to accomplish exactly? Datasets you're working with...output format\nyou're working towards etc...\n\nOn Thu, Mar 12, 2015 at 9:29 PM, Pankaj K Agarwal via R-SIG-Finance <\nr-sig-finance at r-project.org> wrote:\n\n> Dear all,I am working on monthly portfolio holdings data of about 250\n> Indian equity mutual funds. The analysis includes computing active share\n> for each of these funds. Has someone handled this kind of analysis? Kindly\n> suggest package and tips. Thanks and Regards,Pankaj K Agarwal\n> +91-94153 97472http://in.linkedin.com/in/pankajkagarwal/\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Perhaps you might provide us with some more details of what it is you're\nlooking to accomplish exactly? Datasets you're working with...output format\nyou're working towards etc...\n\nOn Thu, Mar 12, 2015",
+      "thread_id": "thread-c9d01cf9cb8f",
+      "thread_depth": 1,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-caadf0fc037b",
+      "message_id": "<CAPPM_gQO0ty=RRRD6JH6f_r3vaa2DGuvbp7yYtDUrjNVx=9tbg@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-03-14T11:22:12-05:00",
+      "subject": "[R-SIG-Finance] quantmod EMA and SMA",
+      "subject_clean": "quantmod EMA and SMA",
+      "in_reply_to": "<CAPPM_gS5WVFY-04gCs4DEJ44gbGCzvPpLC0f6VEMXG9+wztgpA@mail.gmail.com>",
+      "references": [
+        "<54FD9CC4.4080609@avignon.inra.fr>",
+        "<CAPPM_gS5WVFY-04gCs4DEJ44gbGCzvPpLC0f6VEMXG9+wztgpA@mail.gmail.com>"
+      ],
+      "body_plain": "On Mon, Mar 9, 2015 at 9:04 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> On Mon, Mar 9, 2015 at 8:14 AM, Olivier MARTIN\n> <Olivier.Martin at avignon.inra.fr> wrote:\n>> Hi all,\n>>\n>> I compare the serie from the function EMA() and the one from addEMA()\n>>\n>>   getSymbols(\"^FCHI\")\n>> M7=EMA(Cl(FCHI),7)\n>> candleChart(FCHI,theme=\"white\",subset=\"2015\",TA=NULL)\n>> addEMA(7)\n>> addTA(M7,on=-1)\n>>\n>> I don't understant why I don't obtain the same serie with the two\n>> functions...\n>\n> M7 is calculated using the close price.  You didn't specify which\n> column to use in the addEMA call, so it used the first column--the\n> open.\n>\nIt looks like this is a long-standing bug.  The current behavior\noriginated in 2008, so I checked with Jeff.  He confirmed that the\nintention was to choose the Close if the data were OHLC and with.col\nwas not specified.\n\nI have filed and fixed the issue.\nhttps://github.com/joshuaulrich/quantmod/issues/41\n\nThanks for the report!\n\n>> Reagrds,\n>> Olivier.\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>\n>\n>\n> --\n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Mon, Mar 9, 2015 at 9:04 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> On Mon, Mar 9, 2015 at 8:14 AM, Olivier MARTIN\n> <Olivier.Martin at avignon.inra.fr> wrote:\n>> Hi all,\n>>\n>> I compa",
+      "thread_id": "thread-a6ecb6c141be",
+      "thread_depth": 2,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-19ee4a0c64f1",
+      "message_id": "<CAKC0Bh=Dyb6_9U3DtSjDsR2FDY1Wf=yXXoRFwg8v_fj1cVj9Dg@mail.gmail.com>",
+      "from_name": "Andreas Voellenklee",
+      "from_email_hash": "c4aa9ac7845bcf79c3a76f8453c15bd98c2cfedbedf8ea77e7d12c4ce805bd21",
+      "date": "2015-03-15T15:11:22+01:00",
+      "subject": "[R-SIG-Finance] Weird behavior of getSymbols for symbol PLL and PL",
+      "subject_clean": "Weird behavior of getSymbols for symbol PLL and PL",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI am getting strange results when using getSymbols for the symbols \"PLL\"\nand \"PL\". The prices are all over the place. See the output below. Can\nanybody reproduce this?\n\nThanks,\n\nAndreas\n\n\n\nvoellenk at nucd:~$ R --vanilla\n\nR version 3.1.3 (2015-03-09) -- \"Smooth Sidewalk\"\nCopyright (C) 2015 The R Foundation for Statistical Computing\nPlatform: x86_64-pc-linux-gnu (64-bit)\n\nR is free software and comes with ABSOLUTELY NO WARRANTY.\nYou are welcome to redistribute it under certain conditions.\nType 'license()' or 'licence()' for distribution details.\n\n  Natural language support but running in an English locale\n\nR is a collaborative project with many contributors.\nType 'contributors()' for more information and\n'citation()' on how to cite R or R packages in publications.\n\nType 'demo()' for some demos, 'help()' for on-line help, or\n'help.start()' for an HTML browser interface to help.\nType 'q()' to quit R.\n\n> library(quantmod)\nLoading required package: Defaults\nLoading required package: xts\nLoading required package: zoo\n\nAttaching package: ?zoo?\n\nThe following objects are masked from ?package:base?:\n\n    as.Date, as.Date.numeric\n\nLoading required package: TTR\nVersion 0.4-0 included new data defaults. See ?getSymbols.\n> getSymbols(\"PLL\")\n    As of 0.4-0, ?getSymbols? uses env=parent.frame() and\n auto.assign=TRUE by default.\n\n This  behavior  will be  phased out in 0.5-0  when the call  will\n default to use auto.assign=FALSE. getOption(\"getSymbols.env\") and\n getOptions(\"getSymbols.auto.assign\") are now checked for alternate defaults\n\n This message is shown once per session and may be disabled by setting\n options(\"getSymbols.warning4.0\"=FALSE). See ?getSymbol for more details\n[1] \"PLL\"\n> head(PLL)\n           PLL.Open PLL.High PLL.Low PLL.Close PLL.Volume PLL.Adjusted\n2007-01-02    63.90    65.81   63.90     63.90          0        28.21\n2007-01-03    35.08    35.19   34.53     34.89     652000        15.40\n2007-01-04    34.69    34.74   34.32     34.69     504800        15.32\n2007-01-05    34.00    34.25   33.61     33.75    1135000        14.90\n2007-01-08    33.72    33.74   33.23     33.71     578800        14.88\n2007-01-09    33.90    34.27   33.67     34.21     743400        15.10\n> tail(PLL)\n           PLL.Open PLL.High PLL.Low PLL.Close PLL.Volume PLL.Adjusted\n2015-03-06  1446.86  1446.86 1446.86   1446.86          0      1446.86\n2015-03-09  1446.86  1446.86 1446.86   1446.86          0      1446.86\n2015-03-10  1446.86  1446.86 1446.86   1446.86          0      1446.86\n2015-03-11  1446.86  1446.86 1446.86   1446.86          0      1446.86\n2015-03-12  1446.86  1446.86 1446.86   1446.86          0      1446.86\n2015-03-13  1446.86  1446.86 1446.86   1446.86          0      1446.86\n> getSymbols(PL)\nError in force(Symbols) : object 'PL' not found\n> getSymbols(\"PL\")\n[1] \"PL\"\n> chartSeries(PL)\n> head(PL)\n           PL.Open PL.High PL.Low PL.Close PL.Volume PL.Adjusted\n2007-01-01    2.82    2.82   2.82     2.82         0        2.11\n2007-01-02    2.82    2.82   2.82     2.82         0        2.11\n2007-01-03   47.79   48.56  47.50    47.95    379100       35.86\n2007-01-04   47.93   48.30  47.82    48.00    356300       35.90\n2007-01-05   48.25   50.45  48.25    50.35   1092100       37.66\n2007-01-08   50.17   50.45  49.62    49.76    647400       37.22\n> tail(PL)\n           PL.Open PL.High PL.Low PL.Close PL.Volume PL.Adjusted\n2015-02-23    4.70    4.70   4.34     4.34   7398600        4.34\n2015-02-24    4.44    4.44   4.34     4.34   2495400        4.34\n2015-02-25    4.34    4.38   4.28     4.30   1065100        4.30\n2015-02-26    4.28    4.30   4.26     4.28    618500        4.28\n2015-02-27    4.28    4.32   4.26     4.28    868300        4.28\n2015-03-02    4.28    4.38   4.28     4.38    536200        4.38\n> sessionInfo()\nR version 3.1.3 (2015-03-09)\nPlatform: x86_64-pc-linux-gnu (64-bit)\nRunning under: Ubuntu 14.04.2 LTS\n\nlocale:\n [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C\n [3] LC_TIME=de_DE.UTF-8        LC_COLLATE=en_US.UTF-8\n [5] LC_MONETARY=de_DE.UTF-8    LC_MESSAGES=en_US.UTF-8\n [7] LC_PAPER=de_DE.UTF-8       LC_NAME=C\n [9] LC_ADDRESS=C               LC_TELEPHONE=C\n[11] LC_MEASUREMENT=de_DE.UTF-8 LC_IDENTIFICATION=C\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base\n\nother attached packages:\n[1] quantmod_0.4-1 TTR_0.22-0.1   xts_0.9-7      zoo_1.7-11\nDefaults_1.1-1\n\nloaded via a namespace (and not attached):\n[1] grid_3.1.3      lattice_0.20-30\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI am getting strange results when using getSymbols for the symbols \"PLL\"\nand \"PL\". The prices are all over the place. See the output below. Can\nanybody reproduce this?\n\nThanks,\n\nAndreas\n\n\n\nvoelle",
+      "thread_id": "thread-19ee4a0c64f1",
+      "thread_depth": 0,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-769abb5e4065",
+      "message_id": "<CA+xi=qY8g40dLq+yk9LSA3vn9jvPHzHsm3B_RCdA7kZHrmaCCA@mail.gmail.com>",
+      "from_name": "G See",
+      "from_email_hash": "9e2196e2f2c9a9c79bb5b29bd87645c7a75b58fc093ff9cf52d847253a97f8b1",
+      "date": "2015-03-15T09:19:35-05:00",
+      "subject": "[R-SIG-Finance] Weird behavior of getSymbols for symbol PLL and PL",
+      "subject_clean": "Weird behavior of getSymbols for symbol PLL and PL",
+      "in_reply_to": "<CAKC0Bh=Dyb6_9U3DtSjDsR2FDY1Wf=yXXoRFwg8v_fj1cVj9Dg@mail.gmail.com>",
+      "references": [
+        "<CAKC0Bh=Dyb6_9U3DtSjDsR2FDY1Wf=yXXoRFwg8v_fj1cVj9Dg@mail.gmail.com>"
+      ],
+      "body_plain": "Not reproducible for me.  I've got an older version of R and a newer\nversion of quantmod\n\n$ R --vanilla -q\n> suppressMessages(library(quantmod))\n> options(\"getSymbols.warning4.0\"=FALSE)\n> getSymbols(c(\"PLL\", \"PL\"))\n[1] \"PLL\" \"PL\"\n> head(PLL)\n           PLL.Open PLL.High PLL.Low PLL.Close PLL.Volume PLL.Adjusted\n2007-01-03    35.08    35.19   34.53     34.89     668100        30.77\n2007-01-04    34.69    34.74   34.32     34.69     521500        30.60\n2007-01-05    34.00    34.25   33.61     33.75    1171600        29.77\n2007-01-08    33.72    33.74   33.23     33.71     656700        29.73\n2007-01-09    33.90    34.27   33.67     34.21     765000        30.17\n2007-01-10    34.00    34.15   33.77     34.07     708000        30.05\n> tail(PLL)\n           PLL.Open PLL.High PLL.Low PLL.Close PLL.Volume PLL.Adjusted\n2015-03-06   101.18   101.85   99.90    100.17     510200       100.17\n2015-03-09   100.10   100.42  100.00    100.22     441700       100.22\n2015-03-10    98.79    99.67   98.25     98.25     529600        98.25\n2015-03-11    98.25    98.37   97.54     97.91     445700        97.91\n2015-03-12    98.52    99.75   98.40     99.55     438600        99.55\n2015-03-13    99.45    99.79   98.54     99.61     437300        99.61\n> head(PL)\n           PL.Open PL.High PL.Low PL.Close PL.Volume PL.Adjusted\n2007-01-03   47.79   48.56  47.50    47.95    380100       39.01\n2007-01-04   47.93   48.30  47.82    48.00    370300       39.05\n2007-01-05   48.25   50.45  48.25    50.35   1108300       40.96\n2007-01-08   50.17   50.45  49.62    49.76    656300       40.48\n2007-01-09   49.74   49.74  49.23    49.61    473200       40.36\n2007-01-10   49.48   50.06  49.43    49.67    467100       40.41\n> tail(PL)\n           PL.Open PL.High PL.Low PL.Close PL.Volume PL.Adjusted\n2015-01-23   69.94   69.96  69.94    69.95   1111500       69.95\n2015-01-26   69.95   69.95  69.94    69.95    630900       69.95\n2015-01-27   69.95   69.98  69.95    69.96    643800       69.96\n2015-01-28   69.98   69.98  69.95    69.95    975200       69.95\n2015-01-29   69.98   69.98  69.96    69.96    915500       69.96\n2015-01-30   69.99   70.01  69.95    69.95   9516700       69.95\n\n> sessionInfo()\nR version 3.1.2 (2014-10-31)\nPlatform: x86_64-apple-darwin13.4.0 (64-bit)\n\nlocale:\n[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base\n\nother attached packages:\n[1] quantmod_0.4-3 TTR_0.22-0     xts_0.9-7      zoo_1.7-11\n\nloaded via a namespace (and not attached):\n[1] grid_3.1.2      lattice_0.20-29\n\nGarrett",
+      "body_snippet": "Not reproducible for me.  I've got an older version of R and a newer\nversion of quantmod\n\n$ R --vanilla -q\n> suppressMessages(library(quantmod))\n> options(\"getSymbols.warning4.0\"=FALSE)\n> getSymbols(c",
+      "thread_id": "thread-19ee4a0c64f1",
+      "thread_depth": 1,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-6535842c0cdb",
+      "message_id": "<CAA7=MyWO=uMuYgoHGfRgRT9KLf+ydiUGJCbUhh66jqkdsG4O1w@mail.gmail.com>",
+      "from_name": "Robert A'gata",
+      "from_email_hash": "67ffc11191b5ddc8ff8e57473661a99cac154b0a14ba1f834aef3a4ed791e8b5",
+      "date": "2015-03-16T23:19:04-04:00",
+      "subject": "[R-SIG-Finance] Online Hayashi-Yoshida estimator",
+      "subject_clean": "Online Hayashi-Yoshida estimator",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nDoes anyone know of an on-line implementation of Hayashi Yoshida covariance\nestimator? Let's say that we have to time series ticked asynchronously and\nwe would like to update the realized covariance once either ticks so that\nwe do not have to keep in memory all the tick history. Any idea please?\nThank you.\n\nBest,\n\nRobert\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nDoes anyone know of an on-line implementation of Hayashi Yoshida covariance\nestimator? Let's say that we have to time series ticked asynchronously and\nwe would like to update the realized covaria",
+      "thread_id": "thread-6535842c0cdb",
+      "thread_depth": 0,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-87dc92ca0a8d",
+      "message_id": "<CAP+bYWCYbU_SGCBi0EQhzKq9X1SxjCMki+_czGtN3GwBEbc=Gw@mail.gmail.com>",
+      "from_name": "Hasan Diwan",
+      "from_email_hash": "b8c8a6f404dde765d01bd77a3581f540189f9fe98fae1be003d4afa7a0deaab0",
+      "date": "2015-03-16T21:04:37-07:00",
+      "subject": "[R-SIG-Finance] Online Hayashi-Yoshida estimator",
+      "subject_clean": "Online Hayashi-Yoshida estimator",
+      "in_reply_to": "<CAA7=MyWO=uMuYgoHGfRgRT9KLf+ydiUGJCbUhh66jqkdsG4O1w@mail.gmail.com>",
+      "references": [
+        "<CAA7=MyWO=uMuYgoHGfRgRT9KLf+ydiUGJCbUhh66jqkdsG4O1w@mail.gmail.com>"
+      ],
+      "body_plain": "There is a yuima package that claims to have the Hayashi-Yoshida covariance\nestimator since 2009. The link is\nhttp://r-forge.r-project.org/projects/yuima/ and I hope it helps. -- H\n\nOn 16 March 2015 at 20:19, Robert A'gata <rhelpacc at gmail.com> wrote:\n\n> Hi,\n>\n> Does anyone know of an on-line implementation of Hayashi Yoshida covariance\n> estimator? Let's say that we have to time series ticked asynchronously and\n> we would like to update the realized covariance once either ticks so that\n> we do not have to keep in memory all the tick history. Any idea please?\n> Thank you.\n>\n> Best,\n>\n> Robert\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\n\n-- \nOpenPGP: https://hasan.d8u.us/gpg.key\nSent from my mobile device\nEnvoy? de mon portable\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "There is a yuima package that claims to have the Hayashi-Yoshida covariance\nestimator since 2009. The link is\nhttp://r-forge.r-project.org/projects/yuima/ and I hope it helps. -- H\n\nOn 16 March 2015 a",
+      "thread_id": "thread-6535842c0cdb",
+      "thread_depth": 1,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-c9e5962392c9",
+      "message_id": "<CAA7=MyVd8_O+MQir7ouiZi7d1OJmvD8twTHbfrOwZKKO5=a33g@mail.gmail.com>",
+      "from_name": "Robert A'gata",
+      "from_email_hash": "67ffc11191b5ddc8ff8e57473661a99cac154b0a14ba1f834aef3a4ed791e8b5",
+      "date": "2015-03-17T00:39:00-04:00",
+      "subject": "[R-SIG-Finance] Online Hayashi-Yoshida estimator",
+      "subject_clean": "Online Hayashi-Yoshida estimator",
+      "in_reply_to": "<CAP+bYWCYbU_SGCBi0EQhzKq9X1SxjCMki+_czGtN3GwBEbc=Gw@mail.gmail.com>",
+      "references": [
+        "<CAA7=MyWO=uMuYgoHGfRgRT9KLf+ydiUGJCbUhh66jqkdsG4O1w@mail.gmail.com>",
+        "<CAP+bYWCYbU_SGCBi0EQhzKq9X1SxjCMki+_czGtN3GwBEbc=Gw@mail.gmail.com>"
+      ],
+      "body_plain": "Thank you Hasan. I looked into the c code of Yuima. It is an off-line\nversion, i.e. it passes in entire arrays of returns on both assets for\nwhich you want to compute covariance. Rather, I'm looking for an idea to\nimplement the estimator in an on-line fashion.\n\nOn Tue, Mar 17, 2015 at 12:04 AM, Hasan Diwan <hasan.diwan at gmail.com> wrote:\n\n> There is a yuima package that claims to have the Hayashi-Yoshida covariance\n> estimator since 2009. The link is\n> http://r-forge.r-project.org/projects/yuima/ and I hope it helps. -- H\n>\n> On 16 March 2015 at 20:19, Robert A'gata <rhelpacc at gmail.com> wrote:\n>\n> > Hi,\n> >\n> > Does anyone know of an on-line implementation of Hayashi Yoshida\n> covariance\n> > estimator? Let's say that we have to time series ticked asynchronously\n> and\n> > we would like to update the realized covariance once either ticks so that\n> > we do not have to keep in memory all the tick history. Any idea please?\n> > Thank you.\n> >\n> > Best,\n> >\n> > Robert\n> >\n> >         [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions\n> > should go.\n> >\n>\n>\n>\n> --\n> OpenPGP: https://hasan.d8u.us/gpg.key\n> Sent from my mobile device\n> Envoy? de mon portable\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thank you Hasan. I looked into the c code of Yuima. It is an off-line\nversion, i.e. it passes in entire arrays of returns on both assets for\nwhich you want to compute covariance. Rather, I'm looking f",
+      "thread_id": "thread-6535842c0cdb",
+      "thread_depth": 2,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-1ee9b9a8dce6",
+      "message_id": "<3BD83179-ECB0-44E7-9170-F2DC730A77A1@163.com>",
+      "from_name": "曹鼎贤",
+      "from_email_hash": "fc15753d90ceab53bd8c110fd4c5fc35b97d6e272f60fd09dbb55720b7144207",
+      "date": "2015-03-17T15:31:33+08:00",
+      "subject": "[R-SIG-Finance] Error when Using fPortfolio to plot the fitting",
+      "subject_clean": "Error when Using fPortfolio to plot the fitting",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear All, \n    I was learning using the package fPortfolio by the ebook Portfolio Optimization. When I was using the function to print the fitting result which is completely the same as that in the book, there was an error report as follows:   \n\n\t>library(fPortfolio)\n\t> fit <- assetsFit(LPP2005.RET[, 1:3], method = \"st\")\n\tWarning Messages??\n\tIn whichFormat(charvec[1]) :\n  \t  character string is not in a standard unambiguous format\n\t> plot(fit,1)\n\tError at as.double(x) :\n\t  cannot coerce type 'S4' to vector of type ??double?? \n\t \n  The correct result should be a group of picture to show the effect of fitting. Could anyone give me some instructions? THANK YOU.\n\nBest Regards, \nCao Dingxian\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear All, \n    I was learning using the package fPortfolio by the ebook Portfolio Optimization. When I was using the function to print the fitting result which is completely the same as that in the bo",
+      "thread_id": "thread-1ee9b9a8dce6",
+      "thread_depth": 0,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-281a752ac824",
+      "message_id": "<5507E602.7080506@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2015-03-17T03:29:54-05:00",
+      "subject": "[R-SIG-Finance] Online Hayashi-Yoshida estimator",
+      "subject_clean": "Online Hayashi-Yoshida estimator",
+      "in_reply_to": "<CAA7=MyVd8_O+MQir7ouiZi7d1OJmvD8twTHbfrOwZKKO5=a33g@mail.gmail.com>",
+      "references": [
+        "<CAA7=MyWO=uMuYgoHGfRgRT9KLf+ydiUGJCbUhh66jqkdsG4O1w@mail.gmail.com>",
+        "<CAP+bYWCYbU_SGCBi0EQhzKq9X1SxjCMki+_czGtN3GwBEbc=Gw@mail.gmail.com>",
+        "<CAA7=MyVd8_O+MQir7ouiZi7d1OJmvD8twTHbfrOwZKKO5=a33g@mail.gmail.com>"
+      ],
+      "body_plain": "Do you have a reference for the on-line version?  It generally helps \nothers to help you if they can look at the paper(s) which describe the \ntechnique you wish to replicate.\n\nRegards,\n\nBrian\n\nOn 03/16/2015 11:39 PM, Robert A'gata wrote:\n> Thank you Hasan. I looked into the c code of Yuima. It is an off-line\n> version, i.e. it passes in entire arrays of returns on both assets for\n> which you want to compute covariance. Rather, I'm looking for an idea to\n> implement the estimator in an on-line fashion.\n>\n> On Tue, Mar 17, 2015 at 12:04 AM, Hasan Diwan <hasan.diwan at gmail.com> wrote:\n>\n>> There is a yuima package that claims to have the Hayashi-Yoshida covariance\n>> estimator since 2009. The link is\n>> http://r-forge.r-project.org/projects/yuima/ and I hope it helps. -- H\n>>\n>> On 16 March 2015 at 20:19, Robert A'gata <rhelpacc at gmail.com> wrote:\n>>\n>>> Hi,\n>>>\n>>> Does anyone know of an on-line implementation of Hayashi Yoshida\n>> covariance\n>>> estimator? Let's say that we have to time series ticked asynchronously\n>> and\n>>> we would like to update the realized covariance once either ticks so that\n>>> we do not have to keep in memory all the tick history. Any idea please?\n>>> Thank you.\n>>>\n>>> Best,\n>>>\n>>> Robert",
+      "body_snippet": "Do you have a reference for the on-line version?  It generally helps \nothers to help you if they can look at the paper(s) which describe the \ntechnique you wish to replicate.\n\nRegards,\n\nBrian\n\nOn 03/1",
+      "thread_id": "thread-6535842c0cdb",
+      "thread_depth": 3,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-c0d79a741e60",
+      "message_id": "<CAA7=MyUtDFFOvJF=-kQFk3dpKePrzT7G70mrY0NZyeKrFXY07g@mail.gmail.com>",
+      "from_name": "Robert A'gata",
+      "from_email_hash": "67ffc11191b5ddc8ff8e57473661a99cac154b0a14ba1f834aef3a4ed791e8b5",
+      "date": "2015-03-18T19:18:49-04:00",
+      "subject": "[R-SIG-Finance] Online Hayashi-Yoshida estimator",
+      "subject_clean": "Online Hayashi-Yoshida estimator",
+      "in_reply_to": "<5507E602.7080506@braverock.com>",
+      "references": [
+        "<CAA7=MyWO=uMuYgoHGfRgRT9KLf+ydiUGJCbUhh66jqkdsG4O1w@mail.gmail.com>",
+        "<CAP+bYWCYbU_SGCBi0EQhzKq9X1SxjCMki+_czGtN3GwBEbc=Gw@mail.gmail.com>",
+        "<CAA7=MyVd8_O+MQir7ouiZi7d1OJmvD8twTHbfrOwZKKO5=a33g@mail.gmail.com>",
+        "<5507E602.7080506@braverock.com>"
+      ],
+      "body_plain": "Hi Brian - To the best of my knowledge, I don't know any literature that\ndescribes an on-line estimation method for the HY covariance estimator. I\nam raising this question on this forum to brainstorm and get some ideas.\n\nIntuitively since the estimator is only caring about overlapping returns\nbetween the two asynchronous tick streams, doing this online might not seem\nto be a daunting task. I attempted a couple of times by trying to keep\ntracking of last overlapping period and discard all the ticks that are\ncompletely \"overlapped or enveloped\" in the past. But for some reason, it\ndidn't go so well. So I would like to pick some ideas if anybody has any.\n\nThank you.\n\nRobert\n\nOn Tue, Mar 17, 2015 at 4:29 AM, Brian G. Peterson <brian at braverock.com>\nwrote:\n\n> Do you have a reference for the on-line version?  It generally helps\n> others to help you if they can look at the paper(s) which describe the\n> technique you wish to replicate.\n>\n> Regards,\n>\n> Brian\n>\n> On 03/16/2015 11:39 PM, Robert A'gata wrote:\n>\n>> Thank you Hasan. I looked into the c code of Yuima. It is an off-line\n>> version, i.e. it passes in entire arrays of returns on both assets for\n>> which you want to compute covariance. Rather, I'm looking for an idea to\n>> implement the estimator in an on-line fashion.\n>>\n>> On Tue, Mar 17, 2015 at 12:04 AM, Hasan Diwan <hasan.diwan at gmail.com>\n>> wrote:\n>>\n>>  There is a yuima package that claims to have the Hayashi-Yoshida\n>>> covariance\n>>> estimator since 2009. The link is\n>>> http://r-forge.r-project.org/projects/yuima/ and I hope it helps. -- H\n>>>\n>>> On 16 March 2015 at 20:19, Robert A'gata <rhelpacc at gmail.com> wrote:\n>>>\n>>>  Hi,\n>>>>\n>>>> Does anyone know of an on-line implementation of Hayashi Yoshida\n>>>>\n>>> covariance\n>>>\n>>>> estimator? Let's say that we have to time series ticked asynchronously\n>>>>\n>>> and\n>>>\n>>>> we would like to update the realized covariance once either ticks so\n>>>> that\n>>>> we do not have to keep in memory all the tick history. Any idea please?\n>>>> Thank you.\n>>>>\n>>>> Best,\n>>>>\n>>>> Robert\n>>>>\n>>>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Brian - To the best of my knowledge, I don't know any literature that\ndescribes an on-line estimation method for the HY covariance estimator. I\nam raising this question on this forum to brainstorm ",
+      "thread_id": "thread-6535842c0cdb",
+      "thread_depth": 4,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-6d159941c2c1",
+      "message_id": "<alpine.LRH.2.01.1503201008570.22522@hymn01.u.washington.edu>",
+      "from_name": "Eric Zivot",
+      "from_email_hash": "1af1f898d9c468b05e686da9e60bce6b8a0d98f0ec7e822cde24d9d8b3634a20",
+      "date": "2015-03-20T10:08:57-07:00",
+      "subject": "[R-SIG-Finance] problem subsetting xts object with yearmon time index",
+      "subject_clean": "problem subsetting xts object with yearmon time index",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I seem to have a problem sub-setting an xts object with a yearmon time index. I have a xts object holding monthly returns where the time index is a yearmon object. When I subset the data for 2014 using ?2014? within the xts object I don?t get the data for January. However, if I subset the data using window() I get all of the data for 2014. Below is the example (from Rstudio on windows 8) and output. Why is January missing when I subset using mydata.xts[\"2014\"]????\n\n \n\n> options(digits=3, width=70)\n\n> # IntroCompFinR available from R-forge\n\n> # install.packages(\"IntroCompFinR\", repos=\"http://R-Forge.R-project.org\")\n\n> library(IntroCompFinR)\n\n> library(PerformanceAnalytics)\n\n>\n\n> #\n\n> # load data and compute returns - MSFT\n\n> #\n\n>\n\n> data(msftMonthlyPrices)\n\n> msftRetC = na.omit(Return.calculate(msftMonthlyPrices,\n\n+                                     method=\"log\"))\n\n> head(msftRetC, n=3)\n\n            MSFT\n\nFeb 1993 -0.0371\n\nMar 1993  0.1075\n\nApr 1993 -0.0809\n\n> tail(msftRetC, n=3)\n\n            MSFT\n\nOct 2014  0.0128\n\nNov 2014  0.0243\n\nDec 2014 -0.0289\n\n> class(index(msftRetC))\n\n[1] \"yearmon\"\n\n> # restric returns to last year\n\n> msftRetC2014 = msftRetC[\"2014\"]\n\n> msftRetC2014\n\n            MSFT\n\nFeb 2014  0.0198\n\nMar 2014  0.0676\n\nApr 2014 -0.0144\n\nMay 2014  0.0204\n\nJun 2014  0.0183\n\nJul 2014  0.0344\n\nAug 2014  0.0576\n\nSep 2014  0.0201\n\nOct 2014  0.0128\n\nNov 2014  0.0243\n\nDec 2014 -0.0289\n\n> # why is January missing?????\n\n> as.Date(index(msftRetC2014))\n\n[1] \"2014-02-01\" \"2014-03-01\" \"2014-04-01\" \"2014-05-01\" \"2014-06-01\"\n\n[6] \"2014-07-01\" \"2014-08-01\" \"2014-09-01\" \"2014-10-01\" \"2014-11-01\"\n\n[11] \"2014-12-01\"\n\n> # I get the right data using window()\n\n> window(msftRetC, start=as.yearmon(\"Jan 2014\"), end=as.yearmon(\"Dec 2014\"))\n\n            MSFT\n\nJan 2014  0.0113\n\nFeb 2014  0.0198\n\nMar 2014  0.0676\n\nApr 2014 -0.0144\n\nMay 2014  0.0204\n\nJun 2014  0.0183\n\nJul 2014  0.0344\n\nAug 2014  0.0576\n\nSep 2014  0.0201\n\nOct 2014  0.0128\n\nNov 2014  0.0243\n\nDec 2014 -0.0289\n\n> sessionInfo()\n\nR version 3.1.2 (2014-10-31)\n\nPlatform: x86_64-w64-mingw32/x64 (64-bit)\n\n \n\nlocale:\n\n[1] LC_COLLATE=English_United States.1252\n\n[2] LC_CTYPE=English_United States.1252  \n\n[3] LC_MONETARY=English_United States.1252\n\n[4] LC_NUMERIC=C                         \n\n[5] LC_TIME=English_United States.1252   \n\n \n\nattached base packages:\n\n[1] stats     graphics  grDevices utils     datasets  methods \n\n[7] base    \n\n \n\nother attached packages:\n\n[1] boot_1.3-13                   PerformanceAnalytics_1.4.3541\n\n[3] IntroCompFinR_1.0             xts_0.9-7                   \n\n[5] zoo_1.7-11                  \n\n \n\nloaded via a namespace (and not attached):\n\n[1] digest_0.6.8    grid_3.1.2      htmltools_0.2.6 lattice_0.20-29\n\n[5] rmarkdown_0.5.1 tools_3.1.2     yaml_2.1.13\n\n \n\nThanks in advance for any insight.",
+      "body_snippet": "I seem to have a problem sub-setting an xts object with a yearmon time index. I have a xts object holding monthly returns where the time index is a yearmon object. When I subset the data for 2014 usin",
+      "thread_id": "thread-6d159941c2c1",
+      "thread_depth": 0,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-abf182fb3641",
+      "message_id": "<alpine.LRH.2.01.1503201011400.22522@hymn01.u.washington.edu>",
+      "from_name": "Eric Zivot",
+      "from_email_hash": "1af1f898d9c468b05e686da9e60bce6b8a0d98f0ec7e822cde24d9d8b3634a20",
+      "date": "2015-03-20T10:11:40-07:00",
+      "subject": "[R-SIG-Finance] Online trading systems development courses using R at University of Washington",
+      "subject_clean": "Online trading systems development courses using R at University of Washington",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "For folks interested in learning more about trading systems development with the R packages quantstrat and blotter, there is a 2-course sequence in the Computational Finance & Risk Management (CF&RM) program at the University of Washington starting March 31st:\n\n\nIntroduction to Trading Systems Development, taught by Guy Yollin; March 31 ? June 5\nAdvanced Trading Systems Development, with lead lecturer Brian Peterson; June 22 ? August 21\n\n\nThese courses are available online for a fee. More information is available at this link: http://depts.washington.edu/compfin/trading-systems-sequence\n\nEric Zivot\n\nRobert Richards Professor of Economics\n\nAdjunct Professor of Applied Mathematics\n\nAdjunct Professor of Finance\n\nAdjunct Professor of Statistics\n\nUniversity of Washington",
+      "body_snippet": "For folks interested in learning more about trading systems development with the R packages quantstrat and blotter, there is a 2-course sequence in the Computational Finance & Risk Management (CF&RM) ",
+      "thread_id": "thread-abf182fb3641",
+      "thread_depth": 0,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-c980aa9ab3dc",
+      "message_id": "<CAPPM_gQsd3xNfCkSyyakc_+8VQZ=R2ah3tAAABWHdcAsMnEUrQ@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-03-20T12:18:00-05:00",
+      "subject": "[R-SIG-Finance] problem subsetting xts object with yearmon time index",
+      "subject_clean": "problem subsetting xts object with yearmon time index",
+      "in_reply_to": "<alpine.LRH.2.01.1503201008570.22522@hymn01.u.washington.edu>",
+      "references": [
+        "<alpine.LRH.2.01.1503201008570.22522@hymn01.u.washington.edu>"
+      ],
+      "body_plain": "I can confirm this behavior with a simplified example using zoo 1.7-12\nand the latest development xts.\n\n> data(sample_matrix)\n> x <- as.xts(sample_matrix)\n> y <- to.monthly(x)\n> y['2007']\n           x.Open   x.High    x.Low  x.Close\nFeb 2007 50.22448 51.32342 50.19101 50.77091\nMar 2007 50.81620 50.81620 48.23648 48.97490\nApr 2007 48.94407 50.33781 48.80962 49.33974\nMay 2007 49.34572 49.69097 47.51796 47.73780\nJun 2007 47.74432 47.94127 47.09144 47.76719\n\n\nThanks for the report.  I'll investigate.\n\nBest,\nJosh\n\n\nOn Fri, Mar 20, 2015 at 12:08 PM, Eric Zivot <ezivot at u.washington.edu> wrote:\n> I seem to have a problem sub-setting an xts object with a yearmon time index. I have a xts object holding monthly returns where the time index is a yearmon object. When I subset the data for 2014 using ?2014? within the xts object I don?t get the data for January. However, if I subset the data using window() I get all of the data for 2014. Below is the example (from Rstudio on windows 8) and output. Why is January missing when I subset using mydata.xts[\"2014\"]????\n>\n>\n>\n>> options(digits=3, width=70)\n>\n>> # IntroCompFinR available from R-forge\n>\n>> # install.packages(\"IntroCompFinR\", repos=\"http://R-Forge.R-project.org\")\n>\n>> library(IntroCompFinR)\n>\n>> library(PerformanceAnalytics)\n>\n>>\n>\n>> #\n>\n>> # load data and compute returns - MSFT\n>\n>> #\n>\n>>\n>\n>> data(msftMonthlyPrices)\n>\n>> msftRetC = na.omit(Return.calculate(msftMonthlyPrices,\n>\n> +                                     method=\"log\"))\n>\n>> head(msftRetC, n=3)\n>\n>             MSFT\n>\n> Feb 1993 -0.0371\n>\n> Mar 1993  0.1075\n>\n> Apr 1993 -0.0809\n>\n>> tail(msftRetC, n=3)\n>\n>             MSFT\n>\n> Oct 2014  0.0128\n>\n> Nov 2014  0.0243\n>\n> Dec 2014 -0.0289\n>\n>> class(index(msftRetC))\n>\n> [1] \"yearmon\"\n>\n>> # restric returns to last year\n>\n>> msftRetC2014 = msftRetC[\"2014\"]\n>\n>> msftRetC2014\n>\n>             MSFT\n>\n> Feb 2014  0.0198\n>\n> Mar 2014  0.0676\n>\n> Apr 2014 -0.0144\n>\n> May 2014  0.0204\n>\n> Jun 2014  0.0183\n>\n> Jul 2014  0.0344\n>\n> Aug 2014  0.0576\n>\n> Sep 2014  0.0201\n>\n> Oct 2014  0.0128\n>\n> Nov 2014  0.0243\n>\n> Dec 2014 -0.0289\n>\n>> # why is January missing?????\n>\n>> as.Date(index(msftRetC2014))\n>\n> [1] \"2014-02-01\" \"2014-03-01\" \"2014-04-01\" \"2014-05-01\" \"2014-06-01\"\n>\n> [6] \"2014-07-01\" \"2014-08-01\" \"2014-09-01\" \"2014-10-01\" \"2014-11-01\"\n>\n> [11] \"2014-12-01\"\n>\n>> # I get the right data using window()\n>\n>> window(msftRetC, start=as.yearmon(\"Jan 2014\"), end=as.yearmon(\"Dec 2014\"))\n>\n>             MSFT\n>\n> Jan 2014  0.0113\n>\n> Feb 2014  0.0198\n>\n> Mar 2014  0.0676\n>\n> Apr 2014 -0.0144\n>\n> May 2014  0.0204\n>\n> Jun 2014  0.0183\n>\n> Jul 2014  0.0344\n>\n> Aug 2014  0.0576\n>\n> Sep 2014  0.0201\n>\n> Oct 2014  0.0128\n>\n> Nov 2014  0.0243\n>\n> Dec 2014 -0.0289\n>\n>> sessionInfo()\n>\n> R version 3.1.2 (2014-10-31)\n>\n> Platform: x86_64-w64-mingw32/x64 (64-bit)\n>\n>\n>\n> locale:\n>\n> [1] LC_COLLATE=English_United States.1252\n>\n> [2] LC_CTYPE=English_United States.1252\n>\n> [3] LC_MONETARY=English_United States.1252\n>\n> [4] LC_NUMERIC=C\n>\n> [5] LC_TIME=English_United States.1252\n>\n>\n>\n> attached base packages:\n>\n> [1] stats     graphics  grDevices utils     datasets  methods\n>\n> [7] base\n>\n>\n>\n> other attached packages:\n>\n> [1] boot_1.3-13                   PerformanceAnalytics_1.4.3541\n>\n> [3] IntroCompFinR_1.0             xts_0.9-7\n>\n> [5] zoo_1.7-11\n>\n>\n>\n> loaded via a namespace (and not attached):\n>\n> [1] digest_0.6.8    grid_3.1.2      htmltools_0.2.6 lattice_0.20-29\n>\n> [5] rmarkdown_0.5.1 tools_3.1.2     yaml_2.1.13\n>\n>\n>\n> Thanks in advance for any insight.\n>\n>\n>\n>\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "I can confirm this behavior with a simplified example using zoo 1.7-12\nand the latest development xts.\n\n> data(sample_matrix)\n> x <- as.xts(sample_matrix)\n> y <- to.monthly(x)\n> y['2007']\n           x",
+      "thread_id": "thread-6d159941c2c1",
+      "thread_depth": 1,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-22181aba5277",
+      "message_id": "<CAPLrYERygOA-bUwuiZb2iJ21nwy7gMAgXtmJZOU572sPL+3XpA@mail.gmail.com>",
+      "from_name": "Daniel Cegiełka",
+      "from_email_hash": "a53c7f1be3d7b89cbf62e91b70b96a3ed4a6d3306db4e0a96cdd8e340115b214",
+      "date": "2015-03-20T18:30:00+01:00",
+      "subject": "[R-SIG-Finance] problem subsetting xts object with yearmon time index",
+      "subject_clean": "problem subsetting xts object with yearmon time index",
+      "in_reply_to": "<CAPPM_gQsd3xNfCkSyyakc_+8VQZ=R2ah3tAAABWHdcAsMnEUrQ@mail.gmail.com>",
+      "references": [
+        "<alpine.LRH.2.01.1503201008570.22522@hymn01.u.washington.edu>",
+        "<CAPPM_gQsd3xNfCkSyyakc_+8VQZ=R2ah3tAAABWHdcAsMnEUrQ@mail.gmail.com>"
+      ],
+      "body_plain": "2015-03-20 18:18 GMT+01:00 Joshua Ulrich <josh.m.ulrich at gmail.com>:\n> I can confirm this behavior with a simplified example using zoo 1.7-12\n> and the latest development xts.\n>\n>> data(sample_matrix)\n>> x <- as.xts(sample_matrix)\n>> y <- to.monthly(x)\n>> y['2007']\n>            x.Open   x.High    x.Low  x.Close\n> Feb 2007 50.22448 51.32342 50.19101 50.77091\n> Mar 2007 50.81620 50.81620 48.23648 48.97490\n> Apr 2007 48.94407 50.33781 48.80962 49.33974\n> May 2007 49.34572 49.69097 47.51796 47.73780\n> Jun 2007 47.74432 47.94127 47.09144 47.76719\n>\n>\n> Thanks for the report.  I'll investigate.\n>\n> Best,\n> Josh\n\nhi,\nI can not reproduce this error with zoo-1.7-12 and xts-0.8-0.\n\n> getSymbols('MSFT')\n[1] \"MSFT\"\n> x <- xts::to.monthly(MSFT)\n> x['2015']\n         MSFT.Open MSFT.High MSFT.Low MSFT.Close MSFT.Volume MSFT.Adjusted\nJan 2015     46.66     47.91    40.35      40.40   918956900         40.11\nFeb 2015     40.59     44.30    40.23      43.85   656204800         43.85\nMar 2015     43.67     44.19    40.61      42.29   512133400         42.29\n> x['2014']\n         MSFT.Open MSFT.High MSFT.Low MSFT.Close MSFT.Volume MSFT.Adjusted\nJan 2014     37.35     37.89    34.63      37.84   930226200         36.57\nFeb 2014     37.74     38.46    35.69      38.31   705304500         37.30\nMar 2014     37.92     41.50    37.49      40.99   778425700         39.91\nApr 2014     41.15     41.66    38.90      40.40   746113500         39.34\nMay 2014     40.24     40.97    38.51      40.94   574362900         40.15\nJun 2014     40.95     42.29    39.86      41.70   555779700         40.89\nJul 2014     41.86     45.71    41.05      43.16   731616500         42.32\nAug 2014     43.21     45.47    42.21      45.43   513919700         44.83\nSep 2014     45.43     47.57    44.53      46.36   860827300         45.74\nOct 2014     46.27     46.97    42.10      46.95   853235700         46.33\nNov 2014     46.89     50.05    46.73      47.81   522988700         47.47\nDec 2014     47.88     49.06    44.90      46.45   626740700         46.12\n\n\nDaniel",
+      "body_snippet": "2015-03-20 18:18 GMT+01:00 Joshua Ulrich <josh.m.ulrich at gmail.com>:\n> I can confirm this behavior with a simplified example using zoo 1.7-12\n> and the latest development xts.\n>\n>> data(sample_matri",
+      "thread_id": "thread-6d159941c2c1",
+      "thread_depth": 2,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-007a4099e4ec",
+      "message_id": "<CAPPM_gRwBoQTqSnbhH--mOePjDat7voE36FomMas7fhW9WPjYg@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-03-20T13:43:46-05:00",
+      "subject": "[R-SIG-Finance] problem subsetting xts object with yearmon time index",
+      "subject_clean": "problem subsetting xts object with yearmon time index",
+      "in_reply_to": "<CAPLrYERygOA-bUwuiZb2iJ21nwy7gMAgXtmJZOU572sPL+3XpA@mail.gmail.com>",
+      "references": [
+        "<alpine.LRH.2.01.1503201008570.22522@hymn01.u.washington.edu>",
+        "<CAPPM_gQsd3xNfCkSyyakc_+8VQZ=R2ah3tAAABWHdcAsMnEUrQ@mail.gmail.com>",
+        "<CAPLrYERygOA-bUwuiZb2iJ21nwy7gMAgXtmJZOU572sPL+3XpA@mail.gmail.com>"
+      ],
+      "body_plain": "On Fri, Mar 20, 2015 at 12:30 PM, Daniel Cegie?ka\n<daniel.cegielka at gmail.com> wrote:\n> 2015-03-20 18:18 GMT+01:00 Joshua Ulrich <josh.m.ulrich at gmail.com>:\n>> I can confirm this behavior with a simplified example using zoo 1.7-12\n>> and the latest development xts.\n>>\n>>> data(sample_matrix)\n>>> x <- as.xts(sample_matrix)\n>>> y <- to.monthly(x)\n>>> y['2007']\n>>            x.Open   x.High    x.Low  x.Close\n>> Feb 2007 50.22448 51.32342 50.19101 50.77091\n>> Mar 2007 50.81620 50.81620 48.23648 48.97490\n>> Apr 2007 48.94407 50.33781 48.80962 49.33974\n>> May 2007 49.34572 49.69097 47.51796 47.73780\n>> Jun 2007 47.74432 47.94127 47.09144 47.76719\n>>\n>>\n>> Thanks for the report.  I'll investigate.\n>>\n>> Best,\n>> Josh\n>\n> hi,\n> I can not reproduce this error with zoo-1.7-12 and xts-0.8-0.\n>\n>> getSymbols('MSFT')\n> [1] \"MSFT\"\n>> x <- xts::to.monthly(MSFT)\n>> x['2015']\n>          MSFT.Open MSFT.High MSFT.Low MSFT.Close MSFT.Volume MSFT.Adjusted\n> Jan 2015     46.66     47.91    40.35      40.40   918956900         40.11\n> Feb 2015     40.59     44.30    40.23      43.85   656204800         43.85\n> Mar 2015     43.67     44.19    40.61      42.29   512133400         42.29\n>> x['2014']\n>          MSFT.Open MSFT.High MSFT.Low MSFT.Close MSFT.Volume MSFT.Adjusted\n> Jan 2014     37.35     37.89    34.63      37.84   930226200         36.57\n> Feb 2014     37.74     38.46    35.69      38.31   705304500         37.30\n> Mar 2014     37.92     41.50    37.49      40.99   778425700         39.91\n> Apr 2014     41.15     41.66    38.90      40.40   746113500         39.34\n> May 2014     40.24     40.97    38.51      40.94   574362900         40.15\n> Jun 2014     40.95     42.29    39.86      41.70   555779700         40.89\n> Jul 2014     41.86     45.71    41.05      43.16   731616500         42.32\n> Aug 2014     43.21     45.47    42.21      45.43   513919700         44.83\n> Sep 2014     45.43     47.57    44.53      46.36   860827300         45.74\n> Oct 2014     46.27     46.97    42.10      46.95   853235700         46.33\n> Nov 2014     46.89     50.05    46.73      47.81   522988700         47.47\n> Dec 2014     47.88     49.06    44.90      46.45   626740700         46.12\n>\nYou can't reproduce this with an object returned by getSymbols because\ngetSymbols sets the index timezone to \"UTC\".  The xts sample_matrix\ndata, and IntroCompFinR msftMonthlyPrices data do not have an index\ntimezone, so the machine's local timezone is used when converting the\nISO 8601 string to a datetime.\n\n>\n> Daniel\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Fri, Mar 20, 2015 at 12:30 PM, Daniel Cegie?ka\n<daniel.cegielka at gmail.com> wrote:\n> 2015-03-20 18:18 GMT+01:00 Joshua Ulrich <josh.m.ulrich at gmail.com>:\n>> I can confirm this behavior with a s",
+      "thread_id": "thread-6d159941c2c1",
+      "thread_depth": 3,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-83f1dcc56afc",
+      "message_id": "<CAPPM_gS=Pcr3EwkYs_hjAS2pnuwOqx1cP1sCjcPavVGKOnW1vQ@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-03-20T13:47:08-05:00",
+      "subject": "[R-SIG-Finance] problem subsetting xts object with yearmon time index",
+      "subject_clean": "problem subsetting xts object with yearmon time index",
+      "in_reply_to": "<CAPPM_gQsd3xNfCkSyyakc_+8VQZ=R2ah3tAAABWHdcAsMnEUrQ@mail.gmail.com>",
+      "references": [
+        "<alpine.LRH.2.01.1503201008570.22522@hymn01.u.washington.edu>",
+        "<CAPPM_gQsd3xNfCkSyyakc_+8VQZ=R2ah3tAAABWHdcAsMnEUrQ@mail.gmail.com>"
+      ],
+      "body_plain": "On Fri, Mar 20, 2015 at 12:18 PM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> I can confirm this behavior with a simplified example using zoo 1.7-12\n> and the latest development xts.\n>\n>> data(sample_matrix)\n>> x <- as.xts(sample_matrix)\n>> y <- to.monthly(x)\n>> y['2007']\n>            x.Open   x.High    x.Low  x.Close\n> Feb 2007 50.22448 51.32342 50.19101 50.77091\n> Mar 2007 50.81620 50.81620 48.23648 48.97490\n> Apr 2007 48.94407 50.33781 48.80962 49.33974\n> May 2007 49.34572 49.69097 47.51796 47.73780\n> Jun 2007 47.74432 47.94127 47.09144 47.76719\n>\n>\n> Thanks for the report.  I'll investigate.\n>\nThis is a timezone issue.  The solution is to ensure your\ndaily/monthly/quarterly indexed objects have an indexTZ of \"UTC\".\n\n> indexTZ(msftMonthlyPrices) <- \"UTC\"\n> msftMonthlyPrices['2014']\n          MSFT\nJan 2014 36.57\nFeb 2014 37.30\nMar 2014 39.91\nApr 2014 39.34\nMay 2014 40.15\nJun 2014 40.89\nJul 2014 42.32\nAug 2014 44.83\nSep 2014 45.74\nOct 2014 46.33\nNov 2014 47.47\nDec 2014 46.12\nWarning message:\ntimezone of object (UTC) is different than current timezone ().\n\nYou can safely ignore the warning.  There probably should be a warning\nfor non-UTC timezones on objects with a date-based index (or any\nhigher periodicity)...\n\n> Best,\n> Josh\n>\n>\n> On Fri, Mar 20, 2015 at 12:08 PM, Eric Zivot <ezivot at u.washington.edu> wrote:\n>> I seem to have a problem sub-setting an xts object with a yearmon time index. I have a xts object holding monthly returns where the time index is a yearmon object. When I subset the data for 2014 using ?2014? within the xts object I don?t get the data for January. However, if I subset the data using window() I get all of the data for 2014. Below is the example (from Rstudio on windows 8) and output. Why is January missing when I subset using mydata.xts[\"2014\"]????\n>>\n>>\n>>\n>>> options(digits=3, width=70)\n>>\n>>> # IntroCompFinR available from R-forge\n>>\n>>> # install.packages(\"IntroCompFinR\", repos=\"http://R-Forge.R-project.org\")\n>>\n>>> library(IntroCompFinR)\n>>\n>>> library(PerformanceAnalytics)\n>>\n>>>\n>>\n>>> #\n>>\n>>> # load data and compute returns - MSFT\n>>\n>>> #\n>>\n>>>\n>>\n>>> data(msftMonthlyPrices)\n>>\n>>> msftRetC = na.omit(Return.calculate(msftMonthlyPrices,\n>>\n>> +                                     method=\"log\"))\n>>\n>>> head(msftRetC, n=3)\n>>\n>>             MSFT\n>>\n>> Feb 1993 -0.0371\n>>\n>> Mar 1993  0.1075\n>>\n>> Apr 1993 -0.0809\n>>\n>>> tail(msftRetC, n=3)\n>>\n>>             MSFT\n>>\n>> Oct 2014  0.0128\n>>\n>> Nov 2014  0.0243\n>>\n>> Dec 2014 -0.0289\n>>\n>>> class(index(msftRetC))\n>>\n>> [1] \"yearmon\"\n>>\n>>> # restric returns to last year\n>>\n>>> msftRetC2014 = msftRetC[\"2014\"]\n>>\n>>> msftRetC2014\n>>\n>>             MSFT\n>>\n>> Feb 2014  0.0198\n>>\n>> Mar 2014  0.0676\n>>\n>> Apr 2014 -0.0144\n>>\n>> May 2014  0.0204\n>>\n>> Jun 2014  0.0183\n>>\n>> Jul 2014  0.0344\n>>\n>> Aug 2014  0.0576\n>>\n>> Sep 2014  0.0201\n>>\n>> Oct 2014  0.0128\n>>\n>> Nov 2014  0.0243\n>>\n>> Dec 2014 -0.0289\n>>\n>>> # why is January missing?????\n>>\n>>> as.Date(index(msftRetC2014))\n>>\n>> [1] \"2014-02-01\" \"2014-03-01\" \"2014-04-01\" \"2014-05-01\" \"2014-06-01\"\n>>\n>> [6] \"2014-07-01\" \"2014-08-01\" \"2014-09-01\" \"2014-10-01\" \"2014-11-01\"\n>>\n>> [11] \"2014-12-01\"\n>>\n>>> # I get the right data using window()\n>>\n>>> window(msftRetC, start=as.yearmon(\"Jan 2014\"), end=as.yearmon(\"Dec 2014\"))\n>>\n>>             MSFT\n>>\n>> Jan 2014  0.0113\n>>\n>> Feb 2014  0.0198\n>>\n>> Mar 2014  0.0676\n>>\n>> Apr 2014 -0.0144\n>>\n>> May 2014  0.0204\n>>\n>> Jun 2014  0.0183\n>>\n>> Jul 2014  0.0344\n>>\n>> Aug 2014  0.0576\n>>\n>> Sep 2014  0.0201\n>>\n>> Oct 2014  0.0128\n>>\n>> Nov 2014  0.0243\n>>\n>> Dec 2014 -0.0289\n>>\n>>> sessionInfo()\n>>\n>> R version 3.1.2 (2014-10-31)\n>>\n>> Platform: x86_64-w64-mingw32/x64 (64-bit)\n>>\n>>\n>>\n>> locale:\n>>\n>> [1] LC_COLLATE=English_United States.1252\n>>\n>> [2] LC_CTYPE=English_United States.1252\n>>\n>> [3] LC_MONETARY=English_United States.1252\n>>\n>> [4] LC_NUMERIC=C\n>>\n>> [5] LC_TIME=English_United States.1252\n>>\n>>\n>>\n>> attached base packages:\n>>\n>> [1] stats     graphics  grDevices utils     datasets  methods\n>>\n>> [7] base\n>>\n>>\n>>\n>> other attached packages:\n>>\n>> [1] boot_1.3-13                   PerformanceAnalytics_1.4.3541\n>>\n>> [3] IntroCompFinR_1.0             xts_0.9-7\n>>\n>> [5] zoo_1.7-11\n>>\n>>\n>>\n>> loaded via a namespace (and not attached):\n>>\n>> [1] digest_0.6.8    grid_3.1.2      htmltools_0.2.6 lattice_0.20-29\n>>\n>> [5] rmarkdown_0.5.1 tools_3.1.2     yaml_2.1.13\n>>\n>>\n>>\n>> Thanks in advance for any insight.\n>>\n>>\n>>\n>>\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n>\n>\n>\n> --\n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Fri, Mar 20, 2015 at 12:18 PM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> I can confirm this behavior with a simplified example using zoo 1.7-12\n> and the latest development xts.\n>\n>> data",
+      "thread_id": "thread-6d159941c2c1",
+      "thread_depth": 2,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-ac4b2aa3ae34",
+      "message_id": "<alpine.LRH.2.01.1503201211470.22522@hymn01.u.washington.edu>",
+      "from_name": "Eric Zivot",
+      "from_email_hash": "1af1f898d9c468b05e686da9e60bce6b8a0d98f0ec7e822cde24d9d8b3634a20",
+      "date": "2015-03-20T12:11:47-07:00",
+      "subject": "[R-SIG-Finance] problem subsetting xts object with yearmon time index",
+      "subject_clean": "problem subsetting xts object with yearmon time index",
+      "in_reply_to": "<CAPPM_gS=Pcr3EwkYs_hjAS2pnuwOqx1cP1sCjcPavVGKOnW1vQ@mail.gmail.com>",
+      "references": [],
+      "body_plain": "Thanks Josh for the quick reply. However, I am a bit puzzled by the problem. Why should a yearmon (or Date object) time index have a time zone attribute? Shouldn't time zone issues only affect time-date objects? It seems nutty that a date which represents a Year-month can be impacted by a time zone offset from UTC. I know this happens because the internal date for the yearmon object is the first day of the month. I guess this is one of the hidden dangers of using xts objects for calendar time series.\n\n****************************************************************\n*  Eric Zivot                  \t\t\t               *\n*  Robert Richards Chaired Professor of Economics              *\n*  Department of Economics                                     *\n*  Adjunct Professor of Finance                                *\n*  Adjunct Professor of Statistics\n*  Box 353330                  email:  ezivot at u.washington.edu *\n*  University of Washington    phone:  206-543-6715            *\n*  Seattle, WA 98195-3330                                      *                                                           *\n*  www:  http://faculty.washington.edu/ezivot                  *\n****************************************************************\n\nOn Fri, 20 Mar 2015, Joshua Ulrich wrote:\n\n> On Fri, Mar 20, 2015 at 12:18 PM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n>> I can confirm this behavior with a simplified example using zoo 1.7-12\n>> and the latest development xts.\n>>\n>>> data(sample_matrix)\n>>> x <- as.xts(sample_matrix)\n>>> y <- to.monthly(x)\n>>> y['2007']\n>>            x.Open   x.High    x.Low  x.Close\n>> Feb 2007 50.22448 51.32342 50.19101 50.77091\n>> Mar 2007 50.81620 50.81620 48.23648 48.97490\n>> Apr 2007 48.94407 50.33781 48.80962 49.33974\n>> May 2007 49.34572 49.69097 47.51796 47.73780\n>> Jun 2007 47.74432 47.94127 47.09144 47.76719\n>>\n>>\n>> Thanks for the report.  I'll investigate.\n>>\n> This is a timezone issue.  The solution is to ensure your\n> daily/monthly/quarterly indexed objects have an indexTZ of \"UTC\".\n>\n>> indexTZ(msftMonthlyPrices) <- \"UTC\"\n>> msftMonthlyPrices['2014']\n>          MSFT\n> Jan 2014 36.57\n> Feb 2014 37.30\n> Mar 2014 39.91\n> Apr 2014 39.34\n> May 2014 40.15\n> Jun 2014 40.89\n> Jul 2014 42.32\n> Aug 2014 44.83\n> Sep 2014 45.74\n> Oct 2014 46.33\n> Nov 2014 47.47\n> Dec 2014 46.12\n> Warning message:\n> timezone of object (UTC) is different than current timezone ().\n>\n> You can safely ignore the warning.  There probably should be a warning\n> for non-UTC timezones on objects with a date-based index (or any\n> higher periodicity)...\n>\n>> Best,\n>> Josh\n>>\n>>\n>> On Fri, Mar 20, 2015 at 12:08 PM, Eric Zivot <ezivot at u.washington.edu> wrote:\n>>> I seem to have a problem sub-setting an xts object with a yearmon time index. I have a xts object holding monthly returns where the time index is a yearmon object. When I subset the data for 2014 using ?2014? within the xts object I don?t get the data for January. However, if I subset the data using window() I get all of the data for 2014. Below is the example (from Rstudio on windows 8) and output. Why is January missing when I subset using mydata.xts[\"2014\"]????\n>>>\n>>>\n>>>\n>>>> options(digits=3, width=70)\n>>>\n>>>> # IntroCompFinR available from R-forge\n>>>\n>>>> # install.packages(\"IntroCompFinR\", repos=\"http://R-Forge.R-project.org\")\n>>>\n>>>> library(IntroCompFinR)\n>>>\n>>>> library(PerformanceAnalytics)\n>>>\n>>>>\n>>>\n>>>> #\n>>>\n>>>> # load data and compute returns - MSFT\n>>>\n>>>> #\n>>>\n>>>>\n>>>\n>>>> data(msftMonthlyPrices)\n>>>\n>>>> msftRetC = na.omit(Return.calculate(msftMonthlyPrices,\n>>>\n>>> +                                     method=\"log\"))\n>>>\n>>>> head(msftRetC, n=3)\n>>>\n>>>             MSFT\n>>>\n>>> Feb 1993 -0.0371\n>>>\n>>> Mar 1993  0.1075\n>>>\n>>> Apr 1993 -0.0809\n>>>\n>>>> tail(msftRetC, n=3)\n>>>\n>>>             MSFT\n>>>\n>>> Oct 2014  0.0128\n>>>\n>>> Nov 2014  0.0243\n>>>\n>>> Dec 2014 -0.0289\n>>>\n>>>> class(index(msftRetC))\n>>>\n>>> [1] \"yearmon\"\n>>>\n>>>> # restric returns to last year\n>>>\n>>>> msftRetC2014 = msftRetC[\"2014\"]\n>>>\n>>>> msftRetC2014\n>>>\n>>>             MSFT\n>>>\n>>> Feb 2014  0.0198\n>>>\n>>> Mar 2014  0.0676\n>>>\n>>> Apr 2014 -0.0144\n>>>\n>>> May 2014  0.0204\n>>>\n>>> Jun 2014  0.0183\n>>>\n>>> Jul 2014  0.0344\n>>>\n>>> Aug 2014  0.0576\n>>>\n>>> Sep 2014  0.0201\n>>>\n>>> Oct 2014  0.0128\n>>>\n>>> Nov 2014  0.0243\n>>>\n>>> Dec 2014 -0.0289\n>>>\n>>>> # why is January missing?????\n>>>\n>>>> as.Date(index(msftRetC2014))\n>>>\n>>> [1] \"2014-02-01\" \"2014-03-01\" \"2014-04-01\" \"2014-05-01\" \"2014-06-01\"\n>>>\n>>> [6] \"2014-07-01\" \"2014-08-01\" \"2014-09-01\" \"2014-10-01\" \"2014-11-01\"\n>>>\n>>> [11] \"2014-12-01\"\n>>>\n>>>> # I get the right data using window()\n>>>\n>>>> window(msftRetC, start=as.yearmon(\"Jan 2014\"), end=as.yearmon(\"Dec 2014\"))\n>>>\n>>>             MSFT\n>>>\n>>> Jan 2014  0.0113\n>>>\n>>> Feb 2014  0.0198\n>>>\n>>> Mar 2014  0.0676\n>>>\n>>> Apr 2014 -0.0144\n>>>\n>>> May 2014  0.0204\n>>>\n>>> Jun 2014  0.0183\n>>>\n>>> Jul 2014  0.0344\n>>>\n>>> Aug 2014  0.0576\n>>>\n>>> Sep 2014  0.0201\n>>>\n>>> Oct 2014  0.0128\n>>>\n>>> Nov 2014  0.0243\n>>>\n>>> Dec 2014 -0.0289\n>>>\n>>>> sessionInfo()\n>>>\n>>> R version 3.1.2 (2014-10-31)\n>>>\n>>> Platform: x86_64-w64-mingw32/x64 (64-bit)\n>>>\n>>>\n>>>\n>>> locale:\n>>>\n>>> [1] LC_COLLATE=English_United States.1252\n>>>\n>>> [2] LC_CTYPE=English_United States.1252\n>>>\n>>> [3] LC_MONETARY=English_United States.1252\n>>>\n>>> [4] LC_NUMERIC=C\n>>>\n>>> [5] LC_TIME=English_United States.1252\n>>>\n>>>\n>>>\n>>> attached base packages:\n>>>\n>>> [1] stats     graphics  grDevices utils     datasets  methods\n>>>\n>>> [7] base\n>>>\n>>>\n>>>\n>>> other attached packages:\n>>>\n>>> [1] boot_1.3-13                   PerformanceAnalytics_1.4.3541\n>>>\n>>> [3] IntroCompFinR_1.0             xts_0.9-7\n>>>\n>>> [5] zoo_1.7-11\n>>>\n>>>\n>>>\n>>> loaded via a namespace (and not attached):\n>>>\n>>> [1] digest_0.6.8    grid_3.1.2      htmltools_0.2.6 lattice_0.20-29\n>>>\n>>> [5] rmarkdown_0.5.1 tools_3.1.2     yaml_2.1.13\n>>>\n>>>\n>>>\n>>> Thanks in advance for any insight.\n>>>\n>>>\n>>>\n>>>\n>>>\n>>> _______________________________________________\n>>> R-SIG-Finance at r-project.org mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>> -- Also note that this is not the r-help list where general R questions should go.\n>>\n>>\n>>\n>> --\n>> Joshua Ulrich  |  about.me/joshuaulrich\n>> FOSS Trading  |  www.fosstrading.com\n>\n>\n>\n> -- \n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Thanks Josh for the quick reply. However, I am a bit puzzled by the problem. Why should a yearmon (or Date object) time index have a time zone attribute? Shouldn't time zone issues only affect time-da",
+      "thread_id": "thread-6d159941c2c1",
+      "thread_depth": 3,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-d9ecaf909444",
+      "message_id": "<CAPPM_gRSNSwwo-X0hWBosQTVpfv74D8WoGnG+WX2iXUTr1MnqA@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-03-20T14:28:24-05:00",
+      "subject": "[R-SIG-Finance] problem subsetting xts object with yearmon time index",
+      "subject_clean": "problem subsetting xts object with yearmon time index",
+      "in_reply_to": "<alpine.LRH.2.01.1503201211470.22522@hymn01.u.washington.edu>",
+      "references": [
+        "<CAPPM_gS=Pcr3EwkYs_hjAS2pnuwOqx1cP1sCjcPavVGKOnW1vQ@mail.gmail.com>",
+        "<alpine.LRH.2.01.1503201211470.22522@hymn01.u.washington.edu>"
+      ],
+      "body_plain": "On Fri, Mar 20, 2015 at 2:11 PM, Eric Zivot <ezivot at u.washington.edu> wrote:\n> Thanks Josh for the quick reply. However, I am a bit puzzled by the problem.\n> Why should a yearmon (or Date object) time index have a time zone attribute?\n> Shouldn't time zone issues only affect time-date objects? It seems nutty\n> that a date which represents a Year-month can be impacted by a time zone\n> offset from UTC. I know this happens because the internal date for the\n> yearmon object is the first day of the month. I guess this is one of the\n> hidden dangers of using xts objects for calendar time series.\n>\nThe timezone matters because xts objects always store the index as\nPOSIXct.  So, internally, there's always a time component.\n\nHow did you construct the msftMonthlyPrices data?  The xts constructor\nwill throw a warning if you try to supply a timezone with a\nDate-classed index, but does not if the class is yearmon or yearqtr\n(though it should).\n\n>\n>\n> On Fri, 20 Mar 2015, Joshua Ulrich wrote:\n>\n>> On Fri, Mar 20, 2015 at 12:18 PM, Joshua Ulrich <josh.m.ulrich at gmail.com>\n>> wrote:\n>>>\n>>> I can confirm this behavior with a simplified example using zoo 1.7-12\n>>> and the latest development xts.\n>>>\n>>>> data(sample_matrix)\n>>>> x <- as.xts(sample_matrix)\n>>>> y <- to.monthly(x)\n>>>> y['2007']\n>>>\n>>>            x.Open   x.High    x.Low  x.Close\n>>> Feb 2007 50.22448 51.32342 50.19101 50.77091\n>>> Mar 2007 50.81620 50.81620 48.23648 48.97490\n>>> Apr 2007 48.94407 50.33781 48.80962 49.33974\n>>> May 2007 49.34572 49.69097 47.51796 47.73780\n>>> Jun 2007 47.74432 47.94127 47.09144 47.76719\n>>>\n>>>\n>>> Thanks for the report.  I'll investigate.\n>>>\n>> This is a timezone issue.  The solution is to ensure your\n>> daily/monthly/quarterly indexed objects have an indexTZ of \"UTC\".\n>>\n>>> indexTZ(msftMonthlyPrices) <- \"UTC\"\n>>> msftMonthlyPrices['2014']\n>>\n>>          MSFT\n>> Jan 2014 36.57\n>> Feb 2014 37.30\n>> Mar 2014 39.91\n>> Apr 2014 39.34\n>> May 2014 40.15\n>> Jun 2014 40.89\n>> Jul 2014 42.32\n>> Aug 2014 44.83\n>> Sep 2014 45.74\n>> Oct 2014 46.33\n>> Nov 2014 47.47\n>> Dec 2014 46.12\n>> Warning message:\n>> timezone of object (UTC) is different than current timezone ().\n>>\n>> You can safely ignore the warning.  There probably should be a warning\n>> for non-UTC timezones on objects with a date-based index (or any\n>> higher periodicity)...\n>>\n>>> Best,\n>>> Josh\n>>>\n>>>\n>>> On Fri, Mar 20, 2015 at 12:08 PM, Eric Zivot <ezivot at u.washington.edu>\n>>> wrote:\n>>>>\n>>>> I seem to have a problem sub-setting an xts object with a yearmon time\n>>>> index. I have a xts object holding monthly returns where the time index is a\n>>>> yearmon object. When I subset the data for 2014 using ?2014? within the xts\n>>>> object I don?t get the data for January. However, if I subset the data using\n>>>> window() I get all of the data for 2014. Below is the example (from Rstudio\n>>>> on windows 8) and output. Why is January missing when I subset using\n>>>> mydata.xts[\"2014\"]????\n>>>>\n>>>>\n>>>>\n>>>>> options(digits=3, width=70)\n>>>>\n>>>>\n>>>>> # IntroCompFinR available from R-forge\n>>>>\n>>>>\n>>>>> # install.packages(\"IntroCompFinR\",\n>>>>> repos=\"http://R-Forge.R-project.org\")\n>>>>\n>>>>\n>>>>> library(IntroCompFinR)\n>>>>\n>>>>\n>>>>> library(PerformanceAnalytics)\n>>>>\n>>>>\n>>>>>\n>>>>\n>>>>> #\n>>>>\n>>>>\n>>>>> # load data and compute returns - MSFT\n>>>>\n>>>>\n>>>>> #\n>>>>\n>>>>\n>>>>>\n>>>>\n>>>>> data(msftMonthlyPrices)\n>>>>\n>>>>\n>>>>> msftRetC = na.omit(Return.calculate(msftMonthlyPrices,\n>>>>\n>>>>\n>>>> +                                     method=\"log\"))\n>>>>\n>>>>> head(msftRetC, n=3)\n>>>>\n>>>>\n>>>>             MSFT\n>>>>\n>>>> Feb 1993 -0.0371\n>>>>\n>>>> Mar 1993  0.1075\n>>>>\n>>>> Apr 1993 -0.0809\n>>>>\n>>>>> tail(msftRetC, n=3)\n>>>>\n>>>>\n>>>>             MSFT\n>>>>\n>>>> Oct 2014  0.0128\n>>>>\n>>>> Nov 2014  0.0243\n>>>>\n>>>> Dec 2014 -0.0289\n>>>>\n>>>>> class(index(msftRetC))\n>>>>\n>>>>\n>>>> [1] \"yearmon\"\n>>>>\n>>>>> # restric returns to last year\n>>>>\n>>>>\n>>>>> msftRetC2014 = msftRetC[\"2014\"]\n>>>>\n>>>>\n>>>>> msftRetC2014\n>>>>\n>>>>\n>>>>             MSFT\n>>>>\n>>>> Feb 2014  0.0198\n>>>>\n>>>> Mar 2014  0.0676\n>>>>\n>>>> Apr 2014 -0.0144\n>>>>\n>>>> May 2014  0.0204\n>>>>\n>>>> Jun 2014  0.0183\n>>>>\n>>>> Jul 2014  0.0344\n>>>>\n>>>> Aug 2014  0.0576\n>>>>\n>>>> Sep 2014  0.0201\n>>>>\n>>>> Oct 2014  0.0128\n>>>>\n>>>> Nov 2014  0.0243\n>>>>\n>>>> Dec 2014 -0.0289\n>>>>\n>>>>> # why is January missing?????\n>>>>\n>>>>\n>>>>> as.Date(index(msftRetC2014))\n>>>>\n>>>>\n>>>> [1] \"2014-02-01\" \"2014-03-01\" \"2014-04-01\" \"2014-05-01\" \"2014-06-01\"\n>>>>\n>>>> [6] \"2014-07-01\" \"2014-08-01\" \"2014-09-01\" \"2014-10-01\" \"2014-11-01\"\n>>>>\n>>>> [11] \"2014-12-01\"\n>>>>\n>>>>> # I get the right data using window()\n>>>>\n>>>>\n>>>>> window(msftRetC, start=as.yearmon(\"Jan 2014\"), end=as.yearmon(\"Dec\n>>>>> 2014\"))\n>>>>\n>>>>\n>>>>             MSFT\n>>>>\n>>>> Jan 2014  0.0113\n>>>>\n>>>> Feb 2014  0.0198\n>>>>\n>>>> Mar 2014  0.0676\n>>>>\n>>>> Apr 2014 -0.0144\n>>>>\n>>>> May 2014  0.0204\n>>>>\n>>>> Jun 2014  0.0183\n>>>>\n>>>> Jul 2014  0.0344\n>>>>\n>>>> Aug 2014  0.0576\n>>>>\n>>>> Sep 2014  0.0201\n>>>>\n>>>> Oct 2014  0.0128\n>>>>\n>>>> Nov 2014  0.0243\n>>>>\n>>>> Dec 2014 -0.0289\n>>>>\n>>>>> sessionInfo()\n>>>>\n>>>>\n>>>> R version 3.1.2 (2014-10-31)\n>>>>\n>>>> Platform: x86_64-w64-mingw32/x64 (64-bit)\n>>>>\n>>>>\n>>>>\n>>>> locale:\n>>>>\n>>>> [1] LC_COLLATE=English_United States.1252\n>>>>\n>>>> [2] LC_CTYPE=English_United States.1252\n>>>>\n>>>> [3] LC_MONETARY=English_United States.1252\n>>>>\n>>>> [4] LC_NUMERIC=C\n>>>>\n>>>> [5] LC_TIME=English_United States.1252\n>>>>\n>>>>\n>>>>\n>>>> attached base packages:\n>>>>\n>>>> [1] stats     graphics  grDevices utils     datasets  methods\n>>>>\n>>>> [7] base\n>>>>\n>>>>\n>>>>\n>>>> other attached packages:\n>>>>\n>>>> [1] boot_1.3-13                   PerformanceAnalytics_1.4.3541\n>>>>\n>>>> [3] IntroCompFinR_1.0             xts_0.9-7\n>>>>\n>>>> [5] zoo_1.7-11\n>>>>\n>>>>\n>>>>\n>>>> loaded via a namespace (and not attached):\n>>>>\n>>>> [1] digest_0.6.8    grid_3.1.2      htmltools_0.2.6 lattice_0.20-29\n>>>>\n>>>> [5] rmarkdown_0.5.1 tools_3.1.2     yaml_2.1.13\n>>>>\n>>>>\n>>>>\n>>>> Thanks in advance for any insight.\n>>>>\n>>>>\n>>>>\n>>>>\n>>>>\n>>>> _______________________________________________\n>>>> R-SIG-Finance at r-project.org mailing list\n>>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>>> -- Also note that this is not the r-help list where general R questions\n>>>> should go.\n>>>\n>>>\n>>>\n>>>\n>>> --\n>>> Joshua Ulrich  |  about.me/joshuaulrich\n>>> FOSS Trading  |  www.fosstrading.com\n>>\n>>\n>>\n>>\n>> --\n>> Joshua Ulrich  |  about.me/joshuaulrich\n>> FOSS Trading  |  www.fosstrading.com\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Fri, Mar 20, 2015 at 2:11 PM, Eric Zivot <ezivot at u.washington.edu> wrote:\n> Thanks Josh for the quick reply. However, I am a bit puzzled by the problem.\n> Why should a yearmon (or Date object) t",
+      "thread_id": "thread-6d159941c2c1",
+      "thread_depth": 4,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-76acdd2e956c",
+      "message_id": "<253B4FA1ECEEB54DB661809CB67734552A0D0DDA@NOR-EXC02.northview.local>",
+      "from_name": "Charles Duranceau",
+      "from_email_hash": "1bda65d90a23cefe56ceb332499aa8550b94134f4e7ce814f34d81f92187da7a",
+      "date": "2015-03-23T23:05:32Z",
+      "subject": "[R-SIG-Finance] validation of DrawdownPeak in PerformanceAnalytics package",
+      "subject_clean": "validation of DrawdownPeak in PerformanceAnalytics package",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\nI'm looking at the results returned by the function DrawdownPeak and struggle to understand the calculation.\nIn the following example, I recalculate the return from drawdown and for the third period I found a difference (I'm aware the formula I'm using is only local for the example).\nI expect using \"geometric\" rule for aggregating returns but cannot match the calculations\n\nIn this example the peak is 10% and the returns for the next 2 period are -2% and -1% which should lead to a cumulative return of (1.1 / 1.078 / 1.06722)\n\nQ1. The return for the 3rd period from Peak should then be : 1.06722 / 1.10 -1 = 2.98% and not 2.9998%. Is the result I should expect? (it looks like the it does not compound when \"geometric=TRUE\")\nQ2. I noticed that \"geometric=TRUE\" option does not make any difference. Is this expected?\nQ3. Finally I was not able to standardized the decimal with  options(digits=4). Is this normal?\n\nCode for replication\n\nlibrary(\"PerformanceAnalytics\")\nret_num<-c(0.10,-0.020,-0.010)                                                            # simulated returns - the peak is the first observations\nret_test<-xts(ret_num, Sys.Date()-3:1)                                     # return in xts class\nddtp_test<-DrawdownPeak(ret_test,geometric=TRUE)            # results for return for drawdowns  to validate\ncret_num<-cumprod(1+ret_num)-1                                          # validation by cumulative returns\nddtp_vet<-(1+cret_num)/(1+cret_num[1])-1                # replication of cumulative returns for drawdowns\ncbind(ddtp_test,ddtp_vet)                                             # to compare results - differences\n\nThe third row shows a difference - look small bu\n     ddtp_test ddtp_vet\n[1,]  0.000000   0.0000\n[2,] -0.020000  -0.0200\n[3,] -0.029998  -0.0298\n\n\nThis looks small (not related to rounding)  but in other cases the difference was more important and lead to  difference in the drawdown period.\nI reproduced the same values with version 3.1 and version 3.1.3\n\n\nPackage PerformanceAnalytics (1.4.3579) loaded.\n\nversion.string R version 3.1.3 (2015-03-09)\n\n\n\n\n\n\n\nThank you\nBest Regards,\n\nCharles\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\nI'm looking at the results returned by the function DrawdownPeak and struggle to understand the calculation.\nIn the following example, I recalculate the return from drawdown and for the third peri",
+      "thread_id": "thread-76acdd2e956c",
+      "thread_depth": 0,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-e943da366981",
+      "message_id": "<5510A618.6060808@braverock.com>",
+      "from_name": "Peter Carl",
+      "from_email_hash": "1e650586f3b88a796073ac676ae34d7a5367febd527471fdeb70e957b34309a7",
+      "date": "2015-03-23T18:47:36-05:00",
+      "subject": "[R-SIG-Finance] validation of DrawdownPeak in PerformanceAnalytics package",
+      "subject_clean": "validation of DrawdownPeak in PerformanceAnalytics package",
+      "in_reply_to": "<253B4FA1ECEEB54DB661809CB67734552A0D0DDA@NOR-EXC02.northview.local>",
+      "references": [
+        "<253B4FA1ECEEB54DB661809CB67734552A0D0DDA@NOR-EXC02.northview.local>"
+      ],
+      "body_plain": "Charles,\n\nDrawdownPeak probably shouldn't be in the namespace - thanks for \npointing it out.  You might be looking for \nPerformanceAnalytics:::Drawdowns, which probably *should* be in the \nnamespace.  Let me know if that works for you.\n\npcc\n\nOn 03/23/2015 06:05 PM, Charles Duranceau wrote:\n> Hi,\n> I'm looking at the results returned by the function DrawdownPeak and struggle to understand the calculation.\n> In the following example, I recalculate the return from drawdown and for the third period I found a difference (I'm aware the formula I'm using is only local for the example).\n> I expect using \"geometric\" rule for aggregating returns but cannot match the calculations\n>\n> In this example the peak is 10% and the returns for the next 2 period are -2% and -1% which should lead to a cumulative return of (1.1 / 1.078 / 1.06722)\n>\n> Q1. The return for the 3rd period from Peak should then be : 1.06722 / 1.10 -1 = 2.98% and not 2.9998%. Is the result I should expect? (it looks like the it does not compound when \"geometric=TRUE\")\n> Q2. I noticed that \"geometric=TRUE\" option does not make any difference. Is this expected?\n> Q3. Finally I was not able to standardized the decimal with  options(digits=4). Is this normal?\n>\n> Code for replication\n>\n> library(\"PerformanceAnalytics\")\n> ret_num<-c(0.10,-0.020,-0.010)                                                            # simulated returns - the peak is the first observations\n> ret_test<-xts(ret_num, Sys.Date()-3:1)                                     # return in xts class\n> ddtp_test<-DrawdownPeak(ret_test,geometric=TRUE)            # results for return for drawdowns  to validate\n> cret_num<-cumprod(1+ret_num)-1                                          # validation by cumulative returns\n> ddtp_vet<-(1+cret_num)/(1+cret_num[1])-1                # replication of cumulative returns for drawdowns\n> cbind(ddtp_test,ddtp_vet)                                             # to compare results - differences\n>\n> The third row shows a difference - look small bu\n>       ddtp_test ddtp_vet\n> [1,]  0.000000   0.0000\n> [2,] -0.020000  -0.0200\n> [3,] -0.029998  -0.0298\n>\n>\n> This looks small (not related to rounding)  but in other cases the difference was more important and lead to  difference in the drawdown period.\n> I reproduced the same values with version 3.1 and version 3.1.3\n>\n>\n> Package PerformanceAnalytics (1.4.3579) loaded.\n>\n> version.string R version 3.1.3 (2015-03-09)\n>\n>\n>\n>\n>\n>\n>\n> Thank you\n> Best Regards,\n>\n> Charles\n>\n>\n>\n> \t[[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>\n\n\n-- \nPeter Carl\n312.307.6346",
+      "body_snippet": "Charles,\n\nDrawdownPeak probably shouldn't be in the namespace - thanks for \npointing it out.  You might be looking for \nPerformanceAnalytics:::Drawdowns, which probably *should* be in the \nnamespace. ",
+      "thread_id": "thread-76acdd2e956c",
+      "thread_depth": 1,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-884318eb5719",
+      "message_id": "<CAEXmNQB1LG5HU_jnc1BGCyo6ch+F-K+4Z_p+7PKTHrTCFOi-gA@mail.gmail.com>",
+      "from_name": "Jaimie Villanueva",
+      "from_email_hash": "89710ff6f806b34caf52bf14f83044d7494659c65ac6fcc6f8c306affffd14e1",
+      "date": "2015-03-24T19:29:32+01:00",
+      "subject": "[R-SIG-Finance] ugarchfit: Weighted Ljung-Box Test",
+      "subject_clean": "ugarchfit: Weighted Ljung-Box Test",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear R users\n\nI recently moved to the latest version of rugarch package (rugarch_1.3-4)\nand i notice that the Ljung Box test on the standarized residuals\n(squared standarized residuals too) is newer shown up. There is always\nappearing \"NA\" simbols. I don't really understand why.I tried to find it\nout by myself but without success.\n\nIs there anyone who can help me out with this?\n\nHere is a little reproducible example along with session info:\n\n*spec = ugarchspec()*\n*data(sp500ret)*\n*fit = ugarchfit(spec = spec, data = sp500ret)*\n*show(fit)*\n\n\n*---------------------------------*\n*          GARCH Model Fit        *\n*---------------------------------*\n\nConditional Variance Dynamics\n-----------------------------------\nGARCH Model : sGARCH(1,1)\nMean Model : ARFIMA(1,0,1)\nDistribution : norm\n\nOptimal Parameters\n------------------------------------\n        Estimate  Std. Error  t value Pr(>|t|)\nmu      0.000523    0.000087   5.9907   0.0000\nar1     0.870134    0.072199  12.0518   0.0000\nma1    -0.897344    0.064634 -13.8834   0.0000\nomega   0.000001    0.000001   1.3970   0.1624\nalpha1  0.087715    0.013659   6.4219   0.0000\nbeta1   0.904935    0.013705  66.0292   0.0000\n\nRobust Standard Errors:\n        Estimate  Std. Error    t value Pr(>|t|)\nmu      0.000523    0.000129   4.038024 0.000054\nar1     0.870134    0.088227   9.862425 0.000000\nma1    -0.897344    0.080389 -11.162576 0.000000\nomega   0.000001    0.000014   0.094157 0.924984\nalpha1  0.087715    0.185058   0.473985 0.635511\nbeta1   0.904935    0.190563   4.748733 0.000002\n\nLogLikelihood : 17902.41\n\nInformation Criteria\n------------------------------------\n\nAkaike       -6.4807\nBayes        -6.4735\nShibata      -6.4807\nHannan-Quinn -6.4782\n\nWeighted Ljung-Box Test on Standardized Residuals\n------------------------------------\n                        statistic p-value\nLag[1]                         NA      NA\nLag[2*(p+q)+(p+q)-1][5]        NA      NA\nLag[4*(p+q)+(p+q)-1][9]        NA      NA\nd.o.f=2\nH0 : No serial correlation\n\nWeighted Ljung-Box Test on Standardized Squared Residuals\n------------------------------------\n                        statistic p-value\nLag[1]                         NA      NA\nLag[2*(p+q)+(p+q)-1][5]        NA      NA\nLag[4*(p+q)+(p+q)-1][9]        NA      NA\nd.o.f=2\n\nWeighted ARCH LM Tests\n------------------------------------\n            Statistic Shape Scale P-Value\nARCH Lag[3]        NA 0.500 2.000      NA\nARCH Lag[5]        NA 1.440 1.667      NA\nARCH Lag[7]        NA 2.315 1.543      NA\n\nNyblom stability test\n------------------------------------\nJoint Statistic:  174.2204\nIndividual Statistics:\nmu      0.2060\nar1     0.1477\nma1     0.1047\nomega  21.3472\nalpha1  0.1346\nbeta1   0.1134\n\nAsymptotic Critical Values (10% 5% 1%)\nJoint Statistic:      1.49 1.68 2.12\nIndividual Statistic: 0.35 0.47 0.75\n\nSign Bias Test\n------------------------------------\n                   t-value      prob sig\nSign Bias           0.4296 6.675e-01\nNegative Sign Bias  2.9492 3.199e-03 ***\nPositive Sign Bias  2.3921 1.678e-02  **\nJoint Effect       28.9841 2.257e-06 ***\n\n\nAdjusted Pearson Goodness-of-Fit Test:\n------------------------------------\n  group statistic p-value(g-1)\n1    20     178.6    5.738e-28\n2    30     188.1    3.136e-25\n3    40     217.8    1.084e-26\n4    50     227.9    7.064e-25\n\n\nElapsed time : 1.343655\n\n\n*sessionInfo()*\n\nR version 3.1.3 (2015-03-09)\nPlatform: i386-w64-mingw32/i386 (32-bit)\nRunning under: Windows XP (build 2600) Service Pack 3\n\nlocale:\n[1] LC_COLLATE=Spanish_Spain.1252\n[2] LC_CTYPE=Spanish_Spain.1252\n[3] LC_MONETARY=Spanish_Spain.1252\n[4] LC_NUMERIC=C\n[5] LC_TIME=Spanish_Spain.1252\n\nattached base packages:\n[1] parallel  stats     graphics  grDevices utils\n[6] datasets  methods   base\n\nother attached packages:\n [1] nortest_1.0-3      ggplot2_1.0.1\n [3] fUnitRoots_3010.78 urca_1.2-8\n [5] fGarch_3010.82     fBasics_3011.87\n [7] rugarch_1.3-4      FinTS_0.4-5\n [9] TSA_1.01           mgcv_1.8-5\n[11] nlme_3.1-120       locfit_1.5-9.1\n[13] leaps_2.9          MASS_7.3-39\n[15] timeSeries_3012.99 timeDate_3012.100\n[17] tseries_0.10-34    zoo_1.7-12\n[19] quadprog_1.5-5     RODBC_1.3-11\n\nloaded via a namespace (and not attached):\n [1] colorspace_1.2-6\n [2] digest_0.6.8\n [3] DistributionUtils_0.5-1\n [4] expm_0.99-1.1\n [5] GeneralizedHyperbolic_0.8-1\n [6] grid_3.1.3\n [7] gtable_0.1.2\n [8] KernSmooth_2.23-14\n [9] ks_1.9.4\n[10] labeling_0.3\n[11] lattice_0.20-30\n[12] Matrix_1.1-5\n[13] misc3d_0.8-4\n[14] munsell_0.4.2\n[15] mvtnorm_1.0-2\n[16] nloptr_1.0.4\n[17] numDeriv_2012.9-1\n[18] plyr_1.8.1\n[19] proto_0.3-10\n[20] Rcpp_0.11.5\n[21] reshape2_1.4.1\n[22] rgl_0.95.1201\n[23] Rsolnp_1.15\n[24] scales_0.2.4\n[25] SkewHyperbolic_0.3-2\n[26] spd_2.0-0\n[27] stringr_0.6.2\n[28] tools_3.1.3\n[29] truncnorm_1.0-7\n[30] xts_0.9-7\n\n\nThanks u all in advance.\n-- \n*Jaimie.*\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear R users\n\nI recently moved to the latest version of rugarch package (rugarch_1.3-4)\nand i notice that the Ljung Box test on the standarized residuals\n(squared standarized residuals too) is newer s",
+      "thread_id": "thread-884318eb5719",
+      "thread_depth": 0,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-0f0dedcd3c22",
+      "message_id": "<5511AECB.4090703@4dscape.com>",
+      "from_name": "alexios",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2015-03-24T18:36:59Z",
+      "subject": "[R-SIG-Finance] ugarchfit: Weighted Ljung-Box Test",
+      "subject_clean": "ugarchfit: Weighted Ljung-Box Test",
+      "in_reply_to": "<CAEXmNQB1LG5HU_jnc1BGCyo6ch+F-K+4Z_p+7PKTHrTCFOi-gA@mail.gmail.com>",
+      "references": [
+        "<CAEXmNQB1LG5HU_jnc1BGCyo6ch+F-K+4Z_p+7PKTHrTCFOi-gA@mail.gmail.com>"
+      ],
+      "body_plain": "I'm still on R 3.1.2 and can't replicate this...I'll upgrade and \ninvestigate.\n\nAlexios\n\nOn 24/03/2015 18:29, Jaimie Villanueva wrote:\n> Dear R users\n>\n> I recently moved to the latest version of rugarch package (rugarch_1.3-4)\n> and i notice that the Ljung Box test on the standarized residuals\n> (squared standarized residuals too) is newer shown up. There is always\n> appearing \"NA\" simbols. I don't really understand why.I tried to find it\n> out by myself but without success.\n>\n> Is there anyone who can help me out with this?\n>\n> Here is a little reproducible example along with session info:\n>\n> *spec = ugarchspec()*\n> *data(sp500ret)*\n> *fit = ugarchfit(spec = spec, data = sp500ret)*\n> *show(fit)*\n>\n>\n> *---------------------------------*\n> *          GARCH Model Fit        *\n> *---------------------------------*\n>\n> Conditional Variance Dynamics\n> -----------------------------------\n> GARCH Model : sGARCH(1,1)\n> Mean Model : ARFIMA(1,0,1)\n> Distribution : norm\n>\n> Optimal Parameters\n> ------------------------------------\n>          Estimate  Std. Error  t value Pr(>|t|)\n> mu      0.000523    0.000087   5.9907   0.0000\n> ar1     0.870134    0.072199  12.0518   0.0000\n> ma1    -0.897344    0.064634 -13.8834   0.0000\n> omega   0.000001    0.000001   1.3970   0.1624\n> alpha1  0.087715    0.013659   6.4219   0.0000\n> beta1   0.904935    0.013705  66.0292   0.0000\n>\n> Robust Standard Errors:\n>          Estimate  Std. Error    t value Pr(>|t|)\n> mu      0.000523    0.000129   4.038024 0.000054\n> ar1     0.870134    0.088227   9.862425 0.000000\n> ma1    -0.897344    0.080389 -11.162576 0.000000\n> omega   0.000001    0.000014   0.094157 0.924984\n> alpha1  0.087715    0.185058   0.473985 0.635511\n> beta1   0.904935    0.190563   4.748733 0.000002\n>\n> LogLikelihood : 17902.41\n>\n> Information Criteria\n> ------------------------------------\n>\n> Akaike       -6.4807\n> Bayes        -6.4735\n> Shibata      -6.4807\n> Hannan-Quinn -6.4782\n>\n> Weighted Ljung-Box Test on Standardized Residuals\n> ------------------------------------\n>                          statistic p-value\n> Lag[1]                         NA      NA\n> Lag[2*(p+q)+(p+q)-1][5]        NA      NA\n> Lag[4*(p+q)+(p+q)-1][9]        NA      NA\n> d.o.f=2\n> H0 : No serial correlation\n>\n> Weighted Ljung-Box Test on Standardized Squared Residuals\n> ------------------------------------\n>                          statistic p-value\n> Lag[1]                         NA      NA\n> Lag[2*(p+q)+(p+q)-1][5]        NA      NA\n> Lag[4*(p+q)+(p+q)-1][9]        NA      NA\n> d.o.f=2\n>\n> Weighted ARCH LM Tests\n> ------------------------------------\n>              Statistic Shape Scale P-Value\n> ARCH Lag[3]        NA 0.500 2.000      NA\n> ARCH Lag[5]        NA 1.440 1.667      NA\n> ARCH Lag[7]        NA 2.315 1.543      NA\n>\n> Nyblom stability test\n> ------------------------------------\n> Joint Statistic:  174.2204\n> Individual Statistics:\n> mu      0.2060\n> ar1     0.1477\n> ma1     0.1047\n> omega  21.3472\n> alpha1  0.1346\n> beta1   0.1134\n>\n> Asymptotic Critical Values (10% 5% 1%)\n> Joint Statistic:      1.49 1.68 2.12\n> Individual Statistic: 0.35 0.47 0.75\n>\n> Sign Bias Test\n> ------------------------------------\n>                     t-value      prob sig\n> Sign Bias           0.4296 6.675e-01\n> Negative Sign Bias  2.9492 3.199e-03 ***\n> Positive Sign Bias  2.3921 1.678e-02  **\n> Joint Effect       28.9841 2.257e-06 ***\n>\n>\n> Adjusted Pearson Goodness-of-Fit Test:\n> ------------------------------------\n>    group statistic p-value(g-1)\n> 1    20     178.6    5.738e-28\n> 2    30     188.1    3.136e-25\n> 3    40     217.8    1.084e-26\n> 4    50     227.9    7.064e-25\n>\n>\n> Elapsed time : 1.343655\n>\n>\n> *sessionInfo()*\n>\n> R version 3.1.3 (2015-03-09)\n> Platform: i386-w64-mingw32/i386 (32-bit)\n> Running under: Windows XP (build 2600) Service Pack 3\n>\n> locale:\n> [1] LC_COLLATE=Spanish_Spain.1252\n> [2] LC_CTYPE=Spanish_Spain.1252\n> [3] LC_MONETARY=Spanish_Spain.1252\n> [4] LC_NUMERIC=C\n> [5] LC_TIME=Spanish_Spain.1252\n>\n> attached base packages:\n> [1] parallel  stats     graphics  grDevices utils\n> [6] datasets  methods   base\n>\n> other attached packages:\n>   [1] nortest_1.0-3      ggplot2_1.0.1\n>   [3] fUnitRoots_3010.78 urca_1.2-8\n>   [5] fGarch_3010.82     fBasics_3011.87\n>   [7] rugarch_1.3-4      FinTS_0.4-5\n>   [9] TSA_1.01           mgcv_1.8-5\n> [11] nlme_3.1-120       locfit_1.5-9.1\n> [13] leaps_2.9          MASS_7.3-39\n> [15] timeSeries_3012.99 timeDate_3012.100\n> [17] tseries_0.10-34    zoo_1.7-12\n> [19] quadprog_1.5-5     RODBC_1.3-11\n>\n> loaded via a namespace (and not attached):\n>   [1] colorspace_1.2-6\n>   [2] digest_0.6.8\n>   [3] DistributionUtils_0.5-1\n>   [4] expm_0.99-1.1\n>   [5] GeneralizedHyperbolic_0.8-1\n>   [6] grid_3.1.3\n>   [7] gtable_0.1.2\n>   [8] KernSmooth_2.23-14\n>   [9] ks_1.9.4\n> [10] labeling_0.3\n> [11] lattice_0.20-30\n> [12] Matrix_1.1-5\n> [13] misc3d_0.8-4\n> [14] munsell_0.4.2\n> [15] mvtnorm_1.0-2\n> [16] nloptr_1.0.4\n> [17] numDeriv_2012.9-1\n> [18] plyr_1.8.1\n> [19] proto_0.3-10\n> [20] Rcpp_0.11.5\n> [21] reshape2_1.4.1\n> [22] rgl_0.95.1201\n> [23] Rsolnp_1.15\n> [24] scales_0.2.4\n> [25] SkewHyperbolic_0.3-2\n> [26] spd_2.0-0\n> [27] stringr_0.6.2\n> [28] tools_3.1.3\n> [29] truncnorm_1.0-7\n> [30] xts_0.9-7\n>\n>\n> Thanks u all in advance.\n>",
+      "body_snippet": "I'm still on R 3.1.2 and can't replicate this...I'll upgrade and \ninvestigate.\n\nAlexios\n\nOn 24/03/2015 18:29, Jaimie Villanueva wrote:\n> Dear R users\n>\n> I recently moved to the latest version of ruga",
+      "thread_id": "thread-884318eb5719",
+      "thread_depth": 1,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-a08dac2a43c0",
+      "message_id": "<5512BC21.20203@4dscape.com>",
+      "from_name": "alexios",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2015-03-25T13:46:09Z",
+      "subject": "[R-SIG-Finance] ugarchfit: Weighted Ljung-Box Test",
+      "subject_clean": "ugarchfit: Weighted Ljung-Box Test",
+      "in_reply_to": "<CAEXmNQB1LG5HU_jnc1BGCyo6ch+F-K+4Z_p+7PKTHrTCFOi-gA@mail.gmail.com>",
+      "references": [
+        "<CAEXmNQB1LG5HU_jnc1BGCyo6ch+F-K+4Z_p+7PKTHrTCFOi-gA@mail.gmail.com>"
+      ],
+      "body_plain": "I've tested this with R 3.1.3 and could not replicate on either i386 or \nx64. BTW the latest (development) version of rugarch is 1.3-5:\nlibrary(devtools)\ninstall_bitbucket(\"alexiosg/rugarch\")\n\n >sessionInfo()\nR version 3.1.3 (2015-03-09)\nPlatform: x86_64-w64-mingw32/x64 (64-bit)\nRunning under: [deleted]\n\nlocale:\n[deleted]\n\nattached base packages:\n[1] parallel  stats     graphics  grDevices utils     datasets  methods \n   base\n\nother attached packages:\n[1] rugarch_1.3-5  devtools_1.7.0\n\nloaded via a namespace (and not attached):\n  [1] bitops_1.0-6                DistributionUtils_0.5-1 \nexpm_0.99-1.1\n  [4] GeneralizedHyperbolic_0.8-1 grid_3.1.3                  httr_0.6.1 \n\n  [7] KernSmooth_2.23-14          ks_1.9.4 \nlattice_0.20-30\n[10] Matrix_1.1-5                misc3d_0.8-4 \nmvtnorm_1.0-2\n[13] nloptr_1.0.4                numDeriv_2012.9-1           Rcpp_0.11.5 \n\n[16] RCurl_1.95-4.5              rgl_0.95.1201               Rsolnp_1.15 \n\n[19] SkewHyperbolic_0.3-2        spd_2.0-0 \nstringr_0.6.2\n[22] tools_3.1.3                 truncnorm_1.0-7             xts_0.9-7 \n\n[25] zoo_1.7-12\n\nOn 24/03/2015 18:29, Jaimie Villanueva wrote:\n> Dear R users\n>\n> I recently moved to the latest version of rugarch package (rugarch_1.3-4)\n> and i notice that the Ljung Box test on the standarized residuals\n> (squared standarized residuals too) is newer shown up. There is always\n> appearing \"NA\" simbols. I don't really understand why.I tried to find it\n> out by myself but without success.\n>\n> Is there anyone who can help me out with this?\n>\n> Here is a little reproducible example along with session info:\n>\n> *spec = ugarchspec()*\n> *data(sp500ret)*\n> *fit = ugarchfit(spec = spec, data = sp500ret)*\n> *show(fit)*\n>\n>\n> *---------------------------------*\n> *          GARCH Model Fit        *\n> *---------------------------------*\n>\n> Conditional Variance Dynamics\n> -----------------------------------\n> GARCH Model : sGARCH(1,1)\n> Mean Model : ARFIMA(1,0,1)\n> Distribution : norm\n>\n> Optimal Parameters\n> ------------------------------------\n>          Estimate  Std. Error  t value Pr(>|t|)\n> mu      0.000523    0.000087   5.9907   0.0000\n> ar1     0.870134    0.072199  12.0518   0.0000\n> ma1    -0.897344    0.064634 -13.8834   0.0000\n> omega   0.000001    0.000001   1.3970   0.1624\n> alpha1  0.087715    0.013659   6.4219   0.0000\n> beta1   0.904935    0.013705  66.0292   0.0000\n>\n> Robust Standard Errors:\n>          Estimate  Std. Error    t value Pr(>|t|)\n> mu      0.000523    0.000129   4.038024 0.000054\n> ar1     0.870134    0.088227   9.862425 0.000000\n> ma1    -0.897344    0.080389 -11.162576 0.000000\n> omega   0.000001    0.000014   0.094157 0.924984\n> alpha1  0.087715    0.185058   0.473985 0.635511\n> beta1   0.904935    0.190563   4.748733 0.000002\n>\n> LogLikelihood : 17902.41\n>\n> Information Criteria\n> ------------------------------------\n>\n> Akaike       -6.4807\n> Bayes        -6.4735\n> Shibata      -6.4807\n> Hannan-Quinn -6.4782\n>\n> Weighted Ljung-Box Test on Standardized Residuals\n> ------------------------------------\n>                          statistic p-value\n> Lag[1]                         NA      NA\n> Lag[2*(p+q)+(p+q)-1][5]        NA      NA\n> Lag[4*(p+q)+(p+q)-1][9]        NA      NA\n> d.o.f=2\n> H0 : No serial correlation\n>\n> Weighted Ljung-Box Test on Standardized Squared Residuals\n> ------------------------------------\n>                          statistic p-value\n> Lag[1]                         NA      NA\n> Lag[2*(p+q)+(p+q)-1][5]        NA      NA\n> Lag[4*(p+q)+(p+q)-1][9]        NA      NA\n> d.o.f=2\n>\n> Weighted ARCH LM Tests\n> ------------------------------------\n>              Statistic Shape Scale P-Value\n> ARCH Lag[3]        NA 0.500 2.000      NA\n> ARCH Lag[5]        NA 1.440 1.667      NA\n> ARCH Lag[7]        NA 2.315 1.543      NA\n>\n> Nyblom stability test\n> ------------------------------------\n> Joint Statistic:  174.2204\n> Individual Statistics:\n> mu      0.2060\n> ar1     0.1477\n> ma1     0.1047\n> omega  21.3472\n> alpha1  0.1346\n> beta1   0.1134\n>\n> Asymptotic Critical Values (10% 5% 1%)\n> Joint Statistic:      1.49 1.68 2.12\n> Individual Statistic: 0.35 0.47 0.75\n>\n> Sign Bias Test\n> ------------------------------------\n>                     t-value      prob sig\n> Sign Bias           0.4296 6.675e-01\n> Negative Sign Bias  2.9492 3.199e-03 ***\n> Positive Sign Bias  2.3921 1.678e-02  **\n> Joint Effect       28.9841 2.257e-06 ***\n>\n>\n> Adjusted Pearson Goodness-of-Fit Test:\n> ------------------------------------\n>    group statistic p-value(g-1)\n> 1    20     178.6    5.738e-28\n> 2    30     188.1    3.136e-25\n> 3    40     217.8    1.084e-26\n> 4    50     227.9    7.064e-25\n>\n>\n> Elapsed time : 1.343655\n>\n>\n> *sessionInfo()*\n>\n> R version 3.1.3 (2015-03-09)\n> Platform: i386-w64-mingw32/i386 (32-bit)\n> Running under: Windows XP (build 2600) Service Pack 3\n>\n> locale:\n> [1] LC_COLLATE=Spanish_Spain.1252\n> [2] LC_CTYPE=Spanish_Spain.1252\n> [3] LC_MONETARY=Spanish_Spain.1252\n> [4] LC_NUMERIC=C\n> [5] LC_TIME=Spanish_Spain.1252\n>\n> attached base packages:\n> [1] parallel  stats     graphics  grDevices utils\n> [6] datasets  methods   base\n>\n> other attached packages:\n>   [1] nortest_1.0-3      ggplot2_1.0.1\n>   [3] fUnitRoots_3010.78 urca_1.2-8\n>   [5] fGarch_3010.82     fBasics_3011.87\n>   [7] rugarch_1.3-4      FinTS_0.4-5\n>   [9] TSA_1.01           mgcv_1.8-5\n> [11] nlme_3.1-120       locfit_1.5-9.1\n> [13] leaps_2.9          MASS_7.3-39\n> [15] timeSeries_3012.99 timeDate_3012.100\n> [17] tseries_0.10-34    zoo_1.7-12\n> [19] quadprog_1.5-5     RODBC_1.3-11\n>\n> loaded via a namespace (and not attached):\n>   [1] colorspace_1.2-6\n>   [2] digest_0.6.8\n>   [3] DistributionUtils_0.5-1\n>   [4] expm_0.99-1.1\n>   [5] GeneralizedHyperbolic_0.8-1\n>   [6] grid_3.1.3\n>   [7] gtable_0.1.2\n>   [8] KernSmooth_2.23-14\n>   [9] ks_1.9.4\n> [10] labeling_0.3\n> [11] lattice_0.20-30\n> [12] Matrix_1.1-5\n> [13] misc3d_0.8-4\n> [14] munsell_0.4.2\n> [15] mvtnorm_1.0-2\n> [16] nloptr_1.0.4\n> [17] numDeriv_2012.9-1\n> [18] plyr_1.8.1\n> [19] proto_0.3-10\n> [20] Rcpp_0.11.5\n> [21] reshape2_1.4.1\n> [22] rgl_0.95.1201\n> [23] Rsolnp_1.15\n> [24] scales_0.2.4\n> [25] SkewHyperbolic_0.3-2\n> [26] spd_2.0-0\n> [27] stringr_0.6.2\n> [28] tools_3.1.3\n> [29] truncnorm_1.0-7\n> [30] xts_0.9-7\n>\n>\n> Thanks u all in advance.\n>",
+      "body_snippet": "I've tested this with R 3.1.3 and could not replicate on either i386 or \nx64. BTW the latest (development) version of rugarch is 1.3-5:\nlibrary(devtools)\ninstall_bitbucket(\"alexiosg/rugarch\")\n\n >sessi",
+      "thread_id": "thread-884318eb5719",
+      "thread_depth": 1,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-49b1d3355526",
+      "message_id": "<253B4FA1ECEEB54DB661809CB67734552A0D19DD@NOR-EXC02.northview.local>",
+      "from_name": "Charles Duranceau",
+      "from_email_hash": "1bda65d90a23cefe56ceb332499aa8550b94134f4e7ce814f34d81f92187da7a",
+      "date": "2015-03-25T23:30:30Z",
+      "subject": "[R-SIG-Finance] validation of DrawdownPeak in PerformanceAnalytics package",
+      "subject_clean": "validation of DrawdownPeak in PerformanceAnalytics package",
+      "in_reply_to": "<5510A618.6060808@braverock.com>",
+      "references": [
+        "<253B4FA1ECEEB54DB661809CB67734552A0D0DDA@NOR-EXC02.northview.local>",
+        "<5510A618.6060808@braverock.com>"
+      ],
+      "body_plain": "Hi Peter, \n\nYes that works. Thank you\nI found also easier working directly with \"table.Drawdowns\" but wanted to understand the building blocks. \n\nCheers\n\n\n-----Original Message-----\nFrom: Peter Carl [mailto:peter at braverock.com] \nSent: Monday, March 23, 2015 6:48 PM\nTo: Charles Duranceau; r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] validation of DrawdownPeak in PerformanceAnalytics package\n\nCharles,\n\nDrawdownPeak probably shouldn't be in the namespace - thanks for pointing it out.  You might be looking for PerformanceAnalytics:::Drawdowns, which probably *should* be in the namespace.  Let me know if that works for you.\n\npcc\n\nOn 03/23/2015 06:05 PM, Charles Duranceau wrote:\n> Hi,\n> I'm looking at the results returned by the function DrawdownPeak and struggle to understand the calculation.\n> In the following example, I recalculate the return from drawdown and for the third period I found a difference (I'm aware the formula I'm using is only local for the example).\n> I expect using \"geometric\" rule for aggregating returns but cannot \n> match the calculations\n>\n> In this example the peak is 10% and the returns for the next 2 period \n> are -2% and -1% which should lead to a cumulative return of (1.1 / \n> 1.078 / 1.06722)\n>\n> Q1. The return for the 3rd period from Peak should then be : 1.06722 / \n> 1.10 -1 = 2.98% and not 2.9998%. Is the result I should expect? (it looks like the it does not compound when \"geometric=TRUE\") Q2. I noticed that \"geometric=TRUE\" option does not make any difference. Is this expected?\n> Q3. Finally I was not able to standardized the decimal with  options(digits=4). Is this normal?\n>\n> Code for replication\n>\n> library(\"PerformanceAnalytics\")\n> ret_num<-c(0.10,-0.020,-0.010)                                                            # simulated returns - the peak is the first observations\n> ret_test<-xts(ret_num, Sys.Date()-3:1)                                     # return in xts class\n> ddtp_test<-DrawdownPeak(ret_test,geometric=TRUE)            # results for return for drawdowns  to validate\n> cret_num<-cumprod(1+ret_num)-1                                          # validation by cumulative returns\n> ddtp_vet<-(1+cret_num)/(1+cret_num[1])-1                # replication of cumulative returns for drawdowns\n> cbind(ddtp_test,ddtp_vet)                                             # to compare results - differences\n>\n> The third row shows a difference - look small bu\n>       ddtp_test ddtp_vet\n> [1,]  0.000000   0.0000\n> [2,] -0.020000  -0.0200\n> [3,] -0.029998  -0.0298\n>\n>\n> This looks small (not related to rounding)  but in other cases the difference was more important and lead to  difference in the drawdown period.\n> I reproduced the same values with version 3.1 and version 3.1.3\n>\n>\n> Package PerformanceAnalytics (1.4.3579) loaded.\n>\n> version.string R version 3.1.3 (2015-03-09)\n>\n>\n>\n>\n>\n>\n>\n> Thank you\n> Best Regards,\n>\n> Charles\n>\n>\n>\n> \t[[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list \n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>\n\n\n--\nPeter Carl\n312.307.6346",
+      "body_snippet": "Hi Peter, \n\nYes that works. Thank you\nI found also easier working directly with \"table.Drawdowns\" but wanted to understand the building blocks. \n\nCheers\n\n\n-----Original Message-----\nFrom: Peter Carl [",
+      "thread_id": "thread-76acdd2e956c",
+      "thread_depth": 2,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-381cb11fb6af",
+      "message_id": "<549400896.1883408.1427477958569.JavaMail.yahoo@mail.yahoo.com>",
+      "from_name": "Pankaj K Agarwal",
+      "from_email_hash": "0cbb0f9165a5f6176569cf3596bb8d4666fe7d2828a40590fd539fc0758d58e0",
+      "date": "2015-03-27T17:39:18Z",
+      "subject": "[R-SIG-Finance] Problem in output of \"countMonthlyRecords\" in Package \"timeSeries\"",
+      "subject_clean": "Problem in output of \"countMonthlyRecords\" in Package \"timeSeries\"",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear all,I had a 10-year daily irregular time series of stock returns and wanted to count number of trading days each month. The function countMonthlyRecords() did not return the no. of days in the last month of the series. Can anybody help??Thanks and Regards,Pankaj K Agarwal\n+91-94153 97472http://in.linkedin.com/in/pankajkagarwal/\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,I had a 10-year daily irregular time series of stock returns and wanted to count number of trading days each month. The function countMonthlyRecords() did not return the no. of days in the la",
+      "thread_id": "thread-381cb11fb6af",
+      "thread_depth": 0,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-0e92799a530e",
+      "message_id": "<76A974BF-C409-46BF-8EB6-B436BE767EDC@gmail.com>",
+      "from_name": "Michael Weylandt",
+      "from_email_hash": "44e8775a589b9ef81880469e200f3cce307c7180b4289ca1696a578afb772b3a",
+      "date": "2015-03-28T23:56:48-04:00",
+      "subject": "[R-SIG-Finance] Problem in output of \"countMonthlyRecords\" in Package \"timeSeries\"",
+      "subject_clean": "Problem in output of \"countMonthlyRecords\" in Package \"timeSeries\"",
+      "in_reply_to": "<549400896.1883408.1427477958569.JavaMail.yahoo@mail.yahoo.com>",
+      "references": [
+        "<549400896.1883408.1427477958569.JavaMail.yahoo@mail.yahoo.com>"
+      ],
+      "body_plain": "If you have data from each trading day, something like\n\nquantmod::apply.monthly(x, NROW)\n\nmight work. \n\nIf your data is spotty, you need to tell us more about your data provider.\n\nAs always, http://sscce.org is your friend. \n\nMichael\n\n> On Mar 27, 2015, at 1:39 PM, Pankaj K Agarwal via R-SIG-Finance <r-sig-finance at r-project.org> wrote:\n> \n> Dear all,I had a 10-year daily irregular time series of stock returns and wanted to count number of trading days each month. The function countMonthlyRecords() did not return the no. of days in the last month of the series. Can anybody help? Thanks and Regards,Pankaj K Agarwal\n> +91-94153 97472http://in.linkedin.com/in/pankajkagarwal/\n>    [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "If you have data from each trading day, something like\n\nquantmod::apply.monthly(x, NROW)\n\nmight work. \n\nIf your data is spotty, you need to tell us more about your data provider.\n\nAs always, http://ss",
+      "thread_id": "thread-381cb11fb6af",
+      "thread_depth": 1,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-2811eaddda8d",
+      "message_id": "<CA+fgw8QF7gGqZs=ks1HTvqBA-m-2Mw=mqGtXQ4kfM7f27ESXPQ@mail.gmail.com>",
+      "from_name": "Ueli Hofstetter",
+      "from_email_hash": "31c446809496892f3b0ef85f052f332ed0f2fc966a59adb8c87eaa8a7afb67bb",
+      "date": "2015-03-29T20:50:10+02:00",
+      "subject": "[R-SIG-Finance] Problem using Quantmod and MySQL",
+      "subject_clean": "Problem using Quantmod and MySQL",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I have some problems loading symbols from an mysql db using getSymbols.\n\nInstead of repeating the issue, here is a link to the description on\nstackoverflow\n\nhttp://stackoverflow.com/questions/29333330/quantmod-error-loading-symbols-from-mysql-db\n\nAny help is greatly appreciated\n\n-- \nUeli Hofstetter\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I have some problems loading symbols from an mysql db using getSymbols.\n\nInstead of repeating the issue, here is a link to the description on\nstackoverflow\n\nhttp://stackoverflow.com/questions/29333330",
+      "thread_id": "thread-2811eaddda8d",
+      "thread_depth": 0,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-3d5989b4da45",
+      "message_id": "<CAK2H+ec6P9hyhfnmsvZK4HutHGne1XLn0KtFB_X9cW7GhkNWCA@mail.gmail.com>",
+      "from_name": "Mark Knecht",
+      "from_email_hash": "60c26093da6ef493629140d820b18c224125bb61884589ce4143ff939051ea92",
+      "date": "2015-03-29T12:47:32-07:00",
+      "subject": "[R-SIG-Finance] Problem using Quantmod and MySQL",
+      "subject_clean": "Problem using Quantmod and MySQL",
+      "in_reply_to": "<CA+fgw8QF7gGqZs=ks1HTvqBA-m-2Mw=mqGtXQ4kfM7f27ESXPQ@mail.gmail.com>",
+      "references": [
+        "<CA+fgw8QF7gGqZs=ks1HTvqBA-m-2Mw=mqGtXQ4kfM7f27ESXPQ@mail.gmail.com>"
+      ],
+      "body_plain": "On Sun, Mar 29, 2015 at 11:50 AM, Ueli Hofstetter\n<uelihofstetter at gmail.com> wrote:\n> I have some problems loading symbols from an mysql db using getSymbols.\n>\n> Instead of repeating the issue, here is a link to the description on\n> stackoverflow\n>\n> http://stackoverflow.com/questions/29333330/quantmod-error-loading-symbols-from-mysql-db\n>\n> Any help is greatly appreciated\n>\n> --\n> Ueli Hofstetter\n\n\nI see the same error message here. I have moved pretty far away from\nusing R on a day-to-day basis so I have no idea how long this has been\ngoing on.\n\nAnyway, it's not only you so wait for someone closer to the system to\nsupply an answer.\n\nHTH,\nMark",
+      "body_snippet": "On Sun, Mar 29, 2015 at 11:50 AM, Ueli Hofstetter\n<uelihofstetter at gmail.com> wrote:\n> I have some problems loading symbols from an mysql db using getSymbols.\n>\n> Instead of repeating the issue, her",
+      "thread_id": "thread-2811eaddda8d",
+      "thread_depth": 1,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-9ef9d7d176de",
+      "message_id": "<CAPPM_gR=B-fw6fZn2yMa-encND=Vno=aDTHt_HGP3SWhaqHDsQ@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-03-29T17:37:44-05:00",
+      "subject": "[R-SIG-Finance] Problem using Quantmod and MySQL",
+      "subject_clean": "Problem using Quantmod and MySQL",
+      "in_reply_to": "<CA+fgw8QF7gGqZs=ks1HTvqBA-m-2Mw=mqGtXQ4kfM7f27ESXPQ@mail.gmail.com>",
+      "references": [
+        "<CA+fgw8QF7gGqZs=ks1HTvqBA-m-2Mw=mqGtXQ4kfM7f27ESXPQ@mail.gmail.com>"
+      ],
+      "body_plain": "On Sun, Mar 29, 2015 at 1:50 PM, Ueli Hofstetter\n<uelihofstetter at gmail.com> wrote:\n> I have some problems loading symbols from an mysql db using getSymbols.\n>\n> Instead of repeating the issue, here is a link to the description on\n> stackoverflow\n>\n> http://stackoverflow.com/questions/29333330/quantmod-error-loading-symbols-from-mysql-db\n>\n> Any help is greatly appreciated\n>\nThe \"character\" method for dbConnect was removed in the 0.10 release\nof RMySQL. I'm not sure whether or not this was intentional. It was\nnot mentioned in the release notes.\n\n> --\n> Ueli Hofstetter\n>\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Sun, Mar 29, 2015 at 1:50 PM, Ueli Hofstetter\n<uelihofstetter at gmail.com> wrote:\n> I have some problems loading symbols from an mysql db using getSymbols.\n>\n> Instead of repeating the issue, here",
+      "thread_id": "thread-2811eaddda8d",
+      "thread_depth": 1,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-dec6a67acebd",
+      "message_id": "<CAPPM_gQk-trahkccEXBavnf6p4am7uEVARZL4ASJpVVB0n2AcQ@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-03-30T11:25:52-05:00",
+      "subject": "[R-SIG-Finance] Problem using Quantmod and MySQL",
+      "subject_clean": "Problem using Quantmod and MySQL",
+      "in_reply_to": "<CAPPM_gR=B-fw6fZn2yMa-encND=Vno=aDTHt_HGP3SWhaqHDsQ@mail.gmail.com>",
+      "references": [
+        "<CA+fgw8QF7gGqZs=ks1HTvqBA-m-2Mw=mqGtXQ4kfM7f27ESXPQ@mail.gmail.com>",
+        "<CAPPM_gR=B-fw6fZn2yMa-encND=Vno=aDTHt_HGP3SWhaqHDsQ@mail.gmail.com>"
+      ],
+      "body_plain": "On Sun, Mar 29, 2015 at 5:37 PM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> On Sun, Mar 29, 2015 at 1:50 PM, Ueli Hofstetter\n> <uelihofstetter at gmail.com> wrote:\n>> I have some problems loading symbols from an mysql db using getSymbols.\n>>\n>> Instead of repeating the issue, here is a link to the description on\n>> stackoverflow\n>>\n>> http://stackoverflow.com/questions/29333330/quantmod-error-loading-symbols-from-mysql-db\n>>\n>> Any help is greatly appreciated\n>>\n> The \"character\" method for dbConnect was removed in the 0.10 release\n> of RMySQL. I'm not sure whether or not this was intentional. It was\n> not mentioned in the release notes.\n>\nIt was removed intentionally.  I do not have a MySQL database\navailable for testing, so I would really appreciate some help from\nthose who use this functionality.  Can someone please try this\nsuggested edit:\nhttps://github.com/rstats-db/RMySQL/issues/62#issuecomment-87692704\n\nAnd provide feedback at: https://github.com/joshuaulrich/quantmod/issues/45\n\nThanks!\nJosh\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Sun, Mar 29, 2015 at 5:37 PM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> On Sun, Mar 29, 2015 at 1:50 PM, Ueli Hofstetter\n> <uelihofstetter at gmail.com> wrote:\n>> I have some problems loa",
+      "thread_id": "thread-2811eaddda8d",
+      "thread_depth": 2,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-fe10f5ebcc09",
+      "message_id": "<CAK2H+efbW-HAm-UrqAKm8FRAVQ20OH4uXPJ9NzLVqB32Kp6bzQ@mail.gmail.com>",
+      "from_name": "Mark Knecht",
+      "from_email_hash": "60c26093da6ef493629140d820b18c224125bb61884589ce4143ff939051ea92",
+      "date": "2015-03-30T09:49:51-07:00",
+      "subject": "[R-SIG-Finance] Problem using Quantmod and MySQL",
+      "subject_clean": "Problem using Quantmod and MySQL",
+      "in_reply_to": "<CAPPM_gQk-trahkccEXBavnf6p4am7uEVARZL4ASJpVVB0n2AcQ@mail.gmail.com>",
+      "references": [
+        "<CA+fgw8QF7gGqZs=ks1HTvqBA-m-2Mw=mqGtXQ4kfM7f27ESXPQ@mail.gmail.com>",
+        "<CAPPM_gR=B-fw6fZn2yMa-encND=Vno=aDTHt_HGP3SWhaqHDsQ@mail.gmail.com>",
+        "<CAPPM_gQk-trahkccEXBavnf6p4am7uEVARZL4ASJpVVB0n2AcQ@mail.gmail.com>"
+      ],
+      "body_plain": "On Mon, Mar 30, 2015 at 9:25 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> On Sun, Mar 29, 2015 at 5:37 PM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n>> On Sun, Mar 29, 2015 at 1:50 PM, Ueli Hofstetter\n>> <uelihofstetter at gmail.com> wrote:\n>>> I have some problems loading symbols from an mysql db using getSymbols.\n>>>\n>>> Instead of repeating the issue, here is a link to the description on\n>>> stackoverflow\n>>>\n>>> http://stackoverflow.com/questions/29333330/quantmod-error-loading-symbols-from-mysql-db\n>>>\n>>> Any help is greatly appreciated\n>>>\n>> The \"character\" method for dbConnect was removed in the 0.10 release\n>> of RMySQL. I'm not sure whether or not this was intentional. It was\n>> not mentioned in the release notes.\n>>\n> It was removed intentionally.  I do not have a MySQL database\n> available for testing, so I would really appreciate some help from\n> those who use this functionality.  Can someone please try this\n> suggested edit:\n> https://github.com/rstats-db/RMySQL/issues/62#issuecomment-87692704\n>\n> And provide feedback at: https://github.com/joshuaulrich/quantmod/issues/45\n>\n> Thanks!\n> Josh\n>\n>\n> --\n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\nI'm happy to try it out but a little confused as to all the locations\nI need to edit. Help me clear this up and I'll try it out immediately.\n\nThe failure is coming when I'm trying to get the data using the following code:\n\n> if (DownloadNewData){\n+   if (!UseMySQL){\n+     for (i in 1:length(TestSym)){\n+       print(paste(\"From \",SymbolSrc,\" -- \",TestSym[i]))\n+       getSymbolsCont(TestSym[i], from = DataStart, to = DataEnd,\nadjust = MyAdjust, src=SymbolSrc)\n+     }\n+   } else {\n+     for (i in 1:length(TestSym)){\n+       print(paste(\"From MySQL -- \",TestSym[i]))\n+ #      getSymbols(TestSym[i], src=\"MySQL\")\n+       getSymbols(TestSym[i], src=\"MySQL\", user=\"mark\",\npassword=\"MyTempPassword\", dbname=dbName)\n+       assign(TestSym[i], get(TestSym[i])[paste0(DataStart,\"/\",DataEnd)])\n+     }\n+     dbDisconnect(dbc)\n+   }\n+ }\n[1] \"From MySQL --  SPY\"\n Show Traceback\n\n Rerun with Debug\n\nError in (function (classes, fdef, mtable)  :\n  unable to find an inherited method for function ?dbConnect? for\nsignature ?\"character\"?\n\n\nAm I correct that the suggestion is to edit two lines?\n\nFirst, I use\n\nlibrary(RMySQL)\n\nIs the first edit to change this to\n\nrequireNamespace(\"RMySQL\", quietly = TRUE)\n\nor do I add this to my code somewhere and keep the library command?\n\nLater in my code I have:\n\nif (UseMySQL){\n  if (MyAdjust) { dbName = paste0(dbName, \"Adjust\")}\n  dbc = dbConnect(MySQL(), dbname=dbName)\n#  setDefaults(getSymbols.MySQL, user=\"mark\",\npassword=\"MyTempPassword\", dbname=dbName)\n}\n\nThis would be where the second edit goes?\n\ndbConnect(\"MySQL\", ...) to dbConnect(RMySQL::MySQL, ...)\n\nThanks,\nMark",
+      "body_snippet": "On Mon, Mar 30, 2015 at 9:25 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> On Sun, Mar 29, 2015 at 5:37 PM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n>> On Sun, Mar 29, 2015 at 1:50 ",
+      "thread_id": "thread-2811eaddda8d",
+      "thread_depth": 3,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-295133a03572",
+      "message_id": "<CAPPM_gQVCw7a3j3wcMdDSeud_J-3CR59i1j6__Nq5D_X81zNuw@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-03-30T11:59:08-05:00",
+      "subject": "[R-SIG-Finance] Problem using Quantmod and MySQL",
+      "subject_clean": "Problem using Quantmod and MySQL",
+      "in_reply_to": "<CAK2H+efbW-HAm-UrqAKm8FRAVQ20OH4uXPJ9NzLVqB32Kp6bzQ@mail.gmail.com>",
+      "references": [
+        "<CA+fgw8QF7gGqZs=ks1HTvqBA-m-2Mw=mqGtXQ4kfM7f27ESXPQ@mail.gmail.com>",
+        "<CAPPM_gR=B-fw6fZn2yMa-encND=Vno=aDTHt_HGP3SWhaqHDsQ@mail.gmail.com>",
+        "<CAPPM_gQk-trahkccEXBavnf6p4am7uEVARZL4ASJpVVB0n2AcQ@mail.gmail.com>",
+        "<CAK2H+efbW-HAm-UrqAKm8FRAVQ20OH4uXPJ9NzLVqB32Kp6bzQ@mail.gmail.com>"
+      ],
+      "body_plain": "On Mon, Mar 30, 2015 at 11:49 AM, Mark Knecht <markknecht at gmail.com> wrote:\n> On Mon, Mar 30, 2015 at 9:25 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n>> On Sun, Mar 29, 2015 at 5:37 PM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n>>> On Sun, Mar 29, 2015 at 1:50 PM, Ueli Hofstetter\n>>> <uelihofstetter at gmail.com> wrote:\n>>>> I have some problems loading symbols from an mysql db using getSymbols.\n>>>>\n>>>> Instead of repeating the issue, here is a link to the description on\n>>>> stackoverflow\n>>>>\n>>>> http://stackoverflow.com/questions/29333330/quantmod-error-loading-symbols-from-mysql-db\n>>>>\n>>>> Any help is greatly appreciated\n>>>>\n>>> The \"character\" method for dbConnect was removed in the 0.10 release\n>>> of RMySQL. I'm not sure whether or not this was intentional. It was\n>>> not mentioned in the release notes.\n>>>\n>> It was removed intentionally.  I do not have a MySQL database\n>> available for testing, so I would really appreciate some help from\n>> those who use this functionality.  Can someone please try this\n>> suggested edit:\n>> https://github.com/rstats-db/RMySQL/issues/62#issuecomment-87692704\n>>\n>> And provide feedback at: https://github.com/joshuaulrich/quantmod/issues/45\n>>\n>> Thanks!\n>> Josh\n>>\n>>\n>> --\n>> Joshua Ulrich  |  about.me/joshuaulrich\n>> FOSS Trading  |  www.fosstrading.com\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n>\n>\n>\n> I'm happy to try it out but a little confused as to all the locations\n> I need to edit. Help me clear this up and I'll try it out immediately.\n>\n> The failure is coming when I'm trying to get the data using the following code:\n>\n>> if (DownloadNewData){\n> +   if (!UseMySQL){\n> +     for (i in 1:length(TestSym)){\n> +       print(paste(\"From \",SymbolSrc,\" -- \",TestSym[i]))\n> +       getSymbolsCont(TestSym[i], from = DataStart, to = DataEnd,\n> adjust = MyAdjust, src=SymbolSrc)\n> +     }\n> +   } else {\n> +     for (i in 1:length(TestSym)){\n> +       print(paste(\"From MySQL -- \",TestSym[i]))\n> + #      getSymbols(TestSym[i], src=\"MySQL\")\n> +       getSymbols(TestSym[i], src=\"MySQL\", user=\"mark\",\n> password=\"MyTempPassword\", dbname=dbName)\n> +       assign(TestSym[i], get(TestSym[i])[paste0(DataStart,\"/\",DataEnd)])\n> +     }\n> +     dbDisconnect(dbc)\n> +   }\n> + }\n> [1] \"From MySQL --  SPY\"\n>  Show Traceback\n>\n>  Rerun with Debug\n>\n> Error in (function (classes, fdef, mtable)  :\n>   unable to find an inherited method for function ?dbConnect? for\n> signature ?\"character\"?\n>\n>\n> Am I correct that the suggestion is to edit two lines?\n>\n> First, I use\n>\n> library(RMySQL)\n>\n> Is the first edit to change this to\n>\n> requireNamespace(\"RMySQL\", quietly = TRUE)\n>\n> or do I add this to my code somewhere and keep the library command?\n>\nNo, you shouldn't need to change anything in your code.\n\n> Later in my code I have:\n>\n> if (UseMySQL){\n>   if (MyAdjust) { dbName = paste0(dbName, \"Adjust\")}\n>   dbc = dbConnect(MySQL(), dbname=dbName)\n> #  setDefaults(getSymbols.MySQL, user=\"mark\",\n> password=\"MyTempPassword\", dbname=dbName)\n> }\n>\n> This would be where the second edit goes?\n>\n> dbConnect(\"MySQL\", ...) to dbConnect(RMySQL::MySQL, ...)\n>\nNo. Again, you shouldn't need to change your code.  The change\nrequired is on L614 of getSymbols.R.\n\n> Thanks,\n> Mark\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Mon, Mar 30, 2015 at 11:49 AM, Mark Knecht <markknecht at gmail.com> wrote:\n> On Mon, Mar 30, 2015 at 9:25 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n>> On Sun, Mar 29, 2015 at 5:37 PM, ",
+      "thread_id": "thread-2811eaddda8d",
+      "thread_depth": 4,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-01be19ec852b",
+      "message_id": "<CAK2H+efJBJMhUFR5PT4Cxws2rZfSgGght9jj2meu4ojVoriHDw@mail.gmail.com>",
+      "from_name": "Mark Knecht",
+      "from_email_hash": "60c26093da6ef493629140d820b18c224125bb61884589ce4143ff939051ea92",
+      "date": "2015-03-30T10:02:31-07:00",
+      "subject": "[R-SIG-Finance] Problem using Quantmod and MySQL",
+      "subject_clean": "Problem using Quantmod and MySQL",
+      "in_reply_to": "<CAPPM_gQVCw7a3j3wcMdDSeud_J-3CR59i1j6__Nq5D_X81zNuw@mail.gmail.com>",
+      "references": [
+        "<CA+fgw8QF7gGqZs=ks1HTvqBA-m-2Mw=mqGtXQ4kfM7f27ESXPQ@mail.gmail.com>",
+        "<CAPPM_gR=B-fw6fZn2yMa-encND=Vno=aDTHt_HGP3SWhaqHDsQ@mail.gmail.com>",
+        "<CAPPM_gQk-trahkccEXBavnf6p4am7uEVARZL4ASJpVVB0n2AcQ@mail.gmail.com>",
+        "<CAK2H+efbW-HAm-UrqAKm8FRAVQ20OH4uXPJ9NzLVqB32Kp6bzQ@mail.gmail.com>",
+        "<CAPPM_gQVCw7a3j3wcMdDSeud_J-3CR59i1j6__Nq5D_X81zNuw@mail.gmail.com>"
+      ],
+      "body_plain": "On Mon, Mar 30, 2015 at 9:59 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> On Mon, Mar 30, 2015 at 11:49 AM, Mark Knecht <markknecht at gmail.com> wrote:\n>> On Mon, Mar 30, 2015 at 9:25 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n>>> On Sun, Mar 29, 2015 at 5:37 PM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n>>>> On Sun, Mar 29, 2015 at 1:50 PM, Ueli Hofstetter\n>>>> <uelihofstetter at gmail.com> wrote:\n>>>>> I have some problems loading symbols from an mysql db using getSymbols.\n>>>>>\n>>>>> Instead of repeating the issue, here is a link to the description on\n>>>>> stackoverflow\n>>>>>\n>>>>> http://stackoverflow.com/questions/29333330/quantmod-error-loading-symbols-from-mysql-db\n>>>>>\n>>>>> Any help is greatly appreciated\n>>>>>\n>>>> The \"character\" method for dbConnect was removed in the 0.10 release\n>>>> of RMySQL. I'm not sure whether or not this was intentional. It was\n>>>> not mentioned in the release notes.\n>>>>\n>>> It was removed intentionally.  I do not have a MySQL database\n>>> available for testing, so I would really appreciate some help from\n>>> those who use this functionality.  Can someone please try this\n>>> suggested edit:\n>>> https://github.com/rstats-db/RMySQL/issues/62#issuecomment-87692704\n>>>\n>>> And provide feedback at: https://github.com/joshuaulrich/quantmod/issues/45\n>>>\n>>> Thanks!\n>>> Josh\n>>>\n>>>\n>>> --\n>>> Joshua Ulrich  |  about.me/joshuaulrich\n>>> FOSS Trading  |  www.fosstrading.com\n>>>\n>>> _______________________________________________\n>>> R-SIG-Finance at r-project.org mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>> -- Also note that this is not the r-help list where general R questions should go.\n>>\n>>\n>>\n>> I'm happy to try it out but a little confused as to all the locations\n>> I need to edit. Help me clear this up and I'll try it out immediately.\n>>\n>> The failure is coming when I'm trying to get the data using the following code:\n>>\n>>> if (DownloadNewData){\n>> +   if (!UseMySQL){\n>> +     for (i in 1:length(TestSym)){\n>> +       print(paste(\"From \",SymbolSrc,\" -- \",TestSym[i]))\n>> +       getSymbolsCont(TestSym[i], from = DataStart, to = DataEnd,\n>> adjust = MyAdjust, src=SymbolSrc)\n>> +     }\n>> +   } else {\n>> +     for (i in 1:length(TestSym)){\n>> +       print(paste(\"From MySQL -- \",TestSym[i]))\n>> + #      getSymbols(TestSym[i], src=\"MySQL\")\n>> +       getSymbols(TestSym[i], src=\"MySQL\", user=\"mark\",\n>> password=\"MyTempPassword\", dbname=dbName)\n>> +       assign(TestSym[i], get(TestSym[i])[paste0(DataStart,\"/\",DataEnd)])\n>> +     }\n>> +     dbDisconnect(dbc)\n>> +   }\n>> + }\n>> [1] \"From MySQL --  SPY\"\n>>  Show Traceback\n>>\n>>  Rerun with Debug\n>>\n>> Error in (function (classes, fdef, mtable)  :\n>>   unable to find an inherited method for function ?dbConnect? for\n>> signature ?\"character\"?\n>>\n>>\n>> Am I correct that the suggestion is to edit two lines?\n>>\n>> First, I use\n>>\n>> library(RMySQL)\n>>\n>> Is the first edit to change this to\n>>\n>> requireNamespace(\"RMySQL\", quietly = TRUE)\n>>\n>> or do I add this to my code somewhere and keep the library command?\n>>\n> No, you shouldn't need to change anything in your code.\n>\n>> Later in my code I have:\n>>\n>> if (UseMySQL){\n>>   if (MyAdjust) { dbName = paste0(dbName, \"Adjust\")}\n>>   dbc = dbConnect(MySQL(), dbname=dbName)\n>> #  setDefaults(getSymbols.MySQL, user=\"mark\",\n>> password=\"MyTempPassword\", dbname=dbName)\n>> }\n>>\n>> This would be where the second edit goes?\n>>\n>> dbConnect(\"MySQL\", ...) to dbConnect(RMySQL::MySQL, ...)\n>>\n> No. Again, you shouldn't need to change your code.  The change\n> required is on L614 of getSymbols.R.\n>\n>> Thanks,\n>> Mark\n>\n>\n>\n> --\n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com\n\nIn that case I'll leave it to someone else to test. I don't want to\nmess with non-production libraries. My skill set in this code isn't\ngood.\n\nGood luck,\nMark",
+      "body_snippet": "On Mon, Mar 30, 2015 at 9:59 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> On Mon, Mar 30, 2015 at 11:49 AM, Mark Knecht <markknecht at gmail.com> wrote:\n>> On Mon, Mar 30, 2015 at 9:25 AM, ",
+      "thread_id": "thread-2811eaddda8d",
+      "thread_depth": 5,
+      "month": "2015-03"
+    },
+    {
+      "id": "msg-86049c6fec61",
+      "message_id": "<CAPPM_gQy6u02RwGWCb77MhUvN5v4w_rVEeHFwGwmJU9c=OtqLQ@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "1c142a8ab2a2cd292396c50d658d894b0e8efcc0774aa9558978b89b50ac3080",
+      "date": "2015-03-31T07:03:36-05:00",
+      "subject": "[R-SIG-Finance] R/Finance 2015 registration now open",
+      "subject_clean": "R/Finance 2015 registration now open",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Registration for R/Finance 2015 is now open!\n\nThe conference will take place on May 29 and 30, at UIC in Chicago.\nBuilding on the success of the previous conferences in 2009-2014, we\nexpect more than 250 attendees from around the world. R users from\nindustry, academia, and government will joining 30+ presenters\ncovering all areas of finance with R.\n\nWe are very excited about the four keynote presentations given by\nEmanuel Derman, Louis Marascio, Alexander McNeil, and Rishi Narang.\nThe conference agenda (currently) includes 18 full presentations and\n19 shorter \"lightning talks\".  As in previous years, several\n(optional) pre-conference seminars are offered on Friday morning.\n\nThere is also an (optional) conference dinner at The Terrace at Trump\nHotel. Overlooking the Chicago river and skyline, it is a perfect\nvenue to continue conversations while dining and drinking.\n\nAs they are finalized, agenda details are available at:\n  http://www.RinFinance.com/agenda/\n\nRegistration information is available at:\n  http://www.RinFinance.com/register/\n\nand can also be directly accessed by going to:\n  http://www.cvent.com/d/94q27k\n\nWe would to thank our 2015 Sponsors for the continued support enabling us\nto host such an exciting conference:\n\n  International Center for Futures and Derivatives at UIC\n\n  Revolution Analytics\n  MS-Computational Finance and Risk Management at University of Washington\n\n  Ketchum Trading\n  OneMarketData\n  RStudio\n  SYMMS\n\nOn behalf of the committee and sponsors, we look forward to seeing you\nin Chicago!\n\n  Gib Bassett, Peter Carl, Dirk Eddelbuettel, Brian Peterson,\n  Dale Rosenthal, Jeffrey Ryan, Joshua Ulrich\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "Registration for R/Finance 2015 is now open!\n\nThe conference will take place on May 29 and 30, at UIC in Chicago.\nBuilding on the success of the previous conferences in 2009-2014, we\nexpect more than ",
+      "thread_id": "thread-86049c6fec61",
+      "thread_depth": 0,
+      "month": "2015-03"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-7a444af7f839",
+      "subject": "[Q] How to omit NA values in TTR package + Jeff Cooper's 5 day MOM",
+      "message_count": 4,
+      "participants": [
+        "Alex Badoi",
+        "Brian G. Peterson",
+        "Ilya Kipnis",
+        "Joshua Ulrich"
+      ],
+      "started": "2015-03-03T19:55:42+01:00",
+      "last_reply": "2015-03-03T13:11:41-06:00",
+      "root_message_id": "msg-7a444af7f839"
+    },
+    {
+      "id": "thread-eeb4a49daf79",
+      "subject": "Help specifying \"ugarchsim\" function",
+      "message_count": 1,
+      "participants": [
+        "Gareth McEwan"
+      ],
+      "started": "2015-03-04T16:58:43+02:00",
+      "last_reply": "2015-03-04T16:58:43+02:00",
+      "root_message_id": "msg-eeb4a49daf79"
+    },
+    {
+      "id": "thread-0540bea83fa9",
+      "subject": "rmgarch - dccforecast function",
+      "message_count": 2,
+      "participants": [
+        "Fernando Martins Diniz",
+        "alexios"
+      ],
+      "started": "2015-03-06T11:11:54-03:00",
+      "last_reply": "2015-03-06T15:36:33+00:00",
+      "root_message_id": "msg-0540bea83fa9"
+    },
+    {
+      "id": "thread-59a200a2802a",
+      "subject": "Calculating ROI correctly and using chart.CumReturns()",
+      "message_count": 1,
+      "participants": [
+        "david hilton shanabrook"
+      ],
+      "started": "2015-03-07T09:56:44-05:00",
+      "last_reply": "2015-03-07T09:56:44-05:00",
+      "root_message_id": "msg-59a200a2802a"
+    },
+    {
+      "id": "thread-a6ecb6c141be",
+      "subject": "quantmod EMA and SMA",
+      "message_count": 3,
+      "participants": [
+        "Joshua Ulrich",
+        "Olivier MARTIN"
+      ],
+      "started": "2015-03-09T14:14:44+01:00",
+      "last_reply": "2015-03-14T11:22:12-05:00",
+      "root_message_id": "msg-a6ecb6c141be"
+    },
+    {
+      "id": "thread-384eaf42b1be",
+      "subject": "CUSIP Data question and a sneak-peak at two packages",
+      "message_count": 1,
+      "participants": [
+        "Thomas Fuller"
+      ],
+      "started": "2015-03-11T09:01:32-04:00",
+      "last_reply": "2015-03-11T09:01:32-04:00",
+      "root_message_id": "msg-384eaf42b1be"
+    },
+    {
+      "id": "thread-c9d01cf9cb8f",
+      "subject": "analyzing monthly portfolio holdings of 250 funds across 10 years.",
+      "message_count": 2,
+      "participants": [
+        "Nick White",
+        "Pankaj K Agarwal"
+      ],
+      "started": "2015-03-12T10:29:34+00:00",
+      "last_reply": "2015-03-12T21:42:22+11:00",
+      "root_message_id": "msg-c9d01cf9cb8f"
+    },
+    {
+      "id": "thread-e1f0859f080b",
+      "subject": "Kalman Filter Method in R library to Estimate and Forecast the Diebold-Li Yield Curve",
+      "message_count": 2,
+      "participants": [
+        "Chien, Josh-CH",
+        "Shimura, Tetsuro"
+      ],
+      "started": "2015-03-12T15:08:43+08:00",
+      "last_reply": "2015-03-12T07:36:47+00:00",
+      "root_message_id": "msg-e1f0859f080b"
+    },
+    {
+      "id": "thread-19ee4a0c64f1",
+      "subject": "Weird behavior of getSymbols for symbol PLL and PL",
+      "message_count": 2,
+      "participants": [
+        "Andreas Voellenklee",
+        "G See"
+      ],
+      "started": "2015-03-15T15:11:22+01:00",
+      "last_reply": "2015-03-15T09:19:35-05:00",
+      "root_message_id": "msg-19ee4a0c64f1"
+    },
+    {
+      "id": "thread-6535842c0cdb",
+      "subject": "Online Hayashi-Yoshida estimator",
+      "message_count": 5,
+      "participants": [
+        "Brian G. Peterson",
+        "Hasan Diwan",
+        "Robert A'gata"
+      ],
+      "started": "2015-03-16T23:19:04-04:00",
+      "last_reply": "2015-03-18T19:18:49-04:00",
+      "root_message_id": "msg-6535842c0cdb"
+    },
+    {
+      "id": "thread-1ee9b9a8dce6",
+      "subject": "Error when Using fPortfolio to plot the fitting",
+      "message_count": 1,
+      "participants": [
+        "曹鼎贤"
+      ],
+      "started": "2015-03-17T15:31:33+08:00",
+      "last_reply": "2015-03-17T15:31:33+08:00",
+      "root_message_id": "msg-1ee9b9a8dce6"
+    },
+    {
+      "id": "thread-6d159941c2c1",
+      "subject": "problem subsetting xts object with yearmon time index",
+      "message_count": 7,
+      "participants": [
+        "Daniel Cegiełka",
+        "Eric Zivot",
+        "Joshua Ulrich"
+      ],
+      "started": "2015-03-20T10:08:57-07:00",
+      "last_reply": "2015-03-20T14:28:24-05:00",
+      "root_message_id": "msg-6d159941c2c1"
+    },
+    {
+      "id": "thread-abf182fb3641",
+      "subject": "Online trading systems development courses using R at University of Washington",
+      "message_count": 1,
+      "participants": [
+        "Eric Zivot"
+      ],
+      "started": "2015-03-20T10:11:40-07:00",
+      "last_reply": "2015-03-20T10:11:40-07:00",
+      "root_message_id": "msg-abf182fb3641"
+    },
+    {
+      "id": "thread-76acdd2e956c",
+      "subject": "validation of DrawdownPeak in PerformanceAnalytics package",
+      "message_count": 3,
+      "participants": [
+        "Charles Duranceau",
+        "Peter Carl"
+      ],
+      "started": "2015-03-23T23:05:32+00:00",
+      "last_reply": "2015-03-25T23:30:30+00:00",
+      "root_message_id": "msg-76acdd2e956c"
+    },
+    {
+      "id": "thread-884318eb5719",
+      "subject": "ugarchfit: Weighted Ljung-Box Test",
+      "message_count": 3,
+      "participants": [
+        "Jaimie Villanueva",
+        "alexios"
+      ],
+      "started": "2015-03-24T19:29:32+01:00",
+      "last_reply": "2015-03-25T13:46:09+00:00",
+      "root_message_id": "msg-884318eb5719"
+    },
+    {
+      "id": "thread-381cb11fb6af",
+      "subject": "Problem in output of \"countMonthlyRecords\" in Package \"timeSeries\"",
+      "message_count": 2,
+      "participants": [
+        "Michael Weylandt",
+        "Pankaj K Agarwal"
+      ],
+      "started": "2015-03-27T17:39:18+00:00",
+      "last_reply": "2015-03-28T23:56:48-04:00",
+      "root_message_id": "msg-381cb11fb6af"
+    },
+    {
+      "id": "thread-2811eaddda8d",
+      "subject": "Problem using Quantmod and MySQL",
+      "message_count": 7,
+      "participants": [
+        "Joshua Ulrich",
+        "Mark Knecht",
+        "Ueli Hofstetter"
+      ],
+      "started": "2015-03-29T20:50:10+02:00",
+      "last_reply": "2015-03-30T10:02:31-07:00",
+      "root_message_id": "msg-2811eaddda8d"
+    },
+    {
+      "id": "thread-86049c6fec61",
+      "subject": "R/Finance 2015 registration now open",
+      "message_count": 1,
+      "participants": [
+        "Joshua Ulrich"
+      ],
+      "started": "2015-03-31T07:03:36-05:00",
+      "last_reply": "2015-03-31T07:03:36-05:00",
+      "root_message_id": "msg-86049c6fec61"
+    }
+  ]
+}

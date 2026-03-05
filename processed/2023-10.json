@@ -1,0 +1,240 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2023-10",
+  "messages": [
+    {
+      "id": "msg-8a7555b8e030",
+      "message_id": "<CAK1hC9u_EdTjfEgO6KZrYxt-xW+q-uq83VRGomD-Efqx=kc8gA@mail.gmail.com>",
+      "from_name": "arnaud gaboury",
+      "from_email_hash": "8d66b3010463ba4609c087a2aec53210a2c80004ddc8ee34092b23f175a5a8d2",
+      "date": "2023-10-16T16:29:32+02:00",
+      "subject": "[R-SIG-Finance] from a list of array to tibble",
+      "subject_clean": "from a list of array to tibble",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I work with a list of crypto assets daily closing prices in xts class. Here\nis a limited example:\n\nasset.xts.lst <- list(BTCUSDT = structure(c(26759.63, 26862, 26852.48,\n27154.15,\n27973.45), dim = c(5L, 1L), index = structure(c(1697068800, 1697155200,\n1697241600, 1697328000, 1697414400), tzone = \"UTC\", tclass = \"Date\"), class\n= c(\"xts\",\n\"zoo\")), ETHUSDT = structure(c(1539.61, 1552.16, 1554.94, 1557.77,\n1579.73), dim = c(5L, 1L), index = structure(c(1697068800, 1697155200,\n1697241600, 1697328000, 1697414400), tzone = \"UTC\", tclass = \"Date\"), class\n= c(\"xts\",\n\"zoo\")), TRXUSDT = structure(c(0.08481, 0.08549, 0.08501, 0.08667,\n0.08821), dim = c(5L, 1L), index = structure(c(1697068800, 1697155200,\n1697241600, 1697328000, 1697414400), tzone = \"UTC\", tclass = \"Date\"), class\n= c(\"xts\",\n\"zoo\")))\n\nI will compute some function from PerformanceAnalytics package and write\nall results in a tibble. Let's apply a first function, Return.annualized()\n(at first I computed returns from daily prices). I have now a list of\narrays named my.ret.lst:\n\nmy.ret.lst <- list(BTCUSDT = structure(15.36, dim = c(1L, 1L), dimnames =\nlist(\n    \"Annualized Return\", NULL)), ETHUSDT = structure(4.06, dim = c(1L,\n1L), dimnames = list(\"Annualized Return\", NULL)), TRXUSDT = structure(10.9,\ndim = c(1L,\n1L), dimnames = list(\"Annualized Return\", NULL)))\n\nNow I can't find a way to start my tibble. The idea is to have variables\nBTCUSDT, ETHUSDT and TRXUSDT (token names), with observations (like\nannualized return) and the respective values. I will add of course many\nother observations.My row names can be either my token names, or the\nobservation (annualized return).\nIn my example, I can't find a way to pass each list element name to the\nwanted tibble.\n\nThank you for help\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I work with a list of crypto assets daily closing prices in xts class. Here\nis a limited example:\n\nasset.xts.lst <- list(BTCUSDT = structure(c(26759.63, 26862, 26852.48,\n27154.15,\n27973.45), dim = c(5",
+      "thread_id": "thread-8a7555b8e030",
+      "thread_depth": 0,
+      "month": "2023-10"
+    },
+    {
+      "id": "msg-522293a64dc5",
+      "message_id": "<87ttqpfqa7.fsf@enricoschumann.net>",
+      "from_name": "Enrico Schumann",
+      "from_email_hash": "42e3fbcaa04e968726f4c1d1a69e34143bdbc62b403d112ba1d3712256bacb88",
+      "date": "2023-10-17T13:21:20+02:00",
+      "subject": "[R-SIG-Finance] from a list of array to tibble",
+      "subject_clean": "from a list of array to tibble",
+      "in_reply_to": "<CAK1hC9u_EdTjfEgO6KZrYxt-xW+q-uq83VRGomD-Efqx=kc8gA@mail.gmail.com> (arnaud gaboury's message of \"Mon, 16 Oct 2023 16:29:32 +0200\")",
+      "references": [
+        "<CAK1hC9u_EdTjfEgO6KZrYxt-xW+q-uq83VRGomD-Efqx=kc8gA@mail.gmail.com>"
+      ],
+      "body_plain": "On Mon, 16 Oct 2023, arnaud gaboury writes:\n\n> I work with a list of crypto assets daily closing prices in xts class. Here\n> is a limited example:\n>\n> asset.xts.lst <- list(BTCUSDT = structure(c(26759.63, 26862, 26852.48,\n> 27154.15,\n> 27973.45), dim = c(5L, 1L), index = structure(c(1697068800, 1697155200,\n> 1697241600, 1697328000, 1697414400), tzone = \"UTC\", tclass = \"Date\"), class\n> = c(\"xts\",\n> \"zoo\")), ETHUSDT = structure(c(1539.61, 1552.16, 1554.94, 1557.77,\n> 1579.73), dim = c(5L, 1L), index = structure(c(1697068800, 1697155200,\n> 1697241600, 1697328000, 1697414400), tzone = \"UTC\", tclass = \"Date\"), class\n> = c(\"xts\",\n> \"zoo\")), TRXUSDT = structure(c(0.08481, 0.08549, 0.08501, 0.08667,\n> 0.08821), dim = c(5L, 1L), index = structure(c(1697068800, 1697155200,\n> 1697241600, 1697328000, 1697414400), tzone = \"UTC\", tclass = \"Date\"), class\n> = c(\"xts\",\n> \"zoo\")))\n>\n> I will compute some function from PerformanceAnalytics package and write\n> all results in a tibble. Let's apply a first function, Return.annualized()\n> (at first I computed returns from daily prices). I have now a list of\n> arrays named my.ret.lst:\n>\n> my.ret.lst <- list(BTCUSDT = structure(15.36, dim = c(1L, 1L), dimnames =\n> list(\n>     \"Annualized Return\", NULL)), ETHUSDT = structure(4.06, dim = c(1L,\n> 1L), dimnames = list(\"Annualized Return\", NULL)), TRXUSDT = structure(10.9,\n> dim = c(1L,\n> 1L), dimnames = list(\"Annualized Return\", NULL)))\n>\n> Now I can't find a way to start my tibble. The idea is to have variables\n> BTCUSDT, ETHUSDT and TRXUSDT (token names), with observations (like\n> annualized return) and the respective values. I will add of course many\n> other observations.My row names can be either my token names, or the\n> observation (annualized return).\n> In my example, I can't find a way to pass each list element name to the\n> wanted tibble.\n>\n> Thank you for help\n>\n\nDo you mean something like this?\n\n    data.frame(my.ret.lst)\n    ##                   BTCUSDT ETHUSDT TRXUSDT\n    ## Annualized Return   15.36    4.06    10.9\n\n(I don't use tibbles, but there is probably an 'as.tibble' method or\n similar.)\n\n-- \nEnrico Schumann\nLucerne, Switzerland\nhttp://enricoschumann.net",
+      "body_snippet": "On Mon, 16 Oct 2023, arnaud gaboury writes:\n\n> I work with a list of crypto assets daily closing prices in xts class. Here\n> is a limited example:\n>\n> asset.xts.lst <- list(BTCUSDT = structure(c(26759",
+      "thread_id": "thread-8a7555b8e030",
+      "thread_depth": 1,
+      "month": "2023-10"
+    },
+    {
+      "id": "msg-5e34602aaebd",
+      "message_id": "<CAEEj48mhXDiKq0c-CZjsTTz5SXBy-=fwKOwDvU86WWeQUffX7g@mail.gmail.com>",
+      "from_name": "Adam Ginensky",
+      "from_email_hash": "db4992c8c892c6d02ed4e410bb592ade7e04b950ccca8c8a736a70d3f3937580",
+      "date": "2023-10-17T07:51:50-05:00",
+      "subject": "[R-SIG-Finance] from a list of array to tibble",
+      "subject_clean": "from a list of array to tibble",
+      "in_reply_to": "<87ttqpfqa7.fsf@enricoschumann.net>",
+      "references": [
+        "<CAK1hC9u_EdTjfEgO6KZrYxt-xW+q-uq83VRGomD-Efqx=kc8gA@mail.gmail.com>",
+        "<87ttqpfqa7.fsf@enricoschumann.net>"
+      ],
+      "body_plain": "Perhaps you should have used 'The trouble with tibbles\" as your subject\nline :)\n\nOn Tue, Oct 17, 2023 at 6:21?AM Enrico Schumann <es at enricoschumann.net>\nwrote:\n\n> On Mon, 16 Oct 2023, arnaud gaboury writes:\n>\n> > I work with a list of crypto assets daily closing prices in xts class.\n> Here\n> > is a limited example:\n> >\n> > asset.xts.lst <- list(BTCUSDT = structure(c(26759.63, 26862, 26852.48,\n> > 27154.15,\n> > 27973.45), dim = c(5L, 1L), index = structure(c(1697068800, 1697155200,\n> > 1697241600, 1697328000, 1697414400), tzone = \"UTC\", tclass = \"Date\"),\n> class\n> > = c(\"xts\",\n> > \"zoo\")), ETHUSDT = structure(c(1539.61, 1552.16, 1554.94, 1557.77,\n> > 1579.73), dim = c(5L, 1L), index = structure(c(1697068800, 1697155200,\n> > 1697241600, 1697328000, 1697414400), tzone = \"UTC\", tclass = \"Date\"),\n> class\n> > = c(\"xts\",\n> > \"zoo\")), TRXUSDT = structure(c(0.08481, 0.08549, 0.08501, 0.08667,\n> > 0.08821), dim = c(5L, 1L), index = structure(c(1697068800, 1697155200,\n> > 1697241600, 1697328000, 1697414400), tzone = \"UTC\", tclass = \"Date\"),\n> class\n> > = c(\"xts\",\n> > \"zoo\")))\n> >\n> > I will compute some function from PerformanceAnalytics package and write\n> > all results in a tibble. Let's apply a first function,\n> Return.annualized()\n> > (at first I computed returns from daily prices). I have now a list of\n> > arrays named my.ret.lst:\n> >\n> > my.ret.lst <- list(BTCUSDT = structure(15.36, dim = c(1L, 1L), dimnames =\n> > list(\n> >     \"Annualized Return\", NULL)), ETHUSDT = structure(4.06, dim = c(1L,\n> > 1L), dimnames = list(\"Annualized Return\", NULL)), TRXUSDT =\n> structure(10.9,\n> > dim = c(1L,\n> > 1L), dimnames = list(\"Annualized Return\", NULL)))\n> >\n> > Now I can't find a way to start my tibble. The idea is to have variables\n> > BTCUSDT, ETHUSDT and TRXUSDT (token names), with observations (like\n> > annualized return) and the respective values. I will add of course many\n> > other observations.My row names can be either my token names, or the\n> > observation (annualized return).\n> > In my example, I can't find a way to pass each list element name to the\n> > wanted tibble.\n> >\n> > Thank you for help\n> >\n>\n> Do you mean something like this?\n>\n>     data.frame(my.ret.lst)\n>     ##                   BTCUSDT ETHUSDT TRXUSDT\n>     ## Annualized Return   15.36    4.06    10.9\n>\n> (I don't use tibbles, but there is probably an 'as.tibble' method or\n>  similar.)\n>\n> --\n> Enrico Schumann\n> Lucerne, Switzerland\n> http://enricoschumann.net\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Perhaps you should have used 'The trouble with tibbles\" as your subject\nline :)\n\nOn Tue, Oct 17, 2023 at 6:21?AM Enrico Schumann <es at enricoschumann.net>\nwrote:\n\n> On Mon, 16 Oct 2023, arnaud gabour",
+      "thread_id": "thread-8a7555b8e030",
+      "thread_depth": 2,
+      "month": "2023-10"
+    },
+    {
+      "id": "msg-7bcd8ab7ccd3",
+      "message_id": "<CAK1hC9vRxek5J9f0CFkFfw0LxPs=vvb2xpNFXi2RvELn7C0Bkw@mail.gmail.com>",
+      "from_name": "arnaud gaboury",
+      "from_email_hash": "8d66b3010463ba4609c087a2aec53210a2c80004ddc8ee34092b23f175a5a8d2",
+      "date": "2023-10-17T15:43:49+02:00",
+      "subject": "[R-SIG-Finance] from a list of array to tibble",
+      "subject_clean": "from a list of array to tibble",
+      "in_reply_to": "<CAEEj48mhXDiKq0c-CZjsTTz5SXBy-=fwKOwDvU86WWeQUffX7g@mail.gmail.com>",
+      "references": [
+        "<CAK1hC9u_EdTjfEgO6KZrYxt-xW+q-uq83VRGomD-Efqx=kc8gA@mail.gmail.com>",
+        "<87ttqpfqa7.fsf@enricoschumann.net>",
+        "<CAEEj48mhXDiKq0c-CZjsTTz5SXBy-=fwKOwDvU86WWeQUffX7g@mail.gmail.com>"
+      ],
+      "body_plain": "In fact, I realized this is not recommended to give names to rows. A\nbetter approach is to add a column with all names as row. The\nfollowing does the job:\n\nasset.stats <- as_tibble_col(unlist(my.ret.lst), column_name =\n'Annualized_return')\nasset.stats <- rownames_to_column(asset.stats, var = 'Assets')\nasset.stats$Assets <- names(my.ret.lst)\n\nOn Tue, Oct 17, 2023 at 2:52?PM Adam Ginensky <adamno227 at gmail.com> wrote:\n>\n> Perhaps you should have used 'The trouble with tibbles\" as your subject line :)\n>\n> On Tue, Oct 17, 2023 at 6:21?AM Enrico Schumann <es at enricoschumann.net> wrote:\n>>\n>> On Mon, 16 Oct 2023, arnaud gaboury writes:\n>>\n>> > I work with a list of crypto assets daily closing prices in xts class. Here\n>> > is a limited example:\n>> >\n>> > asset.xts.lst <- list(BTCUSDT = structure(c(26759.63, 26862, 26852.48,\n>> > 27154.15,\n>> > 27973.45), dim = c(5L, 1L), index = structure(c(1697068800, 1697155200,\n>> > 1697241600, 1697328000, 1697414400), tzone = \"UTC\", tclass = \"Date\"), class\n>> > = c(\"xts\",\n>> > \"zoo\")), ETHUSDT = structure(c(1539.61, 1552.16, 1554.94, 1557.77,\n>> > 1579.73), dim = c(5L, 1L), index = structure(c(1697068800, 1697155200,\n>> > 1697241600, 1697328000, 1697414400), tzone = \"UTC\", tclass = \"Date\"), class\n>> > = c(\"xts\",\n>> > \"zoo\")), TRXUSDT = structure(c(0.08481, 0.08549, 0.08501, 0.08667,\n>> > 0.08821), dim = c(5L, 1L), index = structure(c(1697068800, 1697155200,\n>> > 1697241600, 1697328000, 1697414400), tzone = \"UTC\", tclass = \"Date\"), class\n>> > = c(\"xts\",\n>> > \"zoo\")))\n>> >\n>> > I will compute some function from PerformanceAnalytics package and write\n>> > all results in a tibble. Let's apply a first function, Return.annualized()\n>> > (at first I computed returns from daily prices). I have now a list of\n>> > arrays named my.ret.lst:\n>> >\n>> > my.ret.lst <- list(BTCUSDT = structure(15.36, dim = c(1L, 1L), dimnames =\n>> > list(\n>> >     \"Annualized Return\", NULL)), ETHUSDT = structure(4.06, dim = c(1L,\n>> > 1L), dimnames = list(\"Annualized Return\", NULL)), TRXUSDT = structure(10.9,\n>> > dim = c(1L,\n>> > 1L), dimnames = list(\"Annualized Return\", NULL)))\n>> >\n>> > Now I can't find a way to start my tibble. The idea is to have variables\n>> > BTCUSDT, ETHUSDT and TRXUSDT (token names), with observations (like\n>> > annualized return) and the respective values. I will add of course many\n>> > other observations.My row names can be either my token names, or the\n>> > observation (annualized return).\n>> > In my example, I can't find a way to pass each list element name to the\n>> > wanted tibble.\n>> >\n>> > Thank you for help\n>> >\n>>\n>> Do you mean something like this?\n>>\n>>     data.frame(my.ret.lst)\n>>     ##                   BTCUSDT ETHUSDT TRXUSDT\n>>     ## Annualized Return   15.36    4.06    10.9\n\nthis is the idea, but BTCUSDT etc as rows and Annualized_Return as one\ncolumn name.\n\n>>\n>> (I don't use tibbles, but there is probably an 'as.tibble' method or\n>>  similar.)\n>>\n>> --\n>> Enrico Schumann\n>> Lucerne, Switzerland\n>> http://enricoschumann.net\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "In fact, I realized this is not recommended to give names to rows. A\nbetter approach is to add a column with all names as row. The\nfollowing does the job:\n\nasset.stats <- as_tibble_col(unlist(my.ret.l",
+      "thread_id": "thread-8a7555b8e030",
+      "thread_depth": 3,
+      "month": "2023-10"
+    },
+    {
+      "id": "msg-46d8327e1bfd",
+      "message_id": "<CAK1hC9t8QbLkhVYOarEWi=vjimK_71wxV=c03HmRz2t3Xv405g@mail.gmail.com>",
+      "from_name": "arnaud gaboury",
+      "from_email_hash": "8d66b3010463ba4609c087a2aec53210a2c80004ddc8ee34092b23f175a5a8d2",
+      "date": "2023-10-20T19:09:35+02:00",
+      "subject": "[R-SIG-Finance] correlation matrix",
+      "subject_clean": "correlation matrix",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I have a xts object with assets daily closing prices. I would like to\nprint an usual correlation matrix of each asset against others. The\nPerformanceAnalytics::table.correlation() function let me with a very\nugly output.\nIs there any other function from a package which will print a user\nfriendly correlation matrix?\n\nThank You for help",
+      "body_snippet": "I have a xts object with assets daily closing prices. I would like to\nprint an usual correlation matrix of each asset against others. The\nPerformanceAnalytics::table.correlation() function let me with",
+      "thread_id": "thread-46d8327e1bfd",
+      "thread_depth": 0,
+      "month": "2023-10"
+    },
+    {
+      "id": "msg-6283a5b93a67",
+      "message_id": "<CY4PR08MB3462C569F19C4D000F36802BB9DBA@CY4PR08MB3462.namprd08.prod.outlook.com>",
+      "from_name": "Eric Zivot",
+      "from_email_hash": "3f7374f1c5eab31f7f5fa0e14f86e9cda5ed6ed36208a6689993e738b8d5a846",
+      "date": "2023-10-20T17:12:49Z",
+      "subject": "[R-SIG-Finance] correlation matrix",
+      "subject_clean": "correlation matrix",
+      "in_reply_to": "<CAK1hC9t8QbLkhVYOarEWi=vjimK_71wxV=c03HmRz2t3Xv405g@mail.gmail.com>",
+      "references": [
+        "<CAK1hC9t8QbLkhVYOarEWi=vjimK_71wxV=c03HmRz2t3Xv405g@mail.gmail.com>"
+      ],
+      "body_plain": "See the package corrplot - you get very nice visual plots of correlations and also printouts of all pairwise correlations. You may need to use coredata() to extract data as a matrix to be passed to the function corrplot().\n\n-----Original Message-----\nFrom: R-SIG-Finance <r-sig-finance-bounces at r-project.org> On Behalf Of arnaud gaboury\nSent: Friday, October 20, 2023 10:10 AM\nTo: r-sig-finance at r-project.org\nSubject: [R-SIG-Finance] correlation matrix\n\nI have a xts object with assets daily closing prices. I would like to print an usual correlation matrix of each asset against others. The\nPerformanceAnalytics::table.correlation() function let me with a very ugly output.\nIs there any other function from a package which will print a user friendly correlation matrix?\n\nThank You for help\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list https://urldefense.com/v3/__https://stat.ethz.ch/mailman/listinfo/r-sig-finance__;!!K-Hz7m0Vt54!jioZM9Nd6oeVy_gNe5CuRD11pqzHc3CDCt46IvWGkZ9xEmit-nl7pwBBf3VJGmxZcMFVq4bc5_F6k93OhMjgBC8$\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "See the package corrplot - you get very nice visual plots of correlations and also printouts of all pairwise correlations. You may need to use coredata() to extract data as a matrix to be passed to th",
+      "thread_id": "thread-46d8327e1bfd",
+      "thread_depth": 1,
+      "month": "2023-10"
+    },
+    {
+      "id": "msg-7c2506a23288",
+      "message_id": "<CAK1hC9spLZ=85iNM4yNC+ivfm4hnuWGEKKTpP-GEDvoG+yKDfg@mail.gmail.com>",
+      "from_name": "arnaud gaboury",
+      "from_email_hash": "8d66b3010463ba4609c087a2aec53210a2c80004ddc8ee34092b23f175a5a8d2",
+      "date": "2023-10-20T19:22:05+02:00",
+      "subject": "[R-SIG-Finance] correlation matrix",
+      "subject_clean": "correlation matrix",
+      "in_reply_to": "<CY4PR08MB3462C569F19C4D000F36802BB9DBA@CY4PR08MB3462.namprd08.prod.outlook.com>",
+      "references": [
+        "<CAK1hC9t8QbLkhVYOarEWi=vjimK_71wxV=c03HmRz2t3Xv405g@mail.gmail.com>",
+        "<CY4PR08MB3462C569F19C4D000F36802BB9DBA@CY4PR08MB3462.namprd08.prod.outlook.com>"
+      ],
+      "body_plain": "On Fri, Oct 20, 2023 at 7:16?PM Eric Zivot <ezivot at uw.edu> wrote:\n>\n> See the package corrplot - you get very nice visual plots of correlations and also printouts of all pairwise correlations. You may need to use coredata() to extract data as a matrix to be passed to the function corrplot().\n>\n> -----Original Message-----\n> From: R-SIG-Finance <r-sig-finance-bounces at r-project.org> On Behalf Of arnaud gaboury\n> Sent: Friday, October 20, 2023 10:10 AM\n> To: r-sig-finance at r-project.org\n> Subject: [R-SIG-Finance] correlation matrix\n>\n> I have a xts object with assets daily closing prices. I would like to print an usual correlation matrix of each asset against others. The\n> PerformanceAnalytics::table.correlation() function let me with a very ugly output.\n> Is there any other function from a package which will print a user friendly correlation matrix?\n>\n> Thank You for help\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list https://urldefense.com/v3/__https://stat.ethz.ch/mailman/listinfo/r-sig-finance__;!!K-Hz7m0Vt54!jioZM9Nd6oeVy_gNe5CuRD11pqzHc3CDCt46IvWGkZ9xEmit-nl7pwBBf3VJGmxZcMFVq4bc5_F6k93OhMjgBC8$\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "On Fri, Oct 20, 2023 at 7:16?PM Eric Zivot <ezivot at uw.edu> wrote:\n>\n> See the package corrplot - you get very nice visual plots of correlations and also printouts of all pairwise correlations. You ",
+      "thread_id": "thread-46d8327e1bfd",
+      "thread_depth": 2,
+      "month": "2023-10"
+    },
+    {
+      "id": "msg-27ad9cd2095c",
+      "message_id": "<CAK1hC9u86YZU+Y724V0mFn9Un63YsCdd1B5LQuzqANKAzYttrg@mail.gmail.com>",
+      "from_name": "arnaud gaboury",
+      "from_email_hash": "8d66b3010463ba4609c087a2aec53210a2c80004ddc8ee34092b23f175a5a8d2",
+      "date": "2023-10-20T19:22:43+02:00",
+      "subject": "[R-SIG-Finance] correlation matrix",
+      "subject_clean": "correlation matrix",
+      "in_reply_to": "<CY4PR08MB3462C569F19C4D000F36802BB9DBA@CY4PR08MB3462.namprd08.prod.outlook.com>",
+      "references": [
+        "<CAK1hC9t8QbLkhVYOarEWi=vjimK_71wxV=c03HmRz2t3Xv405g@mail.gmail.com>",
+        "<CY4PR08MB3462C569F19C4D000F36802BB9DBA@CY4PR08MB3462.namprd08.prod.outlook.com>"
+      ],
+      "body_plain": "On Fri, Oct 20, 2023 at 7:16?PM Eric Zivot <ezivot at uw.edu> wrote:\n>\n> See the package corrplot - you get very nice visual plots of correlations and also printouts of all pairwise correlations. You may need to use coredata() to extract data as a matrix to be passed to the function corrplot().\n\nThank you so much for your quick answer. It works perfectly as expected\n>\n> -----Original Message-----\n> From: R-SIG-Finance <r-sig-finance-bounces at r-project.org> On Behalf Of arnaud gaboury\n> Sent: Friday, October 20, 2023 10:10 AM\n> To: r-sig-finance at r-project.org\n> Subject: [R-SIG-Finance] correlation matrix\n>\n> I have a xts object with assets daily closing prices. I would like to print an usual correlation matrix of each asset against others. The\n> PerformanceAnalytics::table.correlation() function let me with a very ugly output.\n> Is there any other function from a package which will print a user friendly correlation matrix?\n>\n> Thank You for help\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list https://urldefense.com/v3/__https://stat.ethz.ch/mailman/listinfo/r-sig-finance__;!!K-Hz7m0Vt54!jioZM9Nd6oeVy_gNe5CuRD11pqzHc3CDCt46IvWGkZ9xEmit-nl7pwBBf3VJGmxZcMFVq4bc5_F6k93OhMjgBC8$\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "On Fri, Oct 20, 2023 at 7:16?PM Eric Zivot <ezivot at uw.edu> wrote:\n>\n> See the package corrplot - you get very nice visual plots of correlations and also printouts of all pairwise correlations. You ",
+      "thread_id": "thread-46d8327e1bfd",
+      "thread_depth": 2,
+      "month": "2023-10"
+    },
+    {
+      "id": "msg-4bc2f26fda35",
+      "message_id": "<CAPPM_gQuP-bfqjKFuOkJfw5GZ-ONd=ayJV29E30ZR9os9n4zTQ@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "23f6c30ff3bdcca471f7faac8696c097be744a921830fdf6ee417f06337a1b60",
+      "date": "2023-10-20T12:27:30-05:00",
+      "subject": "[R-SIG-Finance] correlation matrix",
+      "subject_clean": "correlation matrix",
+      "in_reply_to": "<CY4PR08MB3462C569F19C4D000F36802BB9DBA@CY4PR08MB3462.namprd08.prod.outlook.com>",
+      "references": [
+        "<CAK1hC9t8QbLkhVYOarEWi=vjimK_71wxV=c03HmRz2t3Xv405g@mail.gmail.com>",
+        "<CY4PR08MB3462C569F19C4D000F36802BB9DBA@CY4PR08MB3462.namprd08.prod.outlook.com>"
+      ],
+      "body_plain": "On Fri, Oct 20, 2023 at 12:20?PM Eric Zivot <ezivot at uw.edu> wrote:\n>\n> See the package corrplot - you get very nice visual plots of correlations and also printouts of all pairwise correlations. You may need to use coredata() to extract data as a matrix to be passed to the function corrplot().\n>\nVery cool package! No need to use coredata(). This works:\n\ndata(edhec, package = \"PerformanceAnalytics\")\ncorrplot::corrplot(cor(edhec))\n\n> -----Original Message-----\n> From: R-SIG-Finance <r-sig-finance-bounces at r-project.org> On Behalf Of arnaud gaboury\n> Sent: Friday, October 20, 2023 10:10 AM\n> To: r-sig-finance at r-project.org\n> Subject: [R-SIG-Finance] correlation matrix\n>\n> I have a xts object with assets daily closing prices. I would like to print an usual correlation matrix of each asset against others. The\n> PerformanceAnalytics::table.correlation() function let me with a very ugly output.\n> Is there any other function from a package which will print a user friendly correlation matrix?\n>\n> Thank You for help\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list https://urldefense.com/v3/__https://stat.ethz.ch/mailman/listinfo/r-sig-finance__;!!K-Hz7m0Vt54!jioZM9Nd6oeVy_gNe5CuRD11pqzHc3CDCt46IvWGkZ9xEmit-nl7pwBBf3VJGmxZcMFVq4bc5_F6k93OhMjgBC8$\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Fri, Oct 20, 2023 at 12:20?PM Eric Zivot <ezivot at uw.edu> wrote:\n>\n> See the package corrplot - you get very nice visual plots of correlations and also printouts of all pairwise correlations. You",
+      "thread_id": "thread-46d8327e1bfd",
+      "thread_depth": 2,
+      "month": "2023-10"
+    },
+    {
+      "id": "msg-bfe8d7f15cf5",
+      "message_id": "<CAK1hC9s26Tg9USvPa1aVaabJ5s5n8e0qptmqRhbXX5Oaa9YvPA@mail.gmail.com>",
+      "from_name": "arnaud gaboury",
+      "from_email_hash": "8d66b3010463ba4609c087a2aec53210a2c80004ddc8ee34092b23f175a5a8d2",
+      "date": "2023-10-20T20:32:47+02:00",
+      "subject": "[R-SIG-Finance] correlation matrix",
+      "subject_clean": "correlation matrix",
+      "in_reply_to": "<CAPPM_gQuP-bfqjKFuOkJfw5GZ-ONd=ayJV29E30ZR9os9n4zTQ@mail.gmail.com>",
+      "references": [
+        "<CAK1hC9t8QbLkhVYOarEWi=vjimK_71wxV=c03HmRz2t3Xv405g@mail.gmail.com>",
+        "<CY4PR08MB3462C569F19C4D000F36802BB9DBA@CY4PR08MB3462.namprd08.prod.outlook.com>",
+        "<CAPPM_gQuP-bfqjKFuOkJfw5GZ-ONd=ayJV29E30ZR9os9n4zTQ@mail.gmail.com>"
+      ],
+      "body_plain": "On Fri, Oct 20, 2023 at 7:27?PM Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n>\n> On Fri, Oct 20, 2023 at 12:20?PM Eric Zivot <ezivot at uw.edu> wrote:\n> >\n> > See the package corrplot - you get very nice visual plots of correlations and also printouts of all pairwise correlations. You may need to use coredata() to extract data as a matrix to be passed to the function corrplot().\n> >\n> Very cool package! No need to use coredata(). This works:\n>\n> data(edhec, package = \"PerformanceAnalytics\")\n> corrplot::corrplot(cor(edhec))\n\nWell, that's it not so bad, but I honestly prefer the  solution from\npackage corrplot\n\n\n>\n> > -----Original Message-----\n> > From: R-SIG-Finance <r-sig-finance-bounces at r-project.org> On Behalf Of arnaud gaboury\n> > Sent: Friday, October 20, 2023 10:10 AM\n> > To: r-sig-finance at r-project.org\n> > Subject: [R-SIG-Finance] correlation matrix\n> >\n> > I have a xts object with assets daily closing prices. I would like to print an usual correlation matrix of each asset against others. The\n> > PerformanceAnalytics::table.correlation() function let me with a very ugly output.\n> > Is there any other function from a package which will print a user friendly correlation matrix?\n> >\n> > Thank You for help\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list https://urldefense.com/v3/__https://stat.ethz.ch/mailman/listinfo/r-sig-finance__;!!K-Hz7m0Vt54!jioZM9Nd6oeVy_gNe5CuRD11pqzHc3CDCt46IvWGkZ9xEmit-nl7pwBBf3VJGmxZcMFVq4bc5_F6k93OhMjgBC8$\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions should go.\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions should go.\n>\n>\n>\n> --\n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Fri, Oct 20, 2023 at 7:27?PM Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n>\n> On Fri, Oct 20, 2023 at 12:20?PM Eric Zivot <ezivot at uw.edu> wrote:\n> >\n> > See the package corrplot - you get v",
+      "thread_id": "thread-46d8327e1bfd",
+      "thread_depth": 3,
+      "month": "2023-10"
+    },
+    {
+      "id": "msg-0e0c77251554",
+      "message_id": "<CAPPM_gS6VGF88dMVZXiqq3KKNk5CCmpXYu5GAi1kRzE0Onq_-Q@mail.gmail.com>",
+      "from_name": "Joshua Ulrich",
+      "from_email_hash": "23f6c30ff3bdcca471f7faac8696c097be744a921830fdf6ee417f06337a1b60",
+      "date": "2023-10-20T13:37:46-05:00",
+      "subject": "[R-SIG-Finance] correlation matrix",
+      "subject_clean": "correlation matrix",
+      "in_reply_to": "<CAK1hC9s26Tg9USvPa1aVaabJ5s5n8e0qptmqRhbXX5Oaa9YvPA@mail.gmail.com>",
+      "references": [
+        "<CAK1hC9t8QbLkhVYOarEWi=vjimK_71wxV=c03HmRz2t3Xv405g@mail.gmail.com>",
+        "<CY4PR08MB3462C569F19C4D000F36802BB9DBA@CY4PR08MB3462.namprd08.prod.outlook.com>",
+        "<CAPPM_gQuP-bfqjKFuOkJfw5GZ-ONd=ayJV29E30ZR9os9n4zTQ@mail.gmail.com>",
+        "<CAK1hC9s26Tg9USvPa1aVaabJ5s5n8e0qptmqRhbXX5Oaa9YvPA@mail.gmail.com>"
+      ],
+      "body_plain": "On Fri, Oct 20, 2023 at 1:32?PM arnaud gaboury <arnaud.gaboury at gmail.com> wrote:\n>\n> On Fri, Oct 20, 2023 at 7:27?PM Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> >\n> > On Fri, Oct 20, 2023 at 12:20?PM Eric Zivot <ezivot at uw.edu> wrote:\n> > >\n> > > See the package corrplot - you get very nice visual plots of correlations and also printouts of all pairwise correlations. You may need to use coredata() to extract data as a matrix to be passed to the function corrplot().\n> > >\n> > Very cool package! No need to use coredata(). This works:\n> >\n> > data(edhec, package = \"PerformanceAnalytics\")\n> > corrplot::corrplot(cor(edhec))\n>\n> Well, that's it not so bad, but I honestly prefer the  solution from\n> package corrplot\n>\nThat *is* a solution using the corrplot() function from the corrplot\npackage. I only used the edhec data from PerformanceAnalytics, and\nonly for convenience because I knew you had that package installed.\n\n>\n> >\n> > > -----Original Message-----\n> > > From: R-SIG-Finance <r-sig-finance-bounces at r-project.org> On Behalf Of arnaud gaboury\n> > > Sent: Friday, October 20, 2023 10:10 AM\n> > > To: r-sig-finance at r-project.org\n> > > Subject: [R-SIG-Finance] correlation matrix\n> > >\n> > > I have a xts object with assets daily closing prices. I would like to print an usual correlation matrix of each asset against others. The\n> > > PerformanceAnalytics::table.correlation() function let me with a very ugly output.\n> > > Is there any other function from a package which will print a user friendly correlation matrix?\n> > >\n> > > Thank You for help\n> > >\n> > > _______________________________________________\n> > > R-SIG-Finance at r-project.org mailing list https://urldefense.com/v3/__https://stat.ethz.ch/mailman/listinfo/r-sig-finance__;!!K-Hz7m0Vt54!jioZM9Nd6oeVy_gNe5CuRD11pqzHc3CDCt46IvWGkZ9xEmit-nl7pwBBf3VJGmxZcMFVq4bc5_F6k93OhMjgBC8$\n> > > -- Subscriber-posting only. If you want to post, subscribe first.\n> > > -- Also note that this is not the r-help list where general R questions should go.\n> > >\n> > > _______________________________________________\n> > > R-SIG-Finance at r-project.org mailing list\n> > > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > > -- Subscriber-posting only. If you want to post, subscribe first.\n> > > -- Also note that this is not the r-help list where general R questions should go.\n> >\n> >\n> >\n> > --\n> > Joshua Ulrich  |  about.me/joshuaulrich\n> > FOSS Trading  |  www.fosstrading.com\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com",
+      "body_snippet": "On Fri, Oct 20, 2023 at 1:32?PM arnaud gaboury <arnaud.gaboury at gmail.com> wrote:\n>\n> On Fri, Oct 20, 2023 at 7:27?PM Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> >\n> > On Fri, Oct 20, 2023 a",
+      "thread_id": "thread-46d8327e1bfd",
+      "thread_depth": 4,
+      "month": "2023-10"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-8a7555b8e030",
+      "subject": "from a list of array to tibble",
+      "message_count": 4,
+      "participants": [
+        "Adam Ginensky",
+        "Enrico Schumann",
+        "arnaud gaboury"
+      ],
+      "started": "2023-10-16T16:29:32+02:00",
+      "last_reply": "2023-10-17T15:43:49+02:00",
+      "root_message_id": "msg-8a7555b8e030"
+    },
+    {
+      "id": "thread-46d8327e1bfd",
+      "subject": "correlation matrix",
+      "message_count": 7,
+      "participants": [
+        "Eric Zivot",
+        "Joshua Ulrich",
+        "arnaud gaboury"
+      ],
+      "started": "2023-10-20T19:09:35+02:00",
+      "last_reply": "2023-10-20T13:37:46-05:00",
+      "root_message_id": "msg-46d8327e1bfd"
+    }
+  ]
+}

@@ -1,0 +1,144 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2013-09",
+  "messages": [
+    {
+      "id": "msg-83854bd47189",
+      "message_id": "<5249FA09.90009@4dscape.com>",
+      "from_name": "alexios ghalanos",
+      "from_email_hash": "1b7f65afe2561f54160034516afa74832dbbeb84a86b8b9fb7fe05ea755a2acb",
+      "date": "2013-09-30T23:24:09+01:00",
+      "subject": "[R-SIG-Finance] Parma Package QP optimization Failing and Ignoring Leverage Constraint",
+      "subject_clean": "Parma Package QP optimization Failing and Ignoring Leverage Constraint",
+      "in_reply_to": "<CAJYra_g4_Q1wpKykixRU++9wmP5_GkUV04kft-18Sk0eaK82iQ@mail.gmail.com>",
+      "references": [
+        "<CAJYra_g4_Q1wpKykixRU++9wmP5_GkUV04kft-18Sk0eaK82iQ@mail.gmail.com>"
+      ],
+      "body_plain": "1. This works just fine: (LB and UB should be a vector)\nmyspec<-parmaspec(S=cov(R),forecast=100*abs(colMeans(R)),LB=rep(-0.05,15),UB=rep(0.05,15),budget=0,risk='EV',riskType='minrisk',target=0.0030346)\nmysol <- parmasolve(myspec,type='QP')\n+---------------------------------+\n|        PARMA Portfolio          |\n+---------------------------------+\nNo.Assets               : 15\nProblem                 : QP\nRisk Measure            : EV\nObjective               : minrisk\nRisk                    : 3e-07\nReward                  : 0.0030346\n\n    Optimal_Weights\nEWG          0.0293\nEEM          0.0206\nEWL          0.0174\nTLT          0.0120\nEZA          0.0107\nEWA          0.0107\nEPP          0.0106\nEWC          0.0094\nIWO          0.0061\nIWN          0.0051\nIWF         -0.0078\nEWJ         -0.0214\nEWU         -0.0221\nIWD         -0.0309\nEWQ         -0.0500\n\n\n2. You've set leverage with a quadratic solver. How do you suppose the\nabsolute value function can be accommodated in this problem?\nThis works:\nmyspec <-\nparmaspec(scenario=as.matrix(R),forecast=100*abs(colMeans(R)),LB=rep(-0.05,15),UB=rep(0.05,15),leverage=0.1,risk='EV',riskType='minrisk',target=0.0030346)\nmysol <- parmasolve(myspec, type='NLP', w0=rep(0.01,15))\nsum(abs(weights(mysol)))\n\ni.e. use a scenario matrix instead and solver as NLP (and make sure to\nprovide a set of starting weights 'w0').\n\n\nI suppose I should add more checks/warnings.\n\n\nRegards,\n\nAlexios\n\n\n\nOn 30/09/2013 22:52, Preston Li wrote:\n> *Can someone please tell me why the following is not giving me a solution?*\n> \n> \n> if (!is.loaded('etfdata')) data(etfdata)\n> \n> R = timeSeries::returns(etfdata)\n> \n>> myspec <-\n> parmaspec(S=cov(R),forecast=100*abs(colMeans(R)),LB=-0.05,UB=0.05,budget=0,risk='EV',riskType='minrisk',target=0.0030346)\n>> mysol <- parmasolve(myspec,type='QP')\n>> mysol\n> \n> +---------------------------------+\n> |        PARMA Portfolio          |\n> +---------------------------------+\n> No.Assets               : 15\n> Problem                 : QP\n> Risk Measure            : EV\n> Objective               : minrisk\n> Risk                    : NA\n> Reward                  : NA\n> \n> Error in Math.data.frame(list(Optimal_Weights = logical(0)), 4) :\n>   non-numeric variable in data frame: Optimal_Weights\n> \n> *Whereas if I do the following I get a solution (and why is the \"leverage\"\n> constraint ignored?):*\n> \n>> myspec <-\n> parmaspec(S=cov(R),forecast=100*abs(colMeans(R)),LB=-0.05,UB=0.05,budget=0,risk='EV',riskType='optimal',leverage=0.1)\n>> mysol <- parmasolve(myspec,type='QP')\n>> mysol\n> \n> +---------------------------------+\n> |        PARMA Portfolio          |\n> +---------------------------------+\n> No.Assets               : 15\n> Problem                 : QP\n> Risk Measure            : EV\n> Objective               : optimal\n> Risk                    : 3e-07\n> Reward                  : 0.0030346\n> \n>     Optimal_Weights\n> EWG          0.0293\n> EEM          0.0206\n> EWL          0.0174\n> TLT          0.0120\n> EZA          0.0107\n> EWA          0.0107\n> EPP          0.0106\n> EWC          0.0094\n> IWO          0.0061\n> IWN          0.0051\n> IWF         -0.0078\n> EWJ         -0.0214\n> EWU         -0.0221\n> IWD         -0.0309\n> EWQ         -0.0500\n>> sum(abs(mysol at solution$weight)/2)\n> [1] 0.1321498\n> \n> \t[[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n> \n>",
+      "body_snippet": "1. This works just fine: (LB and UB should be a vector)\nmyspec<-parmaspec(S=cov(R),forecast=100*abs(colMeans(R)),LB=rep(-0.05,15),UB=rep(0.05,15),budget=0,risk='EV',riskType='minrisk',target=0.0030346",
+      "thread_id": "thread-83854bd47189",
+      "thread_depth": 0,
+      "month": "2013-09"
+    },
+    {
+      "id": "msg-587ecd3f21a4",
+      "message_id": "<FC4D6252-7E09-45BD-94E4-DD639D7E42D7@gmail.com>",
+      "from_name": "Michael Weylandt",
+      "from_email_hash": "44e8775a589b9ef81880469e200f3cce307c7180b4289ca1696a578afb772b3a",
+      "date": "2013-09-30T20:49:13-04:00",
+      "subject": "[R-SIG-Finance] Parma Package QP optimization Failing and Ignoring Leverage Constraint",
+      "subject_clean": "Parma Package QP optimization Failing and Ignoring Leverage Constraint",
+      "in_reply_to": "<CAJYra_g4_Q1wpKykixRU++9wmP5_GkUV04kft-18Sk0eaK82iQ@mail.gmail.com>",
+      "references": [
+        "<CAJYra_g4_Q1wpKykixRU++9wmP5_GkUV04kft-18Sk0eaK82iQ@mail.gmail.com>"
+      ],
+      "body_plain": "On Sep 30, 2013, at 17:52, Preston Li <preston.li at gmail.com> wrote:\n\n> if (!is.loaded('etfdata')) data(etfdata)\n\nTotally off topic: that doesn't do what you think it does. You're looking for exists()\n\nM",
+      "body_snippet": "On Sep 30, 2013, at 17:52, Preston Li <preston.li at gmail.com> wrote:\n\n> if (!is.loaded('etfdata')) data(etfdata)\n\nTotally off topic: that doesn't do what you think it does. You're looking for exists",
+      "thread_id": "thread-587ecd3f21a4",
+      "thread_depth": 0,
+      "month": "2013-09"
+    },
+    {
+      "id": "msg-76245c0cc10d",
+      "message_id": "<CABQr56UyyUZaKwRy9nsfLmbkMikfRQpxHd0uhX7hhLXL7oiiFA@mail.gmail.com>",
+      "from_name": "Qi Li",
+      "from_email_hash": "40efb7d4e12a294bb2efeed6b09629a2892f523b3413575e5376663ab3b1661d",
+      "date": "2013-09-30T21:10:49-04:00",
+      "subject": "[R-SIG-Finance] Question on IBrokers",
+      "subject_clean": "Question on IBrokers",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/7404ceed/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/7404ceed/attachment.pl>",
+      "thread_id": "thread-76245c0cc10d",
+      "thread_depth": 0,
+      "month": "2013-09"
+    },
+    {
+      "id": "msg-de826e123407",
+      "message_id": "<CABQr56UezLXcpO_eaV9D2GZ+CTYr1hf5dWkLC6+MVb7UZCG18A@mail.gmail.com>",
+      "from_name": "Qi Li",
+      "from_email_hash": "40efb7d4e12a294bb2efeed6b09629a2892f523b3413575e5376663ab3b1661d",
+      "date": "2013-09-30T21:27:30-04:00",
+      "subject": "[R-SIG-Finance] Question on IBrokers",
+      "subject_clean": "Question on IBrokers",
+      "in_reply_to": "<CA+kDFFXa8rFZiOvFwoe-ac2OZwb4W00FsWVKUpd0hxPcufCYgA@mail.gmail.com>",
+      "references": [
+        "<CABQr56UyyUZaKwRy9nsfLmbkMikfRQpxHd0uhX7hhLXL7oiiFA@mail.gmail.com>",
+        "<CA+kDFFXa8rFZiOvFwoe-ac2OZwb4W00FsWVKUpd0hxPcufCYgA@mail.gmail.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/edf14194/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/edf14194/attachment.pl>",
+      "thread_id": "thread-de826e123407",
+      "thread_depth": 0,
+      "month": "2013-09"
+    },
+    {
+      "id": "msg-663058a339fb",
+      "message_id": "<CAJYra_iTjQ9evrzfKrRXtPLmPXJACd9uQyaP7wgLumn-CtGbaQ@mail.gmail.com>",
+      "from_name": "Preston Li",
+      "from_email_hash": "0d9201353e3a4ea304ca0c58ad6c035439e5f74bdcfdd47c45effdc99f42cba2",
+      "date": "2013-09-30T23:23:19-07:00",
+      "subject": "[R-SIG-Finance] Parma Package QP optimization Failing and Ignoring Leverage Constraint",
+      "subject_clean": "Parma Package QP optimization Failing and Ignoring Leverage Constraint",
+      "in_reply_to": "<5249FA09.90009@4dscape.com>",
+      "references": [
+        "<CAJYra_g4_Q1wpKykixRU++9wmP5_GkUV04kft-18Sk0eaK82iQ@mail.gmail.com>",
+        "<5249FA09.90009@4dscape.com>"
+      ],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/da5db0e6/attachment.pl>",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/da5db0e6/attachment.pl>",
+      "thread_id": "thread-83854bd47189",
+      "thread_depth": 1,
+      "month": "2013-09"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-587ecd3f21a4",
+      "subject": "Parma Package QP optimization Failing and Ignoring Leverage Constraint",
+      "message_count": 1,
+      "participants": [
+        "Michael Weylandt"
+      ],
+      "started": "2013-09-30T20:49:13-04:00",
+      "last_reply": "2013-09-30T20:49:13-04:00",
+      "root_message_id": "msg-587ecd3f21a4"
+    },
+    {
+      "id": "thread-76245c0cc10d",
+      "subject": "Question on IBrokers",
+      "message_count": 1,
+      "participants": [
+        "Qi Li"
+      ],
+      "started": "2013-09-30T21:10:49-04:00",
+      "last_reply": "2013-09-30T21:10:49-04:00",
+      "root_message_id": "msg-76245c0cc10d"
+    },
+    {
+      "id": "thread-de826e123407",
+      "subject": "Question on IBrokers",
+      "message_count": 1,
+      "participants": [
+        "Qi Li"
+      ],
+      "started": "2013-09-30T21:27:30-04:00",
+      "last_reply": "2013-09-30T21:27:30-04:00",
+      "root_message_id": "msg-de826e123407"
+    },
+    {
+      "id": "thread-83854bd47189",
+      "subject": "Parma Package QP optimization Failing and Ignoring Leverage Constraint",
+      "message_count": 2,
+      "participants": [
+        "Preston Li",
+        "alexios ghalanos"
+      ],
+      "started": "2013-09-30T23:24:09+01:00",
+      "last_reply": "2013-09-30T23:23:19-07:00",
+      "root_message_id": "msg-83854bd47189"
+    }
+  ]
+}

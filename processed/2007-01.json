@@ -1,0 +1,862 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2007-01",
+  "messages": [
+    {
+      "id": "msg-b1eb8c626413",
+      "message_id": "<8230851.post@talk.nabble.com>",
+      "from_name": "genx",
+      "from_email_hash": "988c3969ea449636bf2ecddd29c8339bbfcb5e69ff8c63a59eb73ef6bfb6e73c",
+      "date": "2007-01-08T18:17:48-08:00",
+      "subject": "[R-SIG-Finance] rMetrics",
+      "subject_clean": "rMetrics",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I am trying to download data off Yahoo finance utilizing the rMetrics\npackages but all the example code including several other examples found in\nthe rMetrics PDFs fail. After a successful download of the data i get the\nfollowing error message:\n\n\ntrying URL\n'http://chart.yahoo.com/table.csv?s=^DJI&a=0&b=1&c=1999&d=11&e=31&f=2000&x=.csv'\nContent type 'text/csv' length unknown\nopened URL\ndownloaded 31Kb\n\nRead 504 items\nRead 7 items\nError in if (sum(lt$sec + lt$min + lt$hour) == 0) isoFormat = \"%Y-%m-%d\" : \n        missing value where TRUE/FALSE needed\n\n\nThe .R code i am trying run looks like this (it's from the demo suite):\n\n    # Settings:\n    symbol = \"^DJI\"\n    file = \"DJI.CSV\"\n    source = \"http://chart.yahoo.com/table.csv?\"\n    # 1.1.1999 - 31.12.2000\n    # Note months count from 0 to 11 !\n    query = paste(\"s=\", symbol,\"&a=0&b=1&c=1999&d=11&e=31&f=2000&x=.csv\", \n        sep = \"\")\n    ###\n    \n    # Download: \n    DJI = yahooImport(query, file, source, try = TRUE)\n    head(DJI at data)\n    ###\n        \n    # Direct data access as.timeSeries Object:\n    DJI = as.timeSeries(yahooImport(query, file, source, try = TRUE)@data)\n    class(DJI)\n    head(DJI)\n    tail(DJI)\n    ###\n\n\n\n-- \nView this message in context: http://www.nabble.com/rMetrics-tf2943492.html#a8230851\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "I am trying to download data off Yahoo finance utilizing the rMetrics\npackages but all the example code including several other examples found in\nthe rMetrics PDFs fail. After a successful download of",
+      "thread_id": "thread-b1eb8c626413",
+      "thread_depth": 0,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-594289625a21",
+      "message_id": "<45A35ADB.7090903@mx.uni-saarland.de>",
+      "from_name": "Martin Becker",
+      "from_email_hash": "8a794d4333ae3023243e5dff553a8cd66c9c6e691f585985662cb4f3aa75242f",
+      "date": "2007-01-09T10:05:31+01:00",
+      "subject": "[R-SIG-Finance] rMetrics",
+      "subject_clean": "rMetrics",
+      "in_reply_to": "<8230851.post@talk.nabble.com>",
+      "references": [
+        "<8230851.post@talk.nabble.com>"
+      ],
+      "body_plain": "It seems to be a problem with locales. Yahoo returns US-month-names, but \nthe corresponding code fragment in Rmetrics seems to use the current \nsystem locale for date conversion, and thus it may fail to convert the \nrownames to dates (for some months, resulting in NAs). Setting LC_TIME \n(temporarily) to US provides a quick fix.\n[I am not sure, but maybe altering LC_TIME temporarily could be done by \nRmetrics?]\n\nSee below for the (inserted) commands.\n\nKind regards,\n  Martin Becker\n\ngenx schrieb:\n> I am trying to download data off Yahoo finance utilizing the rMetrics\n> packages but all the example code including several other examples found in\n> the rMetrics PDFs fail. After a successful download of the data i get the\n> following error message:\n>\n>\n> trying URL\n> 'http://chart.yahoo.com/table.csv?s=^DJI&a=0&b=1&c=1999&d=11&e=31&f=2000&x=.csv'\n> Content type 'text/csv' length unknown\n> opened URL\n> downloaded 31Kb\n>\n> Read 504 items\n> Read 7 items\n> Error in if (sum(lt$sec + lt$min + lt$hour) == 0) isoFormat = \"%Y-%m-%d\" : \n>         missing value where TRUE/FALSE needed\n>\n>\n> The .R code i am trying run looks like this (it's from the demo suite):\n>\n>     # Settings:\n>     symbol = \"^DJI\"\n>     file = \"DJI.CSV\"\n>     source = \"http://chart.yahoo.com/table.csv?\"\n>     # 1.1.1999 - 31.12.2000\n>     # Note months count from 0 to 11 !\n>     query = paste(\"s=\", symbol,\"&a=0&b=1&c=1999&d=11&e=31&f=2000&x=.csv\", \n>         sep = \"\")\n>     ###\n>     \n>     # Download: \n>     DJI = yahooImport(query, file, source, try = TRUE)\n>     head(DJI at data)\n>     ###\n>   \ntmp<-Sys.getlocale(\"LC_TIME\")\nSys.setlocale(\"LC_TIME\",\"US\")\n\n>         \n>     # Direct data access as.timeSeries Object:\n>     DJI = as.timeSeries(yahooImport(query, file, source, try = TRUE)@data)\n>   \nSys.setlocale(\"LC_TIME\",tmp)\n\n>     class(DJI)\n>     head(DJI)\n>     tail(DJI)\n>     ###\n>\n>\n>\n>",
+      "body_snippet": "It seems to be a problem with locales. Yahoo returns US-month-names, but \nthe corresponding code fragment in Rmetrics seems to use the current \nsystem locale for date conversion, and thus it may fail ",
+      "thread_id": "thread-b1eb8c626413",
+      "thread_depth": 1,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-dde003c34ee9",
+      "message_id": "<9e8f1a130701090809j392cc85fv105460497bc86d4@mail.gmail.com>",
+      "from_name": "Paolo Rossi",
+      "from_email_hash": "ef55602276901bc6a1e877ee15626b4553ba39508d9a88fe0eef2fbdd46fdffd",
+      "date": "2007-01-09T17:09:58+01:00",
+      "subject": "[R-SIG-Finance] Error loading fCalendar package",
+      "subject_clean": "Error loading fCalendar package",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070109/dc874028/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070109/dc874028/attachment.pl",
+      "thread_id": "thread-dde003c34ee9",
+      "thread_depth": 0,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-ff2bbcab6ec7",
+      "message_id": "<17827.50080.273016.894362@stat.math.ethz.ch>",
+      "from_name": "Martin Maechler",
+      "from_email_hash": "c2c86f22f78a4ecfe6d0e6b4e2be505a3f5beb0470ea88c903688ac536018a98",
+      "date": "2007-01-09T17:32:32+01:00",
+      "subject": "[R-SIG-Finance] Error loading fCalendar package",
+      "subject_clean": "Error loading fCalendar package",
+      "in_reply_to": "<9e8f1a130701090809j392cc85fv105460497bc86d4@mail.gmail.com>",
+      "references": [
+        "<9e8f1a130701090809j392cc85fv105460497bc86d4@mail.gmail.com>"
+      ],
+      "body_plain": ">>>>> \"Paolo\" == Paolo Rossi <prossi79.r at gmail.com>\n>>>>>     on Tue, 9 Jan 2007 17:09:58 +0100 writes:\n\n    Paolo> Dear all,\n    Paolo> when I load the fCalendar package I get this error:\n\n    Paolo> \"Error in lazyLoadDBfetch(key, datafile, compressed, envhook) :\n    Paolo> ReadItem: type 25 unknown\"\n    Paolo> I'm using R ver 2.3.1, with rmetrics downloaded directly from CRAN.\n\n    Paolo> could someone help me?\n\nYes. Upgrade R to 2.4.1\n\n    Paolo> thank you\n\nyou are welcome :-)\n\nMartin Maechler",
+      "body_snippet": ">>>>> \"Paolo\" == Paolo Rossi <prossi79.r at gmail.com>\n>>>>>     on Tue, 9 Jan 2007 17:09:58 +0100 writes:\n\n    Paolo> Dear all,\n    Paolo> when I load the fCalendar package I get this error:\n\n    Pao",
+      "thread_id": "thread-dde003c34ee9",
+      "thread_depth": 1,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-c246661b5965",
+      "message_id": "<8242336.post@talk.nabble.com>",
+      "from_name": "genx",
+      "from_email_hash": "988c3969ea449636bf2ecddd29c8339bbfcb5e69ff8c63a59eb73ef6bfb6e73c",
+      "date": "2007-01-09T09:30:07-08:00",
+      "subject": "[R-SIG-Finance] [R-sig-finance] rMetrics",
+      "subject_clean": "rMetrics",
+      "in_reply_to": "<45A35ADB.7090903@mx.uni-saarland.de>",
+      "references": [
+        "<8230851.post@talk.nabble.com>",
+        "<45A35ADB.7090903@mx.uni-saarland.de>"
+      ],
+      "body_plain": "Thank you for your help Martin, the code runs but it doesnt feel correct\nto apply a hack to make R/rMetrics to run on my ordinary WinXP system.\nWhat is really puzzling me is that many of the examples and code found in \nthe help files and also in the supplied PDF files does not run or does just \nrun partly.\n\nIs R & rMetrics really worth the effort for a non-hacker as me? What I\nwant is an easy way to do simulations on volatility (garch) , calculate l\nog-returns, betas on portfolios , some option valuation (greeks) and \nthats it.\n\n\n\nIt seems to be a problem with locales. Yahoo returns US-month-names, but \nthe corresponding code fragment in Rmetrics seems to use the current \nsystem locale for date conversion, and thus it may fail to convert the \nrownames to dates (for some months, resulting in NAs). Setting LC_TIME \n(temporarily) to US provides a quick fix.\n[I am not sure, but maybe altering LC_TIME temporarily could be done by \nRmetrics?]\n\nSee below for the (inserted) commands.\n\nKind regards,\n  Martin Becker\n\n-- \nView this message in context: http://www.nabble.com/rMetrics-tf2943492.html#a8242336\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "Thank you for your help Martin, the code runs but it doesnt feel correct\nto apply a hack to make R/rMetrics to run on my ordinary WinXP system.\nWhat is really puzzling me is that many of the examples ",
+      "thread_id": "thread-b1eb8c626413",
+      "thread_depth": 2,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-3903d1ba4873",
+      "message_id": "<45A3DD84.6010707@mx.uni-saarland.de>",
+      "from_name": "Martin Becker",
+      "from_email_hash": "8a794d4333ae3023243e5dff553a8cd66c9c6e691f585985662cb4f3aa75242f",
+      "date": "2007-01-09T19:23:00+01:00",
+      "subject": "[R-SIG-Finance] rMetrics",
+      "subject_clean": "rMetrics",
+      "in_reply_to": "<8242336.post@talk.nabble.com>",
+      "references": [
+        "<8230851.post@talk.nabble.com>",
+        "<45A35ADB.7090903@mx.uni-saarland.de>",
+        "<8242336.post@talk.nabble.com>"
+      ],
+      "body_plain": "genx wrote:\n> Thank you for your help Martin, the code runs but it doesnt feel correct\n> to apply a hack to make R/rMetrics to run on my ordinary WinXP system.\n>   \nI wouldn't say that this is a \"hack\", it is just telling R that you are \ngoing to use some data in a language different from that of your \ninstalled Operating System. If you import *.csv - files with #,###.## - \nstyle numbers with a german Micro$oft Excel version, e.g., you have to \nchange standard settings, too.\n> What is really puzzling me is that many of the examples and code found in \n> the help files and also in the supplied PDF files does not run or does just \n> run partly.\n>   \nMaybe the examples run for all developers of Rmetrics, because they work \non machines with unproblematic locale settings (concerning this issue). \nMaybe you are the first person who encountered this particular problem. \nAnd maybe (or rather probably) your report leads to a more robust \nimplementation of yahooImport, which does not require changing locale \nsettings manually any more.\n> Is R & rMetrics really worth the effort for a non-hacker as me? What I\n> want is an easy way to do simulations on volatility (garch) , calculate l\n> og-returns, betas on portfolios , some option valuation (greeks) and \n> thats it.\n>\n>   \nIt took just a few hours until your problem got tracked down and a fix \nwas provided. I doubt that support for commercial software can beat \nthis. I would still give Rmetrics a try ;-)\n\nRegards,\n\n  Martin Becker",
+      "body_snippet": "genx wrote:\n> Thank you for your help Martin, the code runs but it doesnt feel correct\n> to apply a hack to make R/rMetrics to run on my ordinary WinXP system.\n>   \nI wouldn't say that this is a \"hack",
+      "thread_id": "thread-b1eb8c626413",
+      "thread_depth": 3,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-48f442c20f17",
+      "message_id": "<8250644.post@talk.nabble.com>",
+      "from_name": "Tobias",
+      "from_email_hash": "137ef107e114103989228a5781225475d1e7c5d9eb2b211ce81ffc2682dc57de",
+      "date": "2007-01-09T17:26:48-08:00",
+      "subject": "[R-SIG-Finance] Backing out implied parameters from HNGARCH option model",
+      "subject_clean": "Backing out implied parameters from HNGARCH option model",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear all,\n\nI am trying to back out the implied parameters using observed options prices\nand the Heston-Nandi Garch model via NLS. \n\nFor this purpose I am using Diethelm Wuertz's pricing algorithm in a\nfunction called hnoption similar to this:\n\nhnoption <- function(b)      #where b is the vector of parameters passed on\nto the pricing algorithm\n{\n     ....\n     hnoption <- value obtained via pricing algorithm\n}\n\ncalccall <- function(b)\n{\n\tfor (jj in 1:num1)\n\t{\n\t\tcounter <<- jj \n\t\tqq[jj] <- hnoption(b)\n\t\t\n\t}\n\t\n\tcalccall <- sum((c-qq)^2)\n }\n\n# some initial guess of parameters\nbstart <- c(.1,.1,1,-.5,.7)\n\np <- optim(bstart,calccall,hessian = TRUE)\n\nThe code works fine for a few iterations of optim(). However, at some point\nit produces parameter values that cause an integral that's being evaluated\nin hnoption to drift off to infinity. At least that's what I think happens\nwhen R produces the error: error in integrate(): non-finite function value.\nI have tried to constrain some parameters in optim() but keep receiving the\nsame error. \n\nI would really appreciate if someone could point me to possible solutions. \n\nRegards \n\nTobias\n\n-- \nView this message in context: http://www.nabble.com/Backing-out-implied-parameters-from-HNGARCH-option-model-tf2950123.html#a8250644\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "Dear all,\n\nI am trying to back out the implied parameters using observed options prices\nand the Heston-Nandi Garch model via NLS. \n\nFor this purpose I am using Diethelm Wuertz's pricing algorithm in a",
+      "thread_id": "thread-48f442c20f17",
+      "thread_depth": 0,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-3b3067c9c4d0",
+      "message_id": "<OF96F8D8BB.E5E3D8B6-ONC125725F.00305E83-C125725F.0030B7FF@hsbc.fr>",
+      "from_name": "guillaume.nicoulaud at halbis.com",
+      "from_email_hash": "7f9255d1786515332e92a75b628650265b8fae654111549ff0b48dcf88f53949",
+      "date": "2007-01-10T09:49:22+01:00",
+      "subject": "[R-SIG-Finance] solve.QP",
+      "subject_clean": "solve.QP",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear all,\nI use solve.QP for Markowitz-like portfolio optimization purposes and I am trying to set some basic constraints. So far I have achieved to pass the followings:\n\n- Sum of weights = desired target or band\n\n- Target beta = anything I want\n\n- Maximum individual weights (both long and short)\n\n- Minimum individual weights if below 1/n (n being the number of stocks in the investment universe)\n\n\n\nAnd now here is what I would like to do:\n\n- Setting a target number of non-zero weights (I want - say - 30 longs and shorts...)\n\n- Setting a target gross exposure e.g. sum(abs(wi)) == 2\n\n\nDoes anybody has a piece of code I could adapt to do this? Is there any other function that I could use with same level of flexibility than solve.QP?\n\n\n\nThanks for your help!\n\nG\n\n\nLes informations contenues dans ce message sont confidentielles et peuvent constituer des informations privilegiees. Si vous n etes pas le destinataire de ce message, il vous est interdit de le copier, de le faire suivre, de le divulguer ou d en utiliser tout ou partie. Si vous avez recu ce message par erreur, merci de le supprimer de votre systeme, ainsi que toutes ses copies, et d en avertir immediatement l expediteur par message de retour.\nIl est impossible de garantir que les communications par messagerie electronique arrivent en temps utile, sont securisees ou denuees de toute erreur ou virus. En consequence, l expediteur n accepte aucune responsabilite du fait des erreurs ou omissions qui pourraient en resulter.\n--- ----------------------------------------------------- ---\nThe information contained in this e-mail is confidential. It...{{dropped}}",
+      "body_snippet": "Dear all,\nI use solve.QP for Markowitz-like portfolio optimization purposes and I am trying to set some basic constraints. So far I have achieved to pass the followings:\n\n- Sum of weights = desired ta",
+      "thread_id": "thread-3b3067c9c4d0",
+      "thread_depth": 0,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-73947d221330",
+      "message_id": "<45A4C205.3090506@burns-stat.com>",
+      "from_name": "Patrick Burns",
+      "from_email_hash": "406962932e1b0e9aa889ddffedf6a8e166ef21efd83628c67b1f8e535ee909c2",
+      "date": "2007-01-10T10:37:57Z",
+      "subject": "[R-SIG-Finance] solve.QP",
+      "subject_clean": "solve.QP",
+      "in_reply_to": "<OF96F8D8BB.E5E3D8B6-ONC125725F.00305E83-C125725F.0030B7FF@hsbc.fr>",
+      "references": [
+        "<OF96F8D8BB.E5E3D8B6-ONC125725F.00305E83-C125725F.0030B7FF@hsbc.fr>"
+      ],
+      "body_plain": "You can have a look at the POP package from\nBurns Statistics, but it is commercial software.\n\nPatrick Burns\npatrick at burns-stat.com\n+44 (0)20 8525 0696\nhttp://www.burns-stat.com\n(home of S Poetry and \"A Guide for the Unwilling S User\")\n\nguillaume.nicoulaud at halbis.com wrote:\n\n>Dear all,\n>I use solve.QP for Markowitz-like portfolio optimization purposes and I am trying to set some basic constraints. So far I have achieved to pass the followings:\n>\n>- Sum of weights = desired target or band\n>\n>- Target beta = anything I want\n>\n>- Maximum individual weights (both long and short)\n>\n>- Minimum individual weights if below 1/n (n being the number of stocks in the investment universe)\n>\n>\n>\n>And now here is what I would like to do:\n>\n>- Setting a target number of non-zero weights (I want - say - 30 longs and shorts...)\n>\n>- Setting a target gross exposure e.g. sum(abs(wi)) == 2\n>\n>\n>Does anybody has a piece of code I could adapt to do this? Is there any other function that I could use with same level of flexibility than solve.QP?\n>\n>\n>\n>Thanks for your help!\n>\n>G\n>\n>\n>Les informations contenues dans ce message sont confidentielles et peuvent constituer des informations privilegiees. Si vous n etes pas le destinataire de ce message, il vous est interdit de le copier, de le faire suivre, de le divulguer ou d en utiliser tout ou partie. Si vous avez recu ce message par erreur, merci de le supprimer de votre systeme, ainsi que toutes ses copies, et d en avertir immediatement l expediteur par message de retour.\n>Il est impossible de garantir que les communications par messagerie electronique arrivent en temps utile, sont securisees ou denuees de toute erreur ou virus. En consequence, l expediteur n accepte aucune responsabilite du fait des erreurs ou omissions qui pourraient en resulter.\n>--- ----------------------------------------------------- ---\n>The information contained in this e-mail is confidential. It...{{dropped}}\n>\n>_______________________________________________\n>R-SIG-Finance at stat.math.ethz.ch mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>\n>  \n>",
+      "body_snippet": "You can have a look at the POP package from\nBurns Statistics, but it is commercial software.\n\nPatrick Burns\npatrick at burns-stat.com\n+44 (0)20 8525 0696\nhttp://www.burns-stat.com\n(home of S Poetry an",
+      "thread_id": "thread-3b3067c9c4d0",
+      "thread_depth": 1,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-a04660be6131",
+      "message_id": "<8D64D4652EB17048B874B0503309CFCA01526606@epsilon2003.epsilonsgr.it>",
+      "from_name": "Christian Prinoth",
+      "from_email_hash": "eba7e0f745154dc98ab8a441dc94a892985851b4047be03de71052efcc439bc4",
+      "date": "2007-01-10T11:56:58+01:00",
+      "subject": "[R-SIG-Finance] solve.QP",
+      "subject_clean": "solve.QP",
+      "in_reply_to": "<OF96F8D8BB.E5E3D8B6-ONC125725F.00305E83-C125725F.0030B7FF@hsbc .fr>",
+      "references": [],
+      "body_plain": "This is a \"not-so-easy\" problem, since it involves non-linear constraints. I tried using langrangian multipliers, but even for very simple problems (eg linear objective function) it does not work so well. See an example below, where I try to obtain a long-short portfolio with a maximum exposure to a some \"score\". The optimal result should give weight 1/(maxL/2) to stocks in the long portfolio, and the opposite of that to the short names, but the procedure only gets somewhat close to that result (see plot).\n\nProbably a genetic-algorithm approach ? la Burns works best in these cases...\n\n\n\nnd<-100\nscores<-sample(1:nd)\nw<-array(0,nd)\nmw<-0.2\nmaxL<-2\nNetP<-0.0001\n\nfnc<-function(x,score,l1,l2) {\n\tsum(x*score)-l1*0.5*sum(x)^2 -l2*0.5*(sum(abs(x))-maxL)^2\n}\n\nl1<-0\nl2<-0\nw<-optim(w,fnc,NULL,method=\"L-BFGS-B\",lower=-mw,upper=mw,control=list(fnscale=-1,maxit=10000),hessian=F,scores,l1,l2)$par\n\nchk<-T\nl1<-0\nl2<-0\nwhile(chk){\n\tl1<-l1+200\n\tout<-optim(w,fnc,NULL,method=\"L-BFGS-B\",lower=-mw,upper=mw,control=list(fnscale=-1,maxit=10000),hessian=F,scores,l1,l2)\n\tchk<-abs(sum(out$par))>NetP\n\tw<-out$par\n}\n\nchk<-T\nl2<-0\nwhile(chk){\n\tl2<-l2+200\n\tout<-optim(w,fnc,NULL,method=\"L-BFGS-B\",lower=-mw,upper=mw,control=list(fnscale=-1,maxit=10000),hessian=F,scores,l1,l2)\n\tchk<-sum(abs(out$par))>maxL | abs(sum(out$par))>NetP\n\tw<-out$par\n}\n\nround(out$par,4)\nc(out$value,sum(out$par*scores))\nc(l1,l2,out$counts)\nc(out$convergence,out$message)\nround(sum(out$par),6)\nround(sum(abs(out$par)),6)\nplot(sort(out$par))\n\n\n\nChristian Prinoth\ncp at epsilonsgr.it\n+39-0288102355\n\n\n> -----Original Message-----\n> From: r-sig-finance-bounces at stat.math.ethz.ch\n> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of\n> guillaume.nicoulaud at halbis.com\n> Sent: Wednesday, 10 January, 2007 09:49\n> To: r-sig-finance at stat.math.ethz.ch\n> Subject: [R-SIG-Finance] solve.QP\n>\n>\n> Dear all,\n> I use solve.QP for Markowitz-like portfolio optimization\n> purposes and I am trying to set some basic constraints. So\n> far I have achieved to pass the followings:\n>\n> - Sum of weights = desired target or band\n>\n> - Target beta = anything I want\n>\n> - Maximum individual weights (both long and short)\n>\n> - Minimum individual weights if below 1/n (n being the number\n> of stocks in the investment universe)\n>\n>\n>\n> And now here is what I would like to do:\n>\n> - Setting a target number of non-zero weights (I want - say -\n> 30 longs and shorts...)\n>\n> - Setting a target gross exposure e.g. sum(abs(wi)) == 2\n>\n>\n> Does anybody has a piece of code I could adapt to do this? Is\n> there any other function that I could use with same level of\n> flexibility than solve.QP?\n>\n>\n>\n> Thanks for your help!\n>\n> G\n>\n>\n> Les informations contenues dans ce message sont\n> confidentielles et peuvent constituer des informations\n> privilegiees. Si vous n etes pas le destinataire de ce\n> message, il vous est interdit de le copier, de le faire\n> suivre, de le divulguer ou d en utiliser tout ou partie. Si\n> vous avez recu ce message par erreur, merci de le supprimer\n> de votre systeme, ainsi que toutes ses copies, et d en\n> avertir immediatement l expediteur par message de retour.\n> Il est impossible de garantir que les communications par\n> messagerie electronique arrivent en temps utile, sont\n> securisees ou denuees de toute erreur ou virus. En\n> consequence, l expediteur n accepte aucune responsabilite du\n> fait des erreurs ou omissions qui pourraient en resulter.\n> --- ----------------------------------------------------- ---\n> The information contained in this e-mail is confidential.\\...{{dropped}}",
+      "body_snippet": "This is a \"not-so-easy\" problem, since it involves non-linear constraints. I tried using langrangian multipliers, but even for very simple problems (eg linear objective function) it does not work so w",
+      "thread_id": "thread-a04660be6131",
+      "thread_depth": 0,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-7763d9b39983",
+      "message_id": "<200701100603.26184.brian@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2007-01-10T06:03:24-06:00",
+      "subject": "[R-SIG-Finance] solve.QP (for portfolio optimization)",
+      "subject_clean": "solve.QP (for portfolio optimization)",
+      "in_reply_to": "<OF96F8D8BB.E5E3D8B6-ONC125725F.00305E83-C125725F.0030B7FF@hsbc.fr>",
+      "references": [
+        "<OF96F8D8BB.E5E3D8B6-ONC125725F.00305E83-C125725F.0030B7FF@hsbc.fr>"
+      ],
+      "body_plain": "On Wednesday 10 January 2007 02:49, guillaume.nicoulaud at halbis.com wrote:\n> Dear all,\n> I use solve.QP for Markowitz-like portfolio optimization purposes and I\n> am trying to set some basic constraints. So far I have achieved to pass\n> the followings:\n<...>\n> And now here is what I would like to do:\n>\n> - Setting a target number of non-zero weights (I want - say - 30 longs\n> and shorts...)\n>\n> - Setting a target gross exposure e.g. sum(abs(wi)) == 2\n>\n> Does anybody has a piece of code I could adapt to do this? Is there any\n> other function that I could use with same level of flexibility than\n> solve.QP?\n\nI see the Patrick and Christian have already replied to this post as well, \nso I'll try not to be redundant.\n\nIf you can define your constraints as linear constraints, you may be able \nto use linear programming such as the simplex() fn in R to construct the \nsurface to optimize over. \n\nIt appears to be a general truism that I've discovered as I dig deeper \ninto the optimization problem that the more constraints you place on a \nportfolio, the more likely you are to not create a smooth surface, and \nopen yourself to problems of local maxima/minima.  \n\nIn one of my early forrays into optimization in R, Patrick suggested 'A \nData-driven optimization heuristic for downside risk minimization' by \nGilli et al. which discussed a technique called threshold accepting which \nallows the setting of multiple arbitrary heuristic and quantitative \nconstraints.  This would be very useful as an optimization mechanism, but \nalso be quite problem-dependent, and not simple to implement in R.\n\nTechniques such as threshold accepting (suggested by Patrick to me), \ngenetic algorithm (suggested to you by Christian), simulated annealing, \nbayesian optimization, or utility function based optimization (using \nbrute force or sub-sampling) can avoid the local maxima/minima problem.\n\nSince you appear to want to stick with Markowitz-style optimization for \nnow, one \"easy\" approach that I can recommend is to use a pricing model, \nsuch as CAPM or Arbitrage Pricing Theory, that is appropriate to your \nproblem space to separate your long and short portfolios *before* \nattempting optimization.  Markowitz or similar optimizations will work \nfine for your long portfolio, and you'll need to evaluate whether \nMarkowitz will work well for your short portfolio.  You may find, as many \nothers in the optimization literature have, that the short portfolio \nrequires a different optimization approach.\n\nIf you're looking for a reference, \nIntroduction to Modern Portfolio Optimization with \nNuOPT, S-PLUS and S+Bayes\nby Bernd Scherer, R. Douglas Martin\n\nIs quite a good overview, and although the code is for S-Plus, many/most \nof the functions have good analogs in R.\n\nRegards,\n\n   - Brian\n\n-- \nhttp://braverock.com/brian/resume-quant.pdf",
+      "body_snippet": "On Wednesday 10 January 2007 02:49, guillaume.nicoulaud at halbis.com wrote:\n> Dear all,\n> I use solve.QP for Markowitz-like portfolio optimization purposes and I\n> am trying to set some basic constra",
+      "thread_id": "thread-3b3067c9c4d0",
+      "thread_depth": 1,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-c5b4e264f19b",
+      "message_id": "<OF4EDEAE85.4B7946DF-ONC125725F.0042B2B0-C125725F.00449EED@hsbc.fr>",
+      "from_name": "guillaume.nicoulaud at halbis.com",
+      "from_email_hash": "7f9255d1786515332e92a75b628650265b8fae654111549ff0b48dcf88f53949",
+      "date": "2007-01-10T13:26:45+01:00",
+      "subject": "[R-SIG-Finance] Réf. : Re:  solve.QP (for portfolio optimization)",
+      "subject_clean": "Réf. : Re:  solve.QP (for portfolio optimization)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Thanks Patrick / Christian and Brian\n--- Brian wrote ---\n\n\"You may find, as many others in the optimization literature have, that the short portfolio\nrequires a different optimization approach.\"\n\nI did... and it actually doesn't work! That's why I would like to optimize the whole portfolio instead of doing this separatly for longs and shorts (in a Markowitz-like framework *for now*).\n\nG\n\n\nLes informations contenues dans ce message sont confidentielles et peuvent constituer des informations privilegiees. Si vous n etes pas le destinataire de ce message, il vous est interdit de le copier, de le faire suivre, de le divulguer ou d en utiliser tout ou partie. Si vous avez recu ce message par erreur, merci de le supprimer de votre systeme, ainsi que toutes ses copies, et d en avertir immediatement l expediteur par message de retour.\nIl est impossible de garantir que les communications par messagerie electronique arrivent en temps utile, sont securisees ou denuees de toute erreur ou virus. En consequence, l expediteur n accepte aucune responsabilite du fait des erreurs ou omissions qui pourraient en resulter.\n--- ----------------------------------------------------- ---\nThe information contained in this e-mail is confidential. It...{{dropped}}",
+      "body_snippet": "Thanks Patrick / Christian and Brian\n--- Brian wrote ---\n\n\"You may find, as many others in the optimization literature have, that the short portfolio\nrequires a different optimization approach.\"\n\nI di",
+      "thread_id": "thread-c5b4e264f19b",
+      "thread_depth": 0,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-18d80dbd0fbf",
+      "message_id": "<200701100706.26983.brian@braverock.com>",
+      "from_name": "Brian G. Peterson",
+      "from_email_hash": "2d44e89a02cb2a9eb2f2113de72098dcb74d077b13b61958f1336c3292aa0254",
+      "date": "2007-01-10T07:06:26-06:00",
+      "subject": "[R-SIG-Finance] solve.QP (for portfolio optimization)",
+      "subject_clean": "solve.QP (for portfolio optimization)",
+      "in_reply_to": "<OF4EDEAE85.4B7946DF-ONC125725F.0042B2B0-C125725F.00449EED@hsbc.fr>",
+      "references": [
+        "<OF4EDEAE85.4B7946DF-ONC125725F.0042B2B0-C125725F.00449EED@hsbc.fr>"
+      ],
+      "body_plain": "On Wednesday 10 January 2007 06:26, guillaume.nicoulaud at halbis.com wrote:\n> --- Brian wrote ---\n>\n> \"You may find, as many others in the optimization literature have, that\n> the short portfolio requires a different optimization approach.\"\n>\n> I did... and it actually doesn't work! That's why I would like to\n> optimize the whole portfolio instead of doing this separatly for longs\n> and shorts (in a Markowitz-like framework *for now*).\n\nMarkowitz style optimization will try to minimize variance across the \nentire portfolio.  You *want* the short portfolio to decline in value, as \nmuch as possible.  \n\nWhile it should be possible to constrain individual instruments to be on \nthe short portfolio, I haven't worked with the solve.QP function \nconstraints in enough detail to give you any pointers there, and I don't \nthink a minimum variance portfolio is really what you want. \n\nPerhaps you can be a little more specific on the problems you had with \ntrying to optimize the long and short portfolios separately?\n\nI'll give a couple examples of approaches that could work well for your \nshort portfolio (your exact circumstances will vary based on the \ninstruments you're constructing a portfolio over, of course).  In your \nshort portfolio, you have previously made some forecast that the \ninstruments in the short portfolio will decline in value.  You need to \nmake some decision about how much to short, from the limits you have on \ntotal short positions in your portfolio. One method of choosing how much \nto short is based on your confidence in your price target: higher \nconfidence equals a larger short position.  Another method is to use some \nother appropriate measure of risk, like downside deviation or average \ndrawdown: larger [downside risk measure] equals larger short position, \nbecause the instrument tends to move further down in price.\n\nRegards,\n\n   - Brian\n\n-- \nhttp://braverock.com/brian/resume-quant.pdf",
+      "body_snippet": "On Wednesday 10 January 2007 06:26, guillaume.nicoulaud at halbis.com wrote:\n> --- Brian wrote ---\n>\n> \"You may find, as many others in the optimization literature have, that\n> the short portfolio req",
+      "thread_id": "thread-c5b4e264f19b",
+      "thread_depth": 1,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-21d76fa5ccfa",
+      "message_id": "<8D64D4652EB17048B874B0503309CFCA0152660E@epsilon2003.epsilonsgr.it>",
+      "from_name": "Christian Prinoth",
+      "from_email_hash": "eba7e0f745154dc98ab8a441dc94a892985851b4047be03de71052efcc439bc4",
+      "date": "2007-01-10T14:35:56+01:00",
+      "subject": "[R-SIG-Finance] solve.QP (for portfolio optimization)",
+      "subject_clean": "solve.QP (for portfolio optimization)",
+      "in_reply_to": "<200701100706.26983.brian@braverock.com>",
+      "references": [],
+      "body_plain": "If the goal is to build some kind of market neutral position, one could\nalso take a 2-step approach:\n\n1) build an optimized long portfolio that maximizes some score\\expected\nreturn\\whatever\n2) build a short portfolio that minimizes that same score, while\nconstraining risk exposure (however defined) to be similar to that of\nthe long portfolio.\n\nThis way it is easier to specify leverage, number of positions etc.\n\nChristian Prinoth\ncp at epsilonsgr.it\n+39-0288102355\n\n\n> -----Original Message-----\n> From: r-sig-finance-bounces at stat.math.ethz.ch\n> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of\n> Brian G. Peterson\n> Sent: Wednesday, 10 January, 2007 14:06\n> To: r-sig-finance at stat.math.ethz.ch\n> Subject: Re: [R-SIG-Finance] solve.QP (for portfolio optimization)\n>\n> On Wednesday 10 January 2007 06:26,\n> guillaume.nicoulaud at halbis.com wrote:\n> > --- Brian wrote ---\n> >\n> > \"You may find, as many others in the optimization literature have,\n> > that the short portfolio requires a different optimization\n> approach.\"\n> >\n> > I did... and it actually doesn't work! That's why I would like to\n> > optimize the whole portfolio instead of doing this\n> separatly for longs\n> > and shorts (in a Markowitz-like framework *for now*).\n>\n> Markowitz style optimization will try to minimize variance\n> across the entire portfolio.  You *want* the short portfolio\n> to decline in value, as much as possible. \n>\n> While it should be possible to constrain individual\n> instruments to be on the short portfolio, I haven't worked\n> with the solve.QP function constraints in enough detail to\n> give you any pointers there, and I don't think a minimum\n> variance portfolio is really what you want.\n>\n> Perhaps you can be a little more specific on the problems you\n> had with trying to optimize the long and short portfolios separately?\n>\n> I'll give a couple examples of approaches that could work\n> well for your short portfolio (your exact circumstances will\n> vary based on the instruments you're constructing a portfolio\n> over, of course).  In your short portfolio, you have\n> previously made some forecast that the instruments in the\n> short portfolio will decline in value.  You need to make some\n> decision about how much to short, from the limits you have on\n> total short positions in your portfolio. One method of\n> choosing how much to short is based on your confidence in\n> your price target: higher confidence equals a larger short\n> position.  Another method is to use some other appropriate\n> measure of risk, like downside deviation or average\n> drawdown: larger [downside risk measure] equals larger short\n> position, because the instrument tends to move further down in price.\n>\n> Regards,\n>\n>    - Brian\n>\n> --\n> http://braverock.com/brian/resume-quant.pdf\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n\nDISCLAIMER:\\ L'utilizzo non autorizzato del presente messagg...{{dropped}}",
+      "body_snippet": "If the goal is to build some kind of market neutral position, one could\nalso take a 2-step approach:\n\n1) build an optimized long portfolio that maximizes some score\\expected\nreturn\\whatever\n2) build a",
+      "thread_id": "thread-c5b4e264f19b",
+      "thread_depth": 2,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-6fdb02374920",
+      "message_id": "<OF80922B86.0263A52E-ONC125725F.004B1DE3-C125725F.004D8D66@hsbc.fr>",
+      "from_name": "guillaume.nicoulaud at halbis.com",
+      "from_email_hash": "7f9255d1786515332e92a75b628650265b8fae654111549ff0b48dcf88f53949",
+      "date": "2007-01-10T15:04:18+01:00",
+      "subject": "[R-SIG-Finance] Réf. : Re:  solve.QP (for portfolio optimization)",
+      "subject_clean": "Réf. : Re:  solve.QP (for portfolio optimization)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "--- about Christian's two-step approach ---\n\nI've tryed this. The issue is that provided we want to minimize the *overall* portfolio variance we have to manage potential correlations between longs and shorts (e.g. if some of your longs are \"anti-correlated\" - is that the correct word?\n- with some of your shorts). In my tests, simple equally weighted portfolios are less volatiles.\n\n--- Brian wrote ---\n\" Markowitz style optimization will try to minimize variance across the\nentire portfolio.  You *want* the short portfolio to decline in value, as\nmuch as possible. \"\n\nI agree. Yet I could think the same way for my long portfolio: I want these stocks to increase in value as much as possible.\nSo in the end the question is about minimizing variance in general [or not]. At the moment, this is what I'm trying to do (also I agree with your concerns on Markowitz-like frameworks and will keep your suggestions in mind).\n\nG\n\n\n\n\n                                                                                                                           \n                                                                                                                           \n                                                        Pour :   <r-sig-finance at stat.math.ethz.ch>                         \n                                                        cc :                                                               \n                                                        Objet :  Re: [R-SIG-Finance] solve.QP (for portfolio optimization) \n             \"Christian Prinoth\"                                                                                           \n             <Christian.Prinoth at epsilonsgr.it>                                                                             \n             Envoy? par :                                                                                                  \n             r-sig-finance-bounces at stat.math.ethz.                                                                         \n             ch                                                                                                            \n                                                                                                                           \n                                                                                                                           \n             10/01/2007 14:35                                                                                              \n                                                                                                                           \n                                                                                                                           \n\n\n\n\nIf the goal is to build some kind of market neutral position, one could\nalso take a 2-step approach:\n\n1) build an optimized long portfolio that maximizes some score\\expected\nreturn\\whatever\n2) build a short portfolio that minimizes that same score, while\nconstraining risk exposure (however defined) to be similar to that of\nthe long portfolio.\n\nThis way it is easier to specify leverage, number of positions etc.\n\nChristian Prinoth\ncp at epsilonsgr.it\n+39-0288102355\n\n\n> -----Original Message-----\n> From: r-sig-finance-bounces at stat.math.ethz.ch\n> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of\n> Brian G. Peterson\n> Sent: Wednesday, 10 January, 2007 14:06\n> To: r-sig-finance at stat.math.ethz.ch\n> Subject: Re: [R-SIG-Finance] solve.QP (for portfolio optimization)\n>\n> On Wednesday 10 January 2007 06:26,\n> guillaume.nicoulaud at halbis.com wrote:\n> > --- Brian wrote ---\n> >\n> > \"You may find, as many others in the optimization literature have,\n> > that the short portfolio requires a different optimization\n> approach.\"\n> >\n> > I did... and it actually doesn't work! That's why I would like to\n> > optimize the whole portfolio instead of doing this\n> separatly for longs\n> > and shorts (in a Markowitz-like framework *for now*).\n>\n> Markowitz style optimization will try to minimize variance\n> across the entire portfolio.  You *want* the short portfolio\n> to decline in value, as much as possible.\n>\n> While it should be possible to constrain individual\n> instruments to be on the short portfolio, I haven't worked\n> with the solve.QP function constraints in enough detail to\n> give you any pointers there, and I don't think a minimum\n> variance portfolio is really what you want.\n>\n> Perhaps you can be a little more specific on the problems you\n> had with trying to optimize the long and short portfolios separately?\n>\n> I'll give a couple examples of approaches that could work\n> well for your short portfolio (your exact circumstances will\n> vary based on the instruments you're constructing a portfolio\n> over, of course).  In your short portfolio, you have\n> previously made some forecast that the instruments in the\n> short portfolio will decline in value.  You need to make some\n> decision about how much to short, from the limits you have on\n> total short positions in your portfolio. One method of\n> choosing how much to short is based on your confidence in\n> your price target: higher confidence equals a larger short\n> position.  Another method is to use some other appropriate\n> measure of risk, like downside deviation or average\n> drawdown: larger [downside risk measure] equals larger short\n> position, because the instrument tends to move further down in price.\n>\n> Regards,\n>\n>    - Brian\n>\n> --\n> http://braverock.com/brian/resume-quant.pdf\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n\nDISCLAIMER:\\ L'utilizzo non autorizzato del presente messagg...{{dropped}}\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n\n\n\n\nLes informations contenues dans ce message sont confidentielles et peuvent constituer des informations privilegiees. Si vous n etes pas le destinataire de ce message, il vous est interdit de le copier, de le faire suivre, de le divulguer ou d en utiliser tout ou partie. Si vous avez recu ce message par erreur, merci de le supprimer de votre systeme, ainsi que toutes ses copies, et d en avertir immediatement l expediteur par message de retour.\nIl est impossible de garantir que les communications par messagerie electronique arrivent en temps utile, sont securisees ou denuees de toute erreur ou virus. En consequence, l expediteur n accepte aucune responsabilite du fait des erreurs ou omissions qui pourraient en resulter.\n--- ----------------------------------------------------- ---\nThe information contained in this e-mail is confidential. It...{{dropped}}",
+      "body_snippet": "--- about Christian's two-step approach ---\n\nI've tryed this. The issue is that provided we want to minimize the *overall* portfolio variance we have to manage potential correlations between longs and",
+      "thread_id": "thread-6fdb02374920",
+      "thread_depth": 0,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-6907009dd849",
+      "message_id": "<8D64D4652EB17048B874B0503309CFCA01526619@epsilon2003.epsilonsgr.it>",
+      "from_name": "Christian Prinoth",
+      "from_email_hash": "eba7e0f745154dc98ab8a441dc94a892985851b4047be03de71052efcc439bc4",
+      "date": "2007-01-10T15:16:33+01:00",
+      "subject": "[R-SIG-Finance] Réf. : Re:  solve.QP (for portfolio optimization)",
+      "subject_clean": "Réf. : Re:  solve.QP (for portfolio optimization)",
+      "in_reply_to": "<OF80922B86.0263A52E-ONC125725F.004B1DE3-C125725F.004D8D66@hsbc .fr>",
+      "references": [],
+      "body_plain": "IMHO opinion, the concept of correlation is not so useful in this context. I think that if you wish to contain overall variance you are much better off trying to contain risk exposures (eg, net sector exposure etc.), than trying to offset correlations (or betas!) between different assets, since those are way too unstable.\n\nChristian Prinoth\ncp at epsilonsgr.it\n+39-0288102355\n\n\n> -----Original Message-----\n> From: guillaume.nicoulaud at halbis.com\n> [mailto:guillaume.nicoulaud at halbis.com]\n> Sent: Wednesday, 10 January, 2007 15:04\n> To: Christian Prinoth\n> Cc: r-sig-finance at stat.math.ethz.ch;\n> r-sig-finance-bounces at stat.math.ethz.ch\n> Subject: R?f. : Re: [R-SIG-Finance] solve.QP (for portfolio\n> optimization)\n>\n> --- about Christian's two-step approach ---\n>\n> I've tryed this. The issue is that provided we want to\n> minimize the *overall* portfolio variance we have to manage\n> potential correlations between longs and shorts (e.g. if some\n> of your longs are \"anti-correlated\" - is that the correct word?\n> - with some of your shorts). In my tests, simple equally\n> weighted portfolios are less volatiles.\n>\n> --- Brian wrote ---\n> \" Markowitz style optimization will try to minimize variance\n> across the entire portfolio.  You *want* the short portfolio\n> to decline in value, as much as possible. \"\n>\n> I agree. Yet I could think the same way for my long\n> portfolio: I want these stocks to increase in value as much\n> as possible.\n> So in the end the question is about minimizing variance in\n> general [or not]. At the moment, this is what I'm trying to\n> do (also I agree with your concerns on Markowitz-like\n> frameworks and will keep your suggestions in mind).\n>\n> G\n>\n>\n>\n>\n>                                                              \n>                                                             \n>                                                              \n>                                                             \n>                                                         Pour\n> :   <r-sig-finance at stat.math.ethz.ch>                        \n>                                                         cc : \n>                                                             \n>                                                         Objet\n> :  Re: [R-SIG-Finance] solve.QP (for portfolio optimization)\n>              \"Christian Prinoth\"                             \n>                                                             \n>              <Christian.Prinoth at epsilonsgr.it>               \n>                                                             \n>              Envoy? par :                                    \n>                                                             \n>              r-sig-finance-bounces at stat.math.ethz.           \n>                                                             \n>              ch                                              \n>                                                             \n>                                                              \n>                                                             \n>                                                              \n>                                                             \n>              10/01/2007 14:35                                \n>                                                             \n>                                                              \n>                                                             \n>                                                              \n>                                                             \n>\n>\n>\n>\n> If the goal is to build some kind of market neutral position,\n> one could also take a 2-step approach:\n>\n> 1) build an optimized long portfolio that maximizes some\n> score\\expected return\\whatever\n> 2) build a short portfolio that minimizes that same score,\n> while constraining risk exposure (however defined) to be\n> similar to that of the long portfolio.\n>\n> This way it is easier to specify leverage, number of positions etc.\n>\n> Christian Prinoth\n> cp at epsilonsgr.it\n> +39-0288102355\n>\n>\n> > -----Original Message-----\n> > From: r-sig-finance-bounces at stat.math.ethz.ch\n> > [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf\n> Of Brian G.\n> > Peterson\n> > Sent: Wednesday, 10 January, 2007 14:06\n> > To: r-sig-finance at stat.math.ethz.ch\n> > Subject: Re: [R-SIG-Finance] solve.QP (for portfolio optimization)\n> >\n> > On Wednesday 10 January 2007 06:26,\n> > guillaume.nicoulaud at halbis.com wrote:\n> > > --- Brian wrote ---\n> > >\n> > > \"You may find, as many others in the optimization\n> literature have,\n> > > that the short portfolio requires a different optimization\n> > approach.\"\n> > >\n> > > I did... and it actually doesn't work! That's why I would like to\n> > > optimize the whole portfolio instead of doing this\n> > separatly for longs\n> > > and shorts (in a Markowitz-like framework *for now*).\n> >\n> > Markowitz style optimization will try to minimize variance\n> across the\n> > entire portfolio.  You *want* the short portfolio to\n> decline in value,\n> > as much as possible.\n> >\n> > While it should be possible to constrain individual\n> instruments to be\n> > on the short portfolio, I haven't worked with the solve.QP function\n> > constraints in enough detail to give you any pointers there, and I\n> > don't think a minimum variance portfolio is really what you want.\n> >\n> > Perhaps you can be a little more specific on the problems\n> you had with\n> > trying to optimize the long and short portfolios separately?\n> >\n> > I'll give a couple examples of approaches that could work well for\n> > your short portfolio (your exact circumstances will vary\n> based on the\n> > instruments you're constructing a portfolio over, of\n> course).  In your\n> > short portfolio, you have previously made some forecast that the\n> > instruments in the short portfolio will decline in value. \n> You need to\n> > make some decision about how much to short, from the limits\n> you have\n> > on total short positions in your portfolio. One method of\n> choosing how\n> > much to short is based on your confidence in your price\n> target: higher\n> > confidence equals a larger short position.  Another method\n> is to use\n> > some other appropriate measure of risk, like downside deviation or\n> > average\n> > drawdown: larger [downside risk measure] equals larger\n> short position,\n> > because the instrument tends to move further down in price.\n> >\n> > Regards,\n> >\n> >    - Brian\n> >\n> > --\n> > http://braverock.com/brian/resume-quant.pdf\n> >\n> > _______________________________________________\n> > R-SIG-Finance at stat.math.ethz.ch mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> >\n>\n> DISCLAIMER:\\ L'utilizzo non autorizzato del presente\n> messagg...{{dropped}}\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>\n>\n>\n> Les informations contenues dans ce message sont\n> confidentielles et peuvent constituer des informations\n> privilegiees. Si vous n etes pas le destinataire de ce\n> message, il vous est interdit de le copier, de le faire\n> suivre, de le divulguer ou d en utiliser tout ou partie. Si\n> vous avez recu ce message par erreur, merci de le supprimer\n> de votre systeme, ainsi que toutes ses copies, et d en\n> avertir immediatement l expediteur par message de retour.\n> Il est impossible de garantir que les communications par\n> messagerie electronique arrivent en temps utile, sont\n> securisees ou denuees de toute erreur ou virus. En\n> consequence, l expediteur n accepte aucune responsabilite du\n> fait des erreurs ou omissions qui pourraient en resulter.\n> --- ----------------------------------------------------- ---\n> The information contained in this e-mail is confidential. ...{{dropped}}",
+      "body_snippet": "IMHO opinion, the concept of correlation is not so useful in this context. I think that if you wish to contain overall variance you are much better off trying to contain risk exposures (eg, net sector",
+      "thread_id": "thread-6907009dd849",
+      "thread_depth": 0,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-b5e0e3997bcc",
+      "message_id": "<8278024.post@talk.nabble.com>",
+      "from_name": "march",
+      "from_email_hash": "c70e38edc1d65cf78e9677039647d6c312746707660cb06ab73df004bd561144",
+      "date": "2007-01-11T06:26:10-08:00",
+      "subject": "[R-SIG-Finance] simulation gbm with jumps",
+      "subject_clean": "simulation gbm with jumps",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi everybody\nI'd like to simulate a Generalized Wiener Process with jumps. Any\nsuggestion?\nThanks\nMarcella\n-- \nView this message in context: http://www.nabble.com/simulation-gbm-with-jumps-tf2959050.html#a8278024\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "Hi everybody\nI'd like to simulate a Generalized Wiener Process with jumps. Any\nsuggestion?\nThanks\nMarcella\n-- \nView this message in context: http://www.nabble.com/simulation-gbm-with-jumps-tf2959050.h",
+      "thread_id": "thread-b5e0e3997bcc",
+      "thread_depth": 0,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-222411ac3805",
+      "message_id": "<45A65037.5060409@mx.uni-saarland.de>",
+      "from_name": "Martin Becker",
+      "from_email_hash": "8a794d4333ae3023243e5dff553a8cd66c9c6e691f585985662cb4f3aa75242f",
+      "date": "2007-01-11T15:56:55+01:00",
+      "subject": "[R-SIG-Finance] simulation gbm with jumps",
+      "subject_clean": "simulation gbm with jumps",
+      "in_reply_to": "<8278024.post@talk.nabble.com>",
+      "references": [
+        "<8278024.post@talk.nabble.com>"
+      ],
+      "body_plain": "march schrieb:\n> Hi everybody\n> I'd like to simulate a Generalized Wiener Process with jumps. Any\n> suggestion?\n>   \n\nThis seems to be a quite general task. Is the jump activity of the \nconcerning process finite (as, e.g., in Merton jump-diffusions)? Which \ncharacteristics of the process have to be simulated? Whole paths or just \nfinal values?\nThe books of Wim Schoutens (L?vy Processes in Finance, 2003, Wiley) and \nRama Cont/Peter Tankov (Financial Modelling with Jump Processes, 2004, \nChapman&Hall) may be good starting points.\n\n> Thanks\n> Marcella\n>   \n\nRegards,\n\n  Martin Becker",
+      "body_snippet": "march schrieb:\n> Hi everybody\n> I'd like to simulate a Generalized Wiener Process with jumps. Any\n> suggestion?\n>   \n\nThis seems to be a quite general task. Is the jump activity of the \nconcerning pro",
+      "thread_id": "thread-b5e0e3997bcc",
+      "thread_depth": 1,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-55950dff51f8",
+      "message_id": "<d0f55a670701110800i77c8252ax86a8cf411ded9ffd@mail.gmail.com>",
+      "from_name": "Thomas Steiner",
+      "from_email_hash": "750a3ff6af0be6db83d42f3a17b989a218e2ddb0dbf78cb7571168f5e4791c04",
+      "date": "2007-01-11T17:00:55+01:00",
+      "subject": "[R-SIG-Finance] simulation gbm with jumps",
+      "subject_clean": "simulation gbm with jumps",
+      "in_reply_to": "<45A65037.5060409@mx.uni-saarland.de>",
+      "references": [
+        "<8278024.post@talk.nabble.com>",
+        "<45A65037.5060409@mx.uni-saarland.de>"
+      ],
+      "body_plain": "> The books of ...\n\njust to add one:\nGlasserman, Paul: \"Monte Carlo Methods in Financial Engineering\"\nSpringer Series: Stochastic Modelling and Applied Probability , Vol.\n53\n\nThomas",
+      "body_snippet": "> The books of ...\n\njust to add one:\nGlasserman, Paul: \"Monte Carlo Methods in Financial Engineering\"\nSpringer Series: Stochastic Modelling and Applied Probability , Vol.\n53\n\nThomas",
+      "thread_id": "thread-b5e0e3997bcc",
+      "thread_depth": 2,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-a23ac05c8ddf",
+      "message_id": "<674895759-1168571491-cardhu_blackberry.rim.net-772629379-@bwe035-cell00.bisx.prod.on.blackberry>",
+      "from_name": "kriskumar at earthlink.net",
+      "from_email_hash": "b5342e6f7178c92f67a17437313a28bb14db93175150fd429e207c65fb4f88b0",
+      "date": "2007-01-12T03:11:17Z",
+      "subject": "[R-SIG-Finance] simulation gbm with jumps",
+      "subject_clean": "simulation gbm with jumps",
+      "in_reply_to": "<d0f55a670701110800i77c8252ax86a8cf411ded9ffd@mail.gmail.com>",
+      "references": [
+        "<8278024.post@talk.nabble.com>",
+        "<45A65037.5060409@mx.uni-saarland.de>",
+        "<d0f55a670701110800i77c8252ax86a8cf411ded9ffd@mail.gmail.com>"
+      ],
+      "body_plain": "For merton that is poisson jumps with jump size being lognormal it is fairly easy with ?rpoisson and ?rnorm. And \nsimillarly for schouten's nig there is dnig. There is a nice paper on simulating from the inverse gamma by nick webber and is fairly easy to do in R as well.\n\nBest\nKris\nSent from my BlackBerry? wireless handheld  \n\n-----Original Message-----\nFrom: \"Thomas Steiner\" <finbref.2006 at gmail.com>\nDate: Thu, 11 Jan 2007 17:00:55 \nTo:\"Martin Becker\" <martin.becker at mx.uni-saarland.de>\nCc:r-sig-finance at stat.math.ethz.ch, march <marcella.marinelli at uniroma1.it>\nSubject: Re: [R-SIG-Finance] simulation gbm with jumps\n\n> The books of ...\n\njust to add one:\nGlasserman, Paul: \"Monte Carlo Methods in Financial Engineering\"\nSpringer Series: Stochastic Modelling and Applied Probability , Vol.\n53\n\nThomas\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance",
+      "body_snippet": "For merton that is poisson jumps with jump size being lognormal it is fairly easy with ?rpoisson and ?rnorm. And \nsimillarly for schouten's nig there is dnig. There is a nice paper on simulating from ",
+      "thread_id": "thread-b5e0e3997bcc",
+      "thread_depth": 3,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-07057015c604",
+      "message_id": "<8294794.post@talk.nabble.com>",
+      "from_name": "genx",
+      "from_email_hash": "988c3969ea449636bf2ecddd29c8339bbfcb5e69ff8c63a59eb73ef6bfb6e73c",
+      "date": "2007-01-12T00:57:11-08:00",
+      "subject": "[R-SIG-Finance] Days between dates",
+      "subject_clean": "Days between dates",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "What is the function to calculate amount of days between dates ? This is\nuseful when pricing options, number of days (t) expressed as fraction year\nbetween today and strike day.\n\nQuestion two, are there any functions to price warrants ? \n-- \nView this message in context: http://www.nabble.com/Days-between-dates-tf2964721.html#a8294794\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "What is the function to calculate amount of days between dates ? This is\nuseful when pricing options, number of days (t) expressed as fraction year\nbetween today and strike day.\n\nQuestion two, are the",
+      "thread_id": "thread-07057015c604",
+      "thread_depth": 0,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-4aa4bcb6e3e2",
+      "message_id": "<OFFE24367E.D4172B5B-ONC1257261.00317160-C1257261.0031C1E1@hsbc.fr>",
+      "from_name": "guillaume.nicoulaud at halbis.com",
+      "from_email_hash": "7f9255d1786515332e92a75b628650265b8fae654111549ff0b48dcf88f53949",
+      "date": "2007-01-12T10:00:41+01:00",
+      "subject": "[R-SIG-Finance] Réf. :  Days between dates",
+      "subject_clean": "Réf. :  Days between dates",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I would suggest [ difftime ]\n\nRgds\nG\n\n\nLes informations contenues dans ce message sont confidentielles et peuvent constituer des informations privilegiees. Si vous n etes pas le destinataire de ce message, il vous est interdit de le copier, de le faire suivre, de le divulguer ou d en utiliser tout ou partie. Si vous avez recu ce message par erreur, merci de le supprimer de votre systeme, ainsi que toutes ses copies, et d en avertir immediatement l expediteur par message de retour.\nIl est impossible de garantir que les communications par messagerie electronique arrivent en temps utile, sont securisees ou denuees de toute erreur ou virus. En consequence, l expediteur n accepte aucune responsabilite du fait des erreurs ou omissions qui pourraient en resulter.\n--- ----------------------------------------------------- ---\nThe information contained in this e-mail is confidential. It...{{dropped}}",
+      "body_snippet": "I would suggest [ difftime ]\n\nRgds\nG\n\n\nLes informations contenues dans ce message sont confidentielles et peuvent constituer des informations privilegiees. Si vous n etes pas le destinataire de ce mes",
+      "thread_id": "thread-4aa4bcb6e3e2",
+      "thread_depth": 0,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-bea9364b9df3",
+      "message_id": "<45A75373.3010901@mx.uni-saarland.de>",
+      "from_name": "Martin Becker",
+      "from_email_hash": "8a794d4333ae3023243e5dff553a8cd66c9c6e691f585985662cb4f3aa75242f",
+      "date": "2007-01-12T10:22:59+01:00",
+      "subject": "[R-SIG-Finance] Days between dates",
+      "subject_clean": "Days between dates",
+      "in_reply_to": "<8294794.post@talk.nabble.com>",
+      "references": [
+        "<8294794.post@talk.nabble.com>"
+      ],
+      "body_plain": "genx schrieb:\n> What is the function to calculate amount of days between dates ? This is\n> useful when pricing options, number of days (t) expressed as fraction year\n> between today and strike day.\n>\n>   \nThere is more than one way to represent dates in R, but mostly \"-\" \nworks. To do calculations based on these differences, as.numeric() might \nbe useful, e.g.:\n\n > as.numeric(as.Date(\"2006-10-10\")-as.Date(\"2005-05-05\"))\n[1] 523\n\n> Question two, are there any functions to price warrants ? \n>   \nI am not aware of the particular differences of pricing options and \npricing warrants. Package \"fOptions\" implements some option pricing \nformulae.\n\nKind regards,\n\n  Martin Becker",
+      "body_snippet": "genx schrieb:\n> What is the function to calculate amount of days between dates ? This is\n> useful when pricing options, number of days (t) expressed as fraction year\n> between today and strike day.\n>\n",
+      "thread_id": "thread-07057015c604",
+      "thread_depth": 1,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-0ffaabf9cbb7",
+      "message_id": "<OF1AE1F3EB.5A044CB5-ONC1257261.00353F4D-C1257261.0035AB5D@hsbc.fr>",
+      "from_name": "guillaume.nicoulaud at halbis.com",
+      "from_email_hash": "7f9255d1786515332e92a75b628650265b8fae654111549ff0b48dcf88f53949",
+      "date": "2007-01-12T10:43:25+01:00",
+      "subject": "[R-SIG-Finance] Réf. : Re:  Days between dates",
+      "subject_clean": "Réf. : Re:  Days between dates",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "You may also use difftime (end date, start date, units = defaults to 'days')\n\n\n> difftime('2006-12-31','2005-12-31')\n\nTime difference of 365 days\n\n> difftime('2006-12-31','2005-12-31',units='weeks')\n\nTime difference of 52.14286 weeks\n\n> difftime('2006-12-31','2005-12-31',units='hours')\n\nTime difference of 8760 hours\n\n\n\nG\n\n\nLes informations contenues dans ce message sont confidentielles et peuvent constituer des informations privilegiees. Si vous n etes pas le destinataire de ce message, il vous est interdit de le copier, de le faire suivre, de le divulguer ou d en utiliser tout ou partie. Si vous avez recu ce message par erreur, merci de le supprimer de votre systeme, ainsi que toutes ses copies, et d en avertir immediatement l expediteur par message de retour.\nIl est impossible de garantir que les communications par messagerie electronique arrivent en temps utile, sont securisees ou denuees de toute erreur ou virus. En consequence, l expediteur n accepte aucune responsabilite du fait des erreurs ou omissions qui pourraient en resulter.\n--- ----------------------------------------------------- ---\nThe information contained in this e-mail is confidential. It...{{dropped}}",
+      "body_snippet": "You may also use difftime (end date, start date, units = defaults to 'days')\n\n\n> difftime('2006-12-31','2005-12-31')\n\nTime difference of 365 days\n\n> difftime('2006-12-31','2005-12-31',units='weeks')\n\n",
+      "thread_id": "thread-0ffaabf9cbb7",
+      "thread_depth": 0,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-3ad3eccb5f3f",
+      "message_id": "<45A98567.8070208@DecisionSynergy.com>",
+      "from_name": "Dominick Samperi",
+      "from_email_hash": "bc3ac2b81d529fb805d0d74b4f7a046fabb7a2940a166bbd89dd5c8bbde08de9",
+      "date": "2007-01-13T20:20:39-05:00",
+      "subject": "[R-SIG-Finance] FinancePack and The Mind of the Market",
+      "subject_clean": "FinancePack and The Mind of the Market",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "The C++ and R code that is part of the R packages\nFinancePack and FractalPack may be of some interest\nto users of QuantLib and/or R-sig-finance. There you\nwill find open source implementations of implied tree\nconstruction, volatility surface calibration, credit\nmodeling, time series generation using multifractals and\nother methods, agent-based simulations, Mandelbrot\nset exploration, scale-free and random network\nsimulations, and a few other functions.\n\nThe underlying C++ code is NOT copyleft, and can\nbe incorporated into systems like QuantLib (for example)\nunder the terms of an Open Source License.\n\nSome of this software was designed to complement my\npaper titled \"The Mind of the Market\", where I develop\na neuroscientific viewpoint on finance practice. It can be\ndownloaded from http://ssrn.com/abstract=955023.\n\nPlease feel free (and obliged if you find this stuff useful) to send me\nany feedback on the software and/or the paper that you might\nhave (especially the paper).\n\nThese packages were designed to serve as examples for\nresearchers and practitioners who want to provide\nsoftware illustrations of their work along with\npaper publications, something that seems to be fairly\ncommon in statistics, but not common enough in\nother disciplines like finance.  The idea is to provide\na complete framework including a GUI to illustrate\nyour results and permit the user to experiment. The\nwide availability of the open source R system makes\nthis more feasible. (The importance of this\nfor computational science is discussed under the topic\n\"reproducible research\" at\nhttp://www-stat.stanford.edu/~wavelab, for example).\n\nThe packages and associated documentation can be\ndownloaded from http://www.DecisionSynergy.com.\nThe document FinancePack.pdf describes both packages\nand elaborates on the philosophy mentioned above. The\npackage RcppTemplate may be helpful for building an R\npackage around C++ code that implements your ideas.\n\nSee FinancePack.pdf for more info, and please read\n\"The Mind of the Market\" and send me your thoughts...\n\nThanks,\nDominick",
+      "body_snippet": "The C++ and R code that is part of the R packages\nFinancePack and FractalPack may be of some interest\nto users of QuantLib and/or R-sig-finance. There you\nwill find open source implementations of impl",
+      "thread_id": "thread-3ad3eccb5f3f",
+      "thread_depth": 0,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-26e431c92e97",
+      "message_id": "<20070117181206.33ebb9e2.Achim.Zeileis@R-project.org>",
+      "from_name": "Achim Zeileis",
+      "from_email_hash": "5d0666ce9b4ba3eb5d16d8dda715c40e6659f1707b7e9d0727ac8d70b93c8461",
+      "date": "2007-01-17T18:12:06+01:00",
+      "subject": "[R-SIG-Finance] Fan charts in \"vars\" package",
+      "subject_clean": "Fan charts in \"vars\" package",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear Finance SIG,\n\nI'm forwarding this mail from Philip Wagner about fan charts.\n\n(Philip, the Finance SIG (special interest group) is the appropriate\nlist for asking questions related to econometric/financial problems.\nFor subscription, see\n  https://stat.ethz.ch/mailman/listinfo/r-sig-finance\nIf a question is about a contributed package, it is good practice to\nhave the package author (in this case Bernhard Pfaff) in Cc.)\n\nAnd now the question...\nZ\n\nHello, \n \nI work as a macroeconomist, and I?m trying to do add some fan charts to\nmy porjections. I would please like to know if someone could help me\nout. I?m specifically having trouble with the fan charts in the \"var\"\npackage. I would please like to know how I can fix a \"mean\" or \"medium\"\nin the predict( ) function for the VAR estimation. So that, in the fan\nchart ,the center of the projection would be the \"medium\" I had\npreviously fixed. If you have the answer for my question or just know\nsome book I could read that could help me out, I would be very please.\n\nWith best regards,\nPhilip P. Wagner\nUnibanco Macroeconomic Research\nFone: (55 11) 3584 4675\ne-mail: philip.wagner at unibanco.com.br",
+      "body_snippet": "Dear Finance SIG,\n\nI'm forwarding this mail from Philip Wagner about fan charts.\n\n(Philip, the Finance SIG (special interest group) is the appropriate\nlist for asking questions related to econometric/",
+      "thread_id": "thread-26e431c92e97",
+      "thread_depth": 0,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-4e27d9ea8ba2",
+      "message_id": "<905db6ff0701171312v7c1d5e97h97807cb8be54b741@mail.gmail.com>",
+      "from_name": "Rob Hyndman",
+      "from_email_hash": "75b382c839f6d90799f1b3f3752b0aad38427839fd3d536aee69cfe711810472",
+      "date": "2007-01-18T08:12:34+11:00",
+      "subject": "[R-SIG-Finance] Fan charts in \"vars\" package",
+      "subject_clean": "Fan charts in \"vars\" package",
+      "in_reply_to": "<20070117181206.33ebb9e2.Achim.Zeileis@R-project.org>",
+      "references": [
+        "<20070117181206.33ebb9e2.Achim.Zeileis@R-project.org>"
+      ],
+      "body_plain": "You can also produce fan charts with the forecast package.\n\n\n> Hello,\n>\n> I work as a macroeconomist, and I?m trying to do add some fan charts to\n> my porjections. I would please like to know if someone could help me\n> out. I?m specifically having trouble with the fan charts in the \"var\"\n> package. I would please like to know how I can fix a \"mean\" or \"medium\"\n> in the predict( ) function for the VAR estimation. So that, in the fan\n> chart ,the center of the projection would be the \"medium\" I had\n> previously fixed. If you have the answer for my question or just know\n> some book I could read that could help me out, I would be very please.\n>\n> With best regards,\n> Philip P. Wagner\n> Unibanco Macroeconomic Research\n> Fone: (55 11) 3584 4675\n> e-mail: philip.wagner at unibanco.com.br\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n\n\n-- \n_____________________________\nRob J Hyndman\nProfessor of Statistics, Monash University\nEditor-in-Chief, International Journal of Forecasting\nhttp://www.robhyndman.info/",
+      "body_snippet": "You can also produce fan charts with the forecast package.\n\n\n> Hello,\n>\n> I work as a macroeconomist, and I?m trying to do add some fan charts to\n> my porjections. I would please like to know if someo",
+      "thread_id": "thread-26e431c92e97",
+      "thread_depth": 1,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-2c38380ae249",
+      "message_id": "<21a20e21e586.21e58621a20e@adc1.adc.education.fr>",
+      "from_name": "POUCHAIN Michel",
+      "from_email_hash": "e7f055c17c34cc85e4de5500d952e75c2b6d6eeac7a55baaa2a3c03600230929",
+      "date": "2007-01-19T08:42:16+01:00",
+      "subject": "[R-SIG-Finance] a pb wtith a script of fMultivar",
+      "subject_clean": "a pb wtith a script of fMultivar",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "from an example of the doc of fMultivar\nThis is the script with the \"require\" for the libraries\nand under R2.3.1\nCopy of the error message\nis it necesary to load an other lib ? an other function ?\nThanks\nsincerely\nMichel POUCHAIN\nuniversity PAris 13\n------------------------------------------------------------\nrequire(fBasics)\nrequire(fCalendar)\nrequire(fSeries)\nrequire(fMultivar)\nrequire(fExtremes)\nrequire(fOptions)\nrequire(fPortfolio)\nrequire(mgcv)\n\n## SOURCE(\"fMultivar.2A-RegressionModelling\")\n## Not run:\n## regFit -\ndata(recession)\nrecession[,1] = paste(recession[,1], \"28\", sep = \"\")\n## myPlot -\nmyPlot = function(recession, in.sample) {\nrecession = as.timeSeries(recession)[, \"recession\"]\nin.sample = as.timeSeries(recession)[, \"recession\"]\nDate = recession[, \"date\"]\nDate = trunc(Date/100) + (Date-100*trunc(Date/100))/12\nRecession = recession[, \"recession\"]\ninSample = as.vector(in.sample)\nplot(Date, Recession, type = \"n\", main = \"US Recession\")\ngrid()\nlines(Date, Recession, type = \"h\", col = \"steelblue3\")\nlines(Date, inSample)\n}\n## Generalized Additive Modelling:\nrequire(mgcv)\npar(mfrow = c(2, 2))\nfit = gregFit(formula = recession ~ s(tbills3m) + s(tbonds10y),\nfamily = gaussian(), data = recession, use = \"gam\")\n# In Sample Prediction:\nin.sample = predict(fit, newdata = recession)$fit\nmyPlot(recession, in.sample)\n# Summary:\nsummary(fit)\n# Add plots from the original plot method:\ngam.fit = fit at fit\nclass(gam.fit) = \"gam\"\nplot(gam.fit)\n## End(Not run)\n------------------------------------\nError message\n-------------\n\n[1] TRUE\n> par(mfrow = c(2, 2))\n> fit = gregFit(formula = recession ~ s(tbills3m) + s(tbonds10y),\n+ family = gaussian(), data = recession, use = \"gam\")\nErreur : impossible de trouver la fonction \"gregFit\"\n> # In Sample Prediction:\n> in.sample = predict(fit, newdata = recession)$fit\nErreur dans predict(fit, newdata = recession) : \n        objet \"fit\" non trouv?\n> myPlot(recession, in.sample)\nErreur dans if (timeTest == 0) iso.format = \"%Y-%m-%d\" : \n        valeur manquante l? o? TRUE / FALSE est requis\n> # Summary:\n> summary(fit)\nErreur dans summary(fit) : objet \"fit\" non trouv?\n> # Add plots from the original plot method:\n> gam.fit = fit at fit\nErreur : objet \"fit\" non trouv?\n> class(gam.fit) = \"gam\"\n> plot(gam.fit)\nErreur dans plot.gam(gam.fit) : No terms to plot - nothing for\nplot.gam() to do.\n> ## End(Not run)\n> \n>",
+      "body_snippet": "from an example of the doc of fMultivar\nThis is the script with the \"require\" for the libraries\nand under R2.3.1\nCopy of the error message\nis it necesary to load an other lib ? an other function ?\nTha",
+      "thread_id": "thread-2c38380ae249",
+      "thread_depth": 0,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-dbb3c0c3855e",
+      "message_id": "<000001c73f2a$35de35c0$6401a8c0@DESKTOP>",
+      "from_name": "Jerry Pressnell",
+      "from_email_hash": "c17070d6b586fecdf18b0bf7efdfe162dcb5716139e65f1a20a68697edf5ae47",
+      "date": "2007-01-24T07:08:11+11:00",
+      "subject": "[R-SIG-Finance] get.hist.quote",
+      "subject_clean": "get.hist.quote",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070124/cf540bbf/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070124/cf540bbf/attachment.pl",
+      "thread_id": "thread-dbb3c0c3855e",
+      "thread_depth": 0,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-420f14427182",
+      "message_id": "<6e8360ad0701231213w8ba3a72i94337cfb7927893e@mail.gmail.com>",
+      "from_name": "BBands",
+      "from_email_hash": "0f7f8073f0acceeb16c5cb0f1e87bc3b6c563391b2d7d349176cfb0b1ec4f070",
+      "date": "2007-01-23T12:13:58-08:00",
+      "subject": "[R-SIG-Finance] get.hist.quote",
+      "subject_clean": "get.hist.quote",
+      "in_reply_to": "<000001c73f2a$35de35c0$6401a8c0@DESKTOP>",
+      "references": [
+        "<000001c73f2a$35de35c0$6401a8c0@DESKTOP>"
+      ],
+      "body_plain": "On 1/23/07, Jerry Pressnell <jpressnell at westnet.com.au> wrote:\n> I have been running this script regularly for some time. Recently the\n> following error message appeared.\n>\n> Any suggestions to correct this change would be appreciated.\n>\n>\n>\n> EWL<-get.hist.quote(\"EWL\",start=(today <- Sys.Date())-350,quote=\"Cl\")\n>\n> trying URL 'http://chart.yahoo.com/table.csv?s=EWL&a=1&b\u0006&c 06&d=0&e!&f\n> 07&g=d&q=q&y=0&z=EWL&x=.csv'\n>\n> Content type 'text/csv' length unknown\n>\n> opened URL\n>\n> downloaded 11Kb\n>\n>\n>\n> Error in if (dat[n] != start) cat(format(dat[n], \"time series starts\n> %Y-%m-%d\\n\")) :\n>\n> missing value where TRUE/FALSE needed\n\nI received a similar message a few weeks ago. Apparently in was a\nYahoo! problem as it went away within an hour and I haven't seen it\nsince.\n\n     jab\n-- \nJohn Bollinger, CFA, CMT\nwww.BollingerBands.com\n\nIf you advance far enough, you arrive at the beginning.",
+      "body_snippet": "On 1/23/07, Jerry Pressnell <jpressnell at westnet.com.au> wrote:\n> I have been running this script regularly for some time. Recently the\n> following error message appeared.\n>\n> Any suggestions to cor",
+      "thread_id": "thread-dbb3c0c3855e",
+      "thread_depth": 1,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-62f17358c9bf",
+      "message_id": "<45B4BB5400078B5D@> (added by postmaster@aliceadsl.fr)",
+      "from_name": "manu",
+      "from_email_hash": "d0b77caff222307108de0d8628e4898b3f0d3921ac2e55983f15ebe402130bcf",
+      "date": "2007-01-23T21:29:22+01:00",
+      "subject": "[R-SIG-Finance] R-SIG-Finance Digest, Vol 32, Issue 7",
+      "subject_clean": "R-SIG-Finance Digest, Vol 32, Issue 7",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "hi michel\nthe code works with 2.4.1\n\nthe pb must be a problem of version\nupdate to 2.4.1 ;-)\n\nregards\n\nemmanuel\n\n>from an example of the doc of fMultivar\n>This is the script with the \"require\" for the libraries\n>and under R2.3.1\n>Copy of the error message\n>is it necesary to load an other lib ? an other function ?\n>Thanks\n>sincerely\n>Michel POUCHAIN\n>university PAris 13\n>------------------------------------------------------------\n>require(fBasics)\n>require(fCalendar)\n>require(fSeries)\n>require(fMultivar)\n>require(fExtremes)\n>require(fOptions)\n>require(fPortfolio)\n>require(mgcv)\n>\n>## SOURCE(\"fMultivar.2A-RegressionModelling\")\n>## Not run:\n>## regFit -\n>data(recession)\n>recession[,1] = paste(recession[,1], \"28\", sep = \"\")\n>## myPlot -\n>myPlot = function(recession, in.sample) {\n>recession = as.timeSeries(recession)[, \"recession\"]\n>in.sample = as.timeSeries(recession)[, \"recession\"]\n>Date = recession[, \"date\"]\n>Date = trunc(Date/100) + (Date-100*trunc(Date/100))/12\n>Recession = recession[, \"recession\"]\n>inSample = as.vector(in.sample)\n>plot(Date, Recession, type = \"n\", main = \"US Recession\")\n>grid()\n>lines(Date, Recession, type = \"h\", col = \"steelblue3\")\n>lines(Date, inSample)\n>}\n>## Generalized Additive Modelling:\n>require(mgcv)\n>par(mfrow = c(2, 2))\n>fit = gregFit(formula = recession ~ s(tbills3m) + s(tbonds10y),\n>family = gaussian(), data = recession, use = \"gam\")\n># In Sample Prediction:\n>in.sample = predict(fit, newdata = recession)$fit\n>myPlot(recession, in.sample)\n># Summary:\n>summary(fit)\n># Add plots from the original plot method:\n>gam.fit = fit at fit\n>class(gam.fit) = \"gam\"\n>plot(gam.fit)\n>## End(Not run)\n>------------------------------------\n>Error message\n>-------------\n>\n>[1] TRUE\n>> par(mfrow = c(2, 2))\n>> fit = gregFit(formula = recession ~ s(tbills3m) + s(tbonds10y),\n>+ family = gaussian(), data = recession, use = \"gam\")\n>Erreur : impossible de trouver la fonction \"gregFit\"\n>> # In Sample Prediction:\n>> in.sample = predict(fit, newdata = recession)$fit\n>Erreur dans predict(fit, newdata = recession) : \n>        objet \"fit\" non trouv?\n>> myPlot(recession, in.sample)\n>Erreur dans if (timeTest == 0) iso.format = \"%Y-%m-%d\" : \n>        valeur manquante l? o? TRUE / FALSE est requis\n>> # Summary:\n>> summary(fit)\n>Erreur dans summary(fit) : objet \"fit\" non trouv?\n>> # Add plots from the original plot method:\n>> gam.fit = fit at fit\n>Erreur : objet \"fit\" non trouv?\n>> class(gam.fit) = \"gam\"\n>> plot(gam.fit)\n>Erreur dans plot.gam(gam.fit) : No terms to plot - nothing for\n>plot.gam() to do.\n>> ## End(Not run)\n>> \n>>\n>\n>\n>\n>------------------------------\n>\n>Message: 2\n>Date: Tue, 9 Jan 2007 17:26:48 -0800 (PST)\n>From: Tobias <tobias_elbert at hotmail.com>\n>Subject: [R-SIG-Finance] Backing out implied parameters from HNGARCH\n>\toption\tmodel\n>To: r-sig-finance at stat.math.ethz.ch\n>Message-ID: <8250644.post at talk.nabble.com>\n>Content-Type: text/plain; charset=us-ascii\n>\n>\n>Dear all,\n>\n>I am trying to back out the implied parameters using observed options prices\n>and the Heston-Nandi Garch model via NLS. \n>\n>For this purpose I am using Diethelm Wuertz's pricing algorithm in a\n>function called hnoption similar to this:\n>\n>hnoption <- function(b)      #where b is the vector of parameters passed on\n>to the pricing algorithm\n>{\n>     ....\n>     hnoption <- value obtained via pricing algorithm\n>}\n>\n>calccall <- function(b)\n>{\n>\tfor (jj in 1:num1)\n>\t{\n>\t\tcounter <<- jj \n>\t\tqq[jj] <- hnoption(b)\n>\t\t\n>\t}\n>\t\n>\tcalccall <- sum((c-qq)^2)\n> }\n>\n># some initial guess of parameters\n>bstart <- c(.1,.1,1,-.5,.7)\n>\n>p <- optim(bstart,calccall,hessian = TRUE)\n>\n>The code works fine for a few iterations of optim(). However, at some point\n>it produces parameter values that cause an integral that's being evaluated\n>in hnoption to drift off to infinity. At least that's what I think happens\n>when R produces the error: error in integrate(): non-finite function value.\n>I have tried to constrain some parameters in optim() but keep receiving the\n>same error. \n>\n>I would really appreciate if someone could point me to possible solutions. \n>\n>Regards \n>\n>Tobias\n>\n>-- \n>View this message in context: http://www.nabble.com/Backing-out-implied-parameters-from-HNGARCH-option-model-tf2950123.html#a8250644\n>Sent from the Rmetrics mailing list archive at Nabble.com.\n>\n>\n>\n>------------------------------\n>\n>_______________________________________________\n>R-SIG-Finance mailing list\n>R-SIG-Finance at stat.math.ethz.ch\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>\n>End of R-SIG-Finance Digest, Vol 32, Issue 7\n>********************************************\n>\n\n= = = = = = = = = ========= = = = = = = = = = =\n\t\t\t\nmanu\njunkmanu at free.fr\n23/01/2007",
+      "body_snippet": "hi michel\nthe code works with 2.4.1\n\nthe pb must be a problem of version\nupdate to 2.4.1 ;-)\n\nregards\n\nemmanuel\n\n>from an example of the doc of fMultivar\n>This is the script with the \"require\" for the",
+      "thread_id": "thread-62f17358c9bf",
+      "thread_depth": 0,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-dde997249528",
+      "message_id": "<000701c73f35$b786a660$6401a8c0@DESKTOP>",
+      "from_name": "Jerry Pressnell",
+      "from_email_hash": "c17070d6b586fecdf18b0bf7efdfe162dcb5716139e65f1a20a68697edf5ae47",
+      "date": "2007-01-24T08:30:34+11:00",
+      "subject": "[R-SIG-Finance] get.hist.quote",
+      "subject_clean": "get.hist.quote",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070124/0867c64d/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070124/0867c64d/attachment.pl",
+      "thread_id": "thread-dde997249528",
+      "thread_depth": 0,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-b035cd0030e4",
+      "message_id": "<8647844.post@talk.nabble.com>",
+      "from_name": "genx",
+      "from_email_hash": "988c3969ea449636bf2ecddd29c8339bbfcb5e69ff8c63a59eb73ef6bfb6e73c",
+      "date": "2007-01-26T00:59:54-08:00",
+      "subject": "[R-SIG-Finance] getReturns",
+      "subject_clean": "getReturns",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "plot(getReturns(logseries))\nError in ans[-1, ] : incorrect number of dimensions\n\nAnyone got a clue why i get this error message? I have a series with ~1400\nclose values, did a log(series).\n-- \nView this message in context: http://www.nabble.com/getReturns-tf3121306.html#a8647844\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "plot(getReturns(logseries))\nError in ans[-1, ] : incorrect number of dimensions\n\nAnyone got a clue why i get this error message? I have a series with ~1400\nclose values, did a log(series).\n-- \nView th",
+      "thread_id": "thread-b035cd0030e4",
+      "thread_depth": 0,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-b3aeb25dc222",
+      "message_id": "<8654450.post@talk.nabble.com>",
+      "from_name": "genx",
+      "from_email_hash": "988c3969ea449636bf2ecddd29c8339bbfcb5e69ff8c63a59eb73ef6bfb6e73c",
+      "date": "2007-01-26T08:32:33-08:00",
+      "subject": "[R-SIG-Finance] [R-sig-finance] getReturns",
+      "subject_clean": "getReturns",
+      "in_reply_to": "<8647844.post@talk.nabble.com>",
+      "references": [
+        "<8647844.post@talk.nabble.com>"
+      ],
+      "body_plain": "str(logseries) \n\n atomic [1:200] 5.97 5.98 5.98 5.98 5.98 ...\n - attr(*, \"index\")=Class 'Date'  num [1:200] 13249 13250 13251 13252 13255\n...\n\n\n\ngenx wrote:\n> \n> plot(getReturns(logseries))\n> Error in ans[-1, ] : incorrect number of dimensions\n> \n> Anyone got a clue why i get this error message? I have a series with ~1400\n> close values, did a log(series).\n> \n\n-- \nView this message in context: http://www.nabble.com/getReturns-tf3121306.html#a8654450\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "str(logseries) \n\n atomic [1:200] 5.97 5.98 5.98 5.98 5.98 ...\n - attr(*, \"index\")=Class 'Date'  num [1:200] 13249 13250 13251 13252 13255\n...\n\n\n\ngenx wrote:\n> \n> plot(getReturns(logseries))\n> Error in",
+      "thread_id": "thread-b035cd0030e4",
+      "thread_depth": 1,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-495ce6fe4b17",
+      "message_id": "<9e8f1a130701260941v1fd0437bkb561352b4057c55d@mail.gmail.com>",
+      "from_name": "Paolo Rossi",
+      "from_email_hash": "ef55602276901bc6a1e877ee15626b4553ba39508d9a88fe0eef2fbdd46fdffd",
+      "date": "2007-01-26T18:41:33+01:00",
+      "subject": "[R-SIG-Finance] Error with solve.QP function",
+      "subject_clean": "Error with solve.QP function",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070126/04cb6cce/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070126/04cb6cce/attachment.pl",
+      "thread_id": "thread-495ce6fe4b17",
+      "thread_depth": 0,
+      "month": "2007-01"
+    },
+    {
+      "id": "msg-2bc49726abd9",
+      "message_id": "<D3AEEDA31E57474B840BEBC25A8A8344F395EB@NYWEXMB23.msad.ms.com>",
+      "from_name": "Leeds, Mark (IED)",
+      "from_email_hash": "a1e6041ece9dc8cbeab18bc5539a57753153f5981e8a50252c34e98b37c3d2ee",
+      "date": "2007-01-26T15:25:33-05:00",
+      "subject": "[R-SIG-Finance] FW: Re: [R] comparison of packages for Unit Root test",
+      "subject_clean": "comparison of packages for Unit Root test",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070126/c31da4d6/attachment.pl",
+      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20070126/c31da4d6/attachment.pl",
+      "thread_id": "thread-2bc49726abd9",
+      "thread_depth": 0,
+      "month": "2007-01"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-b1eb8c626413",
+      "subject": "rMetrics",
+      "message_count": 4,
+      "participants": [
+        "Martin Becker",
+        "genx"
+      ],
+      "started": "2007-01-08T18:17:48-08:00",
+      "last_reply": "2007-01-09T19:23:00+01:00",
+      "root_message_id": "msg-b1eb8c626413"
+    },
+    {
+      "id": "thread-dde003c34ee9",
+      "subject": "Error loading fCalendar package",
+      "message_count": 2,
+      "participants": [
+        "Martin Maechler",
+        "Paolo Rossi"
+      ],
+      "started": "2007-01-09T17:09:58+01:00",
+      "last_reply": "2007-01-09T17:32:32+01:00",
+      "root_message_id": "msg-dde003c34ee9"
+    },
+    {
+      "id": "thread-48f442c20f17",
+      "subject": "Backing out implied parameters from HNGARCH option model",
+      "message_count": 1,
+      "participants": [
+        "Tobias"
+      ],
+      "started": "2007-01-09T17:26:48-08:00",
+      "last_reply": "2007-01-09T17:26:48-08:00",
+      "root_message_id": "msg-48f442c20f17"
+    },
+    {
+      "id": "thread-3b3067c9c4d0",
+      "subject": "solve.QP",
+      "message_count": 3,
+      "participants": [
+        "Brian G. Peterson",
+        "Patrick Burns",
+        "guillaume.nicoulaud at halbis.com"
+      ],
+      "started": "2007-01-10T09:49:22+01:00",
+      "last_reply": "2007-01-10T06:03:24-06:00",
+      "root_message_id": "msg-3b3067c9c4d0"
+    },
+    {
+      "id": "thread-a04660be6131",
+      "subject": "solve.QP",
+      "message_count": 1,
+      "participants": [
+        "Christian Prinoth"
+      ],
+      "started": "2007-01-10T11:56:58+01:00",
+      "last_reply": "2007-01-10T11:56:58+01:00",
+      "root_message_id": "msg-a04660be6131"
+    },
+    {
+      "id": "thread-c5b4e264f19b",
+      "subject": "Réf. : Re:  solve.QP (for portfolio optimization)",
+      "message_count": 3,
+      "participants": [
+        "Brian G. Peterson",
+        "Christian Prinoth",
+        "guillaume.nicoulaud at halbis.com"
+      ],
+      "started": "2007-01-10T13:26:45+01:00",
+      "last_reply": "2007-01-10T14:35:56+01:00",
+      "root_message_id": "msg-c5b4e264f19b"
+    },
+    {
+      "id": "thread-6fdb02374920",
+      "subject": "Réf. : Re:  solve.QP (for portfolio optimization)",
+      "message_count": 1,
+      "participants": [
+        "guillaume.nicoulaud at halbis.com"
+      ],
+      "started": "2007-01-10T15:04:18+01:00",
+      "last_reply": "2007-01-10T15:04:18+01:00",
+      "root_message_id": "msg-6fdb02374920"
+    },
+    {
+      "id": "thread-6907009dd849",
+      "subject": "Réf. : Re:  solve.QP (for portfolio optimization)",
+      "message_count": 1,
+      "participants": [
+        "Christian Prinoth"
+      ],
+      "started": "2007-01-10T15:16:33+01:00",
+      "last_reply": "2007-01-10T15:16:33+01:00",
+      "root_message_id": "msg-6907009dd849"
+    },
+    {
+      "id": "thread-b5e0e3997bcc",
+      "subject": "simulation gbm with jumps",
+      "message_count": 4,
+      "participants": [
+        "Martin Becker",
+        "Thomas Steiner",
+        "kriskumar at earthlink.net",
+        "march"
+      ],
+      "started": "2007-01-11T06:26:10-08:00",
+      "last_reply": "2007-01-12T03:11:17+00:00",
+      "root_message_id": "msg-b5e0e3997bcc"
+    },
+    {
+      "id": "thread-07057015c604",
+      "subject": "Days between dates",
+      "message_count": 2,
+      "participants": [
+        "Martin Becker",
+        "genx"
+      ],
+      "started": "2007-01-12T00:57:11-08:00",
+      "last_reply": "2007-01-12T10:22:59+01:00",
+      "root_message_id": "msg-07057015c604"
+    },
+    {
+      "id": "thread-4aa4bcb6e3e2",
+      "subject": "Réf. :  Days between dates",
+      "message_count": 1,
+      "participants": [
+        "guillaume.nicoulaud at halbis.com"
+      ],
+      "started": "2007-01-12T10:00:41+01:00",
+      "last_reply": "2007-01-12T10:00:41+01:00",
+      "root_message_id": "msg-4aa4bcb6e3e2"
+    },
+    {
+      "id": "thread-0ffaabf9cbb7",
+      "subject": "Réf. : Re:  Days between dates",
+      "message_count": 1,
+      "participants": [
+        "guillaume.nicoulaud at halbis.com"
+      ],
+      "started": "2007-01-12T10:43:25+01:00",
+      "last_reply": "2007-01-12T10:43:25+01:00",
+      "root_message_id": "msg-0ffaabf9cbb7"
+    },
+    {
+      "id": "thread-3ad3eccb5f3f",
+      "subject": "FinancePack and The Mind of the Market",
+      "message_count": 1,
+      "participants": [
+        "Dominick Samperi"
+      ],
+      "started": "2007-01-13T20:20:39-05:00",
+      "last_reply": "2007-01-13T20:20:39-05:00",
+      "root_message_id": "msg-3ad3eccb5f3f"
+    },
+    {
+      "id": "thread-26e431c92e97",
+      "subject": "Fan charts in \"vars\" package",
+      "message_count": 2,
+      "participants": [
+        "Achim Zeileis",
+        "Rob Hyndman"
+      ],
+      "started": "2007-01-17T18:12:06+01:00",
+      "last_reply": "2007-01-18T08:12:34+11:00",
+      "root_message_id": "msg-26e431c92e97"
+    },
+    {
+      "id": "thread-2c38380ae249",
+      "subject": "a pb wtith a script of fMultivar",
+      "message_count": 1,
+      "participants": [
+        "POUCHAIN Michel"
+      ],
+      "started": "2007-01-19T08:42:16+01:00",
+      "last_reply": "2007-01-19T08:42:16+01:00",
+      "root_message_id": "msg-2c38380ae249"
+    },
+    {
+      "id": "thread-62f17358c9bf",
+      "subject": "R-SIG-Finance Digest, Vol 32, Issue 7",
+      "message_count": 1,
+      "participants": [
+        "manu"
+      ],
+      "started": "2007-01-23T21:29:22+01:00",
+      "last_reply": "2007-01-23T21:29:22+01:00",
+      "root_message_id": "msg-62f17358c9bf"
+    },
+    {
+      "id": "thread-dbb3c0c3855e",
+      "subject": "get.hist.quote",
+      "message_count": 2,
+      "participants": [
+        "BBands",
+        "Jerry Pressnell"
+      ],
+      "started": "2007-01-24T07:08:11+11:00",
+      "last_reply": "2007-01-23T12:13:58-08:00",
+      "root_message_id": "msg-dbb3c0c3855e"
+    },
+    {
+      "id": "thread-dde997249528",
+      "subject": "get.hist.quote",
+      "message_count": 1,
+      "participants": [
+        "Jerry Pressnell"
+      ],
+      "started": "2007-01-24T08:30:34+11:00",
+      "last_reply": "2007-01-24T08:30:34+11:00",
+      "root_message_id": "msg-dde997249528"
+    },
+    {
+      "id": "thread-b035cd0030e4",
+      "subject": "getReturns",
+      "message_count": 2,
+      "participants": [
+        "genx"
+      ],
+      "started": "2007-01-26T00:59:54-08:00",
+      "last_reply": "2007-01-26T08:32:33-08:00",
+      "root_message_id": "msg-b035cd0030e4"
+    },
+    {
+      "id": "thread-2bc49726abd9",
+      "subject": "comparison of packages for Unit Root test",
+      "message_count": 1,
+      "participants": [
+        "Leeds, Mark (IED)"
+      ],
+      "started": "2007-01-26T15:25:33-05:00",
+      "last_reply": "2007-01-26T15:25:33-05:00",
+      "root_message_id": "msg-2bc49726abd9"
+    },
+    {
+      "id": "thread-495ce6fe4b17",
+      "subject": "Error with solve.QP function",
+      "message_count": 1,
+      "participants": [
+        "Paolo Rossi"
+      ],
+      "started": "2007-01-26T18:41:33+01:00",
+      "last_reply": "2007-01-26T18:41:33+01:00",
+      "root_message_id": "msg-495ce6fe4b17"
+    }
+  ]
+}

@@ -1,0 +1,332 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2005-07",
+  "messages": [
+    {
+      "id": "msg-b6578e88312f",
+      "message_id": "<1121018440.8c47c59cL.Isella@myrealbox.com>",
+      "from_name": "L.Isella",
+      "from_email_hash": "e83286d14c4fa9f4a44217fdbbf1fb21f4fc76e631493f09faaf675cb0054803",
+      "date": "2005-07-10T18:00:40Z",
+      "subject": "[R-sig-finance] Solve.QP",
+      "subject_clean": "Solve.QP",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear All,\nI am starting to use R for portfolio optimization.\nI found the portfolio.optim package in tseries very useful, since it allows the user to use both the historical data to create the covariance matrix or to provide it directly.\nHowever, I would like not to simply use it as a black box. Portfolio.optim relies on solve.QP.\nNow, a typical problem in portfolio management is to minimize the variance of the portfolio: \n/frac{1}{2}W^T%*%CovMat%*%W,\nwhere CovMat is the covariance matrix of my portfolio, W is the vector of the (unknown) weights.\nThe constraints are:\n\\sum_i W_i=1 (the portfolio is totally invested)\nand \n\\sum_i W_i\\mu_i=\\mu (\\mu is the required variance of my portfolio, W_i and \\mu_i the weight and the expected return of the i-th asset, respectively).\nThen I could e.g. impose W_i>=0 for all i (no short-selling allowed).\nIs it straightforward to implement these constraints on the weights as \nA%*%W>= b, where A is a matrix and b a vector?\nMaybe it is a naive question and I am just trying to re-invent the wheel, but I will be grateful to anyone who can help clarify these issues to me.\nBest Regards\nLorenzo",
+      "body_snippet": "Dear All,\nI am starting to use R for portfolio optimization.\nI found the portfolio.optim package in tseries very useful, since it allows the user to use both the historical data to create the covarian",
+      "thread_id": "thread-b6578e88312f",
+      "thread_depth": 0,
+      "month": "2005-07"
+    },
+    {
+      "id": "msg-a60e3fd03be5",
+      "message_id": "<FFAAD1A807317540A06142D8CD168E9D54BC97@se000010010038.servinternet.local>",
+      "from_name": "KAHRA HANNU",
+      "from_email_hash": "16718a29600191ba91802e01a545b832f96b08a3789726bda6329fcd2f7da538",
+      "date": "2005-07-11T10:58:09+02:00",
+      "subject": "[R-sig-finance] Solve.QP",
+      "subject_clean": "Solve.QP",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Lorenzo,\n\nHave a look at the portfolio.optim R code and how it applies solve.QP. Download the tseries version 1.9 package and unzip it. The tseries folder contains a folder called R that contains the tseries file. Have a look at the portfolio.optim function in the file.\n\nRegards,\n\nHannu Kahra\nProgetti Speciali \nMonte Paschi Asset Management SGR S.p.A. \nVia San Vittore, 37\nIT-20123 Milano, Italia \n\nTel.: +39 02 43828 754\nMobile: +39 333 876 1558 \nFax: +39 02 43828 247 \nE-mail: hannu.kahra at mpsgr.it \nWeb: www.mpsam.it \n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of L.Isella\nSent: 10. hein?kuuta 2005 20:01\nTo: r-sig-finance at stat.math.ethz.ch\nSubject: [R-sig-finance] Solve.QP\n\nDear All,\nI am starting to use R for portfolio optimization.\nI found the portfolio.optim package in tseries very useful, since it allows the user to use both the historical data to create the covariance matrix or to provide it directly.\nHowever, I would like not to simply use it as a black box. Portfolio.optim relies on solve.QP.\nNow, a typical problem in portfolio management is to minimize the variance of the portfolio: \n/frac{1}{2}W^T%*%CovMat%*%W,\nwhere CovMat is the covariance matrix of my portfolio, W is the vector of the (unknown) weights.\nThe constraints are:\n\\sum_i W_i=1 (the portfolio is totally invested)\nand \n\\sum_i W_i\\mu_i=\\mu (\\mu is the required variance of my portfolio, W_i and \\mu_i the weight and the expected return of the i-th asset, respectively).\nThen I could e.g. impose W_i>=0 for all i (no short-selling allowed).\nIs it straightforward to implement these constraints on the weights as \nA%*%W>= b, where A is a matrix and b a vector?\nMaybe it is a naive question and I am just trying to re-invent the wheel, but I will be grateful to anyone who can help clarify these issues to me.\nBest Regards\nLorenzo\n\n_______________________________________________\nR-sig-finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance",
+      "body_snippet": "Lorenzo,\n\nHave a look at the portfolio.optim R code and how it applies solve.QP. Download the tseries version 1.9 package and unzip it. The tseries folder contains a folder called R that contains the ",
+      "thread_id": "thread-a60e3fd03be5",
+      "thread_depth": 0,
+      "month": "2005-07"
+    },
+    {
+      "id": "msg-6946a1413f9d",
+      "message_id": "<C5A76BA0CA4D734CA725124C4D6397AC8BFDF4@ibfftce502.de.ad.drkw.net>",
+      "from_name": "Molins, Jordi",
+      "from_email_hash": "b4348808cd91ee43361413747e30089faea929351de8ce0ea31882ebf8def6c6",
+      "date": "2005-07-11T14:21:55+02:00",
+      "subject": "[R-sig-finance] Markowitz with non-linear constraints",
+      "subject_clean": "Markowitz with non-linear constraints",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear all,\n\nI am starting to use portfolio optimization with R. It seems pretty easy to\nuse Markowitz optimization with linear constraints, but I still have not\ncome up with a way to introduce non-linear constraints (e.g., \\sum_i |w_i| =\n1, to allow short positions to \"burn\" capital, or \\sum_i w_i*w_i = constant,\nin order not to have too much concentration in the portfolio). Is there an\neasy way to introduce these non-linear constraints without resorting to\nintroduce lagrange multipliers, and then make these multipliers tend to\ninfinity? \n\nAn additional question: is there a package that applies random matrix theory\nto a correlation matrix? I would like to clean the correlation matrix from\nspurious (low) eigenvalues, and not just deleting all small eigenvalues\nwithout a clear-cut cut-off point.\n\nRegards and thank you\n\nJordi\n\n\n\n--------------------------------------------------------------------------------\nThe information contained herein is confidential and is inte...{{dropped}}",
+      "body_snippet": "Dear all,\n\nI am starting to use portfolio optimization with R. It seems pretty easy to\nuse Markowitz optimization with linear constraints, but I still have not\ncome up with a way to introduce non-line",
+      "thread_id": "thread-6946a1413f9d",
+      "thread_depth": 0,
+      "month": "2005-07"
+    },
+    {
+      "id": "msg-71cfb26fb75b",
+      "message_id": "<1db7268005071306103614168b@mail.gmail.com>",
+      "from_name": "roger bos",
+      "from_email_hash": "0ea9d0b748ae3ca539a95b232b50ab6357806ed2938d51cb132598641fb9b417",
+      "date": "2005-07-13T09:10:10-04:00",
+      "subject": "[R-sig-finance] Solve.QP",
+      "subject_clean": "Solve.QP",
+      "in_reply_to": "<FFAAD1A807317540A06142D8CD168E9D54BC97@se000010010038.servinternet.local>",
+      "references": [
+        "<FFAAD1A807317540A06142D8CD168E9D54BC97@se000010010038.servinternet.local>"
+      ],
+      "body_plain": "I have went through this exercise and posted an answer to the email\nlist: search for \"portfolio.optim\" and \"solved\" and it will be the\nfirst hit.  Anyway, I have pasted the code in this message.\n\n\nlibrary(quadprog) \nlibrary(MASS) \nrm(sol) \n\nn<-100\t # number of assets\nm<-200\t\t\t # number of states of the world\n\nrho<-0.7 \nsigma<-0.2 \nmu<-.1 \nCov <- matrix(rho*sigma*sigma, ncol=n, nrow=n) diag(Cov) <- rep(sigma*sigma, n) \nS <- 1+matrix(mvrnorm(m, rep(mu, n), Sigma=Cov), ncol=n) \nCov <- var(S) #gives same answer as cov(S) mu <- apply(S, 2, mean) \nmu.target <- mean(mu) \nbLo <- rep(0, n) \n\nAmat <- rbind(1, mu) \ndim(bLo) <- c(n,1) \n\nbvec <- t(rbind(1, mu.target, bLo))\nzMat <- diag(n)\nAmat <- t(rbind(Amat, zMat))\n\n\nDmat=Cov \ndvec=rep(0, nrow(Amat)) \n\n#The first two rows of Amat should be equality constraints (so weights\nsum to 1) meq <- 2\n\nsol <- solve.QP(Dmat=Dmat, dvec=dvec, Amat=Amat, bvec=bvec, meq) sol \nw.asset <- zapsmall(sol$solution) \npar(mfrow=c(1,2)) \nplot(w.asset, type=\"n\") \nlines(w.asset, type=\"h\") \nhist(w.asset) \n\n#test to see that we get the same result with portfolio.optim \nres<-portfolio.optim(S) \nwgt <- zapsmall(res$pw) \ncbind(w.asset, wgt) #shows both methods are equal \n\nThanks,\n\nRoger\n\n\nOn 7/11/05, KAHRA HANNU <hannu.kahra at mpsgr.it> wrote:\n> Lorenzo,\n> \n> Have a look at the portfolio.optim R code and how it applies solve.QP. Download the tseries version 1.9 package and unzip it. The tseries folder contains a folder called R that contains the tseries file. Have a look at the portfolio.optim function in the file.\n> \n> Regards,\n> \n> Hannu Kahra\n> Progetti Speciali\n> Monte Paschi Asset Management SGR S.p.A.\n> Via San Vittore, 37\n> IT-20123 Milano, Italia\n> \n> Tel.: +39 02 43828 754\n> Mobile: +39 333 876 1558\n> Fax: +39 02 43828 247\n> E-mail: hannu.kahra at mpsgr.it\n> Web: www.mpsam.it\n> \n> -----Original Message-----\n> From: r-sig-finance-bounces at stat.math.ethz.ch [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of L.Isella\n> Sent: 10. hein?kuuta 2005 20:01\n> To: r-sig-finance at stat.math.ethz.ch\n> Subject: [R-sig-finance] Solve.QP\n> \n> Dear All,\n> I am starting to use R for portfolio optimization.\n> I found the portfolio.optim package in tseries very useful, since it allows the user to use both the historical data to create the covariance matrix or to provide it directly.\n> However, I would like not to simply use it as a black box. Portfolio.optim relies on solve.QP.\n> Now, a typical problem in portfolio management is to minimize the variance of the portfolio:\n> /frac{1}{2}W^T%*%CovMat%*%W,\n> where CovMat is the covariance matrix of my portfolio, W is the vector of the (unknown) weights.\n> The constraints are:\n> \\sum_i W_i=1 (the portfolio is totally invested)\n> and\n> \\sum_i W_i\\mu_i=\\mu (\\mu is the required variance of my portfolio, W_i and \\mu_i the weight and the expected return of the i-th asset, respectively).\n> Then I could e.g. impose W_i>=0 for all i (no short-selling allowed).\n> Is it straightforward to implement these constraints on the weights as\n> A%*%W>= b, where A is a matrix and b a vector?\n> Maybe it is a naive question and I am just trying to re-invent the wheel, but I will be grateful to anyone who can help clarify these issues to me.\n> Best Regards\n> Lorenzo\n> \n> _______________________________________________\n> R-sig-finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> \n> _______________________________________________\n> R-sig-finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>",
+      "body_snippet": "I have went through this exercise and posted an answer to the email\nlist: search for \"portfolio.optim\" and \"solved\" and it will be the\nfirst hit.  Anyway, I have pasted the code in this message.\n\n\nlib",
+      "thread_id": "thread-a60e3fd03be5",
+      "thread_depth": 1,
+      "month": "2005-07"
+    },
+    {
+      "id": "msg-44be0ab788c5",
+      "message_id": "<20050714144450.36452.qmail@web40912.mail.yahoo.com>",
+      "from_name": "Jan-Paul Roodbol",
+      "from_email_hash": "c21ab30ef6bb8f8c3ecb0a2a403b19c4487cff03033f71bf1c3c5da6723232dd",
+      "date": "2005-07-14T15:44:50+01:00",
+      "subject": "[R-sig-finance] newbie",
+      "subject_clean": "newbie",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi\n\nI'm currently doing research into Industry Groupings\non Stock Exchanges.  Is R useful (and easy to use for\na non-programmer)?  \n\nI have data of hundreds of shares, 5.5 years, monthly,\nfor 60 variables.  I want to investigate if the\nindustry groupings are indeed homogeneous\nintra-groups, and heterogeneous between groups.  I\nwant to check this with some groupings before and\nafter reallocation of individual shares or regrouping\nbecause of the International Classification Board\nindustry grouping roll-out.  I think I would compare\nmeans and SDs.  Groupings are fairly small, most less\nthan 10 shares in each group.  \n\nI have just started thinking about all of this - hope\nit makes some sense at this stage?   \n\nIs R the right tool for me?\n\nThank you in advance\njpr",
+      "body_snippet": "Hi\n\nI'm currently doing research into Industry Groupings\non Stock Exchanges.  Is R useful (and easy to use for\na non-programmer)?  \n\nI have data of hundreds of shares, 5.5 years, monthly,\nfor 60 varia",
+      "thread_id": "thread-44be0ab788c5",
+      "thread_depth": 0,
+      "month": "2005-07"
+    },
+    {
+      "id": "msg-85bedc9543ba",
+      "message_id": "<20050714184132.36795.qmail@web60322.mail.yahoo.com>",
+      "from_name": "Andrew West",
+      "from_email_hash": "5fe1f4c6a9d1f71d717cb66afe5473898fe43ee03adac541d574d0d791698e2c",
+      "date": "2005-07-14T11:41:32-07:00",
+      "subject": "[R-sig-finance] newbie",
+      "subject_clean": "newbie",
+      "in_reply_to": "<20050714144450.36452.qmail@web40912.mail.yahoo.com>",
+      "references": [],
+      "body_plain": "Useful, yes. Easy for someone unable to learn any\ncode, probably not. However, if what you want to do\ncan be done using the R-commmander (Rcmdr) package (a\ngraphical user interface which does offer cluster\nanalysis and anova, among other things, from a drop\ndown menu), then you may not need to write any code.\nAnd Rcmdr will write the underlying code for you, so\nyou can save it and reproduce your work the next day\nwithout pointing and clicking another 30 times. Still,\neven using Rcmdr, when I first started I had to do a\nlot of reading and searching to figure out seemingly\nsimple tasks. It's worth the effort if you think you\nwill continue to do statistical analysis in the\nfuture, and thus earn a return on you intitial\nefforts.\n\n--- Jan-Paul Roodbol <janpaulr at yahoo.com> wrote:\n\n> Hi\n> \n> I'm currently doing research into Industry Groupings\n> on Stock Exchanges.  Is R useful (and easy to use\n> for\n> a non-programmer)?  \n> \n> I have data of hundreds of shares, 5.5 years,\n> monthly,\n> for 60 variables.  I want to investigate if the\n> industry groupings are indeed homogeneous\n> intra-groups, and heterogeneous between groups.  I\n> want to check this with some groupings before and\n> after reallocation of individual shares or\n> regrouping\n> because of the International Classification Board\n> industry grouping roll-out.  I think I would compare\n> means and SDs.  Groupings are fairly small, most\n> less\n> than 10 shares in each group.  \n> \n> I have just started thinking about all of this -\n> hope\n> it makes some sense at this stage?   \n> \n> Is R the right tool for me?\n> \n> Thank you in advance\n> jpr\n> \n> _______________________________________________\n> R-sig-finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>",
+      "body_snippet": "Useful, yes. Easy for someone unable to learn any\ncode, probably not. However, if what you want to do\ncan be done using the R-commmander (Rcmdr) package (a\ngraphical user interface which does offer cl",
+      "thread_id": "thread-44be0ab788c5",
+      "thread_depth": 1,
+      "month": "2005-07"
+    },
+    {
+      "id": "msg-02ea3c4ae00f",
+      "message_id": "<42tuep$6u1os7@ibs01.interbusiness.it>",
+      "from_name": "Nico",
+      "from_email_hash": "d7a6864b5f1f1584217ad20e3d2f967330c47e018c75c7e3dc4ee2bc4e319755",
+      "date": "2005-07-27T15:17:13+02:00",
+      "subject": "[R-sig-finance] Rmetrics Newbie",
+      "subject_clean": "Rmetrics Newbie",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I'm very interested on Rmetrics for my university home-work: what I have to do is related to\ntime series analysis of interest rates.\nWith Rmetrics, can I compute the spot curve / forward rates starting from quoted instruments\n(depos, futeres and swaps)? I don't find any references on this topics, so I hope in your\nhelp...\n\nThanks in advance,\nNC",
+      "body_snippet": "I'm very interested on Rmetrics for my university home-work: what I have to do is related to\ntime series analysis of interest rates.\nWith Rmetrics, can I compute the spot curve / forward rates startin",
+      "thread_id": "thread-02ea3c4ae00f",
+      "thread_depth": 0,
+      "month": "2005-07"
+    },
+    {
+      "id": "msg-c01c79d321dd",
+      "message_id": "<42E991A9.9090008@pdf.com>",
+      "from_name": "Spencer Graves",
+      "from_email_hash": "0d1725402b5f223aa45a1714f600b741ea6c2ccb2d67d2b94ddab1ed1e80aefd",
+      "date": "2005-07-28T19:17:13-07:00",
+      "subject": "[R-sig-finance] Rmetrics Newbie",
+      "subject_clean": "Rmetrics Newbie",
+      "in_reply_to": "<42tuep$6u1os7@ibs01.interbusiness.it>",
+      "references": [
+        "<42tuep$6u1os7@ibs01.interbusiness.it>"
+      ],
+      "body_plain": "I can't answer your question directly, but a general problem solving \nmethod is provided in the posting guide, \n\"http://www.R-project.org/posting-guide.html\".  This describes many \ntools to help you find answers to your questions AND ways to formulate \nquestions for r-help such that they are more likely to get a reply.  IF \nyou more or less know the math involved, I encourage you to work through \nthe posting guide with your question, and submit a restatement of your \nquestion to \"r-help\", preferably with some simple piece of code that you \ntried that didn't solve your problem, asking for help with the next \nstep.  Please make your example small and completely self-contained, so \nsomeone can copy a few lines out of your email into R, try a few \ndifferent things, and reply with what seemed to work for them.  (I \nsuggest \"r-help\", since you already got zero response -- other than me \n-- from \"R-sig-finance\".)\n\n\t  I did a brief search for a couple of your key words and did not find \nanything.  However, I didn't try very hard, partly because it's not my \nproblem and I have many other demands on my time, and partly because I \ndidn't know enough to phrase your question in other terms that might \nproduce an answer.\n\n\t  There may not be a function specifically designed to do exactly what \nyou want.  However, R is a very flexible and powerful programming \nenvironment that should make it quite easy for you to write your own \nfunction to do what you want.  It is rapidly becoming the platform of \nchoice for new statistical algorithm development internationally.  It \nhas a moderately steep learning curve.  However, after you have a basic \nfacility with the language -- and some skill in how to find things using \n\"RSiteSearch\", etc., you will have FREE access to some of the latest and \ngreatest code for almost any statistical application.\n\n\t  spencer graves\t\n\nNico wrote:\n\n> I'm very interested on Rmetrics for my university home-work: what I have to do is related to\n> time series analysis of interest rates.\n> With Rmetrics, can I compute the spot curve / forward rates starting from quoted instruments\n> (depos, futeres and swaps)? I don't find any references on this topics, so I hope in your\n> help...\n> \n> Thanks in advance,\n> NC\n> \n> _______________________________________________\n> R-sig-finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n\n-- \nSpencer Graves, PhD\nSenior Development Engineer\nPDF Solutions, Inc.\n333 West San Carlos Street Suite 700\nSan Jose, CA 95110, USA\n\nspencer.graves at pdf.com\nwww.pdf.com <http://www.pdf.com>\nTel:  408-938-4420\nFax: 408-280-7915",
+      "body_snippet": "I can't answer your question directly, but a general problem solving \nmethod is provided in the posting guide, \n\"http://www.R-project.org/posting-guide.html\".  This describes many \ntools to help you f",
+      "thread_id": "thread-02ea3c4ae00f",
+      "thread_depth": 1,
+      "month": "2005-07"
+    },
+    {
+      "id": "msg-8ded2212beb2",
+      "message_id": "<17129.39020.4091.781554@basebud.nulle.part>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2005-07-28T21:46:04-05:00",
+      "subject": "[R-sig-finance] Rmetrics Newbie",
+      "subject_clean": "Rmetrics Newbie",
+      "in_reply_to": "<42E991A9.9090008@pdf.com>",
+      "references": [
+        "<42tuep$6u1os7@ibs01.interbusiness.it>",
+        "<42E991A9.9090008@pdf.com>"
+      ],
+      "body_plain": "On 28 July 2005 at 19:17, Spencer Graves wrote:\n| \t  There may not be a function specifically designed to do exactly what \n| you want.  However, R is a very flexible and powerful programming \n\nI think that is the case. However, Diethelm's Rmetrics project lists a module\n'fBonds' as forthcoming so the situation may be improving in a little while.\n\n| environment that should make it quite easy for you to write your own \n| function to do what you want.  It is rapidly becoming the platform of \n| choice for new statistical algorithm development internationally.  It \n| has a moderately steep learning curve.  However, after you have a basic \n| facility with the language -- and some skill in how to find things using \n| \"RSiteSearch\", etc., you will have FREE access to some of the latest and \n| greatest code for almost any statistical application.\n| \n| \t  spencer graves\t\n| \n| Nico wrote:\n| \n| > I'm very interested on Rmetrics for my university home-work: what I have to do is related to\n| > time series analysis of interest rates.\n| > With Rmetrics, can I compute the spot curve / forward rates starting from quoted instruments\n| > (depos, futeres and swaps)? I don't find any references on this topics, so I hope in your\n| > help...\n\nfBonds should address. At the moment, I am not aware of any public code that\ndoes that.\n\nRegards, Dirk\n\n\n-- \nStatistics: The (futile) attempt to offer certainty about uncertainty.\n         -- Roger Koenker, 'Dictionary of Received Ideas of Statistics'",
+      "body_snippet": "On 28 July 2005 at 19:17, Spencer Graves wrote:\n| \t  There may not be a function specifically designed to do exactly what \n| you want.  However, R is a very flexible and powerful programming \n\nI think",
+      "thread_id": "thread-02ea3c4ae00f",
+      "thread_depth": 2,
+      "month": "2005-07"
+    },
+    {
+      "id": "msg-ff733ac03263",
+      "message_id": "<20050729041842.GN431@lubyanka.local>",
+      "from_name": "Ajay Narottam Shah",
+      "from_email_hash": "44daf6d5b15f2615777d1fb204165d8dd630c3fb70829ad9e4ccbfec8f81cc1c",
+      "date": "2005-07-29T09:48:42+05:30",
+      "subject": "[R-sig-finance] Rmetrics Newbie",
+      "subject_clean": "Rmetrics Newbie",
+      "in_reply_to": "<17129.39020.4091.781554@basebud.nulle.part>",
+      "references": [
+        "<42tuep$6u1os7@ibs01.interbusiness.it>",
+        "<42E991A9.9090008@pdf.com>",
+        "<17129.39020.4091.781554@basebud.nulle.part>"
+      ],
+      "body_plain": "> | > With Rmetrics, can I compute the spot curve / forward rates starting from quoted instruments\n> | > (depos, futeres and swaps)? I don't find any references on this topics, so I hope in your\n> | > help...\n> \n> fBonds should address. At the moment, I am not aware of any public code that\n> does that.\n\nI have code which will estimate a zero-coupon yield curve of a given\nfunctional form, by maximum-likelihood. It isn't the best of code, and\nhence I have refrained from release. But if someone would like, I am\nhappy to share the code, and perhaps with some improvements it can be\nready for release.\n\n-- \nAjay Shah                                                   Consultant\najayshah at mayin.org                      Department of Economic Affairs\nhttp://www.mayin.org/ajayshah           Ministry of Finance, New Delhi",
+      "body_snippet": "> | > With Rmetrics, can I compute the spot curve / forward rates starting from quoted instruments\n> | > (depos, futeres and swaps)? I don't find any references on this topics, so I hope in your\n> | >",
+      "thread_id": "thread-02ea3c4ae00f",
+      "thread_depth": 3,
+      "month": "2005-07"
+    },
+    {
+      "id": "msg-086fd2089abc",
+      "message_id": "<1122632347.8bdab8fcL.Isella@myrealbox.com>",
+      "from_name": "L.Isella",
+      "from_email_hash": "e83286d14c4fa9f4a44217fdbbf1fb21f4fc76e631493f09faaf675cb0054803",
+      "date": "2005-07-29T10:19:07Z",
+      "subject": "[R-sig-finance] R and Prompt",
+      "subject_clean": "R and Prompt",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear All,\nI am starting to use R. I need to implement a script to do some basic portfolio optimization which can be used by people with no programming skills at all.\nIn order to do so, the user should be asked simply to input the name of the file containing the portfolio data (e.g. foo.dat), then R will read it, plus a few y/n as an answer to some questions about the contrains on the portfolio.\nWhat is the syntax to do this in R? In the examples I found, the scripts always directly contained the names of the files to read.\nBest Regards\nLorenzo",
+      "body_snippet": "Dear All,\nI am starting to use R. I need to implement a script to do some basic portfolio optimization which can be used by people with no programming skills at all.\nIn order to do so, the user should",
+      "thread_id": "thread-086fd2089abc",
+      "thread_depth": 0,
+      "month": "2005-07"
+    },
+    {
+      "id": "msg-4de4f3b6e92b",
+      "message_id": "<971536df05072920541c2b5779@mail.gmail.com>",
+      "from_name": "Gabor Grothendieck",
+      "from_email_hash": "2252aad0894f89a900da56345b1c4e0414e3b441d448c40b473f7149e06e5a05",
+      "date": "2005-07-29T23:54:02-04:00",
+      "subject": "[R-sig-finance] R and Prompt",
+      "subject_clean": "R and Prompt",
+      "in_reply_to": "<1122632347.8bdab8fcL.Isella@myrealbox.com>",
+      "references": [
+        "<1122632347.8bdab8fcL.Isella@myrealbox.com>"
+      ],
+      "body_plain": "Look at \n\n?file.choose\n?select.list\n\nOn 7/29/05, L.Isella <L.Isella at myrealbox.com> wrote:\n> Dear All,\n> I am starting to use R. I need to implement a script to do some basic portfolio optimization which can be used by people with no programming skills at all.\n> In order to do so, the user should be asked simply to input the name of the file containing the portfolio data (e.g. foo.dat), then R will read it, plus a few y/n as an answer to some questions about the contrains on the portfolio.\n> What is the syntax to do this in R? In the examples I found, the scripts always directly contained the names of the files to read.\n> Best Regards\n> Lorenzo\n> \n> _______________________________________________\n> R-sig-finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>",
+      "body_snippet": "Look at \n\n?file.choose\n?select.list\n\nOn 7/29/05, L.Isella <L.Isella at myrealbox.com> wrote:\n> Dear All,\n> I am starting to use R. I need to implement a script to do some basic portfolio optimization ",
+      "thread_id": "thread-086fd2089abc",
+      "thread_depth": 1,
+      "month": "2005-07"
+    },
+    {
+      "id": "msg-6f835b60720c",
+      "message_id": "<1f52c150507311207460c4df8@mail.gmail.com>",
+      "from_name": "August Petrillo",
+      "from_email_hash": "a72bbc9118c40995a451bbb57edb9862909382839601ba9a48b956526e31b352",
+      "date": "2005-07-31T15:07:37-04:00",
+      "subject": "[R-sig-finance] Financial Beta calculation",
+      "subject_clean": "Financial Beta calculation",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello all,\n\nI am in the process of teaching myself R, for use in financial analysis.\n\nI was wondering if anyone can point me towards an example R script or\ntowards example code to calculate beta.  I have read some of the R\ndocumentation but I thought that being able to look at code that does\nsomething I already understand would make it a lot easier to pick up\nthe R language.\n\nThanks for your time.\n\nAugust",
+      "body_snippet": "Hello all,\n\nI am in the process of teaching myself R, for use in financial analysis.\n\nI was wondering if anyone can point me towards an example R script or\ntowards example code to calculate beta.  I h",
+      "thread_id": "thread-6f835b60720c",
+      "thread_depth": 0,
+      "month": "2005-07"
+    },
+    {
+      "id": "msg-eff37d7a2988",
+      "message_id": "<971536df05073114153c39086a@mail.gmail.com>",
+      "from_name": "Gabor Grothendieck",
+      "from_email_hash": "2252aad0894f89a900da56345b1c4e0414e3b441d448c40b473f7149e06e5a05",
+      "date": "2005-07-31T17:15:48-04:00",
+      "subject": "[R-sig-finance] Financial Beta calculation",
+      "subject_clean": "Financial Beta calculation",
+      "in_reply_to": "<1f52c150507311207460c4df8@mail.gmail.com>",
+      "references": [
+        "<1f52c150507311207460c4df8@mail.gmail.com>"
+      ],
+      "body_plain": "On 7/31/05, August Petrillo <august.petrillo at gmail.com> wrote:\n> I was wondering if anyone can point me towards an example R script or\n> towards example code to calculate beta.  I have read some of the R\n> documentation but I thought that being able to look at code that does\n> something I already understand would make it a lot easier to pick up\n> the R language.\n\n\nstr(EuStockMarkets)  # describes data set included with R\nsummary(EuStockMarkets)  # summary statistics\n\nlogret <- diff(log(EuStockMarkets))  # log returns\nlogret[1:10,] # first 10 rows\neuz.lm <- lm(DAX ~ FTSE, logret)  # regress logret of DAX wrt logret of FTSE\neuz.lm  # beta is shown among output\nsummary(euz.lm) # more output\ncoef(euz.lm)[2]  # beta as a single number\ncov(logret[,\"DAX\"], logret[,\"FTSE\"])/var(logret[,\"FTSE\"]) # another way\n\n# graphics\nplot(DAX ~ FTSE, logret)\nabline(euz.lm, col = \"red\")\nlegend(\"topleft\", c(\"data\", \"regression\"), fill = c(\"black\", \"red\"))",
+      "body_snippet": "On 7/31/05, August Petrillo <august.petrillo at gmail.com> wrote:\n> I was wondering if anyone can point me towards an example R script or\n> towards example code to calculate beta.  I have read some of",
+      "thread_id": "thread-6f835b60720c",
+      "thread_depth": 1,
+      "month": "2005-07"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-b6578e88312f",
+      "subject": "Solve.QP",
+      "message_count": 1,
+      "participants": [
+        "L.Isella"
+      ],
+      "started": "2005-07-10T18:00:40+00:00",
+      "last_reply": "2005-07-10T18:00:40+00:00",
+      "root_message_id": "msg-b6578e88312f"
+    },
+    {
+      "id": "thread-a60e3fd03be5",
+      "subject": "Solve.QP",
+      "message_count": 2,
+      "participants": [
+        "KAHRA HANNU",
+        "roger bos"
+      ],
+      "started": "2005-07-11T10:58:09+02:00",
+      "last_reply": "2005-07-13T09:10:10-04:00",
+      "root_message_id": "msg-a60e3fd03be5"
+    },
+    {
+      "id": "thread-6946a1413f9d",
+      "subject": "Markowitz with non-linear constraints",
+      "message_count": 1,
+      "participants": [
+        "Molins, Jordi"
+      ],
+      "started": "2005-07-11T14:21:55+02:00",
+      "last_reply": "2005-07-11T14:21:55+02:00",
+      "root_message_id": "msg-6946a1413f9d"
+    },
+    {
+      "id": "thread-44be0ab788c5",
+      "subject": "newbie",
+      "message_count": 2,
+      "participants": [
+        "Andrew West",
+        "Jan-Paul Roodbol"
+      ],
+      "started": "2005-07-14T15:44:50+01:00",
+      "last_reply": "2005-07-14T11:41:32-07:00",
+      "root_message_id": "msg-44be0ab788c5"
+    },
+    {
+      "id": "thread-02ea3c4ae00f",
+      "subject": "Rmetrics Newbie",
+      "message_count": 4,
+      "participants": [
+        "Ajay Narottam Shah",
+        "Dirk Eddelbuettel",
+        "Nico",
+        "Spencer Graves"
+      ],
+      "started": "2005-07-27T15:17:13+02:00",
+      "last_reply": "2005-07-29T09:48:42+05:30",
+      "root_message_id": "msg-02ea3c4ae00f"
+    },
+    {
+      "id": "thread-086fd2089abc",
+      "subject": "R and Prompt",
+      "message_count": 2,
+      "participants": [
+        "Gabor Grothendieck",
+        "L.Isella"
+      ],
+      "started": "2005-07-29T10:19:07+00:00",
+      "last_reply": "2005-07-29T23:54:02-04:00",
+      "root_message_id": "msg-086fd2089abc"
+    },
+    {
+      "id": "thread-6f835b60720c",
+      "subject": "Financial Beta calculation",
+      "message_count": 2,
+      "participants": [
+        "August Petrillo",
+        "Gabor Grothendieck"
+      ],
+      "started": "2005-07-31T15:07:37-04:00",
+      "last_reply": "2005-07-31T17:15:48-04:00",
+      "root_message_id": "msg-6f835b60720c"
+    }
+  ]
+}

@@ -1,0 +1,159 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2020-04",
+  "messages": [
+    {
+      "id": "msg-f3758304f86e",
+      "message_id": "<CACK0adF9V4bHKjA5yspAs7JtNXViRbB7-ZpcfwYQgVkP7oAgww@mail.gmail.com>",
+      "from_name": "travisgleith .",
+      "from_email_hash": "ac1e960fdd8e4d6d7dfba47fb9f22efa7dd250b996ce062ba5fc6cea9fb7d29a",
+      "date": "2020-04-01T21:39:05+04:00",
+      "subject": "[R-SIG-Finance] rugarch bug or my mistake?",
+      "subject_clean": "rugarch bug or my mistake?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "This is my first post to this mailing list so I apologize if I am out of\norder here.\n\nI tried to ask this question on an online forum but got shot down\n<https://stats.stackexchange.com/questions/457924/is-this-a-bug-in-rugarch-or-is-the-forecast-supposed-to-conceal-the-first-forec?noredirect=1#comment849108_457924>\n\nlibrary(magrittr)\nlibrary(rugarch)\ndata = c(0.00448915878069781,-0.00593011429139564,-0.00521660375977179,0.00915792713276595,0.0281576105073823,0.00312671172731763,0.00354620561645788,-0.0116968104863564,0.00885293595922043,0.0107479700328324,-0.00286887922892909,-0.0157860645324253,-0.00034496291769634,0.00834156289619709,-0.0118426954076351,-0.0245429072803506,0.00920654078852251,-0.0194853526917377,0.0101437726804425,0.0121099494070556,0.0035482064346366,-0.00229786350435077,-0.00733982114587459,-0.00459640558705143,-0.012915903683943,-0.019073989784277,0.0126645393062962,0.00721493361382838,0.00999175394461038,0.0133412046238938,0.00648737743848443,-0.00562686238554141,-0.00330281416051201,0.00799100742663728,0.000663186933227922,0.0148432054223313,0.00196669935473182,-0.000615357170258429,0.00113636710367157,-0.0194719951587255,0.0169620174351603,-0.0131164201273478,-0.0135647068283389,-0.00438317321680465,-0.0147236772598623,0.00448073182498596,-0.00388037967044466,0.0258503616763401,0.00971753055430585,-0.00790819347457519,-0.00755558584805335,-0.0171629980145799,0.0107626388061985,-0.0105764253253602,-0.00728398157712776,-0.00098385324839817,0.00401832316660708,-0.00123931628811594,0.0117077717740899,0.017917887402996,0.010911835646347,-0.00827245645002914,-0.00906077086137638,-0.0205094556293795,-0.00737675894931045,-0.00690210266337801,0.020337194824323,0.00700174492576033,0.000228651273513847,-0.0143788420968017,0.013170014653836,-0.0041840803265823,-0.00998018021662783,-0.00773937960715987,0.0150502886036981,-0.00281352468848173,-0.0106468266964306,0.00603505797098974,0.00448080249830074,0.00828145475545461,0.000440945562519113,-0.0100964576962305,-0.00160882489466677,-0.000137141351361142,0.00954377280816113,0.00208528678239533,0.0209006426760515,0.00156626715014618,-0.00691347744367798,-0.00860724032017463,0.0110129635734199,0.00446238531960588,-0.0112374698383101,-0.0276009587172153,0.000631167643944636,0.000455412294070562,-0.000428413112601861,-0.00468012712974619,-0.0132383598723957,0.0272178690714789,0.0346151554938807,0.00428132065168324,-0.0135193549155817,-0.0161119996079523)\n\nm_g_spec = ugarchspec(\n  mean.model = list(\n    armaOrder = c(1,2)\n    , include.mean = T\n    , archm = F\n    , arfima = F\n  )\n  , distribution.model = \"norm\"\n  , variance.model = list(model = \"sGARCH\", garchOrder = c(1,1)))\n\nm_g_fit = ugarchfit(m_g_spec, data, solver = \"hybrid\")\nf = ugarchforecast(m_g_fit)\nplot(f, which = 1)\n\nf at model$modeldata$data %>% tail(1) %>% {abline(h = .)}\nf at forecast$seriesFor[1] %>% {abline(h = ., col = \"red\")}\n\nThe above code generates a chart.\nThe black horizontal line shows the last value of the input data. The red\nline shows the first value of the forecast. Where did the last value in the\nblue series come from? The blue series is supposed to show actual data, but\nthis last value is not in the input data. It seems to be the first forecast\nvalue but it is not given in the forecast object. Any idea what is going\non?\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "This is my first post to this mailing list so I apologize if I am out of\norder here.\n\nI tried to ask this question on an online forum but got shot down\n<https://stats.stackexchange.com/questions/45792",
+      "thread_id": "thread-f3758304f86e",
+      "thread_depth": 0,
+      "month": "2020-04"
+    },
+    {
+      "id": "msg-e8f37b80ccc4",
+      "message_id": "<cfc45241-59ae-4fd4-b38d-9cea7b500f8c@4dscape.com>",
+      "from_name": "alexios galanos",
+      "from_email_hash": "a96d1f9bc31603cc8b7738f0d9a0b72c41ec7e0b943e1806c497adc2018497a3",
+      "date": "2020-04-01T11:21:01-07:00",
+      "subject": "[R-SIG-Finance] rugarch bug or my mistake?",
+      "subject_clean": "rugarch bug or my mistake?",
+      "in_reply_to": "<CACK0adF9V4bHKjA5yspAs7JtNXViRbB7-ZpcfwYQgVkP7oAgww@mail.gmail.com>",
+      "references": [
+        "<CACK0adF9V4bHKjA5yspAs7JtNXViRbB7-ZpcfwYQgVkP7oAgww@mail.gmail.com>"
+      ],
+      "body_plain": "There is no discrepancy here. It is just the way the plot is generated \nto connect the last value in the data with the first value in the forecast.\nInstead of plotting, you could just look at the data:\n\n > tail(f at model$modeldata$data,1)\n[1] -0.016112\n > tail(f at model$modeldata$data,1)\n[1] -0.016112\n > head(f at forecast$seriesFor)\n     1970-04-14 16:00:00\nT+1        -0.001220014\nT+2         0.002245227\nT+3         0.001834683\nT+4         0.001518531\nT+5         0.001275068\nT+6         0.001087582\n\n-Alexios\n\nOn 4/1/20 10:39 AM, travisgleith . wrote:\n> This is my first post to this mailing list so I apologize if I am out of\n> order here.\n> \n> I tried to ask this question on an online forum but got shot down\n> <https://stats.stackexchange.com/questions/457924/is-this-a-bug-in-rugarch-or-is-the-forecast-supposed-to-conceal-the-first-forec?noredirect=1#comment849108_457924>\n> \n> library(magrittr)\n> library(rugarch)\n> data = c(0.00448915878069781,-0.00593011429139564,-0.00521660375977179,0.00915792713276595,0.0281576105073823,0.00312671172731763,0.00354620561645788,-0.0116968104863564,0.00885293595922043,0.0107479700328324,-0.00286887922892909,-0.0157860645324253,-0.00034496291769634,0.00834156289619709,-0.0118426954076351,-0.0245429072803506,0.00920654078852251,-0.0194853526917377,0.0101437726804425,0.0121099494070556,0.0035482064346366,-0.00229786350435077,-0.00733982114587459,-0.00459640558705143,-0.012915903683943,-0.019073989784277,0.0126645393062962,0.00721493361382838,0.00999175394461038,0.0133412046238938,0.00648737743848443,-0.00562686238554141,-0.00330281416051201,0.00799100742663728,0.000663186933227922,0.0148432054223313,0.00196669935473182,-0.000615357170258429,0.00113636710367157,-0.0194719951587255,0.0169620174351603,-0.0131164201273478,-0.0135647068283389,-0.00438317321680465,-0.0147236772598623,0.00448073182498596,-0.00388037967044466,0.0258503616763401,0.00971753055430585,-0.0079\n>   0819347457519,-0.00755558584805335,-0.0171629980145799,0.0107626388061985,-0.0105764253253602,-0.00728398157712776,-0.00098385324839817,0.00401832316660708,-0.00123931628811594,0.0117077717740899,0.017917887402996,0.010911835646347,-0.00827245645002914,-0.00906077086137638,-0.0205094556293795,-0.00737675894931045,-0.00690210266337801,0.020337194824323,0.00700174492576033,0.000228651273513847,-0.0143788420968017,0.013170014653836,-0.0041840803265823,-0.00998018021662783,-0.00773937960715987,0.0150502886036981,-0.00281352468848173,-0.0106468266964306,0.00603505797098974,0.00448080249830074,0.00828145475545461,0.000440945562519113,-0.0100964576962305,-0.00160882489466677,-0.000137141351361142,0.00954377280816113,0.00208528678239533,0.0209006426760515,0.00156626715014618,-0.00691347744367798,-0.00860724032017463,0.0110129635734199,0.00446238531960588,-0.0112374698383101,-0.0276009587172153,0.000631167643944636,0.000455412294070562,-0.000428413112601861,-0.00468012712974619,-0.0132383598\n>   723957,0.0272178690714789,0.0346151554938807,0.00428132065168324,-0.0135193549155817,-0.0161119996079523)\n> \n> m_g_spec = ugarchspec(\n>    mean.model = list(\n>      armaOrder = c(1,2)\n>      , include.mean = T\n>      , archm = F\n>      , arfima = F\n>    )\n>    , distribution.model = \"norm\"\n>    , variance.model = list(model = \"sGARCH\", garchOrder = c(1,1)))\n> \n> m_g_fit = ugarchfit(m_g_spec, data, solver = \"hybrid\")\n> f = ugarchforecast(m_g_fit)\n> plot(f, which = 1)\n> \n> f at model$modeldata$data %>% tail(1) %>% {abline(h = .)}\n> f at forecast$seriesFor[1] %>% {abline(h = ., col = \"red\")}\n> \n> The above code generates a chart.\n> The black horizontal line shows the last value of the input data. The red\n> line shows the first value of the forecast. Where did the last value in the\n> blue series come from? The blue series is supposed to show actual data, but\n> this last value is not in the input data. It seems to be the first forecast\n> value but it is not given in the forecast object. Any idea what is going\n> on?\n> \n> \t[[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>",
+      "body_snippet": "There is no discrepancy here. It is just the way the plot is generated \nto connect the last value in the data with the first value in the forecast.\nInstead of plotting, you could just look at the data",
+      "thread_id": "thread-f3758304f86e",
+      "thread_depth": 1,
+      "month": "2020-04"
+    },
+    {
+      "id": "msg-ccb69d901cb9",
+      "message_id": "<1812816871.152175.1585926918167@mail.yahoo.com>",
+      "from_name": "shawn tan",
+      "from_email_hash": "8788a4971e972a0b6fbaa880ac75547bcd29c579605abd1d6de13699a6551c33",
+      "date": "2020-04-03T15:15:18Z",
+      "subject": "[R-SIG-Finance] Selection of appropriate copula family for multivariate Monte Carlo simulation of asset returns",
+      "subject_clean": "Selection of appropriate copula family for multivariate Monte Carlo simulation of asset returns",
+      "in_reply_to": null,
+      "references": [
+        "<1812816871.152175.1585926918167.ref@mail.yahoo.com>"
+      ],
+      "body_plain": "Hi R Sig Finance mailing list,\nI am currently trying to perform a multivariate Monte Carlo simulation of asset class returns. I found that using copulas can overcome the non-normality of asset class returns as well as better simulate dependence between returns.\nIn terms of selecting and applying copulas via R, I found the following R packages VineCopula and copula. The BiCopSelect function in VineCopula package is able to recommend the appropriate copula family based on bivariate data. However, I cannot seem to find any function in the packages that is able to recommend the appropriate copula family based on multivariate data (e.g. modelling 3 or more asset classes).?\nIs anyone able to suggest how I can identify the appropriate copula family using an R function? Would you be able to show me a sample code, based on say historical returns of 3 equity securities.\nThanks in advance\nRegards\nShawn\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi R Sig Finance mailing list,\nI am currently trying to perform a multivariate Monte Carlo simulation of asset class returns. I found that using copulas can overcome the non-normality of asset class r",
+      "thread_id": "thread-ccb69d901cb9",
+      "thread_depth": 0,
+      "month": "2020-04"
+    },
+    {
+      "id": "msg-54c52340889c",
+      "message_id": "<ebc7c5eb-9a86-ac1a-9a7d-74496782461e@web.de>",
+      "from_name": "Peter Ruckdeschel",
+      "from_email_hash": "5e442341d3d22c7ef4e2947082ea7ce8a4fb66eadbdb9f3e929480ce81250959",
+      "date": "2020-04-09T15:06:37+02:00",
+      "subject": "[R-SIG-Finance] Singular matrix in DCC fit in package rmgarch | how to bypass base::solve() elegantly",
+      "subject_clean": "Singular matrix in DCC fit in package rmgarch | how to bypass base::solve() elegantly",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear Alexis,? dear colleagues,\n\na student of mine, Patrick Harren (CC), is currently writing his master thesis with me as advisor.\n\nHe is to write on portfolio optimization for many assets by means of dynamic elliptical copulas\nusing a DCC-GARCH model as implemented in R package rmgarch.\n\nIn his code he is stumbling on errors of form\n\n??? \"error: matrix multiplication: problem with matrix inverse; suggest to use solve() instead\"\n\nI am not surprised this happens, as he has a p>n situation, i.e. more assets than observations,\nso I would guess this is due to singular matrices which at some point of the code is to be inverted.\n\nIs there any [easy] way to replace the general solver base::solve() by something like MASS::ginv()\nfor this purpose, or, if appropriate, would you suggest another regularization, say by some sort of\nshrinkage?\n\nAny suggestions welcome, thank you already,\n\nbest regards, Peter Ruckdeschel\n\n--\n%******************************************************************\n% Prof. Dr. Peter Ruckdeschel\n% Institut fuer Mathematik, Fakultaet V - Mathematik und Naturwissenschaften\n% Carl von Ossietzky Universitaet Oldenburg,\n% Postfach 25 03,  26111 Oldenburg\n% Office: Wechloy W1 02-227 Tel: +49 (0)441 798-3240  Fax: +49 (0)441 798-193240\n% peter.ruckdeschel at uni-oldenburg.de\n% http://www.uni-oldenburg.de/peter-ruckdeschel\n%******************************************************************\n\n\n--\nDiese E-Mail wurde von Avast Antivirus-Software auf Viren gepr?ft.\nhttps://www.avast.com/antivirus",
+      "body_snippet": "Dear Alexis,? dear colleagues,\n\na student of mine, Patrick Harren (CC), is currently writing his master thesis with me as advisor.\n\nHe is to write on portfolio optimization for many assets by means of",
+      "thread_id": "thread-54c52340889c",
+      "thread_depth": 0,
+      "month": "2020-04"
+    },
+    {
+      "id": "msg-5fdcd3763edb",
+      "message_id": "<5dcdfdec-adaa-3584-b073-d595139f1435@4dscape.com>",
+      "from_name": "alexios galanos",
+      "from_email_hash": "a96d1f9bc31603cc8b7738f0d9a0b72c41ec7e0b943e1806c497adc2018497a3",
+      "date": "2020-04-11T19:43:08-07:00",
+      "subject": "[R-SIG-Finance]  Singular matrix in DCC fit in package rmgarch | how to bypass base::solve() elegantly",
+      "subject_clean": "Singular matrix in DCC fit in package rmgarch | how to bypass base::solve() elegantly",
+      "in_reply_to": "<ebc7c5eb-9a86-ac1a-9a7d-74496782461e@web.de>",
+      "references": [
+        "<ebc7c5eb-9a86-ac1a-9a7d-74496782461e@web.de>"
+      ],
+      "body_plain": "Hi Peter,\n\nI'm not sure whether switching to generalized inverse will be a sensible \nor feasible approach in a DCC situation when p>n. The underlying code \nmakes use of RcppArmadillo and you could try to switch out inv with pinv...\n\nHowever, perhaps a more reasonable approach would be to:\n\n1. Use a factor model (e.g. GO-GARCH)\n2. Regularization/Shrinkage, but these have not been implemented in \nrmgarch, and I haven't looked at the literature recently to see what \napproaches and models have been proposed\n\n\nBest,\n\nAlexios\n\nOn 4/9/20 6:06 AM, Peter Ruckdeschel wrote:\n> Dear Alexis,? dear colleagues,\n> \n> a student of mine, Patrick Harren (CC), is currently writing his master thesis with me as advisor.\n> \n> He is to write on portfolio optimization for many assets by means of dynamic elliptical copulas\n> using a DCC-GARCH model as implemented in R package rmgarch.\n> \n> In his code he is stumbling on errors of form\n> \n>  ??? \"error: matrix multiplication: problem with matrix inverse; suggest to use solve() instead\"\n> \n> I am not surprised this happens, as he has a p>n situation, i.e. more assets than observations,\n> so I would guess this is due to singular matrices which at some point of the code is to be inverted.\n> \n> Is there any [easy] way to replace the general solver base::solve() by something like MASS::ginv()\n> for this purpose, or, if appropriate, would you suggest another regularization, say by some sort of\n> shrinkage?\n> \n> Any suggestions welcome, thank you already,\n> \n> best regards, Peter Ruckdeschel\n> \n> --\n> %******************************************************************\n> % Prof. Dr. Peter Ruckdeschel\n> % Institut fuer Mathematik, Fakultaet V - Mathematik und Naturwissenschaften\n> % Carl von Ossietzky Universitaet Oldenburg,\n> % Postfach 25 03,  26111 Oldenburg\n> % Office: Wechloy W1 02-227 Tel: +49 (0)441 798-3240  Fax: +49 (0)441 798-193240\n> % peter.ruckdeschel at uni-oldenburg.de\n> % http://www.uni-oldenburg.de/peter-ruckdeschel\n> %******************************************************************\n> \n> \n> --\n> Diese E-Mail wurde von Avast Antivirus-Software auf Viren gepr?ft.\n> https://www.avast.com/antivirus\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>",
+      "body_snippet": "Hi Peter,\n\nI'm not sure whether switching to generalized inverse will be a sensible \nor feasible approach in a DCC situation when p>n. The underlying code \nmakes use of RcppArmadillo and you could try",
+      "thread_id": "thread-54c52340889c",
+      "thread_depth": 1,
+      "month": "2020-04"
+    },
+    {
+      "id": "msg-1605c6739211",
+      "message_id": "<CAECzKZb0UjyTR6E4qRRrzDKRWYTEmeis1fu9jJM7UfHC_UWpUA@mail.gmail.com>",
+      "from_name": "Sania Wadud",
+      "from_email_hash": "cd845db1f686a0f759a685b3cb5e2761f791eb2417bf832e348cf28fd7ea1f99",
+      "date": "2020-04-22T20:20:22+01:00",
+      "subject": "[R-SIG-Finance] Fwd: VARMA DCC GARCH with external dummy variable in mean and variance model",
+      "subject_clean": "VARMA DCC GARCH with external dummy variable in mean and variance model",
+      "in_reply_to": "<801607829.402263.1585500063561.JavaMail.administrator@n4.nabble.com>",
+      "references": [
+        "<801607829.402263.1585500063561.JavaMail.administrator@n4.nabble.com>"
+      ],
+      "body_plain": "Hi,\n\nI would like to know whether there is any way to extract off diagonal\nelements for ARCH and GARCH parameter to allow for volatility spillover\n(DCC-GARCH) via rmgarch package. As far as I know there was an option to\nselect \"extended\" model in ccgarch package to allow spillovers. As I am\nusing VARX-DCC GARCH model, I can only get spilover effects for conditional\nmean and not for volatility equations. However, I require results for\nvolatility transmission of one series to another series. Is there any\nparticular model that I need to select to get such results for variance\nequation?\n\nAny assistance would be greatly appreciated.\n\nRegards,\nSania\n\n\n\n\n\n_____________________________________\nSent from https://r.789695.n4.nabble.com\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI would like to know whether there is any way to extract off diagonal\nelements for ARCH and GARCH parameter to allow for volatility spillover\n(DCC-GARCH) via rmgarch package. As far as I know the",
+      "thread_id": "thread-1605c6739211",
+      "thread_depth": 0,
+      "month": "2020-04"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-f3758304f86e",
+      "subject": "rugarch bug or my mistake?",
+      "message_count": 2,
+      "participants": [
+        "alexios galanos",
+        "travisgleith ."
+      ],
+      "started": "2020-04-01T21:39:05+04:00",
+      "last_reply": "2020-04-01T11:21:01-07:00",
+      "root_message_id": "msg-f3758304f86e"
+    },
+    {
+      "id": "thread-ccb69d901cb9",
+      "subject": "Selection of appropriate copula family for multivariate Monte Carlo simulation of asset returns",
+      "message_count": 1,
+      "participants": [
+        "shawn tan"
+      ],
+      "started": "2020-04-03T15:15:18+00:00",
+      "last_reply": "2020-04-03T15:15:18+00:00",
+      "root_message_id": "msg-ccb69d901cb9"
+    },
+    {
+      "id": "thread-54c52340889c",
+      "subject": "Singular matrix in DCC fit in package rmgarch | how to bypass base::solve() elegantly",
+      "message_count": 2,
+      "participants": [
+        "Peter Ruckdeschel",
+        "alexios galanos"
+      ],
+      "started": "2020-04-09T15:06:37+02:00",
+      "last_reply": "2020-04-11T19:43:08-07:00",
+      "root_message_id": "msg-54c52340889c"
+    },
+    {
+      "id": "thread-1605c6739211",
+      "subject": "VARMA DCC GARCH with external dummy variable in mean and variance model",
+      "message_count": 1,
+      "participants": [
+        "Sania Wadud"
+      ],
+      "started": "2020-04-22T20:20:22+01:00",
+      "last_reply": "2020-04-22T20:20:22+01:00",
+      "root_message_id": "msg-1605c6739211"
+    }
+  ]
+}
