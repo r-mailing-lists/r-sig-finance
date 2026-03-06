@@ -1,0 +1,356 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2005-02",
+  "messages": [
+    {
+      "id": "msg-4bebe478c102",
+      "message_id": "<5e64e5be050208160628f2fe23@mail.gmail.com>",
+      "from_name": "Wojciech Ślusarski",
+      "from_email_hash": "6530e5ba6ab55c01471a1dcc42f09960509d9cb7fe061538ab2323d62e11ff50",
+      "date": "2005-02-09T01:06:40Z",
+      "subject": "[R-sig-finance] APARCH residuals and fitted values",
+      "subject_clean": "APARCH residuals and fitted values",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I know that, there has already been a question about that, but I am\ndeep in trouble at the moment, because I need to do volatility\nforecasts of one stock index and as far as I am concerned, those taken\nfrom GARCH models are not the best when compared with the realized\nvolatility. Is there maybe any way to get those values through\naparchSim() or any other?  If anyone faced this problem (I am sure\nthat, there is lot of people) and found a solution, I would be very\nglad for any advice.\n\nBest regards\nWojciech Slusarski",
+      "body_snippet": "I know that, there has already been a question about that, but I am\ndeep in trouble at the moment, because I need to do volatility\nforecasts of one stock index and as far as I am concerned, those take",
+      "thread_id": "thread-4bebe478c102",
+      "thread_depth": 0,
+      "month": "2005-02"
+    },
+    {
+      "id": "msg-d838c581867e",
+      "message_id": "<200502111637.j1BGbmnc061637@scmi.com>",
+      "from_name": "Brett F. Sumsion",
+      "from_email_hash": "d02e5161f94bbf5939d4bc6191135b6ead43fd32f46c330bf7627e87ea5b0fb1",
+      "date": "2005-02-12T02:20:06Z",
+      "subject": "[R-sig-finance] Multivariate GARCH",
+      "subject_clean": "Multivariate GARCH",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dr. Burns,\n \nI have read your procedure posted on the internet for using univariate garch\nestimates to form a multivariate result.  I am a new to this stuff and just\nlearning. I follow the procedure very well until I get to the end of step 5,\nwhere you need to \"rotate\" the diagonal variance matrix back into asset\nco-ordinates.  I don't understand what this means? Can you clarify.\n \nStep six appears to describing the same procedure outlined in step 5, is\nthat the case?  I appreciate any insight you can provide.  I have attached\nthe post.\n \nThanks,\n \nBrett\n \n \n \nBelow I will outline a method of getting multivariate GARCH estimates\nby using only univariate GARCH estimates.  I actually did it (years ago)\nnot for lack of a multivariate GARCH estimator, but to get estimates for\nlarge problems (that is, a large number of assets) in a reasonable amount\nof time.  For being ad hoc, it performs remarkably well.\n \nHere is the recipe.  Assume there are n observations (dates) for each of\nthe p assets.\n \nStep 1)  Perform a univariate GARCH estimation on each asset.\n \nStep 2)  Form the standardized residuals of all of the assets.  This is \nan n by p\nmatrix where each value theoretically has mean 0 and variance 1.\n \nStep 3)  Perform a principal component rotation on the standardized \nresiduals.\n \nStep 4)  Perform a univariate GARCH estimate on each of the principal\ncomponents.\n \nStep 5)  At each point in time we have a variance for each of the principal\ncomponents.  If we cross our fingers real hard, we can assume that there is\nno correlation between the principal components at each of the times.  (On\naverage throughout the sample period, this is true, but it is very \ndoubtful that\nit is always true.)\n \nWith our assumption the variance matrix for the principal components at a\npoint in time is diagonal.  Rotate this diagonal matrix back into asset\nco-ordinates.\n \nStep 6)  The end result of step 5 is conceptually the correlation matrix \nof the\nassets at the point in time.  In actuality the diagonals will not all be \n1.  Perform\nthe transformation of a variance matrix into a correlation matrix on the \nresult\nof step 5.  (This may or may not undo some of the damage from the assumption\nof constant zero correlation of the principal components.)\n \nStep 7)  Scale the correlation matrix created in step 6 by the variances \nestimated\nin step 1 to arrive at the estimate of the variance matrix at a point in \ntime.\n \n \nPredictions are straightforward -- just predict the principal component \nGARCH\nmodels, do the transformation into assets, then predict the asset GARCH \nmodels\nand put them together.\n \nPatrick Burns\n \nBurns Statistics\npatrick at burns-stat.com\n<https://stat.ethz.ch/mailman/listinfo/r-sig-finance> \n+44 (0)20 8525 0696\nhttp://www.burns-stat.com\n(home of S Poetry and \"A Guide for the Unwilling S User\")\n\n \n\n \n\nBrett F. Sumsion, CFA\n\nStrategis Financial Group, Inc.\n\n(800) 279-3377\n\nbrett@strategisfinancial.com\n\n \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dr. Burns,\n \nI have read your procedure posted on the internet for using univariate garch\nestimates to form a multivariate result.  I am a new to this stuff and just\nlearning. I follow the procedure v",
+      "thread_id": "thread-d838c581867e",
+      "thread_depth": 0,
+      "month": "2005-02"
+    },
+    {
+      "id": "msg-06c184869102",
+      "message_id": "<3f87cc6d050216070653a7e6ec@mail.gmail.com>",
+      "from_name": "Omar Lakkis",
+      "from_email_hash": "b6c284f52b5f202396999fb0184fb7ed8e91deb163adafa72bd8697caadc30a0",
+      "date": "2005-02-16T16:06:22Z",
+      "subject": "[R-sig-finance] nearby",
+      "subject_clean": "nearby",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "In Splus there is a function called \"nearby\" (description below). Is\nthere an equivalent utility in R?\n\nFutures Nearby Creation Function \n\nDESCRIPTION: \nCreate a nearby series from a multivariate time series representing\nmultiple futures  contracts.\n\nUSAGE: \nnearby(x, rule, contracts)  \n\nREQUIRED ARGUMENTS: \n<b>x </b>\nmultivariate time series containing futures prices for the contracts. \n<b>rule</b> \nrule giving the roll date (last date to use each contract) from one\nfutures contract  to the next, relative to the beginning of the\ncontract month. This can be given as a  time span or relative time\nobject, or a character string which can be coerced into a  relative\ntime object.\n<b>contracts</b> \nthe contract months for the columns of the time series, given as\ncharacter strings  of the form \"F95\", or \"F1995\", where the first\nletter is the month code and the  remainder is the year, and where\ntwo?digit years are converted to four?digit years  using\noptions(\"time.century\"). These should be in ascending order.\n\nVALUE: \na single?column time series containing the specified nearby series. \n\nDETAILS: \nThe series is generated with the following steps. First, the contract\nmonths are  converted to dates of the first of the month, e.g. Z98\nbecomes December 1, 1998. Then  the roll rule is added to each date,\nto calculate the last day each column of the data set  should be used.\nThe time series positions and the end dates are then passed to the cut\n function to determine which column is needed for each output date,\nand these data  values are subscripted from x and returned. NA will be\nthe result for positions that have  no valid column data.\n\nSEE ALSO: \ntimeRelative, timeSeries \n\nEXAMPLES: \n# make a 5?column time series  \nx <? timeSeries(data=matrix(1:750, ncol=5),      \n         pos=timeDate(\"1/1/1995\", format=\"%a %02m/%02d/%Y\")+1:150)  \n# make a nearby series, assuming this are Feb?June 1995 contracts (ignori \n# the fact that there should be NAs in the matrix), rolling on the 3rd  \n# Friday of the month before the contract month  \nnearby(x, timeRelative(\"?1mth ?1day +3fri\"), \n         paste(c(\"G\", \"H\", \"J\", \"K\", \"M\"), 1995, sep=\"\"))",
+      "body_snippet": "In Splus there is a function called \"nearby\" (description below). Is\nthere an equivalent utility in R?\n\nFutures Nearby Creation Function \n\nDESCRIPTION: \nCreate a nearby series from a multivariate time",
+      "thread_id": "thread-06c184869102",
+      "thread_depth": 0,
+      "month": "2005-02"
+    },
+    {
+      "id": "msg-38787b37b93a",
+      "message_id": "<12AE52872B5C5348BE5CF47C707FF53A50245B@rhosvr02.rhotrading.com>",
+      "from_name": "davidr@rhotrading.com",
+      "from_email_hash": "4998ec2d52ffe0c535ce902387987bbb6e981a3c144c9feae07c8ce7b5869756",
+      "date": "2005-02-16T19:29:26Z",
+      "subject": "[R-sig-finance] nearby",
+      "subject_clean": "nearby",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Even if this were available, I wouldn't use it.\nThis method will give you jumps when the contracts roll\n(for almost all products.)\nI would roll my own, blending from the old to the new over some period to \nsmooth out the jumps. This results in more realistic volatilities and \ncorrelations.\nAt least, that's what I've been doing for 20 years.\n\nDavid Reiner\n\n-----Original Message-----\nFrom: Omar Lakkis [mailto:uofiowa@gmail.com] \nSent: Wednesday, February 16, 2005 9:06 AM\nTo: r-sig-finance@stat.math.ethz.ch\nSubject: [R-sig-finance] nearby\n\nIn Splus there is a function called \"nearby\" (description below). Is\nthere an equivalent utility in R?\n\nFutures Nearby Creation Function \n\nDESCRIPTION: \nCreate a nearby series from a multivariate time series representing\nmultiple futures  contracts.\n\nUSAGE: \nnearby(x, rule, contracts)  \n\nREQUIRED ARGUMENTS: \n<b>x </b>\nmultivariate time series containing futures prices for the contracts. \n<b>rule</b> \nrule giving the roll date (last date to use each contract) from one\nfutures contract  to the next, relative to the beginning of the\ncontract month. This can be given as a  time span or relative time\nobject, or a character string which can be coerced into a  relative\ntime object.\n<b>contracts</b> \nthe contract months for the columns of the time series, given as\ncharacter strings  of the form \"F95\", or \"F1995\", where the first\nletter is the month code and the  remainder is the year, and where\ntwo?digit years are converted to four?digit years  using\noptions(\"time.century\"). These should be in ascending order.\n\nVALUE: \na single?column time series containing the specified nearby series. \n\nDETAILS: \nThe series is generated with the following steps. First, the contract\nmonths are  converted to dates of the first of the month, e.g. Z98\nbecomes December 1, 1998. Then  the roll rule is added to each date,\nto calculate the last day each column of the data set  should be used.\nThe time series positions and the end dates are then passed to the cut\n function to determine which column is needed for each output date,\nand these data  values are subscripted from x and returned. NA will be\nthe result for positions that have  no valid column data.\n\nSEE ALSO: \ntimeRelative, timeSeries \n\nEXAMPLES: \n# make a 5?column time series  \nx <? timeSeries(data=matrix(1:750, ncol=5),      \n         pos=timeDate(\"1/1/1995\", format=\"%a %02m/%02d/%Y\")+1:150)  \n# make a nearby series, assuming this are Feb?June 1995 contracts (ignori \n# the fact that there should be NAs in the matrix), rolling on the 3rd  \n# Friday of the month before the contract month  \nnearby(x, timeRelative(\"?1mth ?1day +3fri\"), \n         paste(c(\"G\", \"H\", \"J\", \"K\", \"M\"), 1995, sep=\"\"))\n\n_______________________________________________\nR-sig-finance@stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance",
+      "body_snippet": "Even if this were available, I wouldn't use it.\nThis method will give you jumps when the contracts roll\n(for almost all products.)\nI would roll my own, blending from the old to the new over some perio",
+      "thread_id": "thread-38787b37b93a",
+      "thread_depth": 0,
+      "month": "2005-02"
+    },
+    {
+      "id": "msg-c4a35d9e5437",
+      "message_id": "<5e64e5be05021711144c8ffecd@mail.gmail.com>",
+      "from_name": "Wojciech Ślusarski",
+      "from_email_hash": "6530e5ba6ab55c01471a1dcc42f09960509d9cb7fe061538ab2323d62e11ff50",
+      "date": "2005-02-17T20:14:40Z",
+      "subject": "[R-sig-finance] Computing implied volatility using fOptions",
+      "subject_clean": "Computing implied volatility using fOptions",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\nI have calculated the implied volatility, for the whole history of\noption quotes on WIG20 stock index on Warsaw Stock Exchange. The thing\nthat is wondering me is that for some particular days I get volatility\nnearly 0 (e.g. 3.12236893483001e-11). Is it happening because the\noption was badly priced those thays (in comparison to Black-Scholes\nprice) or is it a problem of the algorithm. I am usin the\nGBSVolatility() function with settings:\n\ntol <- 10^(-10)\nmaxiter <- 100000\n\nAre those values good for that, or should I use some other values.\n\nBest regards,\nWojtek",
+      "body_snippet": "Hello,\nI have calculated the implied volatility, for the whole history of\noption quotes on WIG20 stock index on Warsaw Stock Exchange. The thing\nthat is wondering me is that for some particular days I",
+      "thread_id": "thread-c4a35d9e5437",
+      "thread_depth": 0,
+      "month": "2005-02"
+    },
+    {
+      "id": "msg-f3e3306b5666",
+      "message_id": "<6.2.1.2.0.20050218184003.04cc9e88@mail.ametrano.net>",
+      "from_name": "Ferdinando Ametrano",
+      "from_email_hash": "2ab07061c4116563e520b5f5e48d2b6b487080ceb41757faae7f2eaa3b32715c",
+      "date": "2005-02-18T18:41:37Z",
+      "subject": "[R-sig-finance] what is the R equivalent of S+ Finmetrics",
+      "subject_clean": "what is the R equivalent of S+ Finmetrics",
+      "in_reply_to": "<5e64e5be05021711144c8ffecd@mail.gmail.com>",
+      "references": [
+        "<5e64e5be05021711144c8ffecd@mail.gmail.com>"
+      ],
+      "body_plain": "Hi all\n\nsorry for being so naif, but what is the R equivalent of S+ Finmetrics?\nGoogling around I've found Rmetrics. Is Rmetrics the best candidate?\n\nthank you in advance for your attention\n\nciao -- Nando",
+      "body_snippet": "Hi all\n\nsorry for being so naif, but what is the R equivalent of S+ Finmetrics?\nGoogling around I've found Rmetrics. Is Rmetrics the best candidate?\n\nthank you in advance for your attention\n\nciao -- N",
+      "thread_id": "thread-c4a35d9e5437",
+      "thread_depth": 1,
+      "month": "2005-02"
+    },
+    {
+      "id": "msg-189af77f5a05",
+      "message_id": "<12AE52872B5C5348BE5CF47C707FF53A5024A3@rhosvr02.rhotrading.com>",
+      "from_name": "davidr@rhotrading.com",
+      "from_email_hash": "4998ec2d52ffe0c535ce902387987bbb6e981a3c144c9feae07c8ce7b5869756",
+      "date": "2005-02-18T20:29:41Z",
+      "subject": "[R-sig-finance] Computing implied volatility using fOptions",
+      "subject_clean": "Computing implied volatility using fOptions",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Seems excessive to me. Usually implied vol calcs converge in relatively few iterations with a simple NR solver. Given the accuracy and precision of the option prices, I wouldn't ask for such precision in the implieds.\nChances are you have some bad prices, which is not unusual even in very active markets. You should probably concentrate on the out-of-the-money\noptions, since they usually give more relevant information.\n\n(BTW, I looked on Bloomberg for these options, and it says there are no options in WIG20, either on the cash index or on the futures. Are these OTC's? If so, then, somewhat different cautions may apply.)\n\nDavid Reiner\n\n-----Original Message-----\nFrom: Wojciech ?lusarski [mailto:wojciech.slusarski@gmail.com] \nSent: Thursday, February 17, 2005 1:15 PM\nTo: r-sig-finance@stat.math.ethz.ch\nSubject: [R-sig-finance] Computing implied volatility using fOptions\n\nHello,\nI have calculated the implied volatility, for the whole history of\noption quotes on WIG20 stock index on Warsaw Stock Exchange. The thing\nthat is wondering me is that for some particular days I get volatility\nnearly 0 (e.g. 3.12236893483001e-11). Is it happening because the\noption was badly priced those thays (in comparison to Black-Scholes\nprice) or is it a problem of the algorithm. I am usin the\nGBSVolatility() function with settings:\n\ntol <- 10^(-10)\nmaxiter <- 100000\n\nAre those values good for that, or should I use some other values.\n\nBest regards,\nWojtek\n\n_______________________________________________\nR-sig-finance@stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance",
+      "body_snippet": "Seems excessive to me. Usually implied vol calcs converge in relatively few iterations with a simple NR solver. Given the accuracy and precision of the option prices, I wouldn't ask for such precision",
+      "thread_id": "thread-189af77f5a05",
+      "thread_depth": 0,
+      "month": "2005-02"
+    },
+    {
+      "id": "msg-7c3d28a9c6df",
+      "message_id": "<12AE52872B5C5348BE5CF47C707FF53A5024A4@rhosvr02.rhotrading.com>",
+      "from_name": "davidr@rhotrading.com",
+      "from_email_hash": "4998ec2d52ffe0c535ce902387987bbb6e981a3c144c9feae07c8ce7b5869756",
+      "date": "2005-02-18T20:36:50Z",
+      "subject": "[R-sig-finance] Computing implied volatility using fOptions",
+      "subject_clean": "Computing implied volatility using fOptions",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I see by looking at the exchange's website that there are options on the index. - dlr\n\n-----Original Message-----\nFrom: David Reiner <davidr@rhotrading.com> \nSent: Friday, February 18, 2005 1:30 PM\nTo: Wojciech ?lusarski; r-sig-finance@stat.math.ethz.ch\nSubject: RE: [R-sig-finance] Computing implied volatility using fOptions\n\n (BTW, I looked on Bloomberg for these options, and it says there are no options in WIG20, either on the cash index or on the futures. Are these OTC's? If so, then, somewhat different cautions may apply.)\n\nDavid Reiner",
+      "body_snippet": "I see by looking at the exchange's website that there are options on the index. - dlr\n\n-----Original Message-----\nFrom: David Reiner <davidr@rhotrading.com> \nSent: Friday, February 18, 2005 1:30 PM\nTo",
+      "thread_id": "thread-7c3d28a9c6df",
+      "thread_depth": 0,
+      "month": "2005-02"
+    },
+    {
+      "id": "msg-6554d972b43e",
+      "message_id": "<5e64e5be05021811586c126cb5@mail.gmail.com>",
+      "from_name": "Wojciech Slusarski",
+      "from_email_hash": "6530e5ba6ab55c01471a1dcc42f09960509d9cb7fe061538ab2323d62e11ff50",
+      "date": "2005-02-18T20:59:05Z",
+      "subject": "[R-sig-finance] Computing implied volatility using fOptions",
+      "subject_clean": "Computing implied volatility using fOptions",
+      "in_reply_to": "<12AE52872B5C5348BE5CF47C707FF53A5024A3@rhosvr02.rhotrading.com>",
+      "references": [
+        "<12AE52872B5C5348BE5CF47C707FF53A5024A3@rhosvr02.rhotrading.com>"
+      ],
+      "body_plain": "Those options are traded on Warsaw Stock Exchange since 22.09.2003. I\nhave calculated all historical implied volatilities and try to compare\nthem with volatility forecasts. This is a very flat market, sometimes\nthere are only few transactions, that's why the prices sometimes are\nreally bad and probably that's the reason why I get such strange\nimplied volatilities. Unfourtunately, because of that I have problem\nwith comparison of those implied volatilities with volatilities\nforecasts, because each observation like that in time series is\nseriuosly changing the value of any forecast accuracy measure. Below I\nenclose a link to the page of Warsaw Stock Exchange describing the\nstandard of the options:\n\nhttp://www.gpw.com.pl/gpw_e.asp?cel=e_papiery&k=261&n=26&i=/derivatives/options/options_WIG20\n\nBest regards,\nWojtek\n\n\n\n\nOn Fri, 18 Feb 2005 13:29:33 -0600, davidr@rhotrading.com\n<davidr@rhotrading.com> wrote:\n> Seems excessive to me. Usually implied vol calcs converge in relatively few iterations with a simple NR solver. Given the accuracy and precision of the option prices, I wouldn't ask for such precision in the implieds.\n> Chances are you have some bad prices, which is not unusual even in very active markets. You should probably concentrate on the out-of-the-money\n> options, since they usually give more relevant information.\n> \n> (BTW, I looked on Bloomberg for these options, and it says there are no options in WIG20, either on the cash index or on the futures. Are these OTC's? If so, then, somewhat different cautions may apply.)\n> \n> David Reiner\n> \n> -----Original Message-----\n> From: Wojciech ?lusarski [mailto:wojciech.slusarski@gmail.com]\n> Sent: Thursday, February 17, 2005 1:15 PM\n> To: r-sig-finance@stat.math.ethz.ch\n> Subject: [R-sig-finance] Computing implied volatility using fOptions\n> \n> Hello,\n> I have calculated the implied volatility, for the whole history of\n> option quotes on WIG20 stock index on Warsaw Stock Exchange. The thing\n> that is wondering me is that for some particular days I get volatility\n> nearly 0 (e.g. 3.12236893483001e-11). Is it happening because the\n> option was badly priced those thays (in comparison to Black-Scholes\n> price) or is it a problem of the algorithm. I am usin the\n> GBSVolatility() function with settings:\n> \n> tol <- 10^(-10)\n> maxiter <- 100000\n> \n> Are those values good for that, or should I use some other values.\n> \n> Best regards,\n> Wojtek\n> \n> _______________________________________________\n> R-sig-finance@stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> \n>",
+      "body_snippet": "Those options are traded on Warsaw Stock Exchange since 22.09.2003. I\nhave calculated all historical implied volatilities and try to compare\nthem with volatility forecasts. This is a very flat market,",
+      "thread_id": "thread-189af77f5a05",
+      "thread_depth": 1,
+      "month": "2005-02"
+    },
+    {
+      "id": "msg-b8dbe73b101f",
+      "message_id": "<16918.36771.918179.927459@basebud.nulle.part>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2005-02-19T02:00:30Z",
+      "subject": "[R-sig-finance] what is the R equivalent of S+ Finmetrics",
+      "subject_clean": "what is the R equivalent of S+ Finmetrics",
+      "in_reply_to": "<6.2.1.2.0.20050218184003.04cc9e88@mail.ametrano.net>",
+      "references": [
+        "<5e64e5be05021711144c8ffecd@mail.gmail.com>",
+        "<6.2.1.2.0.20050218184003.04cc9e88@mail.ametrano.net>"
+      ],
+      "body_plain": "On 18 February 2005 at 18:42, Ferdinando Ametrano wrote:\n| sorry for being so naif, but what is the R equivalent of S+ Finmetrics?\n| Googling around I've found Rmetrics. Is Rmetrics the best candidate?\n\nYup, and pretty much the only one :)   \n\nBefore Diethelm came out with Rmetrics, we only had isolated bits and pieces,\ne.g. some code was in the tseries package.  Rmetrics added a lot of code and\ndocumentation, and also provide more consistent wrapper for existing code\n(i.e. similar interfaces to ARIMA and GARCH). There are some areas which\nlittle or missing code, but then that isn't that different in QuantLib :)\n\nBest regards, Dirk\n\n-- \nBetter to have an approximate answer to the right question than a precise \nanswer to the wrong question.  --  John Tukey as quoted by John Chambers",
+      "body_snippet": "On 18 February 2005 at 18:42, Ferdinando Ametrano wrote:\n| sorry for being so naif, but what is the R equivalent of S+ Finmetrics?\n| Googling around I've found Rmetrics. Is Rmetrics the best candidate",
+      "thread_id": "thread-c4a35d9e5437",
+      "thread_depth": 2,
+      "month": "2005-02"
+    },
+    {
+      "id": "msg-e147fc7d265d",
+      "message_id": "<C9FC71F7E9356F40AFE2ACC2099DE14722526A@MAILSERVER-B.mpsgr.it>",
+      "from_name": "Kahra Hannu",
+      "from_email_hash": "b9473a02b882817174b15f6bf27fd8a8d18eb81cdf646e7141697e17c2da08c3",
+      "date": "2005-02-21T10:26:56Z",
+      "subject": "[R-sig-finance] Computing implied volatility using fOptions",
+      "subject_clean": "Computing implied volatility using fOptions",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Wojciech,\n\nin the early 90s I wrote a working paper, where I studied the behavior of the implicit volatilities of the Finnish FOX index options (as a function of time to expiry). In some cases I got similar results. In those cases time to expiry was commonly less than a week. I reasoned that the prices implied negative volatilities. The market was quite young, inefficient and not very liquid.\n\nRegards,\nHannu\n\nHannu Kahra \nProgetti Speciali \nMonte Paschi Asset Management SGR S.p.A. \nVia San Vittore, 37\nIT-20123 Milano, Italia \n\nTel.: +39 02 43828 754 \nMobile: +39 333 876 1558 \nFax: +39 02 43828 247 \nE-mail: kahra@mpsgr.it \nWeb: www.mpsam.it \n\n\n\n-----Original Message-----\nFrom: r-sig-finance-bounces@stat.math.ethz.ch\n[mailto:r-sig-finance-bounces@stat.math.ethz.ch]On Behalf Of Wojciech\nSlusarski\nSent: Thursday, February 17, 2005 8:15 PM\nTo: r-sig-finance@stat.math.ethz.ch\nSubject: [R-sig-finance] Computing implied volatility using fOptions\n\n\nHello,\nI have calculated the implied volatility, for the whole history of\noption quotes on WIG20 stock index on Warsaw Stock Exchange. The thing\nthat is wondering me is that for some particular days I get volatility\nnearly 0 (e.g. 3.12236893483001e-11). Is it happening because the\noption was badly priced those thays (in comparison to Black-Scholes\nprice) or is it a problem of the algorithm. I am usin the\nGBSVolatility() function with settings:\n\ntol <- 10^(-10)\nmaxiter <- 100000\n\nAre those values good for that, or should I use some other values.\n\nBest regards,\nWojtek\n\n_______________________________________________\nR-sig-finance@stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance",
+      "body_snippet": "Wojciech,\n\nin the early 90s I wrote a working paper, where I studied the behavior of the implicit volatilities of the Finnish FOX index options (as a function of time to expiry). In some cases I got s",
+      "thread_id": "thread-e147fc7d265d",
+      "thread_depth": 0,
+      "month": "2005-02"
+    },
+    {
+      "id": "msg-42d19985048c",
+      "message_id": "<421F6826.9080308@mitre.org>",
+      "from_name": "Melanie Vida",
+      "from_email_hash": "1f8162a57653e581410ffa3f0ea70f77b5a648852f8b782e6754768319855768",
+      "date": "2005-02-25T19:02:32Z",
+      "subject": "[R-sig-finance] Outlier Threshold for Temporal Analysis of variable x",
+      "subject_clean": "Outlier Threshold for Temporal Analysis of variable x",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "For a financial data set with large variance, I'm trying to find the \noutlier threshold of one variable \"x\" over a two year period. I \nqqplot(x2001, x2002) and found a normal distribution. The latter part of \nthe normal distribution did not look linear though. Is there a best way \nto find the outlier threshold of this variable from 2001 and 2002  in R?",
+      "body_snippet": "For a financial data set with large variance, I'm trying to find the \noutlier threshold of one variable \"x\" over a two year period. I \nqqplot(x2001, x2002) and found a normal distribution. The latter ",
+      "thread_id": "thread-42d19985048c",
+      "thread_depth": 0,
+      "month": "2005-02"
+    },
+    {
+      "id": "msg-5f1badeeedd1",
+      "message_id": "<13805569.1109350424560.JavaMail.mvida@mac.com>",
+      "from_name": "Melanie Vida",
+      "from_email_hash": "1328b381d195b66d36252823ade650a036f2d8411aeed1017a75957b7620eb16",
+      "date": "2005-02-26T02:07:57Z",
+      "subject": "[R-sig-finance] Outlier Threshold",
+      "subject_clean": "Outlier Threshold",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I am trying to do a temporal analysis of the same variable \"x\" over a period of 2 years. I did a qqplot(x) and discovered an almost normal relationship between the variable x over 2001 and 2002.\nHowever, there were some outliers in the latter half of the qqplot. To select an outlier threshold what is the recommended way when you have financial data with large variance?",
+      "body_snippet": "I am trying to do a temporal analysis of the same variable \"x\" over a period of 2 years. I did a qqplot(x) and discovered an almost normal relationship between the variable x over 2001 and 2002.\nHowev",
+      "thread_id": "thread-5f1badeeedd1",
+      "thread_depth": 0,
+      "month": "2005-02"
+    },
+    {
+      "id": "msg-bdc87bec9463",
+      "message_id": "<Pine.LNX.4.58.0502260428280.26558@thorin.ci.tuwien.ac.at>",
+      "from_name": "Achim Zeileis",
+      "from_email_hash": "d766623ae20ff5eea9df5809187df08da7b9ac247d6072a1908ecce0219ab3e0",
+      "date": "2005-02-26T04:31:08Z",
+      "subject": "[R-sig-finance] Outlier Threshold",
+      "subject_clean": "Outlier Threshold",
+      "in_reply_to": "<13805569.1109350424560.JavaMail.mvida@mac.com>",
+      "references": [
+        "<13805569.1109350424560.JavaMail.mvida@mac.com>"
+      ],
+      "body_plain": "This is your fourth post today, again with only a marginally modified\nquestion. Please stop sending it. You won't get better answers if you\nannoy readers of various mailing lists by asking the same bad question\nover and over again.\nZ\n\nOn Fri, 25 Feb 2005, Melanie Vida wrote:\n\n> I am trying to do a temporal analysis of the same variable \"x\" over a period of 2 years. I did a qqplot(x) and discovered an almost normal relationship between the variable x over 2001 and 2002.\n> However, there were some outliers in the latter half of the qqplot. To select an outlier threshold what is the recommended way when you have financial data with large variance?\n>\n> _______________________________________________\n> R-sig-finance@stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>",
+      "body_snippet": "This is your fourth post today, again with only a marginally modified\nquestion. Please stop sending it. You won't get better answers if you\nannoy readers of various mailing lists by asking the same ba",
+      "thread_id": "thread-5f1badeeedd1",
+      "thread_depth": 1,
+      "month": "2005-02"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-4bebe478c102",
+      "subject": "APARCH residuals and fitted values",
+      "message_count": 1,
+      "participants": [
+        "Wojciech Ślusarski"
+      ],
+      "started": "2005-02-09T01:06:40+00:00",
+      "last_reply": "2005-02-09T01:06:40+00:00",
+      "root_message_id": "msg-4bebe478c102"
+    },
+    {
+      "id": "thread-d838c581867e",
+      "subject": "Multivariate GARCH",
+      "message_count": 1,
+      "participants": [
+        "Brett F. Sumsion"
+      ],
+      "started": "2005-02-12T02:20:06+00:00",
+      "last_reply": "2005-02-12T02:20:06+00:00",
+      "root_message_id": "msg-d838c581867e"
+    },
+    {
+      "id": "thread-06c184869102",
+      "subject": "nearby",
+      "message_count": 1,
+      "participants": [
+        "Omar Lakkis"
+      ],
+      "started": "2005-02-16T16:06:22+00:00",
+      "last_reply": "2005-02-16T16:06:22+00:00",
+      "root_message_id": "msg-06c184869102"
+    },
+    {
+      "id": "thread-38787b37b93a",
+      "subject": "nearby",
+      "message_count": 1,
+      "participants": [
+        "davidr@rhotrading.com"
+      ],
+      "started": "2005-02-16T19:29:26+00:00",
+      "last_reply": "2005-02-16T19:29:26+00:00",
+      "root_message_id": "msg-38787b37b93a"
+    },
+    {
+      "id": "thread-c4a35d9e5437",
+      "subject": "Computing implied volatility using fOptions",
+      "message_count": 3,
+      "participants": [
+        "Dirk Eddelbuettel",
+        "Ferdinando Ametrano",
+        "Wojciech Ślusarski"
+      ],
+      "started": "2005-02-17T20:14:40+00:00",
+      "last_reply": "2005-02-19T02:00:30+00:00",
+      "root_message_id": "msg-c4a35d9e5437"
+    },
+    {
+      "id": "thread-189af77f5a05",
+      "subject": "Computing implied volatility using fOptions",
+      "message_count": 2,
+      "participants": [
+        "Wojciech Slusarski",
+        "davidr@rhotrading.com"
+      ],
+      "started": "2005-02-18T20:29:41+00:00",
+      "last_reply": "2005-02-18T20:59:05+00:00",
+      "root_message_id": "msg-189af77f5a05"
+    },
+    {
+      "id": "thread-7c3d28a9c6df",
+      "subject": "Computing implied volatility using fOptions",
+      "message_count": 1,
+      "participants": [
+        "davidr@rhotrading.com"
+      ],
+      "started": "2005-02-18T20:36:50+00:00",
+      "last_reply": "2005-02-18T20:36:50+00:00",
+      "root_message_id": "msg-7c3d28a9c6df"
+    },
+    {
+      "id": "thread-e147fc7d265d",
+      "subject": "Computing implied volatility using fOptions",
+      "message_count": 1,
+      "participants": [
+        "Kahra Hannu"
+      ],
+      "started": "2005-02-21T10:26:56+00:00",
+      "last_reply": "2005-02-21T10:26:56+00:00",
+      "root_message_id": "msg-e147fc7d265d"
+    },
+    {
+      "id": "thread-42d19985048c",
+      "subject": "Outlier Threshold for Temporal Analysis of variable x",
+      "message_count": 1,
+      "participants": [
+        "Melanie Vida"
+      ],
+      "started": "2005-02-25T19:02:32+00:00",
+      "last_reply": "2005-02-25T19:02:32+00:00",
+      "root_message_id": "msg-42d19985048c"
+    },
+    {
+      "id": "thread-5f1badeeedd1",
+      "subject": "Outlier Threshold",
+      "message_count": 2,
+      "participants": [
+        "Achim Zeileis",
+        "Melanie Vida"
+      ],
+      "started": "2005-02-26T02:07:57+00:00",
+      "last_reply": "2005-02-26T04:31:08+00:00",
+      "root_message_id": "msg-5f1badeeedd1"
+    }
+  ]
+}

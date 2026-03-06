@@ -1,0 +1,117 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2005-03",
+  "messages": [
+    {
+      "id": "msg-d2811a171dce",
+      "message_id": "<4224B87F.9020203@burns-stat.com>",
+      "from_name": "Patrick Burns",
+      "from_email_hash": "406962932e1b0e9aa889ddffedf6a8e166ef21efd83628c67b1f8e535ee909c2",
+      "date": "2005-03-01T19:47:31Z",
+      "subject": "[R-sig-finance] Multivariate GARCH with only univariate estimation",
+      "subject_clean": "Multivariate GARCH with only univariate estimation",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Partially in response to the question that was asked here a couple weeks\nago, the following paper now exists.\n\n\nIn the working papers section of the Burns Statistics website \nhttp://www.burns-stat.com/\nis the following:\n\n                      Multivariate GARCH with Only Univariate Estimation\n\nAbstract:  This brief note offers an explicit algorithm for a \nmultivariate GARCH model,\ncalled PC-GARCH, that requires only univariate GARCH estimation.  It is \nsuitable for\nproblems with hundreds or even thousands of variables.  PC-GARCH is \ncompared to\ntwo other techniques of getting multivariate GARCH using univariate \nestimates.\n\nPatrick Burns\n\nBurns Statistics\npatrick@burns-stat.com\n+44 (0)20 8525 0696\nhttp://www.burns-stat.com",
+      "body_snippet": "Partially in response to the question that was asked here a couple weeks\nago, the following paper now exists.\n\n\nIn the working papers section of the Burns Statistics website \nhttp://www.burns-stat.com",
+      "thread_id": "thread-d2811a171dce",
+      "thread_depth": 0,
+      "month": "2005-03"
+    },
+    {
+      "id": "msg-3bb1556ab286",
+      "message_id": "<1111612342.9479.5.camel@localhost>",
+      "from_name": "Roberto Bertolusso",
+      "from_email_hash": "d2a449eedec93fa642de9d7f6f232ee23f9d98677bbfad24d7e0233feb6648f8",
+      "date": "2005-03-23T22:09:03Z",
+      "subject": "[R-sig-finance] Error in unitrootTest",
+      "subject_clean": "Error in unitrootTest",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello, I am getting the following error message from unitrootTest.\nDo you have any clue of what could be wrong.\n\nDetails: AMD64 (x86_64) Gentoo Linux system.\n\n\nlibrary(fSeries)\nkmodel <- list(ar=c(.3,0,0,0,0.7,-.4*.7),d=1)\nx=armaSim(nobs,model=kmodel)\nunitrootTest(x,trend=\"c\",statistic=\"t\",method=\"adf\",lags=2)\nError in file(file, \"r\") : unable to open connection\nIn addition: Warning message: \ncannot open file `library/fSeries/libs/.urc1.tab' \n\n\nThank you very much\nRoberto\n-- \nRoberto Bertolusso <rbertolusso@yahoo.com>",
+      "body_snippet": "Hello, I am getting the following error message from unitrootTest.\nDo you have any clue of what could be wrong.\n\nDetails: AMD64 (x86_64) Gentoo Linux system.\n\n\nlibrary(fSeries)\nkmodel <- list(ar=c(.3,",
+      "thread_id": "thread-3bb1556ab286",
+      "thread_depth": 0,
+      "month": "2005-03"
+    },
+    {
+      "id": "msg-bbbac0331427",
+      "message_id": "<A05FF736A3208846B04D74334040A7B9022DAFDC@feriex.FERI.DE>",
+      "from_name": "Maniar, Rahul",
+      "from_email_hash": "0c890c55721bba2b6b9dff596e31147ac99f86714a1a173f7bc0b8fa8e99d771",
+      "date": "2005-03-24T12:02:56Z",
+      "subject": "[R-sig-finance] FastICA",
+      "subject_clean": "FastICA",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\nI want to use FastICA algorithm on a set of performance data. Can anybody\ntell whether it requires pre-whitening of data or we can use raw data?\n\nThanks \n\nRahul Maniar\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI want to use FastICA algorithm on a set of performance data. Can anybody\ntell whether it requires pre-whitening of data or we can use raw data?\n\nThanks \n\nRahul Maniar\n\n\t[[alternative HTML versio",
+      "thread_id": "thread-bbbac0331427",
+      "thread_depth": 0,
+      "month": "2005-03"
+    },
+    {
+      "id": "msg-82ded857c531",
+      "message_id": "<12AE52872B5C5348BE5CF47C707FF53A502B1B@rhosvr02.rhotrading.com>",
+      "from_name": "davidr@rhotrading.com",
+      "from_email_hash": "4998ec2d52ffe0c535ce902387987bbb6e981a3c144c9feae07c8ce7b5869756",
+      "date": "2005-03-31T23:14:47Z",
+      "subject": "[R-sig-finance] RE: [R] Bloomberg data import SOLVED",
+      "subject_clean": "Bloomberg data import SOLVED",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Together with Enrique's running start and Prasad's work, we figured out\nhow to get tick data and bulk data from Bloomberg into R. Here is a code\nsnippet which builds on Enrique's.\n\n----------------------------\nrequire(\"RDCOMClient\")\n\nblCon <<- try(blCon <- COMCreate(\"Bloomberg.Data.1\"), silent=TRUE)\n# Always check the class of blCon before proceeding!\n\n# First tick data\n\nticker <- \"IBM US Equity\"\nfields <- c(\"Last Price\",\"Volume\")\n\ncomFrom <- new(\"COMDate\",38442.4583333333)\ncomTo <- new(\"COMDate\",38442.58247696760)\nz <- as.integer(0)\n\nhistData <- try(blCon$BLPGetHistoricalData(Security=ticker,\nFields=fields, StartDate=comFrom, EndDate=comTo, BarSize=z))\n\n# Notes:\n# Passing in just a 0 instead of an int 0 (as z) crashes Rgui\n# For tick data, only one ticker is allowed in each call.\n# Beware of asking for a long date range; tick data can be very\nvoluminous.\n# I'm sure someone can do some R-magic to fix my start and end datetimes\n(please!)\n\n# Bulk data is just like getting prices, except for the return object\nbeing more complex\ntickers <- c(\"TYM5 Comdty\", \"USM5 Comdty\")\nfields <- c(\"FUT_DELIVERABLE_BONDS\", \"FUT_DLVRBLE_BNDS_CUSIPS\")\nbulkData <- try(blCon$BlpSubscribe(Security=tickers, Fields=fields))\n----------------------------\n\nNote that my original idea about GetHistoricalData was wrong since that\nisn't a function. (At least I couldn't get it to work.)\n\nAs a last note, it would be very nice if RDCOMClient were directly\navailable from CRAN so we could use install.packages, etc. (hint, hint!)\n\nEnjoy,\nDavid L. Reiner\n\np.s. I know cross-posting is discouraged, but I thought some people\nmight be looking for this information on r-sig-finance someday.",
+      "body_snippet": "Together with Enrique's running start and Prasad's work, we figured out\nhow to get tick data and bulk data from Bloomberg into R. Here is a code\nsnippet which builds on Enrique's.\n\n-------------------",
+      "thread_id": "thread-82ded857c531",
+      "thread_depth": 0,
+      "month": "2005-03"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-d2811a171dce",
+      "subject": "Multivariate GARCH with only univariate estimation",
+      "message_count": 1,
+      "participants": [
+        "Patrick Burns"
+      ],
+      "started": "2005-03-01T19:47:31+00:00",
+      "last_reply": "2005-03-01T19:47:31+00:00",
+      "root_message_id": "msg-d2811a171dce"
+    },
+    {
+      "id": "thread-3bb1556ab286",
+      "subject": "Error in unitrootTest",
+      "message_count": 1,
+      "participants": [
+        "Roberto Bertolusso"
+      ],
+      "started": "2005-03-23T22:09:03+00:00",
+      "last_reply": "2005-03-23T22:09:03+00:00",
+      "root_message_id": "msg-3bb1556ab286"
+    },
+    {
+      "id": "thread-bbbac0331427",
+      "subject": "FastICA",
+      "message_count": 1,
+      "participants": [
+        "Maniar, Rahul"
+      ],
+      "started": "2005-03-24T12:02:56+00:00",
+      "last_reply": "2005-03-24T12:02:56+00:00",
+      "root_message_id": "msg-bbbac0331427"
+    },
+    {
+      "id": "thread-82ded857c531",
+      "subject": "Bloomberg data import SOLVED",
+      "message_count": 1,
+      "participants": [
+        "davidr@rhotrading.com"
+      ],
+      "started": "2005-03-31T23:14:47+00:00",
+      "last_reply": "2005-03-31T23:14:47+00:00",
+      "root_message_id": "msg-82ded857c531"
+    }
+  ]
+}

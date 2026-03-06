@@ -1,0 +1,559 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2004-10",
+  "messages": [
+    {
+      "id": "msg-cc4eb04bdfe6",
+      "message_id": "<OFCEE74C8C.F6163DBF-ON85256F20.00437047-85256F20.004EBB37@ci.orlando.fl.us>",
+      "from_name": "James.Callahan@CityofOrlando.net",
+      "from_email_hash": "a6cac21f5db8b2ddecdd98b457951f02e2e35e64e7e1e58d6732e4696ec81b89",
+      "date": "2004-10-01T16:21:08Z",
+      "subject": "[R-sig-finance] How and when to USE ts and its objects?",
+      "subject_clean": "How and when to USE ts and its objects?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Creating specialized objects for use within a single R package was for me \nthe easy part\n(the previous question on this list). My questions are:\n\n1. How portable is the object to other R packages? \nWhich packages will accept the object as is? \nWill the object work in LM or other linear model packages?\n\n2. If another R package won't accept the object as is, is there a function \navailable to\ncoerce the object and/or the objects values to the appropriate type?\n\nIs there documentation that deals with object compatibility within R?\n\nAs far as I can tell, Factors are accepted in almost every package in R, \nbut times series objects\n(ts or its) are restricted to a few specialized packages.\n\n3. Can the time series objects be stored in and retrieved from a \nrelational database (perhaps via RODBC)?\n\nBefore I can recommend R to my coworkers, I will have to build either a \ncompelling demo or a GUI,\nthat performs useful work. Before I can even begin to DESIGN the demo or \nGUI I need to know\nwhich parts of R are compatible. If I build a GUI that creates time series \nobjects, will it crash and\nburn if I try to incorporate parts of John Fox's RCommander GUI?\nhttp://socserv.socsci.mcmaster.ca/jfox/Misc/Rcmdr/\n\nIf different parts of a GUI require different objects, can I make the \ntransition transparent to the user of the GUI?\n\nThe upcoming RMetrics modules particularly fBonds and fPorfolios look \nuseful:\nhttp://www.itp.phys.ethz.ch/econophysics/R/pdf/DocFactsheet.pdf\n\nDoes RMetrics use ITS objects or does it have its own time series objects \n(timeDate / timeSeries Classes)?\n\nIt might be neat to combine an RMetrics backend with EPRI's new RPad GUI \nfontend:\nhttp://tolstoy.newcastle.edu.au/R/packages/04/0051.html\nhttp://www.rpad.org/Rpad/\n\nLook at the RPad screenshot and imagine Yield Curves and Efficiency \nFrontiers.\n\nEven without RMetrics, Patrick Burns (Burns Statistics) seems to be making \nsome progress in this area.\nhttp://www.burns-stat.com/\n\nThe City I work for has a variety portfolios ranging from long term \ndefined benefit pension plans \nto short term cash funds each with its own investment policy and benchmark \nportfolios.\n\nDo our investment policies achieve their intended purposes? Do they \noverconstrain the portfolio?\nDo they provide a false sense of confidence in meeting risk management \nobjectives?\n\nThese are not just theoretical concerns, as a Budget Analyst, I am \npainfully aware of the fact\nthat when our defined benefit pension funds fall short of their \nactuarially defined investment targets \n-- the City's General Fund has to make up the difference.  It could be \nworse,  absent vigilance, \nwe could have an LA-style (Orange County, CA) derivative meltdown.\n\nOrange County (November 1994): Orange County, California has an investment \npool \nthat supports various pension liabilities. The pool lost USD 1700 MM from \nstructured notes \nand leveraged repo positions.\nhttp://www.riskglossary.com/articles/risk_management.htm\n\nA quick check of Yahoo shows that the Dow Jones Industrial Average is \nalmost exactly where it was 5 years ago.\nhttp://finance.yahoo.com/q/bc?s=^DJI&t=5y\nInterest rates are near zero and oil is nearly $50 a barrel.\n\nSo my real concern is, in a tight budget environment, can the City of \nOrlando use open source software \nto assist its development and monitoring of investment policies? or would \nthe City get bogged down in \nissues of times series object compatibility?\n\nIn my own area, Budget, assuming I can get the data out of our financial \nsystem into a convenient relational data base, \nand into R via RODBC -- what sort of time series objects should I build \nfor time series and econometric modeling? \n-- or should I just use GRETL? or MS Excel? or RGnumeric?\nhttp://gretl.sourceforge.net/\nhttp://www.omegahat.org/RGnumeric/\n\nJim Callahan, MBA\nBudget Analyst\nManagement, Budget & Accounting\nCity of Orlando\n(407) 246-3039 office\n(407) 234-3744 cell phone\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Creating specialized objects for use within a single R package was for me \nthe easy part\n(the previous question on this list). My questions are:\n\n1. How portable is the object to other R packages? \nWh",
+      "thread_id": "thread-cc4eb04bdfe6",
+      "thread_depth": 0,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-28d1376f1aad",
+      "message_id": "<20041001171626.4523512D4D@mprdmxin.myway.com>",
+      "from_name": "Gabor Grothendieck",
+      "from_email_hash": "f41070d4141f8364fbc9fbb8bdca03539ba49c4bcda2ef692c89d59c36c43273",
+      "date": "2004-10-01T19:16:34Z",
+      "subject": "[R-sig-finance] How and when to USE ts and its objects?",
+      "subject_clean": "How and when to USE ts and its objects?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "ts is for regularly spaced time series and works best with\nmonthly or coarser time series since there is no explicit\ndate support for finer granularity in ts.  If such date\nsupport is not important then ts is fine for finer\ngranularity series as well.  ts is defined in the stats\npackage which comes out-of-the-box with R so its normally\nalways available and is therefore the most likely to be\nsupported.\n\nIf you need irregularly spaced time series such as those\nthat are defined for weekdays but not holidays or weekends then\nyou can choose from a number of options:\n\n1. The irts class in the tseries package changes the\nfrequency of the time scale to simulate a irregular time\nseries with a regular one in such a way that its reversable.\n\n2. The its class in the its package uses S4 constructs to\ndefine a time series object with a POSIXct time scale.\n\n3. The zoo class has _not_ hard coded in the datetime class\nso it can use just about any datetime class (e.g. Date,\nchron, POSIXct).  In most cases zoo implements methods which\nsimply extend base generics to achieve interface\ncompatibility with ts and the base.  This also means that in\nmost cases the user does not have to learn a whole new set\nof commands making it easier to use. A major new version of\nzoo is in development so it is being actively maintained and\nenhanced.  The current version of zoo on CRAN will import ts\nand irts objects (as well as matrices and vectors) and the\nupcoming version will also import its objects.  Its also\neasy to extract the data and datetime.   \n\nI personally use ts for my regular time series and zoo for\nmy irregular time series and have contributed to the\ndevelopment of the latter.\n\nHope that helps.\n\n---\n\nCreating specialized objects for use within a single R package was for me\nthe easy part\n(the previous question on this list). My questions are:\n\n1. How portable is the object to other R packages?\nWhich packages will accept the object as is?\nWill the object work in LM or other linear model packages?\n\n2. If another R package won't accept the object as is, is there a function\navailable to\ncoerce the object and/or the objects values to the appropriate type?\n\nIs there documentation that deals with object compatibility within R?\n\nAs far as I can tell, Factors are accepted in almost every package in R,\nbut times series objects\n(ts or its) are restricted to a few specialized packages.\n\n3. Can the time series objects be stored in and retrieved from a\nrelational database (perhaps via RODBC)?\n\nBefore I can recommend R to my coworkers, I will have to build either a\ncompelling demo or a GUI,\nthat performs useful work. Before I can even begin to DESIGN the demo or\nGUI I need to know\nwhich parts of R are compatible. If I build a GUI that creates time series\nobjects, will it crash and\nburn if I try to incorporate parts of John Fox's RCommander GUI?\nhttp://socserv.socsci.mcmaster.ca/jfox/Misc/Rcmdr/\n\nIf different parts of a GUI require different objects, can I make the\ntransition transparent to the user of the GUI?\n\nThe upcoming RMetrics modules particularly fBonds and fPorfolios look\nuseful:\nhttp://www.itp.phys.ethz.ch/econophysics/R/pdf/DocFactsheet.pdf\n\nDoes RMetrics use ITS objects or does it have its own time series objects\n(timeDate / timeSeries Classes)?\n\nIt might be neat to combine an RMetrics backend with EPRI's new RPad GUI\nfontend:\nhttp://tolstoy.newcastle.edu.au/R/packages/04/0051.html\nhttp://www.rpad.org/Rpad/\n\nLook at the RPad screenshot and imagine Yield Curves and Efficiency\nFrontiers.\n\nEven without RMetrics, Patrick Burns (Burns Statistics) seems to be making\nsome progress in this area.\nhttp://www.burns-stat.com/\n\nThe City I work for has a variety portfolios ranging from long term\ndefined benefit pension plans\nto short term cash funds each with its own investment policy and benchmark\nportfolios.\n\nDo our investment policies achieve their intended purposes? Do they\noverconstrain the portfolio?\nDo they provide a false sense of confidence in meeting risk management\nobjectives?\n\nThese are not just theoretical concerns, as a Budget Analyst, I am\npainfully aware of the fact\nthat when our defined benefit pension funds fall short of their\nactuarially defined investment targets\n-- the City's General Fund has to make up the difference. It could be\nworse, absent vigilance,\nwe could have an LA-style (Orange County, CA) derivative meltdown.\n\nOrange County (November 1994): Orange County, California has an investment\npool\nthat supports various pension liabilities. The pool lost USD 1700 MM from\nstructured notes\nand leveraged repo positions.\nhttp://www.riskglossary.com/articles/risk_management.htm\n\nA quick check of Yahoo shows that the Dow Jones Industrial Average is\nalmost exactly where it was 5 years ago.\nhttp://finance.yahoo.com/q/bc?s=^DJI&t=5y\nInterest rates are near zero and oil is nearly $50 a barrel.\n\nSo my real concern is, in a tight budget environment, can the City of\nOrlando use open source software\nto assist its development and monitoring of investment policies? or would\nthe City get bogged down in\nissues of times series object compatibility?\n\nIn my own area, Budget, assuming I can get the data out of our financial\nsystem into a convenient relational data base,\nand into R via RODBC -- what sort of time series objects should I build\nfor time series and econometric modeling?\n-- or should I just use GRETL? or MS Excel? or RGnumeric?\nhttp://gretl.sourceforge.net/\nhttp://www.omegahat.org/RGnumeric/\n\nJim Callahan, MBA\nBudget Analyst\nManagement, Budget & Accounting\nCity of Orlando\n(407) 246-3039 office\n(407) 234-3744 cell phone\n     [[alternative HTML version deleted]]",
+      "body_snippet": "ts is for regularly spaced time series and works best with\nmonthly or coarser time series since there is no explicit\ndate support for finer granularity in ts.  If such date\nsupport is not important th",
+      "thread_id": "thread-28d1376f1aad",
+      "thread_depth": 0,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-8a0fafe07b14",
+      "message_id": "<20041004161331.GS23573@igidr.ac.in>",
+      "from_name": "Ajay Shah",
+      "from_email_hash": "44daf6d5b15f2615777d1fb204165d8dd630c3fb70829ad9e4ccbfec8f81cc1c",
+      "date": "2004-10-05T06:44:52Z",
+      "subject": "[R-sig-finance] How and when to USE ts and its objects?",
+      "subject_clean": "How and when to USE ts and its objects?",
+      "in_reply_to": "<OFCEE74C8C.F6163DBF-ON85256F20.00437047-85256F20.004EBB37@ci.orlando.fl.us>",
+      "references": [
+        "<OFCEE74C8C.F6163DBF-ON85256F20.00437047-85256F20.004EBB37@ci.orlando.fl.us>"
+      ],
+      "body_plain": "> 1. How portable is the object to other R packages? \n> Which packages will accept the object as is? \n> Will the object work in LM or other linear model packages?\n\nAs an example, \"ITS objects\" are basically matrices, so it isn't that\nforeign. One can say x <- core(itsobject) and get back a raw numerical\nmatrices.\n\nIf d.prices is an ITS object containing daily stock prices, I say:\n  d.returns <- data.frame(core(100*diff(log(d.prices))))\n\nto get a \"data frame\" containing daily returns. After that, I'm home\nfree i.t.o. doing things like feeding d.returns to lm() and so on.\n\n> Does RMetrics use ITS objects or does it have its own time series objects \n> (timeDate / timeSeries Classes)?\n\nI'm curious about this too.\n\n> The City I work for has a variety portfolios ranging from long term \n> defined benefit pension plans \n> to short term cash funds each with its own investment policy and benchmark \n> portfolios.\n> \n> Do our investment policies achieve their intended purposes? Do they \n> overconstrain the portfolio?\n> Do they provide a false sense of confidence in meeting risk management \n> objectives?\n> \n> These are not just theoretical concerns, as a Budget Analyst, I am \n> painfully aware of the fact\n> that when our defined benefit pension funds fall short of their \n> actuarially defined investment targets \n> -- the City's General Fund has to make up the difference.  It could be \n> worse,  absent vigilance, \n> we could have an LA-style (Orange County, CA) derivative meltdown.\n\n> So my real concern is, in a tight budget environment, can the City of \n> Orlando use open source software \n> to assist its development and monitoring of investment policies? or would \n> the City get bogged down in \n> issues of times series object compatibility?\n\nAll I can say is that a lot of people are successfully using R to\nanalyse such questions. I have used R to help in policy thinking in a\ncontext slightly bigger than Orlando :-)\n\nIn the last few days, I have been porting some of my personal code\nwhich prices pension guarantees from C to R. I don't feel hesitant in\nputting R into mission critical applications. It is solid, elegant,\nwell thought out code. Sometimes I think that R is to statistics\nprograms what Unix is to operating systems: elegant and brilliant.\n\nI wouldn't worry so much about TS object compatibility. E.g. speaking\nfor me, I have \"standardised\" on ITS. Everything that I'm doing is\nITS. This has worked well. ITS has not choked on functionality for me\nthus far. Yes, it bothers me that ITS is an orphan but so far I've not\nbeen stuck for want of functionality. And, it isn't that hard to get\ndata in and out of ITS objects, so it isn't asif you're making a big\ninvestment and incurring much by way of sunk costs. If you should\nchoose to switch to something else in the future, it won't be hard.\n\n-- \nAjay Shah                                                   Consultant\najayshah@mayin.org                      Department of Economic Affairs\nhttp://www.mayin.org/ajayshah           Ministry of Finance, New Delhi",
+      "body_snippet": "> 1. How portable is the object to other R packages? \n> Which packages will accept the object as is? \n> Will the object work in LM or other linear model packages?\n\nAs an example, \"ITS objects\" are bas",
+      "thread_id": "thread-cc4eb04bdfe6",
+      "thread_depth": 1,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-39654241d953",
+      "message_id": "<20041004160604.GR23573@igidr.ac.in>",
+      "from_name": "Ajay Shah",
+      "from_email_hash": "44daf6d5b15f2615777d1fb204165d8dd630c3fb70829ad9e4ccbfec8f81cc1c",
+      "date": "2004-10-05T06:51:52Z",
+      "subject": "[R-sig-finance] How and when to USE ts and its objects?",
+      "subject_clean": "How and when to USE ts and its objects?",
+      "in_reply_to": "<20041001171626.4523512D4D@mprdmxin.myway.com>",
+      "references": [
+        "<20041001171626.4523512D4D@mprdmxin.myway.com>"
+      ],
+      "body_plain": "> ts is for regularly spaced time series and works best with\n> monthly or coarser time series since there is no explicit\n> date support for finer granularity in ts.  If such date\n> support is not important then ts is fine for finer\n> granularity series as well.  ts is defined in the stats\n> package which comes out-of-the-box with R so its normally\n> always available and is therefore the most likely to be\n> supported.\n\nYes. I only use ts for monthly or slower data.\n\n> If you need irregularly spaced time series such as those\n> that are defined for weekdays but not holidays or weekends then\n> you can choose from a number of options:\n> \n> 1. The irts class in the tseries package changes the\n> frequency of the time scale to simulate a irregular time\n> series with a regular one in such a way that its reversable.\n> \n> 2. The its class in the its package uses S4 constructs to\n> define a time series object with a POSIXct time scale.\n\nITS is not being actively developed right now. It seems to have\nfabulous functionality but it would be great if it was not orphaned.\n\n> 3. The zoo class has _not_ hard coded in the datetime class\n> so it can use just about any datetime class (e.g. Date,\n> chron, POSIXct).  In most cases zoo implements methods which\n> simply extend base generics to achieve interface\n> compatibility with ts and the base.  This also means that in\n> most cases the user does not have to learn a whole new set\n> of commands making it easier to use. A major new version of\n> zoo is in development so it is being actively maintained and\n> enhanced.  The current version of zoo on CRAN will import ts\n> and irts objects (as well as matrices and vectors) and the\n> upcoming version will also import its objects.  Its also\n> easy to extract the data and datetime.   \n> \n> I personally use ts for my regular time series and zoo for\n> my irregular time series and have contributed to the\n> development of the latter.\n\nGabor, I'm sure you know full well the full power of ITS. Is zoo\nheaded to match that, and then to do better? I, for one, will be happy\nto pitch in and help by using zoo, contributing suggestions and\nperhaps occasionally a little code, bug reports, etc.\n\nIf ITS is 'the existing standard' then wouldn't it be nice if zoo\nwould import and export ITS objects, so as to ease interoperability?\n\nCurious: I was struck by the coolness of union() and intersect() in\nITS. Does zoo do these already?\n\n-- \nAjay Shah                                                   Consultant\najayshah@mayin.org                      Department of Economic Affairs\nhttp://www.mayin.org/ajayshah           Ministry of Finance, New Delhi",
+      "body_snippet": "> ts is for regularly spaced time series and works best with\n> monthly or coarser time series since there is no explicit\n> date support for finer granularity in ts.  If such date\n> support is not impo",
+      "thread_id": "thread-28d1376f1aad",
+      "thread_depth": 1,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-48baaa991b6a",
+      "message_id": "<20041005052020.46B953960@mprdmxin.myway.com>",
+      "from_name": "Gabor Grothendieck",
+      "from_email_hash": "f41070d4141f8364fbc9fbb8bdca03539ba49c4bcda2ef692c89d59c36c43273",
+      "date": "2004-10-05T07:20:24Z",
+      "subject": "[R-sig-finance] How and when to USE ts and its objects?",
+      "subject_clean": "How and when to USE ts and its objects?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "From: Ajay Shah <ajayshah@mayin.org>\n> > Does RMetrics use ITS objects or does it have its own time series objects\n> > (timeDate / timeSeries Classes)?\n\n> I'm curious about this too.\n\nI have just been looking at the fBasics rmetrics package \n(which I had neglected to mention in my list of irregular\ntime series packages earlier on this thread).\n\nThe timeSeries class of rmetrics uses a more sophisticated\ntime zone processing scheme on top of POSIXt.   One must\nset their computer (Windows) or process (UNIX) to \"GMT\"\nin order for this work.  (Somebody please correct me if I \nam wrong about computer/process granularity on various OSes.)\nThe timeSeries class is similar to the S class of the same\nname.\n\nThe timeDate class of fBasics/rmetrics provides essentially the\nsame time and Date functionality but on a class of its\nown independent of timeSeries.  timeSeries does not actually store\ntimes and dates using the timeDate class.",
+      "body_snippet": "From: Ajay Shah <ajayshah@mayin.org>\n> > Does RMetrics use ITS objects or does it have its own time series objects\n> > (timeDate / timeSeries Classes)?\n\n> I'm curious about this too.\n\nI have just been",
+      "thread_id": "thread-48baaa991b6a",
+      "thread_depth": 0,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-2bbe3bd3c3c0",
+      "message_id": "<20041005055043.D26DE39A8@mprdmxin.myway.com>",
+      "from_name": "Gabor Grothendieck",
+      "from_email_hash": "f41070d4141f8364fbc9fbb8bdca03539ba49c4bcda2ef692c89d59c36c43273",
+      "date": "2004-10-05T07:50:56Z",
+      "subject": "[R-sig-finance] How and when to USE ts and its objects?",
+      "subject_clean": "How and when to USE ts and its objects?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "From: Ajay Shah <ajayshah@mayin.org>\n\nGabor, I'm sure you know full well the full power of ITS. Is zoo\nheaded to match that, and then to do better? I, for one, will be happy\nto pitch in and help by using zoo, contributing suggestions and\nperhaps occasionally a little code, bug reports, etc.\n\nIf ITS is 'the existing standard' then wouldn't it be nice if zoo\nwould import and export ITS objects, so as to ease interoperability?\n\nCurious: I was struck by the coolness of union() and intersect() in\nITS. Does zoo do these already?\n\n---\n\nWe are not attempting competing with its, in fact, I offerred \nsome code to its but the unreleased version of zoo \nwhich Achim and I have running\nis approximately comparable in functionality to its.  It can\nimport its objects and we also have an its export too.  It\nwill also be able to import and export fBasics/rmetrics timeSeries\nobjects.\n\nThe version on CRAN can already import ts and irts objects.\nThat version, i.e. on CRAN, already has the union and intersect\nfunctionality.  They are combined into a \nsingle routine, merge, which is a generalization of union\nand intersect.  It has an argument all which is TRUE for\nunion and FALSE for intersect but can be a logical vector\nwhich generalizes these two special cases to create more\npossibilities for combination.\n\nOne of the key goals of zoo is to be compatible with ts and\nthe base of R so you do not have to learn a whole new set of\ncommands making it, hopefully, easy to use.  In fact, most\nfunctions are simply methods which extend core generics.\n\nAchim Zeileis started the project and I joined in and I was really\nhoping others would do so so too so I am really pleased you\nare interested.  I will contact you offline.",
+      "body_snippet": "From: Ajay Shah <ajayshah@mayin.org>\n\nGabor, I'm sure you know full well the full power of ITS. Is zoo\nheaded to match that, and then to do better? I, for one, will be happy\nto pitch in and help by us",
+      "thread_id": "thread-2bbe3bd3c3c0",
+      "thread_depth": 0,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-088dcb8b1cf8",
+      "message_id": "<416C6FD0.2000205@itp.phys.ethz.ch>",
+      "from_name": "Diethelm Wuertz",
+      "from_email_hash": "db72845f148b28bce223455d9f5dbf705d659fd637f9d0697fb0778a67cfebef",
+      "date": "2004-10-13T01:59:20Z",
+      "subject": "[R-sig-finance] New Built Rmetrics 200.10058",
+      "subject_clean": "New Built Rmetrics 200.10058",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear R and Rmetrics Users,\n\nIt is a pleasure for me to announce the new built for Rmetrics Version\n200.10058, updated for R Version 2.0. The source files and Windows binary\npackages can be downloaded from the Rmetrics Server \nhttp://www.rmetrics.org .\n\nThe new built has also been submitted to the CRAN server \nhttp://cran.r-project.org/.\n\nMany new functions and examples have been added and the documentation has\nbeen updated and enhanced. You can download and install the fBasics, \nfSeries,\nfExtremes and fOptions packages in the usual way.\n\n\nDiethelm Wuertz\ninfo@rmetrics.org\nwww.rmetrics.org",
+      "body_snippet": "Dear R and Rmetrics Users,\n\nIt is a pleasure for me to announce the new built for Rmetrics Version\n200.10058, updated for R Version 2.0. The source files and Windows binary\npackages can be downloaded ",
+      "thread_id": "thread-088dcb8b1cf8",
+      "thread_depth": 0,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-6602ce63b2a0",
+      "message_id": "<416C7024.8020805@itp.phys.ethz.ch>",
+      "from_name": "Diethelm Wuertz",
+      "from_email_hash": "db72845f148b28bce223455d9f5dbf705d659fd637f9d0697fb0778a67cfebef",
+      "date": "2004-10-13T02:00:43Z",
+      "subject": "[R-sig-finance] New Built Rmetrics 200.10058",
+      "subject_clean": "New Built Rmetrics 200.10058",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Dear R and Rmetrics Users,\n\nIt is a pleasure for me to announce the new built for Rmetrics Version\n200.10058, updated for R Version 2.0. The source files and Windows binary\npackages can be downloaded from the Rmetrics Server \nhttp://www.rmetrics.org .\n\nThe new built has also been submitted to the CRAN server \nhttp://cran.r-project.org/.\n\nMany new functions and examples have been added and the documentation has\nbeen updated and enhanced. You can download and install the fBasics, \nfSeries,\nfExtremes and fOptions packages in the usual way.\n\n\nDiethelm Wuertz\ninfo@rmetrics.org\nwww.rmetrics.org",
+      "body_snippet": "Dear R and Rmetrics Users,\n\nIt is a pleasure for me to announce the new built for Rmetrics Version\n200.10058, updated for R Version 2.0. The source files and Windows binary\npackages can be downloaded ",
+      "thread_id": "thread-6602ce63b2a0",
+      "thread_depth": 0,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-e5bf2434c46f",
+      "message_id": "<20041013041534.GA7346@sonny.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2004-10-13T06:15:40Z",
+      "subject": "[R-sig-finance] New Built Rmetrics 200.10058",
+      "subject_clean": "New Built Rmetrics 200.10058",
+      "in_reply_to": "<416C7024.8020805@itp.phys.ethz.ch>",
+      "references": [
+        "<416C7024.8020805@itp.phys.ethz.ch>"
+      ],
+      "body_plain": "On Wed, Oct 13, 2004 at 12:00:36AM +0000, Diethelm Wuertz wrote:\n> Dear R and Rmetrics Users,\n> \n> It is a pleasure for me to announce the new built for Rmetrics Version\n> 200.10058, updated for R Version 2.0. The source files and Windows binary\n> packages can be downloaded from the Rmetrics Server \n> http://www.rmetrics.org .\n> \n> The new built has also been submitted to the CRAN server \n> http://cran.r-project.org/.\n> \n> Many new functions and examples have been added and the documentation has\n> been updated and enhanced. You can download and install the fBasics, \n> fSeries,\n> fExtremes and fOptions packages in the usual way.\n\nThese new packages are now also on the main Debian server and will hit\nmirrors over the next day or two.\n\nDirk\n\n-- \nThose are my principles, and if you don't like them... well, I have others.\n                                                -- Groucho Marx",
+      "body_snippet": "On Wed, Oct 13, 2004 at 12:00:36AM +0000, Diethelm Wuertz wrote:\n> Dear R and Rmetrics Users,\n> \n> It is a pleasure for me to announce the new built for Rmetrics Version\n> 200.10058, updated for R Ver",
+      "thread_id": "thread-6602ce63b2a0",
+      "thread_depth": 1,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-4ad4a972d2b1",
+      "message_id": "<1CDEA031FEA76E4F9A41822D63A2D2BC1AA6A1@SBKE2KMB04.win.dowjones.net>",
+      "from_name": "Alpert, William",
+      "from_email_hash": "28541db3112cebcd377990bb6409aac403e2619037d67aad2d2838ed1bb64cc8",
+      "date": "2004-10-15T17:05:55Z",
+      "subject": "[R-sig-finance] WinRmetrics for 2.0?",
+      "subject_clean": "WinRmetrics for 2.0?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Should any of you feel pity for those of us still on training wheels,\ncould you tell me if there's going to be a WinRmetrics package for R 2.0\n?  I rather enjoyed its dropdown menus, and I'm not yet skilled enough\nto create my own.\n\n \n\nBill Alpert\n\nSr. Editor\n\nBarron's\n\n212.416.2742\n\nwilliam.alpert@barrons.com\n\n \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Should any of you feel pity for those of us still on training wheels,\ncould you tell me if there's going to be a WinRmetrics package for R 2.0\n?  I rather enjoyed its dropdown menus, and I'm not yet s",
+      "thread_id": "thread-4ad4a972d2b1",
+      "thread_depth": 0,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-508433c385cc",
+      "message_id": "<12AE52872B5C5348BE5CF47C707FF53A32748F@rhosvr02.rhotrading.com>",
+      "from_name": "davidr@rhotrading.com",
+      "from_email_hash": "4998ec2d52ffe0c535ce902387987bbb6e981a3c144c9feae07c8ce7b5869756",
+      "date": "2004-10-18T22:47:43Z",
+      "subject": "[R-sig-finance] Is there an R-analog of S-Plus's import.dta.bloomberg?",
+      "subject_clean": "Is there an R-analog of S-Plus's import.dta.bloomberg?",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Has anyone considered implementing an R version of S-Plus's\nimport.data.bloomberg?\n\n(Or perhaps someone has?)\n\nI realize that Bloomberg is expensive so few will have access to it, but\nbeing able to get Bloomberg data directly into R would be very useful\n(as it has been in S-Plus.)\n\n \n\n \n\n \n\nDavid L. Reiner\n\n \n\nRho Trading\n\n440 S. LaSalle St -- Suite 620\n\nChicago  IL  60605\n\n \n\n312-362-4963 (voice)\n\n312-362-4941 (fax)\n\n \n\n \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Has anyone considered implementing an R version of S-Plus's\nimport.data.bloomberg?\n\n(Or perhaps someone has?)\n\nI realize that Bloomberg is expensive so few will have access to it, but\nbeing able to ge",
+      "thread_id": "thread-508433c385cc",
+      "thread_depth": 0,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-d231778b059c",
+      "message_id": "<20041018210420.GA8114@sonny.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2004-10-18T23:04:30Z",
+      "subject": "[R-sig-finance] Is there an R-analog of S-Plus's import.dta.bloomberg?",
+      "subject_clean": "Is there an R-analog of S-Plus's import.dta.bloomberg?",
+      "in_reply_to": "<12AE52872B5C5348BE5CF47C707FF53A32748F@rhosvr02.rhotrading.com>",
+      "references": [
+        "<12AE52872B5C5348BE5CF47C707FF53A32748F@rhosvr02.rhotrading.com>"
+      ],
+      "body_plain": "On Mon, Oct 18, 2004 at 03:47:33PM -0500, davidr@rhotrading.com wrote:\n> Has anyone considered implementing an R version of S-Plus's\n> import.data.bloomberg?\n> \n> (Or perhaps someone has?)\n> \n> I realize that Bloomberg is expensive so few will have access to it, but\n> being able to get Bloomberg data directly into R would be very useful\n> (as it has been in S-Plus.)\n\nSure is. I wrote a package for it against the (rather well documented)\nBloomberg C API -- try WAPI <Go> and look for the 'C SDK' under downloads.\nhttp://dirk.eddelbuettel.com/presentations.html has slides I showed at the\nUse R! 2004 conference about this and a related connector package (for Lim).\nI cannot release these as the work was done on company time. \n\n>From what I can tell, most people use Excel as a go-between and use the\nBeier and Neuwirth tools to connect Excel to R (they have a list in Vienna,\nat http://mailman.csd.univie.ac.at/pipermail/rcom-l/ where some of the\nregulars contribute as well).\n\nSeeing your address, and given I work across the street from you: would you\nconsider a 'Chicago Area S Users Group' feasible?  A friend and I once toyed\nwith the idea, but didn't end up doing anything about it. Email me off-list\nif you'd be up for it.\n\nRegards, Dirk\n\n-- \nThose are my principles, and if you don't like them... well, I have others.\n                                                -- Groucho Marx",
+      "body_snippet": "On Mon, Oct 18, 2004 at 03:47:33PM -0500, davidr@rhotrading.com wrote:\n> Has anyone considered implementing an R version of S-Plus's\n> import.data.bloomberg?\n> \n> (Or perhaps someone has?)\n> \n> I real",
+      "thread_id": "thread-508433c385cc",
+      "thread_depth": 1,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-e5317eb4bb63",
+      "message_id": "<OF286C90AB.798A6B9F-ONC1256F32.0039901D@credit-suisse.com>",
+      "from_name": "Enrique Bengoechea",
+      "from_email_hash": "867c96515f3a620c9951603a510be56a57f731c55dd06a62929d63c3ceec7a59",
+      "date": "2004-10-19T12:45:55Z",
+      "subject": "[R-sig-finance] Re: Is there an R-analog of S-Plus's import.dta.bloomberg",
+      "subject_clean": "Is there an R-analog of S-Plus's import.dta.bloomberg",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\n\n> being able to get Bloomberg data directly into R would be very useful\n\nI am doing this every day. To my knowledge, you can do this in 2 ways:\n\n      1) The hard way would be to use the Bloomberg C API  (as Dirk Eddelbuettel has done, but he cannot release his work)\n      2)The easy way would be to use the Bloomberg ActiveX API, as I have done myself. This option is easier because you only have to write R code, and, of course, import some R COM client library (I use RDCOMClient).\n\nYou have some example code to import into R Bloomberg time series and fields on a couple of messages I sent to this list some months ago, just search for \"Bloomberg\" on the archives.\n\nIf my company allows (which I should verify) eventually I could clean up my code and release a package. For that it would be useful to know the API of the equivalent S-Plus package and match it. Do you know how to get it?\n\nRegards,\n\nEnrique",
+      "body_snippet": "Hi,\n\n> being able to get Bloomberg data directly into R would be very useful\n\nI am doing this every day. To my knowledge, you can do this in 2 ways:\n\n      1) The hard way would be to use the Bloomber",
+      "thread_id": "thread-e5317eb4bb63",
+      "thread_depth": 0,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-4a20a286ef97",
+      "message_id": "<41750533.6070007@earthlink.net>",
+      "from_name": "Krishna Kumar",
+      "from_email_hash": "b5342e6f7178c92f67a17437313a28bb14db93175150fd429e207c65fb4f88b0",
+      "date": "2004-10-19T14:14:58Z",
+      "subject": "[R-sig-finance] Is there an R-analog of S-Plus's\timport.dta.bloomberg?",
+      "subject_clean": "Is there an R-analog of S-Plus's\timport.dta.bloomberg?",
+      "in_reply_to": "<20041018210420.GA8114@sonny.eddelbuettel.com>",
+      "references": [
+        "<12AE52872B5C5348BE5CF47C707FF53A32748F@rhosvr02.rhotrading.com>",
+        "<20041018210420.GA8114@sonny.eddelbuettel.com>"
+      ],
+      "body_plain": "Dirk Eddelbuettel wrote:\n\n>Seeing your address, and given I work across the street from you: would you\n>consider a 'Chicago Area S Users Group' feasible?  A friend and I once toyed\n>with the idea, but didn't end up doing anything about it. Email me off-list\n>if you'd be up for it.\n>\n>Regards, Dirk\n>\n>  \n>\nHa!\nAnyone up for a NYC Area S Users Group ?.  p.m. me off the list.\n\nBest,",
+      "body_snippet": "Dirk Eddelbuettel wrote:\n\n>Seeing your address, and given I work across the street from you: would you\n>consider a 'Chicago Area S Users Group' feasible?  A friend and I once toyed\n>with the idea, but",
+      "thread_id": "thread-508433c385cc",
+      "thread_depth": 2,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-96d89c5541ac",
+      "message_id": "<7E4C06F49D6FEB49BE4B60E5FC92ED7AB76542@pnlmse35.pnl.gov>",
+      "from_name": "Waichler, Scott R",
+      "from_email_hash": "32319b802d73f28b597b25928dcaba04c12f35e02e38c08f8dce3394d49a8a99",
+      "date": "2004-10-19T18:04:31Z",
+      "subject": "[R-sig-finance] Getting stock prices and annualized returns for common indexes",
+      "subject_clean": "Getting stock prices and annualized returns for common indexes",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Is there a way to obtain stock and mutual fund prices (previous day's\nclose would be fine) \nfrom R?  Can bond prices also be obtained?  How about annualized returns\nfor previous calendar\nyear and last 3 and 5 years for major indexes such as S&P 500, \nWilshire 5000, MSCI EAFE, etc.?  I am a non-professional\nwho manages some family portfolios and I am looking for better ways to\naccess information\nand compare investment results in annual reports I write using Sweave.\n\nThanks,\nScott Waichler\nscott.waichler@pnl.gov",
+      "body_snippet": "Is there a way to obtain stock and mutual fund prices (previous day's\nclose would be fine) \nfrom R?  Can bond prices also be obtained?  How about annualized returns\nfor previous calendar\nyear and last",
+      "thread_id": "thread-96d89c5541ac",
+      "thread_depth": 0,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-d92e7cc691cf",
+      "message_id": "<4175657E.1030604@burns-stat.com>",
+      "from_name": "Patrick Burns",
+      "from_email_hash": "406962932e1b0e9aa889ddffedf6a8e166ef21efd83628c67b1f8e535ee909c2",
+      "date": "2004-10-19T21:05:55Z",
+      "subject": "[R-sig-finance] Getting stock prices and annualized returns for common indexes",
+      "subject_clean": "Getting stock prices and annualized returns for common indexes",
+      "in_reply_to": "<7E4C06F49D6FEB49BE4B60E5FC92ED7AB76542@pnlmse35.pnl.gov>",
+      "references": [
+        "<7E4C06F49D6FEB49BE4B60E5FC92ED7AB76542@pnlmse35.pnl.gov>"
+      ],
+      "body_plain": "You can get data from Yahoo via the \"get.hist.quote\" function in\nthe tseries package.  Indices have strange symbols in Yahooland.\n\nS&P 500:     ^GSPC\nNasdaq Comp:   ^IXIC\nNasdaq 100:      ^NDX\n\nUS 30yr Treasury:   ^TYX\nUS 10yr Treasury:   ^TNX\nUS   5yr Treasury:   ^FVX\n\n\nPatrick Burns\n\nBurns Statistics\npatrick@burns-stat.com\n+44 (0)20 8525 0696\nhttp://www.burns-stat.com\n(home of S Poetry and \"A Guide for the Unwilling S User\")\n\nWaichler, Scott R wrote:\n\n>Is there a way to obtain stock and mutual fund prices (previous day's\n>close would be fine) \n>from R?  Can bond prices also be obtained?  How about annualized returns\n>for previous calendar\n>year and last 3 and 5 years for major indexes such as S&P 500, \n>Wilshire 5000, MSCI EAFE, etc.?  I am a non-professional\n>who manages some family portfolios and I am looking for better ways to\n>access information\n>and compare investment results in annual reports I write using Sweave.\n>\n>Thanks,\n>Scott Waichler\n>scott.waichler@pnl.gov\n>\n>_______________________________________________\n>R-sig-finance@stat.math.ethz.ch mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>  \n>",
+      "body_snippet": "You can get data from Yahoo via the \"get.hist.quote\" function in\nthe tseries package.  Indices have strange symbols in Yahooland.\n\nS&P 500:     ^GSPC\nNasdaq Comp:   ^IXIC\nNasdaq 100:      ^NDX\n\nUS 30y",
+      "thread_id": "thread-96d89c5541ac",
+      "thread_depth": 1,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-78f79a89d22d",
+      "message_id": "<8422B8BDDBCF7045A59138E8E6A1457BDB3AEA@cacexc01.americas.cpqcorp.net>",
+      "from_name": "Medica, Paul A",
+      "from_email_hash": "ba31d43b583bcd8dd42c9064b996444a45af58fd9b328583e4663c1e32ba6366",
+      "date": "2004-10-19T21:57:58Z",
+      "subject": "[R-sig-finance] Getting stock prices and annualized returns forcommon indexes",
+      "subject_clean": "Getting stock prices and annualized returns forcommon indexes",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I would urge anyone who is downloading price history from yahoo to paste\ninto any analysis package (R, S-plus, Matlab or otherwise) to run the\ndates through a sequential calendar recognition script as there have\nbeen incidents where dates or the associated values are missing.  This\nis a real issue when attempting to correlate multivariate series,\nespecially VaR calculations.\n\nPaul A. Medica\nReliability Engineering\nHewlett-Packard Co.\no: 360-212-2766\npaul.medica@hp.com\n\n\n-----Original Message-----\nFrom: r-sig-finance-bounces@stat.math.ethz.ch\n[mailto:r-sig-finance-bounces@stat.math.ethz.ch] On Behalf Of Patrick\nBurns\nSent: Tuesday, October 19, 2004 12:06 PM\nTo: Waichler, Scott R\nCc: r-sig-finance@stat.math.ethz.ch\nSubject: Re: [R-sig-finance] Getting stock prices and annualized returns\nforcommon indexes\n\n\nYou can get data from Yahoo via the \"get.hist.quote\" function in the\ntseries package.  Indices have strange symbols in Yahooland.\n\nS&P 500:     ^GSPC\nNasdaq Comp:   ^IXIC\nNasdaq 100:      ^NDX\n\nUS 30yr Treasury:   ^TYX\nUS 10yr Treasury:   ^TNX\nUS   5yr Treasury:   ^FVX\n\n\nPatrick Burns\n\nBurns Statistics\npatrick@burns-stat.com\n+44 (0)20 8525 0696\nhttp://www.burns-stat.com\n(home of S Poetry and \"A Guide for the Unwilling S User\")\n\nWaichler, Scott R wrote:\n\n>Is there a way to obtain stock and mutual fund prices (previous day's \n>close would be fine) from R?  Can bond prices also be obtained?  How \n>about annualized returns for previous calendar\n>year and last 3 and 5 years for major indexes such as S&P 500, \n>Wilshire 5000, MSCI EAFE, etc.?  I am a non-professional\n>who manages some family portfolios and I am looking for better ways to\n>access information\n>and compare investment results in annual reports I write using Sweave.\n>\n>Thanks,\n>Scott Waichler\n>scott.waichler@pnl.gov\n>\n>_______________________________________________\n>R-sig-finance@stat.math.ethz.ch mailing list \n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>  \n>\n\n_______________________________________________\nR-sig-finance@stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance",
+      "body_snippet": "I would urge anyone who is downloading price history from yahoo to paste\ninto any analysis package (R, S-plus, Matlab or otherwise) to run the\ndates through a sequential calendar recognition script as",
+      "thread_id": "thread-78f79a89d22d",
+      "thread_depth": 0,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-f00868d0da65",
+      "message_id": "<417582A1.4070504@burns-stat.com>",
+      "from_name": "Patrick Burns",
+      "from_email_hash": "406962932e1b0e9aa889ddffedf6a8e166ef21efd83628c67b1f8e535ee909c2",
+      "date": "2004-10-19T23:10:17Z",
+      "subject": "[R-sig-finance] Getting stock prices and annualized returns\tforcommon indexes",
+      "subject_clean": "Getting stock prices and annualized returns\tforcommon indexes",
+      "in_reply_to": "<8422B8BDDBCF7045A59138E8E6A1457BDB3AEA@cacexc01.americas.cpqcorp.net>",
+      "references": [
+        "<8422B8BDDBCF7045A59138E8E6A1457BDB3AEA@cacexc01.americas.cpqcorp.net>"
+      ],
+      "body_plain": "On that topic, I should have pointed out that the stock prices in\nYahoo are subject to containing missed splits.  (I just got done\nfixing some.)  That makes graphing the prices a valuable exercise.\n\nMedica, Paul A wrote:\n\n>I would urge anyone who is downloading price history from yahoo to paste\n>into any analysis package (R, S-plus, Matlab or otherwise) to run the\n>dates through a sequential calendar recognition script as there have\n>been incidents where dates or the associated values are missing.  This\n>is a real issue when attempting to correlate multivariate series,\n>especially VaR calculations.\n>\n>Paul A. Medica\n>Reliability Engineering\n>Hewlett-Packard Co.\n>o: 360-212-2766\n>paul.medica@hp.com\n>\n>\n>-----Original Message-----\n>From: r-sig-finance-bounces@stat.math.ethz.ch\n>[mailto:r-sig-finance-bounces@stat.math.ethz.ch] On Behalf Of Patrick\n>Burns\n>Sent: Tuesday, October 19, 2004 12:06 PM\n>To: Waichler, Scott R\n>Cc: r-sig-finance@stat.math.ethz.ch\n>Subject: Re: [R-sig-finance] Getting stock prices and annualized returns\n>forcommon indexes\n>\n>\n>You can get data from Yahoo via the \"get.hist.quote\" function in the\n>tseries package.  Indices have strange symbols in Yahooland.\n>\n>S&P 500:     ^GSPC\n>Nasdaq Comp:   ^IXIC\n>Nasdaq 100:      ^NDX\n>\n>US 30yr Treasury:   ^TYX\n>US 10yr Treasury:   ^TNX\n>US   5yr Treasury:   ^FVX\n>\n>\n>Patrick Burns\n>\n>Burns Statistics\n>patrick@burns-stat.com\n>+44 (0)20 8525 0696\n>http://www.burns-stat.com\n>(home of S Poetry and \"A Guide for the Unwilling S User\")\n>\n>Waichler, Scott R wrote:\n>\n>  \n>\n>>Is there a way to obtain stock and mutual fund prices (previous day's \n>>close would be fine) from R?  Can bond prices also be obtained?  How \n>>about annualized returns for previous calendar\n>>year and last 3 and 5 years for major indexes such as S&P 500, \n>>Wilshire 5000, MSCI EAFE, etc.?  I am a non-professional\n>>who manages some family portfolios and I am looking for better ways to\n>>access information\n>>and compare investment results in annual reports I write using Sweave.\n>>\n>>Thanks,\n>>Scott Waichler\n>>scott.waichler@pnl.gov\n>>\n>>_______________________________________________\n>>R-sig-finance@stat.math.ethz.ch mailing list \n>>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>\n>> \n>>\n>>    \n>>\n>\n>_______________________________________________\n>R-sig-finance@stat.math.ethz.ch mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>_______________________________________________\n>R-sig-finance@stat.math.ethz.ch mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>  \n>",
+      "body_snippet": "On that topic, I should have pointed out that the stock prices in\nYahoo are subject to containing missed splits.  (I just got done\nfixing some.)  That makes graphing the prices a valuable exercise.\n\nM",
+      "thread_id": "thread-78f79a89d22d",
+      "thread_depth": 1,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-a719c008adc7",
+      "message_id": "<20041020005403.30298.qmail@web50301.mail.yahoo.com>",
+      "from_name": "Lars Schouw",
+      "from_email_hash": "99d6e99aec3cb6fd8d46b21b7be02595322a2fc25cb66f5c55d05fe449c88f0a",
+      "date": "2004-10-20T02:54:06Z",
+      "subject": "[R-sig-finance] fBonds from rmetrics",
+      "subject_clean": "fBonds from rmetrics",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi\n\nIs it possible to download a beta version of fBonds\nfor testing?\n\nRegards\nLars Schouw\nTokyo",
+      "body_snippet": "Hi\n\nIs it possible to download a beta version of fBonds\nfor testing?\n\nRegards\nLars Schouw\nTokyo",
+      "thread_id": "thread-a719c008adc7",
+      "thread_depth": 0,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-d5ae4c91bd34",
+      "message_id": "<20041020132440.GA28821@piskorski.com>",
+      "from_name": "Andrew Piskorski",
+      "from_email_hash": "7ba288058383c6a3ea095413cedc140865ba579d780f5f4c61b80cc7b52fb770",
+      "date": "2004-10-20T15:24:46Z",
+      "subject": "[R-sig-finance] Is there an R-analog of S-Plus's import.dta.bloomberg?",
+      "subject_clean": "Is there an R-analog of S-Plus's import.dta.bloomberg?",
+      "in_reply_to": "<20041018210420.GA8114@sonny.eddelbuettel.com>",
+      "references": [
+        "<20041018210420.GA8114@sonny.eddelbuettel.com>"
+      ],
+      "body_plain": "On Mon, Oct 18, 2004 at 04:04:20PM -0500, Dirk Eddelbuettel wrote:\n> On Mon, Oct 18, 2004 at 03:47:33PM -0500, davidr@rhotrading.com wrote:\n\n> > I realize that Bloomberg is expensive so few will have access to it, but\n> > being able to get Bloomberg data directly into R would be very useful\n> > (as it has been in S-Plus.)\n> \n> Sure is. I wrote a package for it against the (rather well documented)\n> Bloomberg C API -- try WAPI <Go> and look for the 'C SDK' under downloads.\n\nThe Bloomberg C API is reasonably well documented, but it is also\nquite low level, so it NEEDS to be.  For anyone going that route, my\nadvice is to pay careful attention to the dozen or so example C\nprograms Bloomberg provides, as they are ugly, but CORRECT.\n\nWhenever you encounter subtle correctness or performance bugs in your\ncode, look again at Bloomberg's examples.  Often you will see that\nthey are doing something in one particular way which happens to work\nwell, even though the API docs don't seem to require that you do it\nexactly that way.  Basically, the Bloomberg C API docs are helpful but\ndo not fully specify how you need to use it.  The C examples do.\n\n-- \nAndrew Piskorski <atp@piskorski.com>\nhttp://www.piskorski.com/",
+      "body_snippet": "On Mon, Oct 18, 2004 at 04:04:20PM -0500, Dirk Eddelbuettel wrote:\n> On Mon, Oct 18, 2004 at 03:47:33PM -0500, davidr@rhotrading.com wrote:\n\n> > I realize that Bloomberg is expensive so few will have ",
+      "thread_id": "thread-508433c385cc",
+      "thread_depth": 2,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-4d8383927ed7",
+      "message_id": "<20041020141002.GA27313@sonny.eddelbuettel.com>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2004-10-20T16:10:15Z",
+      "subject": "[R-sig-finance] Is there an R-analog of S-Plus's import.dta.bloomberg?",
+      "subject_clean": "Is there an R-analog of S-Plus's import.dta.bloomberg?",
+      "in_reply_to": "<20041020132440.GA28821@piskorski.com>",
+      "references": [
+        "<20041018210420.GA8114@sonny.eddelbuettel.com>",
+        "<20041020132440.GA28821@piskorski.com>"
+      ],
+      "body_plain": "On Wed, Oct 20, 2004 at 09:24:40AM -0400, Andrew Piskorski wrote:\n> On Mon, Oct 18, 2004 at 04:04:20PM -0500, Dirk Eddelbuettel wrote:\n> > On Mon, Oct 18, 2004 at 03:47:33PM -0500, davidr@rhotrading.com wrote:\n> \n> > > I realize that Bloomberg is expensive so few will have access to it, but\n> > > being able to get Bloomberg data directly into R would be very useful\n> > > (as it has been in S-Plus.)\n> > \n> > Sure is. I wrote a package for it against the (rather well documented)\n> > Bloomberg C API -- try WAPI <Go> and look for the 'C SDK' under downloads.\n> \n> The Bloomberg C API is reasonably well documented, but it is also\n> quite low level, so it NEEDS to be.  For anyone going that route, my\n> advice is to pay careful attention to the dozen or so example C\n> programs Bloomberg provides, as they are ugly, but CORRECT.\n> \n> Whenever you encounter subtle correctness or performance bugs in your\n> code, look again at Bloomberg's examples.  Often you will see that\n> they are doing something in one particular way which happens to work\n> well, even though the API docs don't seem to require that you do it\n> exactly that way.  Basically, the Bloomberg C API docs are helpful but\n> do not fully specify how you need to use it.  The C examples do.\n\nExcellent points and very true -- my presentation didn't stress that as much\nas it could have. The informal algorithm was\n\n- for a given access style, pick the corresponding example C file\n- prune the code, and refactor some recurrent code into a utility library\n- try it in repeated calls from a simple main()\n- wrap the R-style interface around it and disable main()\n\nAs Andrew says, their examples work, though they are not the most elegant\ncode I've ever seen, and there is a pretty obscure call pattern from one\nfunction down to another and another ... for a rather large total. But it\n*works*, and given a Bloomberg terminal, one can alter these.\n\nI still haven't found a good way to initiate a conversation with my boss(es)\nabout why \"we should give something away for free\". I do of course have my\nviews on that, but need something more convincing. I'd love to hear, on or\noff list, from anybody with a template they could share.\n\nDirk\n\n-- \nThose are my principles, and if you don't like them... well, I have others.\n                                                -- Groucho Marx",
+      "body_snippet": "On Wed, Oct 20, 2004 at 09:24:40AM -0400, Andrew Piskorski wrote:\n> On Mon, Oct 18, 2004 at 04:04:20PM -0500, Dirk Eddelbuettel wrote:\n> > On Mon, Oct 18, 2004 at 03:47:33PM -0500, davidr@rhotrading.c",
+      "thread_id": "thread-508433c385cc",
+      "thread_depth": 3,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-b0ca00b32552",
+      "message_id": "<12AE52872B5C5348BE5CF47C707FF53A32751E@rhosvr02.rhotrading.com>",
+      "from_name": "davidr@rhotrading.com",
+      "from_email_hash": "4998ec2d52ffe0c535ce902387987bbb6e981a3c144c9feae07c8ce7b5869756",
+      "date": "2004-10-20T17:06:54Z",
+      "subject": "Sharing privately funded development work (was RE: [R-sig-finance] Is there an R-analog of S-Plus'simport.dta.bloomberg?)",
+      "subject_clean": "Sharing privately funded development work (was RE: [R-sig-finance] Is there an R-analog of S-Plus'simport.dta.bloomberg?)",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Other than altruism, which not so many big companies believe in minus\ntax or PR advantages, the main argument I've seen work is that the\ncompany gets future development for free from the grateful community. In\nthis case, however, I imagine that all people contributing to extending\na bloomberg package would themselves be in the financial industry, so\nthe motivation to share would be smallish, open source licensing\nrequirements to do so aside.\nOf course, many companies participate in standards setting and similar\nactivities, which do not (always) directly benefit them, but do\nindirectly, through ease of communication with other companies like\nthemselves and ease of hiring people who can step in and get to work\nquickly. \nOf course, Bloomberg itself wouldn't want to encourage this development\neither since they are very protective of their data and analytics.\nI'll not hold my breath for your company to give permission.\n\nThanks for the good discussion on this topic!\nDavid\n\n-----Original Message-----\nFrom: Dirk Eddelbuettel [mailto:edd@debian.org] \nSent: Wednesday, October 20, 2004 9:10 AM\nTo: Andrew Piskorski\nCc: r-sig-finance@stat.math.ethz.ch\nSubject: Re: [R-sig-finance] Is there an R-analog of\nS-Plus'simport.dta.bloomberg?\n\n...\nI still haven't found a good way to initiate a conversation with my\nboss(es)\nabout why \"we should give something away for free\". I do of course have\nmy\nviews on that, but need something more convincing. I'd love to hear, on\nor\noff list, from anybody with a template they could share.\n\nDirk\n\n-- \nThose are my principles, and if you don't like them... well, I have\nothers.\n                                                -- Groucho Marx\n\n_______________________________________________\nR-sig-finance@stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance",
+      "body_snippet": "Other than altruism, which not so many big companies believe in minus\ntax or PR advantages, the main argument I've seen work is that the\ncompany gets future development for free from the grateful comm",
+      "thread_id": "thread-b0ca00b32552",
+      "thread_depth": 0,
+      "month": "2004-10"
+    },
+    {
+      "id": "msg-ff5f5ff28fbf",
+      "message_id": "<12AE52872B5C5348BE5CF47C707FF53A327579@rhosvr02.rhotrading.com>",
+      "from_name": "davidr@rhotrading.com",
+      "from_email_hash": "4998ec2d52ffe0c535ce902387987bbb6e981a3c144c9feae07c8ce7b5869756",
+      "date": "2004-10-21T20:57:43Z",
+      "subject": "[R-sig-finance] import.data.bloomberg interface",
+      "subject_clean": "import.data.bloomberg interface",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "This much is on the web:\n\nimport.data.bloomberg(topic, security, fields, flag,type, start.date, end.date, periodicity, chron.order, pathNameToServer)\n\nThis is not the greatest design ever (well, neither is the Bloomberg API, etc.) It is also incomplete, using just the DDE server rather than the API, so historical intraday data is not available (a shortcoming I would hope someone could improve for R.)\n\nThere are also examples such as:\n--------------------------------------------------------------\nSummary of Replies on how to get splits from splus / bloomberg\nfrom [Clark Sims]\n[Bookmark?Link][Original]\nTo: \ns-news@wubios.wustl.edu, Matt.Kurbat@kmv.com\nSubject: \nSummary of Replies on how to get splits from splus / bloomberg\nFrom: \n\"Clark Sims\" <clarksimssplus@my-deja.com>\nDate: \nThu, 5 Jul 2001 13:40:12 -0700\n\nThe following command gets splits for IBM\n\ntemp.data <-  import.data.bloomberg(\"Bulk\", \"IBM Equity\", \"Eqy_Dvd_Hist_Splits\")\n\ncolumn 1:  declared date\ncolumn 2:  ex date\ncolumn 3:  record date\ncolumn 4:  pay date\ncolumn 5:  split ratio\n\nThanks To Steve Wisdom\n\nHTH,\n\nClark\n--------------------------------------------------------------\nMaybe they'll sue me for publicizing this, but surely it's out on the net somewhere:\n\nDESCRIPTION\n\nImport data from a Bloomberg database into an S-PLUS data sheet.\n\nUSAGE\n\nimport.data.bloomberg(topic, security, fields, flag, type,\n     start.date, end.date, periodicity, chron.order, pathNameToServer)\n\nREQUIRED ARGUMENTS\n\ntopic \tcharacter string specifying a Bloomberg data category, one of \"Historical\", \"Market\", or \"Bulk\".\n\tsecurity\tcharacter string containing a comma-separated sequence of Bloomberg security IDs, or a character vector of such IDs. For example,  \"IBM US Equity, F US Equity\" or c(\"IBM US Equity\", \"F US Equity\").\n\tfields\ta character string containing a comma-separated sequence of field mnemonics from the Bloomberg data dictionary, or a character vector of such mnemonics. For example, \"Px High, Px Low\" or c(\"Opt chain\", \"eqy dvd hist\")\n. \n\nOPTIONAL ARGUMENTS\n\nflag\ta character string containing any special flags that apply to your query. See the Bloomberg documentation for more details.\n\ttype \ta character string describing the type of security identifier that can be specified in the DDE link, such as \"AIBD, VALOREN\". The default value is \"\".\n\tstart.date\tnumber giving the start date, or the character string \"Now\". The Bloomberg date format is yyyymmdd.   For example: 19980101, 19960520. \n\nstop.date \tThe end date (see start.date for format).\n\tperiodicity\tcharacter string giving the frequency of the requested data. Can be one of: \"Day\", \"Week\", \"Month\", \"Quarter\", or \"Year\".\n\tchron.order\tcharacter string specifying the order in which to sort the data, either \"Chronological\" or \"Reverse\".\n\tpathNameToServer\ta character string containing the path to BLP.EXE. This should not need to be set unless you have trouble accessing the server, in which case you can specify an explicit path.\n\nVALUE\n\na data sheet containing the requested data. \n\nSEE ALSO\n\nimport.data, import.data.mim, import.data.fame.\n\nEXAMPLES\n\nIBM.DS<-import.data.bloomberg(\"Historical\", c(\"IBM Equity\", \"F Equity\"),\n\n      c(\"Px Last\",\"Px high\"), \"\",\"\",19990501, \"Now\",\n\n      \"Day\",\"Chronological\",\"BLP.EXE\")\n\nIBM.DS.M<-import.data.bloomberg(\"Market\", c(\"IBM Equity\", \"F Equity\"),\n\n      c(\"Px Last\", \"Px high\", \"Px Low\"), \"\",\"\",\"Now\", \"Now\", \"Day\",\n\n      \"Chronological\",\"BLP.EXE\")\n\nDavid L. Reiner\n?\nRho Trading\n440 S. LaSalle St -- Suite 620\nChicago? IL? 60605\n?\n312-362-4963 (voice)\n312-362-4941 (fax)\n?",
+      "body_snippet": "This much is on the web:\n\nimport.data.bloomberg(topic, security, fields, flag,type, start.date, end.date, periodicity, chron.order, pathNameToServer)\n\nThis is not the greatest design ever (well, neith",
+      "thread_id": "thread-ff5f5ff28fbf",
+      "thread_depth": 0,
+      "month": "2004-10"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-cc4eb04bdfe6",
+      "subject": "How and when to USE ts and its objects?",
+      "message_count": 2,
+      "participants": [
+        "Ajay Shah",
+        "James.Callahan@CityofOrlando.net"
+      ],
+      "started": "2004-10-01T16:21:08+00:00",
+      "last_reply": "2004-10-05T06:44:52+00:00",
+      "root_message_id": "msg-cc4eb04bdfe6"
+    },
+    {
+      "id": "thread-28d1376f1aad",
+      "subject": "How and when to USE ts and its objects?",
+      "message_count": 2,
+      "participants": [
+        "Ajay Shah",
+        "Gabor Grothendieck"
+      ],
+      "started": "2004-10-01T19:16:34+00:00",
+      "last_reply": "2004-10-05T06:51:52+00:00",
+      "root_message_id": "msg-28d1376f1aad"
+    },
+    {
+      "id": "thread-48baaa991b6a",
+      "subject": "How and when to USE ts and its objects?",
+      "message_count": 1,
+      "participants": [
+        "Gabor Grothendieck"
+      ],
+      "started": "2004-10-05T07:20:24+00:00",
+      "last_reply": "2004-10-05T07:20:24+00:00",
+      "root_message_id": "msg-48baaa991b6a"
+    },
+    {
+      "id": "thread-2bbe3bd3c3c0",
+      "subject": "How and when to USE ts and its objects?",
+      "message_count": 1,
+      "participants": [
+        "Gabor Grothendieck"
+      ],
+      "started": "2004-10-05T07:50:56+00:00",
+      "last_reply": "2004-10-05T07:50:56+00:00",
+      "root_message_id": "msg-2bbe3bd3c3c0"
+    },
+    {
+      "id": "thread-088dcb8b1cf8",
+      "subject": "New Built Rmetrics 200.10058",
+      "message_count": 1,
+      "participants": [
+        "Diethelm Wuertz"
+      ],
+      "started": "2004-10-13T01:59:20+00:00",
+      "last_reply": "2004-10-13T01:59:20+00:00",
+      "root_message_id": "msg-088dcb8b1cf8"
+    },
+    {
+      "id": "thread-6602ce63b2a0",
+      "subject": "New Built Rmetrics 200.10058",
+      "message_count": 2,
+      "participants": [
+        "Diethelm Wuertz",
+        "Dirk Eddelbuettel"
+      ],
+      "started": "2004-10-13T02:00:43+00:00",
+      "last_reply": "2004-10-13T06:15:40+00:00",
+      "root_message_id": "msg-6602ce63b2a0"
+    },
+    {
+      "id": "thread-4ad4a972d2b1",
+      "subject": "WinRmetrics for 2.0?",
+      "message_count": 1,
+      "participants": [
+        "Alpert, William"
+      ],
+      "started": "2004-10-15T17:05:55+00:00",
+      "last_reply": "2004-10-15T17:05:55+00:00",
+      "root_message_id": "msg-4ad4a972d2b1"
+    },
+    {
+      "id": "thread-508433c385cc",
+      "subject": "Is there an R-analog of S-Plus's import.dta.bloomberg?",
+      "message_count": 5,
+      "participants": [
+        "Andrew Piskorski",
+        "Dirk Eddelbuettel",
+        "Krishna Kumar",
+        "davidr@rhotrading.com"
+      ],
+      "started": "2004-10-18T22:47:43+00:00",
+      "last_reply": "2004-10-20T16:10:15+00:00",
+      "root_message_id": "msg-508433c385cc"
+    },
+    {
+      "id": "thread-e5317eb4bb63",
+      "subject": "Is there an R-analog of S-Plus's import.dta.bloomberg",
+      "message_count": 1,
+      "participants": [
+        "Enrique Bengoechea"
+      ],
+      "started": "2004-10-19T12:45:55+00:00",
+      "last_reply": "2004-10-19T12:45:55+00:00",
+      "root_message_id": "msg-e5317eb4bb63"
+    },
+    {
+      "id": "thread-96d89c5541ac",
+      "subject": "Getting stock prices and annualized returns for common indexes",
+      "message_count": 2,
+      "participants": [
+        "Patrick Burns",
+        "Waichler, Scott R"
+      ],
+      "started": "2004-10-19T18:04:31+00:00",
+      "last_reply": "2004-10-19T21:05:55+00:00",
+      "root_message_id": "msg-96d89c5541ac"
+    },
+    {
+      "id": "thread-78f79a89d22d",
+      "subject": "Getting stock prices and annualized returns forcommon indexes",
+      "message_count": 2,
+      "participants": [
+        "Medica, Paul A",
+        "Patrick Burns"
+      ],
+      "started": "2004-10-19T21:57:58+00:00",
+      "last_reply": "2004-10-19T23:10:17+00:00",
+      "root_message_id": "msg-78f79a89d22d"
+    },
+    {
+      "id": "thread-a719c008adc7",
+      "subject": "fBonds from rmetrics",
+      "message_count": 1,
+      "participants": [
+        "Lars Schouw"
+      ],
+      "started": "2004-10-20T02:54:06+00:00",
+      "last_reply": "2004-10-20T02:54:06+00:00",
+      "root_message_id": "msg-a719c008adc7"
+    },
+    {
+      "id": "thread-b0ca00b32552",
+      "subject": "Sharing privately funded development work (was RE: [R-sig-finance] Is there an R-analog of S-Plus'simport.dta.bloomberg?)",
+      "message_count": 1,
+      "participants": [
+        "davidr@rhotrading.com"
+      ],
+      "started": "2004-10-20T17:06:54+00:00",
+      "last_reply": "2004-10-20T17:06:54+00:00",
+      "root_message_id": "msg-b0ca00b32552"
+    },
+    {
+      "id": "thread-ff5f5ff28fbf",
+      "subject": "import.data.bloomberg interface",
+      "message_count": 1,
+      "participants": [
+        "davidr@rhotrading.com"
+      ],
+      "started": "2004-10-21T20:57:43+00:00",
+      "last_reply": "2004-10-21T20:57:43+00:00",
+      "root_message_id": "msg-ff5f5ff28fbf"
+    }
+  ]
+}

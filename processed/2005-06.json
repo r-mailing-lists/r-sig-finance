@@ -4,6 +4,264 @@
   "month": "2005-06",
   "messages": [
     {
+      "id": "msg-a79f04f7f2fc",
+      "message_id": "<20050601102607.31b4591a.Achim.Zeileis@wu-wien.ac.at>",
+      "from_name": "Achim Zeileis",
+      "from_email_hash": "d766623ae20ff5eea9df5809187df08da7b9ac247d6072a1908ecce0219ab3e0",
+      "date": "2005-06-01T10:46:35Z",
+      "subject": "[R-sig-finance] Granger Causality",
+      "subject_clean": "Granger Causality",
+      "in_reply_to": "<BDF571786CAD224F966FEB86BEDED52F1433DCF8@elon12p32001.csfp.co.uk>",
+      "references": [
+        "<BDF571786CAD224F966FEB86BEDED52F1433DCF8@elon12p32001.csfp.co.uk>"
+      ],
+      "body_plain": "On Tue, 31 May 2005 10:12:47 +0100 Uzuner, Tolga wrote:\n\n> This was asked sometime back. Here is a rudimentary implementation,\n> hope helps.\n\nTolga, thanks for code, but I think the question was about testing\nGranger causality between two multivariate series...\n\nHowever, I also had written some code for testing for Granger causality\nbetween two univariate series as well which I have now committed to\nCRAN. It is a bit more flexible in the specification of the series and\nsupports some more time series formats. It also leverages waldtest()\nwhich allows for asymptotic tests etc.. It is contained in version\n0.9-12 of the lmtest package which is available from the CRAN master\nsite and should propagate to the mirrors in the next days. See\n  ?grangertest\nfor an example. This uses a very entertaining data set (provided to\nme by Roger Koenker) which answers the question \"What came first: the\nchicken or the egg?\". :-)\n\nBest,\nZ\n\n \n> granger <-function(d, L, k = 1) \n> {\n> #d is a bivariate time-series:  regress d[,k] on L lags of d[,1] and\n> #d[,2]. This is a modified version for R, in which the command\n> #ts.matrix was\n> substituted by ts.intersect.\n> names.d <- dimnames(d)[[2]]\n> D <- d\n> for(i in 1:L) \n> {\n> D <-ts.intersect(D, lag(d,  - i))\n> }\n> dimnames(D)[[2]] <- paste(rep(names.d, L + 1), \"_\", rep(0:L, times =\n> rep(2, L+ 1)), sep = \"\")\n> y  <- D[, k]\n> n  <- length(y)\n> x1 <- D[,  - (1:2)]\n> x0 <- x1[, ((1:L) * 2) - (k %% 2)]\n> z1 <- lm(y ~ x1)\n> z0 <- lm(y ~ x0)\n> S1 <- sum(z1$resid^2)\n> S0 <- sum(z0$resid^2)\n> ftest <- ((S0 - S1)/L)/(S1/(n - 2 * L - 1))\n> list(ftest = ftest, p.val = 1 - pf(ftest, L, n - 2 * L - 1), R2 =\n> summary(z1)$r.squared)\n> }\n> \n> gr<-function(d,L) \n> # this loops grangers' p.val for L days, \n> {\n> \tm<-matrix(nrow=L)\n> \tfor(i in 1:L)\n> \t{\n> \t\tm[i]<-granger(d,i)$p.val-granger(array(c(d[,2],d[,1]),dim(d)),\n> \t\ti)$p.val\n> \t}\n> \tm\n> }\n> \n> \n> =====================================================================\n> ========= This message is for the sole use of the intended recipient.\n> ...{{dropped}}\n> \n> _______________________________________________\n> R-sig-finance@stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>",
+      "body_snippet": "On Tue, 31 May 2005 10:12:47 +0100 Uzuner, Tolga wrote:\n\n> This was asked sometime back. Here is a rudimentary implementation,\n> hope helps.\n\nTolga, thanks for code, but I think the question was about",
+      "thread_id": "thread-a79f04f7f2fc",
+      "thread_depth": 0,
+      "month": "2005-06"
+    },
+    {
+      "id": "msg-318fd1708ebc",
+      "message_id": "<cdf8178305060108505c815a59@mail.gmail.com>",
+      "from_name": "Weiwei Shi",
+      "from_email_hash": "e71b4bfdcbaccdf2b4ce76c75550ea197804bdd777c37d227d93f8fb6c027d55",
+      "date": "2005-06-01T17:51:03Z",
+      "subject": "[R-sig-finance] help: reference & book",
+      "subject_clean": "help: reference & book",
+      "in_reply_to": "<cdf8178305052715024413af54@mail.gmail.com>",
+      "references": [
+        "<cdf8178305052715024413af54@mail.gmail.com>"
+      ],
+      "body_plain": "Hi, listers:\nI am really in need for some good books on financial market analysis,\nbetter with R. Can anyone help?\nThanks.\n\nweiwei",
+      "body_snippet": "Hi, listers:\nI am really in need for some good books on financial market analysis,\nbetter with R. Can anyone help?\nThanks.\n\nweiwei",
+      "thread_id": "thread-318fd1708ebc",
+      "thread_depth": 0,
+      "month": "2005-06"
+    },
+    {
+      "id": "msg-b38960bb566f",
+      "message_id": "<cdf8178305060109465297a10a@mail.gmail.com>",
+      "from_name": "Weiwei Shi",
+      "from_email_hash": "e71b4bfdcbaccdf2b4ce76c75550ea197804bdd777c37d227d93f8fb6c027d55",
+      "date": "2005-06-01T18:46:18Z",
+      "subject": "[R-sig-finance] Re: help: reference & book",
+      "subject_clean": "help: reference & book",
+      "in_reply_to": "<cdf8178305060108505c815a59@mail.gmail.com>",
+      "references": [
+        "<cdf8178305052715024413af54@mail.gmail.com>",
+        "<cdf8178305060108505c815a59@mail.gmail.com>"
+      ],
+      "body_plain": "I am interested in stock market. My model is built on s/p500.\n\nSorry for the uncleaness.\n\nweiwei\n\nOn 6/1/05, Weiwei Shi <helprhelp@gmail.com> wrote:\n> Hi, listers:\n> I am really in need for some good books on financial market analysis,\n> better with R. Can anyone help?\n> Thanks.\n> \n> weiwei\n> \n\n\n-- \nWeiwei Shi, Ph.D\n\n\"Did you always know?\"\n\"No, I did not. But I believed...\"\n---Matrix III",
+      "body_snippet": "I am interested in stock market. My model is built on s/p500.\n\nSorry for the uncleaness.\n\nweiwei\n\nOn 6/1/05, Weiwei Shi <helprhelp@gmail.com> wrote:\n> Hi, listers:\n> I am really in need for some good ",
+      "thread_id": "thread-318fd1708ebc",
+      "thread_depth": 1,
+      "month": "2005-06"
+    },
+    {
+      "id": "msg-a871bd548e8d",
+      "message_id": "<1db7268005060110061e7c1e9@mail.gmail.com>",
+      "from_name": "roger bos",
+      "from_email_hash": "0ea9d0b748ae3ca539a95b232b50ab6357806ed2938d51cb132598641fb9b417",
+      "date": "2005-06-01T19:06:14Z",
+      "subject": "[R-sig-finance] Re: [R] Re: help: reference & book",
+      "subject_clean": "help: reference & book",
+      "in_reply_to": "<cdf8178305060109465297a10a@mail.gmail.com>",
+      "references": [
+        "<cdf8178305052715024413af54@mail.gmail.com>",
+        "<cdf8178305060108505c815a59@mail.gmail.com>",
+        "<cdf8178305060109465297a10a@mail.gmail.com>"
+      ],
+      "body_plain": "Your question is kind of broad, but two books I like are \"Statistical\nAnalysis of Financial Data in S-Plus\" by Rene A. Carmona (Springer)\nand \"Modeling Financial Time Series With S-Plus\" by Eric Zivot and\nJiahue Wang.  The last one is an Insightful publication and is\nbasically the user's guide for their S+Finmetrics product, but even\nw/o Finmetrics its a worthwhile read.\n\nHTH,\n\nRoger\n\n\nOn 6/1/05, Weiwei Shi <helprhelp@gmail.com> wrote:\n> I am interested in stock market. My model is built on s/p500.\n> \n> Sorry for the uncleaness.\n> \n> weiwei\n> \n> On 6/1/05, Weiwei Shi <helprhelp@gmail.com> wrote:\n> > Hi, listers:\n> > I am really in need for some good books on financial market analysis,\n> > better with R. Can anyone help?\n> > Thanks.\n> >\n> > weiwei\n> >\n> \n> \n> --\n> Weiwei Shi, Ph.D\n> \n> \"Did you always know?\"\n> \"No, I did not. But I believed...\"\n> ---Matrix III\n> \n> ______________________________________________\n> R-help@stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-help\n> PLEASE do read the posting guide! http://www.R-project.org/posting-guide.html\n>",
+      "body_snippet": "Your question is kind of broad, but two books I like are \"Statistical\nAnalysis of Financial Data in S-Plus\" by Rene A. Carmona (Springer)\nand \"Modeling Financial Time Series With S-Plus\" by Eric Zivot",
+      "thread_id": "thread-318fd1708ebc",
+      "thread_depth": 2,
+      "month": "2005-06"
+    },
+    {
+      "id": "msg-44e0c15e64eb",
+      "message_id": "<1af460ea05060121043198b287@mail.gmail.com>",
+      "from_name": "Sanjun Chen",
+      "from_email_hash": "466647b95212d2a0614276744df17bba420969b596a32be4745a7805072c2529",
+      "date": "2005-06-02T06:04:50Z",
+      "subject": "[R-sig-finance] getReturns in fMultivar",
+      "subject_clean": "getReturns in fMultivar",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hi,\nI got the following message when I used the getReturns in the\nfMultivar package. (it worked fine in previous version of fSeries).\n\n>         data(EuStockMarkets)\n>         dax = log(EuStockMarkets[, \"DAX\"])\n>         plot(getReturns(dax))\nError in ans[-1, ] : incorrect number of dimensions\n\n\nAppreciate any help.\n\nThanks.\n\nSanjun Chen",
+      "body_snippet": "Hi,\nI got the following message when I used the getReturns in the\nfMultivar package. (it worked fine in previous version of fSeries).\n\n>         data(EuStockMarkets)\n>         dax = log(EuStockMarkets",
+      "thread_id": "thread-44e0c15e64eb",
+      "thread_depth": 0,
+      "month": "2005-06"
+    },
+    {
+      "id": "msg-822c51c95c53",
+      "message_id": "<001201c5672c$e64bb3b0$6900a8c0@HCJP.COM>",
+      "from_name": "ManojW",
+      "from_email_hash": "16ebd46bb0e77308d08d586502ac87e3855a44c20cd5969dd7c2c8a82eb5316e",
+      "date": "2005-06-02T06:38:28Z",
+      "subject": "[R-sig-finance] getReturns in fMultivar",
+      "subject_clean": "getReturns in fMultivar",
+      "in_reply_to": null,
+      "references": [
+        "<1af460ea05060121043198b287@mail.gmail.com>"
+      ],
+      "body_plain": "A quick debug of getReturns reveal that the function returnSeries has some\n\"issues\"  handling vector data. As a stop gap arrangement, you can try to\ninvoke getReturns by casting the data as a timeSeries obejct.\n\nHope that helps.\n\nManoj\n\n\n----- Original Message ----- \nFrom: \"Sanjun Chen\" <sanjun.chen@gmail.com>\nTo: <r-sig-finance@stat.math.ethz.ch>\nSent: Thursday, June 02, 2005 1:04 PM\nSubject: [R-sig-finance] getReturns in fMultivar\n\n\n> Hi,\n> I got the following message when I used the getReturns in the\n> fMultivar package. (it worked fine in previous version of fSeries).\n>\n> >         data(EuStockMarkets)\n> >         dax = log(EuStockMarkets[, \"DAX\"])\n> >         plot(getReturns(dax))\n> Error in ans[-1, ] : incorrect number of dimensions\n>\n>\n> Appreciate any help.\n>\n> Thanks.\n>\n> Sanjun Chen\n>\n> _______________________________________________\n> R-sig-finance@stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance",
+      "body_snippet": "A quick debug of getReturns reveal that the function returnSeries has some\n\"issues\"  handling vector data. As a stop gap arrangement, you can try to\ninvoke getReturns by casting the data as a timeSeri",
+      "thread_id": "thread-44e0c15e64eb",
+      "thread_depth": 1,
+      "month": "2005-06"
+    },
+    {
+      "id": "msg-b6a2a432d5ef",
+      "message_id": "<429EAF24.5060005@itp.phys.ethz.ch>",
+      "from_name": "Diethelm Wuertz",
+      "from_email_hash": "db72845f148b28bce223455d9f5dbf705d659fd637f9d0697fb0778a67cfebef",
+      "date": "2005-06-02T09:03:12Z",
+      "subject": "[R-sig-finance] getReturns in fMultivar",
+      "subject_clean": "getReturns in fMultivar",
+      "in_reply_to": "<001201c5672c$e64bb3b0$6900a8c0@HCJP.COM>",
+      "references": [
+        "<1af460ea05060121043198b287@mail.gmail.com>",
+        "<001201c5672c$e64bb3b0$6900a8c0@HCJP.COM>"
+      ],
+      "body_plain": "As pointed out by ManojW, getReturns expects a S4 timeSeries object as \ninput.\n\nTry:\n > data(EuStockMarkets)\n > dim(EuStockMarkets)\n[1] 1860    4\n > attr(EuStockMarkets, \"tsp\")\n[1] 1991.496 1998.646  260.000\n > class(EuStockMarkets)\n[1] \"mts\" \"ts\"\n\nEuStockMarkets is a S3 mts/ts object which has no time positions as a\nS4 timeSeries object does. Only start, end, and frequency are available.\nSo you have to re-construct the dates from the  EuStockMarkets object,\nand convert EuStockMarkets to a  timeSeries object to use it together\nwith the functions getReturns or with returnSeries.\n\nTo plot ts and mts time series object inspect the help of the functions\nplot.sts and ts.plot.\n\nDW\n\n\n\n\n\nManojW wrote:\n\n>A quick debug of getReturns reveal that the function returnSeries has some\n>\"issues\"  handling vector data. As a stop gap arrangement, you can try to\n>invoke getReturns by casting the data as a timeSeries obejct.\n>\n>Hope that helps.\n>\n>Manoj\n>\n>\n>----- Original Message ----- \n>From: \"Sanjun Chen\" <sanjun.chen@gmail.com>\n>To: <r-sig-finance@stat.math.ethz.ch>\n>Sent: Thursday, June 02, 2005 1:04 PM\n>Subject: [R-sig-finance] getReturns in fMultivar\n>\n>\n>  \n>\n>>Hi,\n>>I got the following message when I used the getReturns in the\n>>fMultivar package. (it worked fine in previous version of fSeries).\n>>\n>>    \n>>\n>>>        data(EuStockMarkets)\n>>>        dax = log(EuStockMarkets[, \"DAX\"])\n>>>        plot(getReturns(dax))\n>>>      \n>>>\n>>Error in ans[-1, ] : incorrect number of dimensions\n>>\n>>\n>>Appreciate any help.\n>>\n>>Thanks.\n>>\n>>Sanjun Chen\n>>\n>>_______________________________________________\n>>R-sig-finance@stat.math.ethz.ch mailing list\n>>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>    \n>>\n>\n>_______________________________________________\n>R-sig-finance@stat.math.ethz.ch mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>  \n>",
+      "body_snippet": "As pointed out by ManojW, getReturns expects a S4 timeSeries object as \ninput.\n\nTry:\n > data(EuStockMarkets)\n > dim(EuStockMarkets)\n[1] 1860    4\n > attr(EuStockMarkets, \"tsp\")\n[1] 1991.496 1998.646  ",
+      "thread_id": "thread-44e0c15e64eb",
+      "thread_depth": 2,
+      "month": "2005-06"
+    },
+    {
+      "id": "msg-3d4ef1b37426",
+      "message_id": "<OFF5805335.6CFE9129-ONC1257014.003ABB21@credit-suisse.com>",
+      "from_name": "Enrique Bengoechea",
+      "from_email_hash": "867c96515f3a620c9951603a510be56a57f731c55dd06a62929d63c3ceec7a59",
+      "date": "2005-06-02T12:46:23Z",
+      "subject": "[R-sig-finance] help: reference & book",
+      "subject_clean": "help: reference & book",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "For a good non-R specific book, I always recommend Carol Alexander's \"Market Models: A Guide to Financial Data Analysis\", John Wiley & Sons. It's much better than the two R-specific ones *if you're new to the topic*.\n\nEnrique",
+      "body_snippet": "For a good non-R specific book, I always recommend Carol Alexander's \"Market Models: A Guide to Financial Data Analysis\", John Wiley & Sons. It's much better than the two R-specific ones *if you're ne",
+      "thread_id": "thread-3d4ef1b37426",
+      "thread_depth": 0,
+      "month": "2005-06"
+    },
+    {
+      "id": "msg-18e23f153dfb",
+      "message_id": "<cdf8178305060207434487551d@mail.gmail.com>",
+      "from_name": "Weiwei Shi",
+      "from_email_hash": "e71b4bfdcbaccdf2b4ce76c75550ea197804bdd777c37d227d93f8fb6c027d55",
+      "date": "2005-06-02T16:43:28Z",
+      "subject": "[R-sig-finance] help: reference & book",
+      "subject_clean": "help: reference & book",
+      "in_reply_to": "<OFF5805335.6CFE9129-ONC1257014.003ABB21@credit-suisse.com>",
+      "references": [
+        "<OFF5805335.6CFE9129-ONC1257014.003ABB21@credit-suisse.com>"
+      ],
+      "body_plain": "Thank you so much for everyone's replies. I hope I can read all if my\nwallet allows me :)\n\nWeiwei\n\nOn 6/2/05, Enrique Bengoechea <enrique.bengoechea@credit-suisse.com> wrote:\n> \n> \n> \n> \n> For a good non-R specific book, I always recommend Carol Alexander's \"Market Models: A Guide to Financial Data Analysis\", John Wiley & Sons. It's much better than the two R-specific ones *if you're new to the topic*.\n> \n> Enrique\n> \n> _______________________________________________\n> R-sig-finance@stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> \n\n\n-- \nWeiwei Shi, Ph.D\n\n\"Did you always know?\"\n\"No, I did not. But I believed...\"\n---Matrix III",
+      "body_snippet": "Thank you so much for everyone's replies. I hope I can read all if my\nwallet allows me :)\n\nWeiwei\n\nOn 6/2/05, Enrique Bengoechea <enrique.bengoechea@credit-suisse.com> wrote:\n> \n> \n> \n> \n> For a good ",
+      "thread_id": "thread-3d4ef1b37426",
+      "thread_depth": 1,
+      "month": "2005-06"
+    },
+    {
+      "id": "msg-af21375b2efe",
+      "message_id": "<m2fyw0viz6.fsf@flatsoft.no-ip.info>",
+      "from_name": "Flatman",
+      "from_email_hash": "74b938a844ff32112a4cc37cf0575c645c128ba7dfb8a6cb90e64f773de69655",
+      "date": "2005-06-02T18:09:32Z",
+      "subject": "[R-sig-finance] help: reference & book",
+      "subject_clean": "help: reference & book",
+      "in_reply_to": "<cdf8178305060207434487551d@mail.gmail.com> (Weiwei Shi's message of \"Thu, 2 Jun 2005 09:43:20 -0500\")",
+      "references": [
+        "<OFF5805335.6CFE9129-ONC1257014.003ABB21@credit-suisse.com>",
+        "<cdf8178305060207434487551d@mail.gmail.com>"
+      ],
+      "body_plain": "Weiwei Shi <helprhelp@gmail.com> writes:\n\n> Thank you so much for everyone's replies. I hope I can read all if my\n> wallet allows me :)\n>\n\n\n\nWould you mind sending a list of all the books that were mentioned to you ?\nI lost some posts ...\n\n\nThanks\nErik",
+      "body_snippet": "Weiwei Shi <helprhelp@gmail.com> writes:\n\n> Thank you so much for everyone's replies. I hope I can read all if my\n> wallet allows me :)\n>\n\n\n\nWould you mind sending a list of all the books that were me",
+      "thread_id": "thread-3d4ef1b37426",
+      "thread_depth": 2,
+      "month": "2005-06"
+    },
+    {
+      "id": "msg-acdf4291b023",
+      "message_id": "<cdf817830506021118522f8808@mail.gmail.com>",
+      "from_name": "Weiwei Shi",
+      "from_email_hash": "e71b4bfdcbaccdf2b4ce76c75550ea197804bdd777c37d227d93f8fb6c027d55",
+      "date": "2005-06-02T20:18:58Z",
+      "subject": "[R-sig-finance] help: reference & book",
+      "subject_clean": "help: reference & book",
+      "in_reply_to": "<m2fyw0viz6.fsf@flatsoft.no-ip.info>",
+      "references": [
+        "<OFF5805335.6CFE9129-ONC1257014.003ABB21@credit-suisse.com>",
+        "<cdf8178305060207434487551d@mail.gmail.com>",
+        "<m2fyw0viz6.fsf@flatsoft.no-ip.info>"
+      ],
+      "body_plain": "Here you go:\n\n<start>\nYour question is kind of broad, but two books I like are \"Statistical\nAnalysis of Financial Data in S-Plus\" by Rene A. Carmona (Springer)\nand \"Modeling Financial Time Series With S-Plus\" by Eric Zivot and\nJiahue Wang.  The last one is an Insightful publication and is\nbasically the user's guide for their S+Finmetrics product, but even\nw/o Finmetrics its a worthwhile read.\n\nHTH,\n\nRoger\n\n\nThe book  depends on your model. for example , if you are interested\nin modelling technical analysis you can refer to this book:\n \nTechnical Analysis of the Financial Markets: A Comprehensive Guide to\nTrading Methods and Applications\nby John J. Murphy\n \nTechnical Analysis of Stock Trends, 8th Edition\nby Robert D. Edwards, John Magee, W. H. C. Bassetti (Editor)\n \nif you are interested in fundamental analysis you could refer to this one:\nA Complete Guide to the Futures Markets : Fundamental Analysis,\nTechnical Analysis, Trading, Spreads, and Options\nby Jack D. Schwager\n \n if you are interested in agent based models you could refer to for\nexample Santa Fe models in this page:\nhttp://ideas.repec.org/p/bfe/wpsbfi/wpa2004.html\n \n \nAmir\n \nWhat kind of model is that? If you want to measure its volatility, maybe\nyou should try Engle's \"ARCH selected readings\" and in addition to that\ndocumentation of rmetrics available at rmetrics.org.\n\nBest regards,\nWojtek\n\nFor a good non-R specific book, I always recommend Carol Alexander's\n\"Market Models: A Guide to Financial Data Analysis\", John Wiley &\nSons. It's much better than the two R-specific ones *if you're new to\nthe topic*.\n\nEnrique\n\n<end>\n\nOn 6/2/05, Flatman <flatman@swing.be> wrote:\n> Weiwei Shi <helprhelp@gmail.com> writes:\n> \n> > Thank you so much for everyone's replies. I hope I can read all if my\n> > wallet allows me :)\n> >\n> \n> \n> \n> Would you mind sending a list of all the books that were mentioned to you ?\n> I lost some posts ...\n> \n> \n> Thanks\n> Erik\n> \n\n\n-- \nWeiwei Shi, Ph.D\n\n\"Did you always know?\"\n\"No, I did not. But I believed...\"\n---Matrix III",
+      "body_snippet": "Here you go:\n\n<start>\nYour question is kind of broad, but two books I like are \"Statistical\nAnalysis of Financial Data in S-Plus\" by Rene A. Carmona (Springer)\nand \"Modeling Financial Time Series With",
+      "thread_id": "thread-3d4ef1b37426",
+      "thread_depth": 3,
+      "month": "2005-06"
+    },
+    {
+      "id": "msg-2cc979773884",
+      "message_id": "<m21x7k5w5u.fsf@flatsoft.no-ip.info>",
+      "from_name": "Flatman",
+      "from_email_hash": "74b938a844ff32112a4cc37cf0575c645c128ba7dfb8a6cb90e64f773de69655",
+      "date": "2005-06-02T22:41:31Z",
+      "subject": "[R-sig-finance] help: reference & book",
+      "subject_clean": "help: reference & book",
+      "in_reply_to": "<cdf817830506021118522f8808@mail.gmail.com> (Weiwei Shi's message of \"Thu, 2 Jun 2005 13:18:48 -0500\")",
+      "references": [
+        "<OFF5805335.6CFE9129-ONC1257014.003ABB21@credit-suisse.com>",
+        "<cdf8178305060207434487551d@mail.gmail.com>",
+        "<m2fyw0viz6.fsf@flatsoft.no-ip.info>",
+        "<cdf817830506021118522f8808@mail.gmail.com>"
+      ],
+      "body_plain": "Weiwei Shi <helprhelp@gmail.com> writes:\n\n> Here you go:\n>\n> <start>\n> Your question is kind of broad, but two books I like are \"Statistical\n> Analysis of Financial Data in S-Plus\" by Rene A. Carmona (Springer)\n> and \"Modeling Financial Time Series With S-Plus\" by Eric Zivot and\n> Jiahue Wang.  The last one is an Insightful publication and is\n> basically the user's guide for their S+Finmetrics product, but even\n> w/o Finmetrics its a worthwhile read.\n>\n\n<snip>\n\nAren't there any freely available tutorials on the web ?\n\nThanks\nErik",
+      "body_snippet": "Weiwei Shi <helprhelp@gmail.com> writes:\n\n> Here you go:\n>\n> <start>\n> Your question is kind of broad, but two books I like are \"Statistical\n> Analysis of Financial Data in S-Plus\" by Rene A. Carmona ",
+      "thread_id": "thread-3d4ef1b37426",
+      "thread_depth": 4,
+      "month": "2005-06"
+    },
+    {
+      "id": "msg-e5ede3b14d41",
+      "message_id": "<loom.20050602T195632-335@post.gmane.org>",
+      "from_name": "Dirk Eddelbuettel",
+      "from_email_hash": "447d8de83a7b9c5d61116890bacb6dc0c76aee31b3011a41fb7d3c62dac9042f",
+      "date": "2005-06-03T02:54:32Z",
+      "subject": "[R-sig-finance] [OT] reference & book",
+      "subject_clean": "[OT] reference & book",
+      "in_reply_to": null,
+      "references": [
+        "<OFF5805335.6CFE9129-ONC1257014.003ABB21@credit-suisse.com>",
+        "<cdf8178305060207434487551d@mail.gmail.com>",
+        "<m2fyw0viz6.fsf@flatsoft.no-ip.info>"
+      ],
+      "body_plain": "Flatman <flatman <at> swing.be> writes:\n> Would you mind sending a list of all the books that were mentioned to you ?\n> I lost some posts ...\n\nWhile I wouldn't want to discourage summary posting backs to the list -- quite \nthe contrary -- you should note that this list itself is archived in several \nplaces as e.g. http://news.gmane.org/gmane.comp.lang.r.finance\n\nAlso, I realized this morning that the very detailed list Fernando compiled over\nat Quantlib.org may be of interest to some:  http://www.quantlib.org/books.shtml\n\nRegards,  Dirk",
+      "body_snippet": "Flatman <flatman <at> swing.be> writes:\n> Would you mind sending a list of all the books that were mentioned to you ?\n> I lost some posts ...\n\nWhile I wouldn't want to discourage summary posting backs",
+      "thread_id": "thread-3d4ef1b37426",
+      "thread_depth": 3,
+      "month": "2005-06"
+    },
+    {
+      "id": "msg-eecd0a290284",
+      "message_id": "<FFAAD1A807317540A06142D8CD168E9D54BB90@se000010010038.servinternet.local>",
+      "from_name": "KAHRA HANNU",
+      "from_email_hash": "16718a29600191ba91802e01a545b832f96b08a3789726bda6329fcd2f7da538",
+      "date": "2005-06-03T15:22:05Z",
+      "subject": "[R-sig-finance] RE: [R] help: reference & book",
+      "subject_clean": "help: reference & book",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "A brief look at my library reveals that I have at least the following books on financial econometrics:\n\nWalter Enders: Applied Econometric Time Series (contains RATS code)\nJohn Y. Campbell - Andrew W. Lo - Craig MacKinlay: The Econometrics of Financial Markets\nJames D. Hamilton: Time Series Analysis\nRuey Tsay: Analysis of Financial Time Series (contains RATS code)\nTerence C. Mills: The Econometric Modelling of Financial Time Series\nKeith Cuthbertson - Dirk Nitzsche: Quantitative Financial Economics - Stocks, Bonds and Foreign Exchange\nEric Zivot - Jiahui Wang: Modeling Financial Time Series with S-Plus\nChristian Gourieroux - Joann Jasiak: Financial Econometrics - Problems, Models, and Methods\nCarol Alexander: Market Models - A Guide to Financial Data Analysis\n \nThese books are quite general. Furthermore, there are books on special topics: GARCH, stochastic volatility, Levy processes, high-frequency data, etc.\n\nHannu Kahra \nProgetti Speciali \nMonte Paschi Asset Management SGR S.p.A. \nVia San Vittore, 37\nIT-20123 Milano, Italia \n\nTel.: +39 02 43828 754 \nMobile: +39 333 876 1558 \nFax: +39 02 43828 247 \nE-mail: hannu.kahra@mpsgr.it \nWeb: www.mpsam.it \n\n\n\n-----Original Message-----\nFrom: r-help-bounces@stat.math.ethz.ch\n[mailto:r-help-bounces@stat.math.ethz.ch]On Behalf Of Weiwei Shi\nSent: Wednesday, June 01, 2005 5:51 PM\nTo: R-sig-finance@stat.math.ethz.ch\nCc: R-help@stat.math.ethz.ch\nSubject: [R] help: reference & book\n\n\nHi, listers:\nI am really in need for some good books on financial market analysis,\nbetter with R. Can anyone help?\nThanks.\n\nweiwei\n\n______________________________________________\nR-help@stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-help\nPLEASE do read the posting guide! http://www.R-project.org/posting-guide.html",
+      "body_snippet": "A brief look at my library reveals that I have at least the following books on financial econometrics:\n\nWalter Enders: Applied Econometric Time Series (contains RATS code)\nJohn Y. Campbell - Andrew W.",
+      "thread_id": "thread-eecd0a290284",
+      "thread_depth": 0,
+      "month": "2005-06"
+    },
+    {
       "id": "msg-24c02d3a2d94",
       "message_id": "<1119275176.61e79bcL.Isella@myrealbox.com>",
       "from_name": "L.Isella",
@@ -103,6 +361,67 @@
     }
   ],
   "threads": [
+    {
+      "id": "thread-a79f04f7f2fc",
+      "subject": "Granger Causality",
+      "message_count": 1,
+      "participants": [
+        "Achim Zeileis"
+      ],
+      "started": "2005-06-01T10:46:35+00:00",
+      "last_reply": "2005-06-01T10:46:35+00:00",
+      "root_message_id": "msg-a79f04f7f2fc"
+    },
+    {
+      "id": "thread-318fd1708ebc",
+      "subject": "help: reference & book",
+      "message_count": 3,
+      "participants": [
+        "Weiwei Shi",
+        "roger bos"
+      ],
+      "started": "2005-06-01T17:51:03+00:00",
+      "last_reply": "2005-06-01T19:06:14+00:00",
+      "root_message_id": "msg-318fd1708ebc"
+    },
+    {
+      "id": "thread-44e0c15e64eb",
+      "subject": "getReturns in fMultivar",
+      "message_count": 3,
+      "participants": [
+        "Diethelm Wuertz",
+        "ManojW",
+        "Sanjun Chen"
+      ],
+      "started": "2005-06-02T06:04:50+00:00",
+      "last_reply": "2005-06-02T09:03:12+00:00",
+      "root_message_id": "msg-44e0c15e64eb"
+    },
+    {
+      "id": "thread-3d4ef1b37426",
+      "subject": "help: reference & book",
+      "message_count": 6,
+      "participants": [
+        "Dirk Eddelbuettel",
+        "Enrique Bengoechea",
+        "Flatman",
+        "Weiwei Shi"
+      ],
+      "started": "2005-06-02T12:46:23+00:00",
+      "last_reply": "2005-06-03T02:54:32+00:00",
+      "root_message_id": "msg-3d4ef1b37426"
+    },
+    {
+      "id": "thread-eecd0a290284",
+      "subject": "help: reference & book",
+      "message_count": 1,
+      "participants": [
+        "KAHRA HANNU"
+      ],
+      "started": "2005-06-03T15:22:05+00:00",
+      "last_reply": "2005-06-03T15:22:05+00:00",
+      "root_message_id": "msg-eecd0a290284"
+    },
     {
       "id": "thread-24c02d3a2d94",
       "subject": "fPortfolio",

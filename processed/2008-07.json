@@ -2100,22 +2100,6 @@
       "month": "2008-07"
     },
     {
-      "id": "msg-1d1437bdaf06",
-      "message_id": "<18617785.post@talk.nabble.com>",
-      "from_name": "kafkaz",
-      "from_email_hash": "2f33824ae1fec194536964b58d7f9fb9d31677d868a9e45be9cdbb1b00f43994",
-      "date": "2008-07-23T19:03:44Z",
-      "subject": "[R-SIG-Finance] [R-sig-finance] xts and barChart (quantmod)",
-      "subject_clean": "xts and barChart (quantmod)",
-      "in_reply_to": null,
-      "references": [],
-      "body_plain": "My data is stored in a MySQL database. So, I'm using RMySQL to load\ninformation about price performance. After that, I'm using xts to convert\nselected data into XTS object. Example:\n\nrs <- dbSendQuery(con, \"select ....\");\ndji<- fetch(rs, n = -1) \ndji2<-xts(dji,order.by=as.POSIXct(dji[,1]))\ncolnames(dji2)<-c('Datetime', 'Open', 'High', 'Low', 'Close', 'Volume')\nAt this point I have a xts object:\n\nclass(dji2)\n[1] \"xts\" \"zoo\"\n\n >str(dji2)\nAn ?xts? object from 2004-01-07 15:50:00 to 2004-01-09 11:45:00 containing:\n  Data: chr [1:50, 1:6] \"2004-01-07 15:50:00\" \"2004-01-07 15:55:00\"\n\"2004-01-07 16:00:00\" \"2004-01-07 16:05:00\" ...\n - attr(*, \"dimnames\")=List of 2\n  ..$ : chr [1:50] \"2004-01-07 15:50:00\" \"2004-01-07 15:55:00\" \"2004-01-07\n16:00:00\" \"2004-01-07 16:05:00\" ...\n  ..$ : chr [1:6] \"Datetime\" \"Open\" \"High\" \"Low\" ...\n  Indexed by:  POSIXct[1:50], format: \"2004-01-07 15:50:00\" \"2004-01-07\n15:55:00\" \"2004-01-07 16:00:00\" \"2004-01-07 16:05:00\" ...\n  xts Attributes:  \n NULL\n\ndji2[1:4,]\n                    Datetime            Open  High  Low   Close Volume\n2004-01-07 15:50:00 2004-01-07 15:50:00 10483 10483 10480 10480   0   \n2004-01-07 15:55:00 2004-01-07 15:55:00 10479 10479 10465 10465   0   \n2004-01-07 16:00:00 2004-01-07 16:00:00 10464 10464 10460 10460   0   \n2004-01-07 16:05:00 2004-01-07 16:05:00 10459 10459 10442 10442   0 \n\nIf I try to use barChart function (quantmod package), I will get this error:\nError in checkSlotAssignment(object, name, value) : \n  assignment of an object of class \"character\" is not valid for slot\n\"yrange\" in an object of class \"chob\"; is(value, \"numeric\") is not TRUE\n\nThe problem lies in the type of columns - open, high, low and close have\ntype character, but quantmod function expects integer:\n\nif (is.OHLC(x)) {\n        chob at yrange <- c(min(Lo(x), na.rm = TRUE), max(Hi(x), \n            na.rm = TRUE))\n    }\n    else chob at yrange <- range(x[, 1], na.rm = TRUE)\n\nis.character(dji2[,5])\n[1] TRUE\n\nAny idea how to fix it?\nThank you.\n-- \nView this message in context: http://www.nabble.com/xts-and-barChart-%28quantmod%29-tp18617785p18617785.html\nSent from the Rmetrics mailing list archive at Nabble.com.",
-      "body_snippet": "My data is stored in a MySQL database. So, I'm using RMySQL to load\ninformation about price performance. After that, I'm using xts to convert\nselected data into XTS object. Example:\n\nrs <- dbSendQuery",
-      "thread_id": "thread-1d1437bdaf06",
-      "thread_depth": 0,
-      "month": "2008-07"
-    },
-    {
       "id": "msg-cea8fd13d825",
       "message_id": "<1865010807231816i3292d78bse82e87eb28a5b6c4@mail.gmail.com>",
       "from_name": "Ian Seow",
@@ -3369,17 +3353,6 @@
       "started": "2008-07-23T14:24:42+02:00",
       "last_reply": "2008-07-27T21:24:59-07:00",
       "root_message_id": "msg-2ab1abf1704e"
-    },
-    {
-      "id": "thread-1d1437bdaf06",
-      "subject": "xts and barChart (quantmod)",
-      "message_count": 1,
-      "participants": [
-        "kafkaz"
-      ],
-      "started": "2008-07-23T19:03:44+00:00",
-      "last_reply": "2008-07-23T19:03:44+00:00",
-      "root_message_id": "msg-1d1437bdaf06"
     },
     {
       "id": "thread-3b672b2e4c1a",
