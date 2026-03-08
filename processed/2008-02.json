@@ -2242,6 +2242,22 @@
       "month": "2008-02"
     },
     {
+      "id": "msg-d8a98e0acb52",
+      "message_id": "<15549288.post@talk.nabble.com>",
+      "from_name": "michaelb",
+      "from_email_hash": "5a9cfbb213f1e51a891fbfec74919a05225618b3d516282fd3d354a1c7283b6c",
+      "date": "2008-02-19T16:42:51Z",
+      "subject": "[R-SIG-Finance] [R-sig-finance] garchFit failing to give a solution",
+      "subject_clean": "garchFit failing to give a solution",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "I saw the messages on garch vs garchFit - minimum sample size  and my\nexperinces are the same. For < 500 obs garchFit() often fails and < 1000\ngarch() fails.\n\nIn fact, using garchSim to create test data with obs < 2000 I found garchFit\nfailed more often then I would expect.  I conjecture 2 reasons for this (1)\nthe alpha1=.10 and beta1=.80 starting values are not good choices for many\ncases. (2) the lower bound restriction of 10E-6 on each alpha and beta\nshould be replaced with  0 < sum(alpha,beta) < 1.\n\nI might have missed how to change these in the garchFit documentation.  Or\nmaybe there are too embedded in the procedures to change, and if so I\nsuggest adding more flexible upper and lower bounds settings in the next\nversion of garchFit, and also better diagnostics on non-converged or early\nbreaking in the optimization step.  \n\nI see the Rmetrics developers contribute here , so IMHO :\nFor multiple parmater restrictions such 0 < sum(alpha,beta) < 1 a llh\npenalty is usually easy to add and works too, and checking h > 0 for all t\nmight also be necesssary.  Also an initial step that selects the best\nstarting values from a set of 4 or 5 would add robustness.   Finally, is\nthere a way to check the garchFit version I am running?  adding the version\nnumber would be useful to add to the output description, as well as the\nmethod used to compute the parameter standard errors and whether a\nconvergence criteria was met.\n-- \nView this message in context: http://www.nabble.com/garchFit-failing-to-give-a-solution-tp15549288p15549288.html\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "I saw the messages on garch vs garchFit - minimum sample size  and my\nexperinces are the same. For < 500 obs garchFit() often fails and < 1000\ngarch() fails.\n\nIn fact, using garchSim to create test da",
+      "thread_id": "thread-d8a98e0acb52",
+      "thread_depth": 0,
+      "month": "2008-02"
+    },
+    {
       "id": "msg-a12a3e98eee2",
       "message_id": "<20080219210900.4eca5852@yankee-laptop>",
       "from_name": "Yohan Chalabi",
@@ -2934,6 +2950,25 @@
       "body_snippet": "Hi Murali:\n\nTry:\n\n> xts.ts[which(rownames(xts.ts) %in% rownames(yts.ts))]\n\nThe problem is that the first '2007-02-10' is getting interpreted as a\n'date' index, if you will, and discarding the rest:\n\nT",
       "thread_id": "thread-a1b20141fafd",
       "thread_depth": 1,
+      "month": "2008-02"
+    },
+    {
+      "id": "msg-57ea27953b41",
+      "message_id": "<15718653.post@talk.nabble.com>",
+      "from_name": "Yuri Volchik",
+      "from_email_hash": "ebb1b248e3188f5e1ccc001983be2a138ea18af16ff5fda4d3194574c69e55b8",
+      "date": "2008-02-27T17:44:48Z",
+      "subject": "[R-SIG-Finance] [R-sig-finance] Extracting OHLC from trade price series",
+      "subject_clean": "Extracting OHLC from trade price series",
+      "in_reply_to": "<e8e755250802191639p36e42eb3jfc40afcdd2eb1cdf@mail.gmail.com>",
+      "references": [
+        "<e385f1f9245b9.47bb72ca@optonline.net>",
+        "<e8e755250802191639p36e42eb3jfc40afcdd2eb1cdf@mail.gmail.com>"
+      ],
+      "body_plain": "Hi to all members,\n\nI presume my question is to Jeff mostly concerning to.minutes:\nI have a xts object with tick data:\n\nmm<-xts(dd[,2:4],new.timestamps)\n\n                             BO   Price        Quantity\n2007-01-02 08:13:52 O  18.50000000   5     \n2007-01-02 08:15:02 B  18.29999924   3     \n2007-01-02 08:15:02 B  18.29999924  10     \n2007-01-02 08:46:31 B  18.00000000  10     \n2007-01-02 09:01:43 B  17.85000038   1     \n2007-01-02 09:04:48 B  17.85000038   9     \n2007-01-02 09:19:58 B  17.85000038   1     \n2007-01-02 09:38:19 B  17.85000038   1     \n2007-01-02 09:54:08 B  17.70000076   5     \n2007-01-02 10:07:25 O  17.79999924   5 \n...\n\n\nand trying to convert to 5 min data using \nxx<-to.minutes(mm[,2],5,'minutes')\n\n                    minutes.Open minutes.High minutes.Low minutes.Close\n2007-01-02 08:13:52  18.50000000  18.50000000 18.50000000   18.50000000\n2007-01-02 08:15:02  18.29999924  18.29999924 18.29999924   18.29999924\n2007-01-02 08:46:31  18.00000000  18.00000000 18.00000000   18.00000000\n2007-01-02 09:01:43  17.85000038  17.85000038 17.85000038   17.85000038\n2007-01-02 09:04:48  17.85000038  17.85000038 17.85000038   17.85000038\n2007-01-02 09:19:58  17.85000038  17.85000038 17.85000038   17.85000038\n2007-01-02 09:38:19  17.85000038  17.85000038 17.85000038   17.85000038\n2007-01-02 09:54:08  17.70000076  17.70000076 17.70000076   17.70000076\n2007-01-02 10:07:28  17.79999924  17.79999924 17.79999924   17.79999924\n2007-01-02 10:17:22  17.79999924  17.79999924 17.79999924   17.79999924\n....\n\nThe question is this output correct, is there a way to convert tick data to\na somewhat 'nice' representation with equally spaced time intervals and\nusing specific method of interpolation for missing data (or just leaving\nthem as NA). I created such code in R, but i think it is quite slow. \n\nThanks\n\n\n\n\nJeff Ryan wrote:\n> \n> Hi,\n> \n> The package 'xts' (the function in question previously part of\n> 'quantmod') has a nice and fast aggregation function that allows you\n> to create OHLC from any univariate series, or from an existing OHLC\n> series - called 'to.period'.\n> \n> library(quantmod)\n> getSymbols(\"QQQQ\")\n> \n> to.monthly(QQQQ)  # yields a monthly series from daily data\n> \n> The code works equally well for anything from minute bars on up.  It\n> should work below that, though I can't promise anything as I haven't\n> really tested that recently.  Other functions in the group are\n> to.minutes, to.hourly, to to.daily... you get the idea.\n> \n> to.period is the function you want to look at.  It calls Fortran - so\n> it is very fast on all but gigantic data sets - and then nothing is :)\n> \n> \n> \n\n-- \nView this message in context: http://www.nabble.com/Extracting-OHLC-from-trade-price-series-tp15579652p15718653.html\nSent from the Rmetrics mailing list archive at Nabble.com.",
+      "body_snippet": "Hi to all members,\n\nI presume my question is to Jeff mostly concerning to.minutes:\nI have a xts object with tick data:\n\nmm<-xts(dd[,2:4],new.timestamps)\n\n                             BO   Price       ",
+      "thread_id": "thread-fa027fb05f09",
+      "thread_depth": 2,
       "month": "2008-02"
     },
     {
@@ -3764,16 +3799,28 @@
       "root_message_id": "msg-d8a98e0acb52"
     },
     {
+      "id": "thread-d8a98e0acb52",
+      "subject": "garchFit failing to give a solution",
+      "message_count": 1,
+      "participants": [
+        "michaelb"
+      ],
+      "started": "2008-02-19T16:42:51+00:00",
+      "last_reply": "2008-02-19T16:42:51+00:00",
+      "root_message_id": "msg-d8a98e0acb52"
+    },
+    {
       "id": "thread-fa027fb05f09",
       "subject": "Extracting OHLC from trade price series",
-      "message_count": 5,
+      "message_count": 6,
       "participants": [
         "Gabor Grothendieck",
         "Jeff Ryan",
+        "Yuri Volchik",
         "adschai at optonline.net"
       ],
       "started": "2008-02-20T00:22:34+00:00",
-      "last_reply": "2008-02-20T10:56:12-06:00",
+      "last_reply": "2008-02-27T17:44:48+00:00",
       "root_message_id": "msg-fa027fb05f09"
     },
     {
