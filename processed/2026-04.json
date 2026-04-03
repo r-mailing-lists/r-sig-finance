@@ -1,0 +1,36 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2026-04",
+  "messages": [
+    {
+      "id": "msg-c0ec2f736ae8",
+      "message_id": "<CAPZA_qLam-HcpeMXbJA-3oBER9f+h=vm=XdaOj18wfw=2vEZdA@mail.gmail.com>",
+      "from_name": "Andre Luiz Tietbohl Ramos",
+      "from_email_hash": "f1ee93083eaa5e3d9542ed0100870dcc6aa41f547a0a089c66b564f768a77107",
+      "date": "2026-04-02T13:45:57Z",
+      "subject": "[R-SIG-Finance] Issue with time_summarise function from tibbletime",
+      "subject_clean": "Issue with time_summarise function from tibbletime",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello,\n\nI'm trying to compute the 52week high and low and put each in a new\ncolumn.  I'm using the code below with BHP as an example.  However, I get\nan error: time_summarise does not exist.  I'm using R v4.4.1 on OSX Big Sur\nv11.7.1.\n\n# Source - https://stackoverflow.com/a/47410716\n# Posted by Hakki, modified by community. See post 'Timeline' for change\nhistory\n# Retrieved 2026-04-02, License - CC BY-SA 3.0\n\nlibrary(tidyquant)\nlibrary(tibbletime)\n\nbhp <- tq_get(\"bhp\")\nbhp_tbltime <- tbl_time(bhp, index=date)\n\nbhp_tbltime %>% mutate(date = collapse_index(date, \"yearly\")) %>%\n        group_by(date) %>%\n        time_summarise(high = max(adjusted),\n                                    low = min(adjusted))\n\n    roll_max <- rollify(max, window = 252)\n    roll_min <- rollify(min, window = 252)\n\n    bhp_tbltime %>%\n      mutate(max252 = roll_max(adjusted),\n             min252 = roll_min(adjusted)) %>%\n      tail()\n\n> bhp <- tq_get(\"bhp\")\n> bhp_tbltime <- tbl_time(bhp, index=date)\n> bhp_tbltime %>% mutate(date = collapse_index(date, \"yearly\")) %>%\n+         group_by(date) %>%\n+         time_summarise(high = max(adjusted),\n+                        low = min(adjusted))\n... ... ... Error in time_summarise(., high = max(adjusted), low =\nmin(adjusted)) :\n  could not find function \"time_summarise\"\n\nTIA,\n\n--\nAndr? Luiz Tietbohl Ramos, PhD\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\nI'm trying to compute the 52week high and low and put each in a new\ncolumn.  I'm using the code below with BHP as an example.  However, I get\nan error: time_summarise does not exist.  I'm usin",
+      "thread_id": "thread-c0ec2f736ae8",
+      "thread_depth": 0,
+      "month": "2026-04"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-c0ec2f736ae8",
+      "subject": "Issue with time_summarise function from tibbletime",
+      "message_count": 1,
+      "participants": [
+        "Andre Luiz Tietbohl Ramos"
+      ],
+      "started": "2026-04-02T13:45:57Z",
+      "last_reply": "2026-04-02T13:45:57Z",
+      "root_message_id": "msg-c0ec2f736ae8"
+    }
+  ]
+}

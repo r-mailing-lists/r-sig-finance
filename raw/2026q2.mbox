@@ -1,0 +1,55 @@
+From @ndre|tr@mo@ @end|ng |rom gm@||@com  Thu Apr  2 15:45:57 2026
+From: @ndre|tr@mo@ @end|ng |rom gm@||@com (Andre Luiz Tietbohl Ramos)
+Date: Thu, 2 Apr 2026 10:45:57 -0300
+Subject: [R-SIG-Finance] Issue with time_summarise function from tibbletime
+Message-ID: <CAPZA_qLam-HcpeMXbJA-3oBER9f+h=vm=XdaOj18wfw=2vEZdA@mail.gmail.com>
+
+Hello,
+
+I'm trying to compute the 52week high and low and put each in a new
+column.  I'm using the code below with BHP as an example.  However, I get
+an error: time_summarise does not exist.  I'm using R v4.4.1 on OSX Big Sur
+v11.7.1.
+
+# Source - https://stackoverflow.com/a/47410716
+# Posted by Hakki, modified by community. See post 'Timeline' for change
+history
+# Retrieved 2026-04-02, License - CC BY-SA 3.0
+
+library(tidyquant)
+library(tibbletime)
+
+bhp <- tq_get("bhp")
+bhp_tbltime <- tbl_time(bhp, index=date)
+
+bhp_tbltime %>% mutate(date = collapse_index(date, "yearly")) %>%
+        group_by(date) %>%
+        time_summarise(high = max(adjusted),
+                                    low = min(adjusted))
+
+    roll_max <- rollify(max, window = 252)
+    roll_min <- rollify(min, window = 252)
+
+    bhp_tbltime %>%
+      mutate(max252 = roll_max(adjusted),
+             min252 = roll_min(adjusted)) %>%
+      tail()
+
+> bhp <- tq_get("bhp")
+> bhp_tbltime <- tbl_time(bhp, index=date)
+> bhp_tbltime %>% mutate(date = collapse_index(date, "yearly")) %>%
++         group_by(date) %>%
++         time_summarise(high = max(adjusted),
++                        low = min(adjusted))
+... ... ... Error in time_summarise(., high = max(adjusted), low =
+min(adjusted)) :
+  could not find function "time_summarise"
+
+TIA,
+
+--
+Andr? Luiz Tietbohl Ramos, PhD
+
+	[[alternative HTML version deleted]]
+
+
