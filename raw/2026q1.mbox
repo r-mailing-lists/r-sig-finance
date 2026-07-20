@@ -2167,3 +2167,241 @@ Andr? Luiz Tietbohl Ramos, PhD
 	[[alternative HTML version deleted]]
 
 
+From @ndre|tr@mo@ @end|ng |rom gm@||@com  Sat Mar 14 19:07:21 2026
+From: @ndre|tr@mo@ @end|ng |rom gm@||@com (Andre Luiz Tietbohl Ramos)
+Date: Sat, 14 Mar 2026 15:07:21 -0300
+Subject: [R-SIG-Finance] pdf() and OSX Big Sur v11.7 Preview issue with
+ chartSeries()
+Message-ID: <CAPZA_qL6ZAs870msuxFNqnNRdvH3VcJR=7po+LhefYTc_J0qwQ@mail.gmail.com>
+
+Hello,
+
+I'm trying to generate a pdf file from a plot using the system above to no
+avail for I receive the error: It may be damaged or use a file format that
+Preview doesn?t recognise. when trying to open an example file such
+as: ?ITUB4_em_14_03_2026_14h29m.pdf?
+with the message: could not be opened.
+
+I don't know how to solve it for it works when using ggplot() but does not
+when using chartSeries(), see below.  Data downloaded via getSymbols().
+
+full.window.color.bg <-  'gray63
+
+*Does not work:*
+
+chartSeries("ITUB4.SA",
+                type = "line",
+                show.grid = TRUE,
+                theme = chartTheme("white",
+                                   up.col = 'forestgreen',
+                                   dn.col = 'red',
+                                   bg.col = "black",
+                                   area = full.window.color.bg
+                                   ),
+                TA = NULL
+                 )
+
+grafico <- paste0(gsub("[[:punct:]]SA", "", "ITUB4.SA"),'_on_',
+                  as.character(format(as.Date(end), format="%d_%m_%Y")),
+"_",
+                  as.character(hour(now())), "h",
+as.character(minute(now())), "m",
+                  ".pdf")
+folder <- "/Users/andreltr/Documents/B3/"
+arquivo.grafico <- as.character(paste0(folder, plt))
+
+ggsave(filename = grafico,
+             path = folder,
+             device = "pdf",
+             width = 25, height = 20, units = "cm")
+dev.off()
+
+Using ggplot() the pdf file is generated without problems, as the example
+below shows. Data downloaded via tidyquant library functions.
+
+cum.portfolio <-
+    port_cumulative_ret %>% ggplot(aes(x = date, y = cum_ret)) +
+    theme_gray() +
+    theme(plot.background = element_rect(fill = "gray90")) +
+    geom_line(color = "blue") +
+    theme(axis.text.x = element_text(size = 5,
+                                                         angle = 50,
+                                                         hjust = 1)) +
+    labs(x = 'Data',
+         y = 'Cum Return',
+         title = paste0('Portfolio Cumulative Return of ',
+length(num.tickers),
+                               ' stocks on ',
+                               format(as.Date(end), format="%d/%m/%Y")),
+         subtitle = paste0("Stocks: ", toString(tickers.names), "\nWeights:
+",
+                           toString(percent(wts, accuracy = 0.1)))
+         ) +
+         scale_x_date(date_breaks = '2 weeks',
+                               date_labels = '%d %b %y') +
+    scale_y_continuous(
+        limits = c(0.8, 2),
+        breaks = seq(0, 10, 0.05),
+        labels = scales::percent_format(accuracy = 1)
+    )
+
+graph <- paste0('Cum_Returno_from_Portfolio_',
+                  gsub(" ", "", toString(tickers.names)),'_on_',
+                  format(as.Date(end), format= "%d_%m_%Y"),'_',
+                  as.character(hour(now())), "h",
+as.character(minute(now())), "m",
+                  ".pdf")
+folder <- "/Users/andreltr/Documents/B3/"
+ggsave(filename = graph,
+             path = diretorio,
+             width = 25, height = 20, units = "cm")
+dev.off()
+
+Any help appreciated,
+
+--
+Andr? Luiz Tietbohl Ramos, PhD
+
+	[[alternative HTML version deleted]]
+
+
+From jo@h@m@u|r|ch @end|ng |rom gm@||@com  Sat Mar 14 19:27:38 2026
+From: jo@h@m@u|r|ch @end|ng |rom gm@||@com (Joshua Ulrich)
+Date: Sat, 14 Mar 2026 13:27:38 -0500
+Subject: [R-SIG-Finance] pdf() and OSX Big Sur v11.7 Preview issue with
+ chartSeries()
+In-Reply-To: <CAPZA_qL6ZAs870msuxFNqnNRdvH3VcJR=7po+LhefYTc_J0qwQ@mail.gmail.com>
+References: <CAPZA_qL6ZAs870msuxFNqnNRdvH3VcJR=7po+LhefYTc_J0qwQ@mail.gmail.com>
+Message-ID: <CAPPM_gTGpOUqjeP7QkTzZnv9PB3XRN=hiUT9NjYv39Tra0rH0g@mail.gmail.com>
+
+On Sat, Mar 14, 2026 at 1:07?PM Andre Luiz Tietbohl Ramos
+<andreltramos at gmail.com> wrote:
+>
+> Hello,
+>
+> I'm trying to generate a pdf file from a plot using the system above to no
+> avail for I receive the error: It may be damaged or use a file format that
+> Preview doesn?t recognise. when trying to open an example file such
+> as: ?ITUB4_em_14_03_2026_14h29m.pdf?
+> with the message: could not be opened.
+>
+> I don't know how to solve it for it works when using ggplot() but does not
+> when using chartSeries(), see below.  Data downloaded via getSymbols().
+>
+> full.window.color.bg <-  'gray63
+>
+> *Does not work:*
+>
+> chartSeries("ITUB4.SA",
+>                 type = "line",
+>                 show.grid = TRUE,
+>                 theme = chartTheme("white",
+>                                    up.col = 'forestgreen',
+>                                    dn.col = 'red',
+>                                    bg.col = "black",
+>                                    area = full.window.color.bg
+>                                    ),
+>                 TA = NULL
+>                  )
+>
+> grafico <- paste0(gsub("[[:punct:]]SA", "", "ITUB4.SA"),'_on_',
+>                   as.character(format(as.Date(end), format="%d_%m_%Y")),
+> "_",
+>                   as.character(hour(now())), "h",
+> as.character(minute(now())), "m",
+>                   ".pdf")
+> folder <- "/Users/andreltr/Documents/B3/"
+> arquivo.grafico <- as.character(paste0(folder, plt))
+>
+> ggsave(filename = grafico,
+>              path = folder,
+>              device = "pdf",
+>              width = 25, height = 20, units = "cm")
+> dev.off()
+>
+> Using ggplot() the pdf file is generated without problems, as the example
+> below shows. Data downloaded via tidyquant library functions.
+>
+ggsave() works with ggplot() because it's a ggplot2 function designed
+to save ggplot objects. The help page for ggsave says, "Save a ggplot
+(or other grid object) with sensible defaults". chartSeries() objects
+are not grid objects, so you shouldn't expect ggsave() to work. Use
+pdf(); chartSeries(...); dev.off() instead.
+
+As others have said more than once, please use *minimal* reproducible
+examples. Your question is about quantmod::chartSeries(). There's no
+need for you to use many other unnecessary packages in your example
+code. A minimal reproducible example in this case would be:
+
+x <- quantmod::getSymbols("SPY", auto.assign = TRUE)
+quantmod::chartSeries(x)
+ggplot2::ggsave("chartseries.pdf", device = "pdf")  # can't open pdf
+
+And this should work:
+
+pdf("chartseries.pdf")
+quantmod::chartSeries(x)
+dev.off()
+
+You're much more likely to get help if you make it easier on those
+you're asking to donate their time to helping you.
+
+
+> cum.portfolio <-
+>     port_cumulative_ret %>% ggplot(aes(x = date, y = cum_ret)) +
+>     theme_gray() +
+>     theme(plot.background = element_rect(fill = "gray90")) +
+>     geom_line(color = "blue") +
+>     theme(axis.text.x = element_text(size = 5,
+>                                                          angle = 50,
+>                                                          hjust = 1)) +
+>     labs(x = 'Data',
+>          y = 'Cum Return',
+>          title = paste0('Portfolio Cumulative Return of ',
+> length(num.tickers),
+>                                ' stocks on ',
+>                                format(as.Date(end), format="%d/%m/%Y")),
+>          subtitle = paste0("Stocks: ", toString(tickers.names), "\nWeights:
+> ",
+>                            toString(percent(wts, accuracy = 0.1)))
+>          ) +
+>          scale_x_date(date_breaks = '2 weeks',
+>                                date_labels = '%d %b %y') +
+>     scale_y_continuous(
+>         limits = c(0.8, 2),
+>         breaks = seq(0, 10, 0.05),
+>         labels = scales::percent_format(accuracy = 1)
+>     )
+>
+> graph <- paste0('Cum_Returno_from_Portfolio_',
+>                   gsub(" ", "", toString(tickers.names)),'_on_',
+>                   format(as.Date(end), format= "%d_%m_%Y"),'_',
+>                   as.character(hour(now())), "h",
+> as.character(minute(now())), "m",
+>                   ".pdf")
+> folder <- "/Users/andreltr/Documents/B3/"
+> ggsave(filename = graph,
+>              path = diretorio,
+>              width = 25, height = 20, units = "cm")
+> dev.off()
+>
+> Any help appreciated,
+>
+> --
+> Andr? Luiz Tietbohl Ramos, PhD
+>
+>         [[alternative HTML version deleted]]
+>
+> _______________________________________________
+> R-SIG-Finance at r-project.org mailing list
+> https://stat.ethz.ch/mailman/listinfo/r-sig-finance
+> -- Subscriber-posting only. If you want to post, subscribe first.
+> -- Also note that this is not the r-help list where general R questions should go.
+
+
+
+--
+Joshua Ulrich  |  about.me/joshuaulrich
+FOSS Trading  |  www.fosstrading.com
+
+
