@@ -87,3 +87,152 @@ Andr? Luiz Tietbohl Ramos, PhD.
 	[[alternative HTML version deleted]]
 
 
+From @ndre|tr@mo@ @end|ng |rom gm@||@com  Mon Aug 24 19:55:29 2026
+From: @ndre|tr@mo@ @end|ng |rom gm@||@com (Andre Luiz Tietbohl Ramos)
+Date: Mon, 24 Aug 2026 14:55:29 -0300
+Subject: [R-SIG-Finance] Tidy finance use
+Message-ID: <CAPZA_qKM1Frr1OVG-K26W1JGiTLBPFU2eRXVkumzmWb7C3_8qQ@mail.gmail.com>
+
+Hello everyone,
+
+I'm trying to use the tidyfinance, tidyverse, tidyquant packages to no
+avail. My setup is R version 4.5.1 in OSX 11.7.1. I'm trying to compile
+examples from the book Tidy Finance with R, Scheuch, C, Voigt, S, Weiss,
+P.  The error I'm receiving is below.
+
+prices <- tq_get("AAPL",
+  get = "stock.prices",
+  from = "2021-01-01", to = "2026-12-31")
+
+prices |>
+ggplot(aes(x = date, y = adjusted)) + geom_line() +
+labs(
+    x = NULL,
+    y = NULL,
+    title = "Apple stock prices between beginning of 2000 and end of 2021"
+)
+
+The lines above work fine however the code below does not. Any suggestions,
+please.
+
+returns <- prices |>
+arrange(date) |>
+mutate(ret = adjusted / lag(adjusted) - 1) |> select(symbol, date, ret)
+returns
+
+Error in select(mutate(arrange(prices, date), ret = adjusted/lag(adjusted)
+-  :
+  unused arguments (symbol, date, ret)
+
+R> standardGeneric for "returns" defined from package "timeSeries"
+
+function (x, ...)
+standardGeneric("returns")
+<bytecode: 0x7fddbb02feb0>
+<environment: 0x7fddbb019890>
+Methods may be defined for arguments: x
+Use  showMethods(returns)  for currently available ones.
+
+Could this be due to the timeSeries package, some sort of compatibility
+issue?
+
+TIA,
+
+--
+Andr? Luiz Tietbohl Ramos, PhD.
+
+	[[alternative HTML version deleted]]
+
+
+From ||y@@k|pn|@ @end|ng |rom gm@||@com  Mon Aug 24 20:01:12 2026
+From: ||y@@k|pn|@ @end|ng |rom gm@||@com (Ilya Kipnis)
+Date: Mon, 24 Aug 2026 14:01:12 -0400
+Subject: [R-SIG-Finance] Tidy finance use
+In-Reply-To: <CAPZA_qKM1Frr1OVG-K26W1JGiTLBPFU2eRXVkumzmWb7C3_8qQ@mail.gmail.com>
+References: <CAPZA_qKM1Frr1OVG-K26W1JGiTLBPFU2eRXVkumzmWb7C3_8qQ@mail.gmail.com>
+Message-ID: <CA+oJuEF2id-iQz0WcFmmEz=3tZU8XcUvrQg5kyerL17vou-d2w@mail.gmail.com>
+
+If I had to guess, it's probably the lag function, as the default in
+tidyverse has a one-period look-AHEAD, whereas stats::lag (the correct
+function) has it one period *behind*.
+
+For the error line, in R/Finance lingo, you'd do
+
+returns <- Return.calculate(Ad(<<your symbol here>>))
+
+But in any case, it's generally good practice NOT to use the tidyverse in
+general, in my opinion. The data.table library is superior for general data
+analysis, and it's absolutely no-go once you get to finance, since it
+overrides first, last, lag, and filter functions in ways that can easily
+make code break.
+
+The only time I'd use tidyverse functionality is with ggplot2. Other than
+that, the usual xts, quantmod, and PerformanceAnalytics packages should
+have all the functionality you need.
+
+Is there a particular reason you want to use tidyverse packages?
+
+On Mon, Aug 24, 2026 at 1:55?PM Andre Luiz Tietbohl Ramos <
+andreltramos at gmail.com> wrote:
+
+> Hello everyone,
+>
+> I'm trying to use the tidyfinance, tidyverse, tidyquant packages to no
+> avail. My setup is R version 4.5.1 in OSX 11.7.1. I'm trying to compile
+> examples from the book Tidy Finance with R, Scheuch, C, Voigt, S, Weiss,
+> P.  The error I'm receiving is below.
+>
+> prices <- tq_get("AAPL",
+>   get = "stock.prices",
+>   from = "2021-01-01", to = "2026-12-31")
+>
+> prices |>
+> ggplot(aes(x = date, y = adjusted)) + geom_line() +
+> labs(
+>     x = NULL,
+>     y = NULL,
+>     title = "Apple stock prices between beginning of 2000 and end of 2021"
+> )
+>
+> The lines above work fine however the code below does not. Any suggestions,
+> please.
+>
+> returns <- prices |>
+> arrange(date) |>
+> mutate(ret = adjusted / lag(adjusted) - 1) |> select(symbol, date, ret)
+> returns
+>
+> Error in select(mutate(arrange(prices, date), ret = adjusted/lag(adjusted)
+> -  :
+>   unused arguments (symbol, date, ret)
+>
+> R> standardGeneric for "returns" defined from package "timeSeries"
+>
+> function (x, ...)
+> standardGeneric("returns")
+> <bytecode: 0x7fddbb02feb0>
+> <environment: 0x7fddbb019890>
+> Methods may be defined for arguments: x
+> Use  showMethods(returns)  for currently available ones.
+>
+> Could this be due to the timeSeries package, some sort of compatibility
+> issue?
+>
+> TIA,
+>
+> --
+> Andr? Luiz Tietbohl Ramos, PhD.
+>
+>         [[alternative HTML version deleted]]
+>
+> _______________________________________________
+> R-SIG-Finance at r-project.org mailing list
+> https://stat.ethz.ch/mailman/listinfo/r-sig-finance
+> -- Subscriber-posting only. If you want to post, subscribe first.
+> -- Also note that this is not the r-help list where general R questions
+> should go.
+>
+
+	[[alternative HTML version deleted]]
+
+

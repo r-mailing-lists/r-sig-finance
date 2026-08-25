@@ -1,0 +1,55 @@
+{
+  "list": "r-sig-finance",
+  "description": "",
+  "month": "2026-08",
+  "messages": [
+    {
+      "id": "msg-9764c90688cd",
+      "message_id": "<CAPZA_qKM1Frr1OVG-K26W1JGiTLBPFU2eRXVkumzmWb7C3_8qQ@mail.gmail.com>",
+      "from_name": "Andre Luiz Tietbohl Ramos",
+      "from_email_hash": "f1ee93083eaa5e3d9542ed0100870dcc6aa41f547a0a089c66b564f768a77107",
+      "date": "2026-08-24T17:55:29Z",
+      "subject": "[R-SIG-Finance] Tidy finance use",
+      "subject_clean": "Tidy finance use",
+      "in_reply_to": null,
+      "references": [],
+      "body_plain": "Hello everyone,\n\nI'm trying to use the tidyfinance, tidyverse, tidyquant packages to no\navail. My setup is R version 4.5.1 in OSX 11.7.1. I'm trying to compile\nexamples from the book Tidy Finance with R, Scheuch, C, Voigt, S, Weiss,\nP.  The error I'm receiving is below.\n\nprices <- tq_get(\"AAPL\",\n  get = \"stock.prices\",\n  from = \"2021-01-01\", to = \"2026-12-31\")\n\nprices |>\nggplot(aes(x = date, y = adjusted)) + geom_line() +\nlabs(\n    x = NULL,\n    y = NULL,\n    title = \"Apple stock prices between beginning of 2000 and end of 2021\"\n)\n\nThe lines above work fine however the code below does not. Any suggestions,\nplease.\n\nreturns <- prices |>\narrange(date) |>\nmutate(ret = adjusted / lag(adjusted) - 1) |> select(symbol, date, ret)\nreturns\n\nError in select(mutate(arrange(prices, date), ret = adjusted/lag(adjusted)\n-  :\n  unused arguments (symbol, date, ret)\n\nR> standardGeneric for \"returns\" defined from package \"timeSeries\"\n\nfunction (x, ...)\nstandardGeneric(\"returns\")\n<bytecode: 0x7fddbb02feb0>\n<environment: 0x7fddbb019890>\nMethods may be defined for arguments: x\nUse  showMethods(returns)  for currently available ones.\n\nCould this be due to the timeSeries package, some sort of compatibility\nissue?\n\nTIA,\n\n--\nAndr? Luiz Tietbohl Ramos, PhD.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello everyone,\n\nI'm trying to use the tidyfinance, tidyverse, tidyquant packages to no\navail. My setup is R version 4.5.1 in OSX 11.7.1. I'm trying to compile\nexamples from the book Tidy Finance with",
+      "thread_id": "thread-9764c90688cd",
+      "thread_depth": 0,
+      "month": "2026-08"
+    },
+    {
+      "id": "msg-698bcaeb5389",
+      "message_id": "<CA+oJuEF2id-iQz0WcFmmEz=3tZU8XcUvrQg5kyerL17vou-d2w@mail.gmail.com>",
+      "from_name": "Ilya Kipnis",
+      "from_email_hash": "3e375900f97169bfcb61fc4fdc48bafc91349f60a4f7a4813c93bbe535a52a19",
+      "date": "2026-08-24T18:01:12Z",
+      "subject": "[R-SIG-Finance] Tidy finance use",
+      "subject_clean": "Tidy finance use",
+      "in_reply_to": "<CAPZA_qKM1Frr1OVG-K26W1JGiTLBPFU2eRXVkumzmWb7C3_8qQ@mail.gmail.com>",
+      "references": [
+        "<CAPZA_qKM1Frr1OVG-K26W1JGiTLBPFU2eRXVkumzmWb7C3_8qQ@mail.gmail.com>"
+      ],
+      "body_plain": "If I had to guess, it's probably the lag function, as the default in\ntidyverse has a one-period look-AHEAD, whereas stats::lag (the correct\nfunction) has it one period *behind*.\n\nFor the error line, in R/Finance lingo, you'd do\n\nreturns <- Return.calculate(Ad(<<your symbol here>>))\n\nBut in any case, it's generally good practice NOT to use the tidyverse in\ngeneral, in my opinion. The data.table library is superior for general data\nanalysis, and it's absolutely no-go once you get to finance, since it\noverrides first, last, lag, and filter functions in ways that can easily\nmake code break.\n\nThe only time I'd use tidyverse functionality is with ggplot2. Other than\nthat, the usual xts, quantmod, and PerformanceAnalytics packages should\nhave all the functionality you need.\n\nIs there a particular reason you want to use tidyverse packages?\n\nOn Mon, Aug 24, 2026 at 1:55?PM Andre Luiz Tietbohl Ramos <\nandreltramos at gmail.com> wrote:\n\n> Hello everyone,\n>\n> I'm trying to use the tidyfinance, tidyverse, tidyquant packages to no\n> avail. My setup is R version 4.5.1 in OSX 11.7.1. I'm trying to compile\n> examples from the book Tidy Finance with R, Scheuch, C, Voigt, S, Weiss,\n> P.  The error I'm receiving is below.\n>\n> prices <- tq_get(\"AAPL\",\n>   get = \"stock.prices\",\n>   from = \"2021-01-01\", to = \"2026-12-31\")\n>\n> prices |>\n> ggplot(aes(x = date, y = adjusted)) + geom_line() +\n> labs(\n>     x = NULL,\n>     y = NULL,\n>     title = \"Apple stock prices between beginning of 2000 and end of 2021\"\n> )\n>\n> The lines above work fine however the code below does not. Any suggestions,\n> please.\n>\n> returns <- prices |>\n> arrange(date) |>\n> mutate(ret = adjusted / lag(adjusted) - 1) |> select(symbol, date, ret)\n> returns\n>\n> Error in select(mutate(arrange(prices, date), ret = adjusted/lag(adjusted)\n> -  :\n>   unused arguments (symbol, date, ret)\n>\n> R> standardGeneric for \"returns\" defined from package \"timeSeries\"\n>\n> function (x, ...)\n> standardGeneric(\"returns\")\n> <bytecode: 0x7fddbb02feb0>\n> <environment: 0x7fddbb019890>\n> Methods may be defined for arguments: x\n> Use  showMethods(returns)  for currently available ones.\n>\n> Could this be due to the timeSeries package, some sort of compatibility\n> issue?\n>\n> TIA,\n>\n> --\n> Andr? Luiz Tietbohl Ramos, PhD.\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "If I had to guess, it's probably the lag function, as the default in\ntidyverse has a one-period look-AHEAD, whereas stats::lag (the correct\nfunction) has it one period *behind*.\n\nFor the error line, i",
+      "thread_id": "thread-9764c90688cd",
+      "thread_depth": 1,
+      "month": "2026-08"
+    }
+  ],
+  "threads": [
+    {
+      "id": "thread-9764c90688cd",
+      "subject": "Tidy finance use",
+      "message_count": 2,
+      "participants": [
+        "Andre Luiz Tietbohl Ramos",
+        "Ilya Kipnis"
+      ],
+      "started": "2026-08-24T17:55:29Z",
+      "last_reply": "2026-08-24T18:01:12Z",
+      "root_message_id": "msg-9764c90688cd"
+    }
+  ]
+}
