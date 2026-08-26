@@ -236,3 +236,82 @@ andreltramos at gmail.com> wrote:
 	[[alternative HTML version deleted]]
 
 
+From e@ @end|ng |rom enr|co@chum@nn@net  Tue Aug 25 12:50:34 2026
+From: e@ @end|ng |rom enr|co@chum@nn@net (Enrico Schumann)
+Date: Tue, 25 Aug 2026 12:50:34 +0200
+Subject: [R-SIG-Finance] Tidy finance use
+In-Reply-To: <CAPZA_qKM1Frr1OVG-K26W1JGiTLBPFU2eRXVkumzmWb7C3_8qQ@mail.gmail.com>
+ (Andre Luiz Tietbohl Ramos's message of "Mon, 24 Aug 2026 14:55:29
+ -0300")
+References: <CAPZA_qKM1Frr1OVG-K26W1JGiTLBPFU2eRXVkumzmWb7C3_8qQ@mail.gmail.com>
+Message-ID: <87y0dueao5.fsf@enricoschumann.net>
+
+On Mon, 24 Aug 2026, Andre Luiz Tietbohl Ramos writes:
+
+> Hello everyone,
+>
+> I'm trying to use the tidyfinance, tidyverse, tidyquant packages to no
+> avail. My setup is R version 4.5.1 in OSX 11.7.1. I'm trying to compile
+> examples from the book Tidy Finance with R, Scheuch, C, Voigt, S, Weiss,
+> P.  The error I'm receiving is below.
+>
+> prices <- tq_get("AAPL",
+>   get = "stock.prices",
+>   from = "2021-01-01", to = "2026-12-31")
+>
+> prices |>
+> ggplot(aes(x = date, y = adjusted)) + geom_line() +
+> labs(
+>     x = NULL,
+>     y = NULL,
+>     title = "Apple stock prices between beginning of 2000 and end of 2021"
+> )
+>
+> The lines above work fine however the code below does not. Any suggestions,
+> please.
+>
+> returns <- prices |>
+> arrange(date) |>
+> mutate(ret = adjusted / lag(adjusted) - 1) |> select(symbol, date, ret)
+> returns
+>
+> Error in select(mutate(arrange(prices, date), ret = adjusted/lag(adjusted)
+> -  :
+>   unused arguments (symbol, date, ret)
+>
+> R> standardGeneric for "returns" defined from package "timeSeries"
+>
+> function (x, ...)
+> standardGeneric("returns")
+> <bytecode: 0x7fddbb02feb0>
+> <environment: 0x7fddbb019890>
+> Methods may be defined for arguments: x
+> Use  showMethods(returns)  for currently available ones.
+>
+> Could this be due to the timeSeries package, some sort of compatibility
+> issue?
+
+The example is in the PDF-preview at https://doi.org/10.1201/b23237.
+I just ran the example, and I cannot reproduce your error.
+
+I'd check that the installed tidy* packages are all current,
+then start with a clean R session (no workspace loaded, etc.)
+and try to run the example again.
+
+
+> TIA,
+>
+> --
+> Andr? Luiz Tietbohl Ramos, PhD.
+>
+> 	[[alternative HTML version deleted]]
+
+Please do send plain-text messages to this list.
+
+
+-- 
+Enrico Schumann
+Lucerne, Switzerland
+https://enricoschumann.net
+
+
