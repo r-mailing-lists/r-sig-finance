@@ -68,11 +68,14 @@
         "<COL124-W622B2B85C6C07B6DB781CFE55F0@phx.gbl>",
         "<111060c21001270608i6c2e773dwe15e47f07a076dcd@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100503/700e8d71/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100503/700e8d71/attachment.pl>",
+      "body_plain": "Hi!\n \nI have taken your recomendation and I am trying to apply the methodology suggested by Kejriwal and Perron in the paper \"Testing for Multiple Structural Changes in Cointegrated Regression Models\". I think that if I use the \"strucchange\" package and the function \"breakpoints\", I will get the break points and dates with the same methodology described in the paper. \n \nIn order to prove if the number of breaks found by the \"breakpoint\" function is significant I want to apply the sup-Wald test. I am not sure if a normal supWald test is correct of if I need to implement some kind of modifications. In my case all the coefficients are allowed to change. I send you the program that I am using.\n \n> ##BREAKS POINTS CALCULATION\n> \n> lrun\n\nYX[, 1] ~ YX[, 2] + dattowork[, 1] + 0\n> \n> #Empirical Fluctuation process\n> flproc <- efp(lrun, type = \"RE\")\n> print(sctest(flproc))\n \n        RE test (recursive estimates test)\ndata:  flproc \nRE = 3.6801, p-value = 6.893e-12\n \n> #Bai and Perron \n> breaks<-breakpoints(lrun, h = 0.15, breaks = 3, hpc = c(\"none\"))\n> print(breaks)\n         Optimal 4-segment partition: \nCall:\nbreakpoints.formula(formula = lrun, h = 0.15, breaks = 3, hpc = c(\"none\"))\nBreakpoints at observation number:\n54 127 155 \nCorresponding to breakdates:\n1994(7) 2000(8) 2002(12) \n\n> dummy<-ts(rep(1,length(YXSR[,1])),start=startlag,frequency=12)\n> dummy1<-dummy; dummy1[breaks$breakpoints[1]:(breaks$breakpoints[2]-1)]<-0\n> dummy2<-dummy; dummy2[breaks$breakpoints[2]:(breaks$breakpoints[3]-1)]<-0\n> lrunbreak<-update.formula(lrun, . ~ . + dummy1 + dummy2)\n> longrbreak<-dyn$lm(lrunbreak)\n\n> Waldt<-wald.test(vcov(longrbreak), longrbreak$coefficients, Terms=3:4)\n> print(Waldt)\nWald test:\n----------\nChi-squared test:\nX2 = 28.0, df = 2, P(> X2) = 8.2e-07\n\n \nIn advance thank you for your help!,\n \n \nKarla Hernández\n \n \n \n \n \n \n \n\n \n\n\nDate: Wed, 27 Jan 2010 15:08:05 +0100\nSubject: Re: [R-SIG-Finance] Cointegration, more than one structural break\nFrom: matthieu.stigler at gmail.com\nTo: karlavhv142 at hotmail.com\nCC: r-sig-finance at stat.math.ethz.ch\n\nHi\n\nTesting for multiple breaks in the cointegration framewk is unfortunately for now not possible in R. \n\nFor one break, you have a test in the urca/vars package, as well as the Gregory Hansen Test (I had implemented it so I can send once raw code if needed). \n\nIf you want to implement a test for multiple breaks in cointegration, have a look at the work of Kejriwal and Perron.\n\nHope this helps\n\nMat\n\n\n\n\n2010/1/25 karla hernandez villafuerte <karlavhv142 at hotmail.com>\n\n\n\n\nDear Members:\n\n\n\nI want to analyse the cointegration rank using the Engle and Granger methodology and taking into account the presence of more than one structural break in the long run relation.\n\nI can not find how to do that using R. If some one have a suggestion I would be very glad.\n\n\n\nThank you!\n\n\n\nKarla H.\n\n_________________________________________________________________\n\n\n       [[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\n\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n \t\t \t   \t\t  \n_________________________________________________________________\nAhora no hace falta estar conectado para ver tus mails. Chequea tu Hotmail \n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi!\n \nI have taken your recomendation and I am trying to apply the methodology suggested by Kejriwal and Perron in the paper \"Testing for Multiple Structural Changes in Cointegrated Regression Models\"",
       "thread_id": "thread-272a9040963d",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100503/700e8d71/attachment.pl"
+      ]
     },
     {
       "id": "msg-4f6374904795",
@@ -252,11 +255,14 @@
       "subject_clean": "Johansen",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100507/a1a8758e/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100507/a1a8758e/attachment.pl>",
+      "body_plain": "Dear Members:\n\n \n\nI am working with the function ca.jo from the URCA package in order to know the range of cointegration between two variables. I am trying to calculate the optimum value of the lags (called K in the function). But the package does not provide the AIC and the logLink values for objets like this.\n\nI am using the function like in the following example:\n\n \n\nca.jo(YX, type = c(\"trace\"), ecdet = c(\"none\"), K = 2, spec=c(\"longrun\"), season = NULL, dumvar = NULL)\n\n\nI want to ask if someone knows a way to calculate the k optimum.\n\n \n\nThanks a lot!\n\n \n\nKarla Hernández\n \t\t \t   \t\t  \n_________________________________________________________________\nOrganizar y compartir tus documentos nunca fue tan fácil. Hotmail te da 25 GB gratis. Ver más\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear Members:\n\n \n\nI am working with the function ca.jo from the URCA package in order to know the range of cointegration between two variables. I am trying to calculate the optimum value of the lags (",
       "thread_id": "thread-28c03a614d36",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100507/a1a8758e/attachment.pl"
+      ]
     },
     {
       "id": "msg-79aa5d970912",
@@ -286,11 +292,14 @@
       "subject_clean": "ksmooth Function in Library (\"stats\")",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100508/a5ea0e75/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100508/a5ea0e75/attachment.pl>",
+      "body_plain": "Hi R user,\nI'm studying \"Statistical Analysis of Financial Data in S-plus\" by Carmona. \nIn p.21, the author introduce ksmooth function to plot curve in Kernel estimate method.\nFor this case, using data set \"DSPLR\",S&P return, it want to know the distribution of these return on a given day.\nThere are two methods to do that. One is using density Function ; the other is using kernel estimate method.\nBelow is my working on R console.\n> data(DSPLR)\n> class(DSPLR)\n[1] \"numeric\"\n> str(DSPLR)\n num [1:10928] 0.00798 -0.00431 -0.00734 -0.00319 -0.01234 ...\n> hist(DSPLR,probability=T)\nDENS <- ksmooth(DSPLR, kernel=\"normal\",bandwidth = .03)\n************************************************\nError in ksmooth(DSPLR, kernel = \"normal\", bandwidth = 0.03) : \n  y must be supplied.\nFor density estimation use density()\n*************************************************\n>From error message above, lack in \"y value\" into argument.\n\nBut, I saw example on textbook. \nAuthor' version is \" DENS <- ksmooth(DSPLR, kernel=\"normal\",bandwidth = .03) \"\n\nhow to figure out this error message ?\n\nthanks a lot.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi R user,\nI'm studying \"Statistical Analysis of Financial Data in S-plus\" by Carmona. \nIn p.21, the author introduce ksmooth function to plot curve in Kernel estimate method.\nFor this case, using dat",
       "thread_id": "thread-64ec97eae062",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100508/a5ea0e75/attachment.pl"
+      ]
     },
     {
       "id": "msg-88f811382b39",
@@ -336,11 +345,14 @@
       "subject_clean": "time series aggregating error message",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100510/9c5ef80a/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100510/9c5ef80a/attachment.pl>",
+      "body_plain": "Hi all,\n\nI am tring to aggregate intra-day data to daily basis data, (data sample\nattached at the end of email.)\n\ntest <- read.table(\"D:\\\\test.csv\", header=F, sep=\",\")\n\ntest.ep <- test[1:304231,]\n\ntt <- as.Date(test.ep[,1], \"%m/%d/%y\" )\n\nrn <- test.ep[,7]\n\ntest.rn <- as.xts(rn,tt)\n\nnodudate = tt[!duplicated(tt)]\n\ntest.sum = aggregate(test.rn, nodudate, sum)\n\nThe error message said, \"Error: length(time(x)) == length(by[[1]]) is not\nTRUE\"\n\n\nAppreciate for any hints.\n\nCheers\nmam\n\n\n\n  01/03/05 31.8 31.8 31.78 31.8 167600 0.009479  01/03/05 31.8 31.8 31.78\n31.8 4500 0  01/03/05 31.75 31.75 31.6 31.67 11800 -0.0041  01/03/05 31.62\n31.63 31.6 31.6 9200 -0.00221  01/03/05 31.61 31.67 31.6 31.67 20300\n0.002213  01/04/05 31.69 31.71 31.67 31.71 29800 0.001262  01/04/05 31.7\n31.74 31.64 31.64 34800 -0.00221  01/04/05 31.64 31.66 31.63 31.63 35000\n-0.00032  01/04/05 31.64 31.66 31.63 31.66 41600 0.000948  01/05/05 31.65\n31.65 31.64 31.64 17000 -0.00063  01/05/05 31.61 31.61 31.6 31.6 16600\n-0.00127  01/05/05 31.6 31.61 31.6 31.6 6600 0  01/05/05 31.61 31.61 31.57\n31.59 20500 -0.00032  01/05/05 31.6 31.67 31.59 31.63 12800 0.001265\n01/06/05 31.64 31.67 31.64 31.66 5800 0.000948  01/06/05 31.64 31.66 31.64\n31.66 71700 0  01/06/05 31.66 31.66 31.64 31.65 7300 -0.00032\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi all,\n\nI am tring to aggregate intra-day data to daily basis data, (data sample\nattached at the end of email.)\n\ntest <- read.table(\"D:\\\\test.csv\", header=F, sep=\",\")\n\ntest.ep <- test[1:304231,]\n\ntt ",
       "thread_id": "thread-d71d9cf0ea3a",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100510/9c5ef80a/attachment.pl"
+      ]
     },
     {
       "id": "msg-22d196110ba8",
@@ -372,11 +384,14 @@
       "references": [
         "<AANLkTikI3jPMJ3ftScSdOWAzmUx1ZO4Gf4xrztJl4tmr@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100510/db9d13b1/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100510/db9d13b1/attachment.pl>",
+      "body_plain": "mam,\n\nA fully reproducible code chunk is generally more helpful than simply\ncopying and pasting the data.  Try dput() for a subset of your larger data,\nor better still follow the posting guidelines and create a minimal example\nthat one can follow without your original data.  The rationale is that you\ncan't expect others to put in the time to build a workable example, if you\ndon't bother with one either.\n\nThat aside, your error is in aggregate.  Meaning a question should be\ndirected (once properly composed) to the main R-help list.\n\nIf you are looking for a solution to aggregate intraday to daily (or hourly\netc), take a look at ?to.period in xts, as it will likely do exactly what\nyou want, and will be quite fast (compiled code internally)\n\nHTH\nJeff\n\n\n\nOn Mon, May 10, 2010 at 9:50 AM, mam3xs <mam3xs at gmail.com> wrote:\n\n> Hi all,\n>\n> I am tring to aggregate intra-day data to daily basis data, (data sample\n> attached at the end of email.)\n>\n> test <- read.table(\"D:\\\\test.csv\", header=F, sep=\",\")\n>\n> test.ep <- test[1:304231,]\n>\n> tt <- as.Date(test.ep[,1], \"%m/%d/%y\" )\n>\n> rn <- test.ep[,7]\n>\n> test.rn <- as.xts(rn,tt)\n>\n> nodudate = tt[!duplicated(tt)]\n>\n> test.sum = aggregate(test.rn, nodudate, sum)\n>\n> The error message said, \"Error: length(time(x)) == length(by[[1]]) is not\n> TRUE\"\n>\n>\n> Appreciate for any hints.\n>\n> Cheers\n> mam\n>\n>\n>\n>  01/03/05 31.8 31.8 31.78 31.8 167600 0.009479  01/03/05 31.8 31.8 31.78\n> 31.8 4500 0  01/03/05 31.75 31.75 31.6 31.67 11800 -0.0041  01/03/05 31.62\n> 31.63 31.6 31.6 9200 -0.00221  01/03/05 31.61 31.67 31.6 31.67 20300\n> 0.002213  01/04/05 31.69 31.71 31.67 31.71 29800 0.001262  01/04/05 31.7\n> 31.74 31.64 31.64 34800 -0.00221  01/04/05 31.64 31.66 31.63 31.63 35000\n> -0.00032  01/04/05 31.64 31.66 31.63 31.66 41600 0.000948  01/05/05 31.65\n> 31.65 31.64 31.64 17000 -0.00063  01/05/05 31.61 31.61 31.6 31.6 16600\n> -0.00127  01/05/05 31.6 31.61 31.6 31.6 6600 0  01/05/05 31.61 31.61 31.57\n> 31.59 20500 -0.00032  01/05/05 31.6 31.67 31.59 31.63 12800 0.001265\n> 01/06/05 31.64 31.67 31.64 31.66 5800 0.000948  01/06/05 31.64 31.66 31.64\n> 31.66 71700 0  01/06/05 31.66 31.66 31.64 31.65 7300 -0.00032\n>\n>        [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\n\n-- \nJeffrey Ryan\njeffrey.ryan at insightalgo.com\n\nia: insight algorithmics\nwww.insightalgo.com\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "mam,\n\nA fully reproducible code chunk is generally more helpful than simply\ncopying and pasting the data.  Try dput() for a subset of your larger data,\nor better still follow the posting guidelines an",
       "thread_id": "thread-d71d9cf0ea3a",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100510/db9d13b1/attachment.pl"
+      ]
     },
     {
       "id": "msg-94c97f530caa",
@@ -525,11 +540,14 @@
       "references": [
         "<4BEA67C5.3040907@ath.forthnet.gr>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100512/5de6c727/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100512/5de6c727/attachment.pl>",
+      "body_plain": "Arithmetic operations on zoo first cause a merge to occur, which will align\ntime.\n\nYou haven't provided a simple example to run, but you are likely getting a\nzero-width zoo object (empty) back from your call:\n\n> (GSPC[2]+GSPC[3])/2\n     GSPC.Open GSPC.High GSPC.Low GSPC.Close GSPC.Volume GSPC.Adjusted\n\nSo the error is correct.\n\nWhat you need to do is force one of the objects to be numeric.  And likely\nthe result as well:\n\n> (GSPC[2]+as.numeric(GSPC[3]))/2\n           GSPC.Open GSPC.High GSPC.Low GSPC.Close GSPC.Volume GSPC.Adjusted\n2007-01-04   1417.47   1420.09  1407.09   1414.025  2961930000      1414.025\n\n\nHTH\nJeff\n\n\n\n\nOn Wed, May 12, 2010 at 3:33 AM, Research <risk2009 at ath.forthnet.gr> wrote:\n\n> Hello,\n>\n> I am importing data, say S&P 500 from yahoo:\n>\n>    SPyf<-yahooSeries(\"^GSPC\", file=\"SPyahoo.csv\", frequency=\"daily\",\n> nDaysBack=400)\n>    SPCOMPd<-(SPyf[,4])\n>    a<-time(SPCOMPd)\n>    SPd<-zoo(SPCOMPd,as.POSIXct(a))\n>\n> I am not sure if the above is correct but I am trying to convert a\n> timeSeries object to zoo.\n>\n> > is(SPCOMPd)\n> [1] \"timeSeries\" \"structure\"  \"vector\"\n> >\n> > is(SPd)\n> [1] \"zoo\"\n>\n> I can do\n>\n> SPCOMPd[1]<-SPCOMPd[2]+SPCOMPd[3]\n>\n> with the timeseries object.\n>\n> Is it possible to do something like:\n>\n> SPd[1]<-(SPd[2]+SP[3])/2\n>\n> with the zoo object?\n>\n> I get:\n>\n> Error in SPd[1] <- (SPd[2] + SP[3])/2 : replacement has length zero\n>\n>\n> Thanks in advance,\n> Costas\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\n\n-- \nJeffrey Ryan\njeffrey.ryan at insightalgo.com\n\nia: insight algorithmics\nwww.insightalgo.com\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Arithmetic operations on zoo first cause a merge to occur, which will align\ntime.\n\nYou haven't provided a simple example to run, but you are likely getting a\nzero-width zoo object (empty) back from yo",
       "thread_id": "thread-8bd9193e995b",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100512/5de6c727/attachment.pl"
+      ]
     },
     {
       "id": "msg-d997939ef375",
@@ -559,11 +577,14 @@
       "subject_clean": "Conference on Modeling High Frequency Data in Finance II",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100513/652825ff/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100513/652825ff/attachment.pl>",
+      "body_plain": "I forward you this invitation to the Conference on Modeling High Frequency\nData in Finance II.\n\n\nThe conference takes place at Stevens Institute of Technology between June\n24 and June 27 2010.\n\nThis is a joint conference (Stevens Institute of Technology, University of\nTexas at El Paso and Purdue University) in high frequency data modeling. The\nconference will be held at Stevens from June 24 to June 27 2010.\n\nDirections to our campus may be obtained here. A campus map may be accessed\nhere. The registration is in Howe Bulding 4th floor. The location of the\nconference is split between Bissinger Room in Howe Center and the main\nauditorium in Babbio (B122).\n\nPlease consult the articles on this site for more information.\n\n\nGoals and Topics of the conference\n\nThe purpose of this conference is to improve the models used to analyze\nhigh-frequency financial data. Tools available from a variety of areas such\nas statistics, stochastic processes, statistical mechanics, clustering, and\nsystems will be exposed. Academics, industry professionals, and government\nregulators will meet:\n\nto collaborate, with the goal of advancing the quality of research currently\nunder development in the field,\nto exchange information about practical applications of data modeling to\nalgorithmic trading and high frequency trading,\nto open doors for future collaboration and networking\n\nThe page for the conference is available here:\nhttp://kolmogorov.math.stevens.edu/conference2010/\nThe registration is on a different site which can also be accessed from the\nfirst site.\nhttp://kolmogorov.math.stevens.edu/conference2010WEB/index.php/HF2/HF2/schedConf/registration\n\n\n-- \nGerman (Herman) G. Creamer\nAssociate Professor\nHowe School of Technology Management and\nSchool of Systems and Enterprises\nStevens Institute of Technology\nPh.: 201.216.8986\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I forward you this invitation to the Conference on Modeling High Frequency\nData in Finance II.\n\n\nThe conference takes place at Stevens Institute of Technology between June\n24 and June 27 2010.\n\nThis i",
       "thread_id": "thread-f223f292d5c5",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100513/652825ff/attachment.pl"
+      ]
     },
     {
       "id": "msg-736d73e0a40e",
@@ -575,11 +596,14 @@
       "subject_clean": "Pair Trade",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100513/026bf3b6/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100513/026bf3b6/attachment.pl>",
+      "body_plain": "Hello All,\n\n \n\n                I'm trying to set up a back-test on a pairs trade using\nblotter, but I'm stuck. The code below results in both securities being\nbought or sold for each condition, when I need one security bought the other\nsecurity sold for each condition. For example, if the residual is greater\nthan 5, but GLD sell GDX. I've tried numerous alterations to no avail.  I'm\nusing R version 2.10.1(2009-12-14).  Any help is greatly appreciated.\n\n \n\nBest Regards,\n\nTrey Johnson\n\n \n\n \n\nlibrary(quantmod)\n\nlibrary(TTR)\n\nlibrary(blotter)\n\n \n\n# Set initial values\n\ninitDate='2007-07-31'\n\nendDate='2008-03-31'\n\ninitEq=100000\n\n \n\nsymbols = c(\"GLD\", \"GDX\")\n\n \n\n# Set currency and instruments\n\ncurrency(\"USD\")\n\n for(symbol in symbols){\n\n     stock(symbol, currency=\"USD\",multiplier=1)\n\n }\n\n \n\n# Load data with quantmod\n\nprint(\"Loading data\")\n\ngetSymbols(symbols, from=initDate, to=endDate,\nindex.class=c(\"POSIXt\",\"POSIXct\"))\n\n \n\n#use adjusted price\n\n for(symbol in symbols){\n\n      x=get(symbol)\n\n      x = adjustOHLC(x, use.Adjusted=TRUE)\n\nassign(symbol,x)\n\n }\n\n \n\nmod <- specifyModel(Cl(GLD) ~ Cl(GDX))\n\n \n\nmod.bd <- buildModel(mod, method = \"lm\",\ntraining.per=c(\"2007-07-31\",\"2008-03-31\"))\n\n \n\nres<-residuals(mod.bd)\n\n \n\nGLD$RES <- residuals(mod.bd)\n\nGDX$RES <- residuals(mod.bd)\n\n \n\n# Set up a portfolio object and an account object in blotter\n\ninitPortf(name='Pair Trade', symbols=symbols, initDate=initDate)\n\ninitAcct(name='Pair Acct', portfolios='Pair Trade', initDate=initDate,\ninitEq=initEq)\n\nverbose = TRUE\n\n \n\n \n\n# Create trades\n\nfor( i in 2:NROW(GLD) ) {\n\n  CurrentDate=time(GLD)[i]\n\n  equity = getEndEq(Account='Pair Acct', CurrentDate)\n\n \n\nfor(symbol in symbols) {\n\n    sym = get(symbol)\n\n    ClosePrice = as.numeric(Cl(sym[i,]))\n\n    Posn = getPosQty(Portfolio='Pair Trade', Symbol=symbol,\nDate=CurrentDate)\n\n    UnitSize = as.numeric(100)  \n\n      #as.numeric(trunc((equity/NROW(symbols))/ClosePrice)) \n\n     #UnitSize=as.numeric(trunc(equity/ClosePrice))\n\n \n\n    # Position Entry (assume fill at close)\n\n    if( Posn == 0 ) {\n\n    #enter position\n\n      if( as.numeric(sym[i,'RES']) > as.numeric(5) ) {\n\n        addTxn(Portfolio= 'Pair Trade', Symbol=symbol, TxnDate=CurrentDate,\nTxnPrice=ClosePrice, TxnQty=UnitSize, TxnFees=0, verbose=verbose)\n\n      }  else\n\n     #enter position\n\n      if( as.numeric(sym[i,'RES']) < as.numeric(-5) ) {\n\n        addTxn(Portfolio= 'Pair Trade', Symbol=symbol, TxnDate=CurrentDate,\nTxnPrice=ClosePrice, TxnQty=-UnitSize, TxnFees=0, verbose=verbose)\n\n      }  \n\n    } else {\n\n      # exit position\n\n      if(  (Posn > 0 && as.numeric(sym[i,'RES']) < as.numeric(0)) || (Posn <\n0 && as.numeric(sym[i,'RES']) > as.numeric(0))  ) {\n\n        # Store trade with blotter\n\n        addTxn(Portfolio='Pair Trade', Symbol=symbol, TxnDate=CurrentDate,\nTxnPrice=ClosePrice, TxnQty= -Posn, TxnFees=0, verbose=verbose)\n\n      } \n\n    }\n\n} #end symbol loop\n\n \n\n  # Calculate P&L and resulting equity with blotter\n\n  updatePortf(Portfolio='Pair Trade', Dates=CurrentDate)\n\n  updateAcct(name='Pair Acct', Dates=CurrentDate)\n\n  updateEndEq(Account='Pair Acct', Dates=CurrentDate)\n\n \n\n} # End date loop\n\n \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello All,\n\n \n\n                I'm trying to set up a back-test on a pairs trade using\nblotter, but I'm stuck. The code below results in both securities being\nbought or sold for each condition, when I",
       "thread_id": "thread-736d73e0a40e",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100513/026bf3b6/attachment.pl"
+      ]
     },
     {
       "id": "msg-38b9d85c2c2a",
@@ -664,11 +688,14 @@
         "<AANLkTinzkpKf-PuD1iP78AwamY58LIT1s2XfxwXfOQFl@mail.gmail.com>",
         "<4BECF2B1.1070906@gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100514/d7acc2a3/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100514/d7acc2a3/attachment.pl>",
+      "body_plain": "Thank you Mat.\n\nThat works. I also double-checked manually with different estimation period.\n\nCheers\nMichael\n\nOn 14 May 2010 07:50, Matthieu Stigler <matthieu.stigler at gmail.com> wrote:\n\n> Should \"AA.day.forecast.data\" contain the series oh one step ahead\n> forecasts? If yes, you need to index it also!\n>\n> AA.day.forecast.data[i-start+1] <- garch.pred[,1]\n>\n> Btw, if you are doing it with a loop, you might have a look on package\n> foreach, which is likely to make your loop contruction easier, and\n> especially can run it easily on parallel cores...\n>\n> Mat\n>\n> PS: try when posting to give a code fully reproducible!\n>\n> mam3xs a écrit :\n>\n>> Hi all,\n>>\n>> I got the daily stock return data from 2005 - 2008, calculated from HF\n>> minute data. (Thanks to Jeff and Josh).\n>>\n>> Now, I set 05 - 07yr as the carlibration period for estimating the\n>> parameters of ARMA(1,1)-GARCH(1,1) model, aqnd leave 08 for backtesting.\n>>\n>> So I use the return data observations from 1:760 (yr 05-07) to estimate\n>> the volatility on 2nd-Jan-08 (the position 761),\n>> then use the return data from 1:761 to estimate the vol on 3rd-Jan-08...\n>> 1:762...\n>> 1:763....\n>> ...\n>> ...\n>> and so on...\n>>\n>> My codes are as follow:\n>>\n>> start=length(AA.day.rn['2005-01::2007-12'])\n>> end = length(AA.day.rn)\n>>\n>> AA.day.forecast.data = array(0, dim=(end-start))\n>>\n>> for (i in start:end) {\n>>\n>>    garch.fit <- garchFit(formula = ~arma(1,1)+garch(1,1), data =\n>> AA.day.rn[1:i])\n>>    garch.pred <- predict(garch.fit, n.ahead=1)\n>>    AA.day.forecast.data = garch.pred[,1]\n>>\n>> }\n>>\n>>\n>> Following my design, there should be 193 forecast data, however, when I\n>> checked the object \"AA.day.forecast.data\", it gives the whole length of the\n>> original data( 953 observations).....\n>> Also, I am not too sure that after the loop function of garch.fit, will\n>> garch.pred catch the right estimation result?\n>>\n>> Many thanks.\n>> Mam\n>>\n>> P.S Sample data AA.day.rn is attached with this email.\n>> ------------------------------------------------------------------------\n>>\n>> _______________________________________________\n>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thank you Mat.\n\nThat works. I also double-checked manually with different estimation period.\n\nCheers\nMichael\n\nOn 14 May 2010 07:50, Matthieu Stigler <matthieu.stigler at gmail.com> wrote:\n\n> Should \"A",
       "thread_id": "thread-a6ae62e354c8",
       "thread_depth": 2,
-      "month": "2010-05"
+      "month": "2010-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100514/d7acc2a3/attachment.pl"
+      ]
     },
     {
       "id": "msg-bdcde2c6a39e",
@@ -696,11 +723,14 @@
       "subject_clean": "Robust standard error for a time series mean.",
       "in_reply_to": "<1990856496.1094756.1273966021491.JavaMail.root@vms229.mailsrvcs.net>",
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100515/db17b5f5/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100515/db17b5f5/attachment.pl>",
+      "body_plain": "I think I sended it to R-Sig-Finance (r-sig-finance at stat.math.ethz.ch)...\n\nWell... I analyzed the series with the Augmented Dickey Fuller test. I used the procedure from Dolado, Jenkinson and Rivero (1990) to identify the unit root.\n\nSome idea:\nCan I model the non-stationary time series with the Augmented Dickey Fuller model and use the intercept and the standard error of the intercept as proxies for the mean of the series? That would be something like a conditional mean \"given the series is stationary\"...\nCan I calculate then robust standard errors with the sandwich-package of that Augmented Dickey Fuller-Intercept? -> vcovHC(ADFmodel, type=\"HC0\") or NeweyWest(ADFmodel)\n\n\nAndy\n\n\n\n\n\n\n--- markleeds at verizon.net <markleeds at verizon.net> schrieb am So, 16.5.2010:\n\nVon: markleeds at verizon.net <markleeds at verizon.net>\nBetreff: Re: [R-SIG-Finance] Robust standard error for a time series mean.\nAn: klein82517 at yahoo.de\nDatum: Sonntag, 16. Mai, 2010 01:27 Uhr\n\nHi: i'm not sure what you mean by \"non-stationary\" ( there are many versions of non-stationarity ) but, if you mean non-constant mean , then I don't think the standard error has any meaning and you need to get stationary first.  But , if it's returns, I'm not sure\nhow you would do that because I thought returns were generally stationary ( !~zero mean ).\n\nThe book by Jan Beran, \"statistics for long memory processes\"  has some  material on calculating the standard error for the mean of a time series when the values are not independent but it may be similar to the Newey West estimator. I'm not sure abut that but the book may be worth looking at. Hopefully someone will else will say more. Another thing: it may be better to send that question to R-Sig-Finance because you may get more responses. good luck.\n\n\n\n\n\n\n\n\n\nhi: I'\nOn May 15, 2010, Andreas Klein <klein82517 at yahoo.de> wrote: Hello.\n\nI have a non-stationary time series of returns and I would like to calculate the standard error for the mean of that series.\n\nWhen I use the White-estimator or assume constant variance I got the same results. When I use the Newey-West-estimator, which also cares about autocorrelation, the standard errors increase a lot.\n\n1. What is the right estimator?\n2. Is the Newey West estimator strongly affected by the non-stationarity?\n\n\nDoes anyone have any literature source or a link to a paper or something like that? \n\n\nI hope someone can help me.\n\n\nThank you in advance.\n\n\nSincerely,\nAndy.\n\n\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I think I sended it to R-Sig-Finance (r-sig-finance at stat.math.ethz.ch)...\n\nWell... I analyzed the series with the Augmented Dickey Fuller test. I used the procedure from Dolado, Jenkinson and River",
       "thread_id": "thread-6854bda1b35b",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100515/db17b5f5/attachment.pl"
+      ]
     },
     {
       "id": "msg-fec5d9b4da97",
@@ -866,11 +896,14 @@
       "subject_clean": "tick data sources",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100520/b4c3d278/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100520/b4c3d278/attachment.pl>",
+      "body_plain": "Hello, is anybody aware of a cheaper alternative to Bloomberg and the\nRBloomberg package to get tick data via R?  Thank you very much.  Geoff\n\n-- \nGeoffrey Smith\nVisiting Assistant Professor\nDepartment of Finance\nW. P. Carey School of Business\nArizona State University\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello, is anybody aware of a cheaper alternative to Bloomberg and the\nRBloomberg package to get tick data via R?  Thank you very much.  Geoff\n\n-- \nGeoffrey Smith\nVisiting Assistant Professor\nDepartmen",
       "thread_id": "thread-0bda2cf719e8",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100520/b4c3d278/attachment.pl"
+      ]
     },
     {
       "id": "msg-0df5b3e31a03",
@@ -900,11 +933,14 @@
       "subject_clean": "hourly historical prices?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100520/41363bca/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100520/41363bca/attachment.pl>",
+      "body_plain": "I'm trying to test some a simple concepts and need sub-day historical prices (hourly?) for the previous 12 months for a set of ETFs. \n\nI've been searching the web and can't really find anything, so I thought I would ask here. \n\nIs there such a thing? \n\nThanks,\nJeff.\n\nJeff D. Hamann, PhD\n2430 NW Professional Drive\nCorvallis, Oregon 97330\n877-421-9815\njeff.hamann[at]moneytree[dot]com\nhttp://www.moneytree.com\n\nFull featured flexible financial plans in minutes. \nSimple or advanced. Goal or cash flow. Desktop or online.\nFree downloads, videos, & online trials.\n\n\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I'm trying to test some a simple concepts and need sub-day historical prices (hourly?) for the previous 12 months for a set of ETFs. \n\nI've been searching the web and can't really find anything, so I ",
       "thread_id": "thread-4f2b98fe8b8e",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100520/41363bca/attachment.pl"
+      ]
     },
     {
       "id": "msg-f77906a31837",
@@ -1111,11 +1147,14 @@
         "<AANLkTikdujolwN7u_57PI3lp3buY16lSQZE7w7xx4mi0@mail.gmail.com>",
         "<20100525151219.GM1575@ajay-shahs-macbook-pro.local>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100525/275bb784/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100525/275bb784/attachment.pl>",
+      "body_plain": "I agree that the cost is one-time and really trivial to the whole, but zoo\nwill be getting faster soon, as more of the C code from xts gets pushed back\nup into zoo:\n\n> library(xts)\nLoading required package: zoo\n> z <- zoo(matrix(rnorm(1e6), nc=100), Sys.time()+1:1e4)\n> x <- as.xts(z)\n\n> system.time(as.list(z))\n   user  system elapsed\n  0.483   0.106   0.588\n> system.time(as.list(x))\n   user  system elapsed\n  0.056   0.006   0.063\n\nPoint is, the cost isn't a concern, but it is going to shrink in the near\nfuture anyway.\n\nJeff\n\nOn Tue, May 25, 2010 at 10:12 AM, Ajay Shah <ajayshah at mayin.org> wrote:\n\n> On Tue, May 25, 2010 at 11:05:15AM -0400, Gabor Grothendieck wrote:\n> > The majority of the time is taken by as.list.zoo, not by attach\n> > itself.\n>\n> I agree. I just wanted to say that with data frames, attach() is\n> free. With a zoo object, we're paying the cost of casting. So even\n> though the syntax is seductive and elegant, at an underlying level\n> there is a fundamental difference. (This happens often with R, it's\n> not unique to this situation).\n>\n> --\n> Ajay Shah\n> http://www.mayin.org/ajayshah\n> ajayshah at mayin.org\n> http://ajayshahblog.blogspot.com\n> <*(:-? - wizard who doesn't know the answer.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\n\n-- \nJeffrey Ryan\njeffrey.ryan at insightalgo.com\n\nia: insight algorithmics\nwww.insightalgo.com\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I agree that the cost is one-time and really trivial to the whole, but zoo\nwill be getting faster soon, as more of the C code from xts gets pushed back\nup into zoo:\n\n> library(xts)\nLoading required pa",
       "thread_id": "thread-62ace02c8bb9",
       "thread_depth": 6,
-      "month": "2010-05"
+      "month": "2010-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100525/275bb784/attachment.pl"
+      ]
     },
     {
       "id": "msg-5b75828ac000",
@@ -1127,11 +1166,14 @@
       "subject_clean": "ta-lib & quantlib libraries for R",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100526/2537170f/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100526/2537170f/attachment.pl>",
+      "body_plain": "Hi,\n \nI have been searching for ta-lib and quantlib libraries for R. I\ncouldn't find it. Can you help me with the source?\n \n \n \nThanks,\n \n\nBalakrishnan Ilango \n\nSales Manager - Investment & Advisory\n\nSouth Asia\n\n \n\nThomson Reuters\n\n4th Floor, Nicholas Piramal Tower 'B' Wing\n\nPeninsula Corporate Park\n\nGanpatrao Kadam Marg, Lower Parel\n\nMumbai - 400001, India\n\nTel: +91 22 6636 7328\n\nMobile: +91 90046 51997\n\nEmail: balakrishnan.ilango at thomsonreuters.com\n<mailto:balakrishnan.ilango at thomsonreuters.com> \n\nweb: www.thomsonreuters.com <http://www.thomsonreuters.com/> \n\n \n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n \nI have been searching for ta-lib and quantlib libraries for R. I\ncouldn't find it. Can you help me with the source?\n \n \n \nThanks,\n \n\nBalakrishnan Ilango \n\nSales Manager - Investment & Advisory\n\n",
       "thread_id": "thread-5b75828ac000",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100526/2537170f/attachment.pl"
+      ]
     },
     {
       "id": "msg-506a3068a6dc",
@@ -1163,11 +1205,14 @@
       "references": [
         "<2682D00D80F6894C87D147059DABB18703655309@TFINKABANMBX09.ERF.THOMSON.COM>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100526/4ac5835d/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100526/4ac5835d/attachment.pl>",
+      "body_plain": "There is no ta-lib in R, but there is a great TA package called TTR:\n\nhttp://cran.r-project.org/web/packages/TTR/index.html\n\nAnd quantlib is indeed wrapped for R, or at least parts of:\n\nhttp://dirk.eddelbuettel.com/code/rquantlib.html\nhttp://cran.r-project.org/web/packages/RQuantLib/index.html\n\nHTH\nJeff\n\n\n\nOn Wed, May 26, 2010 at 6:12 AM, <balakrishnan.ilango at thomsonreuters.com>wrote:\n\n> Hi,\n>\n> I have been searching for ta-lib and quantlib libraries for R. I\n> couldn't find it. Can you help me with the source?\n>\n>\n>\n> Thanks,\n>\n>\n> Balakrishnan Ilango\n>\n> Sales Manager - Investment & Advisory\n>\n> South Asia\n>\n>\n>\n> Thomson Reuters\n>\n> 4th Floor, Nicholas Piramal Tower 'B' Wing\n>\n> Peninsula Corporate Park\n>\n> Ganpatrao Kadam Marg, Lower Parel\n>\n> Mumbai - 400001, India\n>\n> Tel: +91 22 6636 7328\n>\n> Mobile: +91 90046 51997\n>\n> Email: balakrishnan.ilango at thomsonreuters.com\n> <mailto:balakrishnan.ilango at thomsonreuters.com>\n>\n> web: www.thomsonreuters.com <http://www.thomsonreuters.com/>\n>\n>\n>\n>        [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\n\n-- \nJeffrey Ryan\njeffrey.ryan at insightalgo.com\n\nia: insight algorithmics\nwww.insightalgo.com\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "There is no ta-lib in R, but there is a great TA package called TTR:\n\nhttp://cran.r-project.org/web/packages/TTR/index.html\n\nAnd quantlib is indeed wrapped for R, or at least parts of:\n\nhttp://dirk.ed",
       "thread_id": "thread-5b75828ac000",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100526/4ac5835d/attachment.pl"
+      ]
     },
     {
       "id": "msg-3d3eb9abdf9f",

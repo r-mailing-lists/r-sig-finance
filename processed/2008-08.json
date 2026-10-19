@@ -17,11 +17,14 @@
         "<4888A85C.6050804@braverock.com>",
         "<c26b95920807241231u5384379cw3f85ab6ed4e11c8d@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080801/bb233fde/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080801/bb233fde/attachment.pl>",
+      "body_plain": "Hello Brian,\n\n                    If you could *still *provide any pointers for the\nbenchmarks or workloads :). Do tell if you need any more info?\n\nRegards,\n\n          Imanpreet Singh Arora\n\nOn Fri, Jul 25, 2008 at 1:01 AM, Imanpreet <imanpreet at gmail.com> wrote:\n\n>\n> Hello Brian,\n>\n>             I am working on porting R to a new architecture which would be\n> most optimized only when we are benchmarking it with huge amounts of data\n> and computation. So, I will be more interested towards benchmarks or\n> workloads which would be sufficiently complex.. Could you provide some\n> pointers for the same?\n>\n> TIA\n>\n> Regards,\n>\n>           Imanpreet Singh Arora\n>\n>\n> On Thu, Jul 24, 2008 at 9:35 PM, Brian G. Peterson <brian at braverock.com>\n> wrote:\n>\n>> Imanpreet wrote:\n>>\n>>>                 Could anyone point out any existing benchmarks or\n>>> workloads\n>>> for R, specifically targeting financial applications?\n>>>\n>>\n>> That's a pretty vague request.\n>>\n>> I've got functions that run in microseconds, and some portfolio\n>> optimizations that take hours.\n>>\n>> I'm aware of organizations that use huge clusters to do financial analysis\n>> with R.\n>>\n>> Perhaps you could be a little more specific about what you are trying to\n>> benchmark?\n>>\n>> Regards,\n>>\n>>  - Brian\n>>\n>\n>\n>\n>\n\n\n-- \nImanpreet Singh Arora\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello Brian,\n\n                    If you could *still *provide any pointers for the\nbenchmarks or workloads :). Do tell if you need any more info?\n\nRegards,\n\n          Imanpreet Singh Arora\n\nOn Fri, J",
       "thread_id": "thread-4a2a54923a70",
       "thread_depth": 0,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080801/bb233fde/attachment.pl"
+      ]
     },
     {
       "id": "msg-12b3a0d4bef1",
@@ -49,11 +52,14 @@
       "subject_clean": "Probability of Default - from CDS",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080801/67f45388/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080801/67f45388/attachment.pl>",
+      "body_plain": "Hello everybody,\n\nI was wondering if someone has already worked out some code to calculate\nthe probability of default from CDS.\n\nMany thanks\n\nDario\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello everybody,\n\nI was wondering if someone has already worked out some code to calculate\nthe probability of default from CDS.\n\nMany thanks\n\nDario\n\n\n\t[[alternative HTML version deleted]]",
       "thread_id": "thread-b26d1466f10d",
       "thread_depth": 0,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080801/67f45388/attachment.pl"
+      ]
     },
     {
       "id": "msg-ad64c6dffcf4",
@@ -104,11 +110,14 @@
       "subject_clean": "Monte Carlo function in package 'fOptions'",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080804/e93f0215/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080804/e93f0215/attachment.pl>",
+      "body_plain": "Hi,\n\n \n\nI think the function MonteCarloOption in package ¡®fOptions¡¯ has something\nwrong. The original function is \n\n \n\nfunction (delta.t, pathLength, mcSteps, mcLoops, init = TRUE, \n\n    innovations.gen, path.gen, payoff.calc, antithetic = TRUE, \n\n    standardization = FALSE, trace = TRUE, ...) \n\n{\n\n    delta.t <<- delta.t\n\n    if (trace) \n\n        cat(\"\\nMonte Carlo Simulation Path:\\n\\n\")\n\n    iteration = rep(0, length = mcLoops)\n\n    cat(\"\\nLoop:\\t\", \"No\\t\")\n\n    for (i in 1:mcLoops) {\n\n        if (i > 1) \n\n            init = FALSE\n\n        eps = innovations.gen(mcSteps, pathLength, init = init, \n\n            ...)\n\n        if (antithetic) \n\n            eps = rbind(eps, -eps)\n\n        if (standardization) \n\n            eps = (eps - mean(eps))/sqrt(var(as.vector(eps)))\n\n        path = t(path.gen(eps))\n\n        payoff = NULL\n\n        for (j in 1:dim(path)[1]) payoff = c(payoff, payoff.calc(path[, \n\n            j]))\n\n        iteration[i] = mean(payoff)\n\n        if (trace) \n\n            cat(\"\\nLoop:\\t\", i, \"\\t:\", iteration[i], sum(iteration)/i)\n\n    }\n\n    if (trace) \n\n        cat(\"\\n\")\n\n    iteration\n\n}\n\n \n\nBut in line ¡®for (j in 1:dim(path)[1]) payoff = c(payoff,\npayoff.calc(path[,j]))¡¯ the condition of ¡®for¡¯ should be ¡®j in\n1:dim(path)[2]¡¯ since dim(path)[2] is the mcStep.\n\n \n\nDo I misunderstand the function?\n\n \n\n                                                                Hsiao-nan\nCheung\n\n                                                                2008/8/4\n\n \n\n \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\n \n\nI think the function MonteCarloOption in package ¡®fOptions¡¯ has something\nwrong. The original function is \n\n \n\nfunction (delta.t, pathLength, mcSteps, mcLoops, init = TRUE, \n\n    innovations",
       "thread_id": "thread-0ec5a8f4beb7",
       "thread_depth": 0,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080804/e93f0215/attachment.pl"
+      ]
     },
     {
       "id": "msg-13acc248fc5a",
@@ -120,11 +129,14 @@
       "subject_clean": "TARN",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080804/19bbb4ac/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080804/19bbb4ac/attachment.pl>",
+      "body_plain": "Hi,\n\nDoes anyone has codeing experience with respect to Target redemption note?\n\nTIA\n\nHong\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nDoes anyone has codeing experience with respect to Target redemption note?\n\nTIA\n\nHong\n\n\t[[alternative HTML version deleted]]",
       "thread_id": "thread-13acc248fc5a",
       "thread_depth": 0,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080804/19bbb4ac/attachment.pl"
+      ]
     },
     {
       "id": "msg-5a3f5ad5e864",
@@ -204,11 +216,14 @@
       "subject_clean": "Long Range Dependence: Hurst exponent estimation",
       "in_reply_to": "<07FF9DD79EF8DD4C876FEC3DE0B6AF1D7DF343@MLNYC20MB057.amrs.win.ml.com>",
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080804/3362afb0/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080804/3362afb0/attachment.pl>",
+      "body_plain": "Thanks Gary. \n\nThat package is a bit weird. When one installs and loads it up, you don't \nactually get any of those functions. One has to go to the following link:\n\nhttp://r-forge.r-project.org/plugins/scmsvn/viewcvs.php?rev=1&root=rmetrics&view=rev\n\nand then download and source the file LongRangeDependence.R to get the \naggvar and rsFit functions to do Hurst exponent estimation.\n\n It appears to be the case that the fSeries package currently does not \nreally have that functionality. Perhaps they meant to put it in there but \ndecided to exclude it in the current release for some reason.\n\nI have also cc'd the RMetrics group here to see if they can cast a light \non this issue.\n\nThanks,\nTolga\n\n\n\n\n\n\n\"Ling, Gary \\(Electronic Trading\\)\" <Gary_Ling at ml.com> \n04/08/2008 20:51\n\nTo\n<tolga.i.uzuner at jpmorgan.com>\ncc\n\nSubject\nRE: [R] Long Range Dependence: Hurst exponent estimation\n\n\n\n\n\n\nHi, you can try the \"fSeries\" package.\nSee this doc:\nhttp://phase.hpcc.jp/mirrors/stat/R/CRAN/doc/packages/fSeries.pdf\n-gary\n\n-----Original Message-----\nFrom: r-help-bounces at r-project.org [mailto:r-help-bounces at r-project.org]\nOn Behalf Of tolga.i.uzuner at jpmorgan.com\nSent: Monday, August 04, 2008 3:04 PM\nTo: r-help at r-project.org\nSubject: [R] Long Range Dependence: Hurst exponent estimation\n\n\nDear R Users,\n\nCan anyone point me to a package for R vrsion 2.7.1 which implements\nsome \nHurst exponent estimation methods ?\n\nThanks in advance,\nTolga\n\nGenerally, this communication is for informational purposes only\nand it is not intended as an offer or solicitation for the purchase\nor sale of any financial instrument or as an official confirmation\nof any transaction. In the event you are receiving the offering\nmaterials attached below related to your interest in hedge funds or\nprivate equity, this communication may be intended as an offer or\nsolicitation for the purchase or sale of such fund(s).  All market\nprices, data and other information are not warranted as to\ncompleteness or accuracy and are subject to change without notice.\nAny comments or statements made herein do not necessarily reflect\nthose of JPMorgan Chase & Co., its subsidiaries and affiliates.\n\nThis transmission may contain information that is privileged,\nconfidential, legally privileged, and/or exempt from disclosure\nunder applicable law. If you are not the intended recipient, you\nare hereby notified that any disclosure, copying, distribution, or\nuse of the information contained herein (including any reliance\nthereon) is STRICTLY PROHIBITED. Although this transmission and any\nattachments are believed to be free of any virus or other defect\nthat might affect any computer system into which it is received and\nopened, it is the responsibility of the recipient to ensure that it\nis virus free and no responsibility is accepted by JPMorgan Chase &\nCo., its subsidiaries and affiliates, as applicable, for any loss\nor damage arising in any way from its use. If you received this\ntransmission in error, please immediately contact the sender and\ndestroy the material in its entirety, whether in electronic or hard\ncopy format. Thank you.\nPlease refer to http://www.jpmorgan.com/pages/disclosures for\ndisclosures relating to UK legal entities.\n                 [[alternative HTML version deleted]]\n\n______________________________________________\nR-help at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-help\nPLEASE do read the posting guide\nhttp://www.R-project.org/posting-guide.html\nand provide commented, minimal, self-contained, reproducible code.\n--------------------------------------------------------\n\nThis message w/attachments (message) may be privileged, confidential or \nproprietary, and if you are not an intended recipient, please notify the \nsender, do not use or share it and delete it. Unless specifically \nindicated, this message is not an offer to sell or a solicitation of any \ninvestment products or other financial product or service, an official \nconfirmation of any transaction, or an official statement of Merrill \nLynch. Subject to applicable law, Merrill Lynch may monitor, review and \nretain e-communications (EC) traveling through its networks/systems. The \nlaws of the country of each sender/recipient may impact the handling of \nEC, and EC may be archived, supervised and produced in countries other \nthan the country in which you are located. This message cannot be \nguaranteed to be secure or error-free. This message is subject to terms \navailable at the following link: http://www.ml.com/e-communications_terms/\n. By messaging with Merrill Lynch you consent to the foregoing.\n--------------------------------------------------------\n\n\n\nGenerally, this communication is for informational purposes only\nand it is not intended as an offer or solicitation for the purchase\nor sale of any financial instrument or as an official confirmation\nof any transaction. In the event you are receiving the offering\nmaterials attached below related to your interest in hedge funds or\nprivate equity, this communication may be intended as an offer or\nsolicitation for the purchase or sale of such fund(s).  All market\nprices, data and other information are not warranted as to\ncompleteness or accuracy and are subject to change without notice.\nAny comments or statements made herein do not necessarily reflect\nthose of JPMorgan Chase & Co., its subsidiaries and affiliates.\n\nThis transmission may contain information that is privileged,\nconfidential, legally privileged, and/or exempt from disclosure\nunder applicable law. If you are not the intended recipient, you\nare hereby notified that any disclosure, copying, distribution, or\nuse of the information contained herein (including any reliance\nthereon) is STRICTLY PROHIBITED. Although this transmission and any\nattachments are believed to be free of any virus or other defect\nthat might affect any computer system into which it is received and\nopened, it is the responsibility of the recipient to ensure that it\nis virus free and no responsibility is accepted by JPMorgan Chase &\nCo., its subsidiaries and affiliates, as applicable, for any loss\nor damage arising in any way from its use. If you received this\ntransmission in error, please immediately contact the sender and\ndestroy the material in its entirety, whether in electronic or hard\ncopy format. Thank you.\nPlease refer to http://www.jpmorgan.com/pages/disclosures for\ndisclosures relating to UK legal entities.\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thanks Gary. \n\nThat package is a bit weird. When one installs and loads it up, you don't \nactually get any of those functions. One has to go to the following link:\n\nhttp://r-forge.r-project.org/plugin",
       "thread_id": "thread-396abc6ff1db",
       "thread_depth": 0,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080804/3362afb0/attachment.pl"
+      ]
     },
     {
       "id": "msg-894a7d0c6e45",
@@ -238,11 +253,14 @@
       "subject_clean": "Principal Component Analysis",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080806/3bba0a3b/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080806/3bba0a3b/attachment.pl>",
+      "body_plain": "I'm currently studying PCA (in particular: Härdle, W. and Simar, L. (2003), \"Applied Multivariate Statistical Analysis\").\n\n \n\nAccording to the authors, the \"main direction of the data\" is the eigenvector corresponding to the largest eigenvalue. \n\nThe PC are then computed by (t)Gamma %*% (X-mu) \n\nwhere (t)Gamma is the transpose of the matrix consisting the eigenvectors and (X-mu) is the demeaned data matrix.\n\n \n\nFor the two dimensional case I tried out the following example:\n\n \n\npar(mfrow = c(2,2))\n\nset.seed(222)\n\nfor (i in c(-2, -0.1, 0.8, 2)) {    #choose values for the slope parameters of y\n\nx <- seq(1,100,1)\n\ny <- 20 + i*x + rnorm(100,0,10)\n\n#x<- x -mean(x)     # Härdle suggests to demean the data but this results in a graphical shift of the PC\n\n#y <- y - mean(y)\n\nS <- cov(cbind(x,y))\n\n \n\n \n\nPC1 <- eigen(S)$vectors[1,1]*x + eigen(S)$vectors[2,1]*y      #eigenvector corresponding to the first (largest) eigenvalue\n\nPC2 <- eigen(S)$vectors[1,2]*x + eigen(S)$vectors[2,2]*y\n\nplot(x,y, xlim = c(-200, 200), ylim = c(-200, 200))\n\nlines(PC1, type = \"l\", col = \"red\", lwd = 2)\n\nlines(PC2, type = \"l\", col = \"blue\", lwd = 2)\n\n \n\nmy questions:\n\n \n\n1.\tWhy do the PC fit the data better when the slope is steep (e.g. 2 or -2) but fit poorly when the slope is flat (in particular when it's below one).\n2.\tThe PC are not orthogonal to each other although they should be\n\n \n\nThanks\n\n \n\nZeno\n\n\n\nEBS European Business School gemeinnuetzige GmbH\nAmtsgericht Wiesbaden HRB 19951\nUmsatzsteuer-ID DE 113891213\nGeschaeftsfuehrung: Prof. Dr. Christopher Jahns, Rektor; Dr. Reimar Palte, Kanzler;  Sabine Fuchs, Prokuristin\nVerwaltungsrat: Dr. Hellmut K. Albrecht, Vorsitzender\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I'm currently studying PCA (in particular: Härdle, W. and Simar, L. (2003), \"Applied Multivariate Statistical Analysis\").\n\n \n\nAccording to the authors, the \"main direction of the data\" is the eigenvec",
       "thread_id": "thread-777d21784ad4",
       "thread_depth": 0,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080806/3bba0a3b/attachment.pl"
+      ]
     },
     {
       "id": "msg-32b7993d4118",
@@ -256,11 +274,14 @@
       "references": [
         "<9064522880125945B98983BBAECBA1CC21D1F4@exchsrv001.ebs.local>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080806/65485f3d/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080806/65485f3d/attachment.pl>",
+      "body_plain": "Dear Zeno,\nTry the following change to your code:\n\n##\npar(mfrow = c(2,2))\nset.seed(222)\nfor (i in c(-2, -0.1, 0.8, 2)) {    #choose values for the slope parameters\nof y\nx <- seq(1,100,1)\ny <- 20 + i*x + rnorm(100,0,10)\n\nS <- cov(cbind(x,y))\n\nx<-x-mean(x)\ny<-y-mean(y)\nplot(x,y, xlim = c(-200, 200), ylim = c(-200, 200),asp=1)\nabline(b=eigen(S)$vectors[2,1]/eigen(S)$vectors[1,1],a=0,col = \"red\", lwd =\n2)\nabline(b=eigen(S)$vectors[2,2]/eigen(S)$vectors[1,2],a=0,col = \"blue\", lwd =\n2)\n}\n\nTake a look also at princomp(), biplot(), etc.\nrgds,\nPaulo\n\n\n\nOn Wed, Aug 6, 2008 at 7:07 AM, Adams, Zeno <Zeno.Adams at ebs.edu> wrote:\n\n> I'm currently studying PCA (in particular: Härdle, W. and Simar, L. (2003),\n> \"Applied Multivariate Statistical Analysis\").\n>\n>\n>\n> According to the authors, the \"main direction of the data\" is the\n> eigenvector corresponding to the largest eigenvalue.\n>\n> The PC are then computed by (t)Gamma %*% (X-mu)\n>\n> where (t)Gamma is the transpose of the matrix consisting the eigenvectors\n> and (X-mu) is the demeaned data matrix.\n>\n>\n>\n> For the two dimensional case I tried out the following example:\n>\n>\n>\n> par(mfrow = c(2,2))\n>\n> set.seed(222)\n>\n> for (i in c(-2, -0.1, 0.8, 2)) {    #choose values for the slope parameters\n> of y\n>\n> x <- seq(1,100,1)\n>\n> y <- 20 + i*x + rnorm(100,0,10)\n>\n> #x<- x -mean(x)     # Härdle suggests to demean the data but this results\n> in a graphical shift of the PC\n>\n> #y <- y - mean(y)\n>\n> S <- cov(cbind(x,y))\n>\n>\n>\n>\n>\n> PC1 <- eigen(S)$vectors[1,1]*x + eigen(S)$vectors[2,1]*y      #eigenvector\n> corresponding to the first (largest) eigenvalue\n>\n> PC2 <- eigen(S)$vectors[1,2]*x + eigen(S)$vectors[2,2]*y\n>\n> plot(x,y, xlim = c(-200, 200), ylim = c(-200, 200))\n>\n> lines(PC1, type = \"l\", col = \"red\", lwd = 2)\n>\n> lines(PC2, type = \"l\", col = \"blue\", lwd = 2)\n>\n>\n>\n> my questions:\n>\n>\n>\n> 1.      Why do the PC fit the data better when the slope is steep (e.g. 2\n> or -2) but fit poorly when the slope is flat (in particular when it's below\n> one).\n> 2.      The PC are not orthogonal to each other although they should be\n>\n>\n>\n> Thanks\n>\n>\n>\n> Zeno\n>\n>\n>\n> EBS European Business School gemeinnuetzige GmbH\n> Amtsgericht Wiesbaden HRB 19951\n> Umsatzsteuer-ID DE 113891213\n> Geschaeftsfuehrung: Prof. Dr. Christopher Jahns, Rektor; Dr. Reimar Palte,\n> Kanzler;  Sabine Fuchs, Prokuristin\n> Verwaltungsrat: Dr. Hellmut K. Albrecht, Vorsitzender\n>\n>        [[alternative HTML version deleted]]\n>\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\n\n-- \n-----------------------------------------------\nPaulo Gustavo Grahl, CFA\npgrahl at fgvmail.br\npgrahl at gmail.com\nhttp://www.linkedin.com/in/pgrahl\n+55 (21) 8809-9254\n-----------------------------------------------\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear Zeno,\nTry the following change to your code:\n\n##\npar(mfrow = c(2,2))\nset.seed(222)\nfor (i in c(-2, -0.1, 0.8, 2)) {    #choose values for the slope parameters\nof y\nx <- seq(1,100,1)\ny <- 20 + i*x",
       "thread_id": "thread-777d21784ad4",
       "thread_depth": 1,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080806/65485f3d/attachment.pl"
+      ]
     },
     {
       "id": "msg-6b38c65d88b3",
@@ -272,11 +293,14 @@
       "subject_clean": "reliable Hurst exponent estimation",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080808/a256b937/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080808/a256b937/attachment.pl>",
+      "body_plain": "Dear R Finance Users,\n \nI am trying to reliably estimate the Hurst exponent using the ***fit \nfunctions in fArma. The estimates appear to be substantially different \ndepending on the estimator used and in some cases, are outside the bounds \nof 0 and 1. \n\nI was wondering if anyone has considered in detail whether a \"meta\" \nestimator in which one takes the median amongst all estimators after \nexcluding any which do not fall into the [0,1] range has any known \nstatistical properties ? Any other recommendations also welcome.\n\nThanks in advance,\nTolga\n\nGenerally, this communication is for informational purposes only\nand it is not intended as an offer or solicitation for the purchase\nor sale of any financial instrument or as an official confirmation\nof any transaction. In the event you are receiving the offering\nmaterials attached below related to your interest in hedge funds or\nprivate equity, this communication may be intended as an offer or\nsolicitation for the purchase or sale of such fund(s).  All market\nprices, data and other information are not warranted as to\ncompleteness or accuracy and are subject to change without notice.\nAny comments or statements made herein do not necessarily reflect\nthose of JPMorgan Chase & Co., its subsidiaries and affiliates.\n\nThis transmission may contain information that is privileged,\nconfidential, legally privileged, and/or exempt from disclosure\nunder applicable law. If you are not the intended recipient, you\nare hereby notified that any disclosure, copying, distribution, or\nuse of the information contained herein (including any reliance\nthereon) is STRICTLY PROHIBITED. Although this transmission and any\nattachments are believed to be free of any virus or other defect\nthat might affect any computer system into which it is received and\nopened, it is the responsibility of the recipient to ensure that it\nis virus free and no responsibility is accepted by JPMorgan Chase &\nCo., its subsidiaries and affiliates, as applicable, for any loss\nor damage arising in any way from its use. If you received this\ntransmission in error, please immediately contact the sender and\ndestroy the material in its entirety, whether in electronic or hard\ncopy format. Thank you.\nPlease refer to http://www.jpmorgan.com/pages/disclosures for\ndisclosures relating to UK legal entities.\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear R Finance Users,\n \nI am trying to reliably estimate the Hurst exponent using the ***fit \nfunctions in fArma. The estimates appear to be substantially different \ndepending on the estimator used an",
       "thread_id": "thread-6b38c65d88b3",
       "thread_depth": 0,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080808/a256b937/attachment.pl"
+      ]
     },
     {
       "id": "msg-56eacdec8ddb",
@@ -306,11 +330,14 @@
       "subject_clean": "reliable Hurst exponent estimation",
       "in_reply_to": "<18588.31763.411357.658216@stat.math.ethz.ch>",
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080808/5acafa1e/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080808/5acafa1e/attachment.pl>",
+      "body_plain": "Hi Martin/Fellow R Users,\n\nHere is some sample code I am considering:\n\nhurst<-function(x){\nresult<-NA\ntry({\nrshurst<-NA\naggvarhurst<-NA\nwhittlehurst<-NA\ndiffvarFit<-NA\nhiguchiFit<-NA\n\ntry({rshurst<-rsFit(x)@hurst$H; if((rshurst>1) || (rshurst<0)) \nrshurst<-NA},silent=TRUE)\ntry({aggvarhurst<-aggvarFit(x)@hurst$H; if((aggvarhurst>1) || \n(aggvarhurst<0)) aggvarhurst<-NA},silent=TRUE)\ntry({whittlehurst<-whittleFit(x)@hurst$H; if((whittlehurst>1) || \n(whittlehurst<0)) whittlehurst<-NA},silent=TRUE)\ntry({diffvarhurst<-diffvarFit(x)@hurst$H; if((diffvarhurst>1) || \n(diffvarhurst<0)) diffvarhurst<-NA},silent=TRUE)\ntry({higuchihurst<-higuchiFit(x)@hurst$H; if((higuchihurst>1) || \n(higuchihurst<0)) higuchihurst<-NA},silent=TRUE)\n \nresult<-median(c(rshurst,aggvarhurst,whittlehurst,diffvarhurst,higuchihurst),na.rm=TRUE)\n})\nresult\n}\n\nNothing too fancy.\n\nThe questions are:\n- is something similar to this implemented in R\n- are there any established results for estimating the Hurst exponent this \nway (i.e. as the median of multiple estimtes) ?\n\nThanks\n\n\n\n\nMartin Maechler <maechler at stat.math.ethz.ch> \n08/08/2008 18:02\nPlease respond to\nMartin Maechler <maechler at stat.math.ethz.ch>\n\n\nTo\ntolga.i.uzuner at jpmorgan.com\ncc\nr-sig-finance at stat.math.ethz.ch\nSubject\nRe: [R-SIG-Finance] reliable Hurst exponent estimation\n\n\n\n\n\n\n>>>>> \"tiu\" == tolga i uzuner <tolga.i.uzuner at jpmorgan.com>\n>>>>>     on Fri, 8 Aug 2008 13:18:20 +0100 writes:\n\n    tiu> Dear R Finance Users, I am trying to reliably estimate\n    tiu> the Hurst exponent using the ***fit functions in\n    tiu> fArma. The estimates appear to be substantially\n    tiu> different depending on the estimator used and in some\n    tiu> cases, are outside the bounds of 0 and 1.\n\n    tiu> I was wondering if anyone has considered in detail\n    tiu> whether a \"meta\" estimator in which one takes the\n    tiu> median amongst all estimators after excluding any which\n    tiu> do not fall into the [0,1] range has any known\n    tiu> statistical properties ? Any other recommendations also\n    tiu> welcome.\n\n    tiu> Thanks in advance, Tolga\n\nAnd where is the small reproducible example code?\n\nWhat does fracdiff give?\n\n\n\nGenerally, this communication is for informational purposes only\nand it is not intended as an offer or solicitation for the purchase\nor sale of any financial instrument or as an official confirmation\nof any transaction. In the event you are receiving the offering\nmaterials attached below related to your interest in hedge funds or\nprivate equity, this communication may be intended as an offer or\nsolicitation for the purchase or sale of such fund(s).  All market\nprices, data and other information are not warranted as to\ncompleteness or accuracy and are subject to change without notice.\nAny comments or statements made herein do not necessarily reflect\nthose of JPMorgan Chase & Co., its subsidiaries and affiliates.\n\nThis transmission may contain information that is privileged,\nconfidential, legally privileged, and/or exempt from disclosure\nunder applicable law. If you are not the intended recipient, you\nare hereby notified that any disclosure, copying, distribution, or\nuse of the information contained herein (including any reliance\nthereon) is STRICTLY PROHIBITED. Although this transmission and any\nattachments are believed to be free of any virus or other defect\nthat might affect any computer system into which it is received and\nopened, it is the responsibility of the recipient to ensure that it\nis virus free and no responsibility is accepted by JPMorgan Chase &\nCo., its subsidiaries and affiliates, as applicable, for any loss\nor damage arising in any way from its use. If you received this\ntransmission in error, please immediately contact the sender and\ndestroy the material in its entirety, whether in electronic or hard\ncopy format. Thank you.\nPlease refer to http://www.jpmorgan.com/pages/disclosures for\ndisclosures relating to UK legal entities.\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Martin/Fellow R Users,\n\nHere is some sample code I am considering:\n\nhurst<-function(x){\nresult<-NA\ntry({\nrshurst<-NA\naggvarhurst<-NA\nwhittlehurst<-NA\ndiffvarFit<-NA\nhiguchiFit<-NA\n\ntry({rshurst<-rs",
       "thread_id": "thread-6b38c65d88b3",
       "thread_depth": 2,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080808/5acafa1e/attachment.pl"
+      ]
     },
     {
       "id": "msg-ad48602d7b92",
@@ -322,11 +349,14 @@
       "subject_clean": "Models Choosing",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080810/e0e39ec6/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080810/e0e39ec6/attachment.pl>",
+      "body_plain": "Hi,\n\n \n\nI have a time series data, which has obviously structure switching property.\nNow I want to use a model to capture its characteristics and find all\ninfluencing factors, then which model should I choose?\n\n \n\nAlso, what¡¯s the difference when a stochastic model, a GARCH model and a\nMarkov-Switching model is used to describe the time series? And what¡¯s the\nmost important when I choose from these models? Is there a transformation\nmechanism between these model?\n\n \n\nThanks!\n\n \n\nHsiao-nan Cheung\n\n \n\n2008/08/10\n\n \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\n \n\nI have a time series data, which has obviously structure switching property.\nNow I want to use a model to capture its characteristics and find all\ninfluencing factors, then which model should ",
       "thread_id": "thread-ad48602d7b92",
       "thread_depth": 0,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080810/e0e39ec6/attachment.pl"
+      ]
     },
     {
       "id": "msg-c77f11b17d2d",
@@ -354,11 +384,14 @@
       "subject_clean": "cointegrated series with Data Missing",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080812/2dc5809c/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080812/2dc5809c/attachment.pl>",
+      "body_plain": "Hi there!\n \nFirst, I´m from Brazil, so sorry for any English mistake.\nI have two cointegrated series with Data Missing in both. They are two finance series, one from USA and another from Brazil, so in holidays here I have data for USA serie and same for holidays in USA.\nI think usual Data Missing thecnics do not apply, since they are time series, and are also cointegrated.\nCan someone help me?\n \nThanks very much,\n \nMarcus Vinicius\n\n\n\n      Novos endereços, o Yahoo! que você conhece. Crie um email novo com a sua cara @ymail.com ou @rocketmail.com.\nhttp://br.new.mail.yahoo.com/addresses\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi there!\n \nFirst, I´m from Brazil, so sorry for any English mistake.\nI have two cointegrated series with Data Missing in both. They are two finance series, one from USA and another from Brazil, so in",
       "thread_id": "thread-cf6e47d1c0bd",
       "thread_depth": 0,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080812/2dc5809c/attachment.pl"
+      ]
     },
     {
       "id": "msg-31a7e94bcea0",
@@ -423,11 +456,14 @@
       "subject_clean": "Granger Causality Test",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080814/bc883cd4/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080814/bc883cd4/attachment.pl>",
+      "body_plain": "Hi,\n\n \n\nI have some question that whether only stationary series could do Granger\nCausality Test. Is there any exception?\n\n \n\nSince I¡¯ve found somewhere that to make a time series stationary, the\ndifferential series may has little economic meaning.\n\n \n\nHsiao-nan Cheung\n\n \n\n \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\n \n\nI have some question that whether only stationary series could do Granger\nCausality Test. Is there any exception?\n\n \n\nSince I¡¯ve found somewhere that to make a time series stationary, the\ndif",
       "thread_id": "thread-662fe54e0e4e",
       "thread_depth": 0,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080814/bc883cd4/attachment.pl"
+      ]
     },
     {
       "id": "msg-7b55ff133b6a",
@@ -491,11 +527,14 @@
       "references": [
         "<11625533.15301711218664866064.JavaMail.javamailuser@localhost>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080813/d53b578f/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080813/d53b578f/attachment.pl>",
+      "body_plain": "Toda, H. Y. and T. Yamamoto (1995). \"Statistical inference in vector autoregressions with possibly integrated processes.\" Journal of Econometrics 66: 225-250.\n\n\n\nI think the above paper should also help, for testing granger-causality among non-stationary variables. \n \nJHK\n> Date: Wed, 13 Aug 2008 17:01:05 -0500> From: markleeds at verizon.net> To: niheaven at hotmail.com> CC: r-sig-finance at stat.math.ethz.ch> Subject: Re: [R-SIG-Finance] Granger Causality Test> > i think your two statements deserve separate answers.> > 1)> > granger causailty is only used ( as far as i know ) in the context of > deciding on which variables in a previusly estimated VAR cause another> in the granger sense. ( defined in Lutkepohl ) . But, since it's a n > already estimated VAR, you should have already decided whether the> series under study needed to be differenced or not in order that the VAR > estimation is done on variables that are stationary.> > So, granger causality doesn't really have much to do with stationarity, > I don't think, because that should have been worked out during the> estimation fo the VAR.> > 2)> > in the 70's before cointegration was discovered, people used to > difference time series variables in order to make them stationary (> for example , if they were prices, they would make them differenced > prices ). but, it was realized that, if one did this, then the > information about levels of the> series was lost and it was always felt that there must be a better > approach so the levels info was not abruptly discarded.> > then, engle and granger figured out in the early 80's that there were > cases where two variables could be non-stationary and yet> the regression of the two on each other could still be valid > statistically ( cointegration ). So, they were able to figure out a way > to> keep the levels in the specification by rewriting the regression > relationship in the form of an error correction model. This was then > extended beyond the> bivariate case to what is called a vector-error correction model ( VECM > ) which is like a VAR but slightly different and I couldn't do the > description of a VECM justice even if i tried so I won't.> > There is a lot of econometrics literautre in this area that talks about > this in a much more eloquent way than I could.> > Some good books in order of increasing difficulty ( atleast to me ).> > Enders> Zivot ( S+Finmetrics book )> Hayashi> Lutkepohl> Hamilton> > To me, Hamilton and Lutkpohl are similar in difficulty and require a > larger time investment than the others. Enders is the most basic but it > gives nice intuition and is good for an intro. Zivot is more general in > that it covers various time series topics but also provides a brief but > nice discussion on the topics above.> > > > > > On Wed, Aug 13, 2008 at 5:23 PM, Hsiao-nan Cheung wrote:> > > Hi,> >> >> > I have some question that whether only stationary series could do > > Granger> > Causality Test. Is there any exception?> >> >> > Since I��ve found somewhere that to make a time series stationary, the> > differential series may has little economic meaning.> >> >> > Hsiao-nan Cheung> >> >> >> >> > [[alternative HTML version deleted]]> >> >> >> > ------------------------------> >> > _______________________________________________> > R-SIG-Finance at stat.math.ethz.ch mailing list> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance> > -- Subscriber-posting only.> > -- If you want to post, subscribe first.> > _______________________________________________> R-SIG-Finance at stat.math.ethz.ch mailing list> https://stat.ethz.ch/mailman/listinfo/r-sig-finance> -- Subscriber-posting only.> -- If you want to post, subscribe first.\n_________________________________________________________________\nAre you paid what you're worth? Find out: SEEK Salary Centre\nhttp://a.ninemsn.com.au/b.aspx?URL=http%3A%2F%2Fninemsn%2Eseek%2Ecom%2Eau%2Fcareer%2Dresources%2Fsalary%2Dcentre%2F%3Ftracking%3Dsk%3Ahet%3Asc%3Anine%3A0%3Ahot%3Atext&_t=764565661&_r=OCT07_endtext_salary&_m=EXT\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Toda, H. Y. and T. Yamamoto (1995). \"Statistical inference in vector autoregressions with possibly integrated processes.\" Journal of Econometrics 66: 225-250.\n\n\n\nI think the above paper should also he",
       "thread_id": "thread-c219fb966b5f",
       "thread_depth": 1,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080813/d53b578f/attachment.pl"
+      ]
     },
     {
       "id": "msg-e358e4dae574",
@@ -525,11 +564,14 @@
       "subject_clean": "cointegrated series with Data Missing",
       "in_reply_to": "<cfdde1650808120700p7d76700cp87ff165313685010@mail.gmail.com>",
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080814/7d484147/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080814/7d484147/attachment.pl>",
+      "body_plain": "Dear John,\n \nI´m trying to test for cointegration. I thought that if I use an MA as estimation with last data before each missing, perhaps one or two weeks, it could do the trick. But I can find some week sazonality, since market in a Friday may be more or less active than in a Monday. The fact is that I can't test cointegration with missing, and I wouldn't just delete the unpaired data.\nSugestions?\n \nI searched in the list of historical mails of this list and didn't find anything that fits on this case.\n\nRgds,\nMarcus\n\n--- Em ter, 12/8/08, John Frain <frainj at tcd.ie> escreveu:\n\nDe: John Frain <frainj at tcd.ie>\nAssunto: Re: [R-SIG-Finance] cointegrated series with Data Missing\nPara: mvstatistics at yahoo.com.br\nData: Terça-feira, 12 de Agosto de 2008, 11:00\n\nIt is not clear what you aim to do with the series.  Are you\n\n1) Trying to test for cointegration\n\n2) Estimating a cointegrating relationship\n\n3) Estimating missing values.  If so how are you going to use the\nestimates.  Perhaps a) estimate a VECM, b) fill in missing values, c)\nreestimate and d) cycle to convergence.\n\nBest Regards\n\nJohn\n\n\n\n\n\n2008/8/12 Marcus Vinícius Soares <mvstatistics at yahoo.com.br>:\n> Hi there!\n>\n> First, I´m from Brazil, so sorry for any English mistake.\n> I have two cointegrated series with Data Missing in both. They are two\nfinance series, one from USA and another from Brazil, so in holidays here I have\ndata for USA serie and same for holidays in USA.\n> I think usual Data Missing thecnics do not apply, since they are time\nseries, and are also cointegrated.\n> Can someone help me?\n>\n> Thanks very much,\n>\n> Marcus Vinicius\n>\n>\n>\n>      Novos endereços, o Yahoo! que você conhece. Crie um email novo com\na sua cara @ymail.com ou @rocketmail.com.\n> http://br.new.mail.yahoo.com/addresses\n>        [[alternative HTML version deleted]]\n>\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\n\n-- \nJohn C Frain\nTrinity College Dublin\nDublin 2\nIreland\nwww.tcd.ie/Economics/staff/frainj/home.htm\nmailto:frainj at tcd.ie\nmailto:frainj at gmail.com\n\n\n\n      Novos endereços, o Yahoo! que você conhece. Crie um email novo com a sua cara @ymail.com ou @rocketmail.com.\nhttp://br.new.mail.yahoo.com/addresses\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear John,\n \nI´m trying to test for cointegration. I thought that if I use an MA as estimation with last data before each missing, perhaps one or two weeks, it could do the trick. But I can find some ",
       "thread_id": "thread-c89aff9decbf",
       "thread_depth": 0,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080814/7d484147/attachment.pl"
+      ]
     },
     {
       "id": "msg-5cc0b8d8d7dd",
@@ -575,11 +617,14 @@
       "subject_clean": "How to get data from different time zones (e.g. USA, EU, Asia) in the same format",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080817/e8dc6f38/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080817/e8dc6f38/attachment.pl>",
+      "body_plain": "Hello,\n\n \n\nI am currently analyzing market data retrieving data sets from yahoo with\nthe get.hist.quote function in the Performance Analytics package.\n\n \n\n############ Data Import Sheet ##############\n\n \n\nticker<-c(\"^GSPC\", \"^GDAXI\")\n\n \n\n \n\n# Time horizon\n\n \n\nfrom <- \"1992-01-03\"              # of type \"YYYY-MM-DD\"\n\ntill <- \"2007-12-31\"\n\n \n\n# Return frequency\n\n \n\nfreque <- c(\"d\", \"w\", \"m\", \"y\")\n\nfq <- 1                             # input 1 for \"d\", 2 for \"w\" etc.\n\n \n\n \n\n# Benchmark\n\nbenchmark <- get.hist.quote(ticker[1], start = from, end = till,\ncompression=freque[fq], quote=\"Close\")\n\nbenchmark2 <- get.hist.quote(ticker[2], start = from, end = till,\ncompression=freque[fq], quote=\"Close\")\n\n \n\nNow, both benchmarks are zoo objects with an attached index. Unfortunately,\ndue to holidays etc both series do neither have identical indices nor the\nsame length (in most cases, sometimes they do by chance). \n\nI have been trying to address this problem for quite some time now, but\ncannot find a solution to it. \n\n \n\nThe problems arise as I usually store each series in a matrix format where\nthe rows contain the assets and the columns the respective quotes or returns\nfor a certain trading interval.\n\n \n\n            Quote 1 .. Quote 2 .. Quote N\n\nAsset1\n\n \n\nAsset 2\n\n \n\n..\n\n..\n\n..\n\n \n\nAsset N \n\n \n\nEtc.\n\n \n\nWhat I ultimately want to do is to match both series, i.e. same time indices\nand same length. \n\n \n\nDo you have an idea how to overcome this? Thanks in advance.\n\n \n\nregards\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\n \n\nI am currently analyzing market data retrieving data sets from yahoo with\nthe get.hist.quote function in the Performance Analytics package.\n\n \n\n############ Data Import Sheet ##############",
       "thread_id": "thread-06c73242e9c6",
       "thread_depth": 0,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080817/e8dc6f38/attachment.pl"
+      ]
     },
     {
       "id": "msg-046de149192e",
@@ -676,11 +721,14 @@
       "subject_clean": "intradaily data from bloomberg EXCEL file (ITS)",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080819/6a54c1fb/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080819/6a54c1fb/attachment.pl>",
+      "body_plain": "Hi,\n \nI have a .CSV file that goes like this:\n \n1/2/2008 18:21,90.75\n1/2/2008 18:22,89.29\n1/2/2008 18:24,89.3\n1/2/2008 18:27,89.33\n1/2/2008 19:22,88.6\n1/2/2008 19:52,88.26\n1/2/2008 20:03,88.12\n1/2/2008 21:28,88.45\n1/2/2008 21:43,88.37\n2/2/2008 0:14,88.37\n4/2/2008 16:35,88.37\n4/2/2008 17:09,88.33\n4/2/2008 17:23,89.05\n4/2/2008 17:52,88.91\n4/2/2008 18:30,89.13\n4/2/2008 18:49,89\n4/2/2008 18:54,88.95\n4/2/2008 21:27,89.3\n\nof high freq. intradaily data (prices by the minute of an asset\ndownloaded from Bloomberg LP) and I am trying to use th following lines\nto read them into R:\n\n\n>    its.format(\"%d/%m/%Y %H:%M\")\n\n\nIt seems that R reads them ok (readcsvIts(filename=\"a.csv\")) as it\nrecognizes times and dates and aligns them to the corresponding prices :\n\n19/08/2008 12:18 112.03\n19/08/2008 12:19 112.05\n19/08/2008 12:20 112.14\n19/08/2008 12:21 112.23\n19/08/2008 12:22 112.16\n19/08/2008 12:23 112.15\n19/08/2008 12:24 112.18\n19/08/2008 12:25 112.18\n19/08/2008 12:27 112.14\n19/08/2008 12:28 112.09\n19/08/2008 12:31 111.94\n19/08/2008 12:32 111.95\n19/08/2008 12:33 111.95\n\n\nHowever, when I try to pass them to a variable I get:\n\n\n> CL1<-its(readcsvIts(filename=\"a.csv\"))\nError in validObject(.Object) : \n  invalid class \"its\" object: Missing values in dates\n> \n\n\nI checked the data file and everything is fine. I think I have a problem\nwith the format (date/time)... \n\nCan anybody help?\n\nAlso:\n\nCan I read them into a ZOO object instad of an ITS???\n\nMany TKS in advance,\n\nCostas\n\n \n\n\nP Think before you print.\n\nDisclaimer:\nThis e-mail is confidential. If you are not the intended recipient, you should not copy it, re-transmit it, use it or disclose its contents, but should return it to the sender immediately and delete the copy from your system.\nEFG Eurobank Ergasias S.A. is not responsible for, nor endorses, any opinion, recommendation, conclusion, solicitation, offer or agreement or any information contained in this communication.\nEFG Eurobank Ergasias S.A. cannot accept any responsibility for the accuracy or completeness of this message as it has been transmitted over a public network. If you suspect that the message may have been intercepted or amended, please call the sender.\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n \nI have a .CSV file that goes like this:\n \n1/2/2008 18:21,90.75\n1/2/2008 18:22,89.29\n1/2/2008 18:24,89.3\n1/2/2008 18:27,89.33\n1/2/2008 19:22,88.6\n1/2/2008 19:52,88.26\n1/2/2008 20:03,88.12\n1/2/200",
       "thread_id": "thread-2dd40d4a797b",
       "thread_depth": 0,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080819/6a54c1fb/attachment.pl"
+      ]
     },
     {
       "id": "msg-936ae2ef56ad",
@@ -745,11 +793,14 @@
       "subject_clean": "SSPIR  noob question",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080820/51f9edfd/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080820/51f9edfd/attachment.pl>",
+      "body_plain": "Hi,\n\nI am trying to use the sspir package but I am running into an when I try to use the \"kfilter\" function, it seems one of my matrix has incorrect dimension but cant find why?\n\nIf you have any idea about what my be wrong I would appreciate your help,\n\n\nThanks in advance.\n\nBen\n\nHere is an excerpt of my code\n\n\n\n> c0=matrix(summary(loading.var)$covres,3,3)  ## setting up the initial vcov matrix \n> m0=matrix(CO[1,])   ## setting up the initial  state\n> \n> d=ncol(Y)\n> p=ncol(X)\n> m1 <- SS(y=Y,x=X,\n+          Fmat=function(tt,x,phi) return(matrix(1,ncol=d,nrow=p)),\n+          Gmat=function(tt,x,phi) return(matrix(1,ncol=p,nrow=p )),\n+          Wmat=function(tt,x,phi) return(matrix(5,ncol=p,nrow=p)),\n+          Vmat=function(tt,x,phi) return(matrix(100,ncol=d,nrow=d)),\n+          m0=m0,C0=c0\n+          )     ### setting up the state space model\n> \n> m1\n------------------------------------------------------------\nThe state space model is given by\n\nY_t     = F_t^T %*% theta_t     + v_t, v_t ~ N(0,V_t)\ntheta_t = G_t   %*% theta_{t-1} + w_t, w_t ~ N(0,W_t)\n\nfor t=1,...,143\n------------------------------------------------------------\nDimensions of the involved terms:\ndim(Y_t) = 10 x 1   (dx1)\ndim(F_t) = 3 x 10   (pxd)\ndim(G_t) = 3 x 3   (pxp)\ndim(V_t) = 10 x 10   (dxd)\ndim(W_t) = 3 x 3   (pxp)\ndim(C_0) = 3 x 3   (pxp)\ndim(m_0) = 3 x 1   (px1)\n------------------------------------------------------------\nThe terms:\nY=\nFirst 10 cols\n           x.11      x.12       x.13         x.14    x.15      x.16      x.17        x.18      x.19       x.110\n [1,]    5.925    5.925    6.135    6.275    6.405    6.575     6.755      6.94      7.04      7.06\n [2,]    6.215    6.215    6.415    6.585    6.695    6.885     7.055      7.23      7.31      7.32\n [3,]    6.380    6.380    6.590    6.740    6.850    7.000     7.190      7.41      7.45      7.40\n [4,]    6.075    6.440    6.640    6.760    6.870    7.030     7.200      7.25      7.28      7.26\n [5,]    6.210    6.415    6.585    6.725    6.815    6.985     7.145      7.29      7.33      7.33\n [6,]    6.090    6.505    6.715    6.865    6.975    7.125     7.220      7.44      7.50      7.51\n [7,]    5.970    6.265    6.465    6.605    6.705    6.885     7.035      7.18      7.25      7.27\n [8,]    5.930    5.905    6.065    6.215    6.315    6.475     6.665      6.83      6.91      6.94\n [9,]    5.655    5.745    5.865    5.985    6.065    6.205     6.355      6.54      6.63      6.69\n[10,]    5.810    6.025    6.215    6.355    6.465    6.595     6.745      6.91      6.98      6.98\nphi= (the parametervector)\n[1] 1 1\n\nx= (the list of covariates)\nError in x$x$x : $ operator is invalid for atomic vectors\n> \n\n> m1.f <- kfilter(m1)\nError in Gmat %*% t(mx) : non-conformable arguments\n_________________________________________________________________\nExplore the seven wonders of the world\n\nBRE\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI am trying to use the sspir package but I am running into an when I try to use the \"kfilter\" function, it seems one of my matrix has incorrect dimension but cant find why?\n\nIf you have any idea ",
       "thread_id": "thread-d9566c21ea65",
       "thread_depth": 0,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080820/51f9edfd/attachment.pl"
+      ]
     },
     {
       "id": "msg-af855e8492b7",
@@ -763,11 +814,14 @@
       "references": [
         "<10693469.22283651219252854219.JavaMail.javamailuser@localhost>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080820/93a66ed7/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080820/93a66ed7/attachment.pl>",
+      "body_plain": "Hi Mark,\n\nThank you for your feedback.\n\nYes, I am giving an x.\nConcerning the error at the bottom of \"SS\", the same one appears in the \"SS\" function example in the R help.\nI have tried to see what is going on inside the \"kfilter\" function but unfortunately I am not able to go inside it ie:\n> kfilter\nfunction (ss) \n{\n    UseMethod(\"kfilter\")\n}\n<environment: namespace:sspir>\n> \n\n> Date: Wed, 20 Aug 2008 12:20:54 -0500\n> From: markleeds at verizon.net\n> Subject: RE: [R-SIG-Finance] SSPIR  noob question\n> To: benverschuere at hotmail.com\n> \n> Hi:  i don't and haven't used sspir but are you giving it an X ? it \n> doesn't look like it and you get an error before the call to kfilter\n> involving x so i'm thinking it has something to do with that ? Maybe X \n> is for when you have coefficients of the Theta's in your KF and\n> , since you don't, maybe you need to set it to NULL in the setup call to \n> SS.  Other than that, I would think you'd have to ask the person who \n> wrote\n> sspir package or go through the code yourself. Hopefully someone else \n> will reply with a more exact answer.\n> \n> \n> \n> On Wed, Aug 20, 2008 at  1:01 PM, Verschuere Benjamin wrote:\n> \n> > Hi,\n> >\n> > I am trying to use the sspir package but I am running into an when I \n> > try to use the \"kfilter\" function, it seems one of my matrix has \n> > incorrect dimension but cant find why?\n> >\n> > If you have any idea about what my be wrong I would appreciate your \n> > help,\n> >\n> >\n> > Thanks in advance.\n> >\n> > Ben\n> >\n> > Here is an excerpt of my code\n> >\n> >\n> >\n> >> c0=matrix(summary(loading.var)$covres,3,3)  ## setting up the initial \n> >> vcov matrix m0=matrix(CO[1,])   ## setting up the initial  state\n> >>\n> >> d=ncol(Y)\n> >> p=ncol(X)\n> >> m1 <- SS(y=Y,x=X,\n> > +          Fmat=function(tt,x,phi) return(matrix(1,ncol=d,nrow=p)),\n> > +          Gmat=function(tt,x,phi) return(matrix(1,ncol=p,nrow=p )),\n> > +          Wmat=function(tt,x,phi) return(matrix(5,ncol=p,nrow=p)),\n> > +          Vmat=function(tt,x,phi) return(matrix(100,ncol=d,nrow=d)),\n> > +          m0=m0,C0=c0\n> > +          )     ### setting up the state space model\n> >>\n> >> m1\n> > ------------------------------------------------------------\n> > The state space model is given by\n> >\n> > Y_t     = F_t^T %*% theta_t     + v_t, v_t ~ N(0,V_t)\n> > theta_t = G_t   %*% theta_{t-1} + w_t, w_t ~ N(0,W_t)\n> >\n> > for t=1,...,143\n> > ------------------------------------------------------------\n> > Dimensions of the involved terms:\n> > dim(Y_t) = 10 x 1   (dx1)\n> > dim(F_t) = 3 x 10   (pxd)\n> > dim(G_t) = 3 x 3   (pxp)\n> > dim(V_t) = 10 x 10   (dxd)\n> > dim(W_t) = 3 x 3   (pxp)\n> > dim(C_0) = 3 x 3   (pxp)\n> > dim(m_0) = 3 x 1   (px1)\n> > ------------------------------------------------------------\n> > The terms:\n> > Y=\n> > First 10 cols\n> >            x.11      x.12       x.13         x.14    x.15      x.16 \n> > x.17        x.18      x.19       x.110\n> >  [1,]    5.925    5.925    6.135    6.275    6.405    6.575     6.755 \n> > 6.94      7.04      7.06\n> >  [2,]    6.215    6.215    6.415    6.585    6.695    6.885     7.055 \n> > 7.23      7.31      7.32\n> >  [3,]    6.380    6.380    6.590    6.740    6.850    7.000     7.190 \n> > 7.41      7.45      7.40\n> >  [4,]    6.075    6.440    6.640    6.760    6.870    7.030     7.200 \n> > 7.25      7.28      7.26\n> >  [5,]    6.210    6.415    6.585    6.725    6.815    6.985     7.145 \n> > 7.29      7.33      7.33\n> >  [6,]    6.090    6.505    6.715    6.865    6.975    7.125     7.220 \n> > 7.44      7.50      7.51\n> >  [7,]    5.970    6.265    6.465    6.605    6.705    6.885     7.035 \n> > 7.18      7.25      7.27\n> >  [8,]    5.930    5.905    6.065    6.215    6.315    6.475     6.665 \n> > 6.83      6.91      6.94\n> >  [9,]    5.655    5.745    5.865    5.985    6.065    6.205     6.355 \n> > 6.54      6.63      6.69\n> > [10,]    5.810    6.025    6.215    6.355    6.465    6.595     6.745 \n> > 6.91      6.98      6.98\n> > phi= (the parametervector)\n> > [1] 1 1\n> >\n> > x= (the list of covariates)\n> > Error in x$x$x : $ operator is invalid for atomic vectors\n> >>\n> >\n> >> m1.f <- kfilter(m1)\n> > Error in Gmat %*% t(mx) : non-conformable arguments\n> > _________________________________________________________________\n> > Explore the seven wonders of the world\n> >\n> > BRE\n> > \t[[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at stat.math.ethz.ch mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only.\n> > -- If you want to post, subscribe first.\n\n_________________________________________________________________\n\n\ne=wlmailtagline\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Mark,\n\nThank you for your feedback.\n\nYes, I am giving an x.\nConcerning the error at the bottom of \"SS\", the same one appears in the \"SS\" function example in the R help.\nI have tried to see what is ",
       "thread_id": "thread-af855e8492b7",
       "thread_depth": 0,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080820/93a66ed7/attachment.pl"
+      ]
     },
     {
       "id": "msg-b85c7fb05315",
@@ -779,11 +833,14 @@
       "subject_clean": "How to use the debugger/broser in a R package function",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080820/a146b660/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080820/a146b660/attachment.pl>",
+      "body_plain": "Hi,\n\nI have small question.  Basically I am trying to see what is going inside function from a R package (in my case the \"kfilter\" function in sspir package).\nThe problem is that when I try to see what is going inside \"kfilter\" I have that:\n> kfilter\nfunction (ss) \n{\n    UseMethod(\"kfilter\")\n}\n<environment: namespace:sspir>\n\nI have been told that the debugger might help, but I dont know how to use it. Or maybe there is a better way?\n\nThanks in advance for the help.\n\nBenjamin\n\n_________________________________________________________________\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI have small question.  Basically I am trying to see what is going inside function from a R package (in my case the \"kfilter\" function in sspir package).\nThe problem is that when I try to see wha",
       "thread_id": "thread-b85c7fb05315",
       "thread_depth": 0,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080820/a146b660/attachment.pl"
+      ]
     },
     {
       "id": "msg-e43cf865b2fe",
@@ -931,11 +988,14 @@
       "subject_clean": "Parabolic cylinder function",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080825/6e664679/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080825/6e664679/attachment.pl>",
+      "body_plain": "Dear all,\n\nI need your advice since I am looking for an implementation of the parabolic\ncylinder function in R. I found implemantations of the hypergeometric\nfunctions (the Whittaker and the confluent hypogeometric functions) in the\npackage fAsianOptions but the parabolic cylinder function was unfortunately\nnot there. Do you know of such implementation?\n\nThank you very much for your advice.\n\nCheers,\nZoe\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,\n\nI need your advice since I am looking for an implementation of the parabolic\ncylinder function in R. I found implemantations of the hypergeometric\nfunctions (the Whittaker and the confluent",
       "thread_id": "thread-ef16f5c0e860",
       "thread_depth": 0,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080825/6e664679/attachment.pl"
+      ]
     },
     {
       "id": "msg-27304c7b40e5",
@@ -967,11 +1027,14 @@
       "references": [
         "<e67ad1a20808250650p27d22449p259d3af3ff8ac5d2@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080825/b6d3166a/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080825/b6d3166a/attachment.pl>",
+      "body_plain": "Hi Zoe,\n\nI dont think the function exists in R (I looked for it last year) but I think it is not too hard to code the function by using numerical method to compute the integral.\n\nBen\n\n\n> Date: Mon, 25 Aug 2008 15:50:52 +0200\n> From: zornitsa.luleva at gmail.com\n> To: r-sig-finance at stat.math.ethz.ch\n> Subject: [R-SIG-Finance] Parabolic cylinder function\n> \n> Dear all,\n> \n> I need your advice since I am looking for an implementation of the parabolic\n> cylinder function in R. I found implemantations of the hypergeometric\n> functions (the Whittaker and the confluent hypogeometric functions) in the\n> package fAsianOptions but the parabolic cylinder function was unfortunately\n> not there. Do you know of such implementation?\n> \n> Thank you very much for your advice.\n> \n> Cheers,\n> Zoe\n> \n> \t[[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n\n_________________________________________________________________\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Zoe,\n\nI dont think the function exists in R (I looked for it last year) but I think it is not too hard to code the function by using numerical method to compute the integral.\n\nBen\n\n\n> Date: Mon, 25",
       "thread_id": "thread-ef16f5c0e860",
       "thread_depth": 1,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080825/b6d3166a/attachment.pl"
+      ]
     },
     {
       "id": "msg-9bd7a031c3d2",
@@ -1159,11 +1222,14 @@
       "subject_clean": "Compound Poisson process",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080827/f580fa38/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080827/f580fa38/attachment.pl>",
+      "body_plain": "Dear all,\n\ni would like to implement two compound Poisson processes that simulate\nupwards and downwards jumps respectively. Thereby, the up jump magnitudes\nare Pareto distributed and the down jump magnitudes are Beta distributed.\nThese jump processes as well as a Brownian motion are a part of a model\ndescribing security prices.\nMy goal is to simulate the two processes (independently of each other) with\nknown values of the parameters - the Poisson lambdas and the Beta / Pareto\nparameters. Afterwards, I want to take the simulated data and try to\nestimate the parameters using Maximum likelihood estimation (MLE) to see how\nwell an estimation algorithm that I implemnted is working.\n\nMy questions:\n\n1) Is it right to simulate exponentially distributed waiting times between\nthe jumps and then just \"jump\" with a Beta / Pareto distributed magnitude?\n\n2) When I simulate the down jumps and take zero as a starting point, then I\nget negative values. The MLE does not like it, neither do I, because it\nmeans, that I simulate negative prices. Can I take another starting value\nfor the process (for example one) ?\n\nI am very grateful for a concise answer.\n\nCheers,\nZoe\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,\n\ni would like to implement two compound Poisson processes that simulate\nupwards and downwards jumps respectively. Thereby, the up jump magnitudes\nare Pareto distributed and the down jump mag",
       "thread_id": "thread-d7667de15c4d",
       "thread_depth": 0,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080827/f580fa38/attachment.pl"
+      ]
     },
     {
       "id": "msg-19392a5f8028",
@@ -1245,11 +1311,14 @@
       "subject_clean": "Relative Date Question",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080828/5b115684/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080828/5b115684/attachment.pl>",
+      "body_plain": "Hi there. I have a quick query. What is the best way in R to find out a\ndate relative to another date? \n \nFor example, how can I find the date one month after \"2008/09/30\" ? \n \nIf there is a method, would it take into account different days in the\nmonth? \n \nThank you for your help. \n \n \n\nhttp://www.investec.com/EmailDisclaimer/emaildisclaimer.htm\n\nThe disclaimer also provides our corporate information and names of our directors as required by law.\n\nThe disclaimer is deemed to form part of this message in terms of Section 11 of the Electronic Communications and Transactions Act 25 of 2002. \nIf you cannot access the disclaimer, please obtain a copy thereof from us by sending an email to: disclaimer at investec.co.za\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi there. I have a quick query. What is the best way in R to find out a\ndate relative to another date? \n \nFor example, how can I find the date one month after \"2008/09/30\" ? \n \nIf there is a method, w",
       "thread_id": "thread-236653abaeb0",
       "thread_depth": 0,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080828/5b115684/attachment.pl"
+      ]
     },
     {
       "id": "msg-4431e0a12268",
@@ -1334,11 +1403,14 @@
       "subject_clean": "R for Individual Stock Trading Analysis",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080828/2e9ef176/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080828/2e9ef176/attachment.pl>",
+      "body_plain": "> <snip>\n> If you're looking for a good book on quantitative finance that covers a\n> lot of the theoretical underpinnings without getting lost in the math of\n> the advanced techniques, I recommend picking up a copy of\n>\n> Statistics and Finance: An Introduction\n> by David Ruppert\n>\n> http://www.amazon.com/Statistics-Finance-Introduction-David-Ruppert/dp/0387202706\n>\n> R code for all of his examples is available online.\n> </snip>\n\n\n\nGreat to hear someone else likes this book! It's one of my favourites - very\nclear and with a nice statistician slant.\n\nRory\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "> <snip>\n> If you're looking for a good book on quantitative finance that covers a\n> lot of the theoretical underpinnings without getting lost in the math of\n> the advanced techniques, I recommend pic",
       "thread_id": "thread-bd19bd89c6d5",
       "thread_depth": 0,
-      "month": "2008-08"
+      "month": "2008-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080828/2e9ef176/attachment.pl"
+      ]
     },
     {
       "id": "msg-1261565d59ee",

@@ -32,11 +32,14 @@
         "<15722777.post@talk.nabble.com>",
         "<732668.44638.bm@omp218.mail.ukl.yahoo.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080701/a8f7dfcd/attachment.ksh>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080701/a8f7dfcd/attachment.ksh>",
+      "body_plain": "you could sign the random weight to each assets first, and then calculated\nportfolio variance as well as portfolio return. Finally, you could use monte\ncarlo simulation to optimise the weight of each asset, which gives you the\nbest sharp ratio.\n\n\n\nOn Tue, Jul 1, 2008 at 8:02 AM, Enrico Schumann <enricoschumann at yahoo.de>\nwrote:\n\n> how about bootstrapping? keeping the cross-sectional correlation in the\n> data\n> is fairly simple by sampling whole rows from your returns matrix (assumed\n> of\n> dimension observations times returns), but the serial dependence is more\n> difficult. if you have an idea how this serial dependence looks like (or,\n> say, you know what parts you want to reproduce in your scenario sets) you\n> may fit a regression model capturing this dependence and then resample from\n> the residuals. if you want a rather non-parametric approach, block\n> bootstrapping may be a technique to look at.\n>\n> i think patrick burns has a tutorial on bootstrapping on his homepage\n> http://www.burns-stat.com/\n>\n> enrico\n>\n> -----Ursprüngliche Nachricht-----\n> Von: r-sig-finance-bounces at stat.math.ethz.ch\n> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] Im Auftrag von maratikus\n> Gesendet: Mittwoch, 27. Februar 2008 21:49\n> An: r-sig-finance at stat.math.ethz.ch\n> Betreff: [R-SIG-Finance] [R-sig-finance] robust portfolio optimization\n>\n>\n> I am exploring robust portfolio optimization.  I have historical daily data\n> for 20 stocks over 2 year period.  i'd like to simulate 1,000 datasets of 1\n> year each that have autocorrelation and cross-correlation properties\n> similar\n> to those of the historical data.  Then I'd like to find allocation that\n> maximizes minimum risk-adjusted return over 1,000 datasets.  All\n> suggestions\n> are appreciated!\n> --\n> View this message in context:\n>\n> http://www.nabble.com/robust-portfolio-optimization-tp15722777p15722777.html\n> Sent from the Rmetrics mailing list archive at Nabble.com.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n> No virus found in this incoming message.\n> Checked by AVG.\n>\n> 28.06.2008\n> 19:42\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "you could sign the random weight to each assets first, and then calculated\nportfolio variance as well as portfolio return. Finally, you could use monte\ncarlo simulation to optimise the weight of each ",
       "thread_id": "thread-b44c24959127",
       "thread_depth": 1,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080701/a8f7dfcd/attachment.ksh"
+      ]
     },
     {
       "id": "msg-40e621de7fc1",
@@ -85,11 +88,14 @@
         "<555700.40036.bm@omp220.mail.ukl.yahoo.com>",
         "<4869FC68.8030507@burns-stat.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080701/e15c388b/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080701/e15c388b/attachment.pl>",
+      "body_plain": "Patrick, I define good simulation as the one that preserves the structure of\nautocorrelations and serial correlations.  For example, if two assets are\nhighly correlated, simulation should reflect that with noise for those\nassets having some kind of correlation.  Same with autocorrelation.  If an\nasset is highly mean-reverting (VIX), I don't want to simulate it as a very\ntrendy asset.  I can't give you a rigorous definition of a good simulation,\nonly descriptive.\nEnrico, I'm familiar with block bootstraping and I'm looking for an\nalternative solution.  Thanks for your suggestions!  Maximizing quantile\n(VaR-like approach), unfortunately, is not convex because VaR itself is not\nconvex.  I've tried maximizing minimum value of Sharpe, Sortino, etc but the\nresult is highly dependent on the simulation.  Therefore, I'm focusing on\ndefining an acceptable simulation that preserves data structure.\nOn Tue, Jul 1, 2008 at 4:44 AM, Patrick Burns <patrick at burns-stat.com>\nwrote:\n\n> I pretty much understand all of the solutions\n> that have been offered.  What I don't understand\n> is the original question.\n>\n> How do you know if your solution is\n> good or not?  Given that you have two years of data\n> and you are talking about samples of one year, a\n> reasonable plan would be to test an out-of-sample\n> period (a day, a week, ...) and then move the in-sample\n> data that amount.  Only a year of out-of-sample data\n> seems rather short to me.\n>\n> You want to get good returns.  I think it is safe to say\n> that the amount of predictive power in a year of daily\n> returns is infinitesimal, no matter how much fancy footwork\n> you do.  A test of optimization technology without a good\n> predictive model for returns is going to be driven by noise\n> unless you are creating minimum variance portfolios (or\n> some other minimum risk).\n>\n>\n> Patrick Burns\n> patrick at burns-stat.com\n> +44 (0)20 8525 0696\n> http://www.burns-stat.com\n> (home of S Poetry and \"A Guide for the Unwilling S User\")\n>\n>\n> Enrico Schumann wrote:\n>\n>>  there are lots of choices how to obtain the `robust solution' you want.\n>> maybe optimise the weights to give the *mean* sharpe/sortino whatever, or\n>> to\n>> maximise a quantile (or the lowest) of the objective functions of your\n>> 1,000\n>> data sets.\n>>\n>> -----Ursprüngliche Nachricht-----\n>> Von: r-sig-finance-bounces at stat.math.ethz.ch\n>> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] Im Auftrag von ning\n>> zhang\n>> Gesendet: Dienstag, 1. Juli 2008 09:55\n>> An: Enrico Schumann\n>> Cc: r-sig-finance at stat.math.ethz.ch\n>> Betreff: Re: [R-SIG-Finance] [R-sig-finance] robust portfolio optimization\n>>\n>> you could sign the random weight to each assets first, and then calculated\n>> portfolio variance as well as portfolio return. Finally, you could use\n>> monte\n>> carlo simulation to optimise the weight of each asset, which gives you the\n>> best sharp ratio.\n>>\n>>\n>>\n>> On Tue, Jul 1, 2008 at 8:02 AM, Enrico Schumann <enricoschumann at yahoo.de>\n>> wrote:\n>>\n>>\n>>\n>>> how about bootstrapping? keeping the cross-sectional correlation in the\n>>> data is fairly simple by sampling whole rows from your returns matrix\n>>> (assumed of dimension observations times returns), but the serial dependence\n>>> is more difficult. if you have an idea how this serial dependence looks like\n>>> (or, say, you know what parts you want to reproduce in your scenario sets)\n>>> you may fit a regression model capturing this dependence and then resample\n>>> from the residuals. if you want a rather non-parametric approach, block\n>>> bootstrapping may be a technique to look at.\n>>>\n>>> i think patrick burns has a tutorial on bootstrapping on his homepage\n>>> http://www.burns-stat.com/\n>>>\n>>> enrico\n>>>\n>>> -----Urspr|ngliche Nachricht-----\n>>> Von: r-sig-finance-bounces at stat.math.ethz.ch\n>>> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] Im Auftrag von\n>>> maratikus\n>>> Gesendet: Mittwoch, 27. Februar 2008 21:49\n>>> An: r-sig-finance at stat.math.ethz.ch\n>>> Betreff: [R-SIG-Finance] [R-sig-finance] robust portfolio optimization\n>>>\n>>>\n>>> I am exploring robust portfolio optimization.  I have historical daily\n>>> data for 20 stocks over 2 year period.  i'd like to simulate 1,000 datasets\n>>> of 1 year each that have autocorrelation and cross-correlation properties\n>>> similar to those of the historical data.  Then I'd like to find allocation\n>>> that maximizes minimum risk-adjusted return over 1,000 datasets.  All\n>>> suggestions are appreciated!\n>>> --\n>>> View this message in context:\n>>>\n>>> http://www.nabble.com/robust-portfolio-optimization-tp15722777p1572277\n>>> 7.html Sent from the Rmetrics mailing list archive at Nabble.com.\n>>>\n>>> _______________________________________________\n>>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only.\n>>> -- If you want to post, subscribe first.\n>>> No virus found in this incoming message.\n>>> Checked by AVG.\n>>>\n>>> 28.06.2008\n>>> 19:42\n>>>\n>>> _______________________________________________\n>>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only.\n>>> -- If you want to post, subscribe first.\n>>>\n>>>\n>>>\n>>\n>>        [[alternative HTML version deleted]]\n>>\n>>\n>> No virus found in this incoming message.\n>> Checked by AVG.\n>> 30.06.2008\n>> 08:43\n>>\n>> _______________________________________________\n>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only.\n>> -- If you want to post, subscribe first.\n>>\n>>\n>>\n>>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Patrick, I define good simulation as the one that preserves the structure of\nautocorrelations and serial correlations.  For example, if two assets are\nhighly correlated, simulation should reflect that",
       "thread_id": "thread-b44c24959127",
       "thread_depth": 4,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080701/e15c388b/attachment.pl"
+      ]
     },
     {
       "id": "msg-b300181f1b90",
@@ -104,11 +110,14 @@
         "<555700.40036.bm@omp220.mail.ukl.yahoo.com>",
         "<4869FC68.8030507@burns-stat.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080701/6a4519aa/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080701/6a4519aa/attachment.pl>",
+      "body_plain": "you could split the data into training and testing periods. Find the\noptimised weight by using the training dataset, then apply this weights into\nthe testing period to see whether the performance is consistance. If it is\nconsistance, then it is a good model.\n\nOn Tue, Jul 1, 2008 at 10:44 AM, Patrick Burns <patrick at burns-stat.com>\nwrote:\n\n> I pretty much understand all of the solutions\n> that have been offered.  What I don't understand\n> is the original question.\n>\n> How do you know if your solution is\n> good or not?  Given that you have two years of data\n> and you are talking about samples of one year, a\n> reasonable plan would be to test an out-of-sample\n> period (a day, a week, ...) and then move the in-sample\n> data that amount.  Only a year of out-of-sample data\n> seems rather short to me.\n>\n> You want to get good returns.  I think it is safe to say\n> that the amount of predictive power in a year of daily\n> returns is infinitesimal, no matter how much fancy footwork\n> you do.  A test of optimization technology without a good\n> predictive model for returns is going to be driven by noise\n> unless you are creating minimum variance portfolios (or\n> some other minimum risk).\n>\n>\n> Patrick Burns\n> patrick at burns-stat.com\n> +44 (0)20 8525 0696\n> http://www.burns-stat.com\n> (home of S Poetry and \"A Guide for the Unwilling S User\")\n>\n>\n> Enrico Schumann wrote:\n>\n>> there are lots of choices how to obtain the `robust solution' you want.\n>> maybe optimise the weights to give the *mean* sharpe/sortino whatever, or\n>> to\n>> maximise a quantile (or the lowest) of the objective functions of your\n>> 1,000\n>> data sets.\n>>\n>> -----Ursprüngliche Nachricht-----\n>> Von: r-sig-finance-bounces at stat.math.ethz.ch\n>> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] Im Auftrag von ning\n>> zhang\n>> Gesendet: Dienstag, 1. Juli 2008 09:55\n>> An: Enrico Schumann\n>> Cc: r-sig-finance at stat.math.ethz.ch\n>> Betreff: Re: [R-SIG-Finance] [R-sig-finance] robust portfolio optimization\n>>\n>> you could sign the random weight to each assets first, and then calculated\n>> portfolio variance as well as portfolio return. Finally, you could use\n>> monte\n>> carlo simulation to optimise the weight of each asset, which gives you the\n>> best sharp ratio.\n>>\n>>\n>>\n>> On Tue, Jul 1, 2008 at 8:02 AM, Enrico Schumann <enricoschumann at yahoo.de>\n>> wrote:\n>>\n>>\n>>\n>>> how about bootstrapping? keeping the cross-sectional correlation in the\n>>> data is fairly simple by sampling whole rows from your returns matrix\n>>> (assumed of dimension observations times returns), but the serial dependence\n>>> is more difficult. if you have an idea how this serial dependence looks like\n>>> (or, say, you know what parts you want to reproduce in your scenario sets)\n>>> you may fit a regression model capturing this dependence and then resample\n>>> from the residuals. if you want a rather non-parametric approach, block\n>>> bootstrapping may be a technique to look at.\n>>>\n>>> i think patrick burns has a tutorial on bootstrapping on his homepage\n>>> http://www.burns-stat.com/\n>>>\n>>> enrico\n>>>\n>>> -----Urspr|ngliche Nachricht-----\n>>> Von: r-sig-finance-bounces at stat.math.ethz.ch\n>>> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] Im Auftrag von\n>>> maratikus\n>>> Gesendet: Mittwoch, 27. Februar 2008 21:49\n>>> An: r-sig-finance at stat.math.ethz.ch\n>>> Betreff: [R-SIG-Finance] [R-sig-finance] robust portfolio optimization\n>>>\n>>>\n>>> I am exploring robust portfolio optimization.  I have historical daily\n>>> data for 20 stocks over 2 year period.  i'd like to simulate 1,000 datasets\n>>> of 1 year each that have autocorrelation and cross-correlation properties\n>>> similar to those of the historical data.  Then I'd like to find allocation\n>>> that maximizes minimum risk-adjusted return over 1,000 datasets.  All\n>>> suggestions are appreciated!\n>>> --\n>>> View this message in context:\n>>>\n>>> http://www.nabble.com/robust-portfolio-optimization-tp15722777p1572277\n>>> 7.html Sent from the Rmetrics mailing list archive at Nabble.com.\n>>>\n>>> _______________________________________________\n>>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only.\n>>> -- If you want to post, subscribe first.\n>>> No virus found in this incoming message.\n>>> Checked by AVG.\n>>>\n>>> 28.06.2008\n>>> 19:42\n>>>\n>>> _______________________________________________\n>>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only.\n>>> -- If you want to post, subscribe first.\n>>>\n>>>\n>>>\n>>\n>>        [[alternative HTML version deleted]]\n>>\n>>\n>> No virus found in this incoming message.\n>> Checked by AVG.\n>> 30.06.2008\n>> 08:43\n>>\n>> _______________________________________________\n>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only.\n>> -- If you want to post, subscribe first.\n>>\n>>\n>>\n>>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "you could split the data into training and testing periods. Find the\noptimised weight by using the training dataset, then apply this weights into\nthe testing period to see whether the performance is c",
       "thread_id": "thread-b44c24959127",
       "thread_depth": 4,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080701/6a4519aa/attachment.pl"
+      ]
     },
     {
       "id": "msg-6325065c8116",
@@ -145,11 +154,14 @@
         "<9519fd9f0807010658h142e1178r886d2d8560016f79@mail.gmail.com>",
         "<486A4170.3070500@braverock.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080701/8dbb78a3/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080701/8dbb78a3/attachment.pl>",
+      "body_plain": "Agreed with your saying. But I believe sometimes too much data is not good\nthing.\nThe old data will provide basis sometimes. You really want to train your\nbeta based on the most recent data. I will say you could create a 1 year\nrolling training data and do 1 day/7 days (short term) out of sample\nforecast for 0.5 year or 1 year. The training will give you difference\noptimised weight every day by the given training data set. Then, you could\ncompare the forecast value with actural to see the performance of the model.\n\n\n\nOn Tue, Jul 1, 2008 at 3:38 PM, Brian G. Peterson <brian at braverock.com>\nwrote:\n\n> Patrick's point is still correct.  With only two years of data, you have\n> basically one year of in-sample data and one year of out-of-sample data.\n>  This is hardly enough to build any reliable statistical inference on for\n> anything other than a minimum risk portfolio (and even that is highly\n> questionable).\n>\n> I'd say that the first step should be to get more data.  Ideally this would\n> be by getting additional history on the target investments, and doing the\n> optimization over a longer time frame.\n>\n> If you still don't have enough data, you could combine a distributional\n> assumption from a \"similar\" industry or company and do a Bayesian or Monte\n> Carlo historical simulation, although you'd want to try to do\n> conditional/dependent variance to get reasonable covariances. Basically,\n> this then becomes a very hard problem.\n>\n> We also haven't addresses what the meaning of \"robust\" is here, but I'll\n> let the original poster comment on what they meant without inferring too\n> much.\n>\n> Regards,\n>\n>  - Brian\n>\n>\n> ning zhang wrote:\n>\n>> you could split the data into training and testing periods. Find the\n>> optimised weight by using the training dataset, then apply this weights\n>> into\n>> the testing period to see whether the performance is consistance. If it is\n>> consistance, then it is a good model.\n>>\n>> On Tue, Jul 1, 2008 at 10:44 AM, Patrick Burns <patrick at burns-stat.com>\n>> wrote:\n>>\n>>  I pretty much understand all of the solutions\n>>> that have been offered.  What I don't understand\n>>> is the original question.\n>>>\n>>> How do you know if your solution is\n>>> good or not?  Given that you have two years of data\n>>> and you are talking about samples of one year, a\n>>> reasonable plan would be to test an out-of-sample\n>>> period (a day, a week, ...) and then move the in-sample\n>>> data that amount.  Only a year of out-of-sample data\n>>> seems rather short to me.\n>>>\n>>> You want to get good returns.  I think it is safe to say\n>>> that the amount of predictive power in a year of daily\n>>> returns is infinitesimal, no matter how much fancy footwork\n>>> you do.  A test of optimization technology without a good\n>>> predictive model for returns is going to be driven by noise\n>>> unless you are creating minimum variance portfolios (or\n>>> some other minimum risk).\n>>>\n>>>\n>>> Patrick Burns\n>>> patrick at burns-stat.com\n>>> +44 (0)20 8525 0696\n>>> http://www.burns-stat.com\n>>> (home of S Poetry and \"A Guide for the Unwilling S User\")\n>>>\n>>>\n>>> Enrico Schumann wrote:\n>>>\n>>>  there are lots of choices how to obtain the `robust solution' you want.\n>>>> maybe optimise the weights to give the *mean* sharpe/sortino whatever,\n>>>> or\n>>>> to\n>>>> maximise a quantile (or the lowest) of the objective functions of your\n>>>> 1,000\n>>>> data sets.\n>>>>\n>>>> -----Ursprüngliche Nachricht-----\n>>>> Von: r-sig-finance-bounces at stat.math.ethz.ch\n>>>> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] Im Auftrag von ning\n>>>> zhang\n>>>> Gesendet: Dienstag, 1. Juli 2008 09:55\n>>>> An: Enrico Schumann\n>>>> Cc: r-sig-finance at stat.math.ethz.ch\n>>>> Betreff: Re: [R-SIG-Finance] [R-sig-finance] robust portfolio\n>>>> optimization\n>>>>\n>>>> you could sign the random weight to each assets first, and then\n>>>> calculated\n>>>> portfolio variance as well as portfolio return. Finally, you could use\n>>>> monte\n>>>> carlo simulation to optimise the weight of each asset, which gives you\n>>>> the\n>>>> best sharp ratio.\n>>>>\n>>>>\n>>>>\n>>>> On Tue, Jul 1, 2008 at 8:02 AM, Enrico Schumann <\n>>>> enricoschumann at yahoo.de>\n>>>> wrote:\n>>>>\n>>>>\n>>>>\n>>>>  how about bootstrapping? keeping the cross-sectional correlation in the\n>>>>> data is fairly simple by sampling whole rows from your returns matrix\n>>>>> (assumed of dimension observations times returns), but the serial\n>>>>> dependence\n>>>>> is more difficult. if you have an idea how this serial dependence looks\n>>>>> like\n>>>>> (or, say, you know what parts you want to reproduce in your scenario\n>>>>> sets)\n>>>>> you may fit a regression model capturing this dependence and then\n>>>>> resample\n>>>>> from the residuals. if you want a rather non-parametric approach, block\n>>>>> bootstrapping may be a technique to look at.\n>>>>>\n>>>>> i think patrick burns has a tutorial on bootstrapping on his homepage\n>>>>> http://www.burns-stat.com/\n>>>>>\n>>>>> enrico\n>>>>>\n>>>>> -----Urspr|ngliche Nachricht-----\n>>>>> Von: r-sig-finance-bounces at stat.math.ethz.ch\n>>>>> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] Im Auftrag von\n>>>>> maratikus\n>>>>> Gesendet: Mittwoch, 27. Februar 2008 21:49\n>>>>> An: r-sig-finance at stat.math.ethz.ch\n>>>>> Betreff: [R-SIG-Finance] [R-sig-finance] robust portfolio optimization\n>>>>>\n>>>>>\n>>>>> I am exploring robust portfolio optimization.  I have historical daily\n>>>>> data for 20 stocks over 2 year period.  i'd like to simulate 1,000\n>>>>> datasets\n>>>>> of 1 year each that have autocorrelation and cross-correlation\n>>>>> properties\n>>>>> similar to those of the historical data.  Then I'd like to find\n>>>>> allocation\n>>>>> that maximizes minimum risk-adjusted return over 1,000 datasets.  All\n>>>>> suggestions are appreciated!\n>>>>>\n>>>>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Agreed with your saying. But I believe sometimes too much data is not good\nthing.\nThe old data will provide basis sometimes. You really want to train your\nbeta based on the most recent data. I will sa",
       "thread_id": "thread-b44c24959127",
       "thread_depth": 6,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080701/8dbb78a3/attachment.pl"
+      ]
     },
     {
       "id": "msg-3a950142c955",
@@ -387,11 +399,14 @@
       "subject_clean": "convert row-vector to column-vector/compose matrix\tfrom two vectors",
       "in_reply_to": "<486E095F.9030104@stud.uni-frankfurt.de>",
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080705/bccea092/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080705/bccea092/attachment.pl>",
+      "body_plain": "1) Is the t() function to transpose a matrix. A vector it-self has no \ndimension (I believe). Here is an example:\n\n> vv <- c(1,2,3)\n> vv\n[1] 1 2 3\n> matrix(vv)\n     [,1]\n[1,]    1\n[2,]    2\n[3,]    3\n> t(matrix(vv))\n     [,1] [,2] [,3]\n[1,]    1    2    3\n\n\n\n2) To create a matrix from two vectors use the cbind() or rbind() to \ncombine the vectors in a column or row-wise manner:\n\n> aa <- c(1,2,3)\n> bb <- c(4,5,6)\n> rbind(aa,bb)\n   [,1] [,2] [,3]\naa    1    2    3\nbb    4    5    6\n> cbind(aa,bb)\n     aa bb\n[1,]  1  4\n[2,]  2  5\n[3,]  3  6\n> \n\n\n\n\nEli Duenisch <duenisch at stud.uni-frankfurt.de> \nSent by: r-sig-finance-bounces at stat.math.ethz.ch\n07/04/2008 07:28 AM\n\nTo\nr-sig-finance at stat.math.ethz.ch\ncc\n\nSubject\n[R-SIG-Finance] convert row-vector to column-vector/compose matrix from \ntwo vectors\n\n\n\n\n\nHi,\ni'm just a newbie and there are two problems i couldn't google:\n1.) How to convert a row-vector to a column-vector (and vice versa)?\n2.)How to compose a matrix from two vectors (that have the same length)?\nThank you for your patience and best regards,\nEli D.\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only.\n-- If you want to post, subscribe first.\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "1) Is the t() function to transpose a matrix. A vector it-self has no \ndimension (I believe). Here is an example:\n\n> vv <- c(1,2,3)\n> vv\n[1] 1 2 3\n> matrix(vv)\n     [,1]\n[1,]    1\n[2,]    2\n[3,]    3\n",
       "thread_id": "thread-18c0604eb649",
       "thread_depth": 1,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080705/bccea092/attachment.pl"
+      ]
     },
     {
       "id": "msg-cb1d81990559",
@@ -437,11 +452,14 @@
       "subject_clean": "yahooSeries - how to access the date field?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080706/a4721526/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080706/a4721526/attachment.pl>",
+      "body_plain": "hello, extracting data sets from the yahooSeries function, see below.  I \nreturn a data frame successfully, however how do i access the date \nfield.  When viewing the structure i don't see the field, but using head \ni do see the date field. \n\nCan someone provide me some example plot code to plot the data in a time \nseries format, with the dates going across the X axis labels? \n-zubin\n\n\n\nzdata <-     yahooSeries(symbols = c(\"^NDX\",\"UYG\"), from = '2006-01-01', \nto = '2008-07-06', quote = c(\"Open\", \"High\", \"Low\", \"Close\",         \n     \"Volume\"), aggregation = c(\"d\"), returnClass = c(\"data.frame\"))\n\nstr(zdata)\n'data.frame':    653 obs. of  10 variables:\n $ X.NDX.Open  : num  1654 1684 1698 1718 1734 ...\n $ X.NDX.High  : num  1687 1697 1708 1736 1745 ...\n $ X.NDX.Low   : num  1634 1682 1697 1711 1730 ...\n $ X.NDX.Close : num  1680 1696 1705 1735 1742 ...\n $ X.NDX.Volume: num  2.00e+09 1.88e+09 1.89e+09 2.23e+09 1.95e+09 ...\n $ UYG.Open    : num  NA NA NA NA NA NA NA NA NA NA ...\n $ UYG.High    : num  NA NA NA NA NA NA NA NA NA NA ...\n $ UYG.Low     : num  NA NA NA NA NA NA NA NA NA NA ...\n $ UYG.Close   : num  NA NA NA NA NA NA NA NA NA NA ...\n $ UYG.Volume  : num  NA NA NA NA NA NA NA NA NA NA ...\n\nhead(zdata)\n           X.NDX.Open X.NDX.High X.NDX.Low\n2006-01-03    1654.39    1686.59   1633.62\n2006-01-04    1684.05    1696.83   1681.85\n2006-01-05    1697.80    1707.71   1697.33\n2006-01-06    1718.17    1735.50   1710.86\n2006-01-09    1734.50    1745.12   1729.60\n2006-01-10    1732.25    1744.47   1730.25\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "hello, extracting data sets from the yahooSeries function, see below.  I \nreturn a data frame successfully, however how do i access the date \nfield.  When viewing the structure i don't see the field, ",
       "thread_id": "thread-24c5ba895574",
       "thread_depth": 0,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080706/a4721526/attachment.pl"
+      ]
     },
     {
       "id": "msg-cecaaf16ef30",
@@ -521,11 +539,14 @@
       "subject_clean": "Market stats data sources",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080708/0865be3b/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080708/0865be3b/attachment.pl>",
+      "body_plain": "Hi all,\n\nI apologize in advance if this is not an appropriate post for this forum.\n\nI'm interested in finding historical data on market stats - new highs, new lows, advances,declines, unchanged, advancing volume, declining volume and unchanged for the NYSE, AMEX and NASDAQ. This is the data in the Market Diary of the WSJ. Anyone know of a souce that could be accessed using something like:\n\nlibrary(quantmod)\n\ngetSymbols(c(\"list of symbols for data above\"), from='1970-01-01')\n \nThanks\nDan Avery\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi all,\n\nI apologize in advance if this is not an appropriate post for this forum.\n\nI'm interested in finding historical data on market stats - new highs, new lows, advances,declines, unchanged, advan",
       "thread_id": "thread-b36c3de91f5e",
       "thread_depth": 0,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080708/0865be3b/attachment.pl"
+      ]
     },
     {
       "id": "msg-901874e1ba00",
@@ -608,11 +629,14 @@
       "subject_clean": "Get Status of Derivatives as Options and Futures",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080709/a870b248/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080709/a870b248/attachment.pl>",
+      "body_plain": "Hi,\n\n \n\nIs there any method to get some information about active traded derivatives\nsuch as several options and futures? Since I¡¯m doing a research about FX\nfutures, but I don't know how to get the data.\n\n \n\n \nHsiao-nan Cheung\n\n \n\n----------------------------------------------------------------------------\n-------\n\n                      º£ÄÉ°Ù´¨£¬ÓÐÈÝÄË´ó£»±ÚÁ¢Ç§Øð£¬ÎÞÓûÔò¸Õ\n\n----------------------------------------------------------------------------\n-------\n\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\n \n\nIs there any method to get some information about active traded derivatives\nsuch as several options and futures? Since I¡¯m doing a research about FX\nfutures, but I don't know how to get the d",
       "thread_id": "thread-ddd1bbd78d51",
       "thread_depth": 0,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080709/a870b248/attachment.pl"
+      ]
     },
     {
       "id": "msg-900a010cdfe8",
@@ -833,11 +857,14 @@
       "subject_clean": "Stress Testing",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080711/a9e8224f/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080711/a9e8224f/attachment.pl>",
+      "body_plain": "Dear All,\n\nFirst of all, apologies if this is not the write place to post this\nrequest. I was looking for some material related to Stress Testing\n(packages, books, articles).\n\nAny suggestions will be appreciated.\n\nKind regards\n\nDario \n\n\n\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear All,\n\nFirst of all, apologies if this is not the write place to post this\nrequest. I was looking for some material related to Stress Testing\n(packages, books, articles).\n\nAny suggestions will be ",
       "thread_id": "thread-bd10a03692ee",
       "thread_depth": 0,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080711/a9e8224f/attachment.pl"
+      ]
     },
     {
       "id": "msg-0b36726572ca",
@@ -851,11 +878,14 @@
       "references": [
         "<8DC2BE23593EC34EA1E731E3AE14705F01297428@MAH-EU-EXM-01.eu.corp.proximaalfa.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080711/ba05e184/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080711/ba05e184/attachment.pl>",
+      "body_plain": "Dear Daria,\n\nPls let me know which sress testing you are referring to? Is this (1) the\nstress testing  for Internal Model Approach of Pillar 1 of  Basel II , or\n(2) Stress testing for additional buffer risk capital requirement under\nPillar 2 of Basel II.\n\nWhereas the first stress testing relates to testing the adequacy of\nVaR-based risk capital   generating different stressed scenerio changing\ncorrelation and others , the second one aims at finding what is the addition\nrisk capital requirement (in addition to pillar I regulatory risk capital)\nfor unexpected losses under stressed scenerios  where its reates to the\nbalance sheet.\n\nAfter you let me which stress testing you  rrefer here, then I can provide\nyou resources.\n\nKind Regards,\nDebashis\n\n\nOn 11/07/2008, Dario Nicodemi <dario.nicodemi at proximaalfa.com> wrote:\n>\n> Dear All,\n>\n> First of all, apologies if this is not the write place to post this\n> request. I was looking for some material related to Stress Testing\n> (packages, books, articles).\n>\n> Any suggestions will be appreciated.\n>\n> Kind regards\n>\n> Dario\n>\n>\n>\n>\n>\n>\n>        [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear Daria,\n\nPls let me know which sress testing you are referring to? Is this (1) the\nstress testing  for Internal Model Approach of Pillar 1 of  Basel II , or\n(2) Stress testing for additional buffe",
       "thread_id": "thread-bd10a03692ee",
       "thread_depth": 1,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080711/ba05e184/attachment.pl"
+      ]
     },
     {
       "id": "msg-89ce9c149cbf",
@@ -870,11 +900,14 @@
         "<8DC2BE23593EC34EA1E731E3AE14705F01297428@MAH-EU-EXM-01.eu.corp.proximaalfa.com>",
         "<37673c2d0807111117l6bd379fcmfcd3b152273776ef@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080714/774f4148/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080714/774f4148/attachment.pl>",
+      "body_plain": "Dear Debashis.\n\n \n\nI am noot specifically referring to capital stress testing, but stress testing of any portfolio for any underlying factors. I know about standard market risk stress test (yield curve shifts, delta changes in prices, etc.) but I was wondering if there is more than that, particularly including liquidity and credit risk exposure. \n\n \n\nMany thanks\n\n\nDario\n\n \n\n \n\n \n\n+++++++++++++++++++++++++ \nDario Nicodemi \n\npróxima - Próxima Alfa Investments SGIIC, S.A. \nPaseo de la Castellana, 15 1º B \n28046 Madrid - Spain \nPhone: (+34) 917 900 569 \n\nE-Mail: Dario.Nicodemi at proximaalfa.com <mailto:Dario.Nicodemi at proximaalfa.com>  \n\n \n\n________________________________\n\nFrom: Debashis Dutta [mailto:dutt.debashis at gmail.com] \nSent: viernes, 11 de julio de 2008 20:18\nTo: Dario Nicodemi\nCc: r-sig-finance at stat.math.ethz.ch\nSubject: Re: [R-SIG-Finance] Stress Testing\n\n\n\nDear Daria,\n\n\n\nPls let me know which sress testing you are referring to? Is this (1) the stress testing  for Internal Model Approach of Pillar 1 of  Basel II , or (2) Stress testing for additional buffer risk capital requirement under Pillar 2 of Basel II.\n\n\n\nWhereas the first stress testing relates to testing the adequacy of  VaR-based risk capital   generating different stressed scenerio changing correlation and others , the second one aims at finding what is the addition risk capital requirement (in addition to pillar I regulatory risk capital) for unexpected losses under stressed scenerios  where its reates to the balance sheet.\n\n\n\nAfter you let me which stress testing you  rrefer here, then I can provide you resources.\n\n\n\nKind Regards,\n\nDebashis\n\n\n\nOn 11/07/2008, Dario Nicodemi <dario.nicodemi at proximaalfa.com> wrote: \n\nDear All,\n\nFirst of all, apologies if this is not the write place to post this\nrequest. I was looking for some material related to Stress Testing\n(packages, books, articles).\n\nAny suggestions will be appreciated.\n\nKind regards\n\nDario\n\n\n\n\n\n\n       [[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only.\n-- If you want to post, subscribe first.\n\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear Debashis.\n\n \n\nI am noot specifically referring to capital stress testing, but stress testing of any portfolio for any underlying factors. I know about standard market risk stress test (yield curv",
       "thread_id": "thread-bd10a03692ee",
       "thread_depth": 2,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080714/774f4148/attachment.pl"
+      ]
     },
     {
       "id": "msg-df219b711dd3",
@@ -1014,11 +1047,14 @@
         "<37673c2d0807111117l6bd379fcmfcd3b152273776ef@mail.gmail.com>",
         "<8DC2BE23593EC34EA1E731E3AE14705F01297539@MAH-EU-EXM-01.eu.corp.proximaalfa.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080715/615593b6/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080715/615593b6/attachment.pl>",
+      "body_plain": "Dear Daria,\n\n*Regarding your query \" I am not specifically referring to capital stress\ntesting, but stress testing of any portfolio for any underlying factors. I\nknow about standard market risk stress test (yield curve shifts, delta\nchanges in prices, etc.) \"..........*\n\nI understand that here you are talking about stress testing for market risk\n, which is addressed under Internal Model approach of Pillar 1 of Basel\nII. A better  way I think is to approach it as  a framework rather a\nmodel-based one.\n\nYou may break it as below :\n\n1. Purpose  ( whether  Risk Factor Based  i.e.market risk, credit risk,\ncombination of  two or more etc., Risk Silo Based  i.e.yield curve risk,\ndefault risk etc., or, Instruments Based i.e. Future, Options etc.)\n\n2. Selection of Methodology ( Whether  scenerio analysis, factor push,\nmaximum loss optimisation etc)\n\nThen you can make your implementation.\n\n\n*Regarding your query \"but I was wondering if there is more than that,\nparticularly including liquidity and credit risk exposure\"....*\n\nRegarding stressing testing for Pillar 2, as I referred before that balance\nsheet is to be stressed. When we are stressing the balance sheet, basically\nwe are stressing the asset class mapped with its line items and as such\nstressing the exposure level data. We simulate it n number of times using\nthe specified routines for each risk factors. Simulation could  be of a\nsingle risk factor or a combination of multiple risk factors.\nThen recomputation can be done. Regarding your query as to credit risk\nexposure, yes it addresses. If we use credit migration matrix for stress\ntesting,  under stressed condition there is common tendency for a migration\ntowards default, and migrating to lower grade of rating means attracting\ngreater credit risk  and as such stressed exposure level data shall shall\nhave greater credit risk exposure. Further, regarding your query for\nliquidity risk, yes it also addresses. After stressing there shall be a\nsignificant reduction in the value of asset side and if you match it with\nliabilities in ALM perspective in appropriate maturity buckets, there shall\nbe cumulative gaps. This causes liquidity risk, which is also captured by\nthis stress testing.\n\nActually, I am writing codes for both Pillar 1 stress testing and Pillar 2\nstrest testing in R. These two approaches are completely different in its\napplication and methodologies. If you like, please feel free to interact\nwith me. This would be a good learning for me.\n\nKind Regards,\nDebashis\n\n\n\nOn 14/07/2008, Dario Nicodemi <dario.nicodemi at proximaalfa.com> wrote:\n>\n>  Dear Debashis.\n>\n>\n>\n> I am noot specifically referring to capital stress testing, but stress\n> testing of any portfolio for any underlying factors. I know about standard\n> market risk stress test (yield curve shifts, delta changes in prices, etc.)\n> but I was wondering if there is more than that, particularly including\n> liquidity and credit risk exposure.\n>\n>\n>\n> Many thanks\n>\n>\n> Dario\n>\n>\n>\n>\n>\n>\n>\n> +++++++++++++++++++++++++\n> Dario Nicodemi\n>\n> *próxima -* Próxima Alfa Investments SGIIC, S.A.\n> Paseo de la Castellana, 15 1º B\n> 28046 Madrid - Spain\n> Phone: (+34) 917 900 569\n>\n> E-Mail: Dario.Nicodemi at proximaalfa.com\n>\n>\n>  ------------------------------\n>\n> *From:* Debashis Dutta [mailto:dutt.debashis at gmail.com]\n> *Sent:* viernes, 11 de julio de 2008 20:18\n> *To:* Dario Nicodemi\n> *Cc:* r-sig-finance at stat.math.ethz.ch\n> *Subject:* Re: [R-SIG-Finance] Stress Testing\n>\n>\n>\n> Dear Daria,\n>\n>\n>\n> Pls let me know which sress testing you are referring to? Is this (1) the\n> stress testing  for Internal Model Approach of Pillar 1 of  Basel II , or\n> (2) Stress testing for additional buffer risk capital requirement under\n> Pillar 2 of Basel II.\n>\n>\n>\n> Whereas the first stress testing relates to testing the adequacy of\n> VaR-based risk capital   generating different stressed scenerio changing\n> correlation and others , the second one aims at finding what is the addition\n> risk capital requirement (in addition to pillar I regulatory risk capital)\n> for unexpected losses under stressed scenerios  where its reates to the\n> balance sheet.\n>\n>\n>\n> After you let me which stress testing you  rrefer here, then I can provide\n> you resources.\n>\n>\n>\n> Kind Regards,\n>\n> Debashis\n>\n>\n>\n> On 11/07/2008, *Dario Nicodemi* <dario.nicodemi at proximaalfa.com> wrote:\n>\n> Dear All,\n>\n> First of all, apologies if this is not the write place to post this\n> request. I was looking for some material related to Stress Testing\n> (packages, books, articles).\n>\n> Any suggestions will be appreciated.\n>\n> Kind regards\n>\n> Dario\n>\n>\n>\n>\n>\n>\n>        [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear Daria,\n\n*Regarding your query \" I am not specifically referring to capital stress\ntesting, but stress testing of any portfolio for any underlying factors. I\nknow about standard market risk stress",
       "thread_id": "thread-bd10a03692ee",
       "thread_depth": 3,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080715/615593b6/attachment.pl"
+      ]
     },
     {
       "id": "msg-f2b7c2f181fb",
@@ -1055,11 +1091,14 @@
         "<8DC2BE23593EC34EA1E731E3AE14705F01297539@MAH-EU-EXM-01.eu.corp.proximaalfa.com>",
         "<37673c2d0807141431g11f7da88u4a6f6971182fe6d3@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080715/7e4a6264/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080715/7e4a6264/attachment.pl>",
+      "body_plain": "Thanks Dutta. \n\n \n\n \n\n+++++++++++++++++++++++++ \nDario Nicodemi \n\npróxima - Próxima Alfa Investments SGIIC, S.A. \nPaseo de la Castellana, 15 1º B \n28046 Madrid - Spain \nPhone: (+34) 917 900 569 \n\nE-Mail: Dario.Nicodemi at proximaalfa.com <mailto:Dario.Nicodemi at proximaalfa.com>  \n\n \n\n________________________________\n\nFrom: Debashis Dutta [mailto:dutt.debashis at gmail.com] \nSent: lunes, 14 de julio de 2008 23:31\nTo: Dario Nicodemi\nCc: r-sig-finance at stat.math.ethz.ch\nSubject: Re: [R-SIG-Finance] Stress Testing\n\n\n\nDear Daria,\n\n\n\nRegarding your query \" I am not specifically referring to capital stress testing, but stress testing of any portfolio for any underlying factors. I know about standard market risk stress test (yield curve shifts, delta changes in prices, etc.) \"..........\n\n\n\nI understand that here you are talking about stress testing for market risk , which is addressed under Internal Model approach of Pillar 1 of Basel II. A better  way I think is to approach it as  a framework rather a model-based one.\n\n\n\nYou may break it as below :\n\n\n\n1. Purpose  ( whether  Risk Factor Based  i.e.market risk, credit risk, combination of  two or more etc., Risk Silo Based  i.e.yield curve risk, default risk etc., or, Instruments Based i.e. Future, Options etc.)\n\n\n\n2. Selection of Methodology ( Whether  scenerio analysis, factor push, maximum loss optimisation etc)\n\n\n\nThen you can make your implementation.\n\n\n\n\n\nRegarding your query \"but I was wondering if there is more than that, particularly including liquidity and credit risk exposure\"....\n\n\n\nRegarding stressing testing for Pillar 2, as I referred before that balance sheet is to be stressed. When we are stressing the balance sheet, basically we are stressing the asset class mapped with its line items and as such stressing the exposure level data. We simulate it n number of times using the specified routines for each risk factors. Simulation could  be of a single risk factor or a combination of multiple risk factors. Then recomputation can be done. Regarding your query as to credit risk exposure, yes it addresses. If we use credit migration matrix for stress testing,  under stressed condition there is common tendency for a migration towards default, and migrating to lower grade of rating means attracting greater credit risk  and as such stressed exposure level data shall shall have greater credit risk exposure. Further, regarding your query for liquidity risk, yes it also addresses. After stressing there shall be a significant reduction in the value of asset side and if you match it with liabilities in ALM perspective in appropriate maturity buckets, there shall be cumulative gaps. This causes liquidity risk, which is also captured by this stress testing.\n\n\n\nActually, I am writing codes for both Pillar 1 stress testing and Pillar 2 strest testing in R. These two approaches are completely different in its application and methodologies. If you like, please feel free to interact with me. This would be a good learning for me.\n\n\n\nKind Regards,\n\nDebashis\n\n\n\n\n\n\nOn 14/07/2008, Dario Nicodemi <dario.nicodemi at proximaalfa.com> wrote: \n\nDear Debashis.\n\n\n\nI am noot specifically referring to capital stress testing, but stress testing of any portfolio for any underlying factors. I know about standard market risk stress test (yield curve shifts, delta changes in prices, etc.) but I was wondering if there is more than that, particularly including liquidity and credit risk exposure. \n\n\n\nMany thanks\n\n\nDario\n\n\n\n\n\n\n\n+++++++++++++++++++++++++ \nDario Nicodemi \n\npróxima - Próxima Alfa Investments SGIIC, S.A. \nPaseo de la Castellana, 15 1º B \n28046 Madrid - Spain \nPhone: (+34) 917 900 569 \n\nE-Mail: Dario.Nicodemi at proximaalfa.com <mailto:Dario.Nicodemi at proximaalfa.com>  \n\n\n\n________________________________\n\nFrom: Debashis Dutta [mailto:dutt.debashis at gmail.com] \nSent: viernes, 11 de julio de 2008 20:18\nTo: Dario Nicodemi\nCc: r-sig-finance at stat.math.ethz.ch\nSubject: Re: [R-SIG-Finance] Stress Testing\n\n\n\nDear Daria,\n\n\n\nPls let me know which sress testing you are referring to? Is this (1) the stress testing  for Internal Model Approach of Pillar 1 of  Basel II , or (2) Stress testing for additional buffer risk capital requirement under Pillar 2 of Basel II.\n\n\n\nWhereas the first stress testing relates to testing the adequacy of  VaR-based risk capital   generating different stressed scenerio changing correlation and others , the second one aims at finding what is the addition risk capital requirement (in addition to pillar I regulatory risk capital) for unexpected losses under stressed scenerios  where its reates to the balance sheet.\n\n\n\nAfter you let me which stress testing you  rrefer here, then I can provide you resources.\n\n\n\nKind Regards,\n\nDebashis\n\n\n\nOn 11/07/2008, Dario Nicodemi <dario.nicodemi at proximaalfa.com> wrote: \n\nDear All,\n\nFirst of all, apologies if this is not the write place to post this\nrequest. I was looking for some material related to Stress Testing\n(packages, books, articles).\n\nAny suggestions will be appreciated.\n\nKind regards\n\nDario\n\n\n\n\n\n\n       [[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only.\n-- If you want to post, subscribe first.\n\n\n\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thanks Dutta. \n\n \n\n \n\n+++++++++++++++++++++++++ \nDario Nicodemi \n\npróxima - Próxima Alfa Investments SGIIC, S.A. \nPaseo de la Castellana, 15 1º B \n28046 Madrid - Spain \nPhone: (+34) 917 900 569 \n\nE-Ma",
       "thread_id": "thread-bd10a03692ee",
       "thread_depth": 4,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080715/7e4a6264/attachment.pl"
+      ]
     },
     {
       "id": "msg-0f6f36583d2b",
@@ -1142,11 +1181,14 @@
       "subject_clean": "time series question",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080716/19544b6d/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080716/19544b6d/attachment.pl>",
+      "body_plain": "I am using the time series package and have a regularly spaced daily\ntime-series. How do I convert it to a monthly or quarterly time-series\n(i.e. up-sample the time series). Is there a method to do that??\n \nAlso, as a side questions - what is the best method to find maximum\ncorrelation between two time-series, one of which lags the other.\n \nthanks\n--------------------------------------------------------\n\nThis is not an offer (or solicitation of an offer) to bu...{{dropped:23}}",
+      "body_snippet": "I am using the time series package and have a regularly spaced daily\ntime-series. How do I convert it to a monthly or quarterly time-series\n(i.e. up-sample the time series). Is there a method to do th",
       "thread_id": "thread-3f38ae418cc0",
       "thread_depth": 0,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080716/19544b6d/attachment.pl"
+      ]
     },
     {
       "id": "msg-e9b495b87c46",
@@ -1534,11 +1576,14 @@
       "subject_clean": "Is there a way to overcome 2 gigabytes data set limit in R?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080718/4b2e82d5/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080718/4b2e82d5/attachment.pl>",
+      "body_plain": "Hello,\n\n \n\nI am doing a survival analysis of the large group of loans and would\nlike to know if there is a way to do it in R with the dataset of more\nthan 2 Gigabytes, specifically on 64 bits OS.\n\n \n\nThank you\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\n \n\nI am doing a survival analysis of the large group of loans and would\nlike to know if there is a way to do it in R with the dataset of more\nthan 2 Gigabytes, specifically on 64 bits OS.\n\n \n\n",
       "thread_id": "thread-11e322f726ac",
       "thread_depth": 0,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080718/4b2e82d5/attachment.pl"
+      ]
     },
     {
       "id": "msg-ac9c45c7b2a6",
@@ -1550,11 +1595,14 @@
       "subject_clean": "Using NAG Callback Functions in R",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080720/077b0e97/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080720/077b0e97/attachment.pl>",
+      "body_plain": "Hello,\n\nI thought the below information could be of use to the R community:\n\nhttp://www.nag.co.uk/numeric/R_UsingCallBackFunctions.asp?mxmroi=4173227/335502/false\n\nRegards.\n\nGirish Mittal\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\nI thought the below information could be of use to the R community:\n\nhttp://www.nag.co.uk/numeric/R_UsingCallBackFunctions.asp?mxmroi=4173227/335502/false\n\nRegards.\n\nGirish Mittal\n\n\t[[alternat",
       "thread_id": "thread-ac9c45c7b2a6",
       "thread_depth": 0,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080720/077b0e97/attachment.pl"
+      ]
     },
     {
       "id": "msg-93cc03831bd9",
@@ -1582,11 +1630,14 @@
       "subject_clean": "portfolio optimization-autocorrelation in asset returns",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080721/44f9575d/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080721/44f9575d/attachment.pl>",
+      "body_plain": "Hi,\n\nI'm running a Markowitz Optimization using an EWMA correlation forecast and\nweekly data to find the minimum variance portfolios, updated every week, for\na basket of currencies.  I'm finding that the performance is somewhat\nwanting, but when I remove currencies with significant positive\nautocorrelation over the sample, the performance over the same sample\nimproves substantially (I know, my description is somewhat vague and this is\nalso cheating).  However, I believe this is due to autocorrelation violating\nassumptions in the Markowitz Optimization framework, and I'm wondering if\nanyone could point me towards the best ways to get around this problem that\ndon't involve looking at the autocorrelation over a sample and then removing\nthe currency from the optimization for the same sample.\n\nThanks,\nAlex\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI'm running a Markowitz Optimization using an EWMA correlation forecast and\nweekly data to find the minimum variance portfolios, updated every week, for\na basket of currencies.  I'm finding that ",
       "thread_id": "thread-2d6802b63ede",
       "thread_depth": 0,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080721/44f9575d/attachment.pl"
+      ]
     },
     {
       "id": "msg-92db876bb0ae",
@@ -1632,11 +1683,14 @@
       "subject_clean": "fama-macbeth",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/a3afebad/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/a3afebad/attachment.pl>",
+      "body_plain": "Dear All,\nI'm having some trouble finding a general approach in R for performing\nfama-macbeth regressions.  Does anyone now if there is a standard technique?\n\nOr generally a technique for performing linear regression by case? Or a loop\nwhere R will read different parts of a huge dataset in order to select the\ndata for a linear regression?\nSorry for the general questions but i'm really in the dark here-quite new\nwith R.\n\nThanks a lot,\nDenise\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear All,\nI'm having some trouble finding a general approach in R for performing\nfama-macbeth regressions.  Does anyone now if there is a standard technique?\n\nOr generally a technique for performing l",
       "thread_id": "thread-d0b917a05861",
       "thread_depth": 0,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/a3afebad/attachment.pl"
+      ]
     },
     {
       "id": "msg-420134d5d217",
@@ -1682,11 +1736,14 @@
       "subject_clean": "Correlation on Tick Data",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/0880735d/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/0880735d/attachment.pl>",
+      "body_plain": "Hello R users.\n\nI was using R to calculate correlation of midquote returns on ES and YM. ES\nand YM are highly correlated at close to .97. However when I run the\ncorrelation on the MQ returns the correlation is close to 0. Should I be\nexpecting this or am I doing something wrong? Others have told me this\nshould happen, but I do not understand why. If anyone can please explain I\nwould really appreciate.\n\nMany Thanks,\nNeil\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello R users.\n\nI was using R to calculate correlation of midquote returns on ES and YM. ES\nand YM are highly correlated at close to .97. However when I run the\ncorrelation on the MQ returns the corre",
       "thread_id": "thread-9285996f31b8",
       "thread_depth": 0,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/0880735d/attachment.pl"
+      ]
     },
     {
       "id": "msg-f589c9e05707",
@@ -1719,11 +1776,14 @@
         "<98a7ecd90807220618w6fdb6c4bjb8282aa014707e8e@mail.gmail.com>",
         "<98a7ecd90807220620l1b54413eie326a2ea1ba0f8b0@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/f449ae40/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/f449ae40/attachment.pl>",
+      "body_plain": "Dear all,\nI have the following data in excel:\n\n    day1   y 1 2 3 2 3 x1 0.2 0.3 0.4 0.3 0.2 x2 7 3.4 2 8 6  day2   y 2 4 3\n2 2 x1 0.4 0.5 0.3 0.3 0.2 x2 7 8 9.1 6 5\n\nI have the following problems:\nfirst of all, when I ask R to read the file (with the package xlsReadWrite\nand the command read.xls) it has a problem with the fact that the left most\ncorner is labelled the same way, so in order for it to work I need to do:\n\n\n\n day1\n\n\n\n y1\n 1\n 2\n 3\n 2\n 3\n x11\n 0.2\n 0.3\n 0.4\n 0.3\n 0.2\n x21\n 7\n 3.4\n 2\n 8\n 6\n\n\n day2\n\n\n\n y2\n 2\n 4\n 3\n 2\n 2\n x12\n 0.4\n 0.5\n 0.3\n 0.3\n 0.2\n x22\n 7\n 8\n 9.1\n 6\n 5\n\nNext I need to do the regression y~ x1+x2, for the different days.\nI have converted the above data in the form of a matrix and labelled it mat.\nThe following loop works:\n\nresults<-c(0,0,0,0,0)\nfor (i in c(1,5)){\nresults[i]<-lm(mat[i,]~mat[i+1,]+mat[i+2,])}\nresults\n\nAnd the results are:\n\nWarning messages:\n1: In results[i] <- lm(mat[i, ] ~ mat[i + 1, ] + mat[i + 2, ]) :\n  number of items to replace is not a multiple of replacement length\n2: In results[i] <- lm(mat[i, ] ~ mat[i + 1, ] + mat[i + 2, ]) :\n  number of items to replace is not a multiple of replacement length\n> results\n[[1]]\n (Intercept) mat[i + 1, ] mat[i + 2, ]\n   2.4918415    1.5151515   -0.1356220\n[[2]]\n[1] 0\n[[3]]\n[1] 0\n[[4]]\n[1] 0\n[[5]]\n (Intercept) mat[i + 1, ] mat[i + 2, ]\n  -0.3741935    3.4193548    0.2580645\n\nThe method does work but it is not ideal.  The problem is that the real data\nthat I will be using will involve regressions of 20 or so variables over\n3000 days. I also want to avoid finding the exact values that \"i\" should\ntake inside the loop.\nIs there a better way of carrying out these regressions so that I do not\nneed to relabel everything, the results are faster and it is clear and easy\nto isolate the results of the linear models for each day?\n\nThank you very much everyone in advance,\nRegards,\nDenise\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,\nI have the following data in excel:\n\n    day1   y 1 2 3 2 3 x1 0.2 0.3 0.4 0.3 0.2 x2 7 3.4 2 8 6  day2   y 2 4 3\n2 2 x1 0.4 0.5 0.3 0.3 0.2 x2 7 8 9.1 6 5\n\nI have the following problems:\nfi",
       "thread_id": "thread-18fbba0232de",
       "thread_depth": 0,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/f449ae40/attachment.pl"
+      ]
     },
     {
       "id": "msg-c6b8e0af0b11",
@@ -1769,11 +1829,14 @@
       "references": [
         "<23870565.5176361216741124953.JavaMail.javamailuser@localhost>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/8d47f6e6/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/8d47f6e6/attachment.pl>",
+      "body_plain": "Neil,\n\nI don't quite understand your data set.\n\n>I performed this on tick data at different tick time frequencies. For\ninstance I can run a whole day's tick updates(quotes) at an >interval of\n50,000 ticks.\n\nWhat does this mean exactly?\n\nYou're doing cor(YM, ES, method = \"whatever\")  I assume.  So ES and YM have\nto have the same number of points.  If you take the returns from 50,000\nticks this could be drastically different time frames.  Do you see my\nconcern?\n\n\n\nOn Tue, Jul 22, 2008 at 10:38 AM, <markleeds at verizon.net> wrote:\n\n>  just to elaborate a bit more on what matt said.\n>\n> you need to make sure you time series are stationary before you correlate\n> them.  usually one does this by using a unit root test but, in your case,\n> since you are dealing with currencies, as long as you are dealing with the\n> returns streamsand not the prices themselves, there's really no need to use\n> the unit root test.  returns should be stationary ( in general ).   if\n> you're dealing with prices, then correlations don't make sense because\n> prices aren't ( in general ),\n> or atleast i've never seen prices that were.\n>\n>\n>\n>\n> On Tue, Jul 22, 2008 at 10:14 AM, Matthieu Stigler wrote:\n>\n>  Hello\n>>\n>> If ES and YM are time series, you maybe should first test for\n>> auto-correlation of the series. High auto-correlated series can lead to the\n>> phenomen called as spurious regression, and then the correlation coefficient\n>> is \"too high\".\n>>\n>> Hope this helps\n>>\n>> Mat\n>>\n>> Neil Gupta a écrit :\n>>\n>>> Hello R users.\n>>>\n>>> I was using R to calculate correlation of midquote returns on ES and YM.\n>>> ES\n>>> and YM are highly correlated at close to .97. However when I run the\n>>> correlation on the MQ returns the correlation is close to 0. Should I be\n>>> expecting this or am I doing something wrong? Others have told me this\n>>> should happen, but I do not understand why. If anyone can please explain\n>>> I\n>>> would really appreciate.\n>>>\n>>> Many Thanks,\n>>> Neil\n>>>\n>>>        [[alternative HTML version deleted]]\n>>>\n>>> _______________________________________________\n>>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only.\n>>> -- If you want to post, subscribe first.\n>>>\n>>>\n>> _______________________________________________\n>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only.\n>> -- If you want to post, subscribe first.\n>>\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Neil,\n\nI don't quite understand your data set.\n\n>I performed this on tick data at different tick time frequencies. For\ninstance I can run a whole day's tick updates(quotes) at an >interval of\n50,000 t",
       "thread_id": "thread-9881a80ece3c",
       "thread_depth": 1,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/8d47f6e6/attachment.pl"
+      ]
     },
     {
       "id": "msg-c4d366e1a0b0",
@@ -1785,11 +1848,14 @@
       "subject_clean": "Correlation on Tick Data",
       "in_reply_to": "<23870565.5176361216741124953.JavaMail.javamailuser@localhost>",
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/3c1c9fdf/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/3c1c9fdf/attachment.pl>",
+      "body_plain": "I would go farther than just stationarity and include normality, and linearity in the relation, three suppositions for the correlation coefficient that are rarely examined. \n\nRobert Wayne Samohyl, Ph.D. \nwww.qualimetria.ufsc.br\nfones: \n55-48-3721-7001 University \n55-48-9608-5056 celular     \n\n\n--- Em ter, 22/7/08, markleeds at verizon.net <markleeds at verizon.net> escreveu:\nDe: markleeds at verizon.net <markleeds at verizon.net>\nAssunto: Re: [R-SIG-Finance] Correlation on Tick Data\nPara: \"Matthieu Stigler\" <Matthieu.Stigler at gmail.com>\nCc: r-sig-finance at stat.math.ethz.ch\nData: Terça-feira, 22 de Julho de 2008, 12:38\n\njust to elaborate a bit more on what matt said.\n\nyou need to make sure you time series are stationary before you \ncorrelate them.  usually one does this by using a unit root test but, in \nyour case, since you are dealing with currencies, as long as you are \ndealing with the returns streamsand not the prices themselves, there's \nreally no need to use the unit root test.  returns should be stationary \n( in general ).   if you're dealing with prices, then correlations\ndon't \nmake sense because prices aren't ( in general ),\nor atleast i've never seen prices that were.\n\n\n\nOn Tue, Jul 22, 2008 at 10:14 AM, Matthieu Stigler wrote:\n\n> Hello\n>\n> If ES and YM are time series, you maybe should first test for \n> auto-correlation of the series. High auto-correlated series can lead \n> to the phenomen called as spurious regression, and then the \n> correlation coefficient is \"too high\".\n>\n> Hope this helps\n>\n> Mat\n>\n> Neil Gupta a écrit :\n>> Hello R users.\n>>\n>> I was using R to calculate correlation of midquote returns on ES and \n>> YM. ES\n>> and YM are highly correlated at close to .97. However when I run the\n>> correlation on the MQ returns the correlation is close to 0. Should I \n>> be\n>> expecting this or am I doing something wrong? Others have told me \n>> this\n>> should happen, but I do not understand why. If anyone can please \n>> explain I\n>> would really appreciate.\n>>\n>> Many Thanks,\n>> Neil\n>>\n>> \t[[alternative HTML version deleted]]\n>>\n>> _______________________________________________\n>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only.\n>> -- If you want to post, subscribe first.\n>>\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only.\n-- If you want to post, subscribe first.\n\n\n[[elided Yahoo spam]]\novo com a sua cara @ymail.com ou @rocketmail.com.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I would go farther than just stationarity and include normality, and linearity in the relation, three suppositions for the correlation coefficient that are rarely examined. \n\nRobert Wayne Samohyl, Ph.",
       "thread_id": "thread-9881a80ece3c",
       "thread_depth": 1,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/3c1c9fdf/attachment.pl"
+      ]
     },
     {
       "id": "msg-51468bd2241d",
@@ -1833,11 +1899,14 @@
       "subject_clean": "Correlation on Tick Data",
       "in_reply_to": "<11732214.5285691216745039641.JavaMail.javamailuser@localhost>",
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/a28ae2c4/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/a28ae2c4/attachment.pl>",
+      "body_plain": "Mark, \n\nTo reject the null of no correlation, an hypothsis test based on the normal distribution. If normality is not the base assumption your working from then p-values, significance tests and conf. intervals dont mean much (the value of the coefficient is not reliable) or youll have to find a more appropriate distribution for your data. Or transform the data to normal. There´s a box-cox transformation in R that can resolve this. Normality may represent returns data most of the time (maybe not) but imagine  that it doesnt in a specific case and this discrepancy finds its way into a portfolio. Bob\n \n\n--- Em ter, 22/7/08, markleeds at verizon.net <markleeds at verizon.net> escreveu:\nDe: markleeds at verizon.net <markleeds at verizon.net>\nAssunto: Re: [R-SIG-Finance] Correlation on Tick Data\nPara: samohyl at yahoo.com\nCc: r-sig-finance at stat.math.ethz.ch\nData: Terça-feira, 22 de Julho de 2008, 13:43\n\nThanks for pointing that out. I understand the linearity ( you're \nsaying i think that correlation will only pick up linear relation ) but \nwhy normality ?\n\n\nOn Tue, Jul 22, 2008 at 12:29 PM, BOB SAMOHYL wrote:\n\n> I would go farther than just stationarity and include normality, and \n> linearity in the relation, three suppositions for the correlation \n> coefficient that are rarely examined.\n> Robert Wayne Samohyl, Ph.D. www.qualimetria.ufsc.br\n> fones: 55-48-3721-7001 University 55-48-9608-5056 celular  ��\n>\n> --- Em ter, 22/7/08, markleeds at verizon.net <markleeds at verizon.net> \n> escreveu:\n> De: markleeds at verizon.net <markleeds at verizon.net>\n> Assunto: Re: [R-SIG-Finance] Correlation on Tick Data\n> Para: \"Matthieu Stigler\" <Matthieu.Stigler at gmail.com>\n> Cc: r-sig-finance at stat.math.ethz.ch\n> Data: Ter��a-feira, 22 de Julho de 2008, 12:38\n>\n> just to elaborate a bit more on what matt said.\n>\n> you need to make sure you time series are stationary before you \n> correlate them.  usually one does this by using a unit root test but, \n> in your case, since you are dealing with currencies, as long as you \n> are dealing with the returns streamsand not the prices themselves, \n> there's really no need to use the unit root test.  returns should be \n> stationary ( in general ).   if you're dealing with prices, then \n> correlations\n> don't make sense because prices aren't ( in general ),\n> or atleast i've never seen prices that were.\n>\n>\n>\n> On Tue, Jul 22, 2008 at 10:14 AM, Matthieu Stigler wrote:\n>\n>> Hello\n>>\n>> If ES and YM are time series, you maybe should first test for \n>> auto-correlation of the series. High auto-correlated series can lead \n>> to the phenomen called as spurious regression, and then the \n>> correlation coefficient is \"too high\".\n>>\n>> Hope this helps\n>>\n>> Mat\n>>\n>> Neil Gupta a ��crit :\n>>> Hello R users.\n>>>\n>>> I was using R to calculate correlation of midquote returns on ES\nand \n>>> YM. ES\n>>> and YM are highly correlated at close to .97. However when I run\nthe\n>>> correlation on the MQ returns the correlation is close to 0.\nShould \n>>> I be\n>>> expecting this or am I doing something wrong? Others have told me \n>>> this\n>>> should happen, but I do not understand why. If anyone can please \n>>> explain I\n>>> would really appreciate.\n>>>\n>>> Many Thanks,\n>>> Neil\n>>>\n>>> \t[[alternative HTML version deleted]]\n>>>\n>>> _______________________________________________\n>>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only.\n>>> -- If you want to post, subscribe first.\n>>>\n>>\n>> _______________________________________________\n>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only.\n>> -- If you want to post, subscribe first.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n>\n> [[elided Yahoo spam]]\n> ovo com a sua cara @ymail.com ou @rocketmail.com.\n>\n> \t[[alternative HTML version deleted]]\n>\n>\n>\n>      ------------------------------\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n\n\n      Novos endereços, o Yahoo! que você conhece. Crie um email novo com a sua cara @ymail.com ou @rocketmail.com.\nhttp://br.new.mail.yahoo.com/addresses\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Mark, \n\nTo reject the null of no correlation, an hypothsis test based on the normal distribution. If normality is not the base assumption your working from then p-values, significance tests and conf. ",
       "thread_id": "thread-cc597a6b29be",
       "thread_depth": 1,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/a28ae2c4/attachment.pl"
+      ]
     },
     {
       "id": "msg-1881f63bd7b6",
@@ -1849,11 +1918,14 @@
       "subject_clean": "Correlation on Tick Data",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/36a5ea7c/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/36a5ea7c/attachment.pl>",
+      "body_plain": "gotcha. so what you are saying is that you need normality for \nhypothesis testing, statistical inference purposes. that's fine and \nthanks again\nfor pointing that out.\n\n\n\n\nOn Tue, Jul 22, 2008 at  1:21 PM, BOB SAMOHYL wrote:\n\n\nMark,\n\nTo reject the null of no correlation, an hypothsis test based on the \nnormal distribution. If normality is not the base assumption your \nworking from then p-values, significance tests and conf. intervals dont \nmean much (the value of the coefficient is not reliable) or youll have \nto find a more appropriate distribution for your data. Or transform the \ndata to normal. There´s a box-cox transformation in R that can resolve \nthis. Normality may represent returns data most of the time (maybe not) \nbut imagine  that it doesnt in a specific case and this discrepancy \nfinds its way into a portfolio. Bob\n\n\n--- Em ter, 22/7/08, markleeds at verizon.net <markleeds at verizon.net> \nescreveu:\nDe:  markleeds at verizon.net <markleeds at verizon.net>\nAssunto: Re: [R-SIG-Finance] Correlation on Tick Data\nPara: samohyl at yahoo.com\nCc: r-sig-finance at stat.math.ethz.ch\nData: Terça-feira, 22 de Julho de 2008, 13:43\n\nThanks for pointing that out. I understand the linearity ( you're\nsaying i think that correlation will only pick up linear relation ) but\nwhy normality ?\n\nOn Tue, Jul 22, 2008 at 12:29 PM, BOB SAMOHYL wrote:\n\n> I would go farther than just stationarity and include normality, and \n> linearity in the relation, three suppositions for the correlation \n> coefficient that are rarely examined. Robert Wayne Samohyl, Ph.D. \n> www.qualimetria.ufsc.br fones: 55-48-3721-7001 University \n> 55-48-9608-5056 celular  ��\n> --- Em ter, 22/7/08, markleeds at verizon.net <markleeds at verizon.net> \n> escreveu: De: markleeds at verizon.net\n  <markleeds at verizon.net>\n> Assunto: Re: [R-SIG-Finance] Correlation on Tick Data Para: \"Matthieu \n> Stigler\" <Matthieu.Stigler at gmail.com> Cc: \n> r-sig-finance at stat.math.ethz.ch Data: Ter��a-feira, 22 de Julho de \n> 2008, 12:38\n> just to elaborate a bit more on what matt said.\n> you need to make sure you time series are stationary before you \n> correlate them.  usually one does this by using a unit root test but, \n> in your case, since you are dealing with currencies, as long as you \n> are dealing with the returns streamsand not the prices themselves, \n> there's really no need to use the unit root test.  returns should be \n> stationary ( in general ).   if you're dealing with prices, then \n> correlations don't make sense because prices aren't ( in general ), or \n> atleast i've never seen prices that were.\n>\n>\n> On\n  Tue, Jul 22, 2008 at 10:14 AM, Matthieu Stigler wrote:\n>\n>> Hello\n>> If ES and YM are time series, you maybe should first test for \n>> auto-correlation of the series. High auto-correlated series can lead \n>> to the phenomen called as spurious regression, and then the \n>> correlation coefficient is \"too high\".\n>> Hope this helps\n>> Mat\n>> Neil Gupta a ��crit :\n>>> Hello R users.\n>>> I was using R to calculate correlation of midquote returns on ES\nand\n>>> YM. ES and YM are highly correlated at close to .97. However when I \n>>> run\nthe\n>>> correlation on the MQ returns the correlation is close to 0.\nShould\n>>> I be expecting this or am I doing something wrong? Others have told \n>>> me this\n  should happen, but I do not understand why. If anyone can please\n>>> explain I would really appreciate.\n>>> Many Thanks, Neil\n>>> \t[[alternative HTML version deleted]]\n>>> _______________________________________________ \n>>> R-SIG-Finance at stat.math.ethz.ch mailing list \n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance -- \n>>> Subscriber-posting only. -- If you want to post, subscribe first.\n>>\n>> _______________________________________________ \n>> R-SIG-Finance at stat.math.ethz.ch mailing list \n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance -- \n>> Subscriber-posting only. -- If you want to post, subscribe first.\n>\n> _______________________________________________\n  R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance -- \n> Subscriber-posting only. -- If you want to post, subscribe first.\n>\n> [[elided Yahoo spam]] ovo com a sua cara @ymail.com ou \n> @rocketmail.com.\n> \t[[alternative HTML version deleted]]\n>\n>\n>      ------------------------------\n> _______________________________________________ \n> R-SIG-Finance at stat.math.ethz.ch mailing list \n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance -- \n> Subscriber-posting only. -- If you want to post, subscribe first.\n___________________________________\n\nNovos endereços, o Yahoo! que você conhece. Crie um email novo \n<http://br.rd.yahoo.com/mail/taglines/mail/*http://br.new.mail.yahoo.com/addresses> \ncom a sua cara @ymail.com ou @rocketmail.com.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "gotcha. so what you are saying is that you need normality for \nhypothesis testing, statistical inference purposes. that's fine and \nthanks again\nfor pointing that out.\n\n\n\n\nOn Tue, Jul 22, 2008 at  1:2",
       "thread_id": "thread-1881f63bd7b6",
       "thread_depth": 0,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/36a5ea7c/attachment.pl"
+      ]
     },
     {
       "id": "msg-4a05cf75820c",
@@ -1867,11 +1939,14 @@
       "references": [
         "<24221559.5347871216747527348.JavaMail.javamailuser@localhost>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/1d39bd9f/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/1d39bd9f/attachment.pl>",
+      "body_plain": "Neil,\n\nI did some quick and dirty ESU8 and YMU8 cor() with Excel.  I looked at 1\nday (yesterday) of 15s midpoint prices from 9:30am to 4pm (Eastern time).\nThe correl was .97 when looking at prices.  For looking at returns it was\n.98.\n\nI have a very low opinion of Excel for doing statistics but this is a\ndrastically different result than what you got with your method.  I realize\nI'm just looking at time series and you've got a different method but 15s\ngives us 1681 data points so you'd think we'd have closer results.\n\nKen\n\nOn Tue, Jul 22, 2008 at 12:25 PM, <markleeds at verizon.net> wrote:\n\n>\n>  gotcha. so what you are saying is that you need normality for\n> hypothesis testing, statistical inference purposes. that's fine and\n> thanks again\n> for pointing that out.\n>\n>\n>\n>\n> On Tue, Jul 22, 2008 at  1:21 PM, BOB SAMOHYL wrote:\n>\n>\n> Mark,\n>\n> To reject the null of no correlation, an hypothsis test based on the\n> normal distribution. If normality is not the base assumption your\n> working from then p-values, significance tests and conf. intervals dont\n> mean much (the value of the coefficient is not reliable) or youll have\n> to find a more appropriate distribution for your data. Or transform the\n> data to normal. There´s a box-cox transformation in R that can resolve\n> this. Normality may represent returns data most of the time (maybe not)\n> but imagine  that it doesnt in a specific case and this discrepancy\n> finds its way into a portfolio. Bob\n>\n>\n> --- Em ter, 22/7/08, markleeds at verizon.net <markleeds at verizon.net>\n> escreveu:\n> De:  markleeds at verizon.net <markleeds at verizon.net>\n> Assunto: Re: [R-SIG-Finance] Correlation on Tick Data\n> Para: samohyl at yahoo.com\n> Cc: r-sig-finance at stat.math.ethz.ch\n> Data: Terça-feira, 22 de Julho de 2008, 13:43\n>\n> Thanks for pointing that out. I understand the linearity ( you're\n> saying i think that correlation will only pick up linear relation ) but\n> why normality ?\n>\n> On Tue, Jul 22, 2008 at 12:29 PM, BOB SAMOHYL wrote:\n>\n> > I would go farther than just stationarity and include normality, and\n> > linearity in the relation, three suppositions for the correlation\n> > coefficient that are rarely examined. Robert Wayne Samohyl, Ph.D.\n> > www.qualimetria.ufsc.br fones: 55-48-3721-7001 University\n> > 55-48-9608-5056 celular  ��\n> > --- Em ter, 22/7/08, markleeds at verizon.net <markleeds at verizon.net>\n> > escreveu: De: markleeds at verizon.net\n>  <markleeds at verizon.net>\n> > Assunto: Re: [R-SIG-Finance] Correlation on Tick Data Para: \"Matthieu\n> > Stigler\" <Matthieu.Stigler at gmail.com> Cc:\n> > r-sig-finance at stat.math.ethz.ch Data: Ter��a-feira, 22 de Julho de\n> > 2008, 12:38\n> > just to elaborate a bit more on what matt said.\n> > you need to make sure you time series are stationary before you\n> > correlate them.  usually one does this by using a unit root test but,\n> > in your case, since you are dealing with currencies, as long as you\n> > are dealing with the returns streamsand not the prices themselves,\n> > there's really no need to use the unit root test.  returns should be\n> > stationary ( in general ).   if you're dealing with prices, then\n> > correlations don't make sense because prices aren't ( in general ), or\n> > atleast i've never seen prices that were.\n> >\n> >\n> > On\n>  Tue, Jul 22, 2008 at 10:14 AM, Matthieu Stigler wrote:\n> >\n> >> Hello\n> >> If ES and YM are time series, you maybe should first test for\n> >> auto-correlation of the series. High auto-correlated series can lead\n> >> to the phenomen called as spurious regression, and then the\n> >> correlation coefficient is \"too high\".\n> >> Hope this helps\n> >> Mat\n> >> Neil Gupta a ��crit :\n> >>> Hello R users.\n> >>> I was using R to calculate correlation of midquote returns on ES\n> and\n> >>> YM. ES and YM are highly correlated at close to .97. However when I\n> >>> run\n> the\n> >>> correlation on the MQ returns the correlation is close to 0.\n> Should\n> >>> I be expecting this or am I doing something wrong? Others have told\n> >>> me this\n>  should happen, but I do not understand why. If anyone can please\n> >>> explain I would really appreciate.\n> >>> Many Thanks, Neil\n> >>>     [[alternative HTML version deleted]]\n> >>> _______________________________________________\n> >>> R-SIG-Finance at stat.math.ethz.ch mailing list\n> >>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance --\n> >>> Subscriber-posting only. -- If you want to post, subscribe first.\n> >>\n> >> _______________________________________________\n> >> R-SIG-Finance at stat.math.ethz.ch mailing list\n> >> https://stat.ethz.ch/mailman/listinfo/r-sig-finance --\n> >> Subscriber-posting only. -- If you want to post, subscribe first.\n> >\n> > _______________________________________________\n>  R-SIG-Finance at stat.math.ethz.ch mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance --\n> > Subscriber-posting only. -- If you want to post, subscribe first.\n> >\n> > [[elided Yahoo spam]] ovo com a sua cara @ymail.com ou\n> > @rocketmail.com.\n> >       [[alternative HTML version deleted]]\n> >\n> >\n> >      ------------------------------\n> > _______________________________________________\n> > R-SIG-Finance at stat.math.ethz.ch mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance --\n> > Subscriber-posting only. -- If you want to post, subscribe first.\n> ___________________________________\n>\n> Novos endereços, o Yahoo! que você conhece. Crie um email novo\n> <\n> http://br.rd.yahoo.com/mail/taglines/mail/*http://br.new.mail.yahoo.com/addresses\n> >\n> com a sua cara @ymail.com ou @rocketmail.com.\n>\n>        [[alternative HTML version deleted]]\n>\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Neil,\n\nI did some quick and dirty ESU8 and YMU8 cor() with Excel.  I looked at 1\nday (yesterday) of 15s midpoint prices from 9:30am to 4pm (Eastern time).\nThe correl was .97 when looking at prices.  F",
       "thread_id": "thread-1881f63bd7b6",
       "thread_depth": 1,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080722/1d39bd9f/attachment.pl"
+      ]
     },
     {
       "id": "msg-1f7ab516499f",
@@ -1983,11 +2058,14 @@
       "subject_clean": "estimating non-linear state space models",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080723/784f20e0/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080723/784f20e0/attachment.pl>",
+      "body_plain": "Hello,\n\n \n\nI am trying to estimate the dynamic model for equity fund's alphas and betas described here: http://papers.ssrn.com/sol3/papers.cfm?abstract_id=389740 <http://papers.ssrn.com/sol3/papers.cfm?abstract_id=389740>  . The nonlinear state space model is described by equations (6) and (11). (For those in a hurry: The one dimensional state follows an AR1 process. The observation equation has similarities with CAPM, but is extended to depend quadratically on the state)\n\n \n\nSo far I have tried to work with the packages sspir and dse, but they don't seem to support non-linear models. I then tried to implement my own EKF code, it works for state estimation but so far I couldn't get the parameter and variance estimation running reliably.\n\n \n\nAre there any R packages capable of joint or dual EKF for non-linear models?\n\n \n\nI also had a look at ReBEL for MATLAB. I had some good results with the joint EKF for state and parameter estimation, but I can't see how to estimate both process and observations noise as well. So if there is any ReBEL specialist among you R experts, I would appreciate any help here as well.\n\n \n\nThank you and regards,\n\nAndreas\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\n \n\nI am trying to estimate the dynamic model for equity fund's alphas and betas described here: http://papers.ssrn.com/sol3/papers.cfm?abstract_id=389740 <http://papers.ssrn.com/sol3/papers.cf",
       "thread_id": "thread-2ab1abf1704e",
       "thread_depth": 0,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080723/784f20e0/attachment.pl"
+      ]
     },
     {
       "id": "msg-695c9b9d149c",
@@ -2037,11 +2115,14 @@
       "references": [
         "<39F7C064586B194EB8AAE4D74AB096A1B32812@EXVS02.mcis.agrinet.local>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080723/4a26071d/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080723/4a26071d/attachment.pl>",
+      "body_plain": "Hello,\n\n \n\nI am trying to estimate the dynamic model for equity fund's alphas and betas described here: http://papers.ssrn.com/sol3/papers.cfm?abstract_id=389740 <http://papers.ssrn.com/sol3/papers.cfm?abstract_id=389740>  . The nonlinear state space model is described by equations (6) and (11). (For those in a hurry: The one dimensional state follows an AR1 process. The observation equation has similarities with CAPM, but is extended to depend quadratically on the state)\n\n \n\nSo far I have tried to work with the packages sspir and dse, but they don't seem to support non-linear models. I then tried to implement my own EKF code, it works for state estimation but so far I couldn't get the parameter and variance estimation running reliably.\n\n \n\nAre there any R packages capable of joint or dual EKF for non-linear models?\n\n \n\nI also had a look at ReBEL for MATLAB. I had some good results with the joint EKF for state and parameter estimation, but I can't see how to estimate both process and observations noise as well. So if there is any ReBEL specialist among you R experts, I would appreciate any help here as well.\n\n \n\nThank you and regards,\n\nAndreas\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\n \n\nI am trying to estimate the dynamic model for equity fund's alphas and betas described here: http://papers.ssrn.com/sol3/papers.cfm?abstract_id=389740 <http://papers.ssrn.com/sol3/papers.cf",
       "thread_id": "thread-2ab1abf1704e",
       "thread_depth": 1,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080723/4a26071d/attachment.pl"
+      ]
     },
     {
       "id": "msg-ae5e208617c7",
@@ -2093,11 +2174,14 @@
         "<24221559.5347871216747527348.JavaMail.javamailuser@localhost>",
         "<Pine.LNX.4.43.0807221251230.8790@hymn31.u.washington.edu>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080723/c4e7d2f9/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080723/c4e7d2f9/attachment.pl>",
+      "body_plain": "Using mid-quote tick data at a very high frequency will create a zero\ncorrelation due to micro-structure noise.  Bid-ask bounce creates an upwards\nbias in variance at high frequencies and non-synchronous trading creates a\nbias toward zero in covariance.  Therefore, if you create a correlation you\nwill calculate (bias toward zero)/(upwards bias * upwards bias)  leading to\na bias toward zero.\n\nI am in the process of releasing a new version of my realized variance,\ncovariance and correlation library.  You can find more information about the\nproblem above, and proposed solutions, in my user's manual (which also will\nbe updated soon).\n\nUser's Manual:\nhttp://students.washington.edu/spayseur/realized/users.manual.08.pdf\n\nRealized Library:\nhttp://students.washington.edu/spayseur/realized\n\nBottom line... if you want a quick but NOISY estimate using tick data, don't\nuse every tick.  The literature says to use every other tick, or every 10th\ntick, depending on your data.  The bias disappears as you decrease your\nsampling frequency, but you trade this bias for noise.  (It is best to\ninvestigate exactly how noisy this is or to try another type of estimator...\nwhich you can do w/ my library.)\n\nScott\n\n\nOn Tue, Jul 22, 2008 at 8:51 PM, Eric Zivot <ezivot at u.washington.edu> wrote:\n\n> I forgot to mention that my former Phd student Scott Payseur wrote the\n> Realized R package that has functions to compute realized variance and\n> covariance using all of the latest techniques.\n>\n>\n> ****************************************************************\n> *  Eric Zivot                                                  *\n> *  Professor and Gary Waterman Distinguished Scholar           *\n> *  Department of Economics                                     *\n> *  Box 353330                  email:  ezivot at u.washington.edu *\n> *  University of Washington    phone:  206-543-6715            *\n> *  Seattle, WA 98195-3330                                      *\n>                                                 *\n> *  www:  http://faculty.washington.edu/ezivot                  *\n> ****************************************************************\n>\n> On Tue, 22 Jul 2008 markleeds at verizon.net wrote:\n>\n>\n>>  gotcha. so what you are saying is that you need normality for\n>> hypothesis testing, statistical inference purposes. that's fine and\n>> thanks again\n>> for pointing that out.\n>>\n>>\n>>\n>>\n>> On Tue, Jul 22, 2008 at  1:21 PM, BOB SAMOHYL wrote:\n>>\n>>\n>> Mark,\n>>\n>> To reject the null of no correlation, an hypothsis test based on the\n>> normal distribution. If normality is not the base assumption your\n>> working from then p-values, significance tests and conf. intervals dont\n>> mean much (the value of the coefficient is not reliable) or youll have\n>> to find a more appropriate distribution for your data. Or transform the\n>> data to normal. There´s a box-cox transformation in R that can resolve\n>> this. Normality may represent returns data most of the time (maybe not)\n>> but imagine  that it doesnt in a specific case and this discrepancy\n>> finds its way into a portfolio. Bob\n>>\n>>\n>> --- Em ter, 22/7/08, markleeds at verizon.net <markleeds at verizon.net>\n>> escreveu:\n>> De:  markleeds at verizon.net <markleeds at verizon.net>\n>> Assunto: Re: [R-SIG-Finance] Correlation on Tick Data\n>> Para: samohyl at yahoo.com\n>> Cc: r-sig-finance at stat.math.ethz.ch\n>> Data: Terça-feira, 22 de Julho de 2008, 13:43\n>>\n>> Thanks for pointing that out. I understand the linearity ( you're\n>> saying i think that correlation will only pick up linear relation ) but\n>> why normality ?\n>>\n>> On Tue, Jul 22, 2008 at 12:29 PM, BOB SAMOHYL wrote:\n>>\n>>  I would go farther than just stationarity and include normality, and\n>>> linearity in the relation, three suppositions for the correlation\n>>> coefficient that are rarely examined. Robert Wayne Samohyl, Ph.D.\n>>> www.qualimetria.ufsc.br fones: 55-48-3721-7001 University\n>>> 55-48-9608-5056 celular  ��\n>>> --- Em ter, 22/7/08, markleeds at verizon.net <markleeds at verizon.net>\n>>> escreveu: De: markleeds at verizon.net\n>>>\n>>  <markleeds at verizon.net>\n>>\n>>> Assunto: Re: [R-SIG-Finance] Correlation on Tick Data Para: \"Matthieu\n>>> Stigler\" <Matthieu.Stigler at gmail.com> Cc:\n>>> r-sig-finance at stat.math.ethz.ch Data: Ter��a-feira, 22 de Julho de\n>>> 2008, 12:38\n>>> just to elaborate a bit more on what matt said.\n>>> you need to make sure you time series are stationary before you\n>>> correlate them.  usually one does this by using a unit root test but,\n>>> in your case, since you are dealing with currencies, as long as you\n>>> are dealing with the returns streamsand not the prices themselves,\n>>> there's really no need to use the unit root test.  returns should be\n>>> stationary ( in general ).   if you're dealing with prices, then\n>>> correlations don't make sense because prices aren't ( in general ), or\n>>> atleast i've never seen prices that were.\n>>>\n>>>\n>>> On\n>>>\n>>  Tue, Jul 22, 2008 at 10:14 AM, Matthieu Stigler wrote:\n>>\n>>>\n>>>  Hello\n>>>> If ES and YM are time series, you maybe should first test for\n>>>> auto-correlation of the series. High auto-correlated series can lead\n>>>> to the phenomen called as spurious regression, and then the\n>>>> correlation coefficient is \"too high\".\n>>>> Hope this helps\n>>>> Mat\n>>>> Neil Gupta a ��crit :\n>>>>\n>>>>> Hello R users.\n>>>>> I was using R to calculate correlation of midquote returns on ES\n>>>>>\n>>>> and\n>>\n>>> YM. ES and YM are highly correlated at close to .97. However when I\n>>>>> run\n>>>>>\n>>>> the\n>>\n>>> correlation on the MQ returns the correlation is close to 0.\n>>>>>\n>>>> Should\n>>\n>>> I be expecting this or am I doing something wrong? Others have told\n>>>>> me this\n>>>>>\n>>>>  should happen, but I do not understand why. If anyone can please\n>>\n>>> explain I would really appreciate.\n>>>>> Many Thanks, Neil\n>>>>>        [[alternative HTML version deleted]]\n>>>>> _______________________________________________\n>>>>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>>>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance --\n>>>>> Subscriber-posting only. -- If you want to post, subscribe first.\n>>>>>\n>>>>\n>>>> _______________________________________________\n>>>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance --\n>>>> Subscriber-posting only. -- If you want to post, subscribe first.\n>>>>\n>>>\n>>> _______________________________________________\n>>>\n>>  R-SIG-Finance at stat.math.ethz.ch mailing list\n>>\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance --\n>>> Subscriber-posting only. -- If you want to post, subscribe first.\n>>>\n>>> [[elided Yahoo spam]] ovo com a sua cara @ymail.com ou\n>>> @rocketmail.com.\n>>>        [[alternative HTML version deleted]]\n>>>\n>>>\n>>>     ------------------------------\n>>> _______________________________________________\n>>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance --\n>>> Subscriber-posting only. -- If you want to post, subscribe first.\n>>>\n>> ___________________________________\n>>\n>> Novos endereços, o Yahoo! que você conhece. Crie um email novo\n>> <\n>> http://br.rd.yahoo.com/mail/taglines/mail/*http://br.new.mail.yahoo.com/addresses\n>> >\n>> com a sua cara @ymail.com ou @rocketmail.com.\n>>\n>>        [[alternative HTML version deleted]]\n>>\n>>\n>>\n> _______________________________________________\n>\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\n\n-- \nScott Payseur, PhD\n---------------------------------------------\nMobile: +44(0) 79 4271 0597\n7 St Anne's Villas\nHolland Park\nLondon, W11 4RU\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Using mid-quote tick data at a very high frequency will create a zero\ncorrelation due to micro-structure noise.  Bid-ask bounce creates an upwards\nbias in variance at high frequencies and non-synchron",
       "thread_id": "thread-1881f63bd7b6",
       "thread_depth": 2,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080723/c4e7d2f9/attachment.pl"
+      ]
     },
     {
       "id": "msg-cea8fd13d825",
@@ -2251,11 +2335,14 @@
       "subject_clean": "Finance Benchmarks/Workload",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080724/c0d5f761/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080724/c0d5f761/attachment.pl>",
+      "body_plain": "Hello,\n\n\n                 Could anyone point out any existing benchmarks or workloads\nfor R, specifically targeting financial applications?\n\nCheers!.\n\nTIA.\n\n-- \nImanpreet Singh Arora\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\n\n                 Could anyone point out any existing benchmarks or workloads\nfor R, specifically targeting financial applications?\n\nCheers!.\n\nTIA.\n\n-- \nImanpreet Singh Arora\n\n\t[[alternative H",
       "thread_id": "thread-84d3daba753f",
       "thread_depth": 0,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080724/c0d5f761/attachment.pl"
+      ]
     },
     {
       "id": "msg-a74decd18f4c",
@@ -2273,11 +2360,14 @@
         "<C4DFF417DAED416EBA949AB0E277BDF4@HPR>",
         "<39F7C064586B194EB8AAE4D74AB096A1B32814@EXVS02.mcis.agrinet.local>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080724/5510c398/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080724/5510c398/attachment.pl>",
+      "body_plain": "PS: The ML-calculation in the EFK-function shoud be:\n \nreturn(sum(log(Inno)) + sum(Kerror^2/Inno))\n \ninstead of Perror, I missed that line while renaming in the version I attached earlier.\n \n\n________________________________\n\nVon: r-sig-finance-bounces at stat.math.ethz.ch im Auftrag von Andreas\nGesendet: Do 24.07.2008 11:46\nAn: r-sig-finance at stat.math.ethz.ch\nBetreff: [R-SIG-Finance] estimating non-linear state space models\n\n\nI had to clean up my EKF code first, after trying many different ideas I ended up with a huge mess... It's still heavily under development, but I think it could serve as a starting point.\n\n\n\nAs I wrote before, state estimation seems to run OK given the true parameters.\n\n\n\nWhen I try to estimate the parameters by maximizing the likelihood, I end up with rather random results depending on the initial parameters I start optimizing with.\n\n\n\nI don't know if there's an error in the calculation of the likelihood, or if I'm just overstraining the ML-method by estimating model parameters and noise variances at the same time. Is this even possible? Or maybe I'm just expecting too precise results...\n\n\n\nRegards\n\nAndreas\n\n\n\n\n\n\n________________________________\n\nVon: Robert Iquiapaza [mailto:rbali at ufmg.br]\nGesendet: Do 24.07.2008 03:21\nAn: Andreas\nCc: r-sig-finance at stat.math.ethz.ch\nBetreff: Re: [R-SIG-Finance] estimating non-linear state space models\n\n\n\nJust for those interested. The final version of that paper was published in\nReview of Financial Studies 2008 21(1):233-264; doi:10.1093/rfs/hhm049.\nRegards\n\nRobert Iquiapaza\nri2162 at columbia.edu\n\n--------------------------------------------------\nFrom: \"Brian G. Peterson\" <brian at braverock.com>\nSent: Wednesday, July 23, 2008 10:03 AM\nTo: \"r_sig_finance\" <r_sig_finance at greenmail.ch>\nCc: <r-sig-finance at stat.math.ethz.ch>\nSubject: Re: [R-SIG-Finance] estimating non-linear state space models\n\n> Andreas wrote:\n>> I am trying to estimate the dynamic model for equity fund's alphas and\n>> betas described here:\n>> http://papers.ssrn.com/sol3/papers.cfm?abstract_id=389740\n>> <http://papers.ssrn.com/sol3/papers.cfm?abstract_id=389740>  . The\n>> nonlinear state space model is described by equations (6) and (11). (For\n>> those in a hurry: The one dimensional state follows an AR1 process. The\n>> observation equation has similarities with CAPM, but is extended to\n>> depend quadratically on the state)\n>>\n>> So far I have tried to work with the packages sspir and dse, but they\n>> don't seem to support non-linear models. I then tried to implement my own\n>> EKF code, it works for state estimation but so far I couldn't get the\n>> parameter and variance estimation running reliably.\n>\n> You might try posting your code here, and being very specific about what\n> help you need.  That way everyone can benefit from an implementation of\n> these models in R.\n>\n> Regards,\n>\n>   - Brian\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "PS: The ML-calculation in the EFK-function shoud be:\n \nreturn(sum(log(Inno)) + sum(Kerror^2/Inno))\n \ninstead of Perror, I missed that line while renaming in the version I attached earlier.\n \n\n________",
       "thread_id": "thread-2ab1abf1704e",
       "thread_depth": 5,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080724/5510c398/attachment.pl"
+      ]
     },
     {
       "id": "msg-3b672b2e4c1a",
@@ -2430,11 +2520,14 @@
         "<c26b95920807240344g1a0e525oa6d502d680eced97@mail.gmail.com>",
         "<4888A85C.6050804@braverock.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080725/ca0f638d/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080725/ca0f638d/attachment.pl>",
+      "body_plain": "Hello Brian,\n\n            I am working on porting R to a new architecture which would be\nmost optimized only when we are benchmarking it with huge amounts of data\nand computation. So, I will be more interested towards benchmarks or\nworkloads which would be sufficiently complex.. Could you provide some\npointers for the same?\n\nTIA\n\nRegards,\n\n          Imanpreet Singh Arora\n\nOn Thu, Jul 24, 2008 at 9:35 PM, Brian G. Peterson <brian at braverock.com>\nwrote:\n\n> Imanpreet wrote:\n>\n>>                 Could anyone point out any existing benchmarks or\n>> workloads\n>> for R, specifically targeting financial applications?\n>>\n>\n> That's a pretty vague request.\n>\n> I've got functions that run in microseconds, and some portfolio\n> optimizations that take hours.\n>\n> I'm aware of organizations that use huge clusters to do financial analysis\n> with R.\n>\n> Perhaps you could be a little more specific about what you are trying to\n> benchmark?\n>\n> Regards,\n>\n>  - Brian\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello Brian,\n\n            I am working on porting R to a new architecture which would be\nmost optimized only when we are benchmarking it with huge amounts of data\nand computation. So, I will be more i",
       "thread_id": "thread-84d3daba753f",
       "thread_depth": 2,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080725/ca0f638d/attachment.pl"
+      ]
     },
     {
       "id": "msg-0e1b55cb13df",
@@ -2465,11 +2558,14 @@
       "subject_clean": "dynamo installation",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080725/f5779358/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080725/f5779358/attachment.pl>",
+      "body_plain": "Dear all:\n\nI tried to install the package dynamo but with the following messages:\n\n....Error in inDL(x, as.logical(local), as.logical(now), ...) :\ncannot load the... ¡uC:/PROGRA~1/R/R-27~1.1/library/dynamo/libs/dynamo.dll¡v¡G\n  LoadLibrary failure:  ....\n\nI checked the dll file and it's OK. Can anyone help me find out what went\nwrong with the installation?\n\nThanks for help.\n\nSWT\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all:\n\nI tried to install the package dynamo but with the following messages:\n\n....Error in inDL(x, as.logical(local), as.logical(now), ...) :\ncannot load the... ¡uC:/PROGRA~1/R/R-27~1.1/library/d",
       "thread_id": "thread-8867a9b1ab17",
       "thread_depth": 0,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080725/f5779358/attachment.pl"
+      ]
     },
     {
       "id": "msg-80cc820a0dee",
@@ -2624,11 +2720,14 @@
       "subject_clean": "VaR.Beyond() etc.",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080730/20c23217/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080730/20c23217/attachment.pl>",
+      "body_plain": "Folks,\n \nI see that the definition of VaR.Beyond() in the PerformanceAnalytics package includes a parameter called periods, to determine the expected shortfall across various time horizons. However, it is not used within the function, at least not in PerformanceAnalytics_0.9.6, which is what I have. Has this been remedied? \n \nLikewise, does it make sense to have a multiperiod VaR method as well?\n \nI'm not sure how to incorporate the notion of horizons into the computation or I'd have done this myself. Is there any paper that helps to explain the concept?\n \nThanks,\nMurali\n \nCc: Brian Peterson\n_________________________________________________________________\n\n\n_WL_Refresh_messenger_video_072008\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Folks,\n \nI see that the definition of VaR.Beyond() in the PerformanceAnalytics package includes a parameter called periods, to determine the expected shortfall across various time horizons. However, i",
       "thread_id": "thread-ac32dc77faf7",
       "thread_depth": 0,
-      "month": "2008-07"
+      "month": "2008-07",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080730/20c23217/attachment.pl"
+      ]
     },
     {
       "id": "msg-d451c6b8c212",

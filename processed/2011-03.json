@@ -106,11 +106,14 @@
       "subject_clean": "Linear Regression on data from FRED",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110301/b560175e/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110301/b560175e/attachment.pl>",
+      "body_plain": "I cannot see why the code below produces this error:-\n   Error in model.frame.default(formula = secA ~ secB + 0, data = t,\ndrop.unused.levels = TRUE) :\n   variable lengths differ (found for 'secB')*\n\nI thought the merge would match up dates in secA and secB, therefore making\nthe different lengths of secA and secB irrelevant.\n\nAny ideas.\n\nlibrary(zoo)\nlibrary(tseries)\nlibrary(quantmod)   #for access to FRED\nrequire(quantmod)\nrequire(TTR)\nsecA <- getSymbols(\"DEXUSEU\",src=\"FRED\") secB <-\ngetSymbols(\"DEXUSUK\",src=\"FRED\")\nsecA <- zoo(DEXUSEU[,1])\nsecB <- zoo(DEXUSUK[,1])\nt.zoo <- merge(secA, secB, all=FALSE)\nt <- as.data.frame(t.zoo)\ncat(\"Date range is\", format(start(t.zoo)), \"to\", format(end(t.zoo)), \"\\n\")\nm <- lm(secA ~ secB + 0, data=t)\n\n\nThanks\nStuart\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I cannot see why the code below produces this error:-\n   Error in model.frame.default(formula = secA ~ secB + 0, data = t,\ndrop.unused.levels = TRUE) :\n   variable lengths differ (found for 'secB')*\n\n",
       "thread_id": "thread-917a20df0bc7",
       "thread_depth": 0,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110301/b560175e/attachment.pl"
+      ]
     },
     {
       "id": "msg-42acf5941868",
@@ -140,11 +143,14 @@
       "subject_clean": "apply.rolling to a multi column timeSeries",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110302/5b963d23/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110302/5b963d23/attachment.pl>",
+      "body_plain": "Hello there,\n\nI am trying to compute the 3 months return momentum with the timeSeries x.ts, \nwhich is just a subset of simple returns from a much bigger series,\n\n> class(x.ts)\n[1] \"timeSeries\"\nattr(,\"package\")\n[1] \"timeSeries\"\n\n> dim(x.ts)\n[1] 20  3\n\n> x.ts[1:8,]\nGMT\n                 MS.US      AAPL.US       CA.FP\n1996-01-31  0.15159065 -0.133391894  0.10602243\n1996-02-29 -0.00692633 -0.004488850  0.03986648\n1996-03-29  0.06511157 -0.106763636  0.07930919\n1996-04-30 -0.04803468 -0.007653477  0.09490285\n1996-05-31  0.08715949  0.071709879  0.05126406\n1996-06-28 -0.03586503 -0.196141479  0.01908068\n1996-07-31 -0.10941283  0.047619048 -0.04993095\n1996-08-30 -0.01720023  0.102363636 -0.06605725\n\nThen, I ran the following,\n\nf <- function(xIn) {prod(1 + xIn)}\ntmp.ts <- apply.rolling(x.ts[,, drop = FALSE], FUN=f, width=3)\nxMom.ts <- tmp.ts - 1\n\nwhere,\n\n> xMom.ts[1:8,]\nGMT\n                  calcs\n1996-01-31           NA\n1996-02-29           NA\n1996-03-29  0.218076872\n1996-04-30  0.006926330\n1996-05-31  0.102324581\n1996-06-28 -0.002179951\n1996-07-31 -0.066514593\n1996-08-30 -0.156122673\n\nIt seems that apply.rolling() only executed for the first column \"MS.US\" but not \ncolumn 2 nor 3.\n\nQ: Apart from looping through the column index manually via a for loop, which is \nnot ideal in R, is there any other way to execute the function for every column \nin this setup?\n\nMany thx.\n\nWill \n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello there,\n\nI am trying to compute the 3 months return momentum with the timeSeries x.ts, \nwhich is just a subset of simple returns from a much bigger series,\n\n> class(x.ts)\n[1] \"timeSeries\"\nattr(,\"",
       "thread_id": "thread-dbbf1aa5d762",
       "thread_depth": 0,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110302/5b963d23/attachment.pl"
+      ]
     },
     {
       "id": "msg-ce7cd56cd4fd",
@@ -209,11 +215,14 @@
         "<AANLkTi=invHEBgLd5ix3+emxWucbfxV-9Yu7RmggPrAQ@mail.gmail.com>",
         "<4D6E99DA.6020007@gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110302/bb0aa81c/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110302/bb0aa81c/attachment.pl>",
+      "body_plain": "You need to update to the CRAN release of quantmod, at the very least.\n\n0.3-15\n\nhttp://cran.r-project.org/web/packages/quantmod/index.html\n\nBest,\nJeff\n\nOn Wed, Mar 2, 2011 at 1:26 PM, Immanuel <mane.desk at googlemail.com> wrote:\n\n> Hello,\n>\n> since I'm talking about the demo examples that come with quantstrat\n> saw no point in attaching them. I assumed that the error comes\n> from one of the quantstrat internal functions thank's for looking into it.\n>\n> regards,\n> Immanuel\n>\n> here the error & code\n>\n> ----------\n> Loading required package: quantstrat\n> Loading required package: xts\n> Loading required package: zoo\n> Loading required package: TTR\n> Loading required package: blotter\n> Loading required package: quantmod\n> Loading required package: Defaults\n> Loading required package: FinancialInstrument\n> [1] \"2007-03-15 AAPL 100 @ 89.57\"\n>\n> Error in if (getPosQty(Portfolio = portfolio, Symbol = symbol, Date =\n> timestamp) ==  :\n>  argument is of length zero\n> In addition: There were 15 warnings (use warnings() to see them)\n> Time difference of 0.2658639 secs\n>\n> [1] \"trade blotter portfolio update:\"\n> Time difference of 0.2728000 secs\n>\n> Warning message:\n> In max(i) : no non-missing arguments to max; returning -Inf\n> > sessionInfo()\n> R version 2.12.0 (2010-10-15)\n>\n> Platform: i486-pc-linux-gnu (32-bit)\n>\n> locale:\n>  [1] LC_CTYPE=en_US.utf8          LC_NUMERIC=C\n>  [3] LC_TIME=en_US.utf8           LC_COLLATE=en_US.utf8\n>  [5] LC_MONETARY=en_US.utf8       LC_MESSAGES=en_US.utf8\n>  [7] LC_PAPER=en_US.utf8          LC_NAME=en_US.utf8\n>  [9] LC_ADDRESS=en_US.utf8        LC_TELEPHONE=en_US.utf8\n> [11] LC_MEASUREMENT=en_US.utf8    LC_IDENTIFICATION=en_US.utf8\n>\n>\n> attached base packages:\n> [1] stats     graphics  grDevices utils     datasets  methods   base\n>\n> other attached packages:\n> [1] quantstrat_0.4.0        blotter_0.8             FinancialInstrument_0.4\n> [4] quantmod_0.3-14         Defaults_1.1-1          TTR_0.20-2\n> [7] xts_0.8-0               zoo_1.6-3               rj_0.5.0-5\n>\n>\n> loaded via a namespace (and not attached):\n> [1] grid_2.12.0     lattice_0.19-13 rJava_0.8-7     tools_2.12.0\n> ---------------------------------------\n>\n> # Simple MACD strategy\n> #\n> # MACD may be used in many ways, this will demonstrate a trend indicator.\n> #\n> # traditionally, when the MACD signal crosses zero, this indicated a\n> establishment of a positive trend\n> #\n> # we'll buy on positive treshold crossover of the 'signal' column, and sell\n> on negative threshold crossover\n> #\n> # Author: brian\n>\n> ###############################################################################\n>\n>\n> require(quantstrat)\n> try(rm(\"order_book.macd\",pos=.strategy),silent=TRUE)\n> try(rm(\"account.macd\",\"portfolio.macd\",pos=.blotter),silent=TRUE)\n> try(rm(\"account.st\",\"portfolio.st\n> \",\"stock.str\",\"stratMACD\",\"initDate\",\"initEq\",'start_t','end_t'),silent=TRUE)\n>\n> stock.str='AAPL' # what are we trying it on\n>\n> #MA parameters for MACD\n> fastMA = 12\n> slowMA = 26\n> signalMA = 9\n> maType=\"EMA\"\n>\n> currency('USD')\n> stock(stock.str,currency='USD',multiplier=1)\n>\n> #or use fake data\n> #stock.str='sample_matrix' # what are we trying it on\n> #data(sample_matrix)                 # data included in package xts\n> #sample_matrix<-as.xts(sample_matrix)\n>\n>\n> initDate='2006-12-31'\n> initEq=1000000\n> portfolio.st='macd'\n> account.st='macd'\n>\n> initPortf(portfolio.st,symbols=stock.str, initDate=initDate)\n> initAcct(account.st,portfolios=portfolio.st, initDate=initDate)\n> initOrders(portfolio=portfolio.st,initDate=initDate)\n>\n>\n> stratMACD <- strategy(portfolio.st)\n>\n> stratMACD <- add.indicator(strategy = stratMACD, name = \"MACD\", arguments =\n> list(x=quote(Cl(mktdata))) )\n>\n> stratMACD <- add.signal(strategy = stratMACD,name=\"sigThreshold\",arguments\n> =\n> list(column=\"signal\",relationship=\"gt\",threshold=0,cross=TRUE),label=\"signal.gt.zero\")\n> stratMACD <- add.signal(strategy = stratMACD,name=\"sigThreshold\",arguments\n> =\n> list(column=\"signal\",relationship=\"lt\",threshold=0,cross=TRUE),label=\"signal.lt.zero\")\n>\n> stratMACD <- add.rule(strategy = stratMACD,name='ruleSignal', arguments =\n> list(sigcol=\"signal.gt.zero\",sigval=TRUE, orderqty=100, ordertype='market',\n> orderside='long', threshold=NULL),type='enter')\n> stratMACD <- add.rule(strategy = stratMACD,name='ruleSignal', arguments =\n> list(sigcol=\"signal.gt.zero\",sigval=TRUE, orderqty=-100,\n> ordertype='stoplimit', orderside='long',\n> threshold=.85,tmult=TRUE),type='risk')\n> # alternately, use a trailing order\n> # stratMACD <- add.rule(strategy = stratMACD,name='ruleSignal', arguments =\n> list(sigcol=\"signal.gt.zero\",sigval=TRUE, orderqty=-100,\n> ordertype='stoptrailing', orderside='long',\n> threshold=.9,tmult=TRUE),type='risk')\n> stratMACD <- add.rule(strategy = stratMACD,name='ruleSignal', arguments =\n> list(sigcol=\"signal.lt.zero\",sigval=TRUE, orderqty='all',\n> ordertype='market', orderside='long', threshold=NULL),type='exit')\n>\n> getSymbols(stock.str,from=initDate)\n> start_t<-Sys.time()\n> out<-try(applyStrategy(strategy=stratMACD , portfolios=portfolio.st,parameters=list(nFast=fastMA,\n> nSlow=slowMA, nSig=signalMA,maType=maType)))\n> end_t<-Sys.time()\n> print(end_t-start_t)\n>\n> start_t<-Sys.time()\n> updatePortf(Portfolio=portfolio.st\n> ,Dates=paste('::',as.Date(Sys.time()),sep=''))\n> end_t<-Sys.time()\n> print(\"trade blotter portfolio update:\")\n> print(end_t-start_t)\n>\n> chart.Posn(Portfolio=portfolio.st,Symbol=stock.str)\n> plot(add_MACD(fast=fastMA, slow=slowMA, signal=signalMA,maType=\"EMA\"))\n>\n> #look at the order book\n> getOrderBook('macd')\n>\n>\n> ###############################################################################\n> # R (http://r-project.org/) Quantitative Strategy Model Framework\n> #\n> # Copyright (c) 2009-2010\n> # Peter Carl, Dirk Eddelbuettel, Brian G. Peterson, Jeffrey Ryan, and\n> Joshua Ulrich\n> #\n> # This library is distributed under the terms of the GNU Public License\n> (GPL)\n> # for full details see the file COPYING\n> #\n> # $Id: macd.R 450 2010-11-13 18:30:40Z braverock $\n> #\n>\n> ##############################################################################\n> -----------\n>\n>\n>\n> On 03/02/2011 07:17 PM, Joshua Ulrich wrote:\n>\n>> Have you tried converting the indexes of your xts objects to POSIXct?\n>> You haven't provided any code, but my guess is that one of xts objects\n>> you're using as input has a Date-classed index.\n>> --\n>> Joshua Ulrich  |  FOSS Trading: www.fosstrading.com\n>>\n>>\n>>\n>> On Tue, Mar 1, 2011 at 6:52 AM, Immanuel<mane.desk at googlemail.com>\n>>  wrote:\n>>\n>>> Hello,\n>>>\n>>> what are the implications of this error, is there a workaround?\n>>> I'm just starting with quantstrat and really like the idea to implement\n>>> strategies not directly with blotter anymore.\n>>>\n>>> regards,\n>>> Immanuel\n>>>\n>>> On 02/26/2011 09:48 PM, Jeffrey Ryan wrote:\n>>>\n>>>> Yes, that isn't an xts issue - just happens to be taking place during a\n>>>> subset.\n>>>>\n>>>> The issue is somewhere else\n>>>>\n>>>> 3: In `[.xts`(PosData, index(PosData)<  Date) :\n>>>>  Incompatible methods (\"Ops.POSIXt\", \"Ops.Date\") for \"<\"\n>>>> Time difference of 0.387223 secs\n>>>>\n>>>> The lhs [index(PosData)] is POSIX and the rhs is Date, which R can't\n>>>> compare\n>>>> correctly.  The warning is happening - and probably resulting in all\n>>>> TRUE\n>>>> values - which isn't likely the desired outcome.\n>>>>\n>>>> I'm not looking at the code at the moment, but you can rule out xts.\n>>>>  There\n>>>> are likely better ways to do this with xts, and I'll see what I can do\n>>>> to\n>>>> make the quantstrat code use more of the built-in xts functionality.\n>>>>\n>>>> Jeff\n>>>>\n>>>>\n>>>> On Sat, Feb 26, 2011 at 12:34 PM, Immanuel<mane.desk at googlemail.com>\n>>>>  wrote:\n>>>>\n>>>>  hello,\n>>>>> seems to be already installed:\n>>>>> ----------\n>>>>> [1] \"2001-06-26 AAPL 100 @ 11.88\"\n>>>>> Error in if (getPosQty(Portfolio = portfolio, Symbol = symbol, Date =\n>>>>> timestamp) ==  :\n>>>>>  argument is of length zero\n>>>>> In addition: Warning messages:\n>>>>> 1: In match.names(columns, colnames(data)) :\n>>>>>  all columns not located in ma50 ma200 for AAPL.Open AAPL.High AAPL.Low\n>>>>> AAPL.Close AAPL.Volume AAPL.Adjusted ma50 ma200 ma50.gt.ma200\n>>>>> 2: In max(i) : no non-missing arguments to max; returning -Inf\n>>>>> 3: In `[.xts`(PosData, index(PosData)<  Date) :\n>>>>>  Incompatible methods (\"Ops.POSIXt\", \"Ops.Date\") for \"<\"\n>>>>> Time difference of 0.387223 secs\n>>>>> [1] \"trade blotter portfolio update:\"\n>>>>> Time difference of 0.7028229 secs\n>>>>> Warning message:\n>>>>> In max(i) : no non-missing arguments to max; returning -Inf\n>>>>>\n>>>>>> sessionInfo()\n>>>>>>\n>>>>> R version 2.12.1 (2010-12-16)\n>>>>> Platform: i486-pc-linux-gnu (32-bit)\n>>>>>\n>>>>> locale:\n>>>>>  [1] LC_CTYPE=en_US.UTF-8          LC_NUMERIC=C\n>>>>>  [3] LC_TIME=en_US.UTF-8           LC_COLLATE=en_US.UTF-8\n>>>>>  [5] LC_MONETARY=en_US.UTF-8       LC_MESSAGES=en_US.UTF-8\n>>>>>  [7] LC_PAPER=en_US.UTF-8          LC_NAME=en_US.UTF-8\n>>>>>  [9] LC_ADDRESS=en_US.UTF-8        LC_TELEPHONE=en_US.UTF-8\n>>>>> [11] LC_MEASUREMENT=en_US.UTF-8    LC_IDENTIFICATION=en_US.UTF-8\n>>>>>\n>>>>> attached base packages:\n>>>>> [1] stats     graphics  grDevices utils     datasets  methods   base\n>>>>>\n>>>>> other attached packages:\n>>>>> [1] quantstrat_0.4.0        blotter_0.8\n>>>>> FinancialInstrument_0.4\n>>>>> [4] quantmod_0.3-15         Defaults_1.1-1          TTR_0.20-2\n>>>>> [7] xts_0.8-0               zoo_1.6-4               rj_0.5.0-5\n>>>>>\n>>>>> loaded via a namespace (and not attached):\n>>>>> [1] grid_2.12.1     lattice_0.19-17 rJava_0.8-7     tools_2.12.1\n>>>>> ------------------\n>>>>>\n>>>>> On 02/26/2011 06:07 PM, Brian G. Peterson wrote:\n>>>>>\n>>>>>> On 02/26/2011 11:03 AM, Immanuel wrote:\n>>>>>>\n>>>>>>> I just run the examples from the quantstrat package and\n>>>>>>> received following error for every example:\n>>>>>>> ----------\n>>>>>>>\n>>>>>> <...>\n>>>>>>\n>>>>>>  2: In `[.xts`(PosData, index(PosData)<    Date) :\n>>>>>>>    Incompatible methods (\"Ops.POSIXt\", \"Ops.Date\") for \"<\"\n>>>>>>> any ideas?\n>>>>>>>\n>>>>>> Try upgrading xts to the latest version (0.8) from R-Forge or CRAN\n>>>>>>\n>>>>>> _______________________________________________\n>>>>>> R-SIG-Finance at r-project.org mailing list\n>>>>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>>>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>>>>> -- Also note that this is not the r-help list where general R\n>>>>>> questions should go.\n>>>>>>\n>>>>>>  _______________________________________________\n>>>>> R-SIG-Finance at r-project.org mailing list\n>>>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>>>> -- Also note that this is not the r-help list where general R questions\n>>>>> should go.\n>>>>>\n>>>>>\n>>>>  _______________________________________________\n>>> R-SIG-Finance at r-project.org mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>> -- Also note that this is not the r-help list where general R questions\n>>> should go.\n>>>\n>>>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\n\n-- \nJeffrey Ryan\njeffrey.ryan at lemnica.com\n\nwww.lemnica.com\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "You need to update to the CRAN release of quantmod, at the very least.\n\n0.3-15\n\nhttp://cran.r-project.org/web/packages/quantmod/index.html\n\nBest,\nJeff\n\nOn Wed, Mar 2, 2011 at 1:26 PM, Immanuel <mane.d",
       "thread_id": "thread-e04ed14fcbdb",
       "thread_depth": 3,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110302/bb0aa81c/attachment.pl"
+      ]
     },
     {
       "id": "msg-1a93cad13dab",
@@ -455,11 +464,14 @@
       "references": [
         "<1299237008213-3335062.post@n4.nabble.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110304/2a6ca3c4/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110304/2a6ca3c4/attachment.pl>",
+      "body_plain": "This will work with xts in case that is an option (always is, since zoo and\nxts share the same basic structure)\n\nlibrary(xts)\nx <- xts(rnorm(60), as.Date(\"2011-01-01\")+0:59)[-2]\n\nx[as.Date(c(\"2011-01-01\", \"2011-01-02\", \"2011-01-03\"))] <- NA\nhead(x)\n                 [,1]\n2011-01-01         NA\n2011-01-03         NA\n2011-01-04  0.1433278\n2011-01-05 -0.3239116\n2011-01-06  0.5226191\n2011-01-07 -1.1774623\n\nSlightly different semantics, but this will do what you want assuming the\ndates you are selecting are a range:\n\nx <- xts(rnorm(60), as.Date(\"2011-01-01\")+0:59)[-2]\nx['2011-01-01/2011-01-03'] <- NA\nhead(x)\n                    [,1]\n2011-01-01            NA\n2011-01-03            NA\n2011-01-04  1.2909828095\n2011-01-05 -0.0000222576\n2011-01-06  0.4758526846\n2011-01-07 -1.1725908376\n\n\n\n\nBest,\nJeff\n\n\nOn Fri, Mar 4, 2011 at 5:10 AM, Bogaso <bogaso.christofer at gmail.com> wrote:\n\n> Hi all, I having some problem in replacing some observation of a zoo object\n> with NA. Here I have tries followings:\n>\n> > MyData <- zooreg(rnorm(60), start=as.Date(\"2011-01-01\"))[-2]\n> > MyData[as.Date(c(\"2011-01-01\", \"2011-01-02\", \"2011-01-03\"))] <- NA  ## I\n> > like to replace values with those indices with 'NA'\n> > MyData\n> Error in dimnames(x) <- dn :\n>  length of 'dimnames' [1] not equal to array extent\n>\n> Can somebody point me on the correct approach?\n>\n> Thanks,\n>\n> --\n> View this message in context:\n> http://r.789695.n4.nabble.com/Replacing-some-observation-of-a-zoo-object-tp3335062p3335062.html\n> Sent from the Rmetrics mailing list archive at Nabble.com.\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\n\n-- \nJeffrey Ryan\njeffrey.ryan at lemnica.com\n\nwww.lemnica.com\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "This will work with xts in case that is an option (always is, since zoo and\nxts share the same basic structure)\n\nlibrary(xts)\nx <- xts(rnorm(60), as.Date(\"2011-01-01\")+0:59)[-2]\n\nx[as.Date(c(\"2011-01-",
       "thread_id": "thread-3092b12a8ced",
       "thread_depth": 1,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110304/2a6ca3c4/attachment.pl"
+      ]
     },
     {
       "id": "msg-fd7773ce166c",
@@ -474,11 +486,14 @@
         "<1299237008213-3335062.post@n4.nabble.com>",
         "<AANLkTinhENAF+9r-KY0x2dagZwKfQ-MzROvu1XFzBYoT@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110304/0b7c8f86/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110304/0b7c8f86/attachment.pl>",
+      "body_plain": "I didn't mean to say xts was always an option with zoo - that was only with\nregard to converting back and forth to get access to the subset feature of\nxts.  If you really need zooreg, you're better off staying with zooreg.\n\nJeff\n\nOn Fri, Mar 4, 2011 at 9:19 AM, Jeffrey Ryan <jeffrey.ryan at lemnica.com>wrote:\n\n> This will work with xts in case that is an option (always is, since zoo and\n> xts share the same basic structure)\n>\n> library(xts)\n> x <- xts(rnorm(60), as.Date(\"2011-01-01\")+0:59)[-2]\n>\n> x[as.Date(c(\"2011-01-01\", \"2011-01-02\", \"2011-01-03\"))] <- NA\n> head(x)\n>                  [,1]\n> 2011-01-01         NA\n> 2011-01-03         NA\n> 2011-01-04  0.1433278\n> 2011-01-05 -0.3239116\n> 2011-01-06  0.5226191\n> 2011-01-07 -1.1774623\n>\n> Slightly different semantics, but this will do what you want assuming the\n> dates you are selecting are a range:\n>\n> x <- xts(rnorm(60), as.Date(\"2011-01-01\")+0:59)[-2]\n> x['2011-01-01/2011-01-03'] <- NA\n> head(x)\n>                     [,1]\n> 2011-01-01            NA\n> 2011-01-03            NA\n> 2011-01-04  1.2909828095\n> 2011-01-05 -0.0000222576\n> 2011-01-06  0.4758526846\n> 2011-01-07 -1.1725908376\n>\n>\n>\n>\n> Best,\n> Jeff\n>\n>\n> On Fri, Mar 4, 2011 at 5:10 AM, Bogaso <bogaso.christofer at gmail.com>wrote:\n>\n>> Hi all, I having some problem in replacing some observation of a zoo\n>> object\n>> with NA. Here I have tries followings:\n>>\n>> > MyData <- zooreg(rnorm(60), start=as.Date(\"2011-01-01\"))[-2]\n>> > MyData[as.Date(c(\"2011-01-01\", \"2011-01-02\", \"2011-01-03\"))] <- NA  ## I\n>> > like to replace values with those indices with 'NA'\n>> > MyData\n>> Error in dimnames(x) <- dn :\n>>  length of 'dimnames' [1] not equal to array extent\n>>\n>> Can somebody point me on the correct approach?\n>>\n>> Thanks,\n>>\n>> --\n>> View this message in context:\n>> http://r.789695.n4.nabble.com/Replacing-some-observation-of-a-zoo-object-tp3335062p3335062.html\n>> Sent from the Rmetrics mailing list archive at Nabble.com.\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n>\n>\n>\n> --\n> Jeffrey Ryan\n> jeffrey.ryan at lemnica.com\n>\n> www.lemnica.com\n>\n>\n\n\n-- \nJeffrey Ryan\njeffrey.ryan at lemnica.com\n\nwww.lemnica.com\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I didn't mean to say xts was always an option with zoo - that was only with\nregard to converting back and forth to get access to the subset feature of\nxts.  If you really need zooreg, you're better of",
       "thread_id": "thread-3092b12a8ced",
       "thread_depth": 2,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110304/0b7c8f86/attachment.pl"
+      ]
     },
     {
       "id": "msg-549675e4d3fb",
@@ -493,11 +508,14 @@
         "<1295470206311-3225448.post@n4.nabble.com>",
         "<AC7102C5-FDCE-4670-B582-7EA1C9D83E7A@gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110306/48b2f71c/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110306/48b2f71c/attachment.pl>",
+      "body_plain": "Hi, R community!\nI am using Window OS in Korean.\nR console shows error messages in Korean whenever there is something wrong.\nIs there any way to see error messages in English?\nThanks.\nWonjae\n \n-----Original Message-----\nFrom: \"Christophe Dutang\"&lt;dutangc at gmail.com&gt; \nTo: \"salmajj\"&lt;salmajj at softhome.net&gt;\nCc: r-sig-finance at stat.math.ethz.ch\nSent: 11-01-20(목) 15:57:39\nSubject: Re: [R-SIG-Finance] Copula and Multivariate distribution\nHello,\nyou can use something like that\neqf &lt;- function(x, sampleMarg) as.numeric(quantile(sampleMarg, probs=x))\nand apply eqf on each marginal after the copula fit if you want to generate random samples or directly ecdf if you want to compute multivariate distribution function.\nChristophe\n--\nChristophe Dutang\nPh.D. student at ISFA, Lyon, France\nwebsite: http://dutangc.free.fr\nLe 19 janv. 2011 à 21:50, salmajj a écrit :\n> \n> Hi all, \n> I understand that rmvdc generates random number from mvdc object. But the\n> mvdc object can only be used if we define the marginals! So my question is\n> suppose we don't find any distribution which fit marginals so we use the\n> Canonical Maximum Likelihood method (This approach uses the empirical CDF of\n> each marginal distribution to transform the observations into pseudo\n> observations with uniform margins) SO after finding the copula which fit the\n> dependancy HOW i can generate random number which mimic the data? \n> Hope my question is clear, please if someone have an idea help me! \n> THANKS \n> \n> -- \n> View this message in context: http://r.789695.n4.nabble.com/Copula-and-Multivariate-distribution-tp3225448p3225448.html\n> Sent from the Rmetrics mailing list archive at Nabble.com.\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi, R community!\nI am using Window OS in Korean.\nR console shows error messages in Korean whenever there is something wrong.\nIs there any way to see error messages in English?\nThanks.\nWonjae\n \n-----Or",
       "thread_id": "thread-549675e4d3fb",
       "thread_depth": 0,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110306/48b2f71c/attachment.pl"
+      ]
     },
     {
       "id": "msg-c917c6d85a1a",
@@ -513,11 +531,14 @@
         "<AC7102C5-FDCE-4670-B582-7EA1C9D83E7A@gmail.com>",
         "<9c0e0bca8a6a96117ed3445a330c132d@tweb12-2.nm>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110306/975aee36/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110306/975aee36/attachment.pl>",
+      "body_plain": "Hi\n\nThis is not really not a finance related question, ask at best on the \nusual R help list. Looking at ?locales might give you a few hints for \nyour problems.\n\nMat\n\nLe 06. 03. 11 06:11, 이원재 a écrit :\n> Hi, R community!\n> I am using Window OS in Korean.\n> R console shows error messages in Korean whenever there is something wrong.\n> Is there any way to see error messages in English?\n> Thanks.\n> Wonjae\n>\n> -----Original Message-----\n> From: \"Christophe Dutang\"&lt;dutangc at gmail.com&gt;\n> To: \"salmajj\"&lt;salmajj at softhome.net&gt;\n> Cc: r-sig-finance at stat.math.ethz.ch\n> Sent: 11-01-20(ëª©) 15:57:39\n> Subject: Re: [R-SIG-Finance] Copula and Multivariate distribution\n> Hello,\n> you can use something like that\n> eqf&lt;- function(x, sampleMarg) as.numeric(quantile(sampleMarg, probs=x))\n> and apply eqf on each marginal after the copula fit if you want to generate random samples or directly ecdf if you want to compute multivariate distribution function.\n> Christophe\n> --\n> Christophe Dutang\n> Ph.D. student at ISFA, Lyon, France\n> website: http://dutangc.free.fr\n> Le 19 janv. 2011 Ã  21:50, salmajj a Ã©crit :\n>> Hi all,\n>> I understand that rmvdc generates random number from mvdc object. But the\n>> mvdc object can only be used if we define the marginals! So my question is\n>> suppose we don't find any distribution which fit marginals so we use the\n>> Canonical Maximum Likelihood method (This approach uses the empirical CDF of\n>> each marginal distribution to transform the observations into pseudo\n>> observations with uniform margins) SO after finding the copula which fit the\n>> dependancy HOW i can generate random number which mimic the data?\n>> Hope my question is clear, please if someone have an idea help me!\n>> THANKS\n>>\n>> -- \n>> View this message in context: http://r.789695.n4.nabble.com/Copula-and-Multivariate-distribution-tp3225448p3225448.html\n>> Sent from the Rmetrics mailing list archive at Nabble.com.\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>\n> \t[[alternative HTML version deleted]]\n>\n>\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi\n\nThis is not really not a finance related question, ask at best on the \nusual R help list. Looking at ?locales might give you a few hints for \nyour problems.\n\nMat\n\nLe 06. 03. 11 06:11, 이원재 a écrit ",
       "thread_id": "thread-549675e4d3fb",
       "thread_depth": 1,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110306/975aee36/attachment.pl"
+      ]
     },
     {
       "id": "msg-0ecf8ae547fb",
@@ -531,11 +552,14 @@
       "references": [
         "<mailman.3.1299409201.2799.r-sig-finance@r-project.org>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110306/5ef40446/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110306/5ef40446/attachment.pl>",
+      "body_plain": "Hi, Wonjae,\n\nIn the installation of R, when you see a window that says \"select components...which components should be installed?\", be careful, there are several options at the bottom. Make sure thatMessage Translate is not ticked. Then you will find everything is in English.\n\nBest wishes,\n\nJudy Peng\n\n\n在2011-03-06 19:00:01，r-sig-finance-request at r-project.org 写道：\n>Send R-SIG-Finance mailing list submissions to\n>\tr-sig-finance at r-project.org\n>\n>To subscribe or unsubscribe via the World Wide Web, visit\n>\thttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>or, via email, send a message with subject or body 'help' to\n>\tr-sig-finance-request at r-project.org\n>\n>You can reach the person managing the list at\n>\tr-sig-finance-owner at r-project.org\n>\n>When replying, please edit your Subject line so it is more specific\n>than \"Re: Contents of R-SIG-Finance digest...\"\n>\n>\n>Today's Topics:\n>\n>   1. How to disable multi-lanuage functionality (???)\n>   2. Re: How to disable multi-lanuage functionality (mat)\n>\n>\n>----------------------------------------------------------------------\n>\n>Message: 1\n>Date: Sun, 6 Mar 2011 14:11:27 +0900\n>From: ??? <wjlee2002 at naver.com>\n>To: <r-sig-finance at stat.math.ethz.ch>\n>Subject: [R-SIG-Finance] How to disable multi-lanuage functionality\n>Message-ID: <9c0e0bca8a6a96117ed3445a330c132d at tweb12-2.nm>\n>Content-Type: text/plain\n>\n>Hi, R community!\n>I am using Window OS in Korean.\n>R console shows error messages in Korean whenever there is something wrong.\n>Is there any way to see error messages in English?\n>Thanks.\n>Wonjae\n> \n>-----Original Message-----\n>From: \"Christophe Dutang\"&lt;dutangc at gmail.com&gt; \n>To: \"salmajj\"&lt;salmajj at softhome.net&gt;\n>Cc: r-sig-finance at stat.math.ethz.ch\n>Sent: 11-01-20(ëª©) 15:57:39\n>Subject: Re: [R-SIG-Finance] Copula and Multivariate distribution\n>Hello,\n>you can use something like that\n>eqf &lt;- function(x, sampleMarg) as.numeric(quantile(sampleMarg, probs=x))\n>and apply eqf on each marginal after the copula fit if you want to generate random samples or directly ecdf if you want to compute multivariate distribution function.\n>Christophe\n>--\n>Christophe Dutang\n>Ph.D. student at ISFA, Lyon, France\n>website: http://dutangc.free.fr\n>Le 19 janv. 2011 Ã  21:50, salmajj a Ã©crit :\n>> \n>> Hi all, \n>> I understand that rmvdc generates random number from mvdc object. But the\n>> mvdc object can only be used if we define the marginals! So my question is\n>> suppose we don't find any distribution which fit marginals so we use the\n>> Canonical Maximum Likelihood method (This approach uses the empirical CDF of\n>> each marginal distribution to transform the observations into pseudo\n>> observations with uniform margins) SO after finding the copula which fit the\n>> dependancy HOW i can generate random number which mimic the data? \n>> Hope my question is clear, please if someone have an idea help me! \n>> THANKS \n>> \n>> -- \n>> View this message in context: http://r.789695.n4.nabble.com/Copula-and-Multivariate-distribution-tp3225448p3225448.html\n>> Sent from the Rmetrics mailing list archive at Nabble.com.\n>> \n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n>_______________________________________________\n>R-SIG-Finance at r-project.org mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>-- Subscriber-posting only. If you want to post, subscribe first.\n>-- Also note that this is not the r-help list where general R questions should go.\n>\n>\t[[alternative HTML version deleted]]\n>\n>\n>------------------------------\n>\n>Message: 2\n>Date: Sun, 6 Mar 2011 11:43:46 +0100\n>From: mat <matthieu.stigler at gmail.com>\n>To: ??? <wjlee2002 at naver.com>,\t<r-sig-finance at stat.math.ethz.ch>\n>Subject: Re: [R-SIG-Finance] How to disable multi-lanuage\n>\tfunctionality\n>Message-ID: <4D736562.5090101 at gmail.com>\n>Content-Type: text/plain\n>\n>Hi\n>\n>This is not really not a finance related question, ask at best on the \n>usual R help list. Looking at ?locales might give you a few hints for \n>your problems.\n>\n>Mat\n>\n>Le 06. 03. 11 06:11, ì´ìì¬ a Ã©crit :\n>> Hi, R community!\n>> I am using Window OS in Korean.\n>> R console shows error messages in Korean whenever there is something wrong.\n>> Is there any way to see error messages in English?\n>> Thanks.\n>> Wonjae\n>>\n>> -----Original Message-----\n>> From: \"Christophe Dutang\"&lt;dutangc at gmail.com&gt;\n>> To: \"salmajj\"&lt;salmajj at softhome.net&gt;\n>> Cc: r-sig-finance at stat.math.ethz.ch\n>> Sent: 11-01-20(Ã«ÂªÂ©) 15:57:39\n>> Subject: Re: [R-SIG-Finance] Copula and Multivariate distribution\n>> Hello,\n>> you can use something like that\n>> eqf&lt;- function(x, sampleMarg) as.numeric(quantile(sampleMarg, probs=x))\n>> and apply eqf on each marginal after the copula fit if you want to generate random samples or directly ecdf if you want to compute multivariate distribution function.\n>> Christophe\n>> --\n>> Christophe Dutang\n>> Ph.D. student at ISFA, Lyon, France\n>> website: http://dutangc.free.fr\n>> Le 19 janv. 2011 Ã  21:50, salmajj a ÃÂ©crit :\n>>> Hi all,\n>>> I understand that rmvdc generates random number from mvdc object. But the\n>>> mvdc object can only be used if we define the marginals! So my question is\n>>> suppose we don't find any distribution which fit marginals so we use the\n>>> Canonical Maximum Likelihood method (This approach uses the empirical CDF of\n>>> each marginal distribution to transform the observations into pseudo\n>>> observations with uniform margins) SO after finding the copula which fit the\n>>> dependancy HOW i can generate random number which mimic the data?\n>>> Hope my question is clear, please if someone have an idea help me!\n>>> THANKS\n>>>\n>>> -- \n>>> View this message in context: http://r.789695.n4.nabble.com/Copula-and-Multivariate-distribution-tp3225448p3225448.html\n>>> Sent from the Rmetrics mailing list archive at Nabble.com.\n>>>\n>>> _______________________________________________\n>>> R-SIG-Finance at r-project.org mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>> -- Also note that this is not the r-help list where general R questions should go.\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n>>\n>> \t[[alternative HTML version deleted]]\n>>\n>>\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n>\n>\n>\t[[alternative HTML version deleted]]\n>\n>\n>\n>------------------------------\n>\n>_______________________________________________\n>R-SIG-Finance mailing list\n>R-SIG-Finance at r-project.org\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>\n>End of R-SIG-Finance Digest, Vol 82, Issue 6\n>********************************************\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi, Wonjae,\n\nIn the installation of R, when you see a window that says \"select components...which components should be installed?\", be careful, there are several options at the bottom. Make sure thatM",
       "thread_id": "thread-0ecf8ae547fb",
       "thread_depth": 0,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110306/5ef40446/attachment.pl"
+      ]
     },
     {
       "id": "msg-2c401a005b63",
@@ -547,11 +571,14 @@
       "subject_clean": "Quantmod question",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110307/bee42da3/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110307/bee42da3/attachment.pl>",
+      "body_plain": "Just learning quantmod and I seem to be getting some strange results.\nGetting a Inf and -45% for monthly returns for Jan and Fed 2000.  Any\nthoughts on what I'm doing wrong ? My daily data is shown below. The\nmonthlyReturn(f1$bhRtrn) is at the bottom below the data.\n\nhead(f1, 251)\n             bhRtrn sysRtrn   xsRtrn\n2000-01-03  0.00000       0  0.00000\n2000-01-04 -0.03834       0  0.03834\n2000-01-05  0.00192       0 -0.00192\n2000-01-06  0.00096       0 -0.00096\n2000-01-07  0.02709       0 -0.02709\n2000-01-10  0.01119       0 -0.01119\n2000-01-11 -0.01306       0  0.01306\n2000-01-12 -0.00439       0  0.00439\n2000-01-13  0.01217       0 -0.01217\n2000-01-14  0.01067       0 -0.01067\n2000-01-18 -0.00683       0  0.00683\n2000-01-19  0.00052       0 -0.00052\n2000-01-20 -0.00710       0  0.00710\n2000-01-21 -0.00291       0  0.00291\n2000-01-24 -0.02763       0  0.02763\n2000-01-25  0.00606       0 -0.00606\n2000-01-26 -0.00421       0  0.00421\n2000-01-27 -0.00394       0  0.00394\n2000-01-28 -0.02746       0  0.02746\n2000-01-31  0.02522       0 -0.02522\n2000-02-01  0.01063       0 -0.01063\n2000-02-02 -0.00011       0  0.00011\n2000-02-03  0.01125       0 -0.01125\n2000-02-04 -0.00042       0  0.00042\n2000-02-07 -0.00009       0  0.00009\n2000-02-08  0.01227       0 -0.01227\n2000-02-09 -0.02082       0  0.02082\n2000-02-10  0.00363       0 -0.00363\n2000-02-11 -0.02097       0  0.02097\n2000-02-14  0.00203       0 -0.00203\n2000-02-15  0.00871       0 -0.00871\n2000-02-16 -0.01026       0  0.01026\n2000-02-17  0.00043       0 -0.00043\n2000-02-18 -0.03038       0  0.03038\n2000-02-22  0.00452       0 -0.00452\n2000-02-23  0.00630       0 -0.00630\n2000-02-24 -0.00534       0  0.00534\n2000-02-25 -0.01483       0  0.01483\n2000-02-28  0.01102       0 -0.01102\n2000-02-29  0.01363       0 -0.01363\n2000-03-01  0.00935       0 -0.00935\n\nhead(monthlyReturn(f1$bhRtrn), 15)\n           monthly.returns\n2000-01-31             Inf\n2000-02-29      -0.4595559\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Just learning quantmod and I seem to be getting some strange results.\nGetting a Inf and -45% for monthly returns for Jan and Fed 2000.  Any\nthoughts on what I'm doing wrong ? My daily data is shown be",
       "thread_id": "thread-2c401a005b63",
       "thread_depth": 0,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110307/bee42da3/attachment.pl"
+      ]
     },
     {
       "id": "msg-4efd5bf273ab",
@@ -565,11 +592,14 @@
       "references": [
         "<AANLkTin_-C=y9wSHJRb+o_28wnBajWGOJDyXOVMTc3W=@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110307/b5c6abee/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110307/b5c6abee/attachment.pl>",
+      "body_plain": "Hi Eric,\n\nArguments:\n\n       x: object of state prices, or an OHLC type object\n\nYou are trying to use returns.\n\nJeff\n\nOn Mon, Mar 7, 2011 at 9:50 PM, Eric Thungstom <eric.thungstrom at gmail.com>wrote:\n\n> Just learning quantmod and I seem to be getting some strange results.\n> Getting a Inf and -45% for monthly returns for Jan and Fed 2000.  Any\n> thoughts on what I'm doing wrong ? My daily data is shown below. The\n> monthlyReturn(f1$bhRtrn) is at the bottom below the data.\n>\n> head(f1, 251)\n>             bhRtrn sysRtrn   xsRtrn\n> 2000-01-03  0.00000       0  0.00000\n> 2000-01-04 -0.03834       0  0.03834\n> 2000-01-05  0.00192       0 -0.00192\n> 2000-01-06  0.00096       0 -0.00096\n> 2000-01-07  0.02709       0 -0.02709\n> 2000-01-10  0.01119       0 -0.01119\n> 2000-01-11 -0.01306       0  0.01306\n> 2000-01-12 -0.00439       0  0.00439\n> 2000-01-13  0.01217       0 -0.01217\n> 2000-01-14  0.01067       0 -0.01067\n> 2000-01-18 -0.00683       0  0.00683\n> 2000-01-19  0.00052       0 -0.00052\n> 2000-01-20 -0.00710       0  0.00710\n> 2000-01-21 -0.00291       0  0.00291\n> 2000-01-24 -0.02763       0  0.02763\n> 2000-01-25  0.00606       0 -0.00606\n> 2000-01-26 -0.00421       0  0.00421\n> 2000-01-27 -0.00394       0  0.00394\n> 2000-01-28 -0.02746       0  0.02746\n> 2000-01-31  0.02522       0 -0.02522\n> 2000-02-01  0.01063       0 -0.01063\n> 2000-02-02 -0.00011       0  0.00011\n> 2000-02-03  0.01125       0 -0.01125\n> 2000-02-04 -0.00042       0  0.00042\n> 2000-02-07 -0.00009       0  0.00009\n> 2000-02-08  0.01227       0 -0.01227\n> 2000-02-09 -0.02082       0  0.02082\n> 2000-02-10  0.00363       0 -0.00363\n> 2000-02-11 -0.02097       0  0.02097\n> 2000-02-14  0.00203       0 -0.00203\n> 2000-02-15  0.00871       0 -0.00871\n> 2000-02-16 -0.01026       0  0.01026\n> 2000-02-17  0.00043       0 -0.00043\n> 2000-02-18 -0.03038       0  0.03038\n> 2000-02-22  0.00452       0 -0.00452\n> 2000-02-23  0.00630       0 -0.00630\n> 2000-02-24 -0.00534       0  0.00534\n> 2000-02-25 -0.01483       0  0.01483\n> 2000-02-28  0.01102       0 -0.01102\n> 2000-02-29  0.01363       0 -0.01363\n> 2000-03-01  0.00935       0 -0.00935\n>\n> head(monthlyReturn(f1$bhRtrn), 15)\n>           monthly.returns\n> 2000-01-31             Inf\n> 2000-02-29      -0.4595559\n>\n>        [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\n\n-- \nJeffrey Ryan\njeffrey.ryan at lemnica.com\n\nwww.lemnica.com\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Eric,\n\nArguments:\n\n       x: object of state prices, or an OHLC type object\n\nYou are trying to use returns.\n\nJeff\n\nOn Mon, Mar 7, 2011 at 9:50 PM, Eric Thungstom <eric.thungstrom at gmail.com>wrote",
       "thread_id": "thread-2c401a005b63",
       "thread_depth": 1,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110307/b5c6abee/attachment.pl"
+      ]
     },
     {
       "id": "msg-e02e4622bec2",
@@ -583,11 +613,14 @@
       "references": [
         "<AANLkTin_-C=y9wSHJRb+o_28wnBajWGOJDyXOVMTc3W=@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110308/305bde25/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110308/305bde25/attachment.pl>",
+      "body_plain": "Eric,\n\nTry ?endpoins function - this function returns the rows at the end of the\nspecified period (eg monthly). You can put the endpoints() result in the\nindex of the xts object... but you probably need to specify the column you\nwant to as a result.\n\nbest,\ndaniel\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Eric,\n\nTry ?endpoins function - this function returns the rows at the end of the\nspecified period (eg monthly). You can put the endpoints() result in the\nindex of the xts object... but you probably ne",
       "thread_id": "thread-2c401a005b63",
       "thread_depth": 1,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110308/305bde25/attachment.pl"
+      ]
     },
     {
       "id": "msg-ab422ebaa0fd",
@@ -615,11 +648,14 @@
       "subject_clean": "How can you align a timeSeries so that only the last day of each month appears without weekends?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110309/e9fc4979/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110309/e9fc4979/attachment.pl>",
+      "body_plain": "I want to divide one series \"x1\" tail listed below by a second series \"x2\",\nbut the dates are not aligned, even though the start and end dates are the\nsame (I get a positions different error).  If I align them by days,\nduplicate dates appear to fill in between monthly values.  Should I use\naggregate() to reconfigure the monthly series?  If so, which value of the\naggregate() argument FUN should I use to list only the last day of the month\n(obviously not mean or sum)?    Thanks much for any help.\n\n \n\nUnaligned series:\n\n \n\n> tail(x1)\n\nGMT\n\n           WILL5000IND\n\n2010-07-31    16421.36\n\n2010-08-31    16509.87\n\n2010-10-01    17094.89  <- out of sequence (Friday)\n\n2010-10-31    17881.22\n\n2010-12-01    18349.44\n\n2010-12-31    19099.87 <- out of sequence\n\n \n\n> tail(x2)\n\nGMT\n\n               TS.1\n\n2010-07-31 14632.61\n\n2010-08-31 14689.75\n\n2010-09-30 14745.52\n\n2010-10-31 14794.91\n\n2010-11-30 14834.44\n\n2010-12-31 14861.00\n\n \n\nAligned series:\n\n \n\n> tail(x1a)\n\nGMT\n\n           WILL5000IND\n\n2010-12-24    18349.44\n\n2010-12-27    18349.44\n\n2010-12-28    18349.44\n\n2010-12-29    18349.44\n\n2010-12-30    18349.44    <-Should be 2010-11-30, delete dates up to here in\nthis list\n\n2010-12-31    19099.87 \n\n \n\n> tail(x2a)\n\nGMT\n\n               TS.1\n\n2010-12-24 14834.44\n\n2010-12-27 14834.44\n\n2010-12-28 14834.44\n\n2010-12-29 14834.44\n\n2010-12-30 14834.44\n\n2010-12-31 14861.00\n\n \n\n \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I want to divide one series \"x1\" tail listed below by a second series \"x2\",\nbut the dates are not aligned, even though the start and end dates are the\nsame (I get a positions different error).  If I a",
       "thread_id": "thread-f84a42e020cc",
       "thread_depth": 0,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110309/e9fc4979/attachment.pl"
+      ]
     },
     {
       "id": "msg-f0ae9c9a3e1a",
@@ -631,11 +667,14 @@
       "subject_clean": "getting percentiles by factor",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110310/9d39ad2d/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110310/9d39ad2d/attachment.pl>",
+      "body_plain": "Hello,\n\nI'm trying to get percentiles (PERCENTRANK for excel users) by factor in the\nfollowing data.frame:\n\nmyExample <- data.frame(Ret=seq(-2, 2.5,\nby=0.5),PE=seq(10,19),Sectors=rep(c(\"Financial\",\"Industrial\"),5))\nmyExample <- na.omit(myExample)\n\nThanks to Patrick I I managed to put together the following lines which does\nit for the \"Ret\" column:\n\nmyecdf <- function(x, sortAsc) {\nw1 <- ecdf(x$Ret)\nw2 <- if (sortAsc) w1(x$Ret) * 100 else abs(w1(x$Ret) * 100 - 100)\nw3 <- transform(x, myPerc=w2)\nreturn(w3)\n}\nmyExampleEnd <- lapply(split(myExample, myExample$Sectors), myecdf,\nsortAsc=\"True\")\nmyExampleEnd <- unsplit(myExampleEnd, myExample$Sectors)\n\n\nI need to make the function more flexible accepting the name of the column\nto calculate percentiles on as a parameter but the following doesn't work:\n\nmyecdf2 <- function(x, column, sortAsc=True) {\n# x data.frame/list being analysed\n# column to calculate percentiles on\n# sortAsc sorting order (True Ascending, False Descending)\nw1 <- ecdf(x$column)\nw2 <- if (sortAsc) w1(x$column) * 100 else abs(w1(x$column) * 100 - 100)\nw3 <- transform(x, myPerc=w2)\nreturn(w3)\n}\nmyExampleEnd2 <- lapply(split(myExample, myExample$Sectors), myecdf2,\ncolumn=Ret, sortAsc=\"True\")\nmyExampleEnd2 <- unsplit(myExampleEnd, myExample$Sectors)\n\n\nI'm not sure whether I'm going down the right way so any help is\nappreciated...also from scratch.\n\nPaolo\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\nI'm trying to get percentiles (PERCENTRANK for excel users) by factor in the\nfollowing data.frame:\n\nmyExample <- data.frame(Ret=seq(-2, 2.5,\nby=0.5),PE=seq(10,19),Sectors=rep(c(\"Financial\",\"In",
       "thread_id": "thread-f0ae9c9a3e1a",
       "thread_depth": 0,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110310/9d39ad2d/attachment.pl"
+      ]
     },
     {
       "id": "msg-024fc4711ce5",
@@ -649,11 +688,14 @@
       "references": [
         "<AANLkTimzf13Ehxt-A2NHUramYM-tQH-rn7zSfrTCm0ZD@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110310/c8acdf13/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110310/c8acdf13/attachment.pl>",
+      "body_plain": "tapply is the function\nOn Mar 10, 2011 4:38 AM, \"Paolo Cavatore\" <pcavatore at gmail.com> wrote:\n> Hello,\n>\n> I'm trying to get percentiles (PERCENTRANK for excel users) by factor in\nthe\n> following data.frame:\n>\n> myExample <- data.frame(Ret=seq(-2, 2.5,\n> by=0.5),PE=seq(10,19),Sectors=rep(c(\"Financial\",\"Industrial\"),5))\n> myExample <- na.omit(myExample)\n>\n> Thanks to Patrick I I managed to put together the following lines which\ndoes\n> it for the \"Ret\" column:\n>\n> myecdf <- function(x, sortAsc) {\n> w1 <- ecdf(x$Ret)\n> w2 <- if (sortAsc) w1(x$Ret) * 100 else abs(w1(x$Ret) * 100 - 100)\n> w3 <- transform(x, myPerc=w2)\n> return(w3)\n> }\n> myExampleEnd <- lapply(split(myExample, myExample$Sectors), myecdf,\n> sortAsc=\"True\")\n> myExampleEnd <- unsplit(myExampleEnd, myExample$Sectors)\n>\n>\n> I need to make the function more flexible accepting the name of the column\n> to calculate percentiles on as a parameter but the following doesn't work:\n>\n> myecdf2 <- function(x, column, sortAsc=True) {\n> # x data.frame/list being analysed\n> # column to calculate percentiles on\n> # sortAsc sorting order (True Ascending, False Descending)\n> w1 <- ecdf(x$column)\n> w2 <- if (sortAsc) w1(x$column) * 100 else abs(w1(x$column) * 100 - 100)\n> w3 <- transform(x, myPerc=w2)\n> return(w3)\n> }\n> myExampleEnd2 <- lapply(split(myExample, myExample$Sectors), myecdf2,\n> column=Ret, sortAsc=\"True\")\n> myExampleEnd2 <- unsplit(myExampleEnd, myExample$Sectors)\n>\n>\n> I'm not sure whether I'm going down the right way so any help is\n> appreciated...also from scratch.\n>\n> Paolo\n>\n> [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\nshould go.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "tapply is the function\nOn Mar 10, 2011 4:38 AM, \"Paolo Cavatore\" <pcavatore at gmail.com> wrote:\n> Hello,\n>\n> I'm trying to get percentiles (PERCENTRANK for excel users) by factor in\nthe\n> following d",
       "thread_id": "thread-f0ae9c9a3e1a",
       "thread_depth": 1,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110310/c8acdf13/attachment.pl"
+      ]
     },
     {
       "id": "msg-b59484365c1e",
@@ -668,11 +710,14 @@
         "<AANLkTimzf13Ehxt-A2NHUramYM-tQH-rn7zSfrTCm0ZD@mail.gmail.com>",
         "<AANLkTik44UhGGp3PwvNa1EPXp2vN44p4ZmQs6QurTQPv@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110310/cd21994e/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110310/cd21994e/attachment.pl>",
+      "body_plain": "tapply doesn't work with ecdf\n\nmyExampleEnd4 <- tapply(myExample, myExample$Sectors, ecdf)\n#gives error\n\n2011/3/10 Hesen Peng <hesen.peng at gmail.com>\n\n> tapply is the function\n>   On Mar 10, 2011 4:38 AM, \"Paolo Cavatore\" <pcavatore at gmail.com> wrote:\n> > Hello,\n> >\n> > I'm trying to get percentiles (PERCENTRANK for excel users) by factor in\n> the\n> > following data.frame:\n> >\n> > myExample <- data.frame(Ret=seq(-2, 2.5,\n> > by=0.5),PE=seq(10,19),Sectors=rep(c(\"Financial\",\"Industrial\"),5))\n> > myExample <- na.omit(myExample)\n> >\n> > Thanks to Patrick I I managed to put together the following lines which\n> does\n> > it for the \"Ret\" column:\n> >\n> > myecdf <- function(x, sortAsc) {\n> > w1 <- ecdf(x$Ret)\n> > w2 <- if (sortAsc) w1(x$Ret) * 100 else abs(w1(x$Ret) * 100 - 100)\n> > w3 <- transform(x, myPerc=w2)\n> > return(w3)\n> > }\n> > myExampleEnd <- lapply(split(myExample, myExample$Sectors), myecdf,\n> > sortAsc=\"True\")\n> > myExampleEnd <- unsplit(myExampleEnd, myExample$Sectors)\n> >\n> >\n> > I need to make the function more flexible accepting the name of the\n> column\n> > to calculate percentiles on as a parameter but the following doesn't\n> work:\n> >\n> > myecdf2 <- function(x, column, sortAsc=True) {\n> > # x data.frame/list being analysed\n> > # column to calculate percentiles on\n> > # sortAsc sorting order (True Ascending, False Descending)\n> > w1 <- ecdf(x$column)\n> > w2 <- if (sortAsc) w1(x$column) * 100 else abs(w1(x$column) * 100 - 100)\n> > w3 <- transform(x, myPerc=w2)\n> > return(w3)\n> > }\n> > myExampleEnd2 <- lapply(split(myExample, myExample$Sectors), myecdf2,\n> > column=Ret, sortAsc=\"True\")\n> > myExampleEnd2 <- unsplit(myExampleEnd, myExample$Sectors)\n> >\n> >\n> > I'm not sure whether I'm going down the right way so any help is\n> > appreciated...also from scratch.\n> >\n> > Paolo\n> >\n> > [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "tapply doesn't work with ecdf\n\nmyExampleEnd4 <- tapply(myExample, myExample$Sectors, ecdf)\n#gives error\n\n2011/3/10 Hesen Peng <hesen.peng at gmail.com>\n\n> tapply is the function\n>   On Mar 10, 2011 4:",
       "thread_id": "thread-f0ae9c9a3e1a",
       "thread_depth": 2,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110310/cd21994e/attachment.pl"
+      ]
     },
     {
       "id": "msg-15d43ad9dfef",
@@ -688,11 +733,14 @@
         "<AANLkTik44UhGGp3PwvNa1EPXp2vN44p4ZmQs6QurTQPv@mail.gmail.com>",
         "<AANLkTinkSPfPzA=vFOC4=ee7iCcawrb6MRJePFuBusY3@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110310/e6eaf4e0/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110310/e6eaf4e0/attachment.pl>",
+      "body_plain": "Anyway I managed to sort it out with the below code\n\npaolo\n\n################################################à\n\nmyExample <- data.frame(Ret=seq(-2, 2.5,\nby=0.5),PE=seq(10,19),Sectors=rep(c(\"Financial\",\"Industrial\"),5))\nmyExample <- na.omit(myExample)\n\nmyecdf2 <- function(x, column, sortAsc=\"True\") {\n# x data.frame/list being analysed\n# column to calculate percentile on\n# sortAsc sorting order (True Ascending, False Descending)\nw1 <- ecdf(x[[column]])\nw2 <- if (sortAsc) w1(x[[column]]) * 100 else abs(w1(x[[column]]) * 100 -\n100)\nw3 <- transform(x, myPerc=w2)\nnames(w3)[ncol(w3)] <- paste(\"Perc.\",column,sep=\"\")\nreturn(w3)\n}\n\nmyExampleEnd2 <- lapply(split(myExample, myExample$Sectors), myecdf2,\ncolumn=\"PE\", sortAsc=\"False\")\nmyExampleEnd2 <- unsplit(myExampleEnd2, myExample$Sectors)\n\n\n\n2011/3/10 Paolo Cavatore <pcavatore at gmail.com>\n\n> tapply doesn't work with ecdf\n>\n> myExampleEnd4 <- tapply(myExample, myExample$Sectors, ecdf)\n> #gives error\n>\n> 2011/3/10 Hesen Peng <hesen.peng at gmail.com>\n>\n>  tapply is the function\n>>   On Mar 10, 2011 4:38 AM, \"Paolo Cavatore\" <pcavatore at gmail.com> wrote:\n>> > Hello,\n>> >\n>> > I'm trying to get percentiles (PERCENTRANK for excel users) by factor in\n>> the\n>> > following data.frame:\n>> >\n>> > myExample <- data.frame(Ret=seq(-2, 2.5,\n>> > by=0.5),PE=seq(10,19),Sectors=rep(c(\"Financial\",\"Industrial\"),5))\n>> > myExample <- na.omit(myExample)\n>> >\n>> > Thanks to Patrick I I managed to put together the following lines which\n>> does\n>> > it for the \"Ret\" column:\n>> >\n>> > myecdf <- function(x, sortAsc) {\n>> > w1 <- ecdf(x$Ret)\n>> > w2 <- if (sortAsc) w1(x$Ret) * 100 else abs(w1(x$Ret) * 100 - 100)\n>> > w3 <- transform(x, myPerc=w2)\n>> > return(w3)\n>> > }\n>> > myExampleEnd <- lapply(split(myExample, myExample$Sectors), myecdf,\n>> > sortAsc=\"True\")\n>> > myExampleEnd <- unsplit(myExampleEnd, myExample$Sectors)\n>> >\n>> >\n>> > I need to make the function more flexible accepting the name of the\n>> column\n>> > to calculate percentiles on as a parameter but the following doesn't\n>> work:\n>> >\n>> > myecdf2 <- function(x, column, sortAsc=True) {\n>> > # x data.frame/list being analysed\n>> > # column to calculate percentiles on\n>> > # sortAsc sorting order (True Ascending, False Descending)\n>> > w1 <- ecdf(x$column)\n>> > w2 <- if (sortAsc) w1(x$column) * 100 else abs(w1(x$column) * 100 - 100)\n>> > w3 <- transform(x, myPerc=w2)\n>> > return(w3)\n>> > }\n>> > myExampleEnd2 <- lapply(split(myExample, myExample$Sectors), myecdf2,\n>> > column=Ret, sortAsc=\"True\")\n>> > myExampleEnd2 <- unsplit(myExampleEnd, myExample$Sectors)\n>> >\n>> >\n>> > I'm not sure whether I'm going down the right way so any help is\n>> > appreciated...also from scratch.\n>> >\n>> > Paolo\n>> >\n>> > [[alternative HTML version deleted]]\n>> >\n>> > _______________________________________________\n>> > R-SIG-Finance at r-project.org mailing list\n>> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> > -- Subscriber-posting only. If you want to post, subscribe first.\n>> > -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Anyway I managed to sort it out with the below code\n\npaolo\n\n################################################à\n\nmyExample <- data.frame(Ret=seq(-2, 2.5,\nby=0.5),PE=seq(10,19),Sectors=rep(c(\"Financial\",",
       "thread_id": "thread-f0ae9c9a3e1a",
       "thread_depth": 3,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110310/e6eaf4e0/attachment.pl"
+      ]
     },
     {
       "id": "msg-c77d827de8de",
@@ -708,11 +756,14 @@
         "<AANLkTik44UhGGp3PwvNa1EPXp2vN44p4ZmQs6QurTQPv@mail.gmail.com>",
         "<AANLkTinkSPfPzA=vFOC4=ee7iCcawrb6MRJePFuBusY3@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110310/ad165762/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110310/ad165762/attachment.pl>",
+      "body_plain": "Sorry I was replying from my phone so I wasn't able to give more detail.\n\nyou can try:\n\ntapply([x], [label.vector], quantile, [a vector containing the quantiles,\nlike 0.05])\n\nOn Thu, Mar 10, 2011 at 11:09 AM, Paolo Cavatore <pcavatore at gmail.com>wrote:\n\n> tapply doesn't work with ecdf\n>\n> myExampleEnd4 <- tapply(myExample, myExample$Sectors, ecdf)\n> #gives error\n>\n> 2011/3/10 Hesen Peng <hesen.peng at gmail.com>\n>\n>  tapply is the function\n>>   On Mar 10, 2011 4:38 AM, \"Paolo Cavatore\" <pcavatore at gmail.com> wrote:\n>> > Hello,\n>> >\n>> > I'm trying to get percentiles (PERCENTRANK for excel users) by factor in\n>> the\n>> > following data.frame:\n>> >\n>> > myExample <- data.frame(Ret=seq(-2, 2.5,\n>> > by=0.5),PE=seq(10,19),Sectors=rep(c(\"Financial\",\"Industrial\"),5))\n>> > myExample <- na.omit(myExample)\n>> >\n>> > Thanks to Patrick I I managed to put together the following lines which\n>> does\n>> > it for the \"Ret\" column:\n>> >\n>> > myecdf <- function(x, sortAsc) {\n>> > w1 <- ecdf(x$Ret)\n>> > w2 <- if (sortAsc) w1(x$Ret) * 100 else abs(w1(x$Ret) * 100 - 100)\n>> > w3 <- transform(x, myPerc=w2)\n>> > return(w3)\n>> > }\n>> > myExampleEnd <- lapply(split(myExample, myExample$Sectors), myecdf,\n>> > sortAsc=\"True\")\n>> > myExampleEnd <- unsplit(myExampleEnd, myExample$Sectors)\n>> >\n>> >\n>> > I need to make the function more flexible accepting the name of the\n>> column\n>> > to calculate percentiles on as a parameter but the following doesn't\n>> work:\n>> >\n>> > myecdf2 <- function(x, column, sortAsc=True) {\n>> > # x data.frame/list being analysed\n>> > # column to calculate percentiles on\n>> > # sortAsc sorting order (True Ascending, False Descending)\n>> > w1 <- ecdf(x$column)\n>> > w2 <- if (sortAsc) w1(x$column) * 100 else abs(w1(x$column) * 100 - 100)\n>> > w3 <- transform(x, myPerc=w2)\n>> > return(w3)\n>> > }\n>> > myExampleEnd2 <- lapply(split(myExample, myExample$Sectors), myecdf2,\n>> > column=Ret, sortAsc=\"True\")\n>> > myExampleEnd2 <- unsplit(myExampleEnd, myExample$Sectors)\n>> >\n>> >\n>> > I'm not sure whether I'm going down the right way so any help is\n>> > appreciated...also from scratch.\n>> >\n>> > Paolo\n>> >\n>> > [[alternative HTML version deleted]]\n>> >\n>> > _______________________________________________\n>> > R-SIG-Finance at r-project.org mailing list\n>> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> > -- Subscriber-posting only. If you want to post, subscribe first.\n>> > -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n>\n>\n\n\n-- \nHesen Peng\nhttp://bit.ly/hesenp\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Sorry I was replying from my phone so I wasn't able to give more detail.\n\nyou can try:\n\ntapply([x], [label.vector], quantile, [a vector containing the quantiles,\nlike 0.05])\n\nOn Thu, Mar 10, 2011 at 1",
       "thread_id": "thread-f0ae9c9a3e1a",
       "thread_depth": 3,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110310/ad165762/attachment.pl"
+      ]
     },
     {
       "id": "msg-74a87dec6050",
@@ -724,11 +775,14 @@
       "subject_clean": "Generating Monthly Return Info",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110310/f2db6b71/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110310/f2db6b71/attachment.pl>",
+      "body_plain": "Newbie just learning.\n\nTrying to figure out how I generate monthly returns information. I have\ndaily returns and daily equity for a trading system over a 10 year period in\nan xts format. I'd like to collapse the daily data into monthly data. In\naddition, I'd like to be able to create a table of monthly returns by year.\nI tried table.CalendarReturns() in the PerfomanceAnalytics package but it\nseems like it needs monthly returns as the input.\n\nSuggestions ?\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Newbie just learning.\n\nTrying to figure out how I generate monthly returns information. I have\ndaily returns and daily equity for a trading system over a 10 year period in\nan xts format. I'd like to c",
       "thread_id": "thread-74a87dec6050",
       "thread_depth": 0,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110310/f2db6b71/attachment.pl"
+      ]
     },
     {
       "id": "msg-4b87ef78030f",
@@ -780,11 +834,14 @@
         "<AANLkTikFYQe9OEHXxb6EJcT35zKdUYh16M-W4KseCi9-@mail.gmail.com>",
         "<4a86956418ce152efe18994fe2b79cc2.squirrel@mail.braverock.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110311/92500738/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110311/92500738/attachment.pl>",
+      "body_plain": "I tried to.monthly but it simply outputs the OHLC of the daily returns for\nthe month. I'm looking for the consolidated monthly return. For example, f1\nis the xls object. f1$Rtrns is the daily returns. Here are the daily returns\nfor March:\n\n2011-03-01 -0.01573\n2011-03-02  0.00159\n2011-03-03  0.01722\n2011-03-04 -0.00737\n2011-03-07 -0.00832\n2011-03-08  0.00892\n2011-03-09 -0.00136\n2011-03-10 -0.01885\n\nSo, if I try to.monthly(f1$Rtrns), the march values I get back are:\n\nMar 2011        -0.01573         0.01722       -0.01885         -0.01885\n\nThose numbers are simply the OHLC of the daily returns. I'm looking for the\ntotal return for March. Actually, I'm looking for a consolidated table of\ntotal returns by month. I'm just using march as an example.\n\n\n\nOn Thu, Mar 10, 2011 at 11:43 PM, Peter Carl <peter at braverock.com> wrote:\n\n> ?to.monthly\n> --\n> Peter Carl\n> http://www.braverock.com/~peter\n>\n> > Newbie just learning.\n> >\n> > Trying to figure out how I generate monthly returns information. I have\n> > daily returns and daily equity for a trading system over a 10 year period\n> > in\n> > an xts format. I'd like to collapse the daily data into monthly data. In\n> > addition, I'd like to be able to create a table of monthly returns by\n> > year.\n> > I tried table.CalendarReturns() in the PerfomanceAnalytics package but it\n> > seems like it needs monthly returns as the input.\n> >\n> > Suggestions ?\n> >\n> >       [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions\n> > should go.\n> >\n>\n>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I tried to.monthly but it simply outputs the OHLC of the daily returns for\nthe month. I'm looking for the consolidated monthly return. For example, f1\nis the xls object. f1$Rtrns is the daily returns.",
       "thread_id": "thread-74a87dec6050",
       "thread_depth": 2,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110311/92500738/attachment.pl"
+      ]
     },
     {
       "id": "msg-54fbaea4e815",
@@ -868,11 +925,14 @@
       "subject_clean": "PerformanceAnalytics Figure 13",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110313/0c2680c7/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110313/0c2680c7/attachment.pl>",
+      "body_plain": "Hello everyone,\n\n \n\nI have been following along with the PerformanceAnalytic \"Charts and Tables\nOverview\" document\n(http://cran.r-project.org/web/packages/PerformanceAnalytics/vignettes/PA-ch\narts.pdf).  \n\n \n\nWhen I use the syntax provided in Figure 13, I get this error: \n\n \n\nError in checkData(R, method = \"xts\") : \n\n  The data cannot be converted into a time series.  If you are trying to\npass in names from a data object with one column, you should use the form\n'data[rows, columns, drop = FALSE]'.  Rownames should have standard date\nformats, such as '1985-03-15'. \n\n \n\nI don't know if I am doing something wrong, as I am relatively new to R, or\nif the provided syntax is driving this error.  I have had no other errors.  \n\n \n\nThe syntax in particular: \n\n \n\n> table.CAPM(managers[trailing36.rows, c(manager.col, peers.cols)],\n\n+ managers[trailing36.rows, 8, drop = FALSE], Rf = managers[trailing36.rows,\n\n+ Rf.col, drop = FALSE]\n\n \n\nAll of the data frames seem to contain the appropriate data.  \n\n \n\nAny suggestions would be welcome.\n\n \n\nRegard,\n\nDavid\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello everyone,\n\n \n\nI have been following along with the PerformanceAnalytic \"Charts and Tables\nOverview\" document\n(http://cran.r-project.org/web/packages/PerformanceAnalytics/vignettes/PA-ch\narts.pdf",
       "thread_id": "thread-df9143904b6e",
       "thread_depth": 0,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110313/0c2680c7/attachment.pl"
+      ]
     },
     {
       "id": "msg-216dfd739329",
@@ -884,11 +944,14 @@
       "subject_clean": "Dealing with the futures roll in quantstrat and blotter",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110314/70a3ba33/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110314/70a3ba33/attachment.pl>",
+      "body_plain": "Has anyone dealt with rolling futures in the quantstrat and blotter\nframework?\n\nI am working on an event based strategy -- the eventIndicators function just\nreturns a whole list of events in xts format (values = 1) that coincide with\nthe index datetimes of the mktdata\n\n# add the event indicators\nstratEvent <- add.indicator(strategy = stratEvent, name = \"eventIndicators\",\narguments = list(price = quote(getPrice(mktdata))))\n\nI then add rules for entry and exit based on the event column being true:\n\nstratEvent <- add.rule(stratEvent, name='ruleSignal', arguments =\nlist(sigcol=\"MEm1\"),sigval=TRUE, orderqty=100, ordertype= 'market',\norderside=NULL, threshold=NULL),type='enter')\n\nI would like to have this strategy applied to a futures contract based on a\nspecified rolling convention (e.g. if < 2 days before first notice of\ndelivery, trade the 2nd contract, otherwise trade the 1st e.g. TY2 Comdty\nversus TY1 Comdty).\n\nI would like to apply this strategy to 1 portfolio covering multiple decades\nof data of closing price data with the whole futures chain.  I'm not sure\nhow to call applyStrategy to get the result I want when the instrument the\nstrategy is trading changes over time.\n\nThanks.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Has anyone dealt with rolling futures in the quantstrat and blotter\nframework?\n\nI am working on an event based strategy -- the eventIndicators function just\nreturns a whole list of events in xts forma",
       "thread_id": "thread-216dfd739329",
       "thread_depth": 0,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110314/70a3ba33/attachment.pl"
+      ]
     },
     {
       "id": "msg-b1df2619523a",
@@ -921,11 +984,14 @@
         "<AANLkTinoGgLFe9=tv75H6HCOXN8mPyJCvL2r6HkWiTT5@mail.gmail.com>",
         "<4D7E35BC.7020409@braverock.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110314/c2efe473/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110314/c2efe473/attachment.pl>",
+      "body_plain": "My issue with one continuous series is that the spliced series does not\nreflect actual performance on the roll date.  There is an inherent drop in\nprice from one contract to the next that if the strategy holds over the\nroll.  What's need is a rolled performance series, and but in that case,\nrolled performance is what is being traded and not prices, resulting in an\norderBook this can't be directly piped to or compared to a real life order\nmanagement system.\n\nI would like to actually simulate trading the roll within the blotter rather\nthan mask it away with a shortcut.  I suppose this can be done by setting up\ndifferent portfolios with the set of tradeable symbols for each time frame\nand lopping calls to applyStrategy for each portfolio?\n\nOn Mon, Mar 14, 2011 at 11:35 AM, Brian G. Peterson <brian at braverock.com>wrote:\n\n> On 03/14/2011 10:02 AM, Gei Lin wrote:\n>\n>> Has anyone dealt with rolling futures in the quantstrat and blotter\n>> framework?\n>>\n>\n> Yes,  we roll products manually.\n>\n> The 'best' approach is probably to construct some sort of continuous series\n> that implements whatever rules you use (roll calendar, volume cross,\n> whatever).\n>\n> Robert Sams wrote splicing functions, but they assume univariate data, and\n> have not been ported to handle multi-column data (e.g. OHLC or TBBO data)\n> for each instrument.\n>\n> Any assistance or contributions on the splicing front would be gladly\n> accepted.\n>\n>\n>  I am working on an event based strategy -- the eventIndicators function\n>> just\n>> returns a whole list of events in xts format (values = 1) that coincide\n>> with\n>> the index datetimes of the mktdata\n>>\n>> # add the event indicators\n>> stratEvent<- add.indicator(strategy = stratEvent, name =\n>> \"eventIndicators\",\n>> arguments = list(price = quote(getPrice(mktdata))))\n>>\n>> I then add rules for entry and exit based on the event column being true:\n>>\n>> stratEvent<- add.rule(stratEvent, name='ruleSignal', arguments =\n>> list(sigcol=\"MEm1\"),sigval=TRUE, orderqty=100, ordertype= 'market',\n>> orderside=NULL, threshold=NULL),type='enter')\n>>\n>> I would like to have this strategy applied to a futures contract based on\n>> a\n>> specified rolling convention (e.g. if<  2 days before first notice of\n>> delivery, trade the 2nd contract, otherwise trade the 1st e.g. TY2 Comdty\n>> versus TY1 Comdty).\n>>\n>> I would like to apply this strategy to 1 portfolio covering multiple\n>> decades\n>> of data of closing price data with the whole futures chain.  I'm not sure\n>> how to call applyStrategy to get the result I want when the instrument the\n>> strategy is trading changes over time.\n>>\n>\n> I would construct a continuous series first, then add an instrument for\n> that continuous series to your portfolio, and test your strategy using the\n> continuous series information.\n>\n> Regards,\n>\n>  - Brian\n>\n> --\n> Brian G. Peterson\n> http://braverock.com/brian/\n> Ph: <773-459-4973>773-459-4973\n> IM: bgpbraverock\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "My issue with one continuous series is that the spliced series does not\nreflect actual performance on the roll date.  There is an inherent drop in\nprice from one contract to the next that if the strat",
       "thread_id": "thread-216dfd739329",
       "thread_depth": 2,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110314/c2efe473/attachment.pl"
+      ]
     },
     {
       "id": "msg-327fdfc2e27d",
@@ -973,11 +1039,14 @@
       "subject_clean": "RBloomberg -- Error in dimnames(x) <- dn : 'dimnames' applied to non-array",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110315/0e8c0d36/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110315/0e8c0d36/attachment.pl>",
+      "body_plain": "Relatively new to this and encountered the following error. Running:\n\nR version 2.12.2 (2011-02-25)\nrJava Version 0.9-0\nRBloomberg Version 0.4-145\nJava environment initialized successfully.\nLooking for most recent blpapi3.jar file...\nBloomberg API Version 3.4.1.3\n\nWhen I run: bdp(conn, \"AMZN US Equity\", \"NAME\")\n\nI get the error: Error in dimnames(x) <- dn : 'dimnames' applied to\nnon-array\n\nDrilling down bdp(), the error occurred in \"return(process.result(result,\n\"java\"))\". Result is retreived successful as a \"\nJava-Object{org.findata.blpwrapper.ReferenceDataResult at 3bc473}\"\n\nDrilling down further, in process.result(), the error occurred in row:\ncolnames(matrix.data) <- result$getColumnNames()\n\nMany thanks in advance.\n\nLi\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Relatively new to this and encountered the following error. Running:\n\nR version 2.12.2 (2011-02-25)\nrJava Version 0.9-0\nRBloomberg Version 0.4-145\nJava environment initialized successfully.\nLooking fo",
       "thread_id": "thread-586dc60c84ee",
       "thread_depth": 0,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110315/0e8c0d36/attachment.pl"
+      ]
     },
     {
       "id": "msg-788adb765cc5",
@@ -1167,11 +1236,14 @@
       "subject_clean": "Passing Transaction costs from quantstrat to blotter",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110316/eb0deb73/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110316/eb0deb73/attachment.pl>",
+      "body_plain": "Is there a way to pass transaction costs from quantstrat in a rule down to\nblotter in the tool chain?\n\nI haven't found any example of this yet.  Been digging down through the code\nfrom applyStrategy -> applyRules -> ruleOrderProc but haven't found it yet.\n\nThanks,\nG\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Is there a way to pass transaction costs from quantstrat in a rule down to\nblotter in the tool chain?\n\nI haven't found any example of this yet.  Been digging down through the code\nfrom applyStrategy -",
       "thread_id": "thread-4c0cb804e1e0",
       "thread_depth": 0,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110316/eb0deb73/attachment.pl"
+      ]
     },
     {
       "id": "msg-2b26c9fc3c3a",
@@ -1452,11 +1524,14 @@
         "<AANLkTinLL3z34XtU=qA_64YJ6zz+hZ+45V_cr587agmo@mail.gmail.com>",
         "<AANLkTikDNPPtfBTsFmsVFWfu2s4BMEYBFrdk2k07Zhuj@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110322/b3b678f9/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110322/b3b678f9/attachment.pl>",
+      "body_plain": "There is a problem creating the log file in your home directory.\n\nSome ideas: this might be a permissions issue, you might have 2 instances\ntrying to access the same log location, or the directory it's trying to\nwrite to may be missing.\n\nDo you have anything unusual about your Windows setup that you know of? Can\nyou look in your home directory (something like Documents and\nSettings/yourwindowsusername) and see if anything looks strange there? Are\nthere any log files there from blp or blpwrapper?\n\n\n\nOn Tue, Mar 22, 2011 at 7:12 PM, Matteo Fornasier <\nmatteo.fornasier at gmail.com> wrote:\n\n> Hi all,\n> I've the following problem:\n>\n> > bl = blpConnect(iface=\"Java\")\n> R version 2.12.1 (2010-12-16)\n> rJava Version 0.8-8\n> RBloomberg Version 0.4-145\n> Java environment initialized successfully.\n> Looking for most recent blpapi3.jar file...\n> Error in .jnew(\"org/findata/blpwrapper/Connection\", java.log.level) :\n> java.io.IOException: Couldn't get lock for %h/org.findata.blpwrapper.%g.log\n> Calls: blpConnect ... eval -> eval -> blpConnect.Java -> .jnew -> .External\n>\n> I don't understand how's possible. Any idea?\n>\n> Many thanks in advance,\n>\n> Matteo\n>\n>\n> On Mon, Feb 28, 2011 at 4:15 PM, Ana Nelson <nelson.ana at gmail.com> wrote:\n> > I have now uploaded what should be a fix, although unfortunately I have\n> > managed to mess up the version numbering, so you may have to uninstall\n> your\n> > existing RBloomberg then install the new one... and that may mean I've\n> > missed a bug fix.\n> >\n> > If possible back up your current installation of RBloomberg before\n> > uninstalling/reinstalling.\n> >\n> > I'll have a proper in-sequence build up within a few days.\n> >\n> >        [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions\n> should go.\n> >\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "There is a problem creating the log file in your home directory.\n\nSome ideas: this might be a permissions issue, you might have 2 instances\ntrying to access the same log location, or the directory it'",
       "thread_id": "thread-2f0786f8c38f",
       "thread_depth": 1,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110322/b3b678f9/attachment.pl"
+      ]
     },
     {
       "id": "msg-bd5332a81da7",
@@ -1484,11 +1559,14 @@
       "subject_clean": "Error Message using RBloomberg",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110322/5bd55c31/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110322/5bd55c31/attachment.pl>",
+      "body_plain": "Hi All, \nI met one problem about that I had tried to use RBloomberg library from R 12.0 \non window XP. \nBut, it shows pop-up message box \" xlCall32.dll is missing \".\nI did search out from rseek.com.\nHere, http://stackoverflow.com/questions/5185213/error-message-using-rbloomberg, \nis the same message with me.\nI can't find out any solution for this problem.\nCould anyone meet the same or know how to figure out this issue ?\n\nThanks a lot.\n\nJosh\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi All, \nI met one problem about that I had tried to use RBloomberg library from R 12.0 \non window XP. \nBut, it shows pop-up message box \" xlCall32.dll is missing \".\nI did search out from rseek.com.\nH",
       "thread_id": "thread-8159ecfc88d5",
       "thread_depth": 0,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110322/5bd55c31/attachment.pl"
+      ]
     },
     {
       "id": "msg-f529f21e8c61",
@@ -1500,11 +1578,14 @@
       "subject_clean": "FamaFrench Carhart models",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110323/6bbbcbe6/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110323/6bbbcbe6/attachment.pl>",
+      "body_plain": "Hi,\nHas anyone developed R program for sorted portfolios in multifactor FF-Carhart \nmodels? \n\nI am thinking to work on them, please guide.\n\nBest \nJosh\n\n\n      \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\nHas anyone developed R program for sorted portfolios in multifactor FF-Carhart \nmodels? \n\nI am thinking to work on them, please guide.\n\nBest \nJosh\n\n\n      \n\t[[alternative HTML version deleted]]",
       "thread_id": "thread-f529f21e8c61",
       "thread_depth": 0,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110323/6bbbcbe6/attachment.pl"
+      ]
     },
     {
       "id": "msg-c3bc916d6371",
@@ -1518,11 +1599,14 @@
       "references": [
         "<411414.79494.qm@web113112.mail.gq1.yahoo.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110323/42886933/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110323/42886933/attachment.pl>",
+      "body_plain": "Please use the Java version of RBloomberg available from\nhttp://findata.org/rbloomberg/\n\n\nOn Wed, Mar 23, 2011 at 2:27 AM, JOSH CHIEN <joshchien at yahoo.com> wrote:\n\n> Hi All,\n> I met one problem about that I had tried to use RBloomberg library from R\n> 12.0\n> on window XP.\n> But, it shows pop-up message box \" xlCall32.dll is missing \".\n> I did search out from rseek.com.\n> Here,\n> http://stackoverflow.com/questions/5185213/error-message-using-rbloomberg,\n> is the same message with me.\n> I can't find out any solution for this problem.\n> Could anyone meet the same or know how to figure out this issue ?\n>\n> Thanks a lot.\n>\n> Josh\n>        [[alternative HTML version deleted]]\n>\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Please use the Java version of RBloomberg available from\nhttp://findata.org/rbloomberg/\n\n\nOn Wed, Mar 23, 2011 at 2:27 AM, JOSH CHIEN <joshchien at yahoo.com> wrote:\n\n> Hi All,\n> I met one problem abo",
       "thread_id": "thread-8159ecfc88d5",
       "thread_depth": 1,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110323/42886933/attachment.pl"
+      ]
     },
     {
       "id": "msg-1b86043ec728",
@@ -1552,11 +1636,14 @@
       "subject_clean": "rgarch and GH",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110324/f722f41b/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110324/f722f41b/attachment.pl>",
+      "body_plain": "Dear Sir:\n\nSorry for bothering you all. I am working on garch estimation using rgarch\npackage assuming a generalized hyperbolic distribution. As I know,\nthe number of estimated parameters of GH should have five paramters.\nHowever, I checked the output and found only three paramters: dlambda, skew\nand shape. Is it because the standardization of the GH by letting the mean\nand variance to be 0 and 1? To meet these two requirements, those paramters\nshould at least have some values there. How can I extract the estimated\nvalues for all five parameters? What does dlambda represent? I want to\nextract those values as I need to calculate the VaR values by the model,\nwhich is still unclear to me how to use rgarch to calculate VaR. Enclosed is\nthe code for testing.\n\nAppreciate for any help from you.\n\nBest regards,\n\nShyh-Weir Tzang\n\n\n#\nlibrary(rgarch)\n\ndata(dji30ret)\nspec = ugarchspec(mean.model = list(armaOrder = c(0,0), include.mean =\nTRUE), variance.model = list(model = \"sGARCH\"), distribution.model = \"ghyp\")\nfit.dji=ugarchfit(spec,data=dji30ret[,\"AA\"], out.sample=1000)\n\n> coef(fit.dji)\n           mu         omega        alpha1         beta1\ndlambda          skew         shape\n 5.218311e-04  2.906185e-06  3.720127e-02  9.555983e-01 -3.553546e+00\n6.324228e-01  2.500494e-01\n#####\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear Sir:\n\nSorry for bothering you all. I am working on garch estimation using rgarch\npackage assuming a generalized hyperbolic distribution. As I know,\nthe number of estimated parameters of GH should",
       "thread_id": "thread-c21a4e152f88",
       "thread_depth": 0,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110324/f722f41b/attachment.pl"
+      ]
     },
     {
       "id": "msg-0aab0361656a",
@@ -1607,11 +1694,14 @@
       "subject_clean": "multiple plots with QQplot of PerformanceAnalytics",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110325/9bb62e97/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110325/9bb62e97/attachment.pl>",
+      "body_plain": "Hi All,\n\n\nI am trying to plot 4 graphs on to 1 page using layout(...), or par(mfcol = \nc(...)); with the function QQplot from the package PerformanceAnalytics.\nThe problem is that, no matter what order I use, it only plots 3 graphs on to 1 \npage and the last QQplot is shunted to the next page.\nAlso, this only happens to the QQplot, i.e. there is no problem with 4 \nHistograms. \n\n\nset.seed(1033)\ndata <- matrix(rnorm(240), 240, 2)\ndata[,2] <- rt(240, df = 7)\n\ntm <- ts(data, start = c(1990, 1), frequency = 12)\nret.ts <- as.timeSeries(tm)\n\nlayout(rbind(c(1, 2), c(3, 4)))\n#par(mfcol = c(2, 2))\nchart.Histogram(ret.ts[, 1], main = \"Density\", breaks = 30, methods = \n\"add.density\")\nchart.Histogram(ret.ts[, 2], main = \"Density\", breaks = 30,  methods = \n\"add.density\")\nchart.QQPlot(ret.ts[, 1])\nchart.QQPlot(ret.ts[, 2])\n\nAny suggestion please. Many thx.\n\nRgds.,\n\nWill\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi All,\n\n\nI am trying to plot 4 graphs on to 1 page using layout(...), or par(mfcol = \nc(...)); with the function QQplot from the package PerformanceAnalytics.\nThe problem is that, no matter what orde",
       "thread_id": "thread-53c53f4ee229",
       "thread_depth": 0,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110325/9bb62e97/attachment.pl"
+      ]
     },
     {
       "id": "msg-02aa96927d4f",
@@ -1659,11 +1749,14 @@
       "subject_clean": "IBrokers R package: issue with class twsconn (R)",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110325/a6fe2988/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110325/a6fe2988/attachment.pl>",
+      "body_plain": "Hello,\n\nAt the moment, I am switching from Python to R and I am trying to write some\nsimple code to price a portfolio, using Jeff Ryan's Ibrokers package. I\nwould like to have a field of class twsconn in one of my objects\n\nsetClass( \"MktAsset\",\n  representation( IB.id = \"character\",\n                          asset.type = \"factor\",\n              ccy = \"factor\",\n              IB.conn = \"twsconn\") )\n\nbut the system does not seem happy about it\n\nMsg is\n\nIn .completeClassSlots(ClassDef, where) : undefined slot classes in\ndefinition of \"MktAsset\": IB.connection(class \"twsconn\")\n\nbut when I ask the class of tws (initialized with tws <- twsConnect(), it\nreturns\n\n[1] \"twsconn\" \"environment\"\n\nI tried to go through the code to check for the existence of a class twsconn\nbut, I found nothing.\n\nCan someone help?\n\nThanks a lot\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\nAt the moment, I am switching from Python to R and I am trying to write some\nsimple code to price a portfolio, using Jeff Ryan's Ibrokers package. I\nwould like to have a field of class twsconn",
       "thread_id": "thread-172ae12fffab",
       "thread_depth": 0,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110325/a6fe2988/attachment.pl"
+      ]
     },
     {
       "id": "msg-7e72317df749",
@@ -1812,11 +1905,14 @@
       "subject_clean": "reqMktData in IBrokers",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110329/4a785f38/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110329/4a785f38/attachment.pl>",
+      "body_plain": "Hi,\n\nI am trying to implement a simple function to get the lastPrice field for\nequities, futures...\nMy first attempt is:\n\n         reqMktData(tws,twsEquity(x$id,x$exchange),snapshot=T)$lastPrice\n\nwhere x is an equity object having the 2 required fields: name and exchange.\n\nThis works randomly at best and is very slow (given that it is supposed to\nbe real time!)\n\nSo, I went through the pages where similar issues were reported; but there\nis a lot of things that are not yet clear:\n\n1- it seems, setting snapshot = T is wrong and slow. Why?\n2- if we look at the API doc, it seems reqMktData is deprecated and\nreqMktDataEx should be used instead; and the interface for reqMktDataEx is\nvery simple (no callback, no wrapper). Is there something similar in the\nIBrokers package?\n3- if we must go with callbacks and wrappers, is there any good pointer for\na tutorial on this?\n3- I am trying to get the lastPrice for a french stock: I use\ntwsEquity(\"SAN\",\"SBF\"), but I get a msg like\n\n                                 2 1 200 No security definition has been\nfound for the request\n\nI guess I don't specify well the stock Sanofi which has SBF as its main\nexchange. Is there a pointer to the way IB symbols work?\n\nThanks a lot in advance\n\nJohnny.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI am trying to implement a simple function to get the lastPrice field for\nequities, futures...\nMy first attempt is:\n\n         reqMktData(tws,twsEquity(x$id,x$exchange),snapshot=T)$lastPrice\n\nwher",
       "thread_id": "thread-cf8dfd622adf",
       "thread_depth": 0,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110329/4a785f38/attachment.pl"
+      ]
     },
     {
       "id": "msg-16e379d46607",
@@ -1862,11 +1958,14 @@
       "subject_clean": "CAPM Wavelets",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110329/ee8c5df1/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110329/ee8c5df1/attachment.pl>",
+      "body_plain": "Dear all,\n\nHas anyone implemented CAPM fitting using wavelets? Im not sure how to do\nthat. It would be great if someone could provide me a working example.\n\nYours,\nRenoir\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,\n\nHas anyone implemented CAPM fitting using wavelets? Im not sure how to do\nthat. It would be great if someone could provide me a working example.\n\nYours,\nRenoir\n\n\t[[alternative HTML version ",
       "thread_id": "thread-dc65d80ecccc",
       "thread_depth": 0,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110329/ee8c5df1/attachment.pl"
+      ]
     },
     {
       "id": "msg-610d6c59075a",
@@ -1899,11 +1998,14 @@
         "<1301441988233-3416574.post@n4.nabble.com>",
         "<1301446867001-3416732.post@n4.nabble.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110330/516ef78e/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110330/516ef78e/attachment.pl>",
+      "body_plain": "Hi,\n\nHave a look at unitrootTest() from fUnitRoots package. Call it with type =\n'nc', i.e.:\n\nunitrootTest(coredata(spread(matrix)), lags=0, type='nc')\n\nThis implements the McKinnon test statistic (using McKinnon's response\nsurface approach) and seems better for reveling trending data.\n\nYou can also use the adfTest implementation from fUnitRoots (with type='cn')\nwhich does not detrends the series, but it does not reveal\nweaker trends in the series.\n\n-Mark-\n\n2011/3/30 algotr8der <algotr8der at gmail.com>\n\n> I just attached the time series source data to the original post. The data\n> is\n> 1 minute data.\n>\n> --\n> View this message in context:\n> http://r.789695.n4.nabble.com/Interpreting-cointegration-ur-df-and-ad-test-tp3416574p3416732.html\n> Sent from the Rmetrics mailing list archive at Nabble.com.\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nHave a look at unitrootTest() from fUnitRoots package. Call it with type =\n'nc', i.e.:\n\nunitrootTest(coredata(spread(matrix)), lags=0, type='nc')\n\nThis implements the McKinnon test statistic (usi",
       "thread_id": "thread-16e379d46607",
       "thread_depth": 2,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110330/516ef78e/attachment.pl"
+      ]
     },
     {
       "id": "msg-b690b271181c",
@@ -1972,11 +2074,14 @@
       "subject_clean": "change class: cajolst and cajorls",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110330/7f1e485f/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110330/7f1e485f/attachment.pl>",
+      "body_plain": "Dear Members:\n \nI am trying to estimate a VECM using the Johansen Methodology and including a shift at unknown time. In order to reach this goal I had applied first the function cajolst and then the function cajorls, both of package urca. I have now a problem, I need to estimate the logLik and also to apply the tests of heterocedasticity, normality and autocorrelation. However the class of both results, from cajolst and cajorls, give the following:\n \nError in UseMethod(\"logLik\") : \n  no applicable method for 'logLik' applied to an object of class \"c('ca.jo', 'urca')\"\n \nError in UseMethod(\"logLik\") : \n  no applicable method for 'logLik' applied to an object of class \"list\"\n \nI think I need to change the class of the result of one of the functions but I am not sure how to do it.\n \nIf some one have an idea I would be very grateful.\n \nThanks! \t\t \t   \t\t  \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear Members:\n \nI am trying to estimate a VECM using the Johansen Methodology and including a shift at unknown time. In order to reach this goal I had applied first the function cajolst and then the f",
       "thread_id": "thread-3d97373f318a",
       "thread_depth": 0,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110330/7f1e485f/attachment.pl"
+      ]
     },
     {
       "id": "msg-6428d33abf85",
@@ -1990,11 +2095,14 @@
       "references": [
         "<COL124-W2089C3FD85217F397F2B82E5BC0@phx.gbl>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110330/c176be44/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110330/c176be44/attachment.pl>",
+      "body_plain": "Dear Members:\n \nI am trying to estimate a VECM using the Johansen Methodology and including a shift at unknown time. In order to reach this goal I had applied first the function cajolst and then the function cajorls, both of package urca. I have now a problem, I need to estimate the logLik and also to apply the tests of heterocedasticity, normality and autocorrelation. However the class of both results, from cajolst and cajorls, give the following:\n \nError in UseMethod(\"logLik\") : \n  no applicable method for 'logLik' applied to an object of class \"c('ca.jo', 'urca')\"\n \nError in UseMethod(\"logLik\") : \n  no applicable method for 'logLik' applied to an object of class \"list\"\n \nI think I need to change the class of the result of one of the functions but I am not sure how to do it.\n \nIf some one have an idea I would be very grateful.\n \nThanks!\n\nKarla Hernández V \t\t \t   \t\t  \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear Members:\n \nI am trying to estimate a VECM using the Johansen Methodology and including a shift at unknown time. In order to reach this goal I had applied first the function cajolst and then the f",
       "thread_id": "thread-3d97373f318a",
       "thread_depth": 1,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110330/c176be44/attachment.pl"
+      ]
     },
     {
       "id": "msg-4ab33ad31929",
@@ -2072,11 +2180,14 @@
       "subject_clean": "Vector Autoregression on Panel Data",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110331/75589bcd/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110331/75589bcd/attachment.pl>",
+      "body_plain": "Hi\n\nI would like to do a Vector Autoregression model on panel data. Is this\npossible in R? and are there any built in functionality to perform this kind\nof model?\n\nThank you very much for your time.\n\nHerbert\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi\n\nI would like to do a Vector Autoregression model on panel data. Is this\npossible in R? and are there any built in functionality to perform this kind\nof model?\n\nThank you very much for your time.\n\n",
       "thread_id": "thread-01934468b533",
       "thread_depth": 0,
-      "month": "2011-03"
+      "month": "2011-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20110331/75589bcd/attachment.pl"
+      ]
     },
     {
       "id": "msg-8aa7ab123d55",

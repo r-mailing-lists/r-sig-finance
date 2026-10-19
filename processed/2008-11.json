@@ -13,11 +13,14 @@
       "subject_clean": "Pattern Recognition / Classification in R for Financial Time Series",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081102/5ab986d0/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081102/5ab986d0/attachment.pl>",
+      "body_plain": "This is a typical search problem that needs well defined similarity measure\n(as Stefano quietly pointed out). For the 5 daily Open-High-Low-Close type\nof series similarity measures based on some statistics/probability may not\nwork most of the time. There are several distance measures (L1,L2,\nMinkowski, Cosine, edit distance, Statistical distances, etc) one can use to\nobtain similar patterns. The similarity is context dependent and you should\nfirst select the proper one.\n\nAs an example,\nAssume that 3 derived values are obtained by means of simply dividing HLC to\nOpen.\nHtoO, LtoO, CtoO (5 observations for each).\nThen for each sequence of these 3 series, simple Euclidean distance can be\ncalculated with other stocks. If these 3 characteristics are assumed to be\nequal, just average the distances obtained. If not, try to find out some\nweights.\nAnd finally the nearest neighbour(s) is (are) selected.\n\nIn this example, we simply treat time series as multivariate observations.\nThis means that we assume the sequence itself does not carry important\ninformation, though exact sequences gives perfect similarity. But, increase\nthen decrease pattern has the same distance as decrease then increase\npattern to flat pattern although they have high dissimilarity. If these\npatterns are clustered, they are certainly assigned to different clusters.\n\nFor the longer sequences I might consider using Longest Common Subsequence\ntype metric. For quite long series, other similarity measures, such as,\nMutual Information, ARIMA, Markov Operators as Stefano proposed,\ncoefficient, best 5-10 fft coefficients, or, some others like,\nKullback-Leibler, Kolmogorov-Smirnov, Histogram Intersection etc are found\nto be useful to identify the similar processes.\n\nAs far as I know, most of the similarity measures are implemented in R (try,\nmachine learning, clustering, bioconductor-biodist) and they are ready to\nuse.\n\nAs for the last suggestion, try something simple first, then identify the\nproblem (if any) of this approach, then try another and.... (Occam's razor\nis your guide when selecting the approach).\n\nGood Luck!\n\nOzkan...\n\n-----------\nHi I was wondering if there are any good packages in R that would be\nuseful in Time Series Pattern Recognition (3rd party software\nsuggestions are also welcome!) .\n\nMy search problem description is this: Given a specific 5 day OHLC\nsequence in a particular stock A, I want to scan through a list of\nstocks B, C, etc... and return another 5 day OHLC sequence which\nclosely 'matches' my given sequence.\n\nThe basic brute force algorithm which I'm working on currently is to\nnormalize all 5 day sequences in my search universe and to calculate\nthe differential in HL and return the top N patterns with the lowest\ndifferential value. If there are any elegant / intelligent ways to\nsolve my problem, I would love to hear it! Thanks...\n\nRgds\nIan\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "This is a typical search problem that needs well defined similarity measure\n(as Stefano quietly pointed out). For the 5 daily Open-High-Low-Close type\nof series similarity measures based on some stati",
       "thread_id": "thread-e0322e91947c",
       "thread_depth": 0,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081102/5ab986d0/attachment.pl"
+      ]
     },
     {
       "id": "msg-e4954aa2bb82",
@@ -97,11 +100,14 @@
       "references": [
         "<490F9C87.7080604@yahoo.co.uk>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081104/f3e922e6/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081104/f3e922e6/attachment.pl>",
+      "body_plain": "Hello Bastian,\nThis error means that the builtin data set was not loaded into the Data\nvariable.\n\nHave you loaded the fPortfolio library?\n\nTry running the following code:\n\nlibrary(fPortfolio)\nData <- as.timeSeries(data(LPP2005REC))[,1:6]\nSpec <- portfolioSpec()\nportfolioFrontier(data = Data , spec = Spec, constraints = \"Const\")\n\nBests,\n\nHebbertt\n\nOn Mon, Nov 3, 2008 at 10:51 PM, Bastian Offermann <\nbastian2507hk at yahoo.co.uk> wrote:\n\n> hello,\n>\n> have there been any changes recently to fPortfolio? i have taken the code\n> from the following presentation\n>\n> http://www.rmetrics.org/Meielisalp2008/Presentations/Wuertz2.pdf\n>    slide 10/31\n>\n> Data <- as.timeSeries(data(LPP2005REC))[,1:6]\n> Spec <- portfolioSpec()\n> portfolioFrontier(data = Data , spec = Spec, constraints = Const)\n>\n> it returns error message\n>\n> Error in as.matrix(x at Data) :\n>  no slot of name \"Data\" for this object of class \"timeSeries\"\n>\n> can anybody help me out? are there any good tutorials on fPortfolio.\n> documentation seems to be a little rather technical. thanks.\n>\n> regards\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello Bastian,\nThis error means that the builtin data set was not loaded into the Data\nvariable.\n\nHave you loaded the fPortfolio library?\n\nTry running the following code:\n\nlibrary(fPortfolio)\nData <- ",
       "thread_id": "thread-c8df734cb7db",
       "thread_depth": 1,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081104/f3e922e6/attachment.pl"
+      ]
     },
     {
       "id": "msg-b0cd932c53be",
@@ -262,11 +268,14 @@
         "<mailman.2.1225364401.4020.r-sig-finance@stat.math.ethz.ch>",
         "<4909B49C.3040102@unige.ch>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081105/e57fb000/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081105/e57fb000/attachment.pl>",
+      "body_plain": "Hi,\n \n \nBeing a new user of R, please accept my apologies if this question is basic. \nIt covers much more R itself than its use in Finance. \n \nI use R under Mac OSX, I have a problem with the initialisation file .Rprofile. \n \n>> according to the documentation, I just have to put a text file into the current directory by default (the one R starts from by default), call it \".Rprofile\" and input the commands I want R to perform at startup. In this case, this is a simple \"library(DBI)\" that is in the file - nothing more. The package is installed and the command functions when typed in manually \n \n>> R reverts me an error message (something like \"error inserted character \"{\\\") which does not appear when I start R after deleting/moving the dile - so I know R detects it. & as mentioned, the only thing the file has written in it is \"library(DBI)\" >> I edited the file using texedit.app\n \n \nAny feedback welcome - many thanks\n \nRgds,\nJulien\n_________________________________________________________________\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n \n \nBeing a new user of R, please accept my apologies if this question is basic. \nIt covers much more R itself than its use in Finance. \n \nI use R under Mac OSX, I have a problem with the initiali",
       "thread_id": "thread-0f910476fad8",
       "thread_depth": 0,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081105/e57fb000/attachment.pl"
+      ]
     },
     {
       "id": "msg-334bb4f36f3f",
@@ -296,11 +305,14 @@
       "references": [
         "<8ed68eed0811051119y476178dbhdea0da1b97887e32@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081105/59678240/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081105/59678240/attachment.pl>",
+      "body_plain": "Dear Sean,\n\nCreditMetrics  package in R is a good resource. However, it would convenient\nfor me to comment further if you please be a little specific regarding  your\nend purpose.\n\nKind Regards,\nDebashis\n\n\nOn 05/11/2008, Sean O'Riordain <seanpor at acm.org> wrote:\n>\n> Good evening,\n>\n> I'm quite new to the risk modeling arena and recently I starting to\n> look at some loans and their state transitions. For simplicity I will\n> describe a cut-down version - NORM=normal, OD means between 1 and 89\n> days after missing a payment and NPL means that there is a payment\n> which is more than 89 days overdue.  My base data is the daily state\n> transition list and the end of month state of the loan book.  I\n> calculate the 3x3 probability transition matrix using a generator\n> matrix method - loosely based on [1].\n>\n> For transition  / generator matrices, has anybody any suggestions for\n> how I might look at the robustness / sensitivity of the calculations?\n> My own thought was to calculate the matrix say N times leaving out a\n> sample of 1/N of the input loans, and then look at the summary() type\n> stats for each point in the matrix - thoughts? or is this just daft\n> talk?  In a single variable I can plot the output density and look at\n> the summary() data - but I have no clue really how to do this for a\n> transition matrix.\n>\n> Then there is the question of time varying transition matrices and how\n> to understand them and even <gasp> estimate where the matrix is headed\n> over the next three months?\n>\n> Has anybody any suggestions as to where I might look for other ideas\n> on where to go with this or has anybody done this type of loan book\n> credit risk modeling?\n>\n> Many thanks in advance!\n>\n> Best regards,\n> Sean O'Riordain\n> Dublin, Ireland.\n> seanpor at acm.org\n>\n>\n> [1] Lando, D., and T. Skodeberg (2002). \"Analyzing ratings transitions\n> and rating drift with continuous observations.\" Journal of Banking and\n> Finance 26: 423-444.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear Sean,\n\nCreditMetrics  package in R is a good resource. However, it would convenient\nfor me to comment further if you please be a little specific regarding  your\nend purpose.\n\nKind Regards,\nDebash",
       "thread_id": "thread-334bb4f36f3f",
       "thread_depth": 1,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081105/59678240/attachment.pl"
+      ]
     },
     {
       "id": "msg-156649210dab",
@@ -365,11 +377,14 @@
       "subject_clean": "Group for Actuarial Research",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081106/3fa871ca/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081106/3fa871ca/attachment.pl>",
+      "body_plain": "Special Interest Group for Actuarial Theory \n\nThis group aims to provide the exchange of information on researches and studies that cover the Actuarial Theory and applications.\n\nSome topics are:\n\nLife and Non-Life insurance;\nRisk Analysis and Ruin Theory;\nStochastic Processes in (Re)Insurance and Finance;\nBayesian Methods in Actuarial Science;\nStatistical Modelling in Risk and (Re)Insurance;\n\nHome page: http://br.groups. yahoo.com/ group/actuarial_ research\nE-mail: actuarial_research@ yahoogrupos. com.br\nSubscribers : actuarial_research- subscribe@ yahoogrupos. com.br\n\n\n      Novos endereços, o Yahoo! que você conhece. Crie um email novo com a sua cara @ymail.com ou @rocketmail.com.\nhttp://br.new.mail.yahoo.com/addresses\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Special Interest Group for Actuarial Theory \n\nThis group aims to provide the exchange of information on researches and studies that cover the Actuarial Theory and applications.\n\nSome topics are:\n\nLife",
       "thread_id": "thread-2ad8eaace2ee",
       "thread_depth": 0,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081106/3fa871ca/attachment.pl"
+      ]
     },
     {
       "id": "msg-688c1ee06b7b",
@@ -433,11 +448,14 @@
       "subject_clean": "FinTS requires zoo to export as.Date.numeric",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081108/7ebbb5b7/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081108/7ebbb5b7/attachment.pl>",
+      "body_plain": "Dear list:\n \nI have just installed the latest versions of zoo (1.6-0) and FinTS (0.3-7)  from RForge.\n \nFinTS has an importFrom(zoo,as.Data.numeric) in its NAMESPACE file,\nbut zoo seems to not export as.Date.numeric in its NAMESPACE file.\n \n> library(FinTS)\nLoading required package: zoo\nError in importIntoEnv(impenv, impnames, ns, impvars) : \n  object ''as.Date.numeric'' is not exported by 'namespace:zoo'\nError: package/namespace load failed for 'FinTS'\n\n> sessionInfo()\nR version 2.8.0 (2008-10-20) \ni386-pc-mingw32 \nlocale:\nLC_COLLATE=English_United States.1252;LC_CTYPE=English_United States.1252;LC_MONETARY=English_United States.1252;LC_NUMERIC=C;LC_TIME=English_United States.1252\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base     \nother attached packages:\n[1] zoo_1.6-0\nloaded via a namespace (and not attached):\n[1] grid_2.8.0      lattice_0.17-15\n\n> a = installed.packages()\n> a['FinTS','Version']\n[1] \"0.3-7\"\n\nWould removing the importFrom(zoo, as.Date.numeric) statement in FinTS NAMESPACE be\nthe appropriate response to this? \n \nThank you in advance,\n \nNorm\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear list:\n \nI have just installed the latest versions of zoo (1.6-0) and FinTS (0.3-7)  from RForge.\n \nFinTS has an importFrom(zoo,as.Data.numeric) in its NAMESPACE file,\nbut zoo seems to not export ",
       "thread_id": "thread-e7037c687fad",
       "thread_depth": 0,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081108/7ebbb5b7/attachment.pl"
+      ]
     },
     {
       "id": "msg-abd84a8569f9",
@@ -556,11 +574,14 @@
       "subject_clean": "please recommend statistics, time series and econometrics books with finance, macroeconomics, trading and business applications",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081109/20ae7be0/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081109/20ae7be0/attachment.pl>",
+      "body_plain": "i think you're question is too general but Eric Zivot's S+Finmetrics \ntext and Peter Kennedy's econometrics text , the title of which escapes \nme but maybe it's \"Introductory Econometrics\", are two VERY DIFFERENT \nkinds of what I would think of as \"connect the dots\" books that you \nmight like ?\n\n\nOn Sat, Nov 8, 2008 at 10:26 PM, Michael wrote:\n\n> I have read these books already... still searching for better books \n> ...\n\nOn Sat, Nov 8, 2008 at 7:49 PM, Spencer Graves <spencer.graves at pdf.com \n<mailto:spencer.graves at pdf.com>   <mailto:spencer.graves at pdf.com> > \nwrote:\n>      One book is Ruey Tsay (2005)  Analysis of Financial Time Series, \n> 2nd ed.\n> (Wiley).  The R package \"FinTS\" provides script files to that show how \n> to\n> work some of the example in the book.\n>      Try also \"RSiteSearch\" (www.r-project.org -> search PLUS the\n> \"RSiteSearch\" function in R) for more options, as Brian Peterson \n> suggested.\n>      Good Luck.     Spencer Graves\n>\n> Brian G. Peterson wrote:\n>>\n>> Michael wrote:\n>>>\n>>> Hi all,\n>>>\n>>> Please recommend good books for the following three categories. (I \n>>> am\n>>> aim at finance, macroeconomics, trading and business applications).\n>>>\n>>> (1) statistical (financial) data analysis;\n>>> (2) time series;\n>>> (3) econometrics.\n>>>\n>>> More specifically, I am looking for the following two types of \n>>> books:\n>>>\n>>> (1) Books that provide big pictures and intuitions and books that\n>>> connect dots...\n>>>\n>>> For example, there are lots of statistics books(e.g. regression,\n>>> etc.), time series, and econometrics books, many of them are quite\n>>> mathematical. I am myself from a quantitative background so I don't\n>>> have problem understanding the math, however I am looking for\n>>> resources that provide big pictures and intuitions and books that\n>>> connect dots together, books that compare the differences and\n>>> similarities and books that talks about why and how (e.g. why ARMA,\n>>> why \"log\", why GARCH, etc. ) and books talk about when things get\n>>> wrong and why and how to fix...\n>>>\n>>> (2) Books with meaningful finance, macroeconomics, trading and\n>>> business applications.\n>>\n>> This topic, in almost exactly the same request, comes up frequently \n>> on\n>> this list.  I suggest that you search the list archives.\n>>\n>> Regards,\n>>\n>>     - Brian\n>>\n>\n\n______________________________________________\nR-help at r-project.org <mailto:R-help at r-project.org>   \n<mailto:R-help at r-project.org>  mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-help \n<https://stat.ethz.ch/mailman/listinfo/r-help>   \n<https://stat.ethz.ch/mailman/listinfo/r-help>\nPLEASE do read the posting guide \nhttp://www.R-project.org/posting-guide.html \n<http://www.R-project.org/posting-guide.html>   \n<http://www.R-project.org/posting-guide.html>\nand provide commented, minimal, self-contained, reproducible code.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "i think you're question is too general but Eric Zivot's S+Finmetrics \ntext and Peter Kennedy's econometrics text , the title of which escapes \nme but maybe it's \"Introductory Econometrics\", are two VE",
       "thread_id": "thread-67c311f397a6",
       "thread_depth": 0,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081109/20ae7be0/attachment.pl"
+      ]
     },
     {
       "id": "msg-ee376999cb09",
@@ -588,11 +609,14 @@
       "subject_clean": "Multi CPUs PC",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081111/9cf0e551/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081111/9cf0e551/attachment.pl>",
+      "body_plain": "Hi,\n\nI have a PC with four CPUs. I am running a program that is doing some\nheavy amount of number crunching. My program is running using only one\nof the available CPU.  I would like to use the 4 CPUs at the same time,\nso as to speed the computing time. Can someone recommend the best way to\ndo that? \n\nAny tips are highly appreciated.\n\n\nJorge Nieves\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI have a PC with four CPUs. I am running a program that is doing some\nheavy amount of number crunching. My program is running using only one\nof the available CPU.  I would like to use the 4 CPUs ",
       "thread_id": "thread-63f83fe13c8c",
       "thread_depth": 0,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081111/9cf0e551/attachment.pl"
+      ]
     },
     {
       "id": "msg-dccc53f53422",
@@ -716,11 +740,14 @@
       "subject_clean": "Multi CPUs PC",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081112/50046bc9/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081112/50046bc9/attachment.pl>",
+      "body_plain": "Hi,\n\nDirk already mentioned NetWorkSpaces (NWS), but I'd like to elaborate a bit\non it. I have several large bootstraps involving the EM-algorithm and found\nmyself needing to use more than one processor. After looking at the\navailable options, I concluded that NWS was the easiest.\n\nIt really is easy to setup, especially when using the \"web launch\". This way\nyou don't have to bother with SSH. It also good for using all those cores on\na signle PC. I additionally found it works when using a mixture of Linux and\nWindows nodes. Your code also doesn't need much modification... If you can\nuse \"apply\" with your code, then it should work with NWS sleigh.\n\nOne word of caution, however, is that the function you pass to sleigh's\n\"eachElem\" can only call functions available to the other workers. That\nsounds obvious, but it created quite a few problems for me. You have to\nprepare each worker so that it has available the functions called by the\nfunction passed onto eachElem. The easiest way I found to this was to\npackage all my custom functions as a library and run \"eachWorker(s,\nfunction() library(mylibrary))\".\n\nAs Dirk pointed out, you should profile your code to make sure that you\nreally need to used parallisation or distributed computing. You may well\nfind that using vectorized R code (apply, sapply etc.) gives you the speed\nboost required. In my case, the problem was truly \"embarassingly parallel\",\nso NWS worked well.\n\nHope this helps.\n\nRegards,\n\nStefan\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nDirk already mentioned NetWorkSpaces (NWS), but I'd like to elaborate a bit\non it. I have several large bootstraps involving the EM-algorithm and found\nmyself needing to use more than one process",
       "thread_id": "thread-932b3f81668f",
       "thread_depth": 0,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081112/50046bc9/attachment.pl"
+      ]
     },
     {
       "id": "msg-61fc19dbc6b9",
@@ -732,11 +759,14 @@
       "subject_clean": "Generic versus calendar futures in trading models",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081112/167b4286/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081112/167b4286/attachment.pl>",
+      "body_plain": "Hello,\n\nI am testing an econometric model for trading futures on commodities. I\nam setting up the back-testing phase, but I am facing a  dilemma about\nwhat is the best way to \"easy\" the transition for when futures mature\ninto the next open contact. For now I am testing the model using the\ngeneric CL1 crude front contact. I would like to ensure that the rolling\nafter maturity of each calendar contract does not generate false\nsignals. Any one has any suggestion about what will be the best approach\nand why?\n\nThanks,\n\n\nJorge Nieves\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\nI am testing an econometric model for trading futures on commodities. I\nam setting up the back-testing phase, but I am facing a  dilemma about\nwhat is the best way to \"easy\" the transition for",
       "thread_id": "thread-61fc19dbc6b9",
       "thread_depth": 0,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081112/167b4286/attachment.pl"
+      ]
     },
     {
       "id": "msg-2949adbe9e4d",
@@ -750,11 +780,14 @@
       "references": [
         "<cd2a43910811120444g167a785dw1c046250986b85cc@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081112/c5e1e190/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081112/c5e1e190/attachment.pl>",
+      "body_plain": "Dear Hebbertt:\n\nOn Wed, Nov 12, 2008 at 1:44 PM, Hebbertt Soares <hsoares85 at gmail.com>wrote:\n\n> Hello UseRs,\n>\n> I am working with Arbitrage Pricing Theory (APT), an extension of CAPM\n> proposed by Roll and Ross. One of the most troubling issues of this\n> model is the estimation of its two components: the factor\n> sensitivities and risk premia..\n>\n> Most of the literature estimate this equation in two steps, using Fama\n> and Macbeth (1973) approach.\n>\n> However, as Burmesteir and McElroy (1988) shows this approach is\n> inefficient. It would be more efficient doing a joint estimation of\n> factor sensitivities  and risk premia as proposed in as Burmesteir and\n> McElroy (1988) paper.\n>\n> This estimation would be done trough a system of nonlinear\n> multivariate equations with the following structural form (suppose two\n> assets and two factors):\n>\n> return of asset 1 - risk free rate = constant*coefficient(2) +\n> coefficient(2)*factor 1 +\n> coefficient(3)*coefficient(4)+coefficient(4)*factor2\n>\n> return of asset 2 - risk free rate = constant*coefficient(5) +\n> coefficient(5)*factor 1 +\n> coefficient(3)*coefficient(5)+coefficient(5)*factor2\n>\n> This system has N equation with K parameter, where N is the number of\n> assets and K is the number of factors and the number of interaction\n> among factors.\n>\n> The estimation can be done using SUR method.\n>\n> I've been looking systemfit (specially nlsystemfit function), and I\n> have not been able to find a way of implementing this method in R.\n>\n> Does anyone in the list implemented APT joint estimation in R? How?\n\n\nIt should be possible to specify the formulas as for nls(). However, while\nthe code for the linear estimation with systemfit() is very mature and has\nproven very reliable for many years, the non-linear estimation with\nnlsystemfit() is still under development. Hence, you should bear in mind\nthat you might get wrong results :-(  You are invited to help us improving\nthe code of nlsystemfit ;-) (You just have to register at R-Forge and ask to\njoin the systemfit project)\n\nBest wishes,\nArne\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear Hebbertt:\n\nOn Wed, Nov 12, 2008 at 1:44 PM, Hebbertt Soares <hsoares85 at gmail.com>wrote:\n\n> Hello UseRs,\n>\n> I am working with Arbitrage Pricing Theory (APT), an extension of CAPM\n> proposed by",
       "thread_id": "thread-680951646e91",
       "thread_depth": 1,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081112/c5e1e190/attachment.pl"
+      ]
     },
     {
       "id": "msg-5324c739484a",
@@ -766,11 +799,14 @@
       "subject_clean": "Generic versus calendar futures in trading models",
       "in_reply_to": "<D595C0E05185614C90515F1E8A2D4CBF014EB771@NYC-XCH3.win.moorecap.com>",
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081112/3f1e0244/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081112/3f1e0244/attachment.pl>",
+      "body_plain": "Every future will have its own market convention for rolling. If you are \nnot sure what the market convention is for a market, the best is to switch \ncontracts when the volume and open interest of the \"deferred\" contract is \ngreater than the \"front\". That makes sure that you are always in the most \nactive contract month.\n\n\n\n\n\"Jorge Nieves\" <jorge.nieves at moorecap.com> \nSent by: r-sig-finance-bounces at stat.math.ethz.ch\n11/12/08 12:27 PM\n\nTo\n<r-sig-finance at stat.math.ethz.ch>\ncc\n\nSubject\n[R-SIG-Finance] Generic versus calendar futures in trading models\n\n\n\n\n\n\nHello,\n\nI am testing an econometric model for trading futures on commodities. I\nam setting up the back-testing phase, but I am facing a  dilemma about\nwhat is the best way to \"easy\" the transition for when futures mature\ninto the next open contact. For now I am testing the model using the\ngeneric CL1 crude front contact. I would like to ensure that the rolling\nafter maturity of each calendar contract does not generate false\nsignals. Any one has any suggestion about what will be the best approach\nand why?\n\nThanks,\n\n\nJorge Nieves\n\n\n\n                 [[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only.\n-- If you want to post, subscribe first.\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Every future will have its own market convention for rolling. If you are \nnot sure what the market convention is for a market, the best is to switch \ncontracts when the volume and open interest of the",
       "thread_id": "thread-61fc19dbc6b9",
       "thread_depth": 1,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081112/3f1e0244/attachment.pl"
+      ]
     },
     {
       "id": "msg-c9d722c17a3a",
@@ -816,11 +852,14 @@
       "subject_clean": "Generic versus calendar futures in trading models",
       "in_reply_to": "<38635.199.198.251.108.1226512132.squirrel@mail.braverock.com>",
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081112/0f483a86/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081112/0f483a86/attachment.pl>",
+      "body_plain": "Also if you are looking for a provider of historical futures data with an \nexcellent tool for creating every imaginable type of modified or \nback-adjusted futures, I would highly recommend CSI, www.csidata.com   It \nis very inexpensive and some of the best data quality I have seen.\n\nAnd of course there is an R package to access the API:\n\nhttp://www.itbizvision.com/ion/tiki-index.php?page=RCSI&PHPSESSID=846f6b0e30deb116c1061f7d46c90b9f\n\n\n\n\n\n\"Brian G. Peterson\" <brian at braverock.com> \nSent by: r-sig-finance-bounces at stat.math.ethz.ch\n11/12/08 12:48 PM\n\nTo\n\"Jorge Nieves\" <jorge.nieves at moorecap.com>\ncc\nr-sig-finance at stat.math.ethz.ch\nSubject\nRe: [R-SIG-Finance] Generic versus calendar futures in trading models\n\n\n\n\n\nJorge Nieves wrote:\n> I am testing an econometric model for trading futures on commodities. I\n> am setting up the back-testing phase, but I am facing a  dilemma about\n> what is the best way to \"easy\" the transition for when futures mature\n> into the next open contact. For now I am testing the model using the\n> generic CL1 crude front contact. I would like to ensure that the rolling\n> after maturity of each calendar contract does not generate false\n> signals. Any one has any suggestion about what will be the best approach\n> and why?\n\nMy first question is: How are you constructing your continuous series? \nThere are many methods for constructing a continuous series for futures\nand options, and the all have different problems.\n\nAlso, I think that one of the challenges in creating a backtesting\ninfrastructure for this type of instrument is that you can test a model\nagainst a continuous series, but you will eventually want to hest against\nhistorical quote and trade data on real insturments (e.g. tick data from\nthe exchange).  This raises your complexity immensely, for obvious\nreasons.\n\nRegards,\n\n  - Brian\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only.\n-- If you want to post, subscribe first.\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Also if you are looking for a provider of historical futures data with an \nexcellent tool for creating every imaginable type of modified or \nback-adjusted futures, I would highly recommend CSI, www.cs",
       "thread_id": "thread-61fc19dbc6b9",
       "thread_depth": 2,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081112/0f483a86/attachment.pl"
+      ]
     },
     {
       "id": "msg-c109f635807c",
@@ -1059,11 +1098,14 @@
       "subject_clean": "Correlation between two asynchronous time\tseries?",
       "in_reply_to": "<491D943D.3030504@swissonline.ch>",
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081114/82b9fba0/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081114/82b9fba0/attachment.pl>",
+      "body_plain": "one simple method used in practice (and the basis for correlation swap for \nexample) is to use 3 series of correlation using 3-day returns (or even 5 \nor 20)\n\n\n\n\nAdrian Trapletti <a.trapletti at swissonline.ch> \nSent by: r-sig-finance-bounces at stat.math.ethz.ch\n11/14/2008 03:07 PM\n\nTo\nR-Finance <r-sig-finance at stat.math.ethz.ch>\ncc\n\nSubject\nRe: [R-SIG-Finance] Correlation between two asynchronous time   series?\n\n\n\n\n\n\n>\n> Message: 4\n> Date: Thu, 13 Nov 2008 21:53:14 -0800\n> From: Michael <comtech.usa at gmail.com>\n> Subject: [R-SIG-Finance] correlation between two asynchronous time\n>                series?\n> To: r-sig-finance at stat.math.ethz.ch\n> Message-ID:\n> <b1f16d9d0811132153qd277378ka3d29b9d30a5d753 at mail.gmail.com>\n> Content-Type: text/plain; charset=ISO-8859-1\n>\n> Hi all,\n>\n> If I want to find out the correlation between two time series, one is\n> the Hong Kong stock index, the other is the S&P 500. The two markets\n> open at two different time.\n>\n> What impact it might have on my estimate of the correlation of the two\n> series? \nBig impact.\n> How do I address this asynchronous time series problem? Any\n> good models?\n> \nEither you use something along the lines of \nhttp://papers.ssrn.com/sol3/papers.cfm?abstract_id=332901or better you \nuse high frequency data (e.g., the S&P 500 futures is open almost 24 \nhours and you will get overlapping hours with the Asian markets).\n> Thanks a lot!\n>\n> \nBest regards\nAdrian\n\n-- \nAdrian Trapletti\nWildsbergstrasse 31\n8610 Uster\nSwitzerland\n\nPhone : +41 (0) 44 9945630\nMobile : +41 (0) 76 3705631\n\nEmail : a.trapletti at swissonline.ch\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only.\n-- If you want to post, subscribe first.\n\n\n\n\n---\n\n\n\nPlease refer to http://www.db.com/en/content/eu_disclosures.htm for additional EU corporate and regulatory disclosures.\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "one simple method used in practice (and the basis for correlation swap for \nexample) is to use 3 series of correlation using 3-day returns (or even 5 \nor 20)\n\n\n\n\nAdrian Trapletti <a.trapletti at swiss",
       "thread_id": "thread-fcb1570de0e3",
       "thread_depth": 1,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081114/82b9fba0/attachment.pl"
+      ]
     },
     {
       "id": "msg-f81e5f570525",
@@ -1093,11 +1135,14 @@
       "subject_clean": "Automatic Stock Market - Minority Game",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081114/2d30cc70/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081114/2d30cc70/attachment.pl>",
+      "body_plain": "Hi all,\n\n\n\nHas anyone here done any work on the Automatic Stock Market or the Minority\ngame?  I've started building a Minority game and have been surprised at how\nfast it is going.\n\nI would be interested in talking about building the minority game - it is\nagent modeling of stock market prices.  To this end, I've built most of the\ngame already.\n\nHowever, I do have a specific question.  Much of the coding uses binary\nnumbers.\n\nIs there a package that is helpful with binary numbers?\n\nI looked but didn't see anything, but given the number of packages I may\nhave overlooked several.\n\nregards,\n\nMike\n\n-- \nMichael Sankowski, CFA, CAIA\n312.404.8717\nmichael.sankowski at gmail.com\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi all,\n\n\n\nHas anyone here done any work on the Automatic Stock Market or the Minority\ngame?  I've started building a Minority game and have been surprised at how\nfast it is going.\n\nI would be interes",
       "thread_id": "thread-2b687943aff0",
       "thread_depth": 0,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081114/2d30cc70/attachment.pl"
+      ]
     },
     {
       "id": "msg-4964adaded2a",
@@ -1146,11 +1191,14 @@
       "references": [
         "<etPan.491f5da1.4821ef08.1b83@localhost>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081115/74420b7b/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081115/74420b7b/attachment.pl>",
+      "body_plain": "Brian,\nBy default, chartSeries() try to add a graph of the \"Volume\". Try running\nchartSeries(Delt(M1), type='line', TA=NULL)\n\nrgds\nPaulo\n\n\nOn Sat, Nov 15, 2008 at 9:39 PM, Brian Lee Yung Rowe <brian at muxspace.com>wrote:\n\n>  Hello,\n>\n> I am using quantmod to download FRED data and would like to view the series\n> using the chartSeries function, but I am getting an error.\n>\n> > getSymbols('M1', src='FRED')\n> > class(M1)\n> [1] \"xts\" \"zoo\"\n> > chartSeries(Delt(M1), type='line')\n> Error in sum(poss.new) : invalid 'type' (list) of argument\n> > chartSeries(Delt(M1))\n> Error in sum(poss.new) : invalid 'type' (list) of argument\n>\n> Based on the documentation it seems that this data should be supported:\n> \"Courtesy of *as.xts* it can handle any object that is time-series like,\n> meaning *R* objects of class *xts*, *zoo*, *timeSeries*, *its*, *ts*, *\n> irts*, and more!\"\n>\n> According to ?quantmod, I am using:\n>        Version:   0.3-6\n>        Revision:  433\n>        Date:      2007-06-09\n>\n>\n> Is this functionality supported or am I missing something?\n>\n> Thanks,\n> Brian\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Brian,\nBy default, chartSeries() try to add a graph of the \"Volume\". Try running\nchartSeries(Delt(M1), type='line', TA=NULL)\n\nrgds\nPaulo\n\n\nOn Sat, Nov 15, 2008 at 9:39 PM, Brian Lee Yung Rowe <brian a",
       "thread_id": "thread-8168cf2c8709",
       "thread_depth": 1,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081115/74420b7b/attachment.pl"
+      ]
     },
     {
       "id": "msg-cc62def86ec6",
@@ -1427,11 +1475,14 @@
         "<a010cefd0811170838o215c8663xc156675a319c6da2@mail.gmail.com>",
         "<8cca69990811170916p2f57f53n92a3c070b345dcc4@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081117/07ee7c4a/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081117/07ee7c4a/attachment.pl>",
+      "body_plain": "Summarizing:\n- google provides an other source of adjusted data, whose quality remains to\nbe proven\n- there is a simple way to merge the data so that they are compatible, this\nis great I was planning to do the same, but it would probably not have been\nas elegant as Josh approach.  I am pretty new to time series, so I was\nlooking into some looping constructs.\n\nOn Mon, Nov 17, 2008 at 9:16 AM, Josh Ulrich <josh.m.ulrich at gmail.com>wrote:\n\n> Hi Marc,\n>\n> The adjustment algorithm will be separate from getYahooData in the\n> next release of TTR.  Then you'll be able to adjust data and pull data\n> using whichever function you prefer.\n>\n> This is what I would do, though I'm not sure it's the most\n> correct/robust way to handle this issue.\n>\n> aapl <- getYahooData(\"AAPl\", 19910101, 20080101, quiet=TRUE)\n> genz <- getYahooData(\"GENZ\", 19910101, 20080101, quiet=TRUE)\n> aapl <- xts(aapl[,-1],aapl[,1])\n> genz <- xts(genz[,-1],genz[,1])\n>\n> both <- merge(aapl,genz,all=FALSE)\n>\n> The all=FALSE arg removes any rows that don't appear in both objects,\n> giving you compatible series.\n>\n> HTH,\n> Josh\n> --\n> http://quantemplation.blogspot.com\n>\n>\n>\n> On Mon, Nov 17, 2008 at 10:38 AM, Marc Delvaux <mdelvaux at gmail.com> wrote:\n> > I am trying to get historical quotes from Yahoo.  Ideally I want high\n> > quality split and dividend adjusted close prices for a set of stocks.\n> > My history so far:\n> > - I started with yahooSeries in pacjage fImport.  This would be ideal,\n> > but it does look like the series is for non adjusted data.  I didn't\n> > find any function to adjust the serires yet, is there any.\n> > - I then used getYahooData in package TTR.  This has the split\n> > adjusted values I want, but it seems that the returned data series\n> > don't always have the same dates present.  The series are OK for the\n> > near past, up to about 1600 points, but some series become\n> > incompatible later on.  A quick illustration of the problem is shown\n> > below, but many series are affected in that way.  Anybody that already\n> > faced that problem and came with a solution to get compatible series?\n> > It is not a real problem if you are using only one series, but is a\n> > serious problems when comparing series.\n> >\n> >> aapl <- getYahooData(\"AAPl\", 19910101, 20080101)\n> > End date out of range, 2007-12-31 is last available date.\n> > Start date out of range, 1991-01-02 is first available date.\n> >> genz <- getYahooData(\"genz\", 19910101, 20080101)\n> > End date out of range, 2007-12-31 is last available date.\n> > Start date out of range, 1991-01-02 is first available date.  << GENZ\n> > and AAPL report same start and end date\n> >> dim(genz)\n> > [1] 4279   10\n> >> dim(aapl)\n> > [1] 4285   10   << but different number of samples\n> >\n> > After some manipulations, including reverting the time order\n> >\n> >> aapl[1488:1490,]\n> >          Date  Open   High    Low  Close   Volume Unadj.Close Div Split\n> Adj.Div\n> > 523 2002-02-04 12.16 12.760 12.100 12.675 18656200       25.35  NA    NA\n>      NA\n> > 522 2002-02-01 12.17 12.480 12.170 12.205 14225200       24.41  NA    NA\n>      NA\n> > 521 2002-01-31 12.08 12.365 12.055 12.360 16730200       24.72  NA    NA\n>      NA\n> >> genz[1488:1490,]\n> >          Date  Open  High   Low Close   Volume Unadj.Close Div Split\n> Adj.Div\n> > 517 2002-02-04 46.45 46.50 43.30 44.04  5297000       44.04  NA    NA\n> >    NA  << where is 2002-02-01 ?\n> > 516 2002-01-31 44.70 46.49 44.22 45.61  4983100       45.61  NA    NA\n>  NA\n> > 515 2002-01-30 45.89 46.00 40.69 44.46 13818300       44.46  NA    NA\n>  NA\n> >\n> > _______________________________________________\n> > R-SIG-Finance at stat.math.ethz.ch mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only.\n> > -- If you want to post, subscribe first.\n> >\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Summarizing:\n- google provides an other source of adjusted data, whose quality remains to\nbe proven\n- there is a simple way to merge the data so that they are compatible, this\nis great I was planning ",
       "thread_id": "thread-e5ffddca4145",
       "thread_depth": 2,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081117/07ee7c4a/attachment.pl"
+      ]
     },
     {
       "id": "msg-32cabcb393cf",
@@ -1461,11 +1512,14 @@
       "references": [
         "<e8e755250810030803p5b361dc5nd3b3f31cfddfd087@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081117/c37cee6b/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081117/c37cee6b/attachment.pl>",
+      "body_plain": "R/Finance useR!s \n\n_*Columbia's Department of Statistics*_ <http://www.stat.columbia.edu/> in collaboration with the *_Center of Applied Probability_* <http://www.cap.columbia.edu/> and the \n_*Center for Financial Engineering*_ <http://www.cfe.columbia.edu/> is organizing a workshop on R in finance. The conference aims \nto bring together both academics and practitioners, and is open to public. \n\nAdmission is free, but please register at this link\nhttp://www.stat.columbia.edu/pages/ComputationalFinance/register.html\n\nThe conference is co-sponsored by *_REvolution Computing_* <http://www.revolution-computing.com/home>. \n\nFor more on the conference please see,      \n\n*http://www.stat.columbia.edu/pages/ComputationalFinance/index.html*\n\n*When : December 4th, 2008,2-6pm \nWhere: Rotunda, Low Library, Columbia University, New York,NY\n*\nHope to see you there!\n\nBest,\nKrishna\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "R/Finance useR!s \n\n_*Columbia's Department of Statistics*_ <http://www.stat.columbia.edu/> in collaboration with the *_Center of Applied Probability_* <http://www.cap.columbia.edu/> and the \n_*Center ",
       "thread_id": "thread-1e3f0fac6a06",
       "thread_depth": 0,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081117/c37cee6b/attachment.pl"
+      ]
     },
     {
       "id": "msg-25dd64b553a7",
@@ -1538,11 +1592,14 @@
       "subject_clean": "Johansen Procedure for VAR question",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081118/9f290417/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081118/9f290417/attachment.pl>",
+      "body_plain": "Good Morning,\n\nI'm using vars package to do a Johansen Procedure for VAR, and I'm\ninterested in using with K=1, but the next error comes up\n\n> ca.jo(Canada, type =\"eigen\", ecdet =\"const\", K = 1,\n+ spec=\"longrun\", season = NULL, dumvar = NULL)\nError en ca.jo(Canada, type = \"eigen\", ecdet = \"const\", K = 1, spec =\n\"longrun\",  :\n\nK must be at least K=2.\n\nI will be really thankful if you can answer me the reason of this.\n\nThanks,\n\nManuel Serna Cortés\nUniversidad Icesi\nColombia\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Good Morning,\n\nI'm using vars package to do a Johansen Procedure for VAR, and I'm\ninterested in using with K=1, but the next error comes up\n\n> ca.jo(Canada, type =\"eigen\", ecdet =\"const\", K = 1,\n+ spe",
       "thread_id": "thread-b7c5df1379df",
       "thread_depth": 0,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081118/9f290417/attachment.pl"
+      ]
     },
     {
       "id": "msg-25b7ae715391",
@@ -1595,11 +1652,14 @@
       "subject_clean": "Automatic Stock Market - Minority Game",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081119/3bf2ae1c/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081119/3bf2ae1c/attachment.pl>",
+      "body_plain": "I second Peter Carl's comments (below).  Particularly this one:\n> I haven't done any work on the Minority Game, per se, and I'd be interested in \n> learning more about it.  Do you have any favorite references?\n\n\nIn any case, I am interested in your thoughts and ideas with respect applying a minority game perspective to markets and market data.  I can imagine a number of possible mechanisms for predicting shifts in the patterns of majority/minority behavior over time in response to ongoing market experiences.\n\nI have not looked at the question of processing binary data in R, but I'm sure that it would not be all that difficult to make it happen in a couple of ways if there are no extant R routines that meet your needs.   If there is a compelling reason to stick with R as the simulation platform, my personal preference would be a combination of Python and R using RPy or RSPython.  Creating an R extension using C to do the binary processing, or incorporating some existing C libraries shouldn't be too tough if that seems appropriate.  (I'm not sure that R is an ideal platform for agent-based modelling, but perhaps someone will prove this notion wrong.)  However, there is quite a bit of mechanical overhead in building agent-based simulations, and that may be best addressed by using a specialized package.  I see that that the Repast system actively supports connectivity with R and also seems to be under active development, but all I know about Repast is what I read on the website.\nhttp://repast.sourceforge.net/\n\nDan Rie\nPortfolio Intelligence, Inc.\nScituate, MA\n\n\nOn Tue, 18 Nov 2008 at 11:52 AM,  Peter Carl <peter at braverock.com>\nwrote:\n> On Friday 14 November 2008 12:39:44 pm Michael Sankowski wrote:\n>> Has anyone here done any work on the Automatic Stock Market or the \n>>Minority\n>> game?  I've started building a Minority game and have been surprised at how\n>> fast it is going.\n>>\n>> I would be interested in talking about building the minority game - it is\n>> agent modeling of stock market prices.  To this end, I've built most of the\n>> game already.\n>\n> I haven't done any work on the Minority Game, per se, and I'd be interested in \n> learning more about it.  Do you have any favorite references?\n> \n> I note that NetLogo, which is an agent-simulation software program maintained \n> at Northwestern, provides an implementation of the Minority Game. See:\n> http://ccl.northwestern.edu/netlogo/\n> http://ccl.northwestern.edu/netlogo/models/MinorityGame\n> \n> pcc\n> -- \n> Peter Carl\n> 145 Scottswood Rd\n> Riverside, IL 60546\n> 312 307 6346\n\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I second Peter Carl's comments (below).  Particularly this one:\n> I haven't done any work on the Minority Game, per se, and I'd be interested in \n> learning more about it.  Do you have any favorite re",
       "thread_id": "thread-df4e4d107c1e",
       "thread_depth": 0,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081119/3bf2ae1c/attachment.pl"
+      ]
     },
     {
       "id": "msg-c99d424c74d7",
@@ -1614,11 +1674,14 @@
         "<b34262a80811141039t613bf867rd24d9e80b4741894@mail.gmail.com>",
         "<200811181552.26983.peter@braverock.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081119/b1429d35/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081119/b1429d35/attachment.pl>",
+      "body_plain": "Here is a link with lots of papers on the Minority Game as it relates to\nfinancial markets.\nhttp://www.unifr.ch/econophysics/minority/\n\n\n\nOn Tue, Nov 18, 2008 at 3:52 PM, Peter Carl <peter at braverock.com> wrote:\n\n> On Friday 14 November 2008 12:39:44 pm Michael Sankowski wrote:\n> > Has anyone here done any work on the Automatic Stock Market or the\n> Minority\n> > game?  I've started building a Minority game and have been surprised at\n> how\n> > fast it is going.\n> >\n> > I would be interested in talking about building the minority game - it is\n> > agent modeling of stock market prices.  To this end, I've built most of\n> the\n> > game already.\n> I haven't done any work on the Minority Game, per se, and I'd be interested\n> in\n> learning more about it.  Do you have any favorite references?\n>\n> I note that NetLogo, which is an agent-simulation software program\n> maintained\n> at Northwestern, provides an implementation of the Minority Game. See:\n>  http://ccl.northwestern.edu/netlogo/\n>  http://ccl.northwestern.edu/netlogo/models/MinorityGame\n>\n> pcc\n> --\n> Peter Carl\n> 145 Scottswood Rd\n> Riverside, IL 60546\n> 312 307 6346\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\n\n-- \nMichael Sankowski, CFA, CAIA\n312.404.8717\nmichael.sankowski at gmail.com\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Here is a link with lots of papers on the Minority Game as it relates to\nfinancial markets.\nhttp://www.unifr.ch/econophysics/minority/\n\n\n\nOn Tue, Nov 18, 2008 at 3:52 PM, Peter Carl <peter at braveroc",
       "thread_id": "thread-2b687943aff0",
       "thread_depth": 2,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081119/b1429d35/attachment.pl"
+      ]
     },
     {
       "id": "msg-c464ea8deed4",
@@ -1632,11 +1695,14 @@
       "references": [
         "<5E1E354A66BF4863BB92E5EBA158F920@MightyMini>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081119/62054f4b/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081119/62054f4b/attachment.pl>",
+      "body_plain": "While I think there is lots to be gained from simply looking at price\npatterns, it seems to me like a real open field of study would be applying\nminority games to volatility and dispersion.   Additionally, I would think\nthat the status of the game for either the market or a individual equity\ncould be an input to a factor model.\nAlso, I am quite far along in the basic coding for the model, I should have\na single future step for the agent model done soon.   Part of the reason I\nwanted to do it in R was to learn R better, and it seems to me like R is\neasily able to handle the flow.\n\nThe basic minority game is simple, N agents, q strategies per agent, T\nglobal memory, tau or better for an agent to participate.  The outcome with\nthe least votes wins, so crowds cannot dominate, because as a set of\nstrategies become popular from winning, eventually they get too popular and\nstart to lose.\n\nI had looked at repast a few years back but didn't do any work with it.  It\nlooks like it has evolved quite a lot, so I will look at that as well.  the\nfact that it has an R interface is useful to me now that I can use R a\nlittle.\n\nOn Wed, Nov 19, 2008 at 12:34 PM, Dan Rie <drie at portfoliointelligence.com>wrote:\n\n>  I second Peter Carl's comments (below).  Particularly this one:\n> > I haven't done any work on the Minority Game, per se, and I'd be\n> interested in\n> > learning more about it.  Do you have any favorite references?\n>\n> In any case, I am interested in your thoughts and ideas with\n> respect applying a minority game perspective to markets and market data.  I\n> can imagine a number of possible mechanisms for predicting shifts in the\n> patterns of majority/minority behavior over time in response to ongoing\n> market experiences.\n>\n> I have not looked at the question of processing binary data in R, but I'm\n> sure that it would not be all that difficult to make it happen in a couple\n> of ways if there are no extant R routines that meet your needs.   If there\n> is a compelling reason to stick with R as the simulation platform, my\n> personal preference would be a combination of Python and R using RPy or\n> RSPython.  Creating an R extension using C to do the binary processing, or\n> incorporating some existing C libraries shouldn't be too tough if that seems\n> appropriate.  (I'm not sure that R is an ideal platform for agent-based\n> modelling, but perhaps someone will prove this notion wrong.)  However,\n> there is quite a bit of mechanical overhead in building agent-based\n> simulations, and that may be best addressed by using a specialized package.\n> I see that that the Repast system actively supports connectivity with R and\n> also seems to be under active development, but all I know about Repast is\n> what I read on the website.\n> http://repast.sourceforge.net/\n>\n> Dan Rie\n> Portfolio Intelligence, Inc.\n> Scituate, MA\n>\n>\n> On Tue, 18 Nov 2008 at 11:52 AM,  Peter Carl <peter at braverock.com>\n> wrote:\n> > On Friday 14 November 2008 12:39:44 pm Michael Sankowski wrote:\n> >> Has anyone here done any work on the Automatic Stock Market or the\n> >>Minority\n> >> game?  I've started building a Minority game and have been surprised at\n> how\n> >> fast it is going.\n> >>\n> >> I would be interested in talking about building the minority game - it\n> is\n> >> agent modeling of stock market prices.  To this end, I've built most of\n> the\n> >> game already.\n> >\n> > I haven't done any work on the Minority Game, per se, and I'd be\n> interested in\n> > learning more about it.  Do you have any favorite references?\n> >\n> > I note that NetLogo, which is an agent-simulation software program\n> maintained\n> > at Northwestern, provides an implementation of the Minority Game. See:\n> > http://ccl.northwestern.edu/netlogo/\n> > http://ccl.northwestern.edu/netlogo/models/MinorityGame\n> >\n> > pcc\n> > --\n> > Peter Carl\n> > 145 Scottswood Rd\n> > Riverside, IL 60546\n> > 312 307 6346\n>\n>\n>\n>\n\n\n\n-- \nMichael Sankowski, CFA, CAIA\n312.404.8717\nmichael.sankowski at gmail.com\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "While I think there is lots to be gained from simply looking at price\npatterns, it seems to me like a real open field of study would be applying\nminority games to volatility and dispersion.   Addition",
       "thread_id": "thread-df4e4d107c1e",
       "thread_depth": 1,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081119/62054f4b/attachment.pl"
+      ]
     },
     {
       "id": "msg-c5be498ab769",
@@ -1664,11 +1730,14 @@
       "subject_clean": "fPortfolio target risk optimization?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081124/77e4ef37/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081124/77e4ef37/attachment.pl>",
+      "body_plain": "Hi,\n \nDoes anybody know whether is it possible to optimize with fPortfolio (I'm using v260.72 under R 2.7.2) defining the target risk? I know it is possible to set the target return and obtain the minimum variance portfolio, but is it possible to solve the dual problem of setting the target (volatility) risk and getting the point on the efficient frontier that maximizes the return given that risk?\n \nThe only way I've found is an indirect one: compute the whole efficient frontier, then select the point with the risk closest to the target. But this seems inefficient and depends on the actual search grid used... \n \nHints appreciated. Session info copied below.\n \nBest,\n \nEnrique\n \n \n> sessionInfo()\nR version 2.7.2 (2008-08-25) \ni386-pc-mingw32 \n \nlocale:\nLC_COLLATE=Spanish_Spain.1252;LC_CTYPE=Spanish_Spain.1252;LC_MONETARY=Spanish_Spain.1252;LC_NUMERIC=C;LC_TIME=Spanish_Spain.1252\n \nattached base packages:\n[1] datasets  grDevices graphics  stats     utils     methods   base     \n \nother attached packages:\n [1] PaRiS_1.0-1        Defaults_1.1-1     zoo_1.5-4          fPortfolio_260.72  fAssets_260.72     fRegression_260.72 fMultivar_260.72  \n [8] sn_0.4-4           mnormt_1.2-1       fTrading_260.72    polspline_1.0.15   nnet_7.2-44        mgcv_1.4-1         fBasics_260.72    \n[15] fImport_260.72     lpSolve_5.6.3      quadprog_1.4-11    fSeries_260.73     fCalendar_270.75   fEcofin_270.73     fUtilities_270.73 \n[22] MASS_7.2-44        robustbase_0.2-8   R2HTML_1.59        RDCOMClient_0.92-0 chron_2.3-24       RODBC_1.2-3        rcom_1.5-2.2  \n \n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n \nDoes anybody know whether is it possible to optimize with fPortfolio (I'm using v260.72 under R 2.7.2) defining the target risk? I know it is possible to set the target return and obtain the min",
       "thread_id": "thread-ffeb35c62db0",
       "thread_depth": 0,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081124/77e4ef37/attachment.pl"
+      ]
     },
     {
       "id": "msg-4d31f782cf39",
@@ -1976,11 +2045,14 @@
       "subject_clean": "garchFit with fSeries",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081126/15802b2b/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081126/15802b2b/attachment.pl>",
+      "body_plain": "Hi,\n \ndoes garchFit function come with fSeries package? I installed the\npackage but can't find the function.\n \nThanks,\nHaky\n\n \n\n \n\n=======================================================================\n\nPlease access the attached hyperlink for an important electronic\ncommunications disclaimer: \n\nhttp://www.credit-suisse.com/legal/en/disclaimer_email_ib.html\n<http://www.credit-suisse.com/legal/en/disclaimer_email_ib.html> \n\n \n\nThe information, tools and material presented in this email are provided\nto you for information purposes only and are not to be used or\nconsidered as an offer, or the solicitation of an offer to sell or to\nbuy securities or other financial instruments. \n\nNothing in this email constitutes investment, legal, accounting or tax\nadvice, or a representation that any investment or strategy is suitable\nor appropriate to your individual circumstances.\n\n=======================================================================\n\n \n\n \n\n==============================================================================\nPlease access the attached hyperlink for an important electronic communications disclaimer: \n\nhttp://www.credit-suisse.com/legal/en/disclaimer_email_ib.html\n==============================================================================\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n \ndoes garchFit function come with fSeries package? I installed the\npackage but can't find the function.\n \nThanks,\nHaky\n\n \n\n \n\n=====================================================================",
       "thread_id": "thread-2042927c358d",
       "thread_depth": 0,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081126/15802b2b/attachment.pl"
+      ]
     },
     {
       "id": "msg-d96e02808052",
@@ -2095,11 +2167,14 @@
       "subject_clean": "fPortfolio target risk optimization?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081127/b23f397a/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081127/b23f397a/attachment.pl>",
+      "body_plain": "Many thanks Hugh and Thomas for your answers. I realize that return maximization is a harder numerical problem than risk minimization, so my thought was doing something along the lines of Thomas' search suggestion. Just wondered if that was not already programmed into the package. Your answers were very useful.\n \npatzoul, I cannot find function \"maxreturnPortfolio\" in fPortfolio v260.72, where have you seen it? A more recent version of fPortfolio?\n \nBest,\n \nEnrique\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Many thanks Hugh and Thomas for your answers. I realize that return maximization is a harder numerical problem than risk minimization, so my thought was doing something along the lines of Thomas' sear",
       "thread_id": "thread-5ef95ba213a1",
       "thread_depth": 0,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081127/b23f397a/attachment.pl"
+      ]
     },
     {
       "id": "msg-bf92f01a4e6a",
@@ -2179,11 +2254,14 @@
       "subject_clean": "Shaded regions as an indicator in quantmod",
       "in_reply_to": "<etPan.492ed69b.331e07dc.1148@localhost>",
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081127/16cde20a/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081127/16cde20a/attachment.pl>",
+      "body_plain": "You can use the chart.TimeSeries() function in the package\nPerformanceAnalytics to do this very easily. See the examples in the help\nfile for adding shading to user defined event times.\nez\n\n  _____  \n\nFrom: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Brian Lee Yung\nRowe\nSent: Thursday, November 27, 2008 9:19 AM\nTo: r-sig-finance at stat.math.ethz.ch\nSubject: [R-SIG-Finance] Shaded regions as an indicator in quantmod\n\n\nHi,\n\nI want to produce charts using quantmod similar to the ones available from\nFRED. Specifically, FRED has this handy feature of rendering the\nNBER-defined recession periods under the displayed time series.\n\nIt seems like calling newTA with the appropriate function handle could\nproduce the output necessary to define the shading bars, but I'm not sure if\nany of the existing charting types can generate the correct look and feel.\nAnybody have suggestions?\n\nThanks,\nBrian \n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "You can use the chart.TimeSeries() function in the package\nPerformanceAnalytics to do this very easily. See the examples in the help\nfile for adding shading to user defined event times.\nez\n\n  _____  \n",
       "thread_id": "thread-4161eb5ed2f5",
       "thread_depth": 1,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081127/16cde20a/attachment.pl"
+      ]
     },
     {
       "id": "msg-9957ee525da8",
@@ -2267,11 +2345,14 @@
       "subject_clean": "Reg: tapply() for TWAP calculations",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081128/c20ab8ca/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081128/c20ab8ca/attachment.pl>",
+      "body_plain": "Hi,\n\nIt would be really helpful if u can brief on how the tapply() logic works in\ncalculating the weighted average price.\n\nThanks,\nArun\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nIt would be really helpful if u can brief on how the tapply() logic works in\ncalculating the weighted average price.\n\nThanks,\nArun\n\n\t[[alternative HTML version deleted]]",
       "thread_id": "thread-d455bd966203",
       "thread_depth": 0,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081128/c20ab8ca/attachment.pl"
+      ]
     },
     {
       "id": "msg-02dca5494dc9",
@@ -2283,11 +2364,14 @@
       "subject_clean": "Help with Dummy Regression",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081128/885bd58a/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081128/885bd58a/attachment.pl>",
+      "body_plain": "Hi R,\n\n \n\nI have dummy exposures on the RHS of the regression equation and to\nthese I add the standardized scores of 4 Barra risk indices. \n\nLHS of the regression is the stock excess returns\n\nR(i) = a(i) + d1(i)*f1(i) + d2(i)*f2(i) + ... + dn(i)*fn(i) +\nx1(i)*g1(i) + ... + x4(i)*g4(i) + e(i)\n\nwhere\n\nR(i) is the excess return of stock i\na(i) is the intercept term\ndj(i), j = 1, ..., n are the dummy exposures\nfj(i), j = 1, ..., n are the dummy returns estimated in the regression \nxj(i), j = 1, 2, 3, 4 are the risk index exposures\ngj(i), j = 1, 2, 3, 4 are the risk index returns estimated in the\nregression\ne(i) is the residual term\n\n \n\nsummary(lm(as.formula(paste(\"final_dat[[i]][,2]~\",paste(gsub(\"\n\",\".\",(names(final_dat[[i]])[3:24])),collapse=\"+\"))),final_dat[[i]]))[[4\n]]\n\n \n\nSo my question is- am I correct in regressing stock returns against a\ncombination of dummy variables and zscores ? Also to get the actual\nfactor returns can I directly add the intercept to dummy returns\nestimated in the regression in spite of the presence of the z-scores in\nthe regression?\n\n \n\nThank you,\n\nRavi\n\n \n\n \n\nThis e-mail may contain confidential and/or privileged i...{{dropped:13}}",
+      "body_snippet": "Hi R,\n\n \n\nI have dummy exposures on the RHS of the regression equation and to\nthese I add the standardized scores of 4 Barra risk indices. \n\nLHS of the regression is the stock excess returns\n\nR(i) = a",
       "thread_id": "thread-02dca5494dc9",
       "thread_depth": 0,
-      "month": "2008-11"
+      "month": "2008-11",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20081128/885bd58a/attachment.pl"
+      ]
     },
     {
       "id": "msg-671cce4e0592",

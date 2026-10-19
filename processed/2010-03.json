@@ -33,11 +33,14 @@
       "subject_clean": "fPortfolio plotting of efficient frontiers",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/f6139023/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/f6139023/attachment.pl>",
+      "body_plain": "In fPortfolio one can derive efficient portfolios using a variety of risk\nestimators. One such is Kendall's rank estimator.\nIn plotting the results of the estimation, one can use the function\nfrontierPlot which plots the efficient frontier.\nOne option within frontierPlot appears to allow the selection of the risk\nused to plot the efficient frontier.\nBut if I calculate the frontier using the Kendall method (stored in f9) and\nplot two frontiers using frontierPlot,\nthey appear on the same horizontal risk-scale. Shouldn't the two scales be\ndifferent?\n\nCharles Ward\nICMA Centre, University of Reading. UK.\n\n#Kendall rank Estimator\nspec09=portfolioSpec()\nsetNFrontierPoints(spec09)=20\nsetEstimator(spec09)=\"kendallEstimator\"\n\nkendallEstimator =\nfunction (x,spec=NULL,...) {\nmu=colMeans(x)\nSigma=cov(x, method=\"kendall\")\nlist(mu=mu, Sigma=Sigma)}\nf9 = portfolioFrontier(data,spec09)\n\nfrontierPlot(f9,risk=c(\"Sig\"),col=c(\"black\",\"green\"))\nfrontierPlot(f9,risk=c(\"Cov\"),col=c(\"red\",\"blue\"))\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "In fPortfolio one can derive efficient portfolios using a variety of risk\nestimators. One such is Kendall's rank estimator.\nIn plotting the results of the estimation, one can use the function\nfrontier",
       "thread_id": "thread-428aa6bbaecf",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/f6139023/attachment.pl"
+      ]
     },
     {
       "id": "msg-b0411109ed06",
@@ -70,11 +73,14 @@
         "<bd9aa36b1003010021v273fb70m8ebf5b27f1ad3138@mail.gmail.com>",
         "<4B8BA0C9.6010609@braverock.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/cffbc6af/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/cffbc6af/attachment.pl>",
+      "body_plain": "I am sorry Brian - my query was unclear.\nI plotted the frontier on two different graphs. In both cases, it was the\nsame calculation - only the options in the frontierPlot were changed.\nI am not quite clear what the units are in the default plot of the Kendall\nestimator but the x-axis shows units of 150, 200 and 250 with the settings\n                         risk=c(\"Sig\")\nIf I then repeat the function with the option set to         risk= c(\"Cov\")\n\nI would have expected the horizontal scale to show the standard deviation\nwhere the units would be in the region of 0.008 to 0.011. In fact, the graph\nappears unchanged with the same units of 150, 200 and 250.\nSo my question really was about the option    risk = ... in the frontierPlot\nfunction.\nWhat does it do?\nCharles\n\n\nOn Mon, Mar 1, 2010 at 11:11 AM, Brian G. Peterson <brian at braverock.com>wrote:\n\n> Charles Ward wrote:\n>\n>> But if I calculate the frontier using the Kendall method (stored in f9)\n>> and\n>> plot two frontiers using frontierPlot,\n>> they appear on the same horizontal risk-scale. Shouldn't the two scales be\n>> different?\n>>\n>\n> Charles,\n>\n> The two efficient frontiers would not be comparable if plotted on different\n> axes on the same chart.\n>\n> The (typical) reason for plotting multiple efficient frontiers is to see\n> how the unconstrained (or long only) Markowitz mean-variance frontier\n> 'shrinks' with different constraints or risk measures.  By definition, the\n> area under these more-restricted efficient frontiers will be smaller than\n> the unconstrained or long-only case.\n>\n> A modification to this approach that we use often it to set the 'risk' axis\n> to the risk measure you really care about, such as CVaR, and then plot the\n> unconstrained or long-only efficient frontier on/against *that* axis.\n>\n> Regards,\n>\n>    - Brian\n>\n> --\n> Brian G. Peterson\n> http://braverock.com/brian/\n> Ph: 773-459-4973\n> IM: bgpbraverock\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I am sorry Brian - my query was unclear.\nI plotted the frontier on two different graphs. In both cases, it was the\nsame calculation - only the options in the frontierPlot were changed.\nI am not quite ",
       "thread_id": "thread-428aa6bbaecf",
       "thread_depth": 2,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/cffbc6af/attachment.pl"
+      ]
     },
     {
       "id": "msg-615ba0532393",
@@ -111,11 +117,14 @@
         "<bd9aa36b1003010332t605e1a08v18ae20c74becac97@mail.gmail.com>",
         "<4B8BA7DA.7070507@braverock.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/8384d627/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/8384d627/attachment.pl>",
+      "body_plain": "Thank you Brian, that is useful advice and my question is now clear!\n\nMy question can be summarised as;\nIs it possible to plot the Kendall risk estimator efficient frontier\nchanging the x-axis to the standard deviation?\n\nRight - here is my code using one of the default datasets.\n\nlibrary(fPortfolio)\ndata=250*(as.timeSeries(data(LPP2005REC))[,2:6])\nsummary(data)\n#set riskfree rate rf\nrf= 0.05\n# set number of portfolios num\nnum=10\n#portfolioSpec() is the default setting for the portfolio\nportfolioSpec()\n#Type is mean-variance\n#Optimize is minimum risk\n# default constraints are \"Long Only\"\npar(mfrow=c(1,2))\n#First Basic portfolio######################\nspec01=portfolioSpec()\ncon01=\"LongOnly\"\nsetRiskFreeRate(spec01)=rf\nsetNFrontierPoints(spec01)=num\nf1=portfolioFrontier(data,spec01,con01)\nfrontierPlot(f1)\nprint(f1)\n#note that the Cov column shows units from 0.3057 to 1.4211\n\n#Now estimate using Kendall rank Estimator\n#Kendall rank Estimator\nkendallEstimator =\nfunction (x,spec=NULL,...) {\nmu=colMeans(x)\nSigma=cov(x, method=\"kendall\")\nlist(mu=mu, Sigma=Sigma)}\n\nspec02=portfolioSpec()\nsetNFrontierPoints(spec02)=num\nsetEstimator(spec02)=\"kendallEstimator\"\nf2 = portfolioFrontier(data,spec02)\nprint(f2)\n#note that in the Target Return and Risk para\n#the Cov and indeed all the other columns except the Sig column\n#shows the same units as in f1\n\n#If we now plot the Kendall risk estimator efficient frontier\n# there is an option which appears to offer different risk measures\n(scales?)\nfrontierPlot(f2,risk=c(\"Sig\"))\nfrontierPlot(f2,risk=c(\"Cov\"))\n#but changing the risk option does not appear to have any effect\n#so is it possible to plot the Kendall risk estimator efficient frontier\n#against the standard deviation?\n\nCharles Ward\n\nOn Mon, Mar 1, 2010 at 11:41 AM, Brian G. Peterson <brian at braverock.com>wrote:\n\n> No worries.  Unfortunately now I can't really be of much assistance.\n>\n> I suspect that you may have changed the portfolioSpec, and changing the\n> option again doesn't change it back, but I don't really know without  code\n> to examine.\n>\n> I'd suggest using one of the standard data sets, like 'edhec' or anything\n> from fEcoFin, and building a little test script.  The list software will\n> allow you to attach PDF's of the output, and your test script will let\n> Diethelm or others more knowledgeable in fPortfolio replicate the problem.\n>\n> Regards,\n>\n>    - Brian\n>\n> Charles Ward wrote:\n>\n>> I am sorry Brian - my query was unclear.\n>> I plotted the frontier on two different graphs. In both cases, it was the\n>> same calculation - only the options in the frontierPlot were changed.\n>> I am not quite clear what the units are in the default plot of the Kendall\n>> estimator but the x-axis shows units of 150, 200 and 250 with the settings\n>>                          risk=c(\"Sig\") If I then repeat the function with\n>> the option set to         risk= c(\"Cov\")  I would have expected the\n>> horizontal scale to show the standard deviation where the units would be in\n>> the region of 0.008 to 0.011. In fact, the graph appears unchanged with the\n>> same units of 150, 200 and 250.\n>> So my question really was about the option    risk = ... in the\n>> frontierPlot function.\n>> What does it do?\n>> Charles\n>>\n>>\n>> On Mon, Mar 1, 2010 at 11:11 AM, Brian G. Peterson <brian at braverock.com<mailto:\n>> brian at braverock.com>> wrote:\n>>\n>>    Charles Ward wrote:\n>>\n>>        But if I calculate the frontier using the Kendall method (stored\n>>        in f9) and\n>>        plot two frontiers using frontierPlot,\n>>        they appear on the same horizontal risk-scale. Shouldn't the two\n>>        scales be\n>>        different?\n>>\n>>\n>>    Charles,\n>>\n>>    The two efficient frontiers would not be comparable if plotted on\n>>    different axes on the same chart.\n>>\n>>    The (typical) reason for plotting multiple efficient frontiers is to\n>>    see how the unconstrained (or long only) Markowitz mean-variance\n>>    frontier 'shrinks' with different constraints or risk measures.  By\n>>    definition, the area under these more-restricted efficient frontiers\n>>    will be smaller than the unconstrained or long-only case.\n>>\n>>    A modification to this approach that we use often it to set the\n>>    'risk' axis to the risk measure you really care about, such as CVaR,\n>>    and then plot the unconstrained or long-only efficient frontier\n>>    on/against *that* axis.\n>>\n>>    Regards,\n>>\n>>       - Brian\n>>\n>>    --    Brian G. Peterson\n>>    http://braverock.com/brian/\n>>    Ph: 773-459-4973\n>>    IM: bgpbraverock\n>>\n>>\n>>\n>\n> --\n> Brian G. Peterson\n> http://braverock.com/brian/\n> Ph: 773-459-4973\n> IM: bgpbraverock\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thank you Brian, that is useful advice and my question is now clear!\n\nMy question can be summarised as;\nIs it possible to plot the Kendall risk estimator efficient frontier\nchanging the x-axis to the ",
       "thread_id": "thread-428aa6bbaecf",
       "thread_depth": 4,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/8384d627/attachment.pl"
+      ]
     },
     {
       "id": "msg-5d3064e14dac",
@@ -347,11 +356,14 @@
         "<4B8BC590.8080507@braverock.com>",
         "<1267453887141-1573601.post@n4.nabble.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/3ea87cff/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/3ea87cff/attachment.pl>",
+      "body_plain": "Hi kafkaz,\n\nI also have this problem with the 0 size transactions if I run the\ndemo(longtrend).\n\nIt looks like there is a small bug in the longtrend.R script in the demo\ndirectory. The account is not initialized with a beginning equity.\n\nreplace the line:\ninitAcct(ltaccount,portfolios='longtrend', initDate=initDate)\n\nwith:\ninitAcct(ltaccount,portfolios='longtrend', initDate=initDate, initEq=initEq)\n\nSave the modification and run \"demo(longtrend) again. This solved it for me.\n\nHTH,\n\n-Mark-\n2010/3/1 kafkaz <kafka at centras.lt>\n\n>\n> demo('longtrend')\n>\n> [1] \"1998-10-30 GSPC 0 @ 1098.67\"\n> .\n> [1] \"1998-11-30 GSPC 0 @ 1163.63\"\n> .\n> [1] \"1998-12-31 GSPC 0 @ 1229.23\"\n> .\n> [1] \"1999-01-29 GSPC 0 @ 1279.64\"\n> .\n> [1] \"1999-02-26 GSPC 0 @ 1238.33\"\n> .\n> [1] \"1999-03-31 GSPC 0 @ 1286.37\"\n> .\n> [1] \"1999-04-30 GSPC 0 @ 1335.18\"\n> .\n> [1] \"1999-05-28 GSPC 0 @ 1301.84\"\n> .\n> [1] \"1999-06-30 GSPC 0 @ 1372.71\"\n> .\n> [1] \"1999-07-30 GSPC 0 @ 1328.72\"\n> .\n> [1] \"1999-08-31 GSPC 0 @ 1320.41\"\n> ..\n> [1] \"1999-10-29 GSPC 0 @ 1362.93\"\n> .\n> [1] \"1999-11-30 GSPC 0 @ 1388.91\"\n> .\n> [1] \"1999-12-31 GSPC 0 @ 1469.25\"\n> .\n> [1] \"2000-01-31 GSPC 0 @ 1394.46\"\n> .\n> [1] \"2000-02-29 GSPC 0 @ 1366.42\"\n> .\n> [1] \"2000-03-31 GSPC 0 @ 1498.58\"\n> .\n> [1] \"2000-04-28 GSPC 0 @ 1452.43\"\n> .\n> [1] \"2000-05-31 GSPC 0 @ 1420.6\"\n> .\n> [1] \"2000-06-30 GSPC 0 @ 1454.6\"\n> .\n> [1] \"2000-07-31 GSPC 0 @ 1430.83\"\n> .\n> [1] \"2000-08-31 GSPC 0 @ 1517.68\"\n> ...................\n> [1] \"2002-03-28 GSPC 0 @ 1147.39\"\n> .............\n> [1] \"2003-04-30 GSPC 0 @ 916.92\"\n> .\n> [1] \"2003-05-30 GSPC 0 @ 963.59\"\n> .\n> [1] \"2003-06-30 GSPC 0 @ 974.5\"\n> .\n> [1] \"2003-07-31 GSPC 0 @ 990.31\"\n> .\n> [1] \"2003-08-29 GSPC 0 @ 1008.01\"\n> .\n> [1] \"2003-09-30 GSPC 0 @ 995.97\"\n> .\n> [1] \"2003-10-31 GSPC 0 @ 1050.71\"\n> .\n> [1] \"2003-11-28 GSPC 0 @ 1058.2\"\n> .\n> [1] \"2003-12-31 GSPC 0 @ 1111.92\"\n> .\n> [1] \"2004-01-30 GSPC 0 @ 1131.13\"\n> .\n> [1] \"2004-02-27 GSPC 0 @ 1144.94\"\n> .\n> [1] \"2004-03-31 GSPC 0 @ 1126.21\"\n> .\n> [1] \"2004-04-30 GSPC 0 @ 1107.3\"\n> .\n> [1] \"2004-05-28 GSPC 0 @ 1120.68\"\n> .\n> [1] \"2004-06-30 GSPC 0 @ 1140.84\"\n> ....\n> [1] \"2004-10-29 GSPC 0 @ 1130.2\"\n> .\n> [1] \"2004-11-30 GSPC 0 @ 1173.82\"\n> .\n> [1] \"2004-12-31 GSPC 0 @ 1211.92\"\n> .\n> [1] \"2005-01-31 GSPC 0 @ 1181.27\"\n> .\n> [1] \"2005-02-28 GSPC 0 @ 1203.6\"\n> .\n> [1] \"2005-03-31 GSPC 0 @ 1180.59\"\n> .\n> [1] \"2005-04-29 GSPC 0 @ 1156.85\"\n> .\n> [1] \"2005-05-31 GSPC 0 @ 1191.5\"\n> .\n> [1] \"2005-06-30 GSPC 0 @ 1191.33\"\n> .\n> [1] \"2005-07-29 GSPC 0 @ 1234.18\"\n> .\n> [1] \"2005-08-31 GSPC 0 @ 1220.33\"\n> .\n> [1] \"2005-09-30 GSPC 0 @ 1228.81\"\n> .\n> [1] \"2005-10-31 GSPC 0 @ 1207.01\"\n> .\n> [1] \"2005-11-30 GSPC 0 @ 1249.48\"\n> .\n> [1] \"2005-12-30 GSPC 0 @ 1248.29\"\n> .\n> [1] \"2006-01-31 GSPC 0 @ 1280.08\"\n> .\n> [1] \"2006-02-28 GSPC 0 @ 1280.66\"\n> .\n> [1] \"2006-03-31 GSPC 0 @ 1294.87\"\n> .\n> [1] \"2006-04-28 GSPC 0 @ 1310.61\"\n> .\n> [1] \"2006-05-31 GSPC 0 @ 1270.09\"\n> .\n> [1] \"2006-06-30 GSPC 0 @ 1270.2\"\n> .\n> [1] \"2006-07-31 GSPC 0 @ 1276.66\"\n> .\n> [1] \"2006-08-31 GSPC 0 @ 1303.82\"\n> .\n> [1] \"2006-09-29 GSPC 0 @ 1335.85\"\n> .\n> [1] \"2006-10-31 GSPC 0 @ 1377.94\"\n> .\n> [1] \"2006-11-30 GSPC 0 @ 1400.63\"\n> .\n> [1] \"2006-12-29 GSPC 0 @ 1418.3\"\n> .\n> [1] \"2007-01-31 GSPC 0 @ 1438.24\"\n> .\n> [1] \"2007-02-28 GSPC 0 @ 1406.82\"\n> .\n> [1] \"2007-03-30 GSPC 0 @ 1420.86\"\n> .\n> [1] \"2007-04-30 GSPC 0 @ 1482.37\"\n> .\n> [1] \"2007-05-31 GSPC 0 @ 1530.62\"\n> .\n> [1] \"2007-06-29 GSPC 0 @ 1503.35\"\n> .\n> [1] \"2007-07-31 GSPC 0 @ 1455.27\"\n> .\n> [1] \"2007-08-31 GSPC 0 @ 1473.99\"\n> .\n> [1] \"2007-09-28 GSPC 0 @ 1526.75\"\n> .\n> [1] \"2007-10-31 GSPC 0 @ 1549.38\"\n> ....................\n> [1] \"2009-06-30 GSPC 0 @ 919.32\"\n> .\n> [1] \"2009-07-31 GSPC 0 @ 987.48\"\n> .\n> [1] \"2009-08-31 GSPC 0 @ 1020.62\"\n> .\n> [1] \"2009-09-30 GSPC 0 @ 1057.08\"\n> .\n> [1] \"2009-10-30 GSPC 0 @ 1036.19\"\n> .\n> [1] \"2009-11-30 GSPC 0 @ 1095.63\"\n> .\n> [1] \"2009-12-31 GSPC 0 @ 1115.1\"\n> .\n> [1] \"2010-01-29 GSPC 0 @ 1073.87\"\n> .\n> [1] \"2010-02-26 GSPC 0 @ 1104.49\"\n>\n> > cat('\\n')\n>\n>\n> > # Chart results with quantmod\n> > chart.Posn(ltportfolio, Symbol = 'GSPC', Dates =\n> > '1998::',theme=chartTheme('white', up.col='lightgreen', dn.col='pink'),\n> > type='bar')\n> Hit <Return> to see next plot:\n> Hit <Return> to see next plot:\n> Hit <Return> to see next plot:\n>\n> > plot(addSMA(n=10,col='darkgreen', on=1))\n> Hit <Return> to see next plot:\n>\n> > getTxns(Portfolio=\"longtrend\", Symbol=\"GSPC\", Date=\"2000::2004\")\n>           Txn.Qty Txn.Price Txn.Fees Txn.Value Txn.Avg.Cost\n> 2000-01-31       0   1394.46        0         0          NaN\n> 2000-02-29       0   1366.42        0         0          NaN\n> 2000-03-31       0   1498.58        0         0          NaN\n> 2000-04-28       0   1452.43        0         0          NaN\n> 2000-05-31       0   1420.60        0         0          NaN\n> 2000-06-30       0   1454.60        0         0          NaN\n> 2000-07-31       0   1430.83        0         0          NaN\n> 2000-08-31       0   1517.68        0         0          NaN\n> 2002-03-28       0   1147.39        0         0          NaN\n> 2003-04-30       0    916.92        0         0          NaN\n> 2003-05-30       0    963.59        0         0          NaN\n> 2003-06-30       0    974.50        0         0          NaN\n> 2003-07-31       0    990.31        0         0          NaN\n> 2003-08-29       0   1008.01        0         0          NaN\n> 2003-09-30       0    995.97        0         0          NaN\n> 2003-10-31       0   1050.71        0         0          NaN\n> 2003-11-28       0   1058.20        0         0          NaN\n> 2003-12-31       0   1111.92        0         0          NaN\n> 2004-01-30       0   1131.13        0         0          NaN\n> 2004-02-27       0   1144.94        0         0          NaN\n> 2004-03-31       0   1126.21        0         0          NaN\n> 2004-04-30       0   1107.30        0         0          NaN\n> 2004-05-28       0   1120.68        0         0          NaN\n> 2004-06-30       0   1140.84        0         0          NaN\n> 2004-10-29       0   1130.20        0         0          NaN\n> 2004-11-30       0   1173.82        0         0          NaN\n> 2004-12-31       0   1211.92        0         0          NaN\n>\n> > # Copy the results into the local environment\n> > print(\"Retrieving resulting portfolio and account\")\n> [1] \"Retrieving resulting portfolio and account\"\n>\n> > ltportfolio = getPortfolio(\"longtrend\")\n>\n> > ltaccount = getAccount(\"longtrend\")\n> Warning messages:\n> 1: In max(i) : no non-missing arguments to max; returning -Inf\n> 2: In max(i) : no non-missing arguments to max; returning -Inf\n> 3: In max(i) : no non-missing arguments to max; returning -Inf\n> 4: In max(i) : no non-missing arguments to max; returning -Inf\n>\n> I had the same warnings in my code.\n> Is it normal, what quantity/position size is 0?\n>\n> --\n> View this message in context:\n> http://n4.nabble.com/Blotter-package-problem-with-example-tp1018634p1573601.html\n> Sent from the Rmetrics mailing list archive at Nabble.com.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi kafkaz,\n\nI also have this problem with the 0 size transactions if I run the\ndemo(longtrend).\n\nIt looks like there is a small bug in the longtrend.R script in the demo\ndirectory. The account is not ",
       "thread_id": "thread-5d3064e14dac",
       "thread_depth": 3,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/3ea87cff/attachment.pl"
+      ]
     },
     {
       "id": "msg-1b7e5266de22",
@@ -374,11 +386,14 @@
         "<1267457016526-1573671.post@n4.nabble.com>",
         "<4B8BE07E.9010600@braverock.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/5b618123/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/5b618123/attachment.pl>",
+      "body_plain": "I reinstaled all packages and I have the same problem like kafkaz.. but\nit's.. faster?\n\ndaniel\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I reinstaled all packages and I have the same problem like kafkaz.. but\nit's.. faster?\n\ndaniel\n\n\t[[alternative HTML version deleted]]",
       "thread_id": "thread-5d3064e14dac",
       "thread_depth": 6,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/5b618123/attachment.pl"
+      ]
     },
     {
       "id": "msg-c5944df95994",
@@ -401,11 +416,14 @@
         "<1267453887141-1573601.post@n4.nabble.com>",
         "<5e6a2e671003010751p7052fe39p109dac5efe72ef89@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/3a35877f/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/3a35877f/attachment.pl>",
+      "body_plain": "2010/3/1 Mark Breman <breman.mark at gmail.com>\n\n\n> It looks like there is a small bug in the longtrend.R script in the demo\n> directory. The account is not initialized with a beginning equity.\n>\n> replace the line:\n> initAcct(ltaccount,portfolios='longtrend', initDate=initDate)\n>\n> with:\n> initAcct(ltaccount,portfolios='longtrend', initDate=initDate,\n> initEq=initEq)\n>\n> Save the modification and run \"demo(longtrend) again. This solved it for\n> me.\n>\n>\nYes, it's works.\nregards\n\ndaniel\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "2010/3/1 Mark Breman <breman.mark at gmail.com>\n\n\n> It looks like there is a small bug in the longtrend.R script in the demo\n> directory. The account is not initialized with a beginning equity.\n>\n> re",
       "thread_id": "thread-5d3064e14dac",
       "thread_depth": 4,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/3a35877f/attachment.pl"
+      ]
     },
     {
       "id": "msg-9550d568077c",
@@ -512,11 +530,14 @@
         "<4B8BE7CA.50406@braverock.com>",
         "<59A2E329CD9D496BAEEC632A100FEA9D@DellPC>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/2df776e7/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/2df776e7/attachment.pl>",
+      "body_plain": "Hi Robert,\n\nWhat is your timezone setting?\n\ntype: Sys.timezone()\n\nIf it's not  \"GMT\" could you try:\nSys.setenv(TZ=\"GMT\")\ngetSymbols('^GSPC', src='yahoo',\nindex.class=c(\"POSIXt\",\"POSIXct\"),from='1998-01-01')\n\nand see if GSPC still has a NA in the last record?\n\nRegards,\n\n-Mark-\n\n2010/3/1 Robert Iquiapaza <rbali at ufmg.br>\n\n>\n> Another problem:\n>\n> It appears to be with index in quantmod\n>\n> #In my case the result after running\n> getSymbols('^GSPC', src='yahoo',\n> index.class=c(\"POSIXt\",\"POSIXct\"),from='1998-01-01')\n> GSPC\n>\n> #is problematic, the last observation has <NA> index!\n>\n> ....\n> 2010-02-22   1110.00   1112.29  1105.38    1108.01  3814440000\n> 1108.01\n> 2010-02-23   1107.49   1108.58  1092.18    1094.60  4521050000\n> 1094.60\n> 2010-02-24   1095.89   1106.42  1095.50    1105.24  4168360000\n> 1105.24\n> 2010-02-25   1101.24   1103.50  1086.02    1102.94  4521130000\n> 1102.94\n> 2010-02-26   1103.10   1107.24  1097.56    1104.49  3945190000\n> 1104.49\n> <NA>         1130.51   1140.48  1128.12    1130.56  1659000000\n> 1130.56\n>\n> GSPC=to.monthly(GSPC, indexAt='endof')\n> GSPC\n> ...\n> 2010-01-29   1116.56   1150.45  1071.59    1073.87  90947579600 1073.87\n> 2010-02-26   1073.89   1112.42  1044.50    1104.49  84561340000 1104.49\n> <NA>         1130.51   1140.48  1128.12    1130.56   1659000000 1130.56\n>\n> #So, the next sentence gives an error\n>\n>  print(\"Setting up indicators\")\n>>\n> [1] \"Setting up indicators\"\n>\n>> GSPC$SMA10m <- SMA(GSPC[,grep('Adj',colnames(GSPC))], 10)\n>>\n> nan, nan\n> Error in merge.xts(..., all = all, fill = fill, suffixes = suffixes) :\n>  'NA' not allowed in 'index'\n>\n> #If I drop the last observation, inserting the following code after\n> to.monthly,\n>\n> GSPC <- GSPC[1:(length(GSPC[,1])-1),]\n>\n> #Then, everything goes well with the example.\n>\n> Any ideas what could be wrong?\n>\n> I have already reinstall some packages and the problem continues:\n> install.packages(\"TTR\", repos=\"http://R-Forge.R-project.org\")\n> install.packages(\"xts\", repos=\"http://R-Forge.R-project.org\")\n> install.packages(\"quantmod\", repos=\"http://R-Forge.R-project.org\")\n>\n> install.packages(\"FinancialInstrument\", repos=\"\n> http://R-Forge.R-project.org\")\n>\n>\n> Here is my system information:\n>\n>  R.version\n>>\n>              _\n> platform       i386-pc-mingw32\n> arch           i386\n> os             mingw32\n> system         i386, mingw32\n> status\n> major          2\n> minor          10.1\n> year           2009\n> month          12\n> day            14\n> svn rev        50720\n> language       R\n> version.string R version 2.10.1 (2009-12-14)\n>\n>> sessionInfo()\n>>\n> R version 2.10.1 (2009-12-14)\n> i386-pc-mingw32\n>\n> locale:\n> [1] LC_COLLATE=Portuguese_Brazil.1252  LC_CTYPE=Portuguese_Brazil.1252\n> [3] LC_MONETARY=Portuguese_Brazil.1252 LC_NUMERIC=C\n> [5] LC_TIME=Portuguese_Brazil.1252\n>\n> attached base packages:\n> [1] stats     graphics  grDevices utils     datasets  methods   base\n>\n> other attached packages:\n> [1] blotter_0.4               FinancialInstrument_0.0.2 quantmod_0.3-14\n> [4] TTR_0.20-1                Defaults_1.1-1            xts_0.7-1\n> [7] zoo_1.6-2\n>\n> loaded via a namespace (and not attached):\n> [1] grid_2.10.1    lattice_0.18-3\n>\n> Regards,\n> Robert\n>\n> --------------------------------------------------\n> From: \"Brian G. Peterson\" <brian at braverock.com>\n> Sent: Monday, March 01, 2010 1:14 PM\n> To: \"Mark Breman\" <breman.mark at gmail.com>\n> Cc: <r-sig-finance at stat.math.ethz.ch>; \"kafkaz\" <kafka at centras.lt>\n> Subject: Re: [R-SIG-Finance] Blotter package - problem with example.\n>\n>  Mark Breman wrote:\n>>\n>>> Hi kafkaz,\n>>>\n>>> I also have this problem with the 0 size transactions if I run the\n>>> demo(longtrend).\n>>>\n>>> It looks like there is a small bug in the longtrend.R script in the demo\n>>> directory. The account is not initialized with a beginning equity.\n>>>\n>>> replace the line:\n>>> initAcct(ltaccount,portfolios='longtrend', initDate=initDate)\n>>>\n>>> with:\n>>> initAcct(ltaccount,portfolios='longtrend', initDate=initDate,\n>>> initEq=initEq)\n>>>\n>>> Save the modification and run \"demo(longtrend) again. This solved it for\n>>> me.\n>>>\n>>>\n>> Thanks Mark (and Daniel and kafkaz for the confirmation).  I've updated\n>> the demo code and committed the changes to svn on R-Forge.\n>>\n>> Regards,\n>>\n>>  - Brian\n>>\n>> --\n>> Brian G. Peterson\n>> http://braverock.com/brian/\n>> Ph: 773-459-4973\n>> IM: bgpbraverock\n>>\n>> _______________________________________________\n>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n>>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Robert,\n\nWhat is your timezone setting?\n\ntype: Sys.timezone()\n\nIf it's not  \"GMT\" could you try:\nSys.setenv(TZ=\"GMT\")\ngetSymbols('^GSPC', src='yahoo',\nindex.class=c(\"POSIXt\",\"POSIXct\"),from='1998-0",
       "thread_id": "thread-5d3064e14dac",
       "thread_depth": 6,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/2df776e7/attachment.pl"
+      ]
     },
     {
       "id": "msg-5ecb78a4ac60",
@@ -555,11 +576,14 @@
       "subject_clean": "Blotter package - problem with example.",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/d8bd552b/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/d8bd552b/attachment.pl>",
+      "body_plain": "Thank you Mark and Jeff,\n\nSys.setenv(TZ=\"GMT\")\nsolves the NA index problem.\n\nRobert\n\n\n\n\n-----Jeff Ryan <jeff.a.ryan at gmail.com> escreveu: -----\n\n\n  Para: Mark Breman <breman.mark at gmail.com>\n  De: Jeff Ryan <jeff.a.ryan at gmail.com>\n  Data: 01/03/2010 16:41\n  cc: Robert Iquiapaza <rbali at ufmg.br>, r-sig-finance at stat.math.ethz.ch\n  Assunto: Re: [R-SIG-Finance] Blotter package - problem with example.\n\n  One item of note, Sys.timezone on Windows is tricky at best, and wrong\n  at worst.\n\n  Check and use Sys.setenv('TZ') or Sys.setenv(TZ=\"America/Chicago\") instead.\n\n  You need to make sure that TZ is a legal variable, or else R (the OS)\n  will just ignore (no error) and carry on..\n\n  Bad things ensue...\n\n  Jeff\n\n  On Mon, Mar 1, 2010 at 1:37 PM, Mark Breman <breman.mark at gmail.com> wrote:\n  > Hi Robert,\n  >\n  > What is your timezone setting?\n  >\n  > type: Sys.timezone()\n  >\n  > If it's not  \"GMT\" could you try:\n  > Sys.setenv(TZ=\"GMT\")\n  > getSymbols('^GSPC', src='yahoo',\n  > index.class=c(\"POSIXt\",\"POSIXct\"),from='1998-01-01')\n  >\n  > and see if GSPC still has a NA in the last record?\n  >\n  > Regards,\n  >\n  > -Mark-\n  >\n  > 2010/3/1 Robert Iquiapaza <rbali at ufmg.br>\n  >\n  >>\n  >> Another problem:\n  >>\n  >> It appears to be with index in quantmod\n  >>\n  >> #In my case the result after running\n  >> getSymbols('^GSPC', src='yahoo',\n  >> index.class=c(\"POSIXt\",\"POSIXct\"),from='1998-01-01')\n  >> GSPC\n  >>\n  >> #is problematic, the last observation has <NA> index!\n  >>\n  >> ....\n  >> 2010-02-22   1110.00   1112.29  1105.38    1108.01  3814440000\n  >> 1108.01\n  >> 2010-02-23   1107.49   1108.58  1092.18    1094.60  4521050000\n  >> 1094.60\n  >> 2010-02-24   1095.89   1106.42  1095.50    1105.24  4168360000\n  >> 1105.24\n  >> 2010-02-25   1101.24   1103.50  1086.02    1102.94  4521130000\n  >> 1102.94\n  >> 2010-02-26   1103.10   1107.24  1097.56    1104.49  3945190000\n  >> 1104.49\n  >> <NA>         1130.51   1140.48  1128.12    1130.56  1659000000\n  >> 1130.56\n  >>\n  >> GSPC=to.monthly(GSPC, indexAt='endof')\n  >> GSPC\n  >> ...\n  >> 2010-01-29   1116.56   1150.45  1071.59    1073.87  90947579600 1073.87\n  >> 2010-02-26   1073.89   1112.42  1044.50    1104.49  84561340000 1104.49\n  >> <NA>         1130.51   1140.48  1128.12    1130.56   1659000000 1130.56\n  >>\n  >> #So, the next sentence gives an error\n  >>\n  >>  print(\"Setting up indicators\")\n  >>>\n  >> [1] \"Setting up indicators\"\n  >>\n  >>> GSPC$SMA10m <- SMA(GSPC[,grep('Adj',colnames(GSPC))], 10)\n  >>>\n  >> nan, nan\n  >> Error in merge.xts(..., all = all, fill = fill, suffixes = suffixes) :\n  >>  'NA' not allowed in 'index'\n  >>\n  >> #If I drop the last observation, inserting the following code after\n  >> to.monthly,\n  >>\n  >> GSPC <- GSPC[1:(length(GSPC[,1])-1),]\n  >>\n  >> #Then, everything goes well with the example.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thank you Mark and Jeff,\n\nSys.setenv(TZ=\"GMT\")\nsolves the NA index problem.\n\nRobert\n\n\n\n\n-----Jeff Ryan <jeff.a.ryan at gmail.com> escreveu: -----\n\n\n  Para: Mark Breman <breman.mark at gmail.com>\n  De:",
       "thread_id": "thread-d4d083649040",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100301/d8bd552b/attachment.pl"
+      ]
     },
     {
       "id": "msg-b458947d521b",
@@ -587,11 +611,14 @@
       "subject_clean": "RBloomberg Package Problem",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100302/5ccb7fae/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100302/5ccb7fae/attachment.pl>",
+      "body_plain": "Hi R \nusers,\nI’m using \nR on company’s computer, Bloomberg terminal. \nHere \nbelow is warning message as I have installed Rbloomberg and then to call \nRbloomberg library.\nBut, it \nseems not to work. How to solve for this problem ?\nthanks a lot. \n\n \nlibrary(RBloomberg)\nLoading required \npackage: RDCOMClient\n: package \n'RDCOMClient' could not be loaded\n: Warning \nmessage:\nIn library(pkg, \ncharacter.only = TRUE, logical.return = TRUE, lib.loc = lib.loc) \n:\n  there is no package \ncalled 'RDCOMClient'\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi R \nusers,\nI’m using \nR on company’s computer, Bloomberg terminal. \nHere \nbelow is warning message as I have installed Rbloomberg and then to call \nRbloomberg library.\nBut, it \nseems not to work. Ho",
       "thread_id": "thread-86746235d10e",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100302/5ccb7fae/attachment.pl"
+      ]
     },
     {
       "id": "msg-3c17020d0938",
@@ -674,11 +701,14 @@
       "subject_clean": "Problems using blp function",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100304/0a2d8195/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100304/0a2d8195/attachment.pl>",
+      "body_plain": "Hello, I want to retrieve the historical amount of the dividends plus their declaration date using the following code:\nlibrary(RBloomberg)\nconn<-blpConnect(na.action=\"na\")\ndivs<-blp(conn,\"ABT UN Equity\",\"DVD_HIST_WITH_AMT_STATUS\") but it returns me the following error:\n and I get that error:\nError in blpSubscribe(conn, securities, fields, override_fields, overrides) : \n  Call to BLPSubscribe did not return any data!\nanu idea\n \t\t \t   \t\t  \n_________________________________________________________________\nNavegue sem medo com o Internet Explorer 8. Clique aqui para instalar gratuitamente.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello, I want to retrieve the historical amount of the dividends plus their declaration date using the following code:\nlibrary(RBloomberg)\nconn<-blpConnect(na.action=\"na\")\ndivs<-blp(conn,\"ABT UN Equit",
       "thread_id": "thread-498e638033fa",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100304/0a2d8195/attachment.pl"
+      ]
     },
     {
       "id": "msg-32f6fe157995",
@@ -724,11 +754,14 @@
       "subject_clean": "Subject: Re: Standard Deviations using Sliding window?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100305/23d191b1/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100305/23d191b1/attachment.pl>",
+      "body_plain": "> Here was a naive attempt to do standard deviation with sliding window\n>>require(quantmod)\n>>getSymbols(\"AAPL\")\n>> AAPL$STDDEV = sd(Cl(AAPL), 20)\n>> AAPL$SMA = SMA(Cl(AAPL), 10)\n>> AAPL\n\nI am pretty sure that rollapply in the ZOO library would work for you. \n\n\n\n      \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "> Here was a naive attempt to do standard deviation with sliding window\n>>require(quantmod)\n>>getSymbols(\"AAPL\")\n>> AAPL$STDDEV = sd(Cl(AAPL), 20)\n>> AAPL$SMA = SMA(Cl(AAPL), 10)\n>> AAPL\n\nI am pretty ",
       "thread_id": "thread-af652b6650f5",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100305/23d191b1/attachment.pl"
+      ]
     },
     {
       "id": "msg-385e6c5921d6",
@@ -742,11 +775,14 @@
       "references": [
         "<291701.34639.qm@web33008.mail.mud.yahoo.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100305/e6c4419c/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100305/e6c4419c/attachment.pl>",
+      "body_plain": "Yep that's where I am now\n\nWhen I try\n\ngetSymbols('AAPL')\ncloses = Cl(AAPL)\nchange = rollapply(closes['2010-02-25::'],width=2, function(x) { log(x[2]/x[1])}, by=1, align = \"right\", na.pad = TRUE)\n\nI end up with\n\nError in switch(deparse(substitute(FUN)), mean = return(rollmean(data,  : \n  switch: EXPR must return a length 1 vector\n\nthis was what I expected\n\nrollapply(zoo(1:10), 2, sum, na.pad = TRUE, by = 1, align=\"right\")\n 1  2  3  4  5  6  7  8  9 10 \nNA  3  5  7  9 11 13 15 17 19\n\nOn Mar 5, 2010, at 9:17 PM, Judson m wrote:\n\n> > Here was a naive attempt to do standard deviation with sliding window\n> >>require(quantmod)\n> >>getSymbols(\"AAPL\")\n> >> AAPL$STDDEV = sd(Cl(AAPL), 20)\n> >> AAPL$SMA = SMA(Cl(AAPL), 10)\n> >> AAPL\n> \n> I am pretty sure that rollapply in the ZOO library would work for you. \n> \n> \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Yep that's where I am now\n\nWhen I try\n\ngetSymbols('AAPL')\ncloses = Cl(AAPL)\nchange = rollapply(closes['2010-02-25::'],width=2, function(x) { log(x[2]/x[1])}, by=1, align = \"right\", na.pad = TRUE)\n\nI e",
       "thread_id": "thread-af652b6650f5",
       "thread_depth": 1,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100305/e6c4419c/attachment.pl"
+      ]
     },
     {
       "id": "msg-0d79f067a129",
@@ -866,11 +902,14 @@
       "subject_clean": "about Nelson-Siegel model fitting",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100306/e8108809/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100306/e8108809/attachment.pl>",
+      "body_plain": "I am trying to fit the bond market data to the Nelson-Siegel term structure\nmodel. I have a series of bond price data, most of them are coupon bonds.\nAccording to the original Nelson-Siegel model setting, my objective is\ntrying to get the paremeters that minimize the weighted/unweighted  sum of\nprice errors squared.\n\nSo, is there any simple way in R or any package that can do this job? I do\nnot know any about non-linear optimization, so what I need is an easy to use\npackage/code that can do the job.\n\n\nthanks a lot in advance.\n\n\nYin\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I am trying to fit the bond market data to the Nelson-Siegel term structure\nmodel. I have a series of bond price data, most of them are coupon bonds.\nAccording to the original Nelson-Siegel model sett",
       "thread_id": "thread-d372175e63d5",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100306/e8108809/attachment.pl"
+      ]
     },
     {
       "id": "msg-74317829adbd",
@@ -902,11 +941,14 @@
       "references": [
         "<57f92e091003060523yd051b5u4b1d724b30cc6b0@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100306/2cd25bbe/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100306/2cd25bbe/attachment.pl>",
+      "body_plain": "The \"fBonds\" package will do the job just fine.\n\nOn Sat, 2010-03-06 at 21:23 +0800, Yin ZHANG wrote:\n\n> I am trying to fit the bond market data to the Nelson-Siegel term structure\n> model. I have a series of bond price data, most of them are coupon bonds.\n> According to the original Nelson-Siegel model setting, my objective is\n> trying to get the paremeters that minimize the weighted/unweighted  sum of\n> price errors squared.\n> \n> So, is there any simple way in R or any package that can do this job? I do\n> not know any about non-linear optimization, so what I need is an easy to use\n> package/code that can do the job.\n> \n> \n> thanks a lot in advance.\n> \n> \n> Yin\n> \n> \t[[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n> \n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "The \"fBonds\" package will do the job just fine.\n\nOn Sat, 2010-03-06 at 21:23 +0800, Yin ZHANG wrote:\n\n> I am trying to fit the bond market data to the Nelson-Siegel term structure\n> model. I have a se",
       "thread_id": "thread-d372175e63d5",
       "thread_depth": 1,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100306/2cd25bbe/attachment.pl"
+      ]
     },
     {
       "id": "msg-64a84fdbde6d",
@@ -1188,11 +1230,14 @@
       "subject_clean": "Portfolio Optimization",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100309/39e1c48e/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100309/39e1c48e/attachment.pl>",
+      "body_plain": "Dear all,\n\nI am looking for a smart way of portfolio optimization. Currently, I am \nusing solve.QP from quadprog package which is quite useful for MV \noptimization. However, I would like to create a bond portfolio with \nduration constraints. It would be possible to use solve.QP as well, but \ninstead of setting a target return and getting the optimal MV portfolio \ngiven the duration constraints, I would like to set a target risk, expected \nreturns and the covariance matrix to maximize the portfolio return.\nSo far, I was unlucky finding something the SIG archive and I am afraid \nsolve.QP is not applicable for this task.\nAny ideas are highly appreciated.\n\nThanks,\nHeiko    \n-- \n\nhttp://portal.gmx.net/de/go/dsl02\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,\n\nI am looking for a smart way of portfolio optimization. Currently, I am \nusing solve.QP from quadprog package which is quite useful for MV \noptimization. However, I would like to create a b",
       "thread_id": "thread-c4b8b7aabae3",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100309/39e1c48e/attachment.pl"
+      ]
     },
     {
       "id": "msg-b6b35ca50bce",
@@ -1222,11 +1267,14 @@
       "subject_clean": "Timedate problems in Rmetrics",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100309/8b28c528/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100309/8b28c528/attachment.pl>",
+      "body_plain": "Hi folks!\n\nShouldn't the following code cut out New Year's Day (2008-01-01) and MLK day\n(2008-01-21) ?\n\nI need a sequence without holidays as well as weekends.  Thx!\n\nJohn\n\ntS<-timeSequence(from = \"2008-01-01\", to = \"2008-01-31\", by = \"day\")\n\ntS[isBizday(tS, holidayNYSE())]\n\nGMT\n [1] [2008-01-01] [2008-01-02] [2008-01-03] [2008-01-04] [2008-01-07]\n[2008-01-08] [2008-01-09]\n [8] [2008-01-10] [2008-01-11] [2008-01-14] [2008-01-15] [2008-01-16]\n[2008-01-17] [2008-01-18]\n[15] [2008-01-21] [2008-01-22] [2008-01-23] [2008-01-24] [2008-01-25]\n[2008-01-28] [2008-01-29]\n[22] [2008-01-30] [2008-01-31]\n\nholidayNYSE(2008)\nNewYork\n[1] [2008-01-01] [2008-01-21] [2008-02-18] [2008-03-21] [2008-05-26]\n[2008-07-04] [2008-09-01]\n[8] [2008-11-27] [2008-12-25]\n\n\n> sessionInfo()\nR version 2.10.1 (2009-12-14)\ni386-pc-mingw32\n\nlocale:\n[1] LC_COLLATE=English_United States.1252  LC_CTYPE=English_United\nStates.1252\n[3] LC_MONETARY=English_United States.1252 LC_NUMERIC=C\n\n[5] LC_TIME=English_United States.1252\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base\n\nother attached packages:\n[1] timeSeries_2110.86 timeDate_2110.87\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi folks!\n\nShouldn't the following code cut out New Year's Day (2008-01-01) and MLK day\n(2008-01-21) ?\n\nI need a sequence without holidays as well as weekends.  Thx!\n\nJohn\n\ntS<-timeSequence(from = \"20",
       "thread_id": "thread-20cf10b1d5c5",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100309/8b28c528/attachment.pl"
+      ]
     },
     {
       "id": "msg-e17af7c5ae3a",
@@ -1362,11 +1410,14 @@
       "subject_clean": "The 'realized' package user manual",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100311/0ceb240b/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100311/0ceb240b/attachment.pl>",
+      "body_plain": "Hi,\n\nA while back I remember skimming the user manual to Scott Payseur's\n'realized' package, but when I try to retrieve it from his home page:\nhttp://students.washington.edu/spayseur/realized I get a Not Found error.\nDoes anyone have an alternative link?\n\nThank you,\nScott\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nA while back I remember skimming the user manual to Scott Payseur's\n'realized' package, but when I try to retrieve it from his home page:\nhttp://students.washington.edu/spayseur/realized I get a ",
       "thread_id": "thread-699dea35f767",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100311/0ceb240b/attachment.pl"
+      ]
     },
     {
       "id": "msg-58b8d7332715",
@@ -1398,11 +1449,14 @@
       "references": [
         "<39A57FC1-B27D-49E9-B111-A845A5D1D62A@gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100311/ee50ab73/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100311/ee50ab73/attachment.pl>",
+      "body_plain": "I haven't used xts before.\n\nbut in general you can do things more vector like\n\nso if you have a vector of prices\nvec = c(10,11,12,10,10.5,15,13,14,13)\n\nyou can get log returns like\nlogRet = round(diff(log(vec)),4)\n\nThe rollapply for the rolling sd looks good.\n\nfor (j in 1:NROW(Sd)) {\nif (!is.na(Sd[j, \"StdDev\"])) {\n       Sd[j, \"Spike\"] = round(as.numeric(TICKER[j, 'Price.Change']) /\nas.numeric(Sd[j-1,\"StdDev\"]),\n>\n> 2)\n> }\n\n\nThis is strange why are you checking if it is na and you shouldn't have to\nloop through each item\n\nimagine you had two vectors:\nlogRet =  round(diff(log(vec)),4)\nrolling20DayStdeviations = c(.2,.3,.3,.4.,.3, NA, NA, NA) or something.\n\nThen sharpeRatio= logRet/rolling20DayStdeviations\n\nso all together you could have:\n\n\nvec = c(10,11,12,10,10.5,15,13,14,13)\nlogRet = round(diff(log(vec)),4)\nyour rollingStdeviation function\n\nsharpeRatio= logRet/rolling20DayStdeviations\n\nHTH\nRob\n\n\nOn Wed, Mar 10, 2010 at 8:23 PM, Robert Nicholson <\nrobert.nicholson at gmail.com> wrote:\n\n> This piece of code is giving me the answers I expect it to but to me it\n> looks ugly and that's usually a sign that there are better more elegant ways\n> to accomplish the same task.\n>\n> I would welcome any criticism of the following as I'm only just getting\n> started in R\n>\n> library('quantmod')\n> getSymbols('RIMM')\n> TICKER=RIMM\n> #TICKER = as.xts(read.table(\"/Users/robert/Programming/R/close.txt\"))\n> PriceChange = rollapply(Cl(TICKER), width=2, function(x) x[2] - x[1], by=1,\n> align = \"right\", na.pad = TRUE)\n> colnames(PriceChange) = c(\"Price.Change\")\n> TICKER = merge.xts(TICKER, PriceChange)\n> LogOfChange = rollapply(Cl(TICKER),width=2, function(x)\n> round(log(x[2]/x[1]),4), by=1, align = \"right\", na.pad = TRUE)\n> colnames(LogOfChange) = c(\"Log.Change\")\n> TICKER = merge.xts(TICKER, LogOfChange)\n> Sd = rollapply(LogOfChange, width=20, function(x) round(sd(x), 4), by=1,\n> align = \"right\", na.pad = TRUE)\n> colnames(Sd) = c(\"StdDev.Log.Change\")\n> TICKER = merge.xts(TICKER, Sd)\n> Sd$StdDev = rep(NA, NROW(Sd))\n> colnames(Sd) = c(\"StdDev.Log.Change\", \"StdDev\")\n> for (i in 1:NROW(Sd)) {\n> Sd[i, \"StdDev\"] = round(TICKER[i, \"StdDev.Log.Change\"] * Cl(TICKER)[i],3);\n> }\n> TICKER = merge.xts(TICKER, Sd$StdDev)\n> Sd$Spike = rep(NA, NROW(Sd))\n> colnames(Sd) = c(\"StdDev.Log.Change\", \"StdDev\", \"Spike\")\n> for (j in 1:NROW(Sd)) {\n> if (!is.na(Sd[j, \"StdDev\"])) {\n>        Sd[j, \"Spike\"] = round(as.numeric(TICKER[j, 'Price.Change']) /\n> as.numeric(Sd[j-1,\"StdDev\"]),2)\n> }\n> }\n> TICKER = merge.xts(TICKER, Sd$Spike)\n> lineChart(Sd$Spike, line.type = 'h')\n> addTA(Cl(TICKER))\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I haven't used xts before.\n\nbut in general you can do things more vector like\n\nso if you have a vector of prices\nvec = c(10,11,12,10,10.5,15,13,14,13)\n\nyou can get log returns like\nlogRet = round(diff",
       "thread_id": "thread-650cdc112ef5",
       "thread_depth": 1,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100311/ee50ab73/attachment.pl"
+      ]
     },
     {
       "id": "msg-397df941b078",
@@ -1417,11 +1471,14 @@
         "<20100309203536.222780@gmx.net>",
         "<8ec76081003091319t3e9a84a3kc32b7f80fe02211@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100311/b03424fe/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100311/b03424fe/attachment.pl>",
+      "body_plain": "Whit,\n\nThank your for your comment. I have attached the current code that uses a \ntarget return. As mentioned before, I would like to set a target risk \ninstead and solve for the maximum return. Could you please give me a sample \naccording to your suggestion below?\n\nlibrary(quadprog)\n# Input\neReturn=c(0.04,0.05,0.045,0.055)  #expected return\nDuration=c(6,7,6.5,7.5) #current duration\nTreturn=0.01  #Target return\nTDuration=2 #Target duration\n# Solver data\nCovMat=cov(matrix(rnorm(400,mean=0,sd=0.05),nrow=100,ncol=4))\nVM=c(rep(0,4))\nA1=cbind(eReturn,Duration)\nCV=c(Treturn,TDuration)\nmeq=2\n#  Solver\nRes=solve.QP(Dmat=CovMat,dvec=VM,Amat=A1,bvec=CV,meq=meq)\n#  Solution summary\nprint(Res)\ncat(\"Duration in years:  \",sum(as.matrix(Res$solution) * \nas.matrix(Duration)),\"\\n\")\ncat(\"Volatility:  \",sqrt(Res$value*2),\"\\n\")\ncat(\"exp. return:  \",sum(Res$solution*eReturn),\"\\n\")\ncat(\"Sum of weights:  \",round(sum(Res$solution),digits=2),\"\\n\")\n\nThank you,\nHeiko\n\n\n>             \n> -------- Original-Nachricht --------\n> Datum: Tue, 9 Mar 2010 16:19:20 -0500\n> Von: Whit Armstrong <armstrong.whit at gmail.com>\n> An: Heiko Mayer <Heiko-Mayer at gmx.de>\n> CC: r-sig-finance at stat.math.ethz.ch\n> Betreff: Re: [R-SIG-Finance] Portfolio Optimization\n> \n>             You can do this w/ solve.QP.\n> \n> use something like this:\n> \n> solve.QP(lambda*2*vcv,fcst,Amat,bvec)\n> \n> and set up Amat and bvec to be the appropriate duration constraints.\n> \n> -Whit\n> \n> \n> On Tue, Mar 9, 2010 at 3:35 PM, Heiko Mayer <Heiko-Mayer at gmx.de> wrote:\n> > Dear all,\n> >\n> > I am looking for a smart way of portfolio optimization. Currently, I am\n> > using solve.QP from quadprog package which is quite useful for MV\n> > optimization. However, I would like to create a bond portfolio with\n> > duration constraints. It would be possible to use solve.QP as well, but\n> > instead of setting a target return and getting the optimal MV portfolio\n> > given the duration constraints, I would like to set a target risk, \n> expected\n> > returns and the covariance matrix to maximize the portfolio return.\n> > So far, I was unlucky finding something the SIG archive and I am afraid\n> > solve.QP is not applicable for this task.\n> > Any ideas are highly appreciated.\n> >\n> > Thanks,\n> > Heiko\n> > --\n> >\n> > http://portal.gmx.net/de/go/dsl02\n> >\n> >        [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at stat.math.ethz.ch mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions \n> should go.\n> >\n> \n        \n-- \n\nhttp://portal.gmx.net/de/go/dsl02\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Whit,\n\nThank your for your comment. I have attached the current code that uses a \ntarget return. As mentioned before, I would like to set a target risk \ninstead and solve for the maximum return. Could",
       "thread_id": "thread-c4b8b7aabae3",
       "thread_depth": 2,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100311/b03424fe/attachment.pl"
+      ]
     },
     {
       "id": "msg-e65045fe312f",
@@ -1545,11 +1602,14 @@
       "subject_clean": "Asian Options Inputs",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100312/0f7f9b8c/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100312/0f7f9b8c/attachment.pl>",
+      "body_plain": "Hi. Can someone help me understand better the inputs to the function\nTurnbullWakemanAsianApprox?\nIn particular, it's not clear from the manual which is the difference\nbetween S and SA, and between Time and time.\n\nThank you.\n\n-- \nDiego Jara\ndiego.jara at quantil.com.co\nwww.quantil.com.co\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi. Can someone help me understand better the inputs to the function\nTurnbullWakemanAsianApprox?\nIn particular, it's not clear from the manual which is the difference\nbetween S and SA, and between Tim",
       "thread_id": "thread-d5e5bf20f143",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100312/0f7f9b8c/attachment.pl"
+      ]
     },
     {
       "id": "msg-7d043cb44278",
@@ -1564,11 +1624,14 @@
         "<c4adf6e91003101950n8b6340fj2a5f12f207d7f09a@mail.gmail.com>",
         "<4B98C686.4030405@braverock.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100313/c4e448e1/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100313/c4e448e1/attachment.pl>",
+      "body_plain": "Sorry, I should have been more specific.\n\nThe reference manual, realized.pdf is indeed on CRAN. I was referring to a\ndocument that was more like a vignette.\n\nI believe it was located at, http://\nstudents.washington.edu/spayseur/realized/splus.supplement.08.pdf\n\nApologies for the confusion.\nScott*\n*\nOn Thu, Mar 11, 2010 at 9:31 PM, Brian G. Peterson <brian at braverock.com>wrote:\n\n> Scott MacDonald wrote:\n>\n>> Hi,\n>>\n>> A while back I remember skimming the user manual to Scott Payseur's\n>> 'realized' package, but when I try to retrieve it from his home page:\n>> http://students.washington.edu/spayseur/realized I get a Not Found error.\n>> Does anyone have an alternative link?\n>>\n>\n> 'realized' (and its manual) is available on CRAN.\n>\n>  - Brian\n>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Sorry, I should have been more specific.\n\nThe reference manual, realized.pdf is indeed on CRAN. I was referring to a\ndocument that was more like a vignette.\n\nI believe it was located at, http://\nstude",
       "thread_id": "thread-699dea35f767",
       "thread_depth": 2,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100313/c4e448e1/attachment.pl"
+      ]
     },
     {
       "id": "msg-a30815f80604",
@@ -1605,11 +1668,14 @@
         "<57f92e091003070339t47452afbt66abe380036ba693@mail.gmail.com>",
         "<2871c9e11003071256k2c292d8fx3b51483d5270f750@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100313/0613a489/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100313/0613a489/attachment.pl>",
+      "body_plain": "Hi all,\n\nMy problem:\n\nWhat I have: traded bond prices, along with their coupon/maturity\nsprcifications\nWhat I want to do: get the NelsonSiegel parameters for the fitted yield\ncurve\n\nWhat I am doing:\n\n1. I use the fixed income toolbox within Matlab 2008b to get the fitted\ncurve data( it only provides the curve, but no NelsonSiegel parameters).\ni.e., Matlab only outputs the spot/forward yield you want in certain\nmaturities.\n\n2.Then I use the fBonds package function NelsonSiegel function to get the\nparameters of the Nelson Siegel Model.\n\n\nIt works.  But as all of you can see, it is not computational efficient, and\ntheoretically not 100% accurate. But I am wondering is there any better way?\n\n\n\n\n\n\n\n\n\n\n\n\nOn Mon, Mar 8, 2010 at 4:56 AM, Khanh Nguyen <knguyen at cs.umb.edu> wrote:\n\n> FittedBondCurve only returns curve data, you can not get the\n> parameters of the model.\n>\n> -k\n>\n> > I am wondering whether I can get the parameters of the Nelson-Siegel\n> model\n> > directly from this FittedBondCurve method.\n> >\n> > Also, if possible, could you kindly provide a specific example for the\n> > following bonds price dataset that I have attached with this mail?\n> >\n> > My primary aim is to get the Nelson-Siegel model parameters. Also, I want\n> > pricing errors of the fitted curve, such as sum of price errors squared.\n> >\n> > Thanks a lot in advance.\n> >\n> > Kindest\n> >\n> > Yin\n> >\n> >\n> >\n> >\n> >\n> >\n> >\n> > On Sat, Mar 6, 2010 at 9:58 PM, Khanh Nguyen <knguyen at cs.umb.edu> wrote:\n> >>\n> >> You can look into RQuantLib\n> >>\n> >> -k\n> >>\n> >> On Sat, Mar 6, 2010 at 8:23 AM, Yin ZHANG <fly1985 at gmail.com> wrote:\n> >> > I am trying to fit the bond market data to the Nelson-Siegel term\n> >> > structure\n> >> > model. I have a series of bond price data, most of them are coupon\n> >> > bonds.\n> >> > According to the original Nelson-Siegel model setting, my objective is\n> >> > trying to get the paremeters that minimize the weighted/unweighted\n>  sum\n> >> > of\n> >> > price errors squared.\n> >> >\n> >> > So, is there any simple way in R or any package that can do this job?\n> I\n> >> > do\n> >> > not know any about non-linear optimization, so what I need is an easy\n> to\n> >> > use\n> >> > package/code that can do the job.\n> >> >\n> >> >\n> >> > thanks a lot in advance.\n> >> >\n> >> >\n> >> > Yin\n> >> >\n> >> >        [[alternative HTML version deleted]]\n> >> >\n> >> > _______________________________________________\n> >> > R-SIG-Finance at stat.math.ethz.ch mailing list\n> >> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> >> > -- Subscriber-posting only. If you want to post, subscribe first.\n> >> > -- Also note that this is not the r-help list where general R\n> questions\n> >> > should go.\n> >> >\n> >\n> >\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi all,\n\nMy problem:\n\nWhat I have: traded bond prices, along with their coupon/maturity\nsprcifications\nWhat I want to do: get the NelsonSiegel parameters for the fitted yield\ncurve\n\nWhat I am doing:\n\n",
       "thread_id": "thread-dc91203fb283",
       "thread_depth": 1,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100313/0613a489/attachment.pl"
+      ]
     },
     {
       "id": "msg-e0a330aab1f5",
@@ -1650,11 +1716,14 @@
         "<57f92e091003130338h1fb0ce0dxcece4d7d75b7f776@mail.gmail.com>",
         "<4B9B861B.7090806@braverock.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100313/f3ce6bb4/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100313/f3ce6bb4/attachment.pl>",
+      "body_plain": "Hi Brian,\n\nthanks for your reply. Could you kindly tell me is there any package that I\ncan use to calculate unsmoothed Fama-Bliss Yields from coupon bond prices?\n\nYes, I have not tried termstrc package. It seems that it can do all the jobs\nthat I try to do.\n\n\nKindest\n\nYin\n\n\n\n\nOn Sat, Mar 13, 2010 at 8:33 PM, Brian G. Peterson <brian at braverock.com>wrote:\n\n> Yin ZHANG wrote:\n>\n>> What I have: traded bond prices, along with their coupon/maturity\n>> sprcifications\n>>\n> >\n>\n>> What I want to do: get the NelsonSiegel parameters for the fitted yield\n>> curve\n>>\n>> What I am doing:\n>>\n>> 1. I use the fixed income toolbox within Matlab 2008b to get the fitted\n>> curve data( it only provides the curve, but no NelsonSiegel parameters).\n>> i.e., Matlab only outputs the spot/forward yield you want in certain\n>> maturities.\n>>\n>\n> As I told you before, the spot yield on a bond, given it's observed price\n> and known maturity, is simple algebra.  R can do this easily, with or\n> without the aid of a package.  You don't need a 'toolbox' to calculate these\n> things, or to graph the resulting yield curve, fitted or not.  There are\n> tools for doing this (see below) if you want them.\n>\n> (there's absolutely no point in fitting a yield curve at this stage if the\n> output of the fitted model isn't what you want)\n>\n> You aren't going to get past the step of converting spot prices to yields\n> on each series.  You have to do it to get what you want.  Write a function,\n> make it easily repeatable, or use one of the packages.\n>\n>\n> 2.Then I use the fBonds package function NelsonSiegel function to get the\n>> parameters of the Nelson Siegel Model.\n>>\n>\n> The input to every Nelson Siegel method that I'm aware of is a set of spot\n> yields and maturities. The output is a fitted yield curve and the parameters\n> of the stochastic term structure model.\n>\n>\n> The packages I'm aware of for doing all this in R are\n>\n> 'YieldCurve', which I mentioned in my previous email.\n>\n> 'fBonds' which you are already familiar with.\n>\n> 'RQuantLib' which as discussed only returns the fitted curve, and\n>\n> 'termstrc' which contains a setting for using *prices* to calculate the\n> yield and then fit the model.\n> http://cran.r-project.org/web/packages/termstrc/index.html\n> http://r-forge.r-project.org/projects/termstrc/\n>\n> The only thing I can think of is that you haven't tried termstrc, otherwise\n> I'm not sure what you've done here except to re-ask the same question.\n>\n> In the interests of exposition and to aid future searches, all of these\n> packages are mentioned in the CRAN Finance Task View:\n>\n> http://cran.r-project.org/web/views/Finance.html\n>\n> Regards,\n>\n>  - Brian\n>\n>\n> On Mon, Mar 8, 2010 at 4:56 AM, Khanh Nguyen <knguyen at cs.umb.edu> wrote:\n>>\n>> FittedBondCurve only returns curve data, you can not get the\n>>> parameters of the model.\n>>>\n>>> -k\n>>>\n>>> I am wondering whether I can get the parameters of the Nelson-Siegel\n>>>>\n>>> model\n>>>\n>>>> directly from this FittedBondCurve method.\n>>>>\n>>>> Also, if possible, could you kindly provide a specific example for the\n>>>> following bonds price dataset that I have attached with this mail?\n>>>>\n>>>> My primary aim is to get the Nelson-Siegel model parameters. Also, I\n>>>> want\n>>>> pricing errors of the fitted curve, such as sum of price errors squared.\n>>>>\n>>>> Thanks a lot in advance.\n>>>>\n>>>> Kindest\n>>>>\n>>>> Yin\n>>>>\n>>>>\n>>>>\n>>>>\n>>>>\n>>>>\n>>>>\n>>>> On Sat, Mar 6, 2010 at 9:58 PM, Khanh Nguyen <knguyen at cs.umb.edu>\n>>>> wrote:\n>>>>\n>>>>> You can look into RQuantLib\n>>>>>\n>>>>> -k\n>>>>>\n>>>>> On Sat, Mar 6, 2010 at 8:23 AM, Yin ZHANG <fly1985 at gmail.com> wrote:\n>>>>>\n>>>>>> I am trying to fit the bond market data to the Nelson-Siegel term\n>>>>>> structure\n>>>>>> model. I have a series of bond price data, most of them are coupon\n>>>>>> bonds.\n>>>>>> According to the original Nelson-Siegel model setting, my objective is\n>>>>>> trying to get the paremeters that minimize the weighted/unweighted\n>>>>>>\n>>>>>  sum\n>>>\n>>>>  of\n>>>>>> price errors squared.\n>>>>>>\n>>>>>> So, is there any simple way in R or any package that can do this job?\n>>>>>>\n>>>>> I\n>>>\n>>>>  do\n>>>>>> not know any about non-linear optimization, so what I need is an easy\n>>>>>>\n>>>>> to\n>>>\n>>>>  use\n>>>>>> package/code that can do the job.\n>>>>>>\n>>>>>>\n>>>>>> thanks a lot in advance.\n>>>>>>\n>>>>>>\n>>>>>> Yin\n>>>>>>\n>>>>>>       [[alternative HTML version deleted]]\n>>>>>>\n>>>>>> _______________________________________________\n>>>>>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>>>>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>>>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>>>>> -- Also note that this is not the r-help list where general R\n>>>>>>\n>>>>> questions\n>>>\n>>>>  should go.\n>>>>>>\n>>>>>>\n>>>>\n>>        [[alternative HTML version deleted]]\n>>\n>> _______________________________________________\n>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n>\n>\n> --\n> Brian G. Peterson\n> http://braverock.com/brian/\n> Ph: 773-459-4973\n> IM: bgpbraverock\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Brian,\n\nthanks for your reply. Could you kindly tell me is there any package that I\ncan use to calculate unsmoothed Fama-Bliss Yields from coupon bond prices?\n\nYes, I have not tried termstrc packag",
       "thread_id": "thread-dc91203fb283",
       "thread_depth": 3,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100313/f3ce6bb4/attachment.pl"
+      ]
     },
     {
       "id": "msg-cf41cecb58e4",
@@ -1684,11 +1753,14 @@
       "references": [
         "<1730e1951003121549k452eb412hd49e0e4e032c0fc3@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100313/493f84bb/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100313/493f84bb/attachment.pl>",
+      "body_plain": "Diego,\n\nYou will find almost everything you need in the pages of any decent\nquantitative finance textbook. My personal favourite is John Hull's\n\"Options, Futures & Other Derivatives\". If you get the latest edition\nthe information that you're looking for should be in Ch. 22 p539-40.\nThose two pages will tell you that \"SA\" is the average of the underlying\nup until the valuation date, \"S\" is the current value of the underlying,\n\"Time\" is the time already elapsed, \"time\" is the time remaining to\nmaturity for the option. Do some reading and you'll find that the\nimplementation that Wuertz & co. have created is pretty much the\nstandard used in the literature.\n\nOn Fri, 2010-03-12 at 18:49 -0500, Diego Jara wrote:\n\n> Hi. Can someone help me understand better the inputs to the function\n> TurnbullWakemanAsianApprox?\n> In particular, it's not clear from the manual which is the difference\n> between S and SA, and between Time and time.\n> \n> Thank you.\n> \n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Diego,\n\nYou will find almost everything you need in the pages of any decent\nquantitative finance textbook. My personal favourite is John Hull's\n\"Options, Futures & Other Derivatives\". If you get the l",
       "thread_id": "thread-d5e5bf20f143",
       "thread_depth": 1,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100313/493f84bb/attachment.pl"
+      ]
     },
     {
       "id": "msg-c7ac00558dfd",
@@ -1723,11 +1795,14 @@
         "<c4adf6e91003122037w51704258xd05808718a9db145@mail.gmail.com>",
         "<4B9B6F1E.80300@braverock.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100314/e18ba961/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100314/e18ba961/attachment.pl>",
+      "body_plain": "Thank you!\n\n\n\nOn Sat, Mar 13, 2010 at 9:55 PM, Brian G. Peterson <brian at braverock.com>wrote:\n\n> Scott,\n>\n> According to the list archives, from Scott Payseur, the link was:\n>\n> students.washington.edu/spayseur/realized/users.manual.08.pdf\n>\n> But it is a dead link anyway, so it is included here only to help future\n> searchers.\n>\n> There is a users.manual.script.q file included in the package, which I\n> presume is the code from the missing manual.\n>\n> I looked in my older copies of the package, and found the docs you're\n> looking for.\n>\n> I've posted mirror copies here:\n> http://www.braverock.com/brian/realized/\n>\n> As these docs are not included in the current archives on CRAN.\n>\n> Regards,\n>\n>    - Brian\n>\n>\n>\n> Scott MacDonald wrote:\n>\n>> Sorry, I should have been more specific.\n>>\n>> The reference manual, realized.pdf is indeed on CRAN. I was referring to a\n>> document that was more like a vignette.\n>>\n>> I believe it was located at,\n>> http://students.washington.edu/spayseur/realized/splus.supplement.08.pdf<\n>> http://students.washington.edu/spayseur/realized/splus.supplement.08.pdf>\n>>\n>>\n>> Apologies for the confusion.\n>> Scott/\n>> /\n>> On Thu, Mar 11, 2010 at 9:31 PM, Brian G. Peterson <brian at braverock.com<mailto:\n>> brian at braverock.com>> wrote:\n>>\n>>    Scott MacDonald wrote:\n>>\n>>        Hi,\n>>\n>>        A while back I remember skimming the user manual to Scott Payseur's\n>>        'realized' package, but when I try to retrieve it from his home\n>>        page:\n>>        http://students.washington.edu/spayseur/realized I get a Not\n>>        Found error.\n>>        Does anyone have an alternative link?\n>>\n>>\n>>    'realized' (and its manual) is available on CRAN.\n>>\n>>     - Brian\n>>\n>>\n>>\n>\n> --\n> Brian G. Peterson\n> http://braverock.com/brian/\n> Ph: 773-459-4973\n> IM: bgpbraverock\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thank you!\n\n\n\nOn Sat, Mar 13, 2010 at 9:55 PM, Brian G. Peterson <brian at braverock.com>wrote:\n\n> Scott,\n>\n> According to the list archives, from Scott Payseur, the link was:\n>\n> students.washington.",
       "thread_id": "thread-699dea35f767",
       "thread_depth": 4,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100314/e18ba961/attachment.pl"
+      ]
     },
     {
       "id": "msg-f6871b1285a8",
@@ -1897,11 +1972,14 @@
       "references": [
         "<20100318053003.GA88026@ajay-shahs-macbook-pro.local>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100318/ec43483d/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100318/ec43483d/attachment.pl>",
+      "body_plain": "If you look on the FRED website, does it show the (missing) data?\n\n\n2010/3/18 Ajay Shah <ajayshah at mayin.org>\n\n> Folks,\n>\n> Here's a blemish:\n>\n>  library(quantmod)\n>  getSymbols(\"PPIACO\", src=\"FRED\")\n>  PPIACO[342:347,]\n>\n> which gives me:\n>\n>           PPIACO\n> 1941-06-01   15.0\n> 1941-07-01   15.3\n> 1941-08-01   15.6\n> 1941-09-01   15.8\n> <NA>         15.9\n> 1941-11-01   15.9\n>\n> where, as you see, the date for October 1941 is missing. This could be\n> a mistake in the underlying FRED data or it could be a flaw in\n> getSymbols.FRED.\n>\n> Hope this helps,\n>\n> --\n> Ajay Shah\n> http://www.mayin.org/ajayshah\n> ajayshah at mayin.org\n> http://ajayshahblog.blogspot.com\n> <*(:-? - wizard who doesn't know the answer.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "If you look on the FRED website, does it show the (missing) data?\n\n\n2010/3/18 Ajay Shah <ajayshah at mayin.org>\n\n> Folks,\n>\n> Here's a blemish:\n>\n>  library(quantmod)\n>  getSymbols(\"PPIACO\", src=\"FRED",
       "thread_id": "thread-633dbb33ccc3",
       "thread_depth": 1,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100318/ec43483d/attachment.pl"
+      ]
     },
     {
       "id": "msg-7a57888c0f19",
@@ -1981,11 +2059,14 @@
       "subject_clean": "fArma",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100321/b372456b/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100321/b372456b/attachment.pl>",
+      "body_plain": "Hi,\n\nI don't know where else to seek help, if not applicable, I would be grateful if you could direct me to a relevant reference.\n\nI tried running (this code was gotten from TAMU.edu) but I kept getting this error \"Error in eval(expr, envir, enclos) : object 'package' not found\". I looked into fArma, but to no avail. What should I do? What is object 'package'?:\n#Examples \n#Fit GE data using AR(1),AR(6), MA(2), ARMA(2,1), ARIMA(2,1,0) Models\n# Yt = a * Y(t-1) + et\n\nPrice<-scan(\"C:\\\\R\\\\IXIC.txt\")\nN<-length(Price)  \nReturn<-Price[2:N]/Price[1:(N-1)]-1\nLogReturn<-log(1+Return)\nLogPrice<-log(Price)\n\nlibrary(\"fSeries\")\n\n#Fit GE Daily log return\nfit_ar<-armaFit(formula = LogReturn ~ arima(1,0,0))     #AR (1)\nfit_ar6<-armaFit(formula = LogReturn ~ arima(6,0,0))     #AR (6)\nfit_ma<-armaFit(formula = LogReturn ~ arima(0,0,2))     #ma (2)\nfit_arma<-armaFit(formula = LogReturn ~ arima(2,0,1))   #arma (2,1)    \n\n#arima model fit GE daily log prices\nfit_arima<-armaFit(formula = LogPrice ~ arima(2,1,0))  #arima (2,1,0)           \n       \n\nsink(\"C:\\\\R\\\\ar.txt\")\npdf(\"C:\\\\R\\\\ar.pdf\")\nsummary(fit_ar)\ndev.off()\nsink()\n\nsink(\"C:\\\\R\\\\ar6.txt\")\npdf(\"C:\\\\R\\\\ar6.pdf\")\nsummary(fit_ar6)\ndev.off()\nsink()\n\nsink(\"C:\\\\R\\\\ma.txt\")\npdf(\"C:\\\\R\\\\ma.pdf\")\nsummary(fit_ma)\ndev.off()\nsink()\n\nsink(\"C:\\\\R\\\\arma.txt\")\npdf(\"C:\\\\R\\\\arma.pdf\")\nsummary(fit_arma)\ndev.off()\nsink()\n\nsink(\"C:\\\\R\\\\arima.txt\")\npdf(\"C:\\\\R\\\\arima.pdf\")\nsummary(fit_arima)\ndev.off()\nsink()\n\n\n\n      \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI don't know where else to seek help, if not applicable, I would be grateful if you could direct me to a relevant reference.\n\nI tried running (this code was gotten from TAMU.edu) but I kept getti",
       "thread_id": "thread-509ebe9d5433",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100321/b372456b/attachment.pl"
+      ]
     },
     {
       "id": "msg-952dc712b1ac",
@@ -2017,11 +2098,14 @@
       "references": [
         "<1269150299502-1676491.post@n4.nabble.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100321/2e6a5694/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100321/2e6a5694/attachment.pl>",
+      "body_plain": "Well, remember what a collar is: a combination of a covered call and a\nprotective put. Then remember what a covered call is: buying one share\nof a stock and selling one call option simultaneously. If you use a\nratio instead to decide how many shares to buy versus how many calls to\nsell, that will determine both the risk and the reward of the strategy.\n\nOn Sat, 2010-03-20 at 21:44 -0800, Megh wrote:\n\n> My query is not directly R related rather on finance. Hopefully folks here\n> would give some solution. I would like to ask what is the \"Ratio collar\n> option\". I know about the Collar option and if I search over net on Ratio\n> collar option all the time it refers to Collar option only. Are they both\n> same? Why the term \"Ratio\" there?\n> \n> Any view will be highly appreciated.\n> \n> Thanks,\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Well, remember what a collar is: a combination of a covered call and a\nprotective put. Then remember what a covered call is: buying one share\nof a stock and selling one call option simultaneously. If ",
       "thread_id": "thread-1fb2761d36d7",
       "thread_depth": 1,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100321/2e6a5694/attachment.pl"
+      ]
     },
     {
       "id": "msg-b4595a727dc8",
@@ -2051,11 +2135,14 @@
       "references": [
         "<1269190832111-1676787.post@n4.nabble.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100321/2737e0f2/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100321/2737e0f2/attachment.pl>",
+      "body_plain": "If you're trying to calculate Value-at-Risk, the first thing to remember\nis that the basic techniques for VaR do not really depend on the assets\nconcerned. With an (arithmetic-average) Asian option, there is no\nclosed-form solution even for the simple European case. There are\nseveral ways one can calculate VaR when confronted with this kind of\nasset:\n\n1) Historical simulation\nThe specific details of this approach are given in Hull's book, Ch.17.\nBasically, just take the option's price over the last n days and \"shock\"\nthe price using historical data. The result will give you your one-day\nVaR for the option, which can then be converted into an n-day VaR\nthrough standard methods.\n\n2) Use closed-form approximations across a range of underlying asset\nprices\nThis is the approach that I like the least. One can use the usual\nTurnbull-Wakeman approximation for a European Asian option, extract a\ndistribution of possible results, and use this for VaR over an n-day\nperiod. I dislike this approach because it imposes a distribution\nassumption with which I am not comfortable- namely, that the arithmetic\naverage of lognormal random variables is also lognormally distributed\n(which it isn't).\n\n3) Monte Carlo Simulation\nThis is the slowest but most robust method. Simulate out the underlying\nasset prices, take averages along each path as required, and calculate\nthe option's payoff at maturity. Discount each payoff back to the\npresent by the risk-free rate. You will be left with a distribution of\npossible option prices, giving you the VaR of the position.\n\nYou're going to need Hull's book (at minimum) to tackle these questions.\nChapter 17 should give you all the information and tools you need.\n\nOn Sun, 2010-03-21 at 09:00 -0800, Bogaso wrote:\n\n> Hi all,\n> \n> Here I am mandated to find the VaR for an Asian type option say call option,\n> wherein pay-off for that option will be simple average of daily prices (20\n> trading days) for next month. For example today it is 21st-march and pay-off\n> will be daily average for all trading days for the month of april, which is\n> going to expire on the last trading day of april. \n> \n> I am clear on calculating VaR, at least daily, for European type option\n> wherein distribution of option price for next day is determined using BS\n> formula and hence the distribution of P/L for the option premium. However in\n> current case as option is path-dependent possibly there is no closed form\n> solution available to determine the fair price of the option. Therefore I am\n> seeking help on how to deal with my present case. If experts here give some\n> clue as well as some published documents or books on the regard I would be\n> truly grateful. Whatever I am aware of is calculation of VaR for plain\n> vanilla option.\n> \n> Thanks,\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "If you're trying to calculate Value-at-Risk, the first thing to remember\nis that the basic techniques for VaR do not really depend on the assets\nconcerned. With an (arithmetic-average) Asian option, t",
       "thread_id": "thread-b4595a727dc8",
       "thread_depth": 1,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100321/2737e0f2/attachment.pl"
+      ]
     },
     {
       "id": "msg-8955f4b1b692",
@@ -2099,11 +2186,14 @@
       "subject_clean": "Strange side effect on setting not existing column to NULL in xts",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100322/fdf55ccb/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100322/fdf55ccb/attachment.pl>",
+      "body_plain": "Hi,\n\nI have noticed that when you try to set a column to NULL on an xts series\n(to remove it), and the column does not exists, the existing column is\nrenamed:\n\n> > prices = (100:130)/10\n> MYSTOCK = xts(prices,\nas.POSIXct(strptime(as.Date(\"2010-01-01\")+seq(1:length(prices)),\n\"%Y-%m-%d\")))\n> colnames(MYSTOCK) = \"Close\"\n> MYSTOCK\n           Close\n2010-01-02  10.0\n2010-01-03  10.1\n2010-01-04  10.2\n2010-01-05  10.3\n2010-01-06  10.4\n2010-01-07  10.5\n2010-01-08  10.6\n2010-01-09  10.7\n2010-01-10  10.8\n2010-01-11  10.9\n2010-01-12  11.0\n2010-01-13  11.1\n2010-01-14  11.2\n2010-01-15  11.3\n2010-01-16  11.4\n2010-01-17  11.5\n2010-01-18  11.6\n2010-01-19  11.7\n2010-01-20  11.8\n2010-01-21  11.9\n2010-01-22  12.0\n2010-01-23  12.1\n2010-01-24  12.2\n2010-01-25  12.3\n2010-01-26  12.4\n2010-01-27  12.5\n2010-01-28  12.6\n2010-01-29  12.7\n2010-01-30  12.8\n2010-01-31  12.9\n2010-02-01  13.0\n> MYSTOCK$doesnotexist = NULL\n> MYSTOCK\n           doesnotexist\n2010-01-02         10.0\n2010-01-03         10.1\n2010-01-04         10.2\n2010-01-05         10.3\n2010-01-06         10.4\n2010-01-07         10.5\n2010-01-08         10.6\n2010-01-09         10.7\n2010-01-10         10.8\n2010-01-11         10.9\n2010-01-12         11.0\n2010-01-13         11.1\n2010-01-14         11.2\n2010-01-15         11.3\n2010-01-16         11.4\n2010-01-17         11.5\n2010-01-18         11.6\n2010-01-19         11.7\n2010-01-20         11.8\n2010-01-21         11.9\n2010-01-22         12.0\n2010-01-23         12.1\n2010-01-24         12.2\n2010-01-25         12.3\n2010-01-26         12.4\n2010-01-27         12.5\n2010-01-28         12.6\n2010-01-29         12.7\n2010-01-30         12.8\n2010-01-31         12.9\n2010-02-01         13.0\n> colnames(MYSTOCK)\n[1] \"doesnotexist\"\n\nThis looks wrong to me. Is it?\n\nMy versions:\n\n> sessionInfo()\nR version 2.10.1 (2009-12-14)\ni386-pc-mingw32\n\nlocale:\n[1] LC_COLLATE=Dutch_Netherlands.1252  LC_CTYPE=Dutch_Netherlands.1252\n LC_MONETARY=Dutch_Netherlands.1252 LC_NUMERIC=C\n[5] LC_TIME=Dutch_Netherlands.1252\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base\n\nother attached packages:\n[1] timeDate_2110.87 IBrokers_0.2-6   quantmod_0.3-14  TTR_0.20-1\nDefaults_1.1-1   xts_0.7-1        zoo_1.6-2\n\nloaded via a namespace (and not attached):\n[1] grid_2.10.1    lattice_0.18-3 tools_2.10.1\n>\n\nRegards,\n\n-Mark-\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI have noticed that when you try to set a column to NULL on an xts series\n(to remove it), and the column does not exists, the existing column is\nrenamed:\n\n> > prices = (100:130)/10\n> MYSTOCK = xt",
       "thread_id": "thread-b65c092fb305",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100322/fdf55ccb/attachment.pl"
+      ]
     },
     {
       "id": "msg-3bb3fd9b7179",
@@ -2168,11 +2258,14 @@
       "subject_clean": "BHHH vs LBFGS",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100322/bc14946c/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100322/bc14946c/attachment.pl>",
+      "body_plain": "Hi,\n\nWhat is the difference between BHHH and LBFGS? Which is the better algorithm for Garch(q,p)? I noticed in garchFit, there are algorithms 'nlminb', 'lbfgsb', 'nlminb+nm' & 'lbfgsb+nm'. Which one enables the BHHH algo or is there another function for BHHH? \n\nThanks in advance.\n\n\n      \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nWhat is the difference between BHHH and LBFGS? Which is the better algorithm for Garch(q,p)? I noticed in garchFit, there are algorithms 'nlminb', 'lbfgsb', 'nlminb+nm' & 'lbfgsb+nm'. Which one e",
       "thread_id": "thread-315886e4f54c",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100322/bc14946c/attachment.pl"
+      ]
     },
     {
       "id": "msg-d6cf89a74673",
@@ -2205,11 +2298,14 @@
         "<959921.27420.qm@web113213.mail.gq1.yahoo.com>",
         "<003201cac9e1$472ff3f0$d58fdbd0$@washington.edu>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100322/38dac7d5/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100322/38dac7d5/attachment.pl>",
+      "body_plain": "I don't have access to that paper. \n\nWell, we are currently using the BHHH algo for our Garch(1,1) vols both intradays and daily. I am thinking of incorporating the Garch(p,q) with the LBFGS algo, because like you said, a simple google search mentioned LBFGS as a more stable algo. Nothing much was said about the BHHH. Just wanted your thoughts about it. I don't have any experience with these algos though. \n\n\n\n________________________________\nFrom: Eric Zivot <ezivot at u.washington.edu>\n\nSent: Tue, March 23, 2010 1:01:13 AM\nSubject: RE: [R-SIG-Finance] BHHH vs LBFGS\n\nThis is not an R finance question. A simple google search brought up the\nfollowing helpful paper\n\nhttp://www.sciencedirect.com/science?_ob=ArticleURL&_udi=B6V8V-3SX829Y-G&_us\ner=582538&_coverDate=03%2F06%2F1998&_rdoc=1&_fmt=high&_orig=search&_sort=d&_\ndocanchor=&view=c&_searchStrId=1261826491&_rerunOrigin=google&_acct=C0000297\n18&_version=1&_urlVersion=0&_userid=582538&md5=6de6878bc6c66e54110a2005b6370\n63d\n\n\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Zany Z\nSent: Monday, March 22, 2010 8:31 AM\nTo: r-sig-finance at stat.math.ethz.ch\nSubject: [R-SIG-Finance] BHHH vs LBFGS\n\nHi,\n\nWhat is the difference between BHHH and LBFGS? Which is the better algorithm\nfor Garch(q,p)? I noticed in garchFit, there are algorithms 'nlminb',\n'lbfgsb', 'nlminb+nm' & 'lbfgsb+nm'. Which one enables the BHHH algo or is\nthere another function for BHHH? \n\n\nThanks in advance.\n\n\n      \n    [[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions\nshould go.\n\n\n      \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I don't have access to that paper. \n\nWell, we are currently using the BHHH algo for our Garch(1,1) vols both intradays and daily. I am thinking of incorporating the Garch(p,q) with the LBFGS algo, bec",
       "thread_id": "thread-315886e4f54c",
       "thread_depth": 2,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100322/38dac7d5/attachment.pl"
+      ]
     },
     {
       "id": "msg-44e1f022c24b",
@@ -2221,11 +2317,14 @@
       "subject_clean": "Neural Networks and R",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100322/32f0442a/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100322/32f0442a/attachment.pl>",
+      "body_plain": "Hi\n\nI recently started playing with the nnet package and the IRIS dataset. I\nwould love to hear from anyone that has used this package to build a\npredictive model in finance. Specifically, I would like to get some pointers\non the modeling aspects i.e. normalization of inputs, directional predictors\nvs. magnitude predictors, neural networks vs. kernel regression etc. Any\nother pointers on books / articles would be great as well.\n\nThanks\nMike\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi\n\nI recently started playing with the nnet package and the IRIS dataset. I\nwould love to hear from anyone that has used this package to build a\npredictive model in finance. Specifically, I would lik",
       "thread_id": "thread-44e1f022c24b",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100322/32f0442a/attachment.pl"
+      ]
     },
     {
       "id": "msg-74ba6f5688d7",
@@ -2289,11 +2388,14 @@
       "subject_clean": "Price velocity and price acceleration",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100323/f884d357/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100323/f884d357/attachment.pl>",
+      "body_plain": "Hi,\n\nDoes anyone know how to compute \"price velocity\" and \"price acceleration\"\nfor a financial time series, or what package implements this (maybe under\nanother name)?\n\nI am trying to apply a linear regression from the following text where both\nterms are coefficients in the regression:\n\n\"The  18  candidate  price  dynamics  indicators  are  of  3  types:\n velocity,\nacceleration  and  volatility,  with  six  variants  of  each  type.  The\n variants\ndiffer with  respect  to  the  number  of  days  used  to measure  velocity\n and\nacceleration or with respect to the exponential smoothing constant used to\nmeasure  volatility. Type  1  (*price  velocity*)  is  the  slope  term  of\n a moving\nlinear  regression,  fit using  least  squares,  to  the  logs  of  the\n S&P500  close.\nThe  six  fitting  or  look-back periods  are  11,  22,  44,  65,  130  and\n 260  days.\nSpecifically, we define price velocity as the coefficient “b” in the\nfunction y\n=a +bx, where y is the log of price and x is the date index (increasing by\none\nfor each trade date). Type 2 (*price acceleration or curvature*)  is the\nsecond\norder term of a moving parabolic regression,  fit using least squares to\nthe\nlogs of the S&P500 close  using  fitting periods of 11, 22, 44, 65, 130 and\n260\ndays. Thus acceleration is the “c” coefficient in the function y= a + bx +\ncx2\nwhere y is the log of price and x is the date index.\"\n\nfrom: Purified Sentiment Indicators For The Stock Market\nhttp://www.hoodriverresearch.com/PurifiedSentimentIndicatorsfortheStockMarket5.04.09.pdf\n\nRegards,\n\n-Mark-\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nDoes anyone know how to compute \"price velocity\" and \"price acceleration\"\nfor a financial time series, or what package implements this (maybe under\nanother name)?\n\nI am trying to apply a linear r",
       "thread_id": "thread-9841e81c3959",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100323/f884d357/attachment.pl"
+      ]
     },
     {
       "id": "msg-4aab511c735f",
@@ -2305,11 +2407,14 @@
       "subject_clean": "Looking for a fast convergence methodology",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100323/9b8a55d1/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100323/9b8a55d1/attachment.pl>",
+      "body_plain": "Hi all,\n\nFirst I would like to apologize if my question seems to be out of the\nscope of this list. It is part of a Finacial model that I am working on.\n\nI have a model in a  functional format:\n\nResult  = mymodel(x,y)\n\nI would like to run the model for a range of values for both variables\n\"x\" and \"y\". The number of possible combination of x and y spans several\nthousand possible scenarios. My goal is to find the best possible\noutcome out of all the different possibilities. I am able to setup  and\nrun this exhaustively,  but it takes too long to cover the\npossibilities. I even have a parallel process set up, but it still takes\ntoo long.\n\nI know my description might be  a bit too general, but I was wondering\nif anyone might have suggestions as what approaches I could experiment.\nI am looking  for some technique that might help to find fast\nconvergence without the need to having to exhaust each of the\npossibilities.\n\nThanks,\n\nJorge Nieves\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi all,\n\nFirst I would like to apologize if my question seems to be out of the\nscope of this list. It is part of a Finacial model that I am working on.\n\nI have a model in a  functional format:\n\nResult",
       "thread_id": "thread-4aab511c735f",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100323/9b8a55d1/attachment.pl"
+      ]
     },
     {
       "id": "msg-acef4f30157d",
@@ -2377,11 +2482,14 @@
       "references": [
         "<D595C0E05185614C90515F1E8A2D4CBF060B449A@NYC-XCH3.win.moorecap.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100323/90b50cf5/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100323/90b50cf5/attachment.pl>",
+      "body_plain": "You're right. It IS way too general.\n\nWhat exactly is \"mymodel\"? What are you trying to do? Are you running a\nPRNG to run the scenarios?\n\nAnswer those questions, and you will likely get plenty of answers.\n\nOn Tue, 2010-03-23 at 13:09 -0400, Jorge Nieves wrote:\n\n> Hi all,\n> \n> First I would like to apologize if my question seems to be out of the\n> scope of this list. It is part of a Finacial model that I am working on.\n> \n> I have a model in a  functional format:\n> \n> Result  = mymodel(x,y)\n> \n> I would like to run the model for a range of values for both variables\n> \"x\" and \"y\". The number of possible combination of x and y spans several\n> thousand possible scenarios. My goal is to find the best possible\n> outcome out of all the different possibilities. I am able to setup  and\n> run this exhaustively,  but it takes too long to cover the\n> possibilities. I even have a parallel process set up, but it still takes\n> too long.\n> \n> I know my description might be  a bit too general, but I was wondering\n> if anyone might have suggestions as what approaches I could experiment.\n> I am looking  for some technique that might help to find fast\n> convergence without the need to having to exhaust each of the\n> possibilities.\n> \n> Thanks,\n> \n> Jorge Nieves\n> \n> \n> \n> \t[[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n> \n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "You're right. It IS way too general.\n\nWhat exactly is \"mymodel\"? What are you trying to do? Are you running a\nPRNG to run the scenarios?\n\nAnswer those questions, and you will likely get plenty of answ",
       "thread_id": "thread-4aab511c735f",
       "thread_depth": 1,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100323/90b50cf5/attachment.pl"
+      ]
     },
     {
       "id": "msg-c5f9602b6495",
@@ -2916,11 +3024,14 @@
       "subject_clean": "A problem with RBloomberg",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100328/192ce29c/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100328/192ce29c/attachment.pl>",
+      "body_plain": "simple restart might do. Bloomberg consoles with R installed on them - under\nWindows - tend to exhibit somewhat erratic behavior. I've had a similar\nproblem, with R \"complaining\" about lack of file / dir, and after restarting\nit worked fine.\n\n\nrg,\nK\n\n*Hi,all!**\n**Here is the Problem:**\n**>library(RBloomberg)**\n**Loading required package: RDCOMClient**\n**Loading required package: zoo**\n**Loading required package: chron**\n**Warning messages:**\n**1: In file(file, \"rt\") :**\n** cannot open file 'C:/blp/API/bbfields.tbl': No such file or directory**\n**2: In f(libname, pkgname) :**\n** I can't find your bbfields file.. see ?blpReadFields**\n**\n**Is there anyone who can help me?**\n**Thanks!**\n**\n**-----**\n**?????????????????**\n**--**\n**View this message in context:\nhttp://n4.nabble.com/A-problem-with-RBloomberg-tp1693479p1693479.html**\n**Sent from the Rmetrics mailing list archive at Nabble.com.**\n*\n*\n*\n\n---\nA gentleman is one who never hurts anyone's feelings unintentionally.\n\nOscar Wilde\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "simple restart might do. Bloomberg consoles with R installed on them - under\nWindows - tend to exhibit somewhat erratic behavior. I've had a similar\nproblem, with R \"complaining\" about lack of file / ",
       "thread_id": "thread-306a2dd0314e",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100328/192ce29c/attachment.pl"
+      ]
     },
     {
       "id": "msg-7394066e2f78",
@@ -2950,11 +3061,14 @@
       "subject_clean": "Coding for a trailing stop (% or fixed $)",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100328/e21722ab/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100328/e21722ab/attachment.pl>",
+      "body_plain": "For the life of me, I don't know why this is eluding me...\n\nI'm trying to add a variable into a time series (have quote data added via\nquantmod).  I've added technical indicators, but now want a column that will\nreflect the trailing stop value for that day, given a starting date and\ntrade value, and a given trailing stop.\n\nIs there a more sensible way than using a FOR loop to march through the\nrows, lagging to compare prior highs/lows to current stop value?  I don't\nwant the canned Parabolic SAR, but a custom user-specifiable trailing stop\n(for example, 5% below the high since position entry for long, 5% above low\nsince short entry)\n\nGoogle searches have come up dry, and this seemingly simple task has eluded\nme.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "For the life of me, I don't know why this is eluding me...\n\nI'm trying to add a variable into a time series (have quote data added via\nquantmod).  I've added technical indicators, but now want a colum",
       "thread_id": "thread-e54cdd17c080",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100328/e21722ab/attachment.pl"
+      ]
     },
     {
       "id": "msg-3eae026c618f",
@@ -2986,11 +3100,14 @@
       "references": [
         "<d332d3e11003280812q4edd001at8e604090b2c5aecb@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100328/7ccf15b4/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100328/7ccf15b4/attachment.pl>",
+      "body_plain": "You may first use \"embed\" function to create a data.frame with lagging time\nand then use sapply to apply the function to each row. In this way you can\neasily parallelize your code using sun grid engine or mcapply.\n\nHesen Peng\n\nOn Mar 28, 2010 11:15 AM, \"David L. Van Brunt, Ph.D.\" <dlvanbrunt at gmail.com>\nwrote:\n\nFor the life of me, I don't know why this is eluding me...\n\nI'm trying to add a variable into a time series (have quote data added via\nquantmod).  I've added technical indicators, but now want a column that will\nreflect the trailing stop value for that day, given a starting date and\ntrade value, and a given trailing stop.\n\nIs there a more sensible way than using a FOR loop to march through the\nrows, lagging to compare prior highs/lows to current stop value?  I don't\nwant the canned Parabolic SAR, but a custom user-specifiable trailing stop\n(for example, 5% below the high since position entry for long, 5% above low\nsince short entry)\n\nGoogle searches have come up dry, and this seemingly simple task has eluded\nme.\n\n       [[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions\nshould go.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "You may first use \"embed\" function to create a data.frame with lagging time\nand then use sapply to apply the function to each row. In this way you can\neasily parallelize your code using sun grid engin",
       "thread_id": "thread-e54cdd17c080",
       "thread_depth": 1,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100328/7ccf15b4/attachment.pl"
+      ]
     },
     {
       "id": "msg-e65c032e6224",
@@ -3004,11 +3121,14 @@
       "references": [
         "<d332d3e11003280812q4edd001at8e604090b2c5aecb@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100328/78155402/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100328/78155402/attachment.pl>",
+      "body_plain": "2010/3/28 David L. Van Brunt, Ph.D. <dlvanbrunt at gmail.com>\n\n> For the life of me, I don't know why this is eluding me...\n>\n> I'm trying to add a variable into a time series (have quote data added via\n> quantmod).  I've added technical indicators, but now want a column that\n> will\n> reflect the trailing stop value for that day, given a starting date and\n> trade value, and a given trailing stop.\n>\n>\nHi David\n\nYou can easy calculate your stop rules and keep this with trade value etc.\ncolumns. Please see the blotter package. You can add new columns with your\nrisk model end exit rules in addTxn() and updatePortf() and initPortf()\nfunctions or you can keep this as a new object in portfolio object - get an\neyeful of turtles.R code in blotter's demo and updateStrat() function.\n\nBest regards\ndaniel\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "2010/3/28 David L. Van Brunt, Ph.D. <dlvanbrunt at gmail.com>\n\n> For the life of me, I don't know why this is eluding me...\n>\n> I'm trying to add a variable into a time series (have quote data added v",
       "thread_id": "thread-e54cdd17c080",
       "thread_depth": 1,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100328/78155402/attachment.pl"
+      ]
     },
     {
       "id": "msg-5abdadce4e52",
@@ -3131,11 +3251,14 @@
       "subject_clean": "Plotting intraday time series with ggplot2",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100330/1128e8ff/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100330/1128e8ff/attachment.pl>",
+      "body_plain": "Hi\n\nI have a time series over n days of data observed at fixed intervals (m\nseconds) between 8:30am and 4:30pm and would like to plot this with ggplot2\nwithout the overnight gaps between 4:30pm and 8:30am. I have googled around\nquite a bit trying to see if I can have a disjoint x-axis but can't seem to\ncome up with much. I also tried using scale_x_continuous for each day in the\nhope you could apply it multiple times to achieve this. I'd also like to\nlabel the x-axis with the dates of the days.\n\nDoes anyone have any ideas? It seems like it should be a relatively simple\nto do but I'm afraid my ggplot2 knowledge is a bit thin\n\nThanks\n\nChris\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi\n\nI have a time series over n days of data observed at fixed intervals (m\nseconds) between 8:30am and 4:30pm and would like to plot this with ggplot2\nwithout the overnight gaps between 4:30pm and 8:",
       "thread_id": "thread-64dd0ba0fa46",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100330/1128e8ff/attachment.pl"
+      ]
     },
     {
       "id": "msg-7468761fd02a",
@@ -3273,11 +3396,14 @@
       "subject_clean": "VECM problem with exogenous components",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100331/6af0a600/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100331/6af0a600/attachment.pl>",
+      "body_plain": "Dear all,\n\nI deal with a econometrics problem in R.\n\nMy final goal is to estimate a vecm (three components) imposing combined\nrestrictions on two components in alpha matrix.\n\nI have no problem to :\nsolve the problem using ca.jo() and cajorls() when I treat all components as\nendogenous\ntest exogeneity of one or more components\n\nbut how can I get standard errors, t values, associated probs for :\nthe cointegration equation ?\nthe estimated value of the error correction term ?\nthe lagged differences ?\n\nThis is my R code :\n\ny.mat<-data.frame(y1,y2,y3)\nvecm<-ca.jo(y.mat, type=\"trace\", ecdet= \"const\", K=2, spec=\"transitory\")\nvecm.result<-cajorls(vecm, r=1)\nsummary(vecm.result$rlm)\n\n# testing weak exogeneity\n\nA<-matrix(c(1,0,0), nrow=3, ncol=1)       # restriction matrix (y2, y3\n:treated as exogenous)\nvecm.restriction<-alrtest(vecm, A, r=1)\nsummary(vecm.restriction)\n\nCould someone help ?\n\nGautier\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,\n\nI deal with a econometrics problem in R.\n\nMy final goal is to estimate a vecm (three components) imposing combined\nrestrictions on two components in alpha matrix.\n\nI have no problem to :\nso",
       "thread_id": "thread-4740d29122e9",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100331/6af0a600/attachment.pl"
+      ]
     },
     {
       "id": "msg-5ea0ed4f13ec",
@@ -3383,11 +3509,14 @@
       "subject_clean": "Truncated Distributions - for OpVaR",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100331/114772c1/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100331/114772c1/attachment.pl>",
+      "body_plain": "Dear R users,\n\nI am working on the Value at Risk (VaR) for the \nOperational risk. For a given loss data, we try to fit some statistical \ndistributions using Kolmogorov-Smirnov (KS) test and A-D test and then \nfor fitted distribution using the estimated parameters, the losses are \nsimulated and the VaR is arrived at. \n\nThe typical problem faced \nby the banks is the paucity of Internal loss data and thus banks depend \non the external loss data obtained from external sources. This external \ndata is normally of higher magnitude than the internal loss data of the \nbank. Thus using regression technique, this external data is scaled and \nthen the internal data and the scaled external data is combined. Then we\n try to fit some statistical distribution to this combined data. \nHowever, at times it becomes very difficult to fit any distribution to \nthis particular combined data as the data becomes Bimodal.\n\nThe \npaper by G. Dionne and Hela Dahen \" What about underevaluating \nOperational Value at Risk in the Banking sector?\" suggests that we fit \ntwo distributions \n\n(1) to the internal data (called body part) \nwith Upper cap or upper bound to the loss data and \n\n(2) to the \nexternal data with Lower bound (called Tail part). \n\nThus, now I \nam dealing with two truncated distributions (i) having a lower loss \nbound (say 5000$ i.e. bank records only those losses exceeding 5,000$) \nand having an Upper bound of say 500,000$; and (ii) having lower loss \nbound of say 500,000$ and no upper limit.\n\nMy question is \n\n(1)\n Is there any R package which helps to estimate the parameters of \n\"various\" Truncated distributions?\n\n(2) How to fit the truncated \ndistributions to loss data in the sense how do we use KS and AD tests?\n\nExtremely\n sorry for writing such a long mail.\n\nRegards\n\nJulia\n\n************************************************\n\n\n\nOnly a man of Worth sees Worth in other men\n\n\n\n************************************************\n\n\n      \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear R users,\n\nI am working on the Value at Risk (VaR) for the \nOperational risk. For a given loss data, we try to fit some statistical \ndistributions using Kolmogorov-Smirnov (KS) test and A-D test a",
       "thread_id": "thread-43f4b98f89f1",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100331/114772c1/attachment.pl"
+      ]
     },
     {
       "id": "msg-9442953bf293",
@@ -3417,11 +3546,14 @@
       "subject_clean": "plot log scale on y axis using zoo object (with plot.zoo)",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100331/6b156122/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100331/6b156122/attachment.pl>",
+      "body_plain": "Hi,\n\nI'd like to plot a times series with a log on the y-axis. I'm plotting a zoo\nobject as it is easier to format the dates on the x-axis. Unfortunately,\nlog=\"y\" does not work with plot.zoo. Any idea?\n\nHere's a reproducible example\n\nx <-seq(1,10000,length.out=10)\nplot(x,log=\"y\",type=\"l\")  #works\n\nz <- zoo(seq(1,10000,length.out=10),\n     as.Date(c(\"1992-01-10\", \"1992-01-17\", \"1992-01-24\", \"1992-01-31\",\n       \"1992-02-07\", \"1992-02-14\", \"1992-02-21\", \"1992-02-28\", \"1992-03-06\",\n       \"1992-03-13\")))\nplot(z,log=\"y\")          #gives error\n\n#Warning message:\n#In plot.xy(xy.coords(x, y), type = type, ...) :\n#  \"log\" is not a graphical parameter\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI'd like to plot a times series with a log on the y-axis. I'm plotting a zoo\nobject as it is easier to format the dates on the x-axis. Unfortunately,\nlog=\"y\" does not work with plot.zoo. Any idea",
       "thread_id": "thread-e7f0bf7dda99",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100331/6b156122/attachment.pl"
+      ]
     },
     {
       "id": "msg-c5fa0a3cf193",
@@ -3433,11 +3565,14 @@
       "subject_clean": "RBloomberg: blpReadFields",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100331/4c759ed4/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100331/4c759ed4/attachment.pl>",
+      "body_plain": "Hi Ana, all,\n\nThanks for making available the RBloomberg package.\n\nA quick bug report:\n\nblpReadFields uses read.table which has a comment.char that defaults to \"#\".\nTurns out there are quite a few Bloomberg fields that have a \"#\" in their\ndescription.\n\n\nCheers, Anil\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Ana, all,\n\nThanks for making available the RBloomberg package.\n\nA quick bug report:\n\nblpReadFields uses read.table which has a comment.char that defaults to \"#\".\nTurns out there are quite a few Blo",
       "thread_id": "thread-c5fa0a3cf193",
       "thread_depth": 0,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100331/4c759ed4/attachment.pl"
+      ]
     },
     {
       "id": "msg-47295adb6cf4",
@@ -3455,11 +3590,14 @@
         "<4BB3250F.2010308@gmail.com>",
         "<B89F0CE41D45644A97CCC93DF548C1C3235BEC3F@GBHENXMB02.corp.amvescap.net>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100331/5da8c62c/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100331/5da8c62c/attachment.pl>",
+      "body_plain": "Yes, beta matrix is same in R and E-views.\n\nMay I ask you what code R do you advice (1) to carry out the estimation of a\npartial vecm in which one ore more components are exogenous and (2) to\nprovide t-stats, probs ?\n\nIn my case, I have three variables (y1, y2, y3). two of them are clearly\nexogeneous (y2, y3). I used alrtest( )\n\ny.mat<-data.frame(y1,y2,y3)\nvecm<-ca.jo(y.mat, type=\"trace\",  ecdet= \"const\", K=2,spec=\"transitory\")\n\nA<-matrix(c(1,0,0), nrow=3, ncol=1)\nvecm.restriction<-alrtest(vecm, A, r=1)\n\nthe result of the test for binding restrictions are :\nchi-square : 1.55\nprobs : 0.45\n\nthanks for your help,\n\nGautier\n\n2010/3/31 Pfaff, Bernhard Dr. <Bernhard_Pfaff at fra.invesco.com>\n\n> Hello Gautier,\n>\n> I am not familiar with the EViews implementation and hence cannot comment\n> on why the results differ. Is the \\beta matrix the same, i.e. the\n> normalization?\n>\n> Best,\n> Bernhard\n>\n>  |>  -----Original Message-----\n>  |>  From: renault gautier [mailto:renault.gautier at gmail.com]\n>  |>  Sent: Wednesday, March 31, 2010 12:34 PM\n>  |>  To: Pfaff, Bernhard Dr.\n>  |>  Cc: Matthieu Stigler; r-sig-finance at stat.math.ethz.ch\n>  |>  Subject: Re: [R-SIG-Finance] FW: VECM problem with\n>  |>  exogenous components\n>  |>\n>  |>  Hello Bernhard,\n>  |>\n>  |>  I bought and red your book few month ago. I really\n>  |>  appreciated it. It is\n>  |>  useful to cope with econometrics in R.\n>  |>\n>  |>  Since alrtest()  returns a cajo.test object, can I take\n>  |>  the result of\n>  |>  this function as an argument in cajorls function to solve\n>  |>  my problem\n>  |>  with urca package? According to R documentation, cajorls()\n>  |>  can take\n>  |>  ca.jo or cajo.test.\n>  |>\n>  |>  I dit it to try and obtain all values (estimators, t\n>  |>  stats, associated\n>  |>  probs, standard errors) except for the cointegration equation by\n>  |>  applying summary method :\n>  |>  these values seems to be right for lagged differences (I\n>  |>  compare with\n>  |>  results with E-view)\n>  |>  but the values associated to error correction terms seems\n>  |>  to be false...\n>  |>\n>  |>  How is it possible ?\n>  |>\n>  |>  Gautier\n>  |>\n>  |>\n>  |>\n>  |>  Le 31/03/2010 11:53, Pfaff, Bernhard Dr. a écrit :\n>  |>  > Hello Mat,\n>  |>  >\n>  |>  > your are right about your asertion. cajorls() suffices\n>  |>  for non-restricted models and hence a transformation to\n>  |>  level-VAR is not necessary.\n>  |>  >\n>  |>  > Best,\n>  |>  > Bernhard\n>  |>  >\n>  |>  >   |>   -----Original Message-----\n>  |>  >   |>   From: Matthieu Stigler [mailto:matthieu.stigler at gmail.com]\n>  |>  >   |>   Sent: Wednesday, March 31, 2010 11:46 AM\n>  |>  >   |>   To: r-sig-finance at stat.math.ethz.ch\n>  |>  >   |>   Cc: Pfaff, Bernhard Dr.; renault.gautier at gmail.com\n>  |>  >   |>   Subject: Re: [R-SIG-Finance] FW: VECM problem with\n>  |>  >   |>   exogenous components\n>  |>  >   |>\n>  |>  >   |>   Hi\n>  |>  >   |>\n>  |>  >   |>   but how can I get standard errors, t values,\n>  |>  >   |>    |>   associated probs for :\n>  |>  >   |>    |>    |>   the cointegration equation ?\n>  |>  >   |>    |>    |>   the estimated value of the error\n>  |>  correction term ?\n>  |>  >   |>    |>    |>   the lagged differences ?\n>  |>  >   |>\n>  |>  >   |>   Ok 1 is not available, but I thought 2 and 3 would be\n>  |>  >   |>   available through\n>  |>  >   |>   cajorls(), unless one estimates a restricted\n>  |>  model, right?\n>  |>  >   |>\n>  |>  >   |>   Thanks for clarifying this point!\n>  |>  >   |>\n>  |>  >   |>   Matthieu\n>  |>  >   |>\n>  |>  >   |>   Pfaff, Bernhard Dr. a écrit :\n>  |>  >   |>   >  Dear Gautier,\n>  |>  >   |>   >\n>  |>  >   |>   >  standard errors, t-values and marginal\n>  |>  signficnance levels\n>  |>  >   |>   >  are not implmenented for a VECM in the package urca.\n>  |>  >   |>   >  However, you can transform your VECM into its level-VAR\n>  |>  >   |>   >  form (see vec2var() in package vars) and can obtain the\n>  |>  >   |>   >  desired numbers by applying the summary method.\n>  |>  >   |>   >\n>  |>  >   |>   >  Best,\n>  |>  >   |>   >  Bernhard\n>  |>  >   |>   >\n>  |>  >   |>   >\n>  |>  >   |>   >   |>\n>  |>  >   |>   >   |>    |>   -----Original Message-----\n>  |>  >   |>   >   |>    |>   From:\n>  |>  r-sig-finance-bounces at stat.math.ethz.ch\n>  |>  >   |>   >   |>    |>\n>  |>  >   |>   [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf\n>  |>  >   |>   >   |>    |>   Of Gautier RENAULT\n>  |>  >   |>   >   |>    |>   Sent: Wednesday, March 31, 2010 10:58 AM\n>  |>  >   |>   >   |>    |>   To: r-sig-finance at stat.math.ethz.ch\n>  |>  >   |>   >   |>    |>   Subject: [R-SIG-Finance] VECM\n>  |>  problem with exogenous\n>  |>  >   |>   >   |>   components\n>  |>  >   |>   >   |>    |>\n>  |>  >   |>   >   |>    |>   Dear all,\n>  |>  >   |>   >   |>    |>\n>  |>  >   |>   >   |>    |>   I deal with a econometrics problem in R.\n>  |>  >   |>   >   |>    |>\n>  |>  >   |>   >   |>    |>   My final goal is to estimate a\n>  |>  vecm (three components)\n>  |>  >   |>   >   |>    |>   imposing combined\n>  |>  >   |>   >   |>    |>   restrictions on two components in\n>  |>  alpha matrix.\n>  |>  >   |>   >   |>    |>\n>  |>  >   |>   >   |>    |>   I have no problem to :\n>  |>  >   |>   >   |>    |>   solve the problem using ca.jo()\n>  |>  and cajorls()\n>  |>  >   |>   when I treat\n>  |>  >   |>   >   |>    |>   all components as\n>  |>  >   |>   >   |>    |>   endogenous\n>  |>  >   |>   >   |>    |>   test exogeneity of one or more components\n>  |>  >   |>   >   |>    |>\n>  |>  >   |>   >   |>    |>   but how can I get standard errors,\n>  |>  t values,\n>  |>  >   |>   >   |>   associated probs for :\n>  |>  >   |>   >   |>    |>   the cointegration equation ?\n>  |>  >   |>   >   |>    |>   the estimated value of the error\n>  |>  correction term ?\n>  |>  >   |>   >   |>    |>   the lagged differences ?\n>  |>  >   |>   >   |>    |>\n>  |>  >   |>   >   |>    |>   This is my R code :\n>  |>  >   |>   >   |>    |>\n>  |>  >   |>   >   |>    |>   y.mat<-data.frame(y1,y2,y3)\n>  |>  >   |>   >   |>    |>   vecm<-ca.jo(y.mat, type=\"trace\",\n>  |>  ecdet= \"const\", K=2,\n>  |>  >   |>   >   |>    |>   spec=\"transitory\")\n>  |>  >   |>   >   |>    |>   vecm.result<-cajorls(vecm, r=1)\n>  |>  >   |>   >   |>    |>   summary(vecm.result$rlm)\n>  |>  >   |>   >   |>    |>\n>  |>  >   |>   >   |>    |>   # testing weak exogeneity\n>  |>  >   |>   >   |>    |>\n>  |>  >   |>   >   |>    |>   A<-matrix(c(1,0,0), nrow=3, ncol=1)       #\n>  |>  >   |>   restriction\n>  |>  >   |>   >   |>    |>   matrix (y2, y3\n>  |>  >   |>   >   |>    |>   :treated as exogenous)\n>  |>  >   |>   >   |>    |>   vecm.restriction<-alrtest(vecm, A, r=1)\n>  |>  >   |>   >   |>    |>   summary(vecm.restriction)\n>  |>  >   |>   >   |>    |>\n>  |>  >   |>   >   |>    |>   Could someone help ?\n>  |>  >   |>   >   |>    |>\n>  |>  >   |>   >   |>    |>   Gautier\n>  |>  >   |>   >   |>    |>\n>  |>  >   |>   >   |>    |>      [[alternative HTML version deleted]]\n>  |>  >   |>   >   |>    |>\n>  |>  >   |>   >   |>    |>\n>  |>  _______________________________________________\n>  |>  >   |>   >   |>    |>   R-SIG-Finance at stat.math.ethz.ch\n>  |>  mailing list\n>  |>  >   |>   >   |>    |>\n>  |>  https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>  |>  >   |>   >   |>    |>   -- Subscriber-posting only. If you\n>  |>  want to post,\n>  |>  >   |>   >   |>   subscribe first.\n>  |>  >   |>   >   |>    |>   -- Also note that this is not the\n>  |>  r-help list where\n>  |>  >   |>   >   |>    |>   general R questions should go.\n>  |>  >   |>   >   |>    |>\n>  |>  >   |>   >   |>\n>  |>  >   |>   >\n>  |>  *****************************************************************\n>  |>  >   |>   >  Confidentiality Note: The information contained in this\n>  |>  >   |>   ...{{dropped:10}}\n>  |>  >   |>   >\n>  |>  >   |>   >  _______________________________________________\n>  |>  >   |>   >  R-SIG-Finance at stat.math.ethz.ch mailing list\n>  |>  >   |>   >  https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>  |>  >   |>   >  -- Subscriber-posting only. If you want to\n>  |>  post, subscribe first.\n>  |>  >   |>   >  -- Also note that this is not the r-help list where\n>  |>  >   |>   general R questions should go.\n>  |>  >   |>   >\n>  |>  >   |>\n>  |>  >   |>\n>  |>  >\n>  |>\n>  |>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Yes, beta matrix is same in R and E-views.\n\nMay I ask you what code R do you advice (1) to carry out the estimation of a\npartial vecm in which one ore more components are exogenous and (2) to\nprovide ",
       "thread_id": "thread-5ea0ed4f13ec",
       "thread_depth": 5,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100331/5da8c62c/attachment.pl"
+      ]
     },
     {
       "id": "msg-e0db787fed99",
@@ -3492,11 +3630,14 @@
         "<w2m676b0d531003311240lb6c31eacz650eb10986901aae@mail.gmail.com>",
         "<4BB3A97E.5020108@braverock.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100331/4c13f39b/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100331/4c13f39b/attachment.pl>",
+      "body_plain": "I'd prefer not to use chartSeries in quantmod as I'm using xaxt = \"n\" in\nplot.zoo to add an x-axis in my own format. I'm also using the screens\nargument in plot.zoo.\n\nAny idea how to plot a log y-axis using plot.zoo?\n\nOn Wed, Mar 31, 2010 at 3:58 PM, Brian G. Peterson <brian at braverock.com>wrote:\n\n> try chartSeries with log.scale=TRUE\n>\n>\n> On 03/31/2010 02:40 PM, Pierre Lapointe wrote:\n>\n>> Hi,\n>>\n>> I'd like to plot a times series with a log on the y-axis. I'm plotting a\n>> zoo\n>> object as it is easier to format the dates on the x-axis. Unfortunately,\n>> log=\"y\" does not work with plot.zoo. Any idea?\n>>\n>> Here's a reproducible example\n>>\n>> x<-seq(1,10000,length.out=10)\n>> plot(x,log=\"y\",type=\"l\")  #works\n>>\n>> z<- zoo(seq(1,10000,length.out=10),\n>>      as.Date(c(\"1992-01-10\", \"1992-01-17\", \"1992-01-24\", \"1992-01-31\",\n>>        \"1992-02-07\", \"1992-02-14\", \"1992-02-21\", \"1992-02-28\",\n>> \"1992-03-06\",\n>>        \"1992-03-13\")))\n>> plot(z,log=\"y\")          #gives error\n>>\n>> #Warning message:\n>> #In plot.xy(xy.coords(x, y), type = type, ...) :\n>> #  \"log\" is not a graphical parameter\n>>\n>>        [[alternative HTML version deleted]]\n>>\n>> _______________________________________________\n>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n>>\n>\n>\n> --\n> Brian G. Peterson\n> http://braverock.com/brian/\n> Ph: 773-459-4973\n> IM: bgpbraverock\n>\n>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I'd prefer not to use chartSeries in quantmod as I'm using xaxt = \"n\" in\nplot.zoo to add an x-axis in my own format. I'm also using the screens\nargument in plot.zoo.\n\nAny idea how to plot a log y-axis",
       "thread_id": "thread-e7f0bf7dda99",
       "thread_depth": 2,
-      "month": "2010-03"
+      "month": "2010-03",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100331/4c13f39b/attachment.pl"
+      ]
     },
     {
       "id": "msg-6b7f4b92ec5b",

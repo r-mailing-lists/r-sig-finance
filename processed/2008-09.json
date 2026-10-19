@@ -52,11 +52,14 @@
       "references": [
         "<B9AEC8265E202D4BA6540EA32F49579004771D2C@LDNPCMEU301VEUA.INTRANET.BARCAPINT.COM>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080901/637ba8c6/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080901/637ba8c6/attachment.pl>",
+      "body_plain": "Hi Yunlei,\n\nTry solve.QP function of Quadprog package. It is\n\n\n> solve.QP\nfunction (Dmat, dvec, Amat, bvec, meq = 0, factorized = FALSE)\n{\n    n <- nrow(Dmat)\n    q <- ncol(Amat)\n    if (missing(bvec))\n        bvec <- rep(0, q)\n    if (n != ncol(Dmat))\n        stop(\"Dmat is not symmetric!\")\n    if (n != length(dvec))\n        stop(\"Dmat and dvec are incompatible!\")\n    if (n != nrow(Amat))\n        stop(\"Amat and dvec are incompatible!\")\n    if (q != length(bvec))\n        stop(\"Amat and bvec are incompatible!\")\n    if ((meq > q) || (meq < 0))\n        stop(\"Value of meq is invalid!\")\n    iact <- rep(0, q)\n    nact <- 0\n    r <- min(n, q)\n    sol <- rep(0, n)\n    crval <- 0\n    work <- rep(0, 2 * n + r * (r + 5)/2 + 2 * q + 1)\n    iter <- rep(0, 2)\n    res1 <- .Fortran(\"qpgen2\", as.double(Dmat), dvec = as.double(dvec),\n        as.integer(n), as.integer(n), sol = as.double(sol), crval =\nas.double(crval),\n        as.double(Amat), as.double(bvec), as.integer(n), as.integer(q),\n        as.integer(meq), iact = as.integer(iact), nact = as.integer(nact),\n        iter = as.integer(iter), work = as.double(work), ierr =\nas.integer(factorized),\n        PACKAGE = \"quadprog\")\n    if (res1$ierr == 1)\n        stop(\"constraints are inconsistent, no solution!\")\n    else if (res1$ierr == 2)\n        stop(\"matrix D in quadratic function is not positive definite!\")\n    list(solution = res1$sol, value = res1$crval, unconstrainted.solution =\nres1$dvec,\n        iterations = res1$iter, iact = res1$iact[1:res1$nact])\n}\n<environment: namespace:quadprog>\n>\n\nLet me know whether I have understood your your problem properly.\n\nRegards,\nDeashis\n\n\nOn 22/07/2008, Yunlei.Hu at barclayscapital.com <Yunlei.Hu at barclayscapital.com>\nwrote:\n>\n>\n> Dear all\n>\n> I am using quadratic programming to solve the portfolio optimization in\n> cosidering transaction cost. Is there any R optimization package can do\n> this?\n>\n> Solve.QP require the positive definite matrix in Dmat, while in my case,\n> this matrix in the objective function is not positive definite.\n>\n> >  It is in a bit of emergency. I would be really appreciated if anybody\n> > can give me the reply ASAP.\n> >\n> > Many thanks\n> >  Yunlei\n> >\n> _______________________________________________\n>\n> This e-mail may contain information that is confidential, privileged or\n> otherwise protected from disclosure. If you are not an intended recipient of\n> this e-mail, do not duplicate or redistribute it by any means. Please delete\n> it and any attachments and notify the sender that you have received it in\n> error. Unless specifically indicated, this e-mail is not an offer to buy or\n> sell or a solicitation to buy or sell any securities, investment products or\n> other financial product or service, an official confirmation of any\n> transaction, or an official statement of Barclays. Any views or opinions\n> presented are solely those of the author and do not necessarily represent\n> those of Barclays. This e-mail is subject to terms available at the\n> following link: www.barcap.com/emaildisclaimer. By messaging with Barclays\n> you consent to the foregoing.  Barclays Capital is the investment banking\n> division of Barclays Bank PLC, a company registered in England (number\n> 1026167) with its registered offi!\n> ce at 1 Churchill Place, London, E14 5HP.  This email may relate to or be\n> sent from other members of the Barclays Group.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Yunlei,\n\nTry solve.QP function of Quadprog package. It is\n\n\n> solve.QP\nfunction (Dmat, dvec, Amat, bvec, meq = 0, factorized = FALSE)\n{\n    n <- nrow(Dmat)\n    q <- ncol(Amat)\n    if (missing(bvec)",
       "thread_id": "thread-7995ad1eff59",
       "thread_depth": 0,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080901/637ba8c6/attachment.pl"
+      ]
     },
     {
       "id": "msg-92deac84355e",
@@ -188,11 +191,14 @@
       "subject_clean": "Use apply/lapply/tapply functions",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080902/0274185c/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080902/0274185c/attachment.pl>",
+      "body_plain": "Hi,\n\nI have  a function that takes in a dataset ( a matrix of m rows by n\ncolumns), and five additional \"constant\" parameters, p1,p2,y1,y2,y3. The\nfunction perform a series of operations and transformations on the\ndataset, and returns a table of results.\n\nI have tested the function repeatedly and it works fine.\n\nHowever, I would like to generate a grid of results from myfunction for\ndifferent values of two of the input parameters: p1, and p2.\n\nI have tried using for loops, and they work, but the computation time is\na too long.  I would like to use the apply/lapply/tapply functions to\navoid using for loops, what ever works !!!\n\nCan someone recommend how to use these function to parameterize only a\nsubset of the inputs into the function, i.e p1, and p2?\n\nAny tips/recommendations will be appreciated.\n\n\n\nmyfunction = function (dataset, p1,p2,y1,y2,y3)\n{\n\nLine1\nLine2\nLine3\n::::::::\n:::::::\n:::::::\nReturn(res.table)\n}\n\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI have  a function that takes in a dataset ( a matrix of m rows by n\ncolumns), and five additional \"constant\" parameters, p1,p2,y1,y2,y3. The\nfunction perform a series of operations and transform",
       "thread_id": "thread-3680ab03ad6a",
       "thread_depth": 0,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080902/0274185c/attachment.pl"
+      ]
     },
     {
       "id": "msg-a9aa303d9301",
@@ -389,11 +395,14 @@
       "subject_clean": "Compound Poisson process - parameter estimation",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080904/acd243a5/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080904/acd243a5/attachment.pl>",
+      "body_plain": "Hi all,\n\nI would like to thank everybody that gave an answer to my question last\nweek. It helped really a lot and I found the book \"Financial modelling with\njump processes\" by Cont & Taknov that you all recommended just excellent!\n\nNow, I would like to bother you once agian with the simultion of the\ncompound Poisson process that I already mentioned. I am simulating such a\nprocess as described by Cont & Tankov with certain parameter values - let's\nsay I have the intensity parameter lambda = 0.001 and the jump magnitudes\nare Beta distributed with parameters (133.16, 1) . Since I am simulating log\nreturns, the data set looks like this:  0, 0, 0, 0, 0, 0.011836677, 0, 0, 0,\n0 . . . , 0.002458188, 0, 0, . . . , 0. I use this data set to let a maximum\nlikelihood algorithm (I use the mle2 function of the bbmle package) to\nestimate parameter values best describing the data set and compare the\nestimated values with the true parameter values. I got the following results\nin this case:\n\nCoefficients:\nlambda_u      r_u\n0.001000     8.469006\n\nIt means that the estimated intensity parameter is lambda = 0.001 and the\nBeta distribution has parameters (8.469006, 1).\n\nI let the algorithm run a lot of times and with different values of the\nparameters of the Beta distribution. The results that I get are all just\nlike that. I think, it is too great a difference between the true parameter\nvalues and the estimated ones.\n\nWhat do you think might be the problem?\n\nThank you very much in advance!\n\nCheers,\nZoe\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi all,\n\nI would like to thank everybody that gave an answer to my question last\nweek. It helped really a lot and I found the book \"Financial modelling with\njump processes\" by Cont & Taknov that you a",
       "thread_id": "thread-a17a9398b02a",
       "thread_depth": 0,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080904/acd243a5/attachment.pl"
+      ]
     },
     {
       "id": "msg-dc9ccb4feffa",
@@ -513,11 +522,14 @@
       "subject_clean": "Difficulty getting desired returns with returns(fSeries) function",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080905/7c4fd785/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080905/7c4fd785/attachment.pl>",
+      "body_plain": "Dear users,\n\nI tried to use the getReturns/returns function available with the fSeries package but it did not appear to give me the results generated by the same function in S-Plus finmetrics. I am not sure what is happening or what goes behind the calculations.\n\nI have the code\n\nmy.ts <- timeSeries(data = DataSeries) which generates the time series\n\n                        37\n1970-01-01        NA\n1970-01-02        NA\n1970-01-03        NA\n1970-01-04        NA\n1970-01-05        NA\n1970-01-06        NA\n1970-01-07        NA\n1970-01-08        NA\n1970-01-09        NA\n1970-01-10        NA\n1970-01-11        6500\n1970-01-12        8100\n1970-01-13        8010\n1970-01-14        7930\n.                       .\n.                       .\n.                       .\n.                       .\n.                       .\n\nThen I used\n\ndummystock.rs <- getReturns(my.ts, type = \"discrete\", na.rm = F, trim = F, percentage = T) which generates the returns\n\n                        37\n1970-01-01        NA\n1970-01-02        NA\n1970-01-03        NA\n1970-01-04        NA\n1970-01-05        NA\n1970-01-06        NA\n1970-01-07        NA\n1970-01-08        NA\n1970-01-09        NA\n1970-01-10        NA\n1970-01-11        NA\n1970-01-12        22.0061885\n1970-01-13        -1.1173301\n1970-01-14        -1.0037725\n.                       .\n.                       .\n.                       .\n.                       .\n\nHowever, what I really want is 24.61, -1.111, and -0.99 respectively rather than the returns above. The calculation I wanted for returns was (8100-6500)/6500 * 100 (for the first return) = 24.61 rather than 22.0061885.\n\nI am using R version 2.7.0.\n\nI wonder if anyone can give me any kind advice as to how to achieve the returns I hope to have.\n\nMany thanks.\n\nBest Regards,\nWy\n\n\n\n\n\n**********************************************************\n\nThe information provided in this e-mail is confidential and is for the sole use of the recipient. It may not be disclosed, copied or distributed in any form without the express permission of Henderson Global Investors and to the extent that it is passed on, care must be taken to ensure that this is in a form which accurately reflects the information presented here.\n\nWhilst Henderson Global Investors believe that the information is correct at the date of this e-mail, no warranty or representation is given to this effect and no responsibility can be accepted by Henderson Global Investors to any end users for any action taken on the basis of this information.\n\nHenderson Global Investors is the name under which Henderson Global Investors Limited (registered no. 906355), Henderson Fund Management plc (registered no. 2607112), Henderson Investment Funds Limited (registered no. 2678531), Henderson Investment Management Limited (registered no. 1795354) Henderson Alternative Investment Advisor Limited (registered no. 962757) and Henderson Equity Partners Limited (registered no.2606646) (each incorporated and registered in England and Wales with registered office at 4 Broadgate, London EC2M 2DA and authorised and regulated by the Financial Services Authority) provide investment products and services.  Henderson Secretarial Services Limited (incorporated and registered in England and Wales, registered no. 1471624, registered office 4 Broadgate, London EC2M 2DA) is the name under which company secretarial services are provided. All these companies are wholly owned subsidiaries of Henderson Group plc (incorporated and registered in England and Wales, registered no. 2072534, registered office 4 Broadgate, London EC2M 2DA).\n\nWe may record telephone calls or email for our mutual protection and to improve customer service. \n\n**********************************************************\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear users,\n\nI tried to use the getReturns/returns function available with the fSeries package but it did not appear to give me the results generated by the same function in S-Plus finmetrics. I am no",
       "thread_id": "thread-7490854c5699",
       "thread_depth": 0,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080905/7c4fd785/attachment.pl"
+      ]
     },
     {
       "id": "msg-ba9df9beec67",
@@ -602,11 +614,14 @@
       "subject_clean": "Summary Difficulty getting desired returns with returns(fSeries) function",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080908/0fc839ee/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080908/0fc839ee/attachment.pl>",
+      "body_plain": "Thanks to Robert, Jeff and Adam for their advice in pointing out that getReturns/returns(fSeries) function calculates ln(Pt/Pt-1)not (Pt/Pt-1)-1 and how the latter should be calculated.\n\nI used the suggestion by Robert below (Method 1) where I just had to make a simple change to the argument name and it worked perfectly! I reproduced their advice below.\n\nMethod 1 (By Robert)\n\nTry 'method' instead of 'type'. This works\n\ngetReturns(MSFT, method = \"discrete\", na.rm = F, trim = F, percentage = T)\n\nRobert\n\nMethod 2 (By Jeff)\n\nlibrary(quantmod)\n\nmy.ts <- timeSeries(c(rep(NA,10),6500,8100,8010,7930),\nas.Date('1970-01-01')+0:13)\n\nDelt(my.ts)\n           Delt.1.arithmetic\n1970-01-01                NA\n1970-01-02                NA\n1970-01-03                NA\n1970-01-04                NA\n1970-01-05                NA\n1970-01-06                NA\n1970-01-07                NA\n1970-01-08                NA\n1970-01-09                NA\n1970-01-10                NA\n1970-01-11                NA\n1970-01-12       0.246153846\n1970-01-13      -0.011111111\n1970-01-14      -0.009987516\n\nWhat you are getting, as Adam points out, is log returns.\n\n> Delt(my.ts, type='log')\n            Delt.1.log\n1970-01-01          NA\n1970-01-02          NA\n1970-01-03          NA\n1970-01-04          NA\n1970-01-05          NA\n1970-01-06          NA\n1970-01-07          NA\n1970-01-08          NA\n1970-01-09          NA\n1970-01-10          NA\n1970-01-11          NA\n1970-01-12  0.22006188\n1970-01-13 -0.01117330\n1970-01-14 -0.01003773\n\nThe xts library also has a family of functions to calculate period returns (and much more).\n\n?periodReturn\n\nBest Regards,\nWY\n\n\n\n**********************************************************\n\nThe information provided in this e-mail is confidential and is for the sole use of the recipient. It may not be disclosed, copied or distributed in any form without the express permission of Henderson Global Investors and to the extent that it is passed on, care must be taken to ensure that this is in a form which accurately reflects the information presented here.\n\nWhilst Henderson Global Investors believe that the information is correct at the date of this e-mail, no warranty or representation is given to this effect and no responsibility can be accepted by Henderson Global Investors to any end users for any action taken on the basis of this information.\n\nHenderson Global Investors is the name under which Henderson Global Investors Limited (registered no. 906355), Henderson Fund Management plc (registered no. 2607112), Henderson Investment Funds Limited (registered no. 2678531), Henderson Investment Management Limited (registered no. 1795354) Henderson Alternative Investment Advisor Limited (registered no. 962757) and Henderson Equity Partners Limited (registered no.2606646) (each incorporated and registered in England and Wales with registered office at 4 Broadgate, London EC2M 2DA and authorised and regulated by the Financial Services Authority) provide investment products and services.  Henderson Secretarial Services Limited (incorporated and registered in England and Wales, registered no. 1471624, registered office 4 Broadgate, London EC2M 2DA) is the name under which company secretarial services are provided. All these companies are wholly owned subsidiaries of Henderson Group plc (incorporated and registered in England and Wales, registered no. 2072534, registered office 4 Broadgate, London EC2M 2DA).\n\nWe may record telephone calls or email for our mutual protection and to improve customer service. \n\n**********************************************************\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thanks to Robert, Jeff and Adam for their advice in pointing out that getReturns/returns(fSeries) function calculates ln(Pt/Pt-1)not (Pt/Pt-1)-1 and how the latter should be calculated.\n\nI used the su",
       "thread_id": "thread-b47d4c8bcf40",
       "thread_depth": 0,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080908/0fc839ee/attachment.pl"
+      ]
     },
     {
       "id": "msg-99a53f76da81",
@@ -634,11 +649,14 @@
       "subject_clean": "Sequence ID",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080910/d40e2153/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080910/d40e2153/attachment.pl>",
+      "body_plain": "Hi,\n\nFirst I would like to apologize if this is not the right forum for the\nfollowing question. \n\nI have the following sequence  of ZEROS  and ONES. I would like to ID\neach  \"package\" of  ONES with a unique identifier.\n\ntest = c(0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,1,0,0,0,1,1,1,0)\n\n An example could be the following vector\n\nid\n=c(0,0,0,0,1000,1000,1000,1000,0,0,0,2000,2000,2000,2000,2000,0,0,0,3000\n,3000,3000,0)\n\nWhere all the consecutive ONES have the same ID. I can create the ID\nusing a loop, but I was wondering if anyone could recommend  another\nmethod. I suspect that something in the area of factors might help, but\nI do not know what will be the best approach. Any recommendations will\nbe highly appreciated.\n\n\n\nJorge Nieves\nPhone 212.782.7083\nFax 212.642.7644\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nFirst I would like to apologize if this is not the right forum for the\nfollowing question. \n\nI have the following sequence  of ZEROS  and ONES. I would like to ID\neach  \"package\" of  ONES with a ",
       "thread_id": "thread-53fb4c85bd89",
       "thread_depth": 0,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080910/d40e2153/attachment.pl"
+      ]
     },
     {
       "id": "msg-466c02b6e5f5",
@@ -720,11 +738,14 @@
       "references": [
         "<005201c911b5$c27c7960$47756c20$@ch>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080911/835a251e/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080911/835a251e/attachment.pl>",
+      "body_plain": "Arno\n\nPresumably you can get an export of daily data from CQG somehow (via Excel, FTP, or some other flat-file export)? If so, you can import it into R using one of the read* methods.\n\nRory\n\n\n________________________________\nFrom: r-sig-finance-bounces at stat.math.ethz.ch [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Arno gaboury\nSent: 08 September 2008 14:21\nTo: r-sig-finance at stat.math.ethz.ch\nSubject: [R-SIG-Finance] get historical quote\n\nHi,\n\nFirst of all, let me tell you I am a very beginner in the R-Project, and it is far from my usual business. I am a futures trader trying to build a risk/management tool. I know little about statistics & programming languages. Please, be kind in all your answers!\nI want to create a correlation matrix for about 25 future products, and will need to download historical data each day.\nI am a CQG user, and interested in retrieving the quotes from my system better than from Yahoo. Does anyone has ever wrote something about using CQG ?\nThen, I need to indicate a time stamp as I want a daily close of all markets in the same time, otherwise returns won't be comparable. I have no idea how to indicate this.\n\nThank You in advance for any hints,\n\nArno\n\n\n\n\n\n\n***********************************************************************************\nThe Royal Bank of Scotland plc. Registered in Scotland No 90312. Registered Office: 36 St Andrew Square, Edinburgh EH2 2YB. \nAuthorised and regulated by the Financial Services Authority \n\nThis e-mail message is confidential and for use by the=2...{{dropped:25}}",
+      "body_snippet": "Arno\n\nPresumably you can get an export of daily data from CQG somehow (via Excel, FTP, or some other flat-file export)? If so, you can import it into R using one of the read* methods.\n\nRory\n\n\n________",
       "thread_id": "thread-99a53f76da81",
       "thread_depth": 1,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080911/835a251e/attachment.pl"
+      ]
     },
     {
       "id": "msg-83b716c367b4",
@@ -754,11 +775,14 @@
       "subject_clean": "Heston Nandi Garch Option pricing",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080911/f3abba1f/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080911/f3abba1f/attachment.pl>",
+      "body_plain": "Dear All:\n\nI tried to write the code by myself to compute the option prices of Heston\nNandi's Garch option model instead of using the function provided by\nHNGOption() in fOption package. However, as I'm not a professional\nprogrammer, the codes I have written run so slow to obtain the result. I\nused discrete Fourier transform to deal with the integration part in\nHeston's closed form formula. Maybe that is not a good way to compute the\noption price. Is there any faster way to compute the HNG prices? I have\ntried HNGOption and found that function runs pretty fast. Can anyone provide\nhints on how to write the codes that make HNGOption function run faster?\nThat would be nice if original author can assist me in this part.\n\nBest regards,\n\nWeir\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear All:\n\nI tried to write the code by myself to compute the option prices of Heston\nNandi's Garch option model instead of using the function provided by\nHNGOption() in fOption package. However, as I",
       "thread_id": "thread-fa0fdfa44bbc",
       "thread_depth": 0,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080911/f3abba1f/attachment.pl"
+      ]
     },
     {
       "id": "msg-365b77b09d48",
@@ -822,11 +846,14 @@
       "subject_clean": "Financial Econometrics",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080915/c51a84e1/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080915/c51a84e1/attachment.pl>",
+      "body_plain": "Hi,\n\n \n\nI¡¯ll be a assistant professor on econometrics in the following term. Since\nthe students are mainly of dept. of finance, my professor want the teaching\nmaterials be about finance and not about macroeconomics. Is there any good\nbooks about financial econometrics (not something about time series\nanalysis)? Something by examples is the best.\n\n \n\nThanks\n\n \n\nHsiao-nan Cheung\n\n \n\n \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\n \n\nI¡¯ll be a assistant professor on econometrics in the following term. Since\nthe students are mainly of dept. of finance, my professor want the teaching\nmaterials be about finance and not about",
       "thread_id": "thread-8fabf4021d32",
       "thread_depth": 0,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080915/c51a84e1/attachment.pl"
+      ]
     },
     {
       "id": "msg-7798755e487a",
@@ -893,11 +920,14 @@
       "subject_clean": "Compound Currency Options",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080915/8b1d6752/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080915/8b1d6752/attachment.pl>",
+      "body_plain": "Hi,\n\n \n\nDoes anyone know of any existing R functions for computing the price of\ncompound currency options?  Any suggestions on existing functions or\npossible approaches to solving this problem would be much appreciated.  \n\n \n\nThanks, \n\n\nBen\n\n \n\n\n___________________________________________\nThis message and any attached documents contain\ninformation which may be confidential, subject to \nprivilege or exempt from disclosure under applicable\nlaw. These materials are solely for the use of the \nintended recipient. If you are not the intended \nrecipient of this transmission, you are hereby \nnotified that any distribution, disclosure, printing, \ncopying, storage, modification or the taking of any\naction in reliance upon this transmission is strictly\nprohibited. Delivery of this message to any person\nother than the intended recipient shall not\ncompromise or waive such confidentiality, privilege\nor exemption from disclosure as to this \ncommunication. \n\nIf you have received this communication in error, \nplease notify the sender immediately and delete\nthis message from your system. \n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\n \n\nDoes anyone know of any existing R functions for computing the price of\ncompound currency options?  Any suggestions on existing functions or\npossible approaches to solving this problem would b",
       "thread_id": "thread-a2097c31e372",
       "thread_depth": 0,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080915/8b1d6752/attachment.pl"
+      ]
     },
     {
       "id": "msg-9b8c314926d0",
@@ -925,11 +955,14 @@
       "subject_clean": "Iterative equation solver",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080915/d18b6431/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080915/d18b6431/attachment.pl>",
+      "body_plain": "Hi\n\n \n\nI am trying to solve for the \"Critical Price\" in a compound option.\nThis involves solving a very non linear equation that I think can only\nbe solved iteratively.  My question is, is there an iterative solve\nfunction (similar to the solver in excel) written anywhere for R?  I've\nseen a couple of posts that seem similar to this one but so far I have\nbeen unable to find an existing function.  Any feedback would be greatly\nappreciated!\n\n \n\nThanks,\n\n \n\nBen\n\n\n___________________________________________\nThis message and any attached documents contain\ninformation which may be confidential, subject to \nprivilege or exempt from disclosure under applicable\nlaw. These materials are solely for the use of the \nintended recipient. If you are not the intended \nrecipient of this transmission, you are hereby \nnotified that any distribution, disclosure, printing, \ncopying, storage, modification or the taking of any\naction in reliance upon this transmission is strictly\nprohibited. Delivery of this message to any person\nother than the intended recipient shall not\ncompromise or waive such confidentiality, privilege\nor exemption from disclosure as to this \ncommunication. \n\nIf you have received this communication in error, \nplease notify the sender immediately and delete\nthis message from your system. \n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi\n\n \n\nI am trying to solve for the \"Critical Price\" in a compound option.\nThis involves solving a very non linear equation that I think can only\nbe solved iteratively.  My question is, is there an it",
       "thread_id": "thread-5953518a066e",
       "thread_depth": 0,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080915/d18b6431/attachment.pl"
+      ]
     },
     {
       "id": "msg-f4afb26d9f68",
@@ -1046,11 +1079,14 @@
       "references": [
         "<dd3243090809160624h53cce231m10782236562e4bc1@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080916/26a869ee/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080916/26a869ee/attachment.pl>",
+      "body_plain": "In addition to the previously mentioned books, I recommend Verbeek: A Guide\nto Modern Econometrics http://www.econ.kuleuven.ac.be/gme/\n\nThe 3rd edition of the book is now available\nhttp://eu.wiley.com/WileyCDA/WileyTitle/productCd-0470517697.html\nI used the 2nd edition in my \"advanced statistical methods\" course and found\nthe book very suitable for the course.\n\n-Hannu\n\nOn Tue, Sep 16, 2008 at 4:24 PM, Shane Conway <shane.conway at gmail.com>wrote:\n\n> I recommend:\n>\n> * Kennedy: \"A Guide to Econometrics\"\n> * Greene: \"Econometric Analysis\"\n>\n>\n> ------------------------------\n>\n> Thanks, and are these book about traditional econometrics or time series?\n>\n> Maybe it's just a illusion to find some econometrics on finance without\n> ts...\n>\n> HC\n>\n> > -----Original Message-----\n> > From: markleeds at verizon.net [mailto:markleeds at verizon.net]\n> > Sent: Monday, September 15, 2008 10:57 PM\n> > To: Hsiao-nan Cheung\n> > Subject: RE: [R-SIG-Finance] Financial Econometrics\n> >\n> > authors of texts  are below but i don't know the text names off the top\n> > of my head.\n> >\n> > tsay\n> > zivot and wang\n> > hayashi\n> > mckinlay & lo\n> > gueriorox and monfort\n> > stephen taylor  ( out of print )\n> >\n> >\n> > On Mon, Sep 15, 2008 at 10:03 AM, Hsiao-nan Cheung wrote:\n> >\n> > > Hi,\n> > >\n> > >\n> > > I��ll be a assistant professor on econometrics in the following term.\n> > > Since\n> > > the students are mainly of dept. of finance, my professor want the\n> > > teaching\n> > > materials be about finance and not about macroeconomics. Is there any\n> > > good\n> > > books about financial econometrics (not something about time series\n> > > analysis)? Something by examples is the best.\n> > >\n> > >\n> > > Thanks\n> > >\n> > >\n> > > Hsiao-nan Cheung\n> > >\n> > >\n> > >\n> > >\n> > >     [[alternative HTML version deleted]]\n> > >\n> > >\n> > >\n> > >      ------------------------------\n> > >\n> > > _______________________________________________\n> > > R-SIG-Finance at stat.math.ethz.ch mailing list\n> > > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > > -- Subscriber-posting only.\n> > > -- If you want to post, subscribe first.\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "In addition to the previously mentioned books, I recommend Verbeek: A Guide\nto Modern Econometrics http://www.econ.kuleuven.ac.be/gme/\n\nThe 3rd edition of the book is now available\nhttp://eu.wiley.com",
       "thread_id": "thread-f9b4bba0e989",
       "thread_depth": 1,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080916/26a869ee/attachment.pl"
+      ]
     },
     {
       "id": "msg-c56f03037f5d",
@@ -1099,11 +1135,14 @@
       "subject_clean": "Help with help",
       "in_reply_to": "<D595C0E05185614C90515F1E8A2D4CBF75DA4E@NYC-XCH3.win.moorecap.com>",
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080916/92de26ec/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080916/92de26ec/attachment.pl>",
+      "body_plain": "> Hi,\n> \n> I recently installed R version 2.7.2(2008-08-25)  \n> \n> I am having some difficulty with the help command. \n> \n> For example, I am using to use the TTR package. When I run help(SMA)\n> in the browser, I get a blank page. I am not sure if something went\n> wrong in the installation. Does anyone have any tips about how to fix\n> fix this problem?\n> \n> Thanks,\n> \n> Jorge\n> \n> \n> \n> \n> \n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "> Hi,\n> \n> I recently installed R version 2.7.2(2008-08-25)  \n> \n> I am having some difficulty with the help command. \n> \n> For example, I am using to use the TTR package. When I run help(SMA)\n> in th",
       "thread_id": "thread-cde4a5b3025d",
       "thread_depth": 0,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080916/92de26ec/attachment.pl"
+      ]
     },
     {
       "id": "msg-f714074fcaf4",
@@ -1184,11 +1223,14 @@
       "subject_clean": "Winsorization",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080918/4456079c/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080918/4456079c/attachment.pl>",
+      "body_plain": "Dear all,\n       I am dealing with a data set with many outliers value. And it is said\nthat a technique named winsorization or winsorising can\nreduce the influence of those extreme values. Did anyone use this skill\nbefore? And how to do it in S+ or R? Thank you.\n\nZhigang Liu\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,\n       I am dealing with a data set with many outliers value. And it is said\nthat a technique named winsorization or winsorising can\nreduce the influence of those extreme values. Did anyone ",
       "thread_id": "thread-e768e2ca7744",
       "thread_depth": 0,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080918/4456079c/attachment.pl"
+      ]
     },
     {
       "id": "msg-1f89f3efa56f",
@@ -1293,11 +1335,14 @@
       "references": [
         "<26c73e350809172029s37606db8t4d053feefcc1d8aa@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080918/04cce4b1/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080918/04cce4b1/attachment.pl>",
+      "body_plain": "what method are you planning to use?\n\nIf you want to do a regression analysis, there are better methods for this.\nThe quantreg package can give you the least absolute deviation (LAD) estimate, (this corresponds to a quantile regression with the quantile tau = 0.5)\nwhich is robust to outliers.\nAnother interesting approach is weighted least squares available in S-Plus. \nSee Martin, R. and Simin, T. (2003) \"Outlier-Resistant Estimates of Beta\" Financial Analysts Journal, September, pp. 56-69.\n\nZeno\n\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch on behalf of ???\nSent: Thu 9/18/2008 5:29 AM\nTo: r-sig-finance at stat.math.ethz.ch\nSubject: [R-SIG-Finance] Winsorization\n \nDear all,\n       I am dealing with a data set with many outliers value. And it is said\nthat a technique named winsorization or winsorising can\nreduce the influence of those extreme values. Did anyone use this skill\nbefore? And how to do it in S+ or R? Thank you.\n\nZhigang Liu\n\n\t[[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only.\n-- If you want to post, subscribe first.\n\n\n\n\n\nEBS European Business School gemeinnuetzige GmbH - Sitz der Gesellschaft: Wiesbaden, Amtsgericht Wiesbaden HRB 19951 - Umsatzsteuer-ID DE 113891213 Geschaeftsfuehrung: Prof. Dr. Christopher Jahns, Rektor; Dr. Reimar Palte, Kanzler;  Sabine Fuchs, Prokuristin; Verwaltungsrat: Dr. Hellmut K. Albrecht, Vorsitzender\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "what method are you planning to use?\n\nIf you want to do a regression analysis, there are better methods for this.\nThe quantreg package can give you the least absolute deviation (LAD) estimate, (this c",
       "thread_id": "thread-e768e2ca7744",
       "thread_depth": 1,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080918/04cce4b1/attachment.pl"
+      ]
     },
     {
       "id": "msg-3371e7829402",
@@ -1501,11 +1546,14 @@
       "references": [
         "<20080918172200.FAH62.91960.root@mp13>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080918/364febcb/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080918/364febcb/attachment.pl>",
+      "body_plain": "Hi\n \nI suggest the \"forecast\" package and the paper available here\n \nhttp://ideas.repec.org/p/msh/ebswps/2007-6.html\n \nJHK\n> Date: Thu, 18 Sep 2008 14:22:00 -0700> From: rkevinburton at charter.net> To: r-sig-finance at stat.math.ethz.ch> Subject: [R-SIG-Finance] Time Series Decomposition> > Hi: > > I've been struggling with the following problem and was just > wondering if someone knew of any solid references in the literature > for what i'm attempting. I think what i'm attempting is fairly > straightforward: I have a time series that has a level, a trend and > seasonal component. I want to model all three of the pieces and put them > back together to build a forecasting model. I tried > to use stl but the seasonal component (in the data) is clearly chaging over time so > the stl models the seasonal piece incorrectly/incompletely (with the amplitude basically fixed for each \"season\") and this causes all the > other components to be subsequently modelled incorrectly also. So, I was > looking for somewhat of a less black boxy approach that > I can really get my hands around as far as what's going on. Then, with > that knowledge, maybe I can figure out a way to deal with > the fact that the seasonal component ( the magnitude ) is changing over > time. I have heard that I can use DLMs ( dynamic linear > models for this ) but they are pretty complicated so I was wondering if > anyone knew of simpler approaches or something in the literature > that I can read and understand. I have been looking at going the arima > route but the time series texts that I have don't do in depth coverage > of a time series decomposition. They talk about how to use the arima > framework to model a seasonal time series but I have a trend in my > series also. And I also want to model the level after the seasonal and trend is > taken out ? So, if anyone could help me out with references for > what I want to do, it would be greatly appreciated. > > Kevin> rkevinburton at charter.net> > _______________________________________________> R-SIG-Finance at stat.math.ethz.ch mailing list> https://stat.ethz.ch/mailman/listinfo/r-sig-finance> -- Subscriber-posting only.> -- If you want to post, subscribe first.\n_________________________________________________________________\nNet yourself a bargain. Find great deals on eBay.\n\nr%2F1%2F705%2D10129%2D5668%2D323%2F4%3Fid%3D10&_t=763807330&_r=hotmailTAGLINES&_m=EXT\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi\n \nI suggest the \"forecast\" package and the paper available here\n \nhttp://ideas.repec.org/p/msh/ebswps/2007-6.html\n \nJHK\n> Date: Thu, 18 Sep 2008 14:22:00 -0700> From: rkevinburton at charter.net> T",
       "thread_id": "thread-684ef28b32ae",
       "thread_depth": 1,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080918/364febcb/attachment.pl"
+      ]
     },
     {
       "id": "msg-4fc46210471d",
@@ -1519,11 +1567,14 @@
       "references": [
         "<20080918153616.GA6633@lubyanka.local>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080919/8e231709/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080919/8e231709/attachment.pl>",
+      "body_plain": "just two small remarks,\n\n1. the point \n>     x[weird.rM,]\n                  rj        rM\n2004-05-17 -11.89823 -13.05386\n\nis actually not a distorting outlier since it lies pretty much on the regression lines.\n\nthis is what Martin and Simin (2003) in the article mentioned earlier in the winzorization topic call a \"good\" outlier, since it confirms rather than disproves the parameter estimates.\n\n2. except for the normal regression line, all other lines seem to be very similar so that choice does not really matter so much, dont you think so?\n\nZeno\n\n\n\nEBS European Business School gemeinnuetzige GmbH - Sitz der Gesellschaft: Wiesbaden, Amtsgericht Wiesbaden HRB 19951 - Umsatzsteuer-ID DE 113891213 Geschaeftsfuehrung: Prof. Dr. Christopher Jahns, Rektor; Dr. Reimar Palte, Kanzler;  Sabine Fuchs, Prokuristin; Verwaltungsrat: Dr. Hellmut K. Albrecht, Vorsitzender\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "just two small remarks,\n\n1. the point \n>     x[weird.rM,]\n                  rj        rM\n2004-05-17 -11.89823 -13.05386\n\nis actually not a distorting outlier since it lies pretty much on the regressio",
       "thread_id": "thread-fc257542431a",
       "thread_depth": 1,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080919/8e231709/attachment.pl"
+      ]
     },
     {
       "id": "msg-263f3693c46d",
@@ -1535,11 +1586,14 @@
       "subject_clean": "Cumulative Multivariate Normal Distribution",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080919/4cbf4441/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080919/4cbf4441/attachment.pl>",
+      "body_plain": "Hi,\n\n \n\nDoes anyone know of a function similar to the CBND function for\nmultivariate distributions?  I've seen a couple but what I am really\nlooking for is one that will take (x1,x2,x3,cor112,cor113) as inputs.\nAlternatively, does anyone know of a package with built in functions for\npricing a worst of three color rainbow options?  Any help along these\nlines would be greatly appreciated.  \n\n \n\nThanks,\n\n\nBen\n\n\n___________________________________________\nThis message and any attached documents contain\ninformation which may be confidential, subject to \nprivilege or exempt from disclosure under applicable\nlaw. These materials are solely for the use of the \nintended recipient. If you are not the intended \nrecipient of this transmission, you are hereby \nnotified that any distribution, disclosure, printing, \ncopying, storage, modification or the taking of any\naction in reliance upon this transmission is strictly\nprohibited. Delivery of this message to any person\nother than the intended recipient shall not\ncompromise or waive such confidentiality, privilege\nor exemption from disclosure as to this \ncommunication. \n\nIf you have received this communication in error, \nplease notify the sender immediately and delete\nthis message from your system. \n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\n \n\nDoes anyone know of a function similar to the CBND function for\nmultivariate distributions?  I've seen a couple but what I am really\nlooking for is one that will take (x1,x2,x3,cor112,cor113) ",
       "thread_id": "thread-263f3693c46d",
       "thread_depth": 0,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080919/4cbf4441/attachment.pl"
+      ]
     },
     {
       "id": "msg-e95357a36e51",
@@ -1605,11 +1659,14 @@
       "references": [
         "<20080919170359.5FGV4.10147.root@mp20>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080920/342049be/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080920/342049be/attachment.pl>",
+      "body_plain": "Hi,\n \nIf you have daily 7-day a week data, you may have weekly, bi-weekly or monthly seasonality. That is, 7-day cycle.\nThis means that the value of your periodicity may have to be 7.\n \nBut I guess you can inspect the SACF to confirm the presence of this periodicity.\n \nJHK\n> Date: Fri, 19 Sep 2008 14:03:59 -0700> From: rkevinburton at charter.net> To: r-sig-finance at stat.math.ethz.ch> Subject: [R-SIG-Finance] Seasonsal ARIMA> > First off let me say that from 'R' calling arima(xdata, order=c(1,1,1), seasonal=list(order=c(2,1,1), period=12) (an ARIMA(1,1,1)X(2.1.1) 12 model) works just fine (provided that data is monthly). But for my data I have daily data so there are 365 obeservations per year and I have about 4 years of data. With this data and replacing 12 with 365 gives me an error indicating that I cannot set the lag above 350. So I gradually worked my way down and now I have 52 observations pwr year and I am calling arima like:> > arima(x, order=c(1,1,1), seasonal=list(order=c(2,1,1), period=52) > (an ARIMA(1,1,1)X(2.1.1) 52 model)> > Now I am getting an error that I don't understand. It must have something to do with the practicle/numeric limitations of the implementation. > > <simpleError in optim(init[mask], armaCSS, method = \"BFGS\", hessian = FALSE, control = optim.control): initial value in 'vmmin' is not finite>> > So my question to this group is, \"what are the practicle limits for using arima to fit data to a seasonal model?\" One, I found that I cannot specify a lag larger than 350 either specifically or implicitly with the model that I am building. If the fit takes longer than say 5 minutes I would say that it is impracticle and I need to look for a different solution. Obviously if I get numerical errors like shown above that would be another practicle limitation of the function. So darwing on the experience of this group rather than me going through trial and error what would be the practicle limits of arima? Can these limitations be overcome by possibly another model or other parameters? > > Let me give an example. If I want to brute force find 100! at first the response would be that it is impossible, that big of number can't be represented. But there have been a number of solutions to make findiing 100! \"practicle\". I am looking for the same kind of advice with arima. > > Thank you.> > Kevin> > _______________________________________________> R-SIG-Finance at stat.math.ethz.ch mailing list> https://stat.ethz.ch/mailman/listinfo/r-sig-finance> -- Subscriber-posting only.> -- If you want to post, subscribe first.\n_________________________________________________________________\n\n\ne%2Ecom%2Fcgi%2Dbin%2Fa%2Fci%5F450304%2Fet%5F2%2Fcg%5F801459%2Fpi%5F1004813%2Fai%5F859641&_t=762955845&_r=tig_OCT07&_m=EXT\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n \nIf you have daily 7-day a week data, you may have weekly, bi-weekly or monthly seasonality. That is, 7-day cycle.\nThis means that the value of your periodicity may have to be 7.\n \nBut I guess yo",
       "thread_id": "thread-402dd490d2da",
       "thread_depth": 1,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080920/342049be/attachment.pl"
+      ]
     },
     {
       "id": "msg-4d54ea532bd4",
@@ -1673,11 +1730,14 @@
       "subject_clean": "Using monte carlo simulation to price options",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080920/0d605155/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080920/0d605155/attachment.pl>",
+      "body_plain": "Hi,\n\n \n\nI'm trying to use monte carlo simulation to price a worst of three asset\ncurrency option.  I'm trying to follow what Haug does in his book \"The\nComplete Guide to Option Pricing Formulas\"  Unfortunately he only\ncarries the monte carlo  simulation logic out to an option on two assets\nand I'm not able to infer how the underlying asset prices should be\nmodeled for an option with 3 underlying assets.  I know this might not\nbe the perfect forum for this question but it was the best I could think\nof.  Any help you can provide would be greatly appreciated.  The formula\nthat Haug gives for simulating two correlated asset prices which follow\ngeometric Brownian motion is....\n\n \n\nS1+ ChangeS1 = S1exp((u1-1/2*std1^2)*t + std1*a1*sqrt(t))\n\nS2+ ChangeS2 = S2exp((u2-1/2*std2^2)*t + std2*a2*sqrt(t))\n\na1=e1\n\na2=rho12*e1+ e2*sqrt(1-rho^2)\n\nwhere e1 and e2 are independent random numbers from standard normal\ndistributions\n\n \n\nAgain, Im basically just trying to add an S3 to this model so that\nrho12, rho13, and rho23 are all incorporated. Thanks again for any\ninsight you can provide!\n\n \n\nBen\n\n \n\n \n\n\n___________________________________________\nThis message and any attached documents contain\ninformation which may be confidential, subject to \nprivilege or exempt from disclosure under applicable\nlaw. These materials are solely for the use of the \nintended recipient. If you are not the intended \nrecipient of this transmission, you are hereby \nnotified that any distribution, disclosure, printing, \ncopying, storage, modification or the taking of any\naction in reliance upon this transmission is strictly\nprohibited. Delivery of this message to any person\nother than the intended recipient shall not\ncompromise or waive such confidentiality, privilege\nor exemption from disclosure as to this \ncommunication. \n\nIf you have received this communication in error, \nplease notify the sender immediately and delete\nthis message from your system. \n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\n \n\nI'm trying to use monte carlo simulation to price a worst of three asset\ncurrency option.  I'm trying to follow what Haug does in his book \"The\nComplete Guide to Option Pricing Formulas\"  Unfo",
       "thread_id": "thread-6a3a2b3493b1",
       "thread_depth": 0,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080920/0d605155/attachment.pl"
+      ]
     },
     {
       "id": "msg-d1d3a3d9ae96",
@@ -1822,11 +1882,14 @@
       "subject_clean": "Use of sorting in Financial Domain",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080924/eac89861/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080924/eac89861/attachment.pl>",
+      "body_plain": "Hi All,\nThe *sort() *command in R has two methods (method specification is an\noptional parameter)\n1.shell sort(default)\n2.quick sort\nand order() has 1 extra method\n3.radix sort.\n\nIn our multicore architecture we have some optimized implementations of\nseveral sorting methods like Bitonic sort that is not supported by R.It is\nfaster than quick sort in most cases in our architecture.\n\nI have two questions in this regard with respect to financial domain.\n\nHow much sorting is used in this domain?\nIn those cases what type of sorting is used?\nWill it help if a seperate R command for bitonic sort is implemented and\noverride the default one?\nAre there any specific packages used by Financial sector where optimized\nsorting techniques have been implemented?\n\nThanks and Regards,\nSubramanian R.\nIndia.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi All,\nThe *sort() *command in R has two methods (method specification is an\noptional parameter)\n1.shell sort(default)\n2.quick sort\nand order() has 1 extra method\n3.radix sort.\n\nIn our multicore arch",
       "thread_id": "thread-92f450ab0ae9",
       "thread_depth": 0,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080924/eac89861/attachment.pl"
+      ]
     },
     {
       "id": "msg-a83a8f0a7492",
@@ -1879,11 +1942,14 @@
         "<1222250889.15019.84.camel@ubuntu.braverock.com>",
         "<C20EA84D76C94F4E999DC041E81C0D11057226BB@exchange2k3.ny.gghc.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080925/e38a1c98/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080925/e38a1c98/attachment.pl>",
+      "body_plain": "On Wed, Sep 24, 2008 at 6:29 PM, Joshua Reich <josh at gghc.com> wrote:\n\n> Extending the question further, I assume that bitonic sorting makes\n> sense when you have access to a SIMD platform, such as in a GPU.\n>\n> I have been playing with porting some of my code to NVIDA's CUDA\n> platform, and I'd love to hear if other people have had much success. If\n> I recall correctly, I had discussed this on the list in the past and we\n> discussed using CUDA BLAS over default installations. Has anyone moved\n> CUDA into a production environment? If so, how has it fared? If not, why\n> not?\n>\n> Josh Reich\n>\n> -----Original Message-----\n> From: r-sig-finance-bounces at stat.math.ethz.ch\n> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Brian G.\n> Peterson\n> Sent: Wednesday, September 24, 2008 6:08 AM\n> To: subramanian R\n> Cc: r-sig-finance at stat.math.ethz.ch\n> Subject: Re: [R-SIG-Finance] Use of sorting in Financial Domain\n>\n> On Wed, 2008-09-24 at 11:37 +0530, subramanian R wrote:\n> > Hi All,\n> > The *sort() *command in R has two methods (method specification is an\n> > optional parameter)\n> > 1.shell sort(default)\n> > 2.quick sort\n> > and order() has 1 extra method\n> > 3.radix sort.\n> >\n> > In our multicore architecture we have some optimized implementations\n> of\n> > several sorting methods like Bitonic sort that is not supported by\n> R.It is\n> > faster than quick sort in most cases in our architecture.\n> >\n> > I have two questions in this regard with respect to financial domain.\n> >\n> > How much sorting is used in this domain?\n> > In those cases what type of sorting is used?\n> > Will it help if a seperate R command for bitonic sort is implemented\n> and\n> > override the default one?\n> > Are there any specific packages used by Financial sector where\n> optimized\n> > sorting techniques have been implemented?\n>\n> Sorting is often used in financial time series: e.g. to examine\n> drawdowns, or to extract a quantile of an observed series or a monte\n> carlo simulation.\n>\n> Implementation of additional parallel sort algorithms in R such as\n> Batcher's bitonic sort seems as though it could be valuable in financial\n> time series.\n>\n> I'm not aware of additional sorting implementations in R specific to\n> finance, most finance specific functionality uses R general functions\n> such as sort() and order()\n>\n> It seems that your implementation would be best proposed as a patch to\n> one of these functions on the r-devel list, or alternately contained in\n> an optimized sorting package that could overload the standard functions\n> with a new implementation.\n>\n> Regards,\n>\n>   - Brian\n>\n\n\nHello Joshua,\n\n             Not just CUDA BLAS, I think it would be interesting to note how\nmany people here are are ready to take a \"parallel\" approach to solving\ncomputation. I have been recently talking to few experts in the field and\nthey mentioned that people would mostly be ready to go parallel when the\nparallelism is provided as an abstraction and does not require any\napplication change, and mentioning that very few people are ready to tune\ntheir applications to \"Parallel R\" to get the benefits of parallelism.\n\n\nRegards,\n\n-- \nImanpreet Singh Arora\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "On Wed, Sep 24, 2008 at 6:29 PM, Joshua Reich <josh at gghc.com> wrote:\n\n> Extending the question further, I assume that bitonic sorting makes\n> sense when you have access to a SIMD platform, such as ",
       "thread_id": "thread-92f450ab0ae9",
       "thread_depth": 3,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080925/e38a1c98/attachment.pl"
+      ]
     },
     {
       "id": "msg-8519d0c7f665",
@@ -1929,11 +1995,14 @@
       "subject_clean": "Omega calculation in PerformanceAnalytics package",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080928/84fe6e7d/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080928/84fe6e7d/attachment.pl>",
+      "body_plain": "I am looking at the Omega() function in the PerformanceAnalytics package \nand it appears there may be an issue with the code and the answers it \ngives. It is entirely possible that it is just my understanding of the \nOmega ratio, but here is what I think needs to be fixed. Please correct me \nif I am wrong:\n\nR version 2.5.0\nPerformanceAnalytics package v 0.9.5\n\nI am using the function Omega with the following inputs and result:\n\n> Omega(-2:3, L=0, method='simple')\n[1] 1.5\n\nThis answer did not seem correct, so I went into the code and see that the \ncalculation is:\n\n...\n    switch(method, simple = {\n        numerator = exp(-rf) * mean(max(x - L, 0))\n        denominator = exp(-rf) * mean(max(L - x, 0))\n        omega = numerator/denominator\n...\n\n>From my understanding of the Omega ratio, the problem lies in the use of \nthe \"max\" in the code and not \"pmax\". The max function returns on the \nsingle largest value from the vector, so the mean(max()) is the same as \njust max(). I believe the proper code should be:\n\n...\n    switch(method, simple = {\n        numerator = exp(-rf) * mean(pmax(x - L, 0))\n        denominator = exp(-rf) * mean(pmax(L - x, 0))\n        omega = numerator/denominator\n...\n\nWhich would give the proper result of 2. This is because the Omega is an \naverage of all the values above the threshold and average of all the \nvalues below, and not just the extreme values.\n\nIf this has been fixed in a later version of PerformanceAnalytics, my \napologies.\n\n\nRyan Sheftel\nMalbec Quantys Fund\n200 Park Avenue\nNew York, NY 10166\n(212) 271-4006\nryan.sheftel at malbecpartners.com\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I am looking at the Omega() function in the PerformanceAnalytics package \nand it appears there may be an issue with the code and the answers it \ngives. It is entirely possible that it is just my under",
       "thread_id": "thread-50615ebad40f",
       "thread_depth": 0,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080928/84fe6e7d/attachment.pl"
+      ]
     },
     {
       "id": "msg-3d7818cfa2ee",
@@ -2000,11 +2069,14 @@
         "<48E0465E.8060908@bellsouth.net>",
         "<971536df0809282053i7c524ff4uaf6f37ee3c8d4c48@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080929/e49c652a/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080929/e49c652a/attachment.pl>",
+      "body_plain": "Sweet, this works well!  thx\n\n\nGabor Grothendieck wrote:\n> Try this:\n>\n> library(quantmod)\n> getSymbols(c(\"GOOG\", \"IBM\", \"MSFT\"))\n> tech <- merge(GOOG, IBM, MSFT)\n> ?merge.zoo\n>\n>\n> On Sun, Sep 28, 2008 at 11:07 PM, zubin <binabina at bellsouth.net> wrote:\n>   \n>> Hello, using R to extract data from yahoo using getSymbols.  I have a few\n>> sets of symbols I need to merge together to conduct some modeling.  How does\n>> one merge multiple xts data objects into one equivalent data frame\n>> representation so I can explore and model>?\n>>     \n>\n>   \n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Sweet, this works well!  thx\n\n\nGabor Grothendieck wrote:\n> Try this:\n>\n> library(quantmod)\n> getSymbols(c(\"GOOG\", \"IBM\", \"MSFT\"))\n> tech <- merge(GOOG, IBM, MSFT)\n> ?merge.zoo\n>\n>\n> On Sun, Sep 28, 20",
       "thread_id": "thread-1f29d934c040",
       "thread_depth": 2,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080929/e49c652a/attachment.pl"
+      ]
     },
     {
       "id": "msg-1cbf3d24ef66",
@@ -2055,11 +2127,14 @@
       "subject_clean": "Omega calculation in PerformanceAnalytics package",
       "in_reply_to": "<1222698198.15019.101.camel@ubuntu.braverock.com>",
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080929/7c31671d/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080929/7c31671d/attachment.pl>",
+      "body_plain": "Glad I could help.\n\nI use the Omega as a way to look at the win/loss ratio in a more complete \nmanner. It is a good way to analyze trading systems with a large number of \ntrades, and where there are not many outlier losses or drawdowns. I find \nthat metrics that give too much weight to the outliers (like Sharpe or \nSortino) tend to overly penalize versions of a system with a large \ndrawdown, which can falsely lead to an acceptance of a version of the \nsystem that happened to just avoid a few bad days.\n\n\n\n\n\n\"Brian G. Peterson\" <brian at braverock.com> \n09/29/08 10:23 AM\n\nTo\nryan.sheftel at malbecpartners.com\ncc\nr-sig-finance at stat.math.ethz.ch, Peter Carl <peter at braverock.com>\nSubject\nRe: Omega calculation in PerformanceAnalytics package\n\n\n\n\n\nRyan,\n\nThank you for spotting this.  I've corrected the function in CVS, and it\nwill be part of version 0.9.7 of PerformanceAnalytics that we are\ncurrently testing for release to CRAN.\n\nAfter implementing the function and some initial testing, we didn't find\na lot of utility in the Omega ratio (this could be because of the error\nin our calculation!, although the interpolated method gave results which\nwe also found of questionable utility).\n\nWould you mind sharing why/how you find Omega useful?\n\nThanks again,\n\n   - Brian\n\nOn Sun, 2008-09-28 at 09:15 -0400, ryan.sheftel at malbecpartners.com\nwrote:\n> \n> I am looking at the Omega() function in the PerformanceAnalytics\n> package and it appears there may be an issue with the code and the\n> answers it gives. It is entirely possible that it is just my\n> understanding of the Omega ratio, but here is what I think needs to be\n> fixed. Please correct me if I am wrong: \n> \n> R version 2.5.0 \n> PerformanceAnalytics package v 0.9.5 \n> \n> I am using the function Omega with the following inputs and result: \n> \n> > Omega(-2:3, L=0, method='simple') \n> [1] 1.5 \n> \n> This answer did not seem correct, so I went into the code and see that\n> the calculation is: \n> \n> ... \n>     switch(method, simple = { \n>         numerator = exp(-rf) * mean(max(x - L, 0)) \n>         denominator = exp(-rf) * mean(max(L - x, 0)) \n>         omega = numerator/denominator \n> ... \n> \n> From my understanding of the Omega ratio, the problem lies in the use\n> of the \"max\" in the code and not \"pmax\". The max function returns on\n> the single largest value from the vector, so the mean(max()) is the\n> same as just max(). I believe the proper code should be: \n> \n> ... \n>     switch(method, simple = { \n>         numerator = exp(-rf) * mean(pmax(x - L, 0)) \n>         denominator = exp(-rf) * mean(pmax(L - x, 0)) \n>         omega = numerator/denominator \n> ... \n> \n> Which would give the proper result of 2. This is because the Omega is\n> an average of all the values above the threshold and average of all\n> the values below, and not just the extreme values. \n> \n> If this has been fixed in a later version of PerformanceAnalytics, my\n> apologies. \n> \n> \n> Ryan Sheftel \n> Malbec Quantys Fund \n> 200 Park Avenue \n> New York, NY 10166 \n> (212) 271-4006 \n> ryan.sheftel at malbecpartners.com\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Glad I could help.\n\nI use the Omega as a way to look at the win/loss ratio in a more complete \nmanner. It is a good way to analyze trading systems with a large number of \ntrades, and where there are n",
       "thread_id": "thread-50615ebad40f",
       "thread_depth": 2,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080929/7c31671d/attachment.pl"
+      ]
     },
     {
       "id": "msg-c8a861109f08",
@@ -2071,11 +2146,14 @@
       "subject_clean": "tapply and rownames",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080929/1bee4aaa/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080929/1bee4aaa/attachment.pl>",
+      "body_plain": "Hi,\n\nI have the data set bellow: where the first column represent the row\nnames, the second column \"x\", is the variable that I am trying to\nprocess, and the third column \"factor\" contains ids for packages of the\nvariable x, see part 3 bellow.\n\n\nI have written a function (which I tested and seems to work) that\nperforms my desired process on \"x\". The function returns a table of\ntransformation on  the variable x. I am using the function \"tapply\" to\ngenerate results for each package of the column \"factors\",  see part 2\nbellow.\n\n\nThe code seems to generate correct results. See output for factors '92'\nand '106' on part 1 bellow.\n\nMy question is how do I instruct the function \"tapply\" to display the\nROWNAMES associated with each row and for each factor?  I read the\n?tapply, but I am not clear how to implement the instructions. \n\nI appreciate any help.\n\n\nThanks,\n\nJorge Nieves\n\n\n\nPART 1\n$`92`\n       res1     res2     res3\n [1,]  1156 82.80097  0.00000\n [2,]  1225  0.00000  0.00000\n [3,]   625  0.00000  0.00000\n [4,] 15876  0.00000  0.00000\n [5,] 35344  0.00000  0.00000\n [6,]  1089  0.00000  0.00000\n [7,]   196  0.00000  0.00000\n [8,]   324  0.00000  0.00000\n [9,]  4489  0.00000 24.66667\n\n$`106`\n       res1     res2  res3\n [1,]  1296 88.45595   0.0\n [2,]  3844  0.00000   0.0\n [3,]  1764  0.00000   0.0\n [4,]   676  0.00000   0.0\n [5,] 12321  0.00000   0.0\n [6,]  5929  0.00000   0.0\n [7,] 42025  0.00000   0.0\n [8,]  1089  0.00000   0.0\n [9,]  3249  0.00000   0.0\n[10,]  3844  0.00000 -23.7\n\n\n\n\nPART 2\nyy <-  mydata[,\"x\"]\nmyfactor <- mydata[,\"factor\"]\n\n\nmytest <- tapply(yy,myfactor,myfunction)\nmytest\n\n\nmyfunction <- function(yy)\n{\n np = length(yy)\n r.names = rownames(yy)\n c.names = c(\"res1\",\"res2\",\"res3\")\n mytable = matrix(0,np,length(c.names),dimnames = list(r.names,c.names))\n\n mytable[,\"res1\"] = yy^2\n mytable[1,\"res2\"] = sd(yy) \n mytable[np,\"res3\"] = mean(yy)\n return(mytable)\n}\n\nPART 3\n> mydata\n                x      factor\n20080927  -76      0\n20080926  162      0\n20080925 -120      0\n20080924   73      0\n20080923   17     20\n20080922  -83     20\n20080921   40     20\n20080920 -131     20\n20080919   76     20\n20080918   62     50\n20080917  -56     50\n20080916  118     50\n20080915   -8     50\n20080914   97     50\n20080913   72     50\n20080912  -14     50\n20080911 -158     50\n20080910 -304      0\n20080909 -180     75\n20080908  -75     75\n20080907   34     92\n20080906   35     92\n20080905   25     92\n20080904 -126     92\n20080903  188     92\n20080902  -33     92\n20080901   14     92\n20080900   18     92\n20080899   67     92\n20080898    0      0\n20080897   36    106\n20080896  -62    106\n20080895  -42    106\n20080894  -26    106\n20080893  111    106\n20080892  -77    106\n20080891 -205    106\n20080890   33    106\n20080889   57    106\n20080888  -62    106\n> \n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI have the data set bellow: where the first column represent the row\nnames, the second column \"x\", is the variable that I am trying to\nprocess, and the third column \"factor\" contains ids for pack",
       "thread_id": "thread-c8a861109f08",
       "thread_depth": 0,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080929/1bee4aaa/attachment.pl"
+      ]
     },
     {
       "id": "msg-421fd909d63a",
@@ -2160,11 +2238,14 @@
       "subject_clean": "Career/Educational Advice - First Post",
       "in_reply_to": "<90182110-1222768979-cardhu_decombobulator_blackberry.rim.net-1696336593-@bxe073.bisx.produk.on.blackberry>",
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080930/6e2486a5/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080930/6e2486a5/attachment.pl>",
+      "body_plain": "R is free, free is good. \nand it's flexible, and it benefits from inputs from a lot of people\nused in a number of quant teams in investment banks\n\n________________________________________\nNicolas Mougeot\nManaging Director\n\nHead of Global Equity Derivatives Strategy - Europe\nDeutsche Bank AG London\n\n+44 207 545 2198 \n+ 44 79 612 18375\n\neDerivatives.db.com -- it's where vol lives\n\nPlease click on this link and read the disclaimer: \nhttps://ederivatives.db.com/static/edsg_disclaimer.html\n\n\n\n\nmapgxcs at brunel.ac.uk \nSent by: r-sig-finance-bounces at stat.math.ethz.ch\n09/30/2008 10:58 AM\nPlease respond to\nmapgxcs at brunel.ac.uk\n\n\nTo\n\"Dale Smith\" <dsmith at viciscapital.com>, \nr-sig-finance-bounces at stat.math.ethz.ch, r-sig-finance at stat.math.ethz.ch\ncc\n\nSubject\nRe: [R-SIG-Finance] Career/Educational Advice - First Post\n\n\n\n\n\n\nHi all,\nIs R/S+ widely used within the financial institutions? Or it's quants' \npersonal preference?\nRegards,\nMc\nMichael\nSent from my BlackBerry® wireless device\n\n-----Original Message-----\nFrom: \"Dale Smith\" <dsmith at viciscapital.com>\n\nDate: Mon, 29 Sep 2008 15:56:13 \nTo: <r-sig-finance at stat.math.ethz.ch>\nSubject: Re: [R-SIG-Finance] Career/Educational Advice - First Post\n\n\nYou are apparently working now. I agree, get involved with QuantLib or\nan R project and learn what you can. If you know any C++, get Joshi's\n\"C++ Design Patterns and Derivatives Pricing\" (2nd edition). Be prepared\nto answer questions about R, C++, and quantitative analysis. RServe is a\nfine project to investigate for distributed R calculations: distributed\ncalculation services may not come up in your interview but it's worth\nknowing something as it may come up on the job.\n\nIt's going to be a while before hiring picks up.\n\nDale Smith, Ph.D.\nVicis Capital LLC\nVoice: 212-909-4635\nEmail: dsmith at viciscapital.com\nAIM: dsmith11701\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of David Kane\nSent: Monday, September 29, 2008 3:17 PM\nTo: Julian Lee\nCc: r-sig-finance at stat.math.ethz.ch\nSubject: Re: [R-SIG-Finance] Career/Educational Advice - First Post\n\nMy personal opinions . . .\n\n> 1. I have been looking at some masters graduate programmes and they\n> come in all shapes and sizes. ...  As\n> a quant in the industry, does the content of these degrees matter?\n\nNo.\n\n> 2. How much of open-source technology, R/Rmetrics is being used by the\n> financial industry?\n\nLots. If you aren't using R now, you will be someday. Further thoughts\nat:\n\nhttp://papers.ssrn.com/sol3/papers.cfm?abstract_id=966354\n\n> 3. Is it possible for someone to be a quant without any post-graduate\n> training?\n\nYes. Your best bet is to get involved with an open source finance\nproject. That will allow you to build your skills and gain some\nexpertise, thereby making a job search much easier (although no job\nsearch will be easy this year.\n\nGood luck,\n\nDave Kane\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only.\n-- If you want to post, subscribe first.\n\nAll e-mail sent to or from this address will be received or otherwise \nrecorded by Vicis Capital, LLC and is subject to archival, monitoring \nand/or review, by and/or disclosure to, someone other than the recipient.\nThis message is intended only for the use of the person(s) (\"intended \nrecipient\") to whom it is addressed.  It may contain information that is \nprivileged and confidential.  If you are not the intended recipient, \nplease contact the sender as soon as possible and delete the message \nwithout reading it or making a copy.  Any dissemination, distribution, \ncopying, or other use of this message or any of its content by any person\nother than the intended recipient is strictly prohibited.  Vicis Capital,\nLLC only transacts business in states where it is properly registered or \nnotice filed, or excluded or exempted from registration or notice filing \nrequirements.\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only.\n-- If you want to post, subscribe first.\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only.\n-- If you want to post, subscribe first.\n\n\n\n\n---\n\nThis e-mail may contain confidential and/or privileged i...{{dropped:11}}",
+      "body_snippet": "R is free, free is good. \nand it's flexible, and it benefits from inputs from a lot of people\nused in a number of quant teams in investment banks\n\n________________________________________\nNicolas Moug",
       "thread_id": "thread-421fd909d63a",
       "thread_depth": 4,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080930/6e2486a5/attachment.pl"
+      ]
     },
     {
       "id": "msg-20c7cfb6d039",
@@ -2241,11 +2322,14 @@
         "<dc0981050809291022s41e426e1k7ec206edb1231d0@mail.gmail.com>",
         "<e8ec70e40809291217x330526ccp1abe05b1fe13d655@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080930/6dd1151b/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080930/6dd1151b/attachment.pl>",
+      "body_plain": "As an aside, there is a paper (which admittedly I've not read yet) on the SSRN arguing for a greater role for open-source\nfinancial tools to increase transparency in risk management:\n\nhttp://papers.ssrn.com/sol3/papers.cfm?abstract_id=1273467\n\nFrancisco Gochez\nMango Solutions\nwww.mango-solutions.com\n\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch on behalf of David Kane\nSent: Mon 9/29/2008 8:17 PM\nTo: Julian Lee\nCc: r-sig-finance at stat.math.ethz.ch\nSubject: Re: [R-SIG-Finance] Career/Educational Advice - First Post\n \nMy personal opinions . . .\n\n> 1. I have been looking at some masters graduate programmes and they\n> come in all shapes and sizes. ...  As\n> a quant in the industry, does the content of these degrees matter?\n\nNo.\n\n> 2. How much of open-source technology, R/Rmetrics is being used by the\n> financial industry?\n\nLots. If you aren't using R now, you will be someday. Further thoughts at:\n\nhttp://papers.ssrn.com/sol3/papers.cfm?abstract_id=966354\n\n> 3. Is it possible for someone to be a quant without any post-graduate\n> training?\n\nYes. Your best bet is to get involved with an open source finance\nproject. That will allow you to build your skills and gain some\nexpertise, thereby making a job search much easier (although no job\nsearch will be easy this year.\n\nGood luck,\n\nDave Kane\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only.\n-- If you want to post, subscribe first.\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "As an aside, there is a paper (which admittedly I've not read yet) on the SSRN arguing for a greater role for open-source\nfinancial tools to increase transparency in risk management:\n\nhttp://papers.ss",
       "thread_id": "thread-421fd909d63a",
       "thread_depth": 2,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080930/6dd1151b/attachment.pl"
+      ]
     },
     {
       "id": "msg-13d796b8c22b",
@@ -2279,11 +2363,14 @@
       "subject_clean": "PerformanceAnalytics and the UpsidePotentialRatio",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080930/d2dc8809/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080930/d2dc8809/attachment.pl>",
+      "body_plain": "Continuing to look at the PerformanceAnalytic package and this time the \nfunction UpsidePotentialRatio\n\nThe code in the package is:\n\n> UpsidePotentialRatio\nfunction (Ra, MAR = 0) \n{\n    Ra = checkData(Ra, method = \"vector\")\n    r = subset(Ra, Ra > MAR)\n    return((sum(r - MAR)/(length(Ra)))/DownsideDeviation(Ra, MAR))\n}\n\nI believe there are two problems with this calculation according to my \nunderstanding of the ratio.\n\n- I think the numerator should be the average return of the observations \nin excess of the MAR, so the lenght(Ra) should be lenght(r).\n\n        (sum(r - MAR)/(length(r)))\n\n- Second the denominator should the the deviation below the MAR, but again \nonly for the observations below the MAR. The DownsideDeviation function \nlooks to again be using all observations:\n\n> DownsideDeviation\nfunction (Ra, MAR = 0) \n{\n    Ra = checkDataVector(Ra)\n    r = subset(Ra, Ra < MAR)\n    return(sqrt(sum((r - MAR)^2)/(length(Ra))))\n}\n\nIn here the final \"length(Ra)\" should be \"length(r)\"\n\n\nThanks for taking a look. The package is very impressive.\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Continuing to look at the PerformanceAnalytic package and this time the \nfunction UpsidePotentialRatio\n\nThe code in the package is:\n\n> UpsidePotentialRatio\nfunction (Ra, MAR = 0) \n{\n    Ra = checkData",
       "thread_id": "thread-57c73e63ebef",
       "thread_depth": 0,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080930/d2dc8809/attachment.pl"
+      ]
     },
     {
       "id": "msg-9984d785d8cd",
@@ -2331,11 +2418,14 @@
       "subject_clean": "[Maybe Content Spam] Re: PerformanceAnalytics and the UpsidePotentialRatio",
       "in_reply_to": "<1222809295.11730.35.camel@ubuntu.braverock.com>",
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080930/dff98310/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080930/dff98310/attachment.pl>",
+      "body_plain": "Thanks. I agree that the seems to be a lot of mixed uses in the academic \nwork, I will take a look and be back with the best standard market \npractices, but allowing the method is a great answer.\n\n\nRyan Sheftel\nMalbec Quantys Fund\n200 Park Avenue\nNew York, NY 10166\n(212) 271-4006\nryan.sheftel at malbecpartners.com\n\n\n\n\n\"Brian G. Peterson\" <brian at braverock.com> \n09/30/08 05:14 PM\n\nTo\nryan.sheftel at malbecpartners.com\ncc\nPeter Carl <peter at braverock.com>, R-SIG-Finance \n<r-sig-finance at stat.math.ethz.ch>\nSubject\n[Maybe Content Spam] Re: PerformanceAnalytics and the UpsidePotentialRatio\n\n\n\n\n\nRyan,\n\nI've updated the code to allow the use of a \"method\" argument for all\nthe related functions.  I was wondering if I could impose upon you to\ncheck my understanding of something.\n\nIn June of 2007, I committed changes to the DownsideDeviation function\nwith the comment: \"fixed to use length of entire series, per Platinga,\nvan der Meer, Sortino 2001\", and in August 2007, I added the method\nargument so that users could choose. \nT\nIf you have the time and inclination, would you be willing to take a\nlook at the reference and see if yourread of the paper matches my\nunderstanding that the length of the full series should be the default?\n \nPlantinga, A., van der Meer, R. and Sortino, F. The Impact of Downside\nRisk on Risk-Adjusted Performance of Mutual Funds in the Euronext\nMarkets. July 19, 2001. Available at SSRN:\nhttp://ssrn.com/abstract=277352\n\n\nI'm mostly concerned with setting the best default here.  All the\nfunctions now support the method argument, I just want to make sure that\nthe default is as rational as possible.  I've copied the list in case\nany one else wants to chime in as well.\n\nRegards,\n\n   - Brian\n\nOn Tue, 2008-09-30 at 14:36 -0400, ryan.sheftel at malbecpartners.com\nwrote:\n> \n> Continuing to look at the PerformanceAnalytic package and this time\n> the function UpsidePotentialRatio \n> \n> The code in the package is: \n> \n> > UpsidePotentialRatio \n> function (Ra, MAR = 0) \n> { \n>     Ra = checkData(Ra, method = \"vector\") \n>     r = subset(Ra, Ra > MAR) \n>     return((sum(r - MAR)/(length(Ra)))/DownsideDeviation(Ra, MAR)) \n> } \n> \n> I believe there are two problems with this calculation according to my\n> understanding of the ratio. \n> \n> - I think the numerator should be the average return of the\n> observations in excess of the MAR, so the lenght(Ra) should be\n> lenght(r). \n> \n>         (sum(r - MAR)/(length(r))) \n> \n> - Second the denominator should the the deviation below the MAR, but\n> again only for the observations below the MAR. The DownsideDeviation\n> function looks to again be using all observations: \n> \n> > DownsideDeviation \n> function (Ra, MAR = 0) \n> { \n>     Ra = checkDataVector(Ra) \n>     r = subset(Ra, Ra < MAR) \n>     return(sqrt(sum((r - MAR)^2)/(length(Ra)))) \n> } \n> \n> In here the final \"length(Ra)\" should be \"length(r)\" \n> \n> \n> Thanks for taking a look. The package is very impressive.\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thanks. I agree that the seems to be a lot of mixed uses in the academic \nwork, I will take a look and be back with the best standard market \npractices, but allowing the method is a great answer.\n\n\nRy",
       "thread_id": "thread-57c73e63ebef",
       "thread_depth": 2,
-      "month": "2008-09"
+      "month": "2008-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080930/dff98310/attachment.pl"
+      ]
     }
   ],
   "threads": [

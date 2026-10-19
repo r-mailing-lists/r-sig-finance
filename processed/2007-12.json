@@ -13,11 +13,14 @@
       "subject_clean": "R memory management",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071202/abc5ac8f/attachment.pl",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071202/abc5ac8f/attachment.pl",
+      "body_plain": "Hi,\n\n \n\nI'm using R to collect data for a number of exchanges through a socket\nconnection and constantly running into memory problems even though task I\nbelieve is not that memory consuming. I guess there is a miscommunication\nbetween R and WinXP about freeing up memory.\n\nSo this is the code:\n\n \n\nfor (x in 1:length(exchanges.to.get)) {\n\n   tickers<-sqlQuery(channel,paste(\"SELECT Symbol FROM symbols_list WHERE\nExchange='\",exchanges.to.get[x],\"';\",sep=''))[,1]\n\n   dir.create(paste(Working.dir,exchanges.to.get[x],'/',sep=''))\n\n   for (y in 1:length(tickers)) {\n\n     con2 <- socketConnection(Sys.info()[\"nodename\"], port = ****)  #open\nsocket connection to get data\n\n     writeLines(paste(command,',',tickers[y],',',interval,';',sep=''), con2)\n\n     data.<-readLines(con2)\n\n     end.of.data<-sum(c(data.==\"!ENDMSG!\",data.==\"!SYNTAX_ERROR!\"))\n\n     while(end.of.data!=1)\n{new.data<-readLines(con2);end.of.data<-sum(new.data==\"!ENDMSG!\");\ndata.<-c(data.,new.data)}\n\n     if (length(data.)>3)\nwrite.table(data.[1:(length(data.)-2)],paste(Working.dir,exchanges.to.get[x]\n,'/',sub('\\\\*','\\+',tickers[y]),'_.csv',sep=''),quote=F,col.names =\nF,row.names=F)\n\n     close(con2)\n\n   }\n\n  rm(tickers)\n\n  gc()\n\n \n\n \n\nWith command  gcinfo(TRUE) I got the following info (some examples) :\n\n \n\nGarbage collection 16362 = 15411+754+197 (level 0) ... \n\n6.3 Mbytes of cons cells used (22%)\n\n2.2 Mbytes of vectors used (8%)\n\n \n\nGarbage collection 16407 = 15454+756+197 (level 0) ... \n\n13.1 Mbytes of cons cells used (46%)\n\n10.4 Mbytes of vectors used (39%)\n\n \n\nGarbage collection 16410 = 15456+756+198 (level 2) ... \n\n4.9 Mbytes of cons cells used (21%)\n\n0.9 Mbytes of vectors used (4%)\n\n \n\nGarbage collection 16679 = 15634+796+249 (level 0) ... \n\n150.7 Mbytes of cons cells used (95%)\n\n203.9 Mbytes of vectors used (75%)\n\n \n\nGarbage collection 16680 = 15634+796+250 (level 2) ... \n\n4.9 Mbytes of cons cells used (4%)\n\n0.9 Mbytes of vectors used (0%)\n\n \n\nGarbage collection 16808 = 15754+802+252 (level 0) ... \n\n6.1 Mbytes of cons cells used (7%)\n\n1.8 Mbytes of vectors used (1%)\n\n \n\nBut the end result is in Task Manager:\n\nRGui.exe  Mem Usage 470,472K  VM Size 541,988K\n\n \n\nEven though R reports \n\nGarbage collection 16808 = 15754+802+252 (level 0) ... \n\n6.1 Mbytes of cons cells used (7%)\n\n1.8 Mbytes of vectors used (1%)\n\n \n\nHas anybody encountered this problem and how you guys deal with it?  It\nseems like a memory leak to me, as tasks are not memory demandind, the\nbiggest amount of data in a single file is about 40MB.\n\n \n\nThanks\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\n \n\nI'm using R to collect data for a number of exchanges through a socket\nconnection and constantly running into memory problems even though task I\nbelieve is not that memory consuming. I guess t",
       "thread_id": "thread-19d927b5f988",
       "thread_depth": 0,
-      "month": "2007-12"
+      "month": "2007-12",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071202/abc5ac8f/attachment.pl"
+      ]
     },
     {
       "id": "msg-9ad017dbc3c7",
@@ -29,11 +32,14 @@
       "subject_clean": "R memory management",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071202/29431a9d/attachment.pl",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071202/29431a9d/attachment.pl",
+      "body_plain": "Hi,\n\n \n\nI'm using R to collect data for a number of exchanges through a socket\nconnection and constantly running into memory problems even though task I\nbelieve is not that memory consuming. I guess there is a miscommunication\nbetween R and WinXP about freeing up memory.\n\nSo this is the code:\n\n \n\nfor (x in 1:length(exchanges.to.get)) {\n\n   tickers<-sqlQuery(channel,paste(\"SELECT Symbol FROM symbols_list WHERE\nExchange='\",exchanges.to.get[x],\"';\",sep=''))[,1]\n\n   dir.create(paste(Working.dir,exchanges.to.get[x],'/',sep=''))\n\n   for (y in 1:length(tickers)) {\n\n     con2 <- socketConnection(Sys.info()[\"nodename\"], port = ****)  #open\nsocket connection to get data\n\n     writeLines(paste(command,',',tickers[y],',',interval,';',sep=''), con2)\n\n     data.<-readLines(con2)\n\n     end.of.data<-sum(c(data.==\"!ENDMSG!\",data.==\"!SYNTAX_ERROR!\"))\n\n     while(end.of.data!=1)\n{new.data<-readLines(con2);end.of.data<-sum(new.data==\"!ENDMSG!\");\ndata.<-c(data.,new.data)}\n\n     if (length(data.)>3)\nwrite.table(data.[1:(length(data.)-2)],paste(Working.dir,exchanges.to.get[x]\n,'/',sub('\\\\*','\\+',tickers[y]),'_.csv',sep=''),quote=F,col.names =\nF,row.names=F)\n\n     close(con2)\n\n   }\n\n  rm(tickers)\n\n  gc()\n\n \n\n \n\nWith command  gcinfo(TRUE) I got the following info (some examples) :\n\n \n\nGarbage collection 16362 = 15411+754+197 (level 0) ... \n\n6.3 Mbytes of cons cells used (22%)\n\n2.2 Mbytes of vectors used (8%)\n\n \n\nGarbage collection 16407 = 15454+756+197 (level 0) ... \n\n13.1 Mbytes of cons cells used (46%)\n\n10.4 Mbytes of vectors used (39%)\n\n \n\nGarbage collection 16410 = 15456+756+198 (level 2) ... \n\n4.9 Mbytes of cons cells used (21%)\n\n0.9 Mbytes of vectors used (4%)\n\n \n\nGarbage collection 16679 = 15634+796+249 (level 0) ... \n\n150.7 Mbytes of cons cells used (95%)\n\n203.9 Mbytes of vectors used (75%)\n\n \n\nGarbage collection 16680 = 15634+796+250 (level 2) ... \n\n4.9 Mbytes of cons cells used (4%)\n\n0.9 Mbytes of vectors used (0%)\n\n \n\nGarbage collection 16808 = 15754+802+252 (level 0) ... \n\n6.1 Mbytes of cons cells used (7%)\n\n1.8 Mbytes of vectors used (1%)\n\n \n\nBut the end result is in Task Manager:\n\nRGui.exe  Mem Usage 470,472K  VM Size 541,988K\n\n \n\nEven though R reports \n\nGarbage collection 16808 = 15754+802+252 (level 0) ... \n\n6.1 Mbytes of cons cells used (7%)\n\n1.8 Mbytes of vectors used (1%)\n\n \n\nHas anybody encountered this problem and how you guys deal with it?  It\nseems like a memory leak to me, as tasks are not memory demandind, the\nbiggest amount of data in a single file is about 40MB.\n\n \n\nThanks\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\n \n\nI'm using R to collect data for a number of exchanges through a socket\nconnection and constantly running into memory problems even though task I\nbelieve is not that memory consuming. I guess t",
       "thread_id": "thread-9ad017dbc3c7",
       "thread_depth": 0,
-      "month": "2007-12"
+      "month": "2007-12",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071202/29431a9d/attachment.pl"
+      ]
     },
     {
       "id": "msg-e43102e9f807",
@@ -63,11 +69,14 @@
       "subject_clean": "random walk: variable drift",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071203/92a958be/attachment.pl",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071203/92a958be/attachment.pl",
+      "body_plain": "Hi,\n\nI'm trying to use weekly data to estimate a random walk with variable drift\n(possibly incorporating seasonality) for exchange rate forecasting.  Any\nrecommendations on packages or functions to use?  I'm thinking of using the\nkalman filter to estimate the variable drift term, although I'm unsure how\nto implement this using the kfilter function from sspir on a time series of\nexchange rates.  Any help would be appreciated.\n\nThanks,\nAlex\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI'm trying to use weekly data to estimate a random walk with variable drift\n(possibly incorporating seasonality) for exchange rate forecasting.  Any\nrecommendations on packages or functions to us",
       "thread_id": "thread-fde9cd0f2b49",
       "thread_depth": 0,
-      "month": "2007-12"
+      "month": "2007-12",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071203/92a958be/attachment.pl"
+      ]
     },
     {
       "id": "msg-2a4f0d0486a3",
@@ -95,11 +104,14 @@
       "subject_clean": "GARCH estimation",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071205/11ca8d38/attachment.pl",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071205/11ca8d38/attachment.pl",
+      "body_plain": "Dear all:\n\nI have a garch equation different from the traditional one:\n\n y(t)=b1+b2*x(t) + sqrt(h(t))*z(t), where z(t)~N(0,1)  h(t)=b3+b4*h(t-1)+b5*(\nz(t-1)-b6*sqrt(h(t-1) )^2\n\nI tried to use optim to estimate the six parameters:\n\ngarch <- function(b,x,y){\n         b1<-b[1]\n         b2<-b[2]\n         b3<-b[3]\n         b4<-b[4]\n         b5<-b[5]\n         b6<-b[6]\n         N<-length(y)\n         lkhd<-0\n         ht<-var(y)\n         for (i in 1:N){\n                zt<-y[i]-b1-b2*x[i]\n                ht<-b3+b4*(ht)^2+b5*(zt/sqrt(ht)-b6*sqrt(ht))^2\n                lkhd<-lkhd +log(ht)+zt^2/ht\n                }\n        return(lkhd)\n}\noptim(c(0.01,0.2,0.2,0.2,0.2,0.2),method=\"BFGS\",fn=garch,\n    x=data.x,y=data.y)\n\nHowever, I got the following warnings:\nIn log(ht) : create NaNs\nIn sqrt(ht) : create NaNs\n........................\n\nCan anyone help me interpreting these warnings? Are there any other better\nway to estimate the parameters? Thank you very much.\n\nShyhWeir\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all:\n\nI have a garch equation different from the traditional one:\n\n y(t)=b1+b2*x(t) + sqrt(h(t))*z(t), where z(t)~N(0,1)  h(t)=b3+b4*h(t-1)+b5*(\nz(t-1)-b6*sqrt(h(t-1) )^2\n\nI tried to use optim to",
       "thread_id": "thread-01ff624ede08",
       "thread_depth": 0,
-      "month": "2007-12"
+      "month": "2007-12",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071205/11ca8d38/attachment.pl"
+      ]
     },
     {
       "id": "msg-e946e80c8225",
@@ -257,11 +269,14 @@
       "subject_clean": "Extracting Interval-Based Data From Zoo Series",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071210/c7767d70/attachment.pl",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071210/c7767d70/attachment.pl",
+      "body_plain": "Hi all\n\nI have a few series with high-frequency tick data. The series is recorded at\nmillisecond resolution, and a data file can span anything from a few hours\nto a calendar month.\n\nHere is an example of one file:\n\n2007-10-23 00:00:36.139|1.419|1.4192\n2007-10-23 00:00:42.629|1.4191|0\n2007-10-23 00:01:03.109|1.419|0\n2007-10-23 00:01:08.109|0|1.4191\n\nI load the file in as follows:\n\neurusd <- read.zoo(file=\"data/eurusd_EBS_11_07.dat\",\n    sep=\"|\", FUN=as.POSIXct,\n    col.names=c(\"time\",\"bid\",\"ask\"))\n\n# Replace zero ticks with NA, and thus locf\ncoredata(eurusd)[,\"bid\"][coredata(eurusd)[,\"bid\"]==0] = NA\ncoredata(eurusd)[,\"ask\"][coredata(eurusd)[,\"ask\"]==0] = NA\neurusd <- na.locf(eurusd)\n\nI have a couple of questions:\n\n1. I can see that as.POSIXct() can deal with millisecond resolution, but zoo\ndoesnt seem to use the millis portion of the timestamp as an index variable.\nI tried to use a function as follows:\n\nconvertDate <- function(x) {\n    # 2007-11-23 14:48:43.140\n    as.POSIXct(strptime(x, \"%Y-%m-%d %H:%M:%OS\"))\n}\n\nand then used this as the FUN argument in read.zoo(), but it still complains\nthat index values must be unique. Is it possible to use a high-resolution\nindex (milliseconds or an even finer recorded granularity)?\n\n2. What I would like to do with the data, is extract and aggregate\nsub-series. So for the tick data above, if I wanted to check for diurnal\nseasonality, I would like to be able to extract as a daily series, the\ninterarrival times of the ticks. I can  do this in a primitive way by:\n\n# Extract data for 12/11/07\nts <- eurusd[as.Date(time(eurusd))==\"2007-11-12\"]\n\nplot(time(ts)[2:length(time(ts))], diff(time(ts)), type='h',\n main=\"EBS EUR/USD Tick Interarrival Times\\n12-11-2007\",\n xlab=\"Time\", ylab=\"Interrarival Time (sec)\")\n\n\nIs it possible to do this in a neater way? I tried using rollapply() to get\na daily rolling window, but wasnt successful.\n\nThanks in advance\nRory\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi all\n\nI have a few series with high-frequency tick data. The series is recorded at\nmillisecond resolution, and a data file can span anything from a few hours\nto a calendar month.\n\nHere is an example",
       "thread_id": "thread-6263986ef16a",
       "thread_depth": 0,
-      "month": "2007-12"
+      "month": "2007-12",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071210/c7767d70/attachment.pl"
+      ]
     },
     {
       "id": "msg-22fa85453b99",
@@ -363,11 +378,14 @@
       "subject_clean": "Riskmetrics volatility and correlation estimation",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071212/46adcc68/attachment.pl",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071212/46adcc68/attachment.pl",
+      "body_plain": "Folks,\nAre there functions available to compute the Riskmetrics (1996) volatilities and correlations for financial time-series? I refer to the exponentially weighted moving average vols and exponentially smoothed correlations (with lambda = 0.94). I looked in the VarModelling part of fPortfolio, but this stuff doesn't seem to be there?\n \nThanks,\nMurali\n_________________________________________________________________\nThe best games are on Xbox 360.  Click here for a special offer on an Xbox 360 Console.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Folks,\nAre there functions available to compute the Riskmetrics (1996) volatilities and correlations for financial time-series? I refer to the exponentially weighted moving average vols and exponentia",
       "thread_id": "thread-6b30ee569638",
       "thread_depth": 0,
-      "month": "2007-12"
+      "month": "2007-12",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071212/46adcc68/attachment.pl"
+      ]
     },
     {
       "id": "msg-59650a55a7a0",
@@ -436,11 +454,14 @@
       "subject_clean": "Header intact",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071212/97d6d898/attachment.pl",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071212/97d6d898/attachment.pl",
+      "body_plain": "I confirm i want to be added to the mailing list.\n\nBest regards,\nDamien Louvet\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I confirm i want to be added to the mailing list.\n\nBest regards,\nDamien Louvet\n\n\t[[alternative HTML version deleted]]",
       "thread_id": "thread-fe0948f8cd65",
       "thread_depth": 0,
-      "month": "2007-12"
+      "month": "2007-12",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071212/97d6d898/attachment.pl"
+      ]
     },
     {
       "id": "msg-7df3029be996",
@@ -468,11 +489,14 @@
       "subject_clean": "FGarch Information",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071213/f253e503/attachment.pl",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071213/f253e503/attachment.pl",
+      "body_plain": "Hello, \nI have a question about the fGarch package.  Can I fix individual Arma + \nGarch coefficients in the new fGarch package? \n\nThanks for your Help.\n\nBest regards,\n\nEric Thibault\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello, \nI have a question about the fGarch package.  Can I fix individual Arma + \nGarch coefficients in the new fGarch package? \n\nThanks for your Help.\n\nBest regards,\n\nEric Thibault\n\t[[alternative HTM",
       "thread_id": "thread-2f52e69b7a29",
       "thread_depth": 0,
-      "month": "2007-12"
+      "month": "2007-12",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071213/f253e503/attachment.pl"
+      ]
     },
     {
       "id": "msg-3a786cd8e79e",
@@ -484,11 +508,14 @@
       "subject_clean": "Kernel Regression",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071214/c093ce4f/attachment.pl",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071214/c093ce4f/attachment.pl",
+      "body_plain": "Dear all:\n\nI am not able to find a function/package that can do\nkernel regression (gaussian) with p explanatory\nvariables, using financial time series data.\nCan anyone help me on this, would much appreciate\nyour response.\n\nCheers!\n\nsud achath \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all:\n\nI am not able to find a function/package that can do\nkernel regression (gaussian) with p explanatory\nvariables, using financial time series data.\nCan anyone help me on this, would much appr",
       "thread_id": "thread-3a786cd8e79e",
       "thread_depth": 0,
-      "month": "2007-12"
+      "month": "2007-12",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071214/c093ce4f/attachment.pl"
+      ]
     },
     {
       "id": "msg-71f14ae4f168",
@@ -536,11 +563,14 @@
       "subject_clean": "garch with additional regressors",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071217/09eb6624/attachment.pl",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071217/09eb6624/attachment.pl",
+      "body_plain": "Dear All:\n\nHow can I fit the garch with additional regressors in R? For example:\n\nyt=c+b1*x1t+b2*x2t+sqrt(ht)*zt\nht=a+b*h(t-1)+c*h(t-1)z(t-1)^2\n\nor ARMA11-garch type equation like:\n <r-sig-finance at stat.math.ethz.ch>\nyt=c+b1*y(t-1)+sqrt(ht)*zt+b2*sqrt(h(t-1))*z(t-1)\nht=a+b*h(t-1)+c*h(t-1)z(t-1)^2\n\nIs there any function available? I tried to use garchFit but it seems not\nsupporting addtional regressors. Thanks for any help.\n\nShyhWeir\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear All:\n\nHow can I fit the garch with additional regressors in R? For example:\n\nyt=c+b1*x1t+b2*x2t+sqrt(ht)*zt\nht=a+b*h(t-1)+c*h(t-1)z(t-1)^2\n\nor ARMA11-garch type equation like:\n <r-sig-finance at ",
       "thread_id": "thread-f2f46a71654a",
       "thread_depth": 0,
-      "month": "2007-12"
+      "month": "2007-12",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071217/09eb6624/attachment.pl"
+      ]
     },
     {
       "id": "msg-555f443eb619",
@@ -621,11 +651,14 @@
       "subject_clean": "Non-gaussian (L-stable) Garch innovations",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071223/e639f4fe/attachment.pl",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071223/e639f4fe/attachment.pl",
+      "body_plain": "Hi,\n\nCould someone give an example on how to simulate paths (forecast) of a Garch\nprocess with Levy stable innovations (by using rstable random deviates, for\nexample)?\n\nThanks in advance.\n\nJosé Augusto M de Andrade Jr\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nCould someone give an example on how to simulate paths (forecast) of a Garch\nprocess with Levy stable innovations (by using rstable random deviates, for\nexample)?\n\nThanks in advance.\n\nJosé August",
       "thread_id": "thread-846ab2449455",
       "thread_depth": 0,
-      "month": "2007-12"
+      "month": "2007-12",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071223/e639f4fe/attachment.pl"
+      ]
     },
     {
       "id": "msg-bd926bcba262",
@@ -658,11 +691,14 @@
         "<f7ecaf330712231610x46dbe4earc2019553065d7bed@mail.gmail.com>",
         "<476F8D6B.3080903@burns-stat.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071224/4773863c/attachment.pl",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071224/4773863c/attachment.pl",
+      "body_plain": "Hi Patrick,\n\nThanks for the explanation.\n\nI want to discuss the infinite variance of stable distributions (except\nnormal). I understand that infinite variance means only that this\ndistributions does not have a constant variance, that the integral does not\nconverge to a finite constant value.\n\nWhen someone uses GARCH to model the variance he is indeed recogning the\nsame fact: the varince is not constant and should not converge, as with\nstable distributions also occur.\n\nAm i wrong?\n\n2007/12/24, Patrick Burns <patrick at burns-stat.com>:\n>\n> Given the model parameters and the starting volatility state,\n> the procedure (which you can use a 'for' loop to do) is:\n>\n> * select the next random innovation.\n>\n> * multiply by the volatility at that time point to get the simulated\n> return for that period.\n>\n> * use the return to get the next period's variance using the garch\n> equation.\n>\n> So there are two series that are being produced: the return\n> series and the variance series.\n>\n>\n> I'm not exactly objecting, but I hope you realize that garch models\n> variances while stable distributions (except the Gaussian) have infinite\n> variance.  Hence a garch model with a stable distribution is at least\n> a bit nonsensical.\n>\n> Patrick Burns\n> patrick at burns-stat.com\n> +44 (0)20 8525 0696\n> http://www.burns-stat.com\n> (home of S Poetry and \"A Guide for the Unwilling S User\")\n>\n> José Augusto M. de Andrade Junior wrote:\n>\n> >Hi,\n> >\n> >Could someone give an example on how to simulate paths (forecast) of a\n> Garch\n> >process with Levy stable innovations (by using rstable random deviates,\n> for\n> >example)?\n> >\n> >Thanks in advance.\n> >\n> >José Augusto M de Andrade Jr\n> >\n> >       [[alternative HTML version deleted]]\n> >\n> >\n> >\n> >------------------------------------------------------------------------\n> >\n> >_______________________________________________\n> >R-SIG-Finance at stat.math.ethz.ch mailing list\n> >https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> >-- Subscriber-posting only.\n> >-- If you want to post, subscribe first.\n> >\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Patrick,\n\nThanks for the explanation.\n\nI want to discuss the infinite variance of stable distributions (except\nnormal). I understand that infinite variance means only that this\ndistributions does n",
       "thread_id": "thread-846ab2449455",
       "thread_depth": 2,
-      "month": "2007-12"
+      "month": "2007-12",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071224/4773863c/attachment.pl"
+      ]
     },
     {
       "id": "msg-deeb934913b7",
@@ -1197,11 +1233,14 @@
       "subject_clean": "fixing arma coefficients in garch modelling",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071227/8d844eef/attachment.pl",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071227/8d844eef/attachment.pl",
+      "body_plain": "Hi,\n\nI would like to ask if it is possible to fix arma coefficients in garch estimation. I can estimate an arma model with only ma(1) and ma(3) terms and without constant in the following way:\n\narmamodel <- armaFit(~ ma(3), data, include.mean=FALSE, fixed=c(NA,0,NA))\n\nDiagnostic tests show that there a is a garch process in the residuals. Therefore, I would like to estimate a garch model with ma(1) and ma(3) terms and no constant in the mean equation. Does anybody know if it is possible? Apparently, the garchFit function does not allow fixing arma coefficients in the mean equation...\n\nThanks for answers and suggestions.\n\nBest regards\n\n\nMichal Miklovic\n\n\n\n\n      ____________________________________________________________________________________\nLooking for last minute shopping deals?  \n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI would like to ask if it is possible to fix arma coefficients in garch estimation. I can estimate an arma model with only ma(1) and ma(3) terms and without constant in the following way:\n\narmamo",
       "thread_id": "thread-0237574f621d",
       "thread_depth": 0,
-      "month": "2007-12"
+      "month": "2007-12",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071227/8d844eef/attachment.pl"
+      ]
     },
     {
       "id": "msg-c4ecb3632b17",
@@ -1213,11 +1252,14 @@
       "subject_clean": "books?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071227/d0c81e24/attachment.pl",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071227/d0c81e24/attachment.pl",
+      "body_plain": "Hi Everyone!\n\nI do some forecasts for my job and recently have started to realize that\nI may be able to make better forecasts if I look at multivariate\nanalysis rather than fit several univariate models. Unfortunately in\nundergrad I only took one course in univarate analysis.\n\nI was wondering what some good books are on the subject of multivariate\ntime series analysis? Especially any that use R over other languages.\n\nThanks,\n\n-Max\n\n_________________________________________\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Everyone!\n\nI do some forecasts for my job and recently have started to realize that\nI may be able to make better forecasts if I look at multivariate\nanalysis rather than fit several univariate mode",
       "thread_id": "thread-c4ecb3632b17",
       "thread_depth": 0,
-      "month": "2007-12"
+      "month": "2007-12",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071227/d0c81e24/attachment.pl"
+      ]
     },
     {
       "id": "msg-b7865444dfad",
@@ -1229,11 +1271,14 @@
       "subject_clean": "ljung-box tests in arma and garch models",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071227/1743241f/attachment.pl",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071227/1743241f/attachment.pl",
+      "body_plain": "Hi,\n\nI would like to ask/clarify how should degrees of freedom (and p-values) for the Ljung-Box Q-statistics in arma and garch models be computed. The reason for the question is that I have encountered two different approaches. Let us say we have an arma(p,q) garch(m,n) model. The two approaches are as follows:\n\n1) In R and fArma and fGarch packages, the arma and garch orders are disregarded in the computation of degrees of freedom for the Ljung-Box (LB) Q-statistics. In other words, regardless of p, q, m and n, the LB Q-statistic computed from the first x autocorrelations of (squared) standardised residuals has x degrees of freedom. Given the statistic and degrees of freedom, the corresponding p-value is computed.\n\n2) In EViews, TSP and other statistical software, the LB Q-statistic computed from the first x autocorrelations of standardised residuals has (x - (p+q)) degrees of freedom. Degrees of freedom and p-values are not computed for the first (p+q) LB Q-statistics. A similar method is applied to squared standardised residuals: the LB Q-statistic computed from the first x autocorrelations\nof squared standardised residuals has (x - (m+n)) degrees of freedom.\nDegrees of freedom and p-values are not computed for the first (m+n) LB\nQ-statistics.\n\nI think the second approach is better because the first (p+q) orders in standardised residuals and the first (m+n) orders in squared standardised residuals should not exhibit any pattern and higher orders should be checked for any remaining arma and garch structures. Am I right or wrong?\n\nThanks for answers and suggestions.\n\nBest regards\n\nMichal Miklovic\n\n\n\n\n\n      ____________________________________________________________________________________\nBe a better friend, newshound, and \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI would like to ask/clarify how should degrees of freedom (and p-values) for the Ljung-Box Q-statistics in arma and garch models be computed. The reason for the question is that I have encountere",
       "thread_id": "thread-b7865444dfad",
       "thread_depth": 0,
-      "month": "2007-12"
+      "month": "2007-12",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071227/1743241f/attachment.pl"
+      ]
     },
     {
       "id": "msg-88aced9f3d49",
@@ -1348,11 +1393,14 @@
       "subject_clean": "ljung-box tests in arma and garch models",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071230/7c15c383/attachment.pl",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nUrl: https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071230/7c15c383/attachment.pl",
+      "body_plain": "Hi,\n\nFirst, I would like to thank Patrick and Spencer for their comments and suggestions.\n\nSecond,\nI did a literature search on the computation of degrees of freedom for\nthe Ljung-Box Q-statistic when testing residuals from an arma model. I\ndo not mean an optimum number of lags for the ACF or the LB Q-statistic\nbut I tried to find an answer to the question: how do I determine\ndegrees of freedom for a given LB Q-statistic from an arma(p,q) model?\nEnders\nstates the following in Applied Econometric Time Series (2nd edition,\n2004, Wiley & Sons) on pp. 68 - 69: \"The Box-Pierce and Ljung-Box\nQ-statistics also serve as a check to see if the residuals from an\nestimated arma(p,q) model behave as a white noise process. However,\nwhen the s correlations from an estimated arma(p,q) model are formed,\nthe degrees of freedom are reduced by the number of estimated\ncoefficients. Hence, using the residuals of an arma(p,q) model, Q has a\nchi-squared [distribution] with s - p - q degrees of freedom.\"\nTsay\nstates the following in Analysis of Financial Time Series (1st edition,\n2002, Wiley & Sons) on p. 52: \"The Ljung-Box statistics of the\nresiduals can be used to check the adequacy of a fitted model. If the\nmodel is correctly specified, then Q(m) follows asymptotically a\nchi-squared distribution with m - g degrees of freedom, where g denotes\nthe number of parameters used in the model.\"\n\nThe two above\nquotations are in line with mine and Spencer's opinions. Considering\nwhat the books say, I would suggest that the computation of the degrees\nof freedom and, consequently, p-values could be altered in the next\nrelease of fArma and fGarch.\n\nI did not find any exact\nformulations concerning the computation of degrees of freedom for the\nLB Q-statistics when testing squared standardised residuals from an\nestimated garch model.\n\nBest regards\n\nMichal Miklovic\n\n\n\n----- Original Message ----\nFrom: Patrick Burns <patrick at burns-stat.com>\nTo: Spencer Graves <spencer.graves at pdf.com>\nCc: michal miklovic <mmiklovic at yahoo.com>; r-sig-finance at stat.math.ethz.ch\nSent: Friday, December 28, 2007 11:21:33 AM\nSubject: Re: [R-SIG-Finance] ljung-box tests in arma and garch models\n\n\nI heartily agree with Spencer that a simulation is the\nway to answer the question.  However, my intuition is\nthe opposite of Spencer's regarding what the answer\nwill be.\n\nThe Burns Statistics working paper on Ljung-Box tests\nmakes it clear that using rank tests for testing the garch\nadequacy will be much more important than messing with\nthe degrees of freedom.\n\n\nPatrick Burns\npatrick at burns-stat.com\n+44 (0)20 8525 0696\nhttp://www.burns-stat.com\n(home of S Poetry and \"A Guide for the Unwilling S User\")\n\nSpencer Graves wrote:\n\n>Dear Michal:\n>\n>      The best way to check something like this is to do a simulation,\n>tailored to your application.  If you do such, I'd like to hear the\n>results.\n>\n>      Absent that, my gut reaction is to agree with you.  The\n chi-square\n>distribution with k degrees of freedom is defined as distribution of\n the\n>sum of squares of k independent N(0, 1) variates\n>(http://en.wikipedia.org/wiki/Chi-square_distribution).  In 1900, Karl\n>Pearson published \"On the criterion that a given system of deviations\n>from the probable in the case of a correlated system of variables is\n>such that it can be reasonably supposed to have arisen from random\n>sampling\", Philosophical magazine, t.50\n>(http://fr.wikipedia.org/wiki/Karl_Pearson).  In this test, Pearson\n>assumed that the sums of squares of k N(0, 1) variates, independent or\n>not, would follow a chi-square(k).  R. A. Fisher determined that the\n>number of degrees of freedom should be reduced by the number of\n>parameters estimated\n>(http://www.mrs.umn.edu/~sungurea/introstat/history/w98/RAFisher.html).\n>This led to a feud that continued after Pearson died.\n>\n>      The \"Box-Pierce\" and \"Ljung-Box\" tests are both available in\n>'Box.test{stats}' and discussed in Tsay (2005) Analysis of \"financial\n>Time Series (Wiley, p. 27), which includes a comment that, \"Simulation\n>studies suggest that the choice of\" the number of lags included in the\n>Ljung-Box statistic should be roughly log(number of observations) for\n>\"better power performance.\"\n>\n>       Based on this, the \"FinTS\" package includes a function \"ARIMA\"\n>that calls \"arima\", computes Box.test on the residuals and adjusts the\n>number of degrees of freedom to match the examples in Tsay (2005).  I\n>haven't looked at this in depth, but it would seem to conform with\n>Eviews, etc., and not with fArma, etc., as you mentioned.\n>\n>      I haven't done a substantive literature search on this, but if\n>anyone has evidence bearing on this issue beyond the original\n Ljung-Box\n>paper, I'd like to know.\n>\n>      Hope this helps.\n>      Spencer Graves\n>\n>michal miklovic wrote:\n>  \n>\n>> Hi,\n>>\n>>I would like to ask/clarify how should degrees of freedom (and\n p-values) for the Ljung-Box Q-statistics in arma and garch models be\n computed. The reason for the question is that I have encountered two different\n approaches. Let us say we have an arma(p,q) garch(m,n) model. The two\n approaches are as follows:\n>>\n>>1) In R and fArma and fGarch packages, the arma and garch orders are\n disregarded in the computation of degrees of freedom for the Ljung-Box\n (LB) Q-statistics. In other words, regardless of p, q, m and n, the LB\n Q-statistic computed from the first x autocorrelations of (squared)\n standardised residuals has x degrees of freedom. Given the statistic and\n degrees of freedom, the corresponding p-value is computed.\n>>\n>>2) In EViews, TSP and other statistical software, the LB Q-statistic\n computed from the first x autocorrelations of standardised residuals\n has (x - (p+q)) degrees of freedom. Degrees of freedom and p-values are\n not computed for the first (p+q) LB Q-statistics. A similar method is\n applied to squared standardised residuals: the LB Q-statistic computed\n from the first x autocorrelations\n>>of squared standardised residuals has (x - (m+n)) degrees of freedom.\n>>Degrees of freedom and p-values are not computed for the first (m+n)\n LB\n>>Q-statistics.\n>>\n>>I think the second approach is better because the first (p+q) orders\n in standardised residuals and the first (m+n) orders in squared\n standardised residuals should not exhibit any pattern and higher orders should\n be checked for any remaining arma and garch structures. Am I right or\n wrong?\n>>\n>>Thanks for answers and suggestions.\n>>\n>>Best regards\n>>\n>>Michal Miklovic\n>>\n>>\n>>\n>>\n>>\n>>    \n  ____________________________________________________________________________________\n>>Be a better friend, newshound, and \n>>\n>>\n>>    [[alternative HTML version deleted]]\n>>\n>>_______________________________________________\n>>R-SIG-Finance at stat.math.ethz.ch mailing list\n>>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>-- Subscriber-posting only. \n>>-- If you want to post, subscribe first.\n>>\n>>    \n>>\n>\n>_______________________________________________\n>R-SIG-Finance at stat.math.ethz.ch mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>-- Subscriber-posting only. \n>-- If you want to post, subscribe first.\n>\n>\n>  \n>\n\n\n\n\n\n\n      ____________________________________________________________________________________\nNever miss a thing.  Make Yahoo your home page. \n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nFirst, I would like to thank Patrick and Spencer for their comments and suggestions.\n\nSecond,\nI did a literature search on the computation of degrees of freedom for\nthe Ljung-Box Q-statistic when",
       "thread_id": "thread-7ff70594fd09",
       "thread_depth": 0,
-      "month": "2007-12"
+      "month": "2007-12",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20071230/7c15c383/attachment.pl"
+      ]
     },
     {
       "id": "msg-2a72490ed28d",

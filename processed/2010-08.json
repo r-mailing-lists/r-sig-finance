@@ -29,11 +29,14 @@
       "subject_clean": "help in quantstrat",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100801/08fa84ee/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100801/08fa84ee/attachment.pl>",
+      "body_plain": "Hi\n\nI have a function myTTR ( which calculates the 5D SMA) given a price series.\nI am trying to use add.indicator, add.signal and add.rule to this function.\nThe argument of myTTR is a price series, say ,'IBM'. So I have myTTR(IBM)\nwhich returns a set of 1s,0s and -1s based on when the 5D SMA crossover has\nhappened etc. I have been trying to use this as follows but I keep getting\nan error after applyStrategy. Can someone help please?\n\nHere is the code:\n\nrequire(quantstrat)\ntry(rm(\"order_book.SMA5D\",pos=.strategy),silent=TRUE)\ntry(rm(\"account.SMA5D\",\"portfolio.SMA5D\",pos=.blotter),silent=TRUE)\ntry(rm(\"account.st\",\"portfolio.st\n\",\"stock.str\",\"s\",\"initDate\",\"initEq\",'start_t','end_t'),silent=TRUE)\n\nstock.str='IBM' # what are we trying it on\ncurrency('USD')\nstock(stock.str,currency='USD',multiplier=1)\n\ninitDate='2006-12-31'\ninitEq=1000000\nportfolio.st='SMA5D'\naccount.st='SMA5D'\n\ninitPortf(portfolio.st,symbols=stock.str, initDate=initDate)\ninitAcct(account.st,portfolios=portfolio.st, initDate=initDate)\ninitOrders(portfolio=portfolio.st,initDate=initDate)\n\n\nstratSMA5D <- strategy(portfolio.st)\n\nstratSMA5D <- add.indicator(strategy = stratSMA5D, name = \"myTTR\", arguments\n= list(x=quote(mktdata)))\n\nstratSMA5D <- add.signal(strategy = stratSMA5D,name=\"sigThreshold\",arguments\n=\nlist(data=quote(mktdata),column=\"signal\",relationship=\"gt\",threshold=0,cross=TRUE),label=\"signal.gt.zero\")\nstratSMA5D <- add.signal(strategy = stratSMA5D,name=\"sigThreshold\",arguments\n=\nlist(data=quote(mktdata),column=\"signal\",relationship=\"lt\",threshold=0,cross=TRUE),label=\"signal.lt.zero\")\n\nstratSMA5D <- add.rule(strategy = stratSMA5D,name='ruleSignal', arguments =\nlist(data=quote(mktdata),sigcol=\"signal.gt.zero\",sigval=TRUE, orderqty=100,\nordertype='market', orderside='long', threshold=NULL),type='enter')\nstratSMA5D <- add.rule(strategy = stratSMA5D,name='ruleSignal', arguments =\nlist(data=quote(mktdata),sigcol=\"signal.gt.zero\",sigval=TRUE, orderqty=-100,\nordertype='stoplimit', orderside='long',\nthreshold=1.1,tmult=TRUE),type='risk')\n\ngetSymbols(stock.str,from=initDate)\nstart_t<-Sys.time()\n*out<-try(applyStrategy(strategy=stratSMA5D , portfolios=portfolio.st))*\nend_t<-Sys.time()\nend_t-start_t\nupdatePortf(Portfolio='SMA5D',Dates=paste('::',as.Date(Sys.time()),sep=''))\nchart.Posn(Portfolio='SMA5D',Symbol=stock.str)\n\nout<-try(applyStrategy(strategy=stratSMA5D , portfolios=portfolio.st))\nError in is.array(x) : 'x' is missing\n\n\nMany thanks for  your kind assistance.\n-- \n'Raghu'\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi\n\nI have a function myTTR ( which calculates the 5D SMA) given a price series.\nI am trying to use add.indicator, add.signal and add.rule to this function.\nThe argument of myTTR is a price series, sa",
       "thread_id": "thread-e5870ba06c58",
       "thread_depth": 0,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100801/08fa84ee/attachment.pl"
+      ]
     },
     {
       "id": "msg-09cc9fe4a4d0",
@@ -45,11 +48,14 @@
       "subject_clean": "duan model  - garch option pricing",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100802/cbb2d313/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100802/cbb2d313/attachment.pl>",
+      "body_plain": "I am looking for the Duan model in R....\nthe workpaper is Duan (1995) and the title is The Garch Option Pricing. \n\nThanks a lot see u soon bye. \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I am looking for the Duan model in R....\nthe workpaper is Duan (1995) and the title is The Garch Option Pricing. \n\nThanks a lot see u soon bye. \n\t[[alternative HTML version deleted]]",
       "thread_id": "thread-09cc9fe4a4d0",
       "thread_depth": 0,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100802/cbb2d313/attachment.pl"
+      ]
     },
     {
       "id": "msg-e3be1012695e",
@@ -127,11 +133,14 @@
       "subject_clean": "Import data from dynamically changing spreadsheet",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100802/0459eefa/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100802/0459eefa/attachment.pl>",
+      "body_plain": "How can I import data to R from a dynamically(real time) changing excel\nsheet.\n\nOn Mon, Aug 2, 2010 at 5:00 AM, <r-sig-finance-request at stat.math.ethz.ch>wrote:\n\n> Send R-SIG-Finance mailing list submissions to\n>        r-sig-finance at stat.math.ethz.ch\n>\n> To subscribe or unsubscribe via the World Wide Web, visit\n>        https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> or, via email, send a message with subject or body 'help' to\n>        r-sig-finance-request at stat.math.ethz.ch\n>\n> You can reach the person managing the list at\n>        r-sig-finance-owner at stat.math.ethz.ch\n>\n> When replying, please edit your Subject line so it is more specific\n> than \"Re: Contents of R-SIG-Finance digest...\"\n>\n>\n> Today's Topics:\n>\n>   1. BCa-intervals not defined in boot.ci() for tsboot()\n>      (Andreas Klein)\n>   2. help in quantstrat (Raghu)\n>\n>\n> ----------------------------------------------------------------------\n>\n> Message: 1\n> Date: Sun, 1 Aug 2010 15:35:01 +0000 (GMT)\n> From: Andreas Klein <klein82517 at yahoo.de>\n> To: r-sig-finance at stat.math.ethz.ch\n> Subject: [R-SIG-Finance] BCa-intervals not defined in boot.ci() for\n>        tsboot()\n> Message-ID: <433898.6951.qm at web24206.mail.ird.yahoo.com>\n> Content-Type: text/plain; charset=utf-8\n>\n> Hello everybody,\n>\n> when I create an object of class boot with the function tsboot() from the\n> package boot and try to compute several types of confidence intervals with\n> boot.ci(\"object of class boot created with tsboot\") I obtain the warning\n> message, that \"BCa-intervals are not defined for time-series bootstraps\".\n>\n> Does this statement hold in general? Or is it just not defined in boot.ci(),\n> because I saw several applications of the BCa-methodology in the time-series\n> context in the literature?\n>\n> So maybe someone can end my confusion and give me an advice, if the\n> BCa-methodology can be used also with time-series data, but is just not\n> implemented in the boot.ci()-function...\n>\n> Regards,\n> Andy.\n>\n>\n>\n>\n>\n> ------------------------------\n>\n> Message: 2\n> Date: Sun, 1 Aug 2010 21:42:31 +0100\n> From: Raghu <r.raghuraman at gmail.com>\n> To: R-Finance <r-sig-finance at stat.math.ethz.ch>\n> Subject: [R-SIG-Finance] help in quantstrat\n> Message-ID:\n>        <AANLkTik9p3qa57=OZyt6QUsUbOxgLiqjDkz0gr8pMouZ at mail.gmail.com>\n> Content-Type: text/plain\n>\n> Hi\n>\n> I have a function myTTR ( which calculates the 5D SMA) given a price\n> series.\n> I am trying to use add.indicator, add.signal and add.rule to this function.\n> The argument of myTTR is a price series, say ,'IBM'. So I have myTTR(IBM)\n> which returns a set of 1s,0s and -1s based on when the 5D SMA crossover has\n> happened etc. I have been trying to use this as follows but I keep getting\n> an error after applyStrategy. Can someone help please?\n>\n> Here is the code:\n>\n> require(quantstrat)\n> try(rm(\"order_book.SMA5D\",pos=.strategy),silent=TRUE)\n> try(rm(\"account.SMA5D\",\"portfolio.SMA5D\",pos=.blotter),silent=TRUE)\n> try(rm(\"account.st\",\"portfolio.st\n> \",\"stock.str\",\"s\",\"initDate\",\"initEq\",'start_t','end_t'),silent=TRUE)\n>\n> stock.str='IBM' # what are we trying it on\n> currency('USD')\n> stock(stock.str,currency='USD',multiplier=1)\n>\n> initDate='2006-12-31'\n> initEq=1000000\n> portfolio.st='SMA5D'\n> account.st='SMA5D'\n>\n> initPortf(portfolio.st,symbols=stock.str, initDate=initDate)\n> initAcct(account.st,portfolios=portfolio.st, initDate=initDate)\n> initOrders(portfolio=portfolio.st,initDate=initDate)\n>\n>\n> stratSMA5D <- strategy(portfolio.st)\n>\n> stratSMA5D <- add.indicator(strategy = stratSMA5D, name = \"myTTR\",\n> arguments\n> = list(x=quote(mktdata)))\n>\n> stratSMA5D <- add.signal(strategy =\n> stratSMA5D,name=\"sigThreshold\",arguments\n> =\n>\n> list(data=quote(mktdata),column=\"signal\",relationship=\"gt\",threshold=0,cross=TRUE),label=\"signal.gt.zero\")\n> stratSMA5D <- add.signal(strategy =\n> stratSMA5D,name=\"sigThreshold\",arguments\n> =\n>\n> list(data=quote(mktdata),column=\"signal\",relationship=\"lt\",threshold=0,cross=TRUE),label=\"signal.lt.zero\")\n>\n> stratSMA5D <- add.rule(strategy = stratSMA5D,name='ruleSignal', arguments =\n> list(data=quote(mktdata),sigcol=\"signal.gt.zero\",sigval=TRUE, orderqty=100,\n> ordertype='market', orderside='long', threshold=NULL),type='enter')\n> stratSMA5D <- add.rule(strategy = stratSMA5D,name='ruleSignal', arguments =\n> list(data=quote(mktdata),sigcol=\"signal.gt.zero\",sigval=TRUE,\n> orderqty=-100,\n> ordertype='stoplimit', orderside='long',\n> threshold=1.1,tmult=TRUE),type='risk')\n>\n> getSymbols(stock.str,from=initDate)\n> start_t<-Sys.time()\n> *out<-try(applyStrategy(strategy=stratSMA5D , portfolios=portfolio.st))*\n> end_t<-Sys.time()\n> end_t-start_t\n> updatePortf(Portfolio='SMA5D',Dates=paste('::',as.Date(Sys.time()),sep=''))\n> chart.Posn(Portfolio='SMA5D',Symbol=stock.str)\n>\n> out<-try(applyStrategy(strategy=stratSMA5D , portfolios=portfolio.st))\n> Error in is.array(x) : 'x' is missing\n>\n>\n> Many thanks for  your kind assistance.\n> --\n> 'Raghu'\n>\n>        [[alternative HTML version deleted]]\n>\n>\n>\n> ------------------------------\n>\n> _______________________________________________\n> R-SIG-Finance mailing list\n> R-SIG-Finance at stat.math.ethz.ch\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>\n> End of R-SIG-Finance Digest, Vol 75, Issue 1\n> ********************************************\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "How can I import data to R from a dynamically(real time) changing excel\nsheet.\n\nOn Mon, Aug 2, 2010 at 5:00 AM, <r-sig-finance-request at stat.math.ethz.ch>wrote:\n\n> Send R-SIG-Finance mailing list su",
       "thread_id": "thread-4c2287b131c1",
       "thread_depth": 0,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100802/0459eefa/attachment.pl"
+      ]
     },
     {
       "id": "msg-b1839884c28c",
@@ -164,11 +173,14 @@
         "<AD1E438A-EEC5-4A90-94DC-450D4862BE20@gmail.com>",
         "<AANLkTinCfKvD+JsrUB9KGPyEQqU-XVhF2gDc0pCkHu96@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100802/47e51720/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100802/47e51720/attachment.pl>",
+      "body_plain": "Thanks for your posting, Gabor. I liked your creative use of zoo-related \nfunctions, and I learned something from your example.\n\nThe example wouldn't run on my machine, unfortunately, so I made some changes. \nIf other people have difficulties, too, perhaps my version will work for them. \n(I also made some cosmetic changes.) Here it is:\n\nlibrary(zoo)\n\n# Create synthetic data\nDF <- data.frame(date = as.Date(0:999), value = cumsum(rnorm(1000)))\n\n# Create columns for year and\n# julian day-of-the-year (1st, 2nd, ..., Nth day of the year)\nDF$year <- cut(DF$date, \"year\")\nDF$jul <- ave(DF$value, factor(DF$year), FUN = seq)\n\n# Create a list of vectors: each vector contains the values for one year\nf <- factor(DF$year)\nvalues <- split(DF$value, f)\n\n# Create a list of vector: each vector contains the julian days for one year\njulians <- split(DF$jul, f)\n\n# Combine each pair of vectors (values and days), creating zoo objects\nzz <- lapply(seq_along(values), function(i) zoo(values[[i]], julians[[i]]))\nz <- do.call(merge.zoo, zz)\ncolnames(z) <- substr(levels(f),1,4)\n\n# Plot the zoo objects:\n#    Use plot.type=\"single\" to have all columns in the same frame\n#    Use plot.type=\"multiple\" to get separate plots\ncolors <- 1:ncol(z)\nplot(z, screens=1, col = colors, plot.type=\"single\")\nlegend(\"bottomright\", leg = substr(levels(f), 1, 4), fill = colors)\n\n\nPaul Teetor, Elgin, IL  USA\nhttp://quanttrader.info/public\n\n\n\n\n________________________________\nFrom: Gabor Grothendieck <ggrothendieck at gmail.com>\nTo: SNV Krishna <snvk4u at gmail.com>\nCc: \"r-sig-finance at stat.math.ethz.ch\" <r-sig-finance at stat.math.ethz.ch>\nSent: Mon, August 2, 2010 11:31:43 AM\nSubject: Re: [R-SIG-Finance] Seasonal plot of daily data\n\nOn Mon, Aug 2, 2010 at 11:28 AM, SNV Krishna <snvk4u at gmail.com> wrote:\n> Hi All,\n>\n> I have daily closing prices of a particular commodity. I would like to generate \n>annual plot of the series so as to get a visual feel of the seasonality across \n>years.\n>\n> For ex I have crude oil daily price data since 2002. I would like to have \n>multiple lines on a single plot, each line represents each year and plotted \n>against day of year on x-axis. I tried reading the data as zoo or xts objects, \n>but unable to plot multiple series on a single plot. Can any one help me out in \n>this regard?\n>\n> Thanks in advance for the help, rgds\n>\n\nTry this:\n\nlibrary(zoo)\n\n# input data\nDF <- data.frame(date = as.Date(0:999), value = 1:1000)\n\n# create columns for year and\n# julian day (1st, 2nd, ... day of the year)\n\nDF$year <- cut(DF$date, \"year\")\nDF$jul <- ave(DF$value, DF$year, FUN = seq_along)\n\n# split into 1 col per year. year is col 2. index is col 3.\nz <- read.zoo(DF[-1], index = 3, split = 2)\n\n# plot - screen = 1 causes all columns to be in same frame\ncolors <- 1:ncol(z)\nplot(z, screen = 1, col = colors)\nlegend(\"bottomright\", leg = substr(levels(DF$year), 1, 4), fill = colors)\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should \ngo.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thanks for your posting, Gabor. I liked your creative use of zoo-related \nfunctions, and I learned something from your example.\n\nThe example wouldn't run on my machine, unfortunately, so I made some c",
       "thread_id": "thread-e3be1012695e",
       "thread_depth": 2,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100802/47e51720/attachment.pl"
+      ]
     },
     {
       "id": "msg-138be827a40f",
@@ -294,11 +306,14 @@
       "subject_clean": "Futures Roll?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100804/df988ea5/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100804/df988ea5/attachment.pl>",
+      "body_plain": "guRus\n\nIs there any function to get a continuous stream of futures time series when\nthe inputs are a series of contracts? specifically if the contracts are x1,\nx2, x3 etc, then the output X should be defined as x1 which gets rolled over\nto x2 at a predetermined date (say n days before the expiry of x1) and then\nx2 to x3 etc.\nx= x1 (upto date1) then x=x2(upto date2).......\n\nBloomberg's GFUT does something similar.\n\nAlso Is there a function to check an expiry date given a logic, say every\nthird wednesday of the month prior to the futures month (options expiry)\netc?\n\nThx\n-- \n'Raghu'\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "guRus\n\nIs there any function to get a continuous stream of futures time series when\nthe inputs are a series of contracts? specifically if the contracts are x1,\nx2, x3 etc, then the output X should be ",
       "thread_id": "thread-04a9368e29e9",
       "thread_depth": 0,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100804/df988ea5/attachment.pl"
+      ]
     },
     {
       "id": "msg-c574ccde6def",
@@ -352,11 +367,14 @@
       "references": [
         "<AANLkTimNPFPD=ui8wCAgLjxx9RVh1nrJmYR=52FwR87k@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100805/1c2e224c/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100805/1c2e224c/attachment.pl>",
+      "body_plain": "Hi Raghu,\n\nMy tradesys package has two functions--splice and splooth--that were\nwritten with this very task in mind. Download the package from \n\nhttps://r-forge.r-project.org/projects/tradesys/\n\nand read the documentation. Whilst the package is still in alpha stage,\nthese functions ship with unit tests. I use them extensively myself for\nconstructing smoothed generic futures series' from a postgresql database\nconsisting of thousands of tables of individual contract expiries (eg,\nTYM0, TYU0, ...). They work, and can be verified against bloomberg's\ngenerics. \n\nAs for expiry dates, the package timeDate contains most of the logic you\nneed. For example, \n\n> library(timeDate)\n> timeNthNdayInMonth(timeFirstDayInMonth(Sys.Date()), nday = 3, nth = 3)\nGMT\n[1] [2010-08-18]\n>\n\ncalculates the third Wednesday of the current month. \n\nRobert\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch\n[mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Raghu\nSent: 04 August 2010 21:46\nTo: R-Finance\nSubject: [R-SIG-Finance] Futures Roll?\n\nguRus\n\nIs there any function to get a continuous stream of futures time series\nwhen\nthe inputs are a series of contracts? specifically if the contracts are\nx1,\nx2, x3 etc, then the output X should be defined as x1 which gets rolled\nover\nto x2 at a predetermined date (say n days before the expiry of x1) and\nthen\nx2 to x3 etc.\nx= x1 (upto date1) then x=x2(upto date2).......\n\nBloomberg's GFUT does something similar.\n\nAlso Is there a function to check an expiry date given a logic, say\nevery\nthird wednesday of the month prior to the futures month (options expiry)\netc?\n\nThx\n-- \n'Raghu'\n\n\t[[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions\nshould go.\n---------------------------------------------------------------------------------------\nThis email message has been delivered safely and archived online by Mimecast.\nA true SaaS solution, Mimecast provides the security, continuity and archiving for millions of emails, across thousands of customers every day.\nFor more information please visit http://www.mimecast.co.uk \n---------------------------------------------------------------------------------------\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Raghu,\n\nMy tradesys package has two functions--splice and splooth--that were\nwritten with this very task in mind. Download the package from \n\nhttps://r-forge.r-project.org/projects/tradesys/\n\nand r",
       "thread_id": "thread-04a9368e29e9",
       "thread_depth": 1,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100805/1c2e224c/attachment.pl"
+      ]
     },
     {
       "id": "msg-9fcb0640c0b3",
@@ -423,11 +441,14 @@
       "subject_clean": "calculating GBSVolatility using apply?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100807/ad51d881/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100807/ad51d881/attachment.pl>",
+      "body_plain": "Hi\n\nI am trying to find the implied vols for the following structure using apply\nfunction. As I am relatively new to R and learning to apply apply, could\nsomeone please tell me how do I apply apply in this case? I want to try to\nfind out the IVs using vectorisation only and thus I want to understand how\napply works in this case.\n\nstructure(list(EXPIRY_DT = structure(c(1L, 1L, 1L, 1L, 1L, 1L\n), .Label = \"26-Aug-10\", class = \"factor\"), STRIKE_PR = c(9600L,\n9700L, 9800L, 9900L, 10000L, 10100L), OPTION_TYP = structure(c(1L,\n1L, 1L, 1L, 1L, 1L), .Label = \"CE\", class = \"factor\"), OPEN = c(866.55,\n783.1, 575, 0, 470, 355), HIGH = c(866.55, 783.1, 575, 0, 470,\n360), LOW = c(866.55, 742.25, 575, 0, 420, 343), CLOSE = c(866.55,\n742.25, 575, 493, 425, 360), SETTLE_PR = c(866.55, 742.25, 575,\n547, 425, 360), SPOT = c(9900L, 9900L, 9900L, 9900L, 9900L, 9900L\n)), .Names = c(\"EXPIRY_DT\", \"STRIKE_PR\", \"OPTION_TYP\", \"OPEN\",\n\"HIGH\", \"LOW\", \"CLOSE\", \"SETTLE_PR\", \"SPOT\"), class = \"data.frame\",\nrow.names = c(NA,\n-6L))\nAssume r=0.1 and cost-of-carry=0.1. All options are Calls (European),Exp =\n26th Aug 2010.\n\nMany thanks\nRaghu\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi\n\nI am trying to find the implied vols for the following structure using apply\nfunction. As I am relatively new to R and learning to apply apply, could\nsomeone please tell me how do I apply apply in",
       "thread_id": "thread-cd4465d5abf9",
       "thread_depth": 0,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100807/ad51d881/attachment.pl"
+      ]
     },
     {
       "id": "msg-84d9a93c7844",
@@ -473,11 +494,14 @@
       "subject_clean": "question in quantmod package",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100809/6e155429/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100809/6e155429/attachment.pl>",
+      "body_plain": "Hi\n\nI am trying to pass a stock's name as an argument to a function and then I\nam trying to use getSymbols to get data. For example,\nstock=\"AAPL\"\nstock = getSymbols(stock) returns \"AAPL\"\nBut, if I do an OHLC(stock) it cribs. Also colnames(stock) returns NULL as\nstock is still considered a string rather than an AAPL. How do I overcome\nthis problem pls?\nBasically I want the variable stock to exactly mimic the returned object of\ngetSymbols().\n\nThanks\nRaghu\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi\n\nI am trying to pass a stock's name as an argument to a function and then I\nam trying to use getSymbols to get data. For example,\nstock=\"AAPL\"\nstock = getSymbols(stock) returns \"AAPL\"\nBut, if I do ",
       "thread_id": "thread-1eb9c28eb149",
       "thread_depth": 0,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100809/6e155429/attachment.pl"
+      ]
     },
     {
       "id": "msg-637f79c74ec2",
@@ -510,11 +534,14 @@
         "<AANLkTinZGywdU4fJEOoRHhU67LGFvni9o2bjj-g45Zpd@mail.gmail.com>",
         "<4C600B14.1010602@cedrickjohnson.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100809/7f069f7c/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100809/7f069f7c/attachment.pl>",
+      "body_plain": "Thank you all. Both the get and the auto.assign=FALSE methods work.\n\nOn Mon, Aug 9, 2010 at 3:05 PM, Johnson, Cedrick W. <\ncedrick at cedrickjohnson.com> wrote:\n\n> you could try:\n>\n> OHLC(get(stock)) and colnames(get(stock))\n>\n> hth\n> -c\n>\n>\n> On 08/09/2010 06:48 AM, Raghuraman Ramachandran wrote:\n>\n>>  Hi\n>>\n>> I am trying to pass a stock's name as an argument to a function and then I\n>> am trying to use getSymbols to get data. For example,\n>> stock=\"AAPL\"\n>> stock = getSymbols(stock) returns \"AAPL\"\n>> But, if I do an OHLC(stock) it cribs. Also colnames(stock) returns NULL as\n>> stock is still considered a string rather than an AAPL. How do I overcome\n>> this problem pls?\n>> Basically I want the variable stock to exactly mimic the returned object\n>> of\n>> getSymbols().\n>>\n>> Thanks\n>> Raghu\n>>\n>>        [[alternative HTML version deleted]]\n>>\n>> _______________________________________________\n>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thank you all. Both the get and the auto.assign=FALSE methods work.\n\nOn Mon, Aug 9, 2010 at 3:05 PM, Johnson, Cedrick W. <\ncedrick at cedrickjohnson.com> wrote:\n\n> you could try:\n>\n> OHLC(get(stock)) ",
       "thread_id": "thread-1eb9c28eb149",
       "thread_depth": 2,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100809/7f069f7c/attachment.pl"
+      ]
     },
     {
       "id": "msg-b6dae1461d11",
@@ -542,11 +569,14 @@
       "subject_clean": "New 3 course online certificate in computational finance using R",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100811/6035ec4f/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100811/6035ec4f/attachment.pl>",
+      "body_plain": "I am very excited to announce that the Applied Mathematics Department, in\ncooperation with the Departments of Economics and Statistics, at the\nUniversity of Washington is offering a new online three course computational\nfinance certificate. This certificate was developed by Doug Martin and\nmyself and the courses are built around using R for computational finance.\nThe courses, offered one per quarter and summarized in detail below, are\nInvestment Science, R Computing for Computational Finance, and Portfolio\nConstruction and Risk Management.  All three courses are required for the\ncertificate but can also be taken individually. Full details, application\nmaterials and pricing information can be found at\nhttp://www.pce.uw.edu/prog.aspx?id=5508  .  A summary of the certificate\nprogram is given below.\n\n \n\nNEW ONLINE COMPUTATIONAL FINANCE CERTIFICATE\n\n \n\nFall, Winter, and Spring Quarters 2010-11\n\n \n\nOverview\n\n \n\nThis new online certificate program is offered by the Department of Applied\nMathematics in partnership with the departments of Statistics and Economics\nand begins in fall quarter 2010. The certificate is awarded to students who\nsuccessfully complete the online certificate curriculum consisting of the\nfollowing three courses: \n\n \n\nCourse Title\nNumber               Quarter\n\nInvestment Science\nSTAT 591              Fall\n\nR Computing for Computational Finance               AMATH 500        Winter\n\nPortfolio Construction and Risk Management     STAT 549              Spring\n\n \n\nFor course details see the Online Courses section below. Each of the above\ncourses may be taken on a stand-alone basis subject to instructor approval.\n\n \n\nBenefits\n\n \n\nStudents will benefit from this certificate program by acquiring the tools\nto effectively manage financial investments, supported by the use and\ndevelopment of R programs, and will be positioned to: (a) apply for an entry\nlevel position in a quantitative asset management organization such as a\nlong-only quantitative portfolio management group, an absolute returns hedge\nfund, a fund-of-hedge funds, an endowment, or a pension, (b) transfer to a\nquantitative asset management job position in your current organization, (c)\nmanage your own investment using quantitative portfolio construction and\nrisk management methods, (d) continue on to a full MS degree in quantitative\nfinance in preparation for career advancement in the quantitative asset\nmanagement field. Certificate credits earned may be applied to an MS in\nComputational Finance and Risk Management degree at the University of\nWashington currently in the planning stage.\n\n \n\nCurriculum Design\n\n \n\nThe Online Certificate curriculum was designed to provide the strongest\npossible three-course introductory education in Computational Finance that\nbalances theoretical foundations, powerful modern computing tools and\ninvestment portfolio management. The first course, Investment Science,\nprovides the financial, mathematical and statistical foundations needed for\nsound investment decision making by covering three fundamental topic areas:\n(a) interest rates and fixed income, (b) portfolio and factor model theory,\n(c) futures, forwards and options. The quantitative level of this course is\nintermediate between that of an MBA investments course and that of Ph.D.\nlevel finance course. The second course, R Programming for Computational\nFinance, leverages: (a) the overall strengths of the open source R\nprogramming language for statistical modeling and data analysis as applied\nto finance, (b) the rapid growth in use of R in quantitative finance, and\n(c) rapid emergence of new R \"packages\" for both conventional and cutting\nedge financial analytics. Finally, Portfolio Construction and Risk\nManagement, builds on the foundations of the first two courses to provide a\nvery modern approach to portfolio management that covers both conventional\nmean-variance based portfolio methods and new cutting edge methods of\nportfolio optimization and risk budgeting that take into account fat-tailed\nskewed returns distributions. It also covers other modern approaches such as\nvolatility clustering and Bayesian methods and deals with practical\noptimization such as weights constraints, turnover cost control, and\nliquidity risk. The course involves hands-on computing and performance\ncomparisons using historical asset returns data from multiple financial data\nservice providers. Course outlines are provided at the above course title\nlinks.\n\n \n\nBackground\n\n \n\nThis online certificate program is an out-growth of a successful Graduate\nCertificate in Computational Finance program started in 2004 for resident\nPh.D. students in science and engineering. The program was founded by\nProfessors Doug Martin in Statistics and Eric Zivot in Economics, who serve\nas Director and Co-director of the program. This program has approximately\n20 students currently enrolled and has placed 9 students in finance industry\ncompanies and 3 in university faculty positions since 2006. Brief resumes of\nMartin and Zivot, along with that of Guy Yollin, who are collectively\nteaching courses in the Online Computational Finance Certificate are\nprovided in the next section. For details on the overall Computational\nFinance Program at University of Washington see:\nhttp://www.amath.washington.edu/studies/compfin/ .\n\n \n\nApplication Process\n\n \n\nFor information on how to apply for this program and other details see the\nfollowing web site: http://www.pce.uw.edu/prog.aspx?id=5508  .\n\n \n\nONLINE CERTIFICATE FACULTY RESUMES\n\n \n\nR. Douglas Martin\n\n \n\nMartin is a Professor of Statistics, Adjunct Professor of Finance, and\nDirector of Computational Finance. He was Chair of Statistics during its\nearly formative years, a consultant at Bell Laboratories for ten years,\nfounder of the S-PLUS company Statistical Sciences, and founder and Chairman\nof the risk management software company FinAnalytica, Inc. His numerous\npublications on time series and robust statistical methods include one\nAnnals of Statistics and two Royal Statistical Society discussion papers. He\nis co-author of Modern Portfolio Optimization (2005), and Robust Statistics:\nTheory and Methods (2006), and frequent invited speaker at finance industry\nconferences. His research focus is on applications of modern statistical\nmethods in portfolio construction and risk management. He holds the B.S.E.\nand Ph.D. in Electrical Engineering from Princeton University\n\n \n\nEric Zivot\n\n \n\nEric Zivot is the Robert Richards Chaired Professor in the Economics\nDepartment, Adjunct Professor of Statistics, and Adjunct Professor of\nFinance. He regularly teaches courses on econometric theory, financial\neconometrics and time series econometrics, and is the recipient of the Henry\nT. Buechel Award for Outstanding Teaching. He was an associate editor of the\nJournal of Business and Economic Statistics. He is co-author of Modeling\nFinancial Time Series with S-PLUS and co-developer of S+FinMetrics, and has\nconsulted on the use of S-PLUS and R in the finance industry. He has\npublished in the leading econometrics journals, including Econometrica,\nEconometric Theory, the Journal of Business and Economic Statistics, Journal\nof Econometrics, and the Review of Economics and Statistics, and in\nempirical finance journals including the Journal of Empirical Finance, the\nJournal of Financial Markets, and the Journal of International Money and\nFinance. He holds the Ph.D. in Economics from Yale University.\n\n \n\nGuy Yollin\n\n \n\nGuy is a quantitative research analyst, risk manager, and R language\nevangelist for Rotella Capital Management (RCM), a Seattle-area hedge fund\nmanager specializing in the trading of global futures and foreign exchange\nmarkets. Prior to joining RCM, Guy led the quant finance software\ndevelopment team at Insightful Corporation, developers of S-PLUSR and\nS+FinMetricsR. Guy has given numerous talks on R/S programming for financial\napplications and has taught graduate courses in statistical computing and\nfinancial time series analysis. He holds a master's degree in computational\nfinance from the Oregon Graduate Institute (now part of Oregon Health &\nScience University) and a bachelor's degree in electrical engineering from\nDrexel University.\n\n \n\nONLINE CERTIFICATE COURSES\n\n \n\nSTAT 591 Investment Science\n\n(Temporary course catalog title is Special Topics in Statistics)\n\n. Quarter: Autumn Quarter 2010\n\n. Time: Mon., Tues. 4:30 to 6:20\n\n. Instructor: R. Douglas Martin\n\n \n\nOverview\n\n \n\nThis course is an introduction to the mathematical and statistical\nfoundations and financial concepts of investment science. The material is\nsimilar in scope to an MBA level investments course, but at a significantly\nhigher quantitative level.\n\n \n\nTopics\n\n \n\n. Basic Theory of Interest Rates. Compounding, present value, internal rate\nof return\n\n. Fixed Income Securities. Bonds, value formulas, yield, duration,\nconvexity, immunization\n\n. Term Structure of Interest Rates. Bonds, PV, yield, duration, convexity,\nimmunization\n\n. Mean-Variance Portfolio Theory. Diversification, efficient frontiers,\ntwo-fund theorems,\n\n. Factor Models. Multi-factor models, linear regression and prediction,\narbitrage pricing theory\n\n. General Principles. Expected utility maximization, risk aversion, linear\nand risk neutral pricing.\n\n. Futures and Forwards. Futures and forward prices, margin, hedging with\nfutures\n\n. Binomial Tree Derivative Pricing. Binomial models, no arbitrage and risk\nneutral pricing\n\n. Introduction to Options Theory. Brownian motion, Ito's lemma,\nBlack-Scholes, the Greeks\n\n. Multi-Period Portfolio Management. Log-optimality, asset liability\nmanagement\n\n \n\nTextbook\n\n \n\nD. G. Luenberger (1998). Investment Science, Oxford University Press\n\n \n\nPrerequisites\n\n \n\nFamiliarity with matrix algebra, solutions to linear equations, and calculus\nthrough partial differentiation and constrained optimization using Lagrange\nmultipliers. Introductory probability and statistics at the level of STAT\n390 or STAT/AMATH 506.\n\n \n\nAMATH 500 R Programming for Computational Finance\n\n(Temporary course catalog title is Special Studies in Applied Mathematics)\n\n. Quarter: Winter Quarter 2011\n\n. Time: Mon., Wed. 6:30 to 8:20\n\n. Instructor: Guy Yollin\n\n \n\nOverview\n\n \n\nThis course is an in-depth hands-on introduction to the R statistical\nprogramming language (www.r-project.org) for computational finance. The\ncourse will focus on R code and code writing, R packages, and R software\ndevelopment for statistical analysis of financial data including topics on\nfactor models, time series analysis, and portfolio analytics.\n\n \n\nTopics\n\n \n\n. The R Language. Syntax, data types, resources, packages and history\n\n. Graphics in R. Plotting and visualization\n\n. Statistical analysis of returns. Fat-tailed skewed distributions,\noutliers, serial correlation\n\n. Financial time series modeling. Covariance matrices, AR, VecAR\n\n. Factor models. Linear regression, LS and robust fits, test statistics,\nmodel selection Multidimensional models. Principal components, clustering,\nclassification\n\n. Optimization methods. QP, LP, general nonlinear\n\n. Portfolio optimization. Mean-variance optimization, out-of-sample back\ntesting\n\n. Bootstrap methods. Non-parametric, parametric, confidence intervals, tests\n\n. Portfolio analytics. Performance and risk measures, style analysis\n\n \n\nTextbooks\n\n \n\nJ. Adler (2009). R in a Nutshell: A Desktop Quick Reference, O'Reilly Media\n\nD. Ruppert (2010). Statistics and Data Analysis for Financial Engineering,\nSpringer\n\n \n\nPrerequisites\n\n \n\nSTAT 591 Investment Science, Introductory probability and statistics at the\nlevel of STAT 390 or STAT/AMATH 506, or equivalents. Familiarity with matrix\nalgebra, multivariable calculus and optimization with Lagrange multipliers.\nBasic computer programming experience.\n\n \n\nSTAT 549 Portfolio Construction and Risk Management\n\n(Temporary course catalog title is Statistical Methods for Portfolios)\n\n. Quarter: Spring Quarter 2011\n\n. Time: Mon., Tues. 4:30 to 6:20\n\n. Instructor: R. Douglas Martin\n\n \n\nOverview\n\n \n\nThis computationally oriented course uses R and R+NuOPT for portfolio\nconstruction and risk management. The course is unique in focusing on not\nonly classical mean-variance optimization methods but also on post-modern\noptimization based on new downside risk measures for dealing with fat-tailed\nand skewed distribution of asset returns.\n\n \n\nTopics\n\n. Portfolio risk analysis. Risk measures, incremental and marginal risk,\nrisk management\n\n. Mean-variance and mean-risk. Old and new optimization methods\n\n. Numerical portfolio optimization. Using R and R+NuOPT with real-world\nconstraints, penalties\n\n. Estimation error. Classical sampling distribution methods and bootstrap\nmethods\n\n. Active management. Alpha, benchmarks, information ratios, IC's and TC's\n\n. Long-short portfolios. Market neutral versus dollar neutral, 130-30\n\n. Fundamental factor models. Three types, optimization, risk management,\nrobust fitting\n\n. Leverage. Types of leverage, return versus risk considerations\n\n. Liquidity and market impact. Liquidity risk, Sadka risk beta, market\nimpact models\n\n. Portfolio risk budgets. Volatility risk versus tail risk budgets, implied\nreturns\n\n. Bayes methods. Bayes shrinkage, Bayes-Stein, Black-Litterman\n\n \n\nTextbooks\n\n \n\nScherer and Martin (2011). Modern Portfolio Optimization (2011), 2nd edition\npreprint, \n\nConnor, Goldberg and Korajczyk (2010), Portfolio Risk Management.\n\n \n\nPrerequisites\n\nSTAT 591 Investment Science plus either ECON 424 or STAT 592 R Programming\nfor Computational Finance, or equivalents.\n\n \n\n \n\nEric Zivot                                               \n\nProfessor and Gary Waterman Distinguished Scholar       \n\nDepartment of Economics                                 \n\nAdjunct Professor of Finance                            \n\nAdjunct Professor of Statistics\n\nBox 353330                  email:  ezivot at u.washington.edu \n\nUniversity of Washington    phone:  206-543-6715            \n\nSeattle, WA 98195-3330\nwww:  http://faculty.washington.edu/ezivot                  \n\n \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I am very excited to announce that the Applied Mathematics Department, in\ncooperation with the Departments of Economics and Statistics, at the\nUniversity of Washington is offering a new online three c",
       "thread_id": "thread-42116ba8f714",
       "thread_depth": 0,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100811/6035ec4f/attachment.pl"
+      ]
     },
     {
       "id": "msg-01c137a6f451",
@@ -558,11 +588,14 @@
       "subject_clean": "GBSVolatility using apply",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100811/e16504eb/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100811/e16504eb/attachment.pl>",
+      "body_plain": "Hi\n\nI posted this query before but I guess it was missed out from the list. I am\ntrying to find the implied vols for the following structure using apply\nfunction. As I am relatively new to R and learning to apply apply, could\nsomeone please tell me how do I apply apply in this case? I want to try to\nfind out the IVs using vectorisation only and thus I want to understand how\napply works in this case.\n\nstructure(list(EXPIRY_DT = structure(c(1L, 1L, 1L, 1L, 1L, 1L\n), .Label = \"26-Aug-10\", class = \"factor\"), STRIKE_PR = c(9600L,\n9700L, 9800L, 9900L, 10000L, 10100L), OPTION_TYP = structure(c(1L,\n1L, 1L, 1L, 1L, 1L), .Label = \"CE\", class = \"factor\"), OPEN = c(866.55,\n783.1, 575, 0, 470, 355), HIGH = c(866.55, 783.1, 575, 0, 470,\n360), LOW = c(866.55, 742.25, 575, 0, 420, 343), CLOSE = c(866.55,\n742.25, 575, 493, 425, 360), SETTLE_PR = c(866.55, 742.25, 575,\n547, 425, 360), SPOT = c(9900L, 9900L, 9900L, 9900L, 9900L, 9900L\n)), .Names = c(\"EXPIRY_DT\", \"STRIKE_PR\", \"OPTION_TYP\", \"OPEN\",\n\"HIGH\", \"LOW\", \"CLOSE\", \"SETTLE_PR\", \"SPOT\"), class = \"data.frame\",\nrow.names = c(NA,\n-6L))\n\nAssume r=0.1 and cost-of-carry=0.1. All options are Calls (European),Exp =\n26th Aug 2010.\n\nMany thanks\nRaghu\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi\n\nI posted this query before but I guess it was missed out from the list. I am\ntrying to find the implied vols for the following structure using apply\nfunction. As I am relatively new to R and learn",
       "thread_id": "thread-01c137a6f451",
       "thread_depth": 0,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100811/e16504eb/attachment.pl"
+      ]
     },
     {
       "id": "msg-b1dbeb98802e",
@@ -645,11 +678,14 @@
       "references": [
         "<AANLkTimmvgXLjjwfB=sxnBQkAQ+e2b6OLCUj58-cBkWP@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100812/93d1f37e/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100812/93d1f37e/attachment.pl>",
+      "body_plain": "It's cheaper than http://cqf.com/apply/cqf-costs, anyway.\n\nOn Thu, Aug 12, 2010 at 6:01 AM, Sergey Goriatchev <sergeyg at gmail.com>wrote:\n\n> Great curriculum, great teachers... but 10000 for online certificate?!\n>\n> --\n> Kniven skärpes bara mot stenen.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "It's cheaper than http://cqf.com/apply/cqf-costs, anyway.\n\nOn Thu, Aug 12, 2010 at 6:01 AM, Sergey Goriatchev <sergeyg at gmail.com>wrote:\n\n> Great curriculum, great teachers... but 10000 for online c",
       "thread_id": "thread-729a751029ed",
       "thread_depth": 1,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100812/93d1f37e/attachment.pl"
+      ]
     },
     {
       "id": "msg-bca8c121a210",
@@ -729,11 +765,14 @@
       "subject_clean": "the dividend effect?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100817/197e32a8/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100817/197e32a8/attachment.pl>",
+      "body_plain": "Hi\n\nThis is not an R-related question so pls excuse. If I am backtesting a\n*completely\nhedged* options portfolio then do I need to take dividends into\nconsideration? My understanding is that since dividend affects both the\ncalls and the underlier in a similar fashion then taking dividends also into\nconsideration for backtesting will skew the effects on the returns. Please\ncorrect me if I am wrong?\n\nMany thanks\nRaghu\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi\n\nThis is not an R-related question so pls excuse. If I am backtesting a\n*completely\nhedged* options portfolio then do I need to take dividends into\nconsideration? My understanding is that since div",
       "thread_id": "thread-38df3c6f76d8",
       "thread_depth": 0,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100817/197e32a8/attachment.pl"
+      ]
     },
     {
       "id": "msg-54827fdf73cf",
@@ -901,11 +940,14 @@
       "subject_clean": "r and easylanguage?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100819/b5ee2183/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100819/b5ee2183/attachment.pl>",
+      "body_plain": "Hi,\n\n \n\nAre there a package(s) that converts EasyLanguage (or similar with another\nname, due to trademark) into code that can be run on R?\n\n \n\nRegards\n\nRolf\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\n \n\nAre there a package(s) that converts EasyLanguage (or similar with another\nname, due to trademark) into code that can be run on R?\n\n \n\nRegards\n\nRolf\n\n\n\t[[alternative HTML version deleted]]",
       "thread_id": "thread-39edc094d848",
       "thread_depth": 0,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100819/b5ee2183/attachment.pl"
+      ]
     },
     {
       "id": "msg-1ef84e7b9c10",
@@ -935,11 +977,14 @@
       "subject_clean": "Non-parametric estimation of time-varying market beta?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100821/8ea5695d/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100821/8ea5695d/attachment.pl>",
+      "body_plain": "Hello, R users:\n \nI am interested in nonparametric estimation of time-varying beta using additive model, \nfollowing \"Estimating Beta-Coefficients of German Stock Data: A Non-Parametric Approach\" \nEuropean Journal of Finance, September 2007.\n \nAuthors suggest using gam in library(mgcv) to estimate time varying beta \nof i-th stock (= beta_i + beta_i (t) ) in the following model:\n \nR_it = alpha_i + beta_i * R_Mt + beta_i (t) * R_Mt + e_it\n \nThey show some codes used for tables and graphs of the paper \nin the appendix as follows:\n \n> output &lt;- gam(Rj ¡­ RM + s(t, by=RM))\n \nwhere t is the time trend. My questions about this code are:\n \n1. When I use their code and plot the time varying smooth s(t) by \"plot(output)\", \nIt plots only beta_i (t), not beta_i + beta_i (t). \n \nBut when I am using \"output &lt;- gam(Rj ¡­ s(t, by=RM))\", It plots OK.\nIs this the correct beta?\n \n2. I cannot plot varying beta with x-axis of year.\n(I am using zoo object of monthly stock returns) \nHow do I set up the time trend t for this?\n \n3. How do I retrieve the fitted time-varying beta?\n \n4. Do you have any recommendation of R nonparametric function\nfor estimating time-varying market beta?\n \nThanks in advance.\nSW KIM\n \n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello, R users:\n \nI am interested in nonparametric estimation of time-varying beta using additive model, \nfollowing \"Estimating Beta-Coefficients of German Stock Data: A Non-Parametric Approach\" \nEuro",
       "thread_id": "thread-a2106f36ff0f",
       "thread_depth": 0,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100821/8ea5695d/attachment.pl"
+      ]
     },
     {
       "id": "msg-c154502f93ec",
@@ -969,11 +1014,14 @@
       "subject_clean": "Example code for nonparametric estimation of time-varying beta",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100821/43c0202e/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100821/43c0202e/attachment.pl>",
+      "body_plain": "OK! Here are some codes to help you understand my previous questions:\n \nlibrary(mgcv)\nlibrary(tseries)\n \n# download some test data from YAHOO\nspc &lt;- get.hist.quote(instrument = \"^gspc\", start = \"2000-01-01\", quote = \"Close\")\nibm &lt;- get.hist.quote(instrument = \"ibm\", start = \"2000-01-01\", quote = \"AdjClose\")\nt30 &lt;- get.hist.quote(instrument = \"^TYX\", start = \"2000-01-01\", quote = \"Close\") \n \nRM &lt;- (diff(log(spc)) - t30 / 365)*100.0 # let's say this is excess market return\nR_IBM &lt;- (diff(log(ibm)) - t30 / 365)*100.0 # individual stock's excess return\nt &lt;- 1:length(RM) # time trend\n \noutput &lt;- gam(R_IBM ~ RM + s(t, by=RM)) # the code in the paper\nplot(output, rug=F, ylab=\"Time-Varying Beta\") # beta looks two low \n \noutput &lt;- gam(R_IBM ~ s(t, by=RM))\nplot(output, rug=F, ylab=\"Time-Varying Beta\") \n# now reasonable but I want time-axis like 2000 2001 ... 2010\n \nAny help would be appreciated!\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "OK! Here are some codes to help you understand my previous questions:\n \nlibrary(mgcv)\nlibrary(tseries)\n \n# download some test data from YAHOO\nspc &lt;- get.hist.quote(instrument = \"^gspc\", start = \"20",
       "thread_id": "thread-9a73875167b5",
       "thread_depth": 0,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100821/43c0202e/attachment.pl"
+      ]
     },
     {
       "id": "msg-e93b2ad300e5",
@@ -1053,11 +1101,14 @@
       "subject_clean": "Quantmod",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100821/eafdfc90/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100821/eafdfc90/attachment.pl>",
+      "body_plain": "Hi fellow R users,\n\nAs a new user to r and quantmod i have the following problem. Using quantmod\nfor retrieving data from yahoo or google i am stuck in writing this data to\na text file.\n\n> getSymbols(\"IBM\")\n[1] \"IBM\"\n> write.table(IBM, file = \"ibm-data.txt\")\n\nThe text file created this way does not contain the date information.\n\nSo how could i best write quantmod data to a text file?\n\ngreetings,\n\nWerner\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi fellow R users,\n\nAs a new user to r and quantmod i have the following problem. Using quantmod\nfor retrieving data from yahoo or google i am stuck in writing this data to\na text file.\n\n> getSymbols(",
       "thread_id": "thread-e1f6d497ca85",
       "thread_depth": 0,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100821/eafdfc90/attachment.pl"
+      ]
     },
     {
       "id": "msg-b0154195b50f",
@@ -1087,11 +1138,14 @@
       "subject_clean": "adding xts time series",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100821/6dd60dfb/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100821/6dd60dfb/attachment.pl>",
+      "body_plain": "An obviously dumb question but I'm trying to add/subtract xts data...\n\n>myPrediction[10]<- myPrediction[10]-myPrediction[9]\nError in NextMethod(.Generic) : replacement has length zero\n\n>myPrediction[10,1]<- myPrediction[10,1]-myPrediction[9,1]\nError in NextMethod(.Generic) : replacement has length zero\n\n> myPrediction[10,1] <- (myPrediction[10,1]-myPrediction[9,1])\nError in NextMethod(.Generic) : replacement has length zero\n\n> is.xts(myPrediction)\n[1] TRUE\n\n> myPrediction[10]\nNov 2009 9854.299\n\n> myPrediction[9]\nOct 2009 9713.752\n\nWhat is my issue here?\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "An obviously dumb question but I'm trying to add/subtract xts data...\n\n>myPrediction[10]<- myPrediction[10]-myPrediction[9]\nError in NextMethod(.Generic) : replacement has length zero\n\n>myPrediction[1",
       "thread_id": "thread-cfe769171cd5",
       "thread_depth": 0,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100821/6dd60dfb/attachment.pl"
+      ]
     },
     {
       "id": "msg-21f7af21cbfe",
@@ -1105,11 +1159,14 @@
       "references": [
         "<AANLkTimQg746uJTE7CDh+Nux9K-0dUYvH8mz6Jj7X1Pj@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100821/0547f0e0/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100821/0547f0e0/attachment.pl>",
+      "body_plain": "myPrediction[10,1]<- myPrediction[[10,1]]-myPrediction[[9,1]]\n\nphhhhhttt!!\n\nOn Sat, Aug 21, 2010 at 5:28 PM, Nick Torenvliet\n<nick.torenvliet at gmail.com>wrote:\n\n> An obviously dumb question but I'm trying to add/subtract xts data...\n>\n> >myPrediction[10]<- myPrediction[10]-myPrediction[9]\n> Error in NextMethod(.Generic) : replacement has length zero\n>\n> >myPrediction[10,1]<- myPrediction[10,1]-myPrediction[9,1]\n> Error in NextMethod(.Generic) : replacement has length zero\n>\n> > myPrediction[10,1] <- (myPrediction[10,1]-myPrediction[9,1])\n> Error in NextMethod(.Generic) : replacement has length zero\n>\n> > is.xts(myPrediction)\n> [1] TRUE\n>\n> > myPrediction[10]\n> Nov 2009 9854.299\n>\n> > myPrediction[9]\n> Oct 2009 9713.752\n>\n> What is my issue here?\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "myPrediction[10,1]<- myPrediction[[10,1]]-myPrediction[[9,1]]\n\nphhhhhttt!!\n\nOn Sat, Aug 21, 2010 at 5:28 PM, Nick Torenvliet\n<nick.torenvliet at gmail.com>wrote:\n\n> An obviously dumb question but I'm ",
       "thread_id": "thread-cfe769171cd5",
       "thread_depth": 1,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100821/0547f0e0/attachment.pl"
+      ]
     },
     {
       "id": "msg-cee277afcd5b",
@@ -1176,11 +1233,14 @@
       "subject_clean": "(no subject)",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100823/4c849057/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100823/4c849057/attachment.pl>",
+      "body_plain": "hi R finance list, i am from South Africa and i would like to make plans to\nattend the R finance conference in Chicago next year (2011). If anyone knows\nthe conference date (confirmed or provisional), then please let me know. or\ncould one of the organisors send me thier contact details.\n\nthanks\n\n-- \nRashaad Tayob\nTel: +27 (0)21 670 5298\nFax: +27 (0)86 508 0685\nMobile: +27 (0)82 940 2669\nEmail: rashaad.tayob at aeonim.co.za\nwww.aeonim.co.za\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "hi R finance list, i am from South Africa and i would like to make plans to\nattend the R finance conference in Chicago next year (2011). If anyone knows\nthe conference date (confirmed or provisional),",
       "thread_id": "thread-9e285cc1fd9a",
       "thread_depth": 0,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100823/4c849057/attachment.pl"
+      ]
     },
     {
       "id": "msg-7f34031c9626",
@@ -1192,11 +1252,14 @@
       "subject_clean": "Secant Method Convergence (Method to replicate Excel XIRR/IRR)",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100825/de2d2a09/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100825/de2d2a09/attachment.pl>",
+      "body_plain": "Hi,\n\nI am new to R, and as a first exercise, I decided to try to implement an XIRR function using the secant method.  I did a quick search and saw another posting that used the Bisection method but wanted to see if it was possible using the secant method.\n\nI would input a Cash Flow and Date vector as well as an initial guess.  I hardcoded today's initial date so I could do checks in Excel.  This code seems to only converge when my initial guess is very close to the correct IRR.\n\nMaybe I have some basic errors in my coding/logic? Any help would be greatly appreciated.\n\nThe Wikipedia article to secant method and IRR: http://en.wikipedia.org/wiki/Internal_rate_of_return#Numerical_solution\n\nThanks!\n\n\n\nANXIRR <- function (cashFlow, cfDate, guess){\n        cfDate<-as.Date(cfDate,format=\"%m/%d/%Y\")\n        irrprev <- c(0); irr<- guess\n\n\n        pvPrev<- sum(cashFlow)\n        pv<- sum(cashFlow/((1+irr)^(as.numeric(difftime(cfDate,\"2010-08-24\",units=\"days\"))/360)))\n        print(pv)\n        print(\"Hi\")\n\n\nwhile (abs(pv) >= 0.001) {\n        t<-irrprev; irrprev<- irr;\n        irr<-irr-((irr-t)*pv/(pv-pvPrev));\n        pvPrev<-pv;\n        pv<-sum(cashFlow/((1+irr)^(as.numeric(difftime(cfDate,\"2010-08-24\",units=\"days\"))/365)))\n        print(irr);print(pv)\n        }\n}\n\n\n\n\n\nPlease consider the environment before printing this e-mail.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI am new to R, and as a first exercise, I decided to try to implement an XIRR function using the secant method.  I did a quick search and saw another posting that used the Bisection method but wa",
       "thread_id": "thread-7f34031c9626",
       "thread_depth": 0,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100825/de2d2a09/attachment.pl"
+      ]
     },
     {
       "id": "msg-4af788edfba4",
@@ -1226,11 +1289,14 @@
       "references": [
         "<FEE323851BB2C840819D7A025609CF49EEE813@ex2k.bankofamerica.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100825/b370f1de/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100825/b370f1de/attachment.pl>",
+      "body_plain": "Here are modified floor and ceiling functions that solve your problem:\n\nmy.floor <-function(x,my.base){\nfloor(x/my.base)*my.base\n}\n\nmy.ceiling <-function(x,my.base){\nceiling(x/my.base)*my.base\n}\n\nBase = 0.5\nmy.floor(126.6,Base)   #[1] 126.5\nmy.ceiling(126.6,Base) #[1] 127\n\nBase = 1\nmy.floor(126.6,Base) #[1] 126\nmy.ceiling(126.6,Base) #[1] 127\n\nHTH\n\nPierre\n\n\nOn Wed, Aug 25, 2010 at 4:38 PM, Gandhi, Puneet - RSCH AMRS <\np.gandhi at baml.com> wrote:\n\n> Hi All,\n>\n> Is there any function in R which does what Floor or Ceiling in Excel.\n>\n> Excel can take 2 arguments to FLOOR function while R doesn't.\n>\n> I need the following which is done in excel\n>\n> Base = 0.5\n> Floor(126.6,Base) = 126.5\n> Ceiling(126.6, Base) = 127\n>\n>\n> Base = 1\n> Floor(126.6, Base) = 126\n> Ceiling(126.6, Base) = 127\n>\n> I tried round, floor, ceiling, trunc in R but none does this job.\n>\n> Pls Help/Thanks\n> Puneet\n>\n> ----------------------------------------------------------------------\n> This message w/attachments (message) is intended solely ...{{dropped:7}}\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Here are modified floor and ceiling functions that solve your problem:\n\nmy.floor <-function(x,my.base){\nfloor(x/my.base)*my.base\n}\n\nmy.ceiling <-function(x,my.base){\nceiling(x/my.base)*my.base\n}\n\nBase",
       "thread_id": "thread-4af788edfba4",
       "thread_depth": 1,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100825/b370f1de/attachment.pl"
+      ]
     },
     {
       "id": "msg-6d82d6d2d13c",
@@ -1336,11 +1402,14 @@
       "subject_clean": "Calculating Hasbrouck's information share and Gonzalo-Granger weights on R",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100829/4e150428/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100829/4e150428/attachment.pl>",
+      "body_plain": "Folks,\n\nI have been working on the question of `information share' which began\nwith Joel Hasbrouck and Gonzalo--Granger paper in 1995 and has been\nthe subject of interest in the following years with work most recently\nby Yan & Zivot (2010).\n\nA function that computes the Hasbrouck information share and the\nGonzalo/Granger common factor weights is at:\n\nhttp://www.mayin.org/ajayshah/tmp/infoshare.R\n\nHere's an example of running it with a simple futures/spot problem:\n\nsource(\"http://www.mayin.org/ajayshah/tmp/infoshare.R\")\nx <- as.matrix(read.csv(url(\"http://www.mayin.org/ajayshah/tmp/ex1.csv\"),\nheader=TRUE))\nIS(log(x))\n\nThe result of this computation is:\n\n$original.ordering\n[1] 0.0158933    0.9841067\n\n$reversed.ordering\n[1] 0.993828577  0.006171423\n\n$gonzalo.granger\n[1] 0.08537347    0.91462653\n\nThe above results appear agreeable wherein the upper and lower bound for\neach market turn out to be quite close (i.e [0.006, 0.015] for futures and\n[0.98, 0.99] for spot).\n\n\nHowever, when I run the same code on a few other stocks, the difference\nbetween the upper and lower bound of each market turns out to be very high.\nA sample dataset for five stocks across a set of three days is at:\n\nhttp://www.mayin.org/ajayshah/tmp/ex2.csv\n\nThe prices are at 5 second frequency.\n\nAs an illustration, when I run the code on a stock like BHARTIARTL\nfor July 1, 2009 as:\n\nsource(\"http://www.mayin.org/ajayshah/tmp/infoshare.R\")\ndata <- read.csv(url(\"http://www.mayin.org/ajayshah/tmp/ex2.csv\"), skip=1)\nx <- data [1:4009, 3:4]\nIS(log(x))\n\nI get the following results:\n\n$original.ordering\n[1] 0.8194992 0.1805008\n\n$reversed.ordering\n[1] 0.6782834 0.3217166\n\n$gonzalo.granger\n[1] 0.5378149 0.4621851\n\nwhich indicate the upper and lower bound for market1 are (0.32, 0.82) while\nthat of market2  are (0.18, 0.67). The bounds in this case turn out to be\ntoo\nwide. Similar is the case when I tried the code on other stocks mentioned in\nex2.csv\n\nI know that several authors have described such phenomena in the literature,\nbut it makes me anxious. Does this make sense?  Or is there a mistake in\nmy code?\n\nIs there an example of a data set or a simulated data set where the\nanswer is known, through which the correctness of the code can be\nestablished?\n\nMore generally, I am a novice R programmer and it would be great if\nyou could look at my code and criticize what I have done.\n\nThanks,\nNidhi Aggarwal.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Folks,\n\nI have been working on the question of `information share' which began\nwith Joel Hasbrouck and Gonzalo--Granger paper in 1995 and has been\nthe subject of interest in the following years with w",
       "thread_id": "thread-0a4c35f4b62f",
       "thread_depth": 0,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100829/4e150428/attachment.pl"
+      ]
     },
     {
       "id": "msg-815138a99530",
@@ -1352,11 +1421,14 @@
       "subject_clean": "Market index data visualization in R",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100829/e7bcbd9c/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100829/e7bcbd9c/attachment.pl>",
+      "body_plain": "Hello\nI have been learning R for the past year for use at work.  To keep the learning going I started plotting the change in the major market indices (S&P, Dow, NIKKEI, etc) using a variety of graphs such as heat maps, run charts and radial plots.  I was primarily interested if return on any given date was in the outliers of historical returns, and to present this information in a simple graphical way using the principles of Tufte and Harrell.  \nI present these to you and invite your comments.  The website is named \"Stock Market Index Visualizations using R\"  and is located at http://sites.google.com/site/indexplot  Index data can be accessed using the left sidebar.\nPlease feel free to share your comments.  All R source code is available upon request.  I use the quantmod library to pull data from Yahoo finance and am using the 2.10.1 R distribution to create all graphs.  \nI am plotting the history of the market return in percentiles, and annualized returns in deciles (using quantile function).  There are two help files on the website that describe in detail all the calculations done in R.  I am using simple math like ratios and basic stats (quantiles), basic geometry and trigonometry for the graph transformations. I hope to but am not too sure if I achieved the graph clarity I wanted.\nAcknowledgementsI have listed the R community in my acknowledgements page, to Dirk Eddelbuettel and to Jeffrey Ryan (for quantmod).  Special thanks to Dirk for his interest in my poster at UseR2010 and his encouragement to create this page.  It has been a lot of fun, in learning the using the google website tools.  \nNext steps- Update graphs and analysis based on your comments.- plot the historical returns for a portfolio, something like a 50:50 stock:bond portfolio.  - learn RApache- plead to Google sites to allow ftp...\nbest regardsNadeemHockessin, DE  \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello\nI have been learning R for the past year for use at work.  To keep the learning going I started plotting the change in the major market indices (S&P, Dow, NIKKEI, etc) using a variety of graphs ",
       "thread_id": "thread-815138a99530",
       "thread_depth": 0,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100829/e7bcbd9c/attachment.pl"
+      ]
     },
     {
       "id": "msg-fbc1fe85778a",
@@ -1370,11 +1442,14 @@
       "references": [
         "<263101.4339.qm@web84207.mail.re3.yahoo.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100830/a8ff1469/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100830/a8ff1469/attachment.pl>",
+      "body_plain": "Nadeem,\n\nyour efforts in honour, but I strongly doubt that it's legal to redistribute\nthe yahoo data, whether with or without acknowledgment, but that's just my\ngood guess, especially as there is a revenue generator on your site.\nAny opinion on that, does yahoo allow this sort of data redistribution?\n\nBest regards,\nUlrich\n\n\n\nOn Sun, Aug 29, 2010 at 6:23 PM, Nadeem Faiz <nadeem_faiz at yahoo.com> wrote:\n\n> Hello\n> I have been learning R for the past year for use at work.  To keep the\n> learning going I started plotting the change in the major market indices\n> (S&P, Dow, NIKKEI, etc) using a variety of graphs such as heat maps, run\n> charts and radial plots.  I was primarily interested if return on any given\n> date was in the outliers of historical returns, and to present this\n> information in a simple graphical way using the principles of Tufte and\n> Harrell.\n> I present these to you and invite your comments.  The website is\n> named \"Stock Market Index Visualizations using R\"  and is located at\n> http://sites.google.com/site/indexplot  Index data can be accessed using\n> the left sidebar.\n> Please feel free to share your comments.  All R source code is available\n> upon request.  I use the quantmod library to pull data from Yahoo finance\n> and am using the 2.10.1 R distribution to create all graphs.\n> I am plotting the history of the market return in percentiles, and\n> annualized returns in deciles (using quantile function).  There are two help\n> files on the website that describe in detail all the calculations done in R.\n>  I am using simple math like ratios and basic stats (quantiles), basic\n> geometry and trigonometry for the graph transformations. I hope to but\n> am not too sure if I achieved the graph clarity I wanted.\n> AcknowledgementsI have listed the R community in my acknowledgements page,\n> to Dirk Eddelbuettel and to Jeffrey Ryan (for quantmod).  Special thanks to\n> Dirk for his interest in my poster at UseR2010 and his encouragement to\n> create this page.  It has been a lot of fun, in learning the using the\n> google website tools.\n> Next steps- Update graphs and analysis based on your comments.- plot the\n> historical returns for a portfolio, something like a 50:50 stock:bond\n> portfolio.  - learn RApache- plead to Google sites to allow ftp...\n> best regardsNadeemHockessin, DE\n>        [[alternative HTML version deleted]]\n>\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\n\n-- \nUlrich Staudinger\nKlosterstr. 7\nCH-6003 Luzern\nSwitzerland\n++41-79-7020595\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Nadeem,\n\nyour efforts in honour, but I strongly doubt that it's legal to redistribute\nthe yahoo data, whether with or without acknowledgment, but that's just my\ngood guess, especially as there is a re",
       "thread_id": "thread-815138a99530",
       "thread_depth": 1,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100830/a8ff1469/attachment.pl"
+      ]
     },
     {
       "id": "msg-b1cb5d5fc277",
@@ -1438,11 +1513,14 @@
       "subject_clean": "Market index data visualization in R",
       "in_reply_to": "<AANLkTikJjQawcAuAu_Or4kcirMdVi5G+9we6t=ZM1D+d@mail.gmail.com>",
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100830/cc12168b/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100830/cc12168b/attachment.pl>",
+      "body_plain": "Ulrich,\nthanks for the email. I reviewed Yahoo's Terms of Service and did not find anything expressly related to Yahoo Finance historical data.  I do know that Yahoo Finance allows download of the market historical data.  They do mention in the Terms of Service (my translation follows) that all utility from downloaded data from their services is done at the user's risk.  I will look into this topic further towards a better understanding of the same. \nMeanwhile I have removed Adsense links till I understand this topic better.  I recently discovered (on Saturday 8/28) Google's webmaster tools that enable site access statistics.  Adsense allowed me simple to use access to Google Analytics, I can do the same with the Webmaster tools now. \n\nI had a few requests yesterday for the source code and added a link to the R files, this under the Help menu. best regards,\nNadeemHockessin, DE\n--- On Mon, 8/30/10, Ulrich Staudinger <ustaudinger at gmail.com> wrote:\n\nFrom: Ulrich Staudinger <ustaudinger at gmail.com>\nSubject: Re: [R-SIG-Finance] Market index data visualization in R\nTo: \"Nadeem Faiz\" <nadeem_faiz at yahoo.com>\nCc: r-sig-finance at stat.math.ethz.ch\nDate: Monday, August 30, 2010, 3:39 AM\n\nNadeem, \n\nyour efforts in honour, but I strongly doubt that it's legal to redistribute the yahoo data, whether with or without acknowledgment, but that's just my good guess, especially as there is a revenue generator on your site.\n\nAny opinion on that, does yahoo allow this sort of data redistribution? \n\nBest regards, \nUlrich\n\n\n\nOn Sun, Aug 29, 2010 at 6:23 PM, Nadeem Faiz <nadeem_faiz at yahoo.com> wrote:\n\nHello\n\nI have been learning R for the past year for use at work.  To keep the learning going I started plotting the change in the major market indices (S&P, Dow, NIKKEI, etc) using a variety of graphs such as heat maps, run charts and radial plots.  I was primarily interested if return on any given date was in the outliers of historical returns, and to present this information in a simple graphical way using the principles of Tufte and Harrell.  \n\n\nI present these to you and invite your comments.  The website is named \"Stock Market Index Visualizations using R\"  and is located at http://sites.google.com/site/indexplot  Index data can be accessed using the left sidebar.\n\n\nPlease feel free to share your comments.  All R source code is available upon request.  I use the quantmod library to pull data from Yahoo finance and am using the 2.10.1 R distribution to create all graphs.  \n\nI am plotting the history of the market return in percentiles, and annualized returns in deciles (using quantile function).  There are two help files on the website that describe in detail all the calculations done in R.  I am using simple math like ratios and basic stats (quantiles), basic geometry and trigonometry for the graph transformations. I hope to but am not too sure if I achieved the graph clarity I wanted.\n\n\nAcknowledgementsI have listed the R community in my acknowledgements page, to Dirk Eddelbuettel and to Jeffrey Ryan (for quantmod).  Special thanks to Dirk for his interest in my poster at UseR2010 and his encouragement to create this page.  It has been a lot of fun, in learning the using the google website tools.  \n\n\nNext steps- Update graphs and analysis based on your comments.- plot the historical returns for a portfolio, something like a 50:50 stock:bond portfolio.  - learn RApache- plead to Google sites to allow ftp...\n\nbest regardsNadeemHockessin, DE  \n\n        [[alternative HTML version deleted]]\n\n\n\n\n_______________________________________________\n\nR-SIG-Finance at stat.math.ethz.ch mailing list\n\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n\n-- Subscriber-posting only. If you want to post, subscribe first.\n\n-- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nUlrich Staudinger\nKlosterstr. 7\nCH-6003 Luzern\nSwitzerland\n++41-79-7020595\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Ulrich,\nthanks for the email. I reviewed Yahoo's Terms of Service and did not find anything expressly related to Yahoo Finance historical data.  I do know that Yahoo Finance allows download of the mar",
       "thread_id": "thread-815138a99530",
       "thread_depth": 2,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100830/cc12168b/attachment.pl"
+      ]
     },
     {
       "id": "msg-abebe133d7ea",
@@ -1568,11 +1646,14 @@
       "subject_clean": "Annual Percentage Rate",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100831/bec3f408/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100831/bec3f408/attachment.pl>",
+      "body_plain": "Hi\n\nI wish to know how to calculate the Annual Percentage Rate (APR) and is there any R code or package for the same.\n\nRegards\n\nAmy\n\n\n\n      \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi\n\nI wish to know how to calculate the Annual Percentage Rate (APR) and is there any R code or package for the same.\n\nRegards\n\nAmy\n\n\n\n      \n\t[[alternative HTML version deleted]]",
       "thread_id": "thread-4a5cd3c6e466",
       "thread_depth": 0,
-      "month": "2010-08"
+      "month": "2010-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100831/bec3f408/attachment.pl"
+      ]
     },
     {
       "id": "msg-ba3198510822",

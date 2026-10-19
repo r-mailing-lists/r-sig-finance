@@ -13,11 +13,14 @@
       "subject_clean": "fCalendar's time seems incorrect for some FinCenters",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080601/dbf2bcbf/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080601/dbf2bcbf/attachment.pl>",
+      "body_plain": "Hello, \n\nhaving some trouble getting Sys.timeDate(x) to return the correct time for\nsome FinCenters. \n\nHere is a demonstration:\n\n \n\n> require(fCalendar)\n\n> x <- c(\"HongKong\",\"Singapore\",\"Seoul\",\"Tokyo\",\"Sydney\",\"London\",\"NewYork\")\n\n> lapply(x,Sys.timeDate)\n\n[[1]]\n\nHongKong\n\n[1] [2008-06-01 23:12:08]\n\n \n\n[[2]]\n\nSingapore\n\n[1] [2008-06-01 21:42:08]\n\n \n\n[[3]]\n\nSeoul\n\n[1] [2008-06-02 00:12:08]\n\n \n\n[[4]]\n\nTokyo\n\n[1] [2008-06-02 00:12:08]\n\n \n\n[[5]]\n\nSydney\n\n[1] [2008-06-02 00:12:08]\n\n \n\n[[6]]\n\nLondon\n\n[1] [2008-06-01 15:12:08]\n\n \n\n[[7]]\n\nNewYork\n\n[1] [2008-06-01 10:12:08]\n\n \n\n> \n\nNew York is correct\n\nLondon is correct\n\nSydney is correct\n\nbut\n\nTokyo off by +1hr\n\nSingapore is off by -0.5hr\n\nHong Kong is off by +1hr\n\nSeoul is off by +1hr\n\n \n\nAny tips on how to correct? \n\n \n\nThank you\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello, \n\nhaving some trouble getting Sys.timeDate(x) to return the correct time for\nsome FinCenters. \n\nHere is a demonstration:\n\n \n\n> require(fCalendar)\n\n> x <- c(\"HongKong\",\"Singapore\",\"Seoul\",\"Tokyo",
       "thread_id": "thread-4053694f7738",
       "thread_depth": 0,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080601/dbf2bcbf/attachment.pl"
+      ]
     },
     {
       "id": "msg-b86426e12951",
@@ -132,11 +135,14 @@
         "<BLU105-W249C4E4EC70E6042ECA709EEBB0@phx.gbl>",
         "<971536df0806020527s6028918bh3bf04ebf774eadba@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080602/c716e33f/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080602/c716e33f/attachment.pl>",
+      "body_plain": "Hi Gabor,\n \nThanks for the suggestion. Actually, I just simplified the problem to a small bit of code that replicates the issue; in actuality, it's not the mean I am interested in calculating (but all sorts of other metrics), and the data are not randomly generated, but are financial time-series.\n \nThe warning's probably coming from the apply.fromstart() function, but am not quite able to determine why. The initial 20 NAs are expected as there are no 'mean' computed for these (viz. the argument gap = 20).\n \nCheers,\nMurali> Date: Mon, 2 Jun 2008 08:27:56 -0400> From: ggrothendieck at gmail.com> To: feanor0 at hotmail.com> Subject: Re: [R-SIG-Finance] apply.fromstart() warnings> CC: r-sig-finance at stat.math.ethz.ch> > To do it in zoo alone try this:> > library(zoo)> d <- zoo(matrix(1:50, 25), as.Date(1:25))> > dd <- NA * d> for(i in 21:nrow(dd)) dd[i, ] <- colMeans(d[1:i, ])> > You also might try updating the to latest version of all packages and R> although that does not appear to be the source of the problem here.> > On Mon, Jun 2, 2008 at 7:57 AM, Murali Menon <feanor0 at hotmail.com> wrote:> >> >> > Folks,> >> > When I attempt to find the growing window columnwise mean of a two-dimensional array, I get a bunch of warnings. Any idea why? Here's my code:> >> >> library(PerformanceAnalytics)> >> >> d <- zoo(matrix(rnorm(50), ncol=2), order.by=as.Date(1:25))> >> >> apply.fromstart(d, gap=20, FUN=\"mean\")> > 1970-01-02 NA NA> > 1970-01-03 NA NA> > 1970-01-04 NA NA> > 1970-01-05 NA NA> > 1970-01-06 NA NA> > 1970-01-07 NA NA> > 1970-01-08 NA NA> > 1970-01-09 NA NA> > 1970-01-10 NA NA> > 1970-01-11 NA NA> > 1970-01-12 NA NA> > 1970-01-13 NA NA> > 1970-01-14 NA NA> > 1970-01-15 NA NA> > 1970-01-16 NA NA> > 1970-01-17 NA NA> > 1970-01-18 NA NA> > 1970-01-19 NA NA> > 1970-01-20 NA NA> > 1970-01-21 -0.05899970 -0.05899970> > 1970-01-22 -0.05882669 -0.05882669> > 1970-01-23 -0.08635806 -0.08635806> > 1970-01-24 -0.15848480 -0.15848480> > 1970-01-25 -0.13168358 -0.13168358> > 1970-01-26 -0.17101046 -0.17101046> > There were 12 warnings (use warnings() to see them)> >> >> > When I check the warnings(), here's the first string I get:> >> > 1: In column.Return.calc[i] = apply(as.matrix(data.zoo[, ... :> > number of items to replace is not a multiple of replacement length> >> > I'm not sure why this should be the case?> >> >> > I'm using:> >> >> packageDescription(\"zoo\")$Version> > [1] \"1.4-2\"> >> packageDescription(\"PerformanceAnalytics\")$Version> > [1] \"0.9.6\"> >> >> > And R 2.6.1 on Windows XP.> >> >> > Thanks,> >> >> > Murali> >> > _________________________________________________________________> > Give to a good cause with every e-mail. Join the i'm Initiative from Microsoft.> >> > _______________________________________________> > R-SIG-Finance at stat.math.ethz.ch mailing list> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance> > -- Subscriber-posting only.> > -- If you want to post, subscribe first.> >\n_________________________________________________________________\nGive to a good cause with every e-mail. Join the i’m Initiative from Microsoft.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Gabor,\n \nThanks for the suggestion. Actually, I just simplified the problem to a small bit of code that replicates the issue; in actuality, it's not the mean I am interested in calculating (but all",
       "thread_id": "thread-92f22a47b7cd",
       "thread_depth": 2,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080602/c716e33f/attachment.pl"
+      ]
     },
     {
       "id": "msg-356de32c9d4a",
@@ -218,11 +224,14 @@
         "<BLU105-W310E34D5691BAAC7BB7B7EEEBB0@phx.gbl>",
         "<971536df0806020710k4886af1es7cbff2c2f08b5571@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080602/a182f3ad/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080602/a182f3ad/attachment.pl>",
+      "body_plain": "Gabor,\n \nI think in your code, the loop should be (to replicate apply.fromstart())\n \nfor(i in 20:nrow(dd)) dd[i, ] <- colMeans(d[1:i, ])\n \nnot 21:nrow(dd)\n \nI think that's where the difference you refer to comes from. IF you make it 20:nrow(dd), then the answers match apply.fromstart()\n \nMy understanding of the gap parameter:\n \nIf it is 20, then the mean of the first 20 entries of d are computed, and stored in the 20th entry of dd, not the 21st. \n \nWhat do you think?\n \nCheers,\nMurali> Date: Mon, 2 Jun 2008 10:10:44 -0400> From: ggrothendieck at gmail.com> To: feanor0 at hotmail.com> Subject: Re: [R-SIG-Finance] apply.fromstart() warnings> CC: r-sig-finance at stat.math.ethz.ch> > Try the example in my post.> > On Mon, Jun 2, 2008 at 10:07 AM, Murali Menon <feanor0 at hotmail.com> wrote:> >> >> > Hi,> >> >> > Did you see where the answers are wrong? I tried the following, and it appears correct (except for the warnings):> >> >> >> apply.fromstart(cbind(1:20, 1:20), gap=10, FUN=mean)> >> > Column.1 Column.2> > 1970-01-02 NA NA> > 1970-01-03 NA NA> > 1970-01-04 NA NA> > 1970-01-05 NA NA> > 1970-01-06 NA NA> > 1970-01-07 NA NA> > 1970-01-08 NA NA> > 1970-01-09 NA NA> > 1970-01-10 NA NA> > 1970-01-11 5.5 5.5> > 1970-01-12 6.0 6.0> > 1970-01-13 6.5 6.5> > 1970-01-14 7.0 7.0> > 1970-01-15 7.5 7.5> > 1970-01-16 8.0 8.0> > 1970-01-17 8.5 8.5> > 1970-01-18 9.0 9.0> > 1970-01-19 9.5 9.5> > 1970-01-20 10.0 10.0> > 1970-01-21 10.5 10.5> > There were 22 warnings (use warnings() to see them)> >> > That's correct, no? The mean of the first 10 entries go into the 10th row, the mean of the first 11 entries go into the 11th row, etc.> >> > Funnily enough, there are no warnings if I run the function on a vector, say:> >> > apply.fromstart(1:20, gap=10, FUN=mean)> >> > Cheers,> > Murali> >> >> Date: Mon, 2 Jun 2008 09:40:53 -0400> >> From: ggrothendieck at gmail.com> >> To: r-sig-finance at stat.math.ethz.ch> >> Subject: Re: [R-SIG-Finance] apply.fromstart() warnings> >>> >> The problem goes beyond some warnings -- the answers from> >> apply.fromstart are wrong. You could report the problem to the> >> author and just use a suitably modified version of the loop I posted> >> as a workaround.> >>> >> On Mon, Jun 2, 2008 at 9:26 AM, Murali Menon wrote:> >>>> >>> Hi Gabor,> >>>> >>> Thanks for the suggestion. Actually, I just simplified the problem to a small bit of code that replicates the issue; in actuality, it's not the mean I am interested in calculating (but all sorts of other metrics), and the data are not randomly generated, but are financial time-series.> >>>> >>> The warning's probably coming from the apply.fromstart() function, but am not quite able to determine why. The initial 20 NAs are expected as there are no 'mean' computed for these (viz. the argument gap = 20).> >>>> >>> Cheers,> >>> Murali> Date: Mon, 2 Jun 2008 08:27:56 -0400> From: ggrothendieck at gmail.com> To: feanor0 at hotmail.com> Subject: Re: [R-SIG-Finance] apply.fromstart() warnings> CC: r-sig-finance at stat.math.ethz.ch>> To do it in zoo alone try this:>> library(zoo)> d <- zoo(matrix(1:50, 25), as.Date(1:25))>> dd <- NA * d> for(i in 21:nrow(dd)) dd[i, ] <- colMeans(d[1:i, ])>> You also might try updating the to latest version of all packages and R> although that does not appear to be the source of the problem here.>> On Mon, Jun 2, 2008 at 7:57 AM, Murali Menon wrote:>>>>>> Folks,>>>> When I attempt to find the growing window columnwise mean of a two-dimensional array, I get a bunch of warnings. Any idea why? Here's my code:>>>>> library(PerformanceAnalytics)>>>>> d <- zoo(matrix(rnorm(50), ncol=2), order.by=as.Date(1:25))>>>>> apply.fromstart(d, gap=20, FUN=\"mean\")>> 1970-01-02 NA NA>> 1970-01-03 NA NA>> 1970-01-04 NA NA>> 1970-01-05 NA NA>> 1970-01-06!> >> NA NA>> 1970-01-07 NA NA>> 1970-01-08 NA NA>> 1970-01-09 NA NA>> 1970-01-10 NA NA>> 1970-01-11 NA NA>> 1970-01-12 NA NA>> 1970-01-13 NA NA>> 1970-01-14 NA NA>> 1970-01-15 NA NA>> 1970-01-16 NA NA>> 1970-01-17 NA NA>> 1970-01-18 NA NA>> 1970-01-19 NA NA>> 1970-01-20 NA NA>> 1970-01-21 -0.05899970 -0.05899970>> 1970-01-22 -0.05882669 -0.05882669>> 1970-01-23 -0.08635806 -0.08635806>> 1970-01-24 -0.15848480 -0.15848480>> 1970-01-25 -0.13168358 -0.13168358>> 1970-01-26 -0.17101046 -0.17101046>> There were 12 warnings (use warnings() to see them)>>>>>> When I check the warnings(), here's the first string I get:>>>> 1: In column.Return.calc[i] = apply(as.matrix(data.zoo[, ... :>> number of items to replace is not a multiple of replacement length>>>> I'm not sure why this should be the case?>>>>>> I'm using:>>>>> packageDescription(\"zoo\")$Version>> [1] \"1.4-2\">>> packageDescription(\"PerformanceAnalytics\")$Version>> [1] \"0.9.6\">>>>>> And R 2!> >> .6.1 on Windows XP.>>>>>> Thanks,>>>>>> Murali>>>> ___________> >> ______________________________________________________>> Give to a good cause with every e-mail. Join the i'm Initiative from Microsoft.>>>> _______________________________________________>> R-SIG-Finance at stat.math.ethz.ch mailing list>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance>> -- Subscriber-posting only.>> -- If you want to post, subscribe first.>>> >>> _________________________________________________________________> >>> Give to a good cause with every e-mail. Join the i'm Initiative from Microsoft.> >>>> >>> [[alternative HTML version deleted]]> >>>> >>>> >>> _______________________________________________> >>> R-SIG-Finance at stat.math.ethz.ch mailing list> >>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance> >>> -- Subscriber-posting only.> >>> -- If you want to post, subscribe first.> >>>> >>> >> _______________________________________________> >> R-SIG-Finance at stat.math.ethz.ch mailing list> >> https://stat.ethz.ch/mailman/listinfo/r-sig-finance> >> -- Subscriber-posting only.> >> -- If you want to post, subscribe first.> >> > _________________________________________________________________> > Give to a good cause with every e-mail. Join the i'm Initiative from Microsoft.> > http://im.live.com/Messenger/IM/Join/Default.aspx?souce=EML_WL_ GoodCause\n_________________________________________________________________\nChange the world with e-mail. Join the i’m Initiative from Microsoft.\n\nld\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Gabor,\n \nI think in your code, the loop should be (to replicate apply.fromstart())\n \nfor(i in 20:nrow(dd)) dd[i, ] <- colMeans(d[1:i, ])\n \nnot 21:nrow(dd)\n \nI think that's where the difference you ref",
       "thread_id": "thread-92f22a47b7cd",
       "thread_depth": 6,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080602/a182f3ad/attachment.pl"
+      ]
     },
     {
       "id": "msg-a917afda41e2",
@@ -267,11 +276,14 @@
         "<BLU105-W9403CBDB14B43DC0BBCC4EEBB0@phx.gbl>",
         "<971536df0806020743o2338fed9v7aad5165e6e5990e@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080602/4e141953/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080602/4e141953/attachment.pl>",
+      "body_plain": "You are right. I completely missed that.> Date: Mon, 2 Jun 2008 10:43:40 -0400> From: ggrothendieck at gmail.com> To: feanor0 at hotmail.com> Subject: Re: [R-SIG-Finance] apply.fromstart() warnings> CC: r-sig-finance at stat.math.ethz.ch> > Although the gap in my post was defined as one off from theirs that> is not the relevant point. Look at the answers from apply.fromstart> The last number in the last column should be 38 (mean of 26:50),> not 13.> > > d <- zoo(matrix(1:50, 25), as.Date(1:25))> > apply.fromstart(d, gap = 20, FUN = \"mean\")> > 1970-01-02 NA NA> 1970-01-03 NA NA> 1970-01-04 NA NA> 1970-01-05 NA NA> 1970-01-06 NA NA> 1970-01-07 NA NA> 1970-01-08 NA NA> 1970-01-09 NA NA> 1970-01-10 NA NA> 1970-01-11 NA NA> 1970-01-12 NA NA> 1970-01-13 NA NA> 1970-01-14 NA NA> 1970-01-15 NA NA> 1970-01-16 NA NA> 1970-01-17 NA NA> 1970-01-18 NA NA> 1970-01-19 NA NA> 1970-01-20 NA NA> 1970-01-21 10.5 10.5> 1970-01-22 11.0 11.0> 1970-01-23 11.5 11.5> 1970-01-24 12.0 12.0> 1970-01-25 12.5 12.5> 1970-01-26 13.0 13.0> There were 12 warnings (use warnings() to see them)> > > On Mon, Jun 2, 2008 at 10:30 AM, Murali Menon <feanor0 at hotmail.com> wrote:> > Gabor,> >> > I think in your code, the loop should be (to replicate apply.fromstart())> >> > for(i in 20:nrow(dd)) dd[i, ] <- colMeans(d[1:i, ])> >> > not 21:nrow(dd)> >> > I think that's where the difference you refer to comes from. IF you make it> > 20:nrow(dd), then the answers match apply.fromstart()> >> > My understanding of the gap parameter:> >> > If it is 20, then the mean of the first 20 entries of d are computed, and> > stored in the 20th entry of dd, not the 21st.> >> > What do you think?> >> > Cheers,> > Murali> >> >> Date: Mon, 2 Jun 2008 10:10:44 -0400> >> From: ggrothendieck at gmail.com> >> To: feanor0 at hotmail.com> >> Subject: Re: [R-SIG-Finance] apply.fromstart() warnings> >> CC: r-sig-finance at stat.math.ethz.ch> >>> >> Try the example in my post.> >>> >> On Mon, Jun 2, 2008 at 10:07 AM, Murali Menon <feanor0 at hotmail.com> wrote:> >> >> >> >> >> > Hi,> >> >> >> >> >> > Did you see where the answers are wrong? I tried the following, and it> >> > appears correct (except for the warnings):> >> >> >> >> >> >> apply.fromstart(cbind(1:20, 1:20), gap=10, FUN=mean)> >> >> >> > Column.1 Column.2> >> > 1970-01-02 NA NA> >> > 1970-01-03 NA NA> >> > 1970-01-04 NA NA> >> > 1970-01-05 NA NA> >> > 1970-01-06 NA NA> >> > 1970-01-07 NA NA> >> > 1970-01-08 NA NA> >> > 1970-01-09 NA NA> >> > 1970-01-10 NA NA> >> > 1970-01-11 5.5 5.5> >> > 1970-01-12 6.0 6.0> >> > 1970-01-13 6.5 6.5> >> > 1970-01-14 7.0 7.0> >> > 1970-01-15 7.5 7.5> >> > 1970-01-16 8.0 8.0> >> > 1970-01-17 8.5 8.5> >> > 1970-01-18 9.0 9.0> >> > 1970-01-19 9.5 9.5> >> > 1970-01-20 10.0 10.0> >> > 1970-01-21 10.5 10.5> >> > There were 22 warnings (use warnings() to see them)> >> >> >> > That's correct, no? The mean of the first 10 entries go into the 10th> >> > row, the mean of the first 11 entries go into the 11th row, etc.> >> >> >> > Funnily enough, there are no warnings if I run the function on a vector,> >> > say:> >> >> >> > apply.fromstart(1:20, gap=10, FUN=mean)> >> >> >> > Cheers,> >> > Murali> >> >> >> >> Date: Mon, 2 Jun 2008 09:40:53 -0400> >> >> From: ggrothendieck at gmail.com> >> >> To: r-sig-finance at stat.math.ethz.ch> >> >> Subject: Re: [R-SIG-Finance] apply.fromstart() warnings> >> >>> >> >> The problem goes beyond some warnings -- the answers from> >> >> apply.fromstart are wrong. You could report the problem to the> >> >> author and just use a suitably modified version of the loop I posted> >> >> as a workaround.> >> >>> >> >> On Mon, Jun 2, 2008 at 9:26 AM, Murali Menon wrote:> >> >>>> >> >>> Hi Gabor,> >> >>>> >> >>> Thanks for the suggestion. Actually, I just simplified the problem to> >> >>> a small bit of code that replicates the issue; in actuality, it's not the> >> >>> mean I am interested in calculating (but all sorts of other metrics), and> >> >>> the data are not randomly generated, but are financial time-series.> >> >>>> >> >>> The warning's probably coming from the apply.fromstart() function, but> >> >>> am not quite able to determine why. The initial 20 NAs are expected as there> >> >>> are no 'mean' computed for these (viz. the argument gap = 20).> >> >>>> >> >>> Cheers,> >> >>> Murali> Date: Mon, 2 Jun 2008 08:27:56 -0400> From:> >> >>> ggrothendieck at gmail.com> To: feanor0 at hotmail.com> Subject: Re:> >> >>> [R-SIG-Finance] apply.fromstart() warnings> CC:> >> >>> r-sig-finance at stat.math.ethz.ch>> To do it in zoo alone try this:>>> >> >>> library(zoo)> d <- zoo(matrix(1:50, 25), as.Date(1:25))>> dd <- NA * d>> >> >>> for(i in 21:nrow(dd)) dd[i, ] <- colMeans(d[1:i, ])>> You also might try> >> >>> updating the to latest version of all packages and R> although that does not> >> >>> appear to be the source of the problem here.>> On Mon, Jun 2, 2008 at 7:57> >> >>> AM, Murali Menon wrote:>>>>>> Folks,>>>> When I attempt to find the growing> >> >>> window columnwise mean of a two-dimensional array, I get a bunch of> >> >>> warnings. Any idea why? Here's my code:>>>>>> >> >>> library(PerformanceAnalytics)>>>>> d <- zoo(matrix(rnorm(50), ncol=2),> >> >>> order.by=as.Date(1:25))>>>>> apply.fromstart(d, gap=20, FUN=\"mean\")>>> >> >>> 1970-01-02 NA NA>> 1970-01-03 NA NA>> 1970-01-04 NA NA>> 1970-01-05 NA NA>>> >> >>> 1970-01-06!> >> >> NA NA>> 1970-01-07 NA NA>> 1970-01-08 NA NA>> 1970-01-09 NA NA>>> >> >> 1970-01-10 NA NA>> 1970-01-11 NA NA>> 1970-01-12 NA NA>> 1970-01-13 NA NA>>> >> >> 1970-01-14 NA NA>> 1970-01-15 NA NA>> 1970-01-16 NA NA>> 1970-01-17 NA NA>>> >> >> 1970-01-18 NA NA>> 1970-01-19 NA NA>> 1970-01-20 NA NA>> 1970-01-21> >> >> -0.05899970 -0.05899970>> 1970-01-22 -0.05882669 -0.05882669>> 1970-01-23> >> >> -0.08635806 -0.08635806>> 1970-01-24 -0.15848480 -0.15848480>> 1970-01-25> >> >> -0.13168358 -0.13168358>> 1970-01-26 -0.17101046 -0.17101046>> There were 12> >> >> warnings (use warnings() to see them)>>>>>> When I check the warnings(),> >> >> here's the first string I get:>>>> 1: In column.Return.calc[i] => >> >> apply(as.matrix(data.zoo[, ... :>> number of items to replace is not a> >> >> multiple of replacement length>>>> I'm not sure why this should be the> >> >> case?>>>>>> I'm using:>>>>> packageDescription(\"zoo\")$Version>> [1]> >> >> \"1.4-2\">>> packageDescription(\"PerformanceAnalytics\")$Version>> [1]> >> >> \"0.9.6\">>>>>> And R 2!> >> >> .6.1 on Windows XP.>>>>>> Thanks,>>>>>> Murali>>>> ___________> >> >> ______________________________________________________>> Give to a good> >> >> cause with every e-mail. Join the i'm Initiative from Microsoft.>>>>> >> >> _______________________________________________>>> >> >> R-SIG-Finance at stat.math.ethz.ch mailing list>>> >> >> https://stat.ethz.ch/mailman/listinfo/r-sig-finance>> -- Subscriber-posting> >> >> only.>> -- If you want to post, subscribe first.>>> >> >>> _________________________________________________________________> >> >>> Give to a good cause with every e-mail. Join the i'm Initiative from> >> >>> Microsoft.> >> >>>> >> >>> [[alternative HTML version deleted]]> >> >>>> >> >>>> >> >>> _______________________________________________> >> >>> R-SIG-Finance at stat.math.ethz.ch mailing list> >> >>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance> >> >>> -- Subscriber-posting only.> >> >>> -- If you want to post, subscribe first.> >> >>>> >> >>> >> >> _______________________________________________> >> >> R-SIG-Finance at stat.math.ethz.ch mailing list> >> >> https://stat.ethz.ch/mailman/listinfo/r-sig-finance> >> >> -- Subscriber-posting only.> >> >> -- If you want to post, subscribe first.> >> >> >> > _________________________________________________________________> >> > Give to a good cause with every e-mail. Join the i'm Initiative from> >> > Microsoft.> >> > http://im.live.com/Messenger/IM/Join/Default.aspx?souce=EML_WL_> >> > GoodCause> >> >> > ________________________________> > Change the world with e-mail. Join the i'm Initiative from Microsoft.\n_________________________________________________________________\nGive to a good cause with every e-mail. Join the i’m Initiative from Microsoft.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "You are right. I completely missed that.> Date: Mon, 2 Jun 2008 10:43:40 -0400> From: ggrothendieck at gmail.com> To: feanor0 at hotmail.com> Subject: Re: [R-SIG-Finance] apply.fromstart() warnings> C",
       "thread_id": "thread-92f22a47b7cd",
       "thread_depth": 8,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080602/4e141953/attachment.pl"
+      ]
     },
     {
       "id": "msg-77c82211fd80",
@@ -428,11 +440,14 @@
       "subject_clean": "Datastream interface",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080605/08424ab4/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080605/08424ab4/attachment.pl>",
+      "body_plain": "Hi folks,\n \nIs there an R interface to Datastream?\n \nThanks,\nMurali\n_________________________________________________________________\n\n\nsh_skydrive_062008\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi folks,\n \nIs there an R interface to Datastream?\n \nThanks,\nMurali\n_________________________________________________________________\n\n\nsh_skydrive_062008\n\t[[alternative HTML version deleted]]",
       "thread_id": "thread-79c0393cc93f",
       "thread_depth": 0,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080605/08424ab4/attachment.pl"
+      ]
     },
     {
       "id": "msg-274526ce7e34",
@@ -515,11 +530,14 @@
       "subject_clean": "Granger-Gonzalo decomposition",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080611/aaffea25/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080611/aaffea25/attachment.pl>",
+      "body_plain": "Dear List member I was wondering if somebody has ever implemented the Granger Gonzalo decomposition.\n\nFollowing the Granger and Gonzalo paper I have tried to code it by using the result from the urca package. But it doesnt seem to work as my Permanent time series is much more volatile than the actual one.\n\nIf somebody has some idea, it would be helpful\nHere is my code\n\nlibrary(urca)\ndata(denmark)\nsjd <- denmark[, c(\"LRM\", \"LRY\", \"IBO\", \"IDE\")]\nN=nrow(sjd)\n\nsjd.vecm1 <- ca.jo(sjd, ecdet = \"const\", type=\"eigen\", K=2, spec=\"longrun\",season=4)\na=attr(sjd.vecm1, 'V')\ng=attr(sjd.vecm1, 'W')\n\nalpha=matrix(a[,1])\ngamma=matrix(g[1,])\n\nalpha.T=eigen((alpha)%*%t(alpha))$vectors[,5:2]\ngamma.T=eigen((gamma)%*%t(gamma))$vectors[,5:2]\n\nX=cbind(sjd,rep(1,N))\n\nA1=alpha.T%*%solve(t(gamma.T)%*%alpha.T)\nA2=gamma%*%solve(t(alpha)%*%gamma)\n\nTt=Pt=array(rep(0,N*ncol(X)),c(N,ncol(X)))\n\nfor(i in 1:N){\n    Pt[i,]=A1%*%t(gamma.T)%*%t(X[i,])\n    Tt[i,]=A2%*%t(alpha)%*%t(X[i,])\n}\n\n\n_________________________________________________________________\n\n\ne=wlmailtagline\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear List member I was wondering if somebody has ever implemented the Granger Gonzalo decomposition.\n\nFollowing the Granger and Gonzalo paper I have tried to code it by using the result from the urca ",
       "thread_id": "thread-b401c0a70e11",
       "thread_depth": 0,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080611/aaffea25/attachment.pl"
+      ]
     },
     {
       "id": "msg-ef9b204a8f8d",
@@ -547,11 +565,14 @@
       "subject_clean": "Financial workload in R",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080613/deb9731d/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080613/deb9731d/attachment.pl>",
+      "body_plain": "Hi:\n\nI am looking for 1 or 2 compute-intensive realistic workloads in Finance sector for R, where I can take advantage of optimized BLAS and LAPACK libraries and also random number libraries.  VaR calculation is one of the areas I am looking into.  Can you please suggest other models/methods where BLAS/LAPACK performance is critical?   \n\nThank You.\n\nBest Regards,\n\nBalaji\n\n       \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi:\n\nI am looking for 1 or 2 compute-intensive realistic workloads in Finance sector for R, where I can take advantage of optimized BLAS and LAPACK libraries and also random number libraries.  VaR cal",
       "thread_id": "thread-14bf87fb2a13",
       "thread_depth": 0,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080613/deb9731d/attachment.pl"
+      ]
     },
     {
       "id": "msg-0e1060d1af0a",
@@ -563,11 +584,14 @@
       "subject_clean": "Cox, Ingersoll, Ross/Vasicek parameter  estimation via Kalman-Filter (SSPIR)",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080615/98f0f38d/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080615/98f0f38d/attachment.pl>",
+      "body_plain": "Dear R-Users,\n\n\n\ndoes anybody have a procedure to estimate the parameters for a CIR 2 \nor 3 Factor model via Kalman filtering?\n\nRegards,\nFrancesco \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear R-Users,\n\n\n\ndoes anybody have a procedure to estimate the parameters for a CIR 2 \nor 3 Factor model via Kalman filtering?\n\nRegards,\nFrancesco \n\t[[alternative HTML version deleted]]",
       "thread_id": "thread-0e1060d1af0a",
       "thread_depth": 0,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080615/98f0f38d/attachment.pl"
+      ]
     },
     {
       "id": "msg-17edb55e789c",
@@ -579,11 +603,14 @@
       "subject_clean": "Are there somewhere the examples http://www.quantmod.com/examples/ ready to run ?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080617/5ba4c79d/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080617/5ba4c79d/attachment.pl>",
+      "body_plain": "Hello,\n\n\n\nAre there somewhere the examples http://www.quantmod.com/examples/\n\nready to run ?\n\n\n\nThanks,\n\n\n\nPierre8r\n\n\n      _____________________________________________________________________________ \n\no.fr\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\n\n\nAre there somewhere the examples http://www.quantmod.com/examples/\n\nready to run ?\n\n\n\nThanks,\n\n\n\nPierre8r\n\n\n      ____________________________________________________________________________",
       "thread_id": "thread-17edb55e789c",
       "thread_depth": 0,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080617/5ba4c79d/attachment.pl"
+      ]
     },
     {
       "id": "msg-0c17ed53f727",
@@ -747,11 +774,14 @@
       "subject_clean": "portfolio optimization questions",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080617/ed2d0663/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080617/ed2d0663/attachment.pl>",
+      "body_plain": "Hi,\n\nI have a general finance question, rather than an R-specific question.  In\ntrading currencies, should the weights always add up to 1, or 0, or can they\nadd up to anything?  What determines this?  Also, I have an Splus nuopt\nquestion.  If anyone knows a better place to post this, it would be\nappreciated, but in the meantime I'll ask it here.  In NuOPT, when I set\nmu.target for solveQP to be very low (used as in page 9 of introduction to\nmodern portfolio optimization with NuOPT, S-PLUS, and S+Bayes), I see poor\nportfolio returns, but if I set it to be high, I get an error message\n<<SIMPLE 193>> Error in solve():\n       <<NUOPT 2>> infeasible(linear constraints and variable bounds)\n\nAny help would be much appreciated.\n\nRegards,\nAlexander Moreno\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI have a general finance question, rather than an R-specific question.  In\ntrading currencies, should the weights always add up to 1, or 0, or can they\nadd up to anything?  What determines this? ",
       "thread_id": "thread-0d9ed093081a",
       "thread_depth": 0,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080617/ed2d0663/attachment.pl"
+      ]
     },
     {
       "id": "msg-a03a6aceb11e",
@@ -818,11 +848,14 @@
       "subject_clean": "Resampling Methods for Dependent Data",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080617/fed2d044/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080617/fed2d044/attachment.pl>",
+      "body_plain": "Hi there:\nI am reading a book by Lahiri (2003): Resampling Methods for Dependent Data.  I am trying to implement some of the techniques that book has introduced, e.g. model-based bootstrap, block bootstrap method, and bootstrapping heavy-tailed data and extremes. \nCould somebody share any information helpful in this regard?\n\nThanks a lot.\nWei-han Liu\n\n\n      \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi there:\nI am reading a book by Lahiri (2003): Resampling Methods for Dependent Data.  I am trying to implement some of the techniques that book has introduced, e.g. model-based bootstrap, block boot",
       "thread_id": "thread-5a2ae2da0901",
       "thread_depth": 0,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080617/fed2d044/attachment.pl"
+      ]
     },
     {
       "id": "msg-ee115af610b5",
@@ -886,11 +919,14 @@
       "subject_clean": "Resampling Methods for Dependent Data",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080618/a250baa0/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080618/a250baa0/attachment.pl>",
+      "body_plain": "Hi:\nYes, I know 'tsboot' package and it is designed to generate resample using fixed or random block lengths. However, I am curious if it can be used to bootstrap heavy-tailed data and extremes.\nWei-han\n\n\n----- Original Message ----\nFrom: Brian G. Peterson <brian at braverock.com>\nTo: Wei-han Liu <weihanliu2002 at yahoo.com>\nCc: r-sig-finance at stat.math.ethz.ch\nSent: Wednesday, June 18, 2008 6:05:03 PM\nSubject: Re: [R-SIG-Finance] Resampling Methods for Dependent Data\n\nWei-han Liu wrote:\n> I am reading a book by Lahiri (2003): Resampling Methods for Dependent\n> Data.  I am trying to implement some of the techniques that book has\n> introduced, e.g. model-based bootstrap, block bootstrap method, and\n> bootstrapping heavy-tailed data and extremes.\n> Could somebody share any information helpful in this regard?\n\nThere has been a ton of information posted on this list on bootstrapping\ntechniques.  I suggest searching the list archive. Jrff has already\nsuggested the 'tsboot' package, which has been previously discussed here\nin some depth.\n\nWhen you have more specific questions, successes, or failures in your\ninvestigation of these techniques, please share them with the list so\nothers can benefit from your experience.  Bootstrap techniques are so\nimportant in modern financial analytics that just about anything you\ndiscover (good or bad) will likely be useful to someone else on this list.\n\nRegards,\n\n   - Brian\n\n\n      \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi:\nYes, I know 'tsboot' package and it is designed to generate resample using fixed or random block lengths. However, I am curious if it can be used to bootstrap heavy-tailed data and extremes.\nWei-h",
       "thread_id": "thread-70ae3efb9fda",
       "thread_depth": 0,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080618/a250baa0/attachment.pl"
+      ]
     },
     {
       "id": "msg-7dd81278a20c",
@@ -938,11 +974,14 @@
       "references": [
         "<540758.91229.qm@web53504.mail.re2.yahoo.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080618/47a2bc83/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080618/47a2bc83/attachment.pl>",
+      "body_plain": "Hi, You may consider the wild bootstrap, which is applicable to general conditionally or unconditionally heteroskdastic time series. Let rt is the time series (say return). Then the bootstrap sample is generated as  rt* = mt X rt where mt is any iid random variable with mean 0 and variance 1. As an example, mt can be 1 with prob = 0.5 and -1 with with prob = 0.5 (Rademacher distribution), among others. Then when rt is volatile, rt* is also volatile. When rt has an extreme value, so has rt*. So the wild bootstrap can replicate heavy tailed data or extremes, I suppose. The references for the wild bootstrap are \nMammMammen, E., 1993, Bootstrap and wild bootstrap for high dimensional linear models, The Annals of Statistics 21, 255-285.\nKim, J. Kim, J. H., 2006, Wild bootstrapping variance ratio tests, Economics Letters 92, 38-43. (This test is in vrtest package)Goncalves, S. and L. Kilian (2004). \"Bootstrapping autoregressive with conditional heteroskedasticity of unknown form.\" Journal of Econometrics 123(1): 83-120.\n\nHope this helps. JHK> Date: Wed, 18 Jun 2008 06:19:07 -0700> From: weihanliu2002 at yahoo.com> To: brian at braverock.com> CC: r-sig-finance at stat.math.ethz.ch> Subject: Re: [R-SIG-Finance] Resampling Methods for Dependent Data> > Hi:> Yes, I know 'tsboot' package and it is designed to generate resample using fixed or random block lengths. However, I am curious if it can be used to bootstrap heavy-tailed data and extremes.> Wei-han> > > ----- Original Message ----> From: Brian G. Peterson <brian at braverock.com>> To: Wei-han Liu <weihanliu2002 at yahoo.com>> Cc: r-sig-finance at stat.math.ethz.ch> Sent: Wednesday, June 18, 2008 6:05:03 PM> Subject: Re: [R-SIG-Finance] Resampling Methods for Dependent Data> > Wei-han Liu wrote:> > I am reading a book by Lahiri (2003): Resampling Methods for Dependent> > Data. I am trying to implement some of the techniques that book has> > introduced, e.g. model-based bootstrap, block bootstrap method, and> > bootstrapping heavy-tailed data and extremes.> > Could somebody share any information helpful in this regard?> > There has been a ton of information posted on this list on bootstrapping> techniques. I suggest searching the list archive. Jrff has already> suggested the 'tsboot' package, which has been previously discussed here> in some depth.> > When you have more specific questions, successes, or failures in your> investigation of these techniques, please share them with the list so> others can benefit from your experience. Bootstrap techniques are so> important in modern financial analytics that just about anything you> discover (good or bad) will likely be useful to someone else on this list.> > Regards,> > - Brian> > > > [[alternative HTML version deleted]]> > _______________________________________________> R-SIG-Finance at stat.math.ethz.ch mailing list> https://stat.ethz.ch/mailman/listinfo/r-sig-finance> -- Subscriber-posting only.> -- If you want to post, subscribe first.\n_________________________________________________________________\nNever miss another e-mail with Hotmail on your mobile.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi, You may consider the wild bootstrap, which is applicable to general conditionally or unconditionally heteroskdastic time series. Let rt is the time series (say return). Then the bootstrap sample i",
       "thread_id": "thread-70ae3efb9fda",
       "thread_depth": 1,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080618/47a2bc83/attachment.pl"
+      ]
     },
     {
       "id": "msg-9c4104214e72",
@@ -1022,11 +1061,14 @@
       "subject_clean": "Multiplicative error model ?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080624/1725d06d/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080624/1725d06d/attachment.pl>",
+      "body_plain": "Dear all:\n\nDoes anyone know whether the multiplicative error mode (MEM) is implemented\nin R or other languages? I tried to write the program but got non-converging\nproblems. I checked the paper in :\nwww.core.ucl.ac.be/archives/CORE.ETRICSfiles/2005-06/gallo.pdf\nBut I found that the stuff there seems too complicated for me to handle.\nCan anyone give a hint here? Thanks for help of any kind.\n\nShyhWeir\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all:\n\nDoes anyone know whether the multiplicative error mode (MEM) is implemented\nin R or other languages? I tried to write the program but got non-converging\nproblems. I checked the paper in :\nw",
       "thread_id": "thread-2a15443520ec",
       "thread_depth": 0,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080624/1725d06d/attachment.pl"
+      ]
     },
     {
       "id": "msg-34e0549fc75c",
@@ -1072,11 +1114,14 @@
       "subject_clean": "Error in QRMlib",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080626/cf8e4a23/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080626/cf8e4a23/attachment.pl>",
+      "body_plain": "Hi,\n\nI can not get the desired result if I running the example code from QRMlib\nuser manual:\n\n-------------------------------------------\n\ndata(nasdaq);\n> nreturns <- -mk.returns(nasdaq);\n> monthly.maxima <- aggregateMonthlySeries(nreturns,FUN=max);\nError in aggregateMonthlySeries(nreturns, FUN = max) :\n  no slot of name \"Dim\" for this object of class \"timeDate\"\n> monthly.maxima <- seriesData(monthly.maxima)\nError in seriesData(monthly.maxima) : object \"monthly.maxima\" not found\n> mod1 <- fit.GEV(monthly.maxima);\nError in var(maxima) : object \"monthly.maxima\" not found\n\n--------------------------------------------\n\nThe following content is the prompt message after I running debug\n(ggregateMonthlySeries)\n\n----------------------------------------------\n> monthly.maxima <- aggregateMonthlySeries(nreturns,FUN=max);\ndebugging in: aggregateMonthlySeries(nreturns, FUN = max)\ndebug: {\n  if (!is.timeSeries(timeseries))\n  stop(\"timeseries must be of the timeSeries class from fCalendar package\")\n  charvecStartDate <- timeseries at positions[1]\n  charvecLastDate <- timeseries at positions[length(timeseries at positions)]\n  dateFormat = \"%Y-%m-%d\"\n  test1 <- as.character(timeFirstDayInMonth(charvecStartDate))\n  test2 <- as.character(timeFirstDayInMonth(charvecLastDate))\n  from3 = timeSequence(from = test1, to = test2, by = \"month\",\n  format = dateFormat)\n  test3 <- as.character(timeLastDayInMonth(charvecStartDate))\n  test4 <- as.character(timeLastDayInMonth(charvecLastDate))\n  to3 = timeSequence(from = test3, to = test4, by = \"month\",\n  format = dateFormat)\n  monthsLength <- to3 at Dim\n  repetitions <- as.integer(monthsLength/12)\n  remainder <- monthsLength - 12 * repetitions\n  firstDayInMonthYr <- c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)\n  monthNumbers <- c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)\n  lastMonthDayStdYr <- c(31, 28, 31, 30, 31, 30, 31, 31, 30,\n  31, 30, 31)\n  lastDayVector <- rep(lastMonthDayStdYr, time = repetitions)\n  if (remainder > 0)\n  lastDayVector <- c(lastDayVector, lastMonthDayStdYr[1:remainder])\n  monthVector <- rep(monthNumbers, times = repetitions)\n  if (remainder > 0)\n  monthVector <- c(monthVector, monthNumbers[1:remainder])\n  ltest <- strptime(to3 at Data, \"%Y-%m-%d\")\n  ltest$mday <- lastDayVector\n  ltest$mon <- monthVector\n  for (iter in 1:monthsLength) {\n  if (leap.year(ltest$year[iter] + 1900) && (ltest$mon[iter] ==\n  1))\n  ltest$mday[iter] <- 29\n  }\n  to3 at Data[] <- ltest\n  applySeries(timeseries, from3, to3, by = \"monthly\", FUN = FUNC)\n}\nBrowse[1]> monthly.maxima <- seriesData(monthly.maxima)\nError in seriesData(monthly.maxima) : object \"monthly.maxima\" not found\nBrowse[1]> mod1 <- fit.GEV(monthly.maxima);\n------------------------------------------------------\n\nHow can we get the desired result?\n\nAppreciate a lot!\n\nBest,\n\nHong\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI can not get the desired result if I running the example code from QRMlib\nuser manual:\n\n-------------------------------------------\n\ndata(nasdaq);\n> nreturns <- -mk.returns(nasdaq);\n> monthly.ma",
       "thread_id": "thread-53441312d7a9",
       "thread_depth": 0,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080626/cf8e4a23/attachment.pl"
+      ]
     },
     {
       "id": "msg-bc283b44ec4d",
@@ -1106,11 +1151,14 @@
       "subject_clean": "Bond valuation",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080627/574b1a92/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080627/574b1a92/attachment.pl>",
+      "body_plain": "Hi,\n\nDoes R offer any package can calculate the duration of bond?\n\nThanks in advance!\n\nBest,\n\nHong\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nDoes R offer any package can calculate the duration of bond?\n\nThanks in advance!\n\nBest,\n\nHong\n\n\t[[alternative HTML version deleted]]",
       "thread_id": "thread-0970bc291163",
       "thread_depth": 0,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080627/574b1a92/attachment.pl"
+      ]
     },
     {
       "id": "msg-42cbacaffb38",
@@ -1235,11 +1283,14 @@
       "references": [
         "<47A2B9DE.4010101@soundinvest.net>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080629/cb581231/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080629/cb581231/attachment.pl>",
+      "body_plain": "Marcin,\n\nWhile I have not seen this problem with the R Bloomberg package, I have\ncertainly seen something similar with large calls to the Bloomberg API from\nExcel. For some reason, the API seemed to choke if it received \"too many\"\ndata requests. I never had any luck getting clarification from Bloomberg as\nto the limits of the API and only got around the problem by breaking my\nproblem into smaller requests. In your case, you might need to loop through\nsay 100 stocks or so at a time. In any event, it is certainly worth testing\nwhether your code works with a smaller number than 900.\n\nRegards,\nSean.\n\nOn Fri, Feb 1, 2008 at 4:19 PM, Marcin Kopaczynski <\nmarcin.kopaczynski at soundinvest.net> wrote:\n\n> hi robert,\n>\n> i´ve got a problem with the bloomberg data import. usually all works well,\n> but sometimes it seems that nothing is downloaded at all from bloomberg.\n>\n> example: i wanted to download px_last for 900 us-stocks beginning with\n> 19900101 (giving him the appropriate chron-date format). the download\n> starts, the downloaded data is stored and written out to a file. new data is\n> being concatenated with the old data (column by column) until all 900 stocks\n> are downloaded. during this process the download breaks down, and the\n> strange thing is, that it does happen SOMETIMES and not at the same place\n> (i.e. not at stock number 390, but at number 401 at one time and 789 at\n> other time). sometimes it does not happen at all. also, when i resume the\n> download, i.e. tell him to download the data from where he stopped, it then\n> works.\n>\n> so i checked the functions in your package and the problem really seems to\n> be with the download itself. what happens is: in the function\n> <blpGetHistoricalData> the object <lst> is NULL. this makes the command\n> \"attr(lst, \"num.of.date.cols\")  <- 1\" to throw an error, because he is not\n> able to assign an attribute to a NULL object:\n> \"attr(lst, \"num.of.date.cols\") <- 1 : attempt to set an attribute on NULL\".\n> the object <lst> becomes then a data.frame of the dimension\n> [0:number.of.tickers], which obviously is not what one would expect to get.\n>\n> my question is: have you ever experienced such a problem? the problem seems\n> to become more probable, the more data one downloads from bloomberg.\n>\n> here are some infos on my environment:\n>\n> R 2.5.1\n> windows xp on the bloomberg terminal\n> chron 2.3.16\n> RBloomberg 0.1-10\n> RDCOMClient 0.91-0\n> zoo 1.4-2\n>\n> i´ve been talking to bloomberg about this problem, as well. they assured me\n> that it is not about the amount of data i was downloading. so there must be\n> something else.\n>\n> thx in advance for your help,\n>\n> marcin\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Marcin,\n\nWhile I have not seen this problem with the R Bloomberg package, I have\ncertainly seen something similar with large calls to the Bloomberg API from\nExcel. For some reason, the API seemed to c",
       "thread_id": "thread-d2f4ea70e316",
       "thread_depth": 0,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080629/cb581231/attachment.pl"
+      ]
     },
     {
       "id": "msg-707efbdb5ab0",
@@ -1254,11 +1305,14 @@
         "<OF33BEE4EA.17F1467C-ONC12573E0.005006CB-C12573E0.0052689B@fr.world.socgen>",
         "<16176711.post@talk.nabble.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080628/deefaeb0/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080628/deefaeb0/attachment.pl>",
+      "body_plain": "R can handle this type of data if your machine has enough RAM to deal with\nthe size of your tic data.\n\ntry converting your char dates vector using strptime and see if that works.\nI'm not sure if timeDate is using strptime underneath, but it is a good\nplace to start to check for obvious errors in the data like inconsistent\nformats.\n\n-Whit\n\n\nOn Thu, Mar 20, 2008 at 7:26 AM, DavidM.UK <david.merritt at bris.ac.uk> wrote:\n\n>\n> If you're dealing with tick data (which is usually extensive) I'd advise\n> you\n> do any time/date processing outside of R.  My suggestion would be to use\n> Perl to format the dates and then read the data into R, this is how I deal\n> with tick data at least.\n>\n> Best,\n>\n> David\n>\n> anass.mouhsine wrote:\n> >\n> >\n> >\n> > Hello,\n> >\n> > I am carrying out some research on tick data and I am faced to a date\n> > problem when trying to transform my dataset into timeSeries.\n> > My date time is written this way\n> > \"2005-04-08 08:30:35.916\"\n> > where I used this format \"%Y-%m-%d %H:%M:%OS\" to benfit from the\n> > tick-by-tick information.\n> > I have a problem when I convert this character object to timeDate\n> >\n> >> dates.tmp=timeDate(\"2005-04-08 08:30:35.916\",format=\"%Y-%m-%d\n> %H:%M:%OS\")\n> > Error in if (sum(lt$sec + lt$min + lt$hour) == 0) isoFormat = \"%Y-%m-%d\"\n> :\n> >         missing value where TRUE/FALSE needed\n> > In addition: Warning message:\n> > Unknown Format Specification in: .whichFormat(charvec)\n> >\n> > when debugging, I've found the problem coming from the function\n> > ..whichFormat(charvec) that don't recognize the format of the input.\n> > Browse[1]> .whichFormat(charvec)\n> > [1] \"unknown\"\n> > Warning message:\n> > Unknown Format Specification in: .whichFormat(charvec)\n> >\n> > Have anyone faced this kind of issue?\n> >\n> > Thank you\n> >\n> > Anass Mouhsine\n> >\n> >\n> >\n> >\n> >\n> > *************************************************************************\n> > This message and any attachments (the \"message\") are con...{{dropped:10}}\n> >\n> > _______________________________________________\n> > R-SIG-Finance at stat.math.ethz.ch mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only.\n> > -- If you want to post, subscribe first.\n> >\n> >\n>\n> --\n> View this message in context:\n> http://www.nabble.com/timeDate-conversion--C1--tp15184361p16176711.html\n> Sent from the Rmetrics mailing list archive at Nabble.com.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "R can handle this type of data if your machine has enough RAM to deal with\nthe size of your tic data.\n\ntry converting your char dates vector using strptime and see if that works.\nI'm not sure if timeD",
       "thread_id": "thread-707efbdb5ab0",
       "thread_depth": 0,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080628/deefaeb0/attachment.pl"
+      ]
     },
     {
       "id": "msg-1d696f4b76c4",
@@ -1272,11 +1326,14 @@
       "references": [
         "<34f2770f0805181702u65fb89d8x76613f7191b11725@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080628/5753fa05/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080628/5753fa05/attachment.pl>",
+      "body_plain": "Vince,\n\nIf your securities are in a list then you can easily use lapply and\nfriends.  If you are not doing anything too complicated, that should be\nsufficient.  If you are really have efficiency problems, then hook in some\nc/c++ code which is the approach I've taken in fts (link:\nhttp://repo.or.cz/w/fts.git).\n\nContact me off list if you want to give it a spin; I'll help get you\nstarted.  You still in Greenwich?\n\n-Whit\n\n\nOn Sun, May 18, 2008 at 8:02 PM, Vince Fulco <vfulco1 at gmail.com> wrote:\n\n> Looking for the best recommendation to manage the manipulation of multiple\n> securities w/i the overall package (i.e. downloading in bulk (simple) and\n> then calculating N period differences and other custom measures).  Looping\n> thru and/or vectorizing is easy but I suspect there are more efficient\n> methods w/i the quantmod class once the data is localized.  The docs seem\n> to\n> focus only on single securities and some early trials had me bouncing\n> around\n> zoo/xts, etc. classes.  Thanks to Jeff Ryan for an extraordinary\n> contribution.\n>\n> Regards,\n>\n> --\n> Vince Fulco, CFA, CAIA\n>\n>        [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Vince,\n\nIf your securities are in a list then you can easily use lapply and\nfriends.  If you are not doing anything too complicated, that should be\nsufficient.  If you are really have efficiency probl",
       "thread_id": "thread-1d696f4b76c4",
       "thread_depth": 0,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080628/5753fa05/attachment.pl"
+      ]
     },
     {
       "id": "msg-cca6c9fc38a4",
@@ -1306,11 +1363,14 @@
       "subject_clean": "Experience of large scale use of R in financial\tservices",
       "in_reply_to": "<59C6D502E2521141B9F6C3D857FB24BA0DBB19@becxoex03.corp.kpmgconsulting.com>",
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080629/c3f1a4e4/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080629/c3f1a4e4/attachment.pl>",
+      "body_plain": "We run a quantitative hedge fund with about 6 alpha professionals, and 10 \nsupport across 4 locations, Windows/Linux, etc. We use R extensively as \nour core business logic engine. Having used MatLab in the past I can say I \nam pleased we made the switch.\n\n\n\n\n\n\n\"Dassler, Marc\" <marc.dassler at bearingpoint.com> \nSent by: r-sig-finance-bounces at stat.math.ethz.ch\n02/07/2008 12:52 PM\n\nTo\n<r-sig-finance at stat.math.ethz.ch>\ncc\n\nSubject\n[R-SIG-Finance] Experience of large scale use of R in financial services\n\n\n\n\n\nHi!\n\nWe, a management and technology consultants company in financial\nservices, are planning a large scale use of R in a bank. We would like\nto use R as calculation kernel for creating ratings of special\ntransactions based on cash flow simulations. \n\nHere comes my question: does anyone have experience of large scale usage\nof R in an operational system?\n\nBest regards,\nMarc\n***************************************************************************************************\nThe information in this email is confidential and may be...{{dropped:12}}",
+      "body_snippet": "We run a quantitative hedge fund with about 6 alpha professionals, and 10 \nsupport across 4 locations, Windows/Linux, etc. We use R extensively as \nour core business logic engine. Having used MatLab i",
       "thread_id": "thread-0479fb095f78",
       "thread_depth": 0,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080629/c3f1a4e4/attachment.pl"
+      ]
     },
     {
       "id": "msg-de237c04e275",
@@ -1325,11 +1385,14 @@
         "<59C6D502E2521141B9F6C3D857FB24BA0DBB19@becxoex03.corp.kpmgconsulting.com>",
         "<OF72F45E12.A57A7080-ON85257477.005D3E67-85257477.005D6613@malbecpartners.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080629/a73589fa/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080629/a73589fa/attachment.pl>",
+      "body_plain": "Hi Ryan,\n\nFor my understanding, I just have one question to ask. For your Hedge Fund,\ndo you use existing R libraries or use your own embedded libraries?Thanks.\n\n\nKind Regards,\nDebashis\n\n\nOn 29/06/2008, ryan.sheftel at malbecpartners.com <\nryan.sheftel at malbecpartners.com> wrote:\n>\n> We run a quantitative hedge fund with about 6 alpha professionals, and 10\n> support across 4 locations, Windows/Linux, etc. We use R extensively as\n> our core business logic engine. Having used MatLab in the past I can say I\n> am pleased we made the switch.\n>\n>\n>\n>\n>\n>\n> \"Dassler, Marc\" <marc.dassler at bearingpoint.com>\n> Sent by: r-sig-finance-bounces at stat.math.ethz.ch\n> 02/07/2008 12:52 PM\n>\n> To\n> <r-sig-finance at stat.math.ethz.ch>\n> cc\n>\n> Subject\n> [R-SIG-Finance] Experience of large scale use of R in financial services\n>\n>\n>\n>\n>\n> Hi!\n>\n> We, a management and technology consultants company in financial\n> services, are planning a large scale use of R in a bank. We would like\n> to use R as calculation kernel for creating ratings of special\n> transactions based on cash flow simulations.\n>\n> Here comes my question: does anyone have experience of large scale usage\n> of R in an operational system?\n>\n> Best regards,\n> Marc\n>\n> ***************************************************************************************************\n> The information in this email is confidential and may ...{{dropped:12}}",
+      "body_snippet": "Hi Ryan,\n\nFor my understanding, I just have one question to ask. For your Hedge Fund,\ndo you use existing R libraries or use your own embedded libraries?Thanks.\n\n\nKind Regards,\nDebashis\n\n\nOn 29/06/200",
       "thread_id": "thread-0479fb095f78",
       "thread_depth": 1,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080629/a73589fa/attachment.pl"
+      ]
     },
     {
       "id": "msg-81a87b103326",
@@ -1341,11 +1404,14 @@
       "subject_clean": "Experience of large scale use of R in financial services",
       "in_reply_to": "<37673c2d0806291016n2985cd82v9a784b466e8590a3@mail.gmail.com>",
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080629/6ddb9624/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080629/6ddb9624/attachment.pl>",
+      "body_plain": "We make extensive use of the existing libraries, there are some great \nones, like zoo, etc. But of course we write our proprietary stuff \ninternally. We also link to FinCAD for generic finance math. There are \nsome great R packages including RMetrics, but we needed a one stop shop \nand had familiarity with FinCAD. I would say that probably 90% of what you \nwant is in the R community already, and the rest is very easy to create. \nEspecially with things like RJava your programmers can continue to code in \na language they are comfortable with, and that code can be exposed to R. \nPlus with RSQL, etc it integrates nicely into the domain.\n\nLastly, the biggest hidden benefit we found with R is that it seems \ndominant in academia, so any new people we interview from college or \ngrad-school seems very well versed, which helps keep the learning curve \ndown.\n\n\n\n\n\"Debashis Dutta\" <dutt.debashis at gmail.com> \n06/29/2008 01:16 PM\n\nTo\n\"ryan.sheftel at malbecpartners.com\" <ryan.sheftel at malbecpartners.com>\ncc\nr-sig-finance at stat.math.ethz.ch\nSubject\nRe: [R-SIG-Finance] Experience of large scale use of R in financial \nservices\n\n\n\n\n\nHi Ryan,\n \nFor my understanding, I just have one question to ask. For your Hedge \nFund, do you use existing R libraries or use your own embedded \nlibraries?Thanks.\n \n \nKind Regards,\nDebashis\n\n \nOn 29/06/2008, ryan.sheftel at malbecpartners.com <\nryan.sheftel at malbecpartners.com> wrote: \nWe run a quantitative hedge fund with about 6 alpha professionals, and 10\nsupport across 4 locations, Windows/Linux, etc. We use R extensively as\nour core business logic engine. Having used MatLab in the past I can say I\nam pleased we made the switch.\n\n\n\n\n\n\n\"Dassler, Marc\" <marc.dassler at bearingpoint.com>\nSent by: r-sig-finance-bounces at stat.math.ethz.ch\n02/07/2008 12:52 PM\n\nTo\n<r-sig-finance at stat.math.ethz.ch>\ncc\n\nSubject\n[R-SIG-Finance] Experience of large scale use of R in financial services\n\n\n\n\n\nHi!\n\nWe, a management and technology consultants company in financial\nservices, are planning a large scale use of R in a bank. We would like\nto use R as calculation kernel for creating ratings of special\ntransactions based on cash flow simulations.\n\nHere comes my question: does anyone have experience of large scale usage\nof R in an operational system?\n\nBest regards,\nMarc\n***************************************************************************************************\nThe information in this email is confidential and may be...{{dropped:12}}",
+      "body_snippet": "We make extensive use of the existing libraries, there are some great \nones, like zoo, etc. But of course we write our proprietary stuff \ninternally. We also link to FinCAD for generic finance math. T",
       "thread_id": "thread-0479fb095f78",
       "thread_depth": 2,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080629/6ddb9624/attachment.pl"
+      ]
     },
     {
       "id": "msg-c44e7011f823",
@@ -1357,11 +1423,14 @@
       "subject_clean": "Dummy / Indicator Variable",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080629/161e8ab0/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080629/161e8ab0/attachment.pl>",
+      "body_plain": "Recently, I began using R for OLS regression analysis.  I would like to run\nan OLS regression in R that has a dummy variable in it.  My data has one\ncolumn that represents decile ranked data.  I need help with writing code\nthat will allow me to tell R that this 'decile column' is a dummy variable\n(not discrete).  My focus is on the extreme values ie decile 1 and decile\n10.  R will automatically make the base number, (decile 1), the 'base'\nnumber.  Is there a way to have R select a base number that is not decile 1\nor decile 10?\n\n \n\nThx,\n\n \n\nJohn \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Recently, I began using R for OLS regression analysis.  I would like to run\nan OLS regression in R that has a dummy variable in it.  My data has one\ncolumn that represents decile ranked data.  I need ",
       "thread_id": "thread-c44e7011f823",
       "thread_depth": 0,
-      "month": "2008-06"
+      "month": "2008-06",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080629/161e8ab0/attachment.pl"
+      ]
     },
     {
       "id": "msg-ae867b5931c4",

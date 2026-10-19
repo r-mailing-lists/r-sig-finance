@@ -31,11 +31,14 @@
       "subject_clean": "how do you use get.hist.quote() to obtain dividend",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090104/be0f19db/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090104/be0f19db/attachment.pl>",
+      "body_plain": "Apologies if this is a newbie question, but I've been able to use\nget.hist.quote() to obtain quote information.\n\nHowever, is there a way to use this function to obtain dividend distribution\ninformation?  Or is there a function for doing this?\n\nThanks,\nAndrew\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Apologies if this is a newbie question, but I've been able to use\nget.hist.quote() to obtain quote information.\n\nHowever, is there a way to use this function to obtain dividend distribution\ninformatio",
       "thread_id": "thread-38f4e179fdb7",
       "thread_depth": 0,
-      "month": "2009-01"
+      "month": "2009-01",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090104/be0f19db/attachment.pl"
+      ]
     },
     {
       "id": "msg-6833a7a65ece",
@@ -115,11 +118,14 @@
       "subject_clean": "Trouble using ohlcPlot",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090106/f1d1885b/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090106/f1d1885b/attachment.pl>",
+      "body_plain": "Hi,\n\nSorry about the cross-posting with r-help, I've just found this list.\n\nI'm trying to create a time series that will work with ohlcPlot:\n\nmts<-ts(data=c(results$OpenPrice,results$HighPrice,results$LowPrice, results$ClosePrice),c=\"mts\",names=c(\"Open\", \"High\", \"Low\",\"Close\"))\n\nohlcPlot(mts) fails with: Error in if ((!is.mts(x)) || (colnames(x)[1] != \"Open\") || (colnames(x)[2] !=  : ...\n\nis.mts(mts) returns true but colnames(mts) returns NULL.\n\nI've trawled the archive for an example of using this function to no avail and it's not apparent from the docs what the data needs to look like.  Does anyone have an example of code that will work with this function?\n\nThanks\n\nNeil\n\n\n.\n\nThis message is intended only for the use of the person(s) to whom it is addressed. It may contain information which is privileged and confidential. Accordingly any unauthorised use is strictly prohibited. If you are not the intended recipient, please contact the sender as soon as possible.\n\nIt is not intended as an offer or solicitation for the purchase or sale of any financial instrument or as an official confirmation of any transaction, unless specifically agreed otherwise. All market prices, data and other information are not warranted as to completeness or accuracy and are subject to change without notice. Any opinions or advice contained in this Internet email are subject to the terms and conditions expressed in any applicable governing Marble Bar Asset Management LLP's  terms and conditions of business or client agreement letter. Any comments or statements made herein do not necessarily reflect those of Marble Bar Asset Management LLP.\n\nMarble Bar Asset Management LLP is regulated and authorised by the FSA.\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nSorry about the cross-posting with r-help, I've just found this list.\n\nI'm trying to create a time series that will work with ohlcPlot:\n\nmts<-ts(data=c(results$OpenPrice,results$HighPrice,results",
       "thread_id": "thread-eef4ed5eeb56",
       "thread_depth": 0,
-      "month": "2009-01"
+      "month": "2009-01",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090106/f1d1885b/attachment.pl"
+      ]
     },
     {
       "id": "msg-1f782e620c8d",
@@ -362,11 +368,14 @@
       "subject_clean": "Economagic data downloads",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090109/673fac7c/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090109/673fac7c/attachment.pl>",
+      "body_plain": "I do subscribe to Economagic, but unfortunately the download method\navailable with a subscription is not as useful as the method intended in\nfImport. The subscription gives me some other advantages so I don't begrudge\nit.\n\n \n\nMy solution is to maintain my own method, which I have to change\noccasionally. It is derived from the original economagicImport function. One\nday it may become impossible to read the HTML; in the meantime it remains a\nvaluable data source.\n\n \n\nHere is my current code:\n\n \n\neconomagicImport <- function (query, file = \"tempfile\", source =\n\"http://www.economagic.com/em-cgi/data.exe/\", \n\n    frequency = c(\"quarterly\", \"monthly\", \"daily\", \"weekly\"), save = FALSE, \n\n    colname = \"VALUE\", try = TRUE) \n\n{\n\n    freq = match.arg(frequency)\n\n    if (try) {\n\n        z = try(economagicImport(query = query, file = file, \n\n            source = source, frequency = freq, save = save, colname =\ncolname, \n\n            try = FALSE))\n\n        if (inherits(z, \"try-error\") || inherits(z, \"Error\")) {\n\n            return(\"No Internet Access\")\n\n        }\n\n        else {\n\n            return(z)\n\n        }\n\n    }\n\n    else {\n\n        n <- switch(freq, quarterly = , monthly = 2, daily = 3, weekly = 4)\n\n        method <- if (is.R()) \n\n            NULL\n\n        else \"lynx\"\n\n        url = paste(source, query, sep = \"\")\n\n        download.file(url = url, destfile = file, method = method)\n\n        SCAN = scan(file, what = \"\", sep = \"\\n\")\n\n        # this identifies the data lines\n\n        lines = grep(\"font color=white\", SCAN)\n\n        z1 = SCAN[lines]\n\n        z2 = gsub(\"font\", \"          \", x = z1)\n\n        z1 = gsub(\"color=white........\", \" \", x = z2)\n\n        z2 = gsub(\">\", \" \", x = z1)\n\n        z1 = gsub(\"<\", \" \", x = z2)\n\n        z1 = gsub(\"/\", \" \", x = z1)\n\n        z1 = gsub(\"&#149;\", \".\", x = z1) # MW addition\n\n        n.rows = length(z1)\n\n        z2 = unlist(apply(matrix(z1, ncol = 1), 2, strsplit, \n\n            split = \" \"))\n\n        # this triggers warnings. It replaces non-numerics with NA\n\n        options(warn=-1)\n\n        z1 = as.numeric(z2[z2 != \"\"])\n\n        z1 <- z1[!is.na(z1)] # MW addition\n\n        options(warn=0)\n\n        n.fields = length(z1)\n\n        ncols <- n.fields/n.rows\n\n        z = matrix(z1, byrow = TRUE, ncol = ncols)\n\n        if (n == 2) \n\n            z = cbind(z[, 1] * 100 + z[, 2], z[, 3])\n\n        if (n == 3){\n\n                                if(ncols == 3){\n\n                                                z = cbind(z[, 1] * 100 + z[,\n2], z[, 3])\n\n                                                zlast <- z[nrow(z),2]\n\n                                                dup <- duplicated(z[,1])\n\n                                                z <- z[!dup,]\n\n                                                z[nrow(z),2] <- zlast\n\n                                                freq <- \"monthly\"\n\n                                } else {\n\n            z = cbind(z[, 1] * 10000 + z[, 2] * 100 + z[, 3], \n\n                z[, 4])\n\n            }\n\n        }\n\n        if (freq == \"quarterly\") \n\n            z[, 1] = 100 * (z[, 1]%/%100) + 3 * z[, 1]%%100\n\n        z = data.frame(cbind(z[, 1], z[, 2]))\n\n        names(z) = c(\"DATE\", colname)\n\n        rowNames = as.character(z[, 1])\n\n        if (freq == \"daily\" || freq == \"weekly\") {\n\n            rowNames = paste(substring(rowNames, 1, 4), \"-\", \n\n                substring(rowNames, 5, 6), \"-\", substring(rowNames, \n\n                  7, 8), sep = \"\")\n\n        }\n\n        else {\n\n            rowNames = paste(substring(rowNames, 1, 4), \"-\", \n\n                substring(rowNames, 5, 6), \"-01\", sep = \"\")\n\n        }\n\n        z[, 1] = rowNames\n\n        if (save) {\n\n            write.table(z, file, quote = FALSE, sep = \";\", row.names =\nFALSE)\n\n        }\n\n        else {\n\n            unlink(file)\n\n        }\n\n        return(list(data=z,freq=freq)) # MW replaces fWEBDATA structure\n\n    }\n\n}\n\n \n\nBill Hutchison\n\nhutch at moneyware.com\n\n \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I do subscribe to Economagic, but unfortunately the download method\navailable with a subscription is not as useful as the method intended in\nfImport. The subscription gives me some other advantages so",
       "thread_id": "thread-7f2dd0b18304",
       "thread_depth": 0,
-      "month": "2009-01"
+      "month": "2009-01",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090109/673fac7c/attachment.pl"
+      ]
     },
     {
       "id": "msg-fb383569c1ab",
@@ -497,11 +506,14 @@
         "<BAY104-DS23A50089FB3C5091B84AECDDD0@phx.gbl>",
         "<496845F7.5070403@gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090110/8ac61e62/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090110/8ac61e62/attachment.pl>",
+      "body_plain": "Hi Paul and thanks for your most helpful and informative posting!\nBest regards, \nKen Erickson\n\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch on behalf of Matthieu Stigler\nSent: Sat 1/10/2009 1:53 AM\nTo: paulteetor at yahoo.com\nCc: r-sig-finance at stat.math.ethz.ch\nSubject: Re: [R-SIG-Finance] Fw: Testing for cointegration: Johansen vsDickey-Fuller\n \nHi\n\nFirst of all, when dealing with time series, having contradictory \nresults is not the exception but almost the rule! You may have opposite \nresults between tests, with a same test with different specifications \nand finally with same test, same specification but different number of lags!\n\nYour contradictory results come maybe from the way you apply the DF \ntest, as pointed out by Jae Kim. In the residual based approach (or \n\"Engle and Granger\", or \"two steps\"), one applies unit root tests on the \nresiduals from the cointegrating vector. If this cointegrating vector is \nknown (from theory), just use the ADF.\n\nNevertheless, if the cointegrating vector has to be estimated (with \nusual OLS, as you did), one has to take into account this uncertainty \nand correct the distribution (which is then \"larger\") what EG did with \nMonte-Carlo, and Philips and Ouliaris more theoretically. The last one \nis implemented  in package urca under ca.po.\n\nSo maybe your two favorable result come from the fact that you estimate \nthe cointegrating value but then take it as known a priori. Note \nnevertheless that studying spreads one typically assumes the vector (1, \n-1).\n\nSmall point, as residuals from a regression have zero mean, I don't \nthink you need to test a model with a drift.\n\nFinally, for your data, you may be interested in testing for threshold \ncointegration, that is, cointegration and error correction occurring \nonly when deviations from long-run are big enough, which is more \nrealistic and theory consistent. Some functions (as for your case a test \nof no cointegration against threshold cointegration with known vector) \nare availabe in dev version of package tsDyn (see TVECM_SeoTest).\n\nMatthieu\n\nJae Kim a écrit :\n> From: \"Jae Kim\" <jh8080 at hotmail.com>\n> Sent: Saturday, January 10, 2009 10:04 AM\n> To: \"Paul Teetor\" <paulteetor at yahoo.com>\n> Subject: Re: [R-SIG-Finance] Testing for cointegration: Johansen vs \n> Dickey-Fuller\n>\n>> Hi,\n>>\n>> 1. If you are using the ADF test here, you are giving the restriction \n>> that the  cointegrating vector between the two is (1, -1.2534). That \n>> is, you are saying that the two variables are related in the long run \n>> with the cointegrating vector given. Under this restriction, you find \n>> the spread stationary, so they are cointegrated with given \n>> cointegrating vector.\n>>\n>> 2. If you are using Johansen method, you are doing unrestricted \n>> estimation of cointegrating vector. But if you believe that the above \n>> restriction is sensible economically, the ADF result should be \n>> preferred to Johansen result.\n>>\n>> 3. This is the bivariate case, so Johansen method may not be \n>> necessary. try Engle-Granger 2-stage method, you might find \n>> cointegration. In addition, Johansen method assumes normality, which \n>> may often be violated.\n>>\n>> hope this helps. JHK\n>>\n>>\n>> --------------------------------------------------\n>> From: \"Paul Teetor\" <paulteetor at yahoo.com>\n>> Sent: Saturday, January 10, 2009 8:38 AM\n>> To: <r-sig-finance at stat.math.ethz.ch>\n>> Subject: [R-SIG-Finance] Testing for cointegration: Johansen vs \n>> Dickey-Fuller\n>>\n>>> R SIG Finance readers:\n>>>\n>>> I am checking a futures spread for mean reversion.  I am using the \n>>> Johansen\n>>> test (ca.jo) for cointegration and the Augmented Dickey-Fuller test \n>>> (ur.df)\n>>> for mean reversion.\n>>>\n>>> Here is the odd part:  The Johansen test says the two futures prices \n>>> are not\n>>> cointegrated, but the ADF test says the spread is, in fact, \n>>> mean-reverting.\n>>>\n>>> I am very puzzled.  The spread is a linear combination of the \n>>> prices, and\n>>> the ADF test says it is mean-reverting.  But the failed Johansen \n>>> test says\n>>> the prices are not cointegrated, so no linear combination of prices is\n>>> mean-reverting.  Huh??\n>>>\n>>> I would be very grateful is someone could suggest where I went \n>>> wrong, or\n>>> steer me towards some relevent reference materials.\n>>>\n>>>\n>>> Background:  I am studying the spread between TY futures (10-year US\n>>> Treasurys) and SR futures (10-year US swap rate), calculated as:\n>>>\n>>>    sprd = ty - (1.2534 * sr)\n>>>\n>>> where ty and sr are the time series of futures prices.  (The 1.2534 \n>>> factor\n>>> is from an ordinary least squares fit.)  I execute the Johansen \n>>> procedure\n>>> this way:\n>>>\n>>>    ca.jo(data.frame(ty, sr), type=\"eigen\", ecdet=\"const\")\n>>>\n>>> The summary of the test result is:\n>>>\n>>> ######################\n>>> # Johansen-Procedure #\n>>> ######################\n>>>\n>>> Test type: maximal eigenvalue statistic (lambda max) , without\n>>> linear trend and constant in cointegration\n>>>\n>>> Eigenvalues (lambda):\n>>> [1]  2.929702e-03  6.616599e-04 -1.001412e-17\n>>>\n>>> Values of teststatistic and critical values of test:\n>>>\n>>>          test 10pct  5pct  1pct\n>>> r <= 1 | 2.00  7.52  9.24 12.97\n>>> r = 0  | 8.89 13.75 15.67 20.20\n>>>\n>>> <snip>\n>>>\n>>> I interpret the \"r <= 1\" line this way:  The test statistic for r <= \n>>> 1 is\n>>> below the critical values, hence we cannot reject the null \n>>> hypothesis that\n>>> the rank is less than 2.  We conclude that the two time series are not\n>>> cointegrated.\n>>>\n>>> I run the ADF test this way:\n>>>\n>>> ur.df(sprd, type=\"drift\")\n>>>\n>>> (I set type=\"drift\" because that seems to correspond to \n>>> ecdet=\"const\" for\n>>> the Johansen test.)  The summary of the ADF test is:\n>>>\n>>> ###############################################\n>>> # Augmented Dickey-Fuller Test Unit Root Test #\n>>> ###############################################\n>>>\n>>> Test regression drift\n>>>\n>>> <snip>\n>>>\n>>> Value of test-statistic is: -2.9624 4.4142\n>>>\n>>> Critical values for test statistics:\n>>> 1pct  5pct 10pct\n>>> tau2 -3.43 -2.86 -2.57\n>>> phi1  6.43  4.59  3.78\n>>>\n>>> I interpret the test statistics as meaning we can reject the null \n>>> hypothesis\n>>> of a unit root (at a confidence level of 90% or better), hence the \n>>> spread is\n>>> mean-reverting.  I get similar results from the adf.test() procedure.\n>>>\n>>> F.Y.I., I am running version 2.6.2 of R.\n>>>\n>>> Paul Teetor\n>>> Elgin, IL   USA\n>>>\n>>> _______________________________________________\n>>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only.\n>>> -- If you want to post, subscribe first.\n>>>\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only.\n-- If you want to post, subscribe first.\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Paul and thanks for your most helpful and informative posting!\nBest regards, \nKen Erickson\n\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch on behalf of Matthieu Stigle",
       "thread_id": "thread-3e81847dd7a0",
       "thread_depth": 2,
-      "month": "2009-01"
+      "month": "2009-01",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090110/8ac61e62/attachment.pl"
+      ]
     },
     {
       "id": "msg-ec495d637c47",
@@ -738,11 +750,14 @@
         "<BAY104-DS23A50089FB3C5091B84AECDDD0@phx.gbl>",
         "<21406957.post@talk.nabble.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090112/e2d50228/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090112/e2d50228/attachment.pl>",
+      "body_plain": "Hi,\n \nSuppose Y and X are cointegrated. The cointegration regression can be written as\n \nY = a + bX.\n \nSetting a = 0 means that you are forcing the line between Y and X to go thru the origin. \nIf the true value of a is in fact 0, this is innocuos. If not (which is the case in general), it can distort the estimated value for b.\n \nSo it is better to consider non-zero intercept, unless you are sure that a is truly 0.\nHope this help. > Date: Sun, 11 Jan 2009 17:25:00 -0800> From: bogaso.christofer at gmail.com> To: r-sig-finance at stat.math.ethz.ch> Subject: Re: [R-SIG-Finance] [R-sig-finance] Fw: Testing for cointegration: Johansen vs Dickey-Fuller> > > I have one question. What is the point to keep constant in cointegration> euqation? I think you should consider zero intercept in cointegrating> equation.> > > > Jae Kim-3 wrote:> > > > From: \"Jae Kim\" <jh8080 at hotmail.com>> > Sent: Saturday, January 10, 2009 10:04 AM> > To: \"Paul Teetor\" <paulteetor at yahoo.com>> > Subject: Re: [R-SIG-Finance] Testing for cointegration: Johansen vs > > Dickey-Fuller> > > >> Hi,> >>> >> 1. If you are using the ADF test here, you are giving the restriction> >> that > >> the cointegrating vector between the two is (1, -1.2534). That is, you > >> are saying that the two variables are related in the long run with the > >> cointegrating vector given. Under this restriction, you find the spread > >> stationary, so they are cointegrated with given cointegrating vector.> >>> >> 2. If you are using Johansen method, you are doing unrestricted> >> estimation > >> of cointegrating vector. But if you believe that the above restriction is > >> sensible economically, the ADF result should be preferred to Johansen > >> result.> >>> >> 3. This is the bivariate case, so Johansen method may not be necessary. > >> try Engle-Granger 2-stage method, you might find cointegration. In > >> addition, Johansen method assumes normality, which may often be violated.> >>> >> hope this helps. JHK> >>> >>> >> --------------------------------------------------> >> From: \"Paul Teetor\" <paulteetor at yahoo.com>> >> Sent: Saturday, January 10, 2009 8:38 AM> >> To: <r-sig-finance at stat.math.ethz.ch>> >> Subject: [R-SIG-Finance] Testing for cointegration: Johansen vs > >> Dickey-Fuller> >>> >>> R SIG Finance readers:> >>>> >>> I am checking a futures spread for mean reversion. I am using the > >>> Johansen> >>> test (ca.jo) for cointegration and the Augmented Dickey-Fuller test > >>> (ur.df)> >>> for mean reversion.> >>>> >>> Here is the odd part: The Johansen test says the two futures prices are > >>> not> >>> cointegrated, but the ADF test says the spread is, in fact, > >>> mean-reverting.> >>>> >>> I am very puzzled. The spread is a linear combination of the prices,> >>> and> >>> the ADF test says it is mean-reverting. But the failed Johansen test > >>> says> >>> the prices are not cointegrated, so no linear combination of prices is> >>> mean-reverting. Huh??> >>>> >>> I would be very grateful is someone could suggest where I went wrong, or> >>> steer me towards some relevent reference materials.> >>>> >>>> >>> Background: I am studying the spread between TY futures (10-year US> >>> Treasurys) and SR futures (10-year US swap rate), calculated as:> >>>> >>> sprd = ty - (1.2534 * sr)> >>>> >>> where ty and sr are the time series of futures prices. (The 1.2534 > >>> factor> >>> is from an ordinary least squares fit.) I execute the Johansen> >>> procedure> >>> this way:> >>>> >>> ca.jo(data.frame(ty, sr), type=\"eigen\", ecdet=\"const\")> >>>> >>> The summary of the test result is:> >>>> >>> ######################> >>> # Johansen-Procedure #> >>> ######################> >>>> >>> Test type: maximal eigenvalue statistic (lambda max) , without> >>> linear trend and constant in cointegration> >>>> >>> Eigenvalues (lambda):> >>> [1] 2.929702e-03 6.616599e-04 -1.001412e-17> >>>> >>> Values of teststatistic and critical values of test:> >>>> >>> test 10pct 5pct 1pct> >>> r <= 1 | 2.00 7.52 9.24 12.97> >>> r = 0 | 8.89 13.75 15.67 20.20> >>>> >>> <snip>> >>>> >>> I interpret the \"r <= 1\" line this way: The test statistic for r <= 1> >>> is> >>> below the critical values, hence we cannot reject the null hypothesis > >>> that> >>> the rank is less than 2. We conclude that the two time series are not> >>> cointegrated.> >>>> >>> I run the ADF test this way:> >>>> >>> ur.df(sprd, type=\"drift\")> >>>> >>> (I set type=\"drift\" because that seems to correspond to ecdet=\"const\"> >>> for> >>> the Johansen test.) The summary of the ADF test is:> >>>> >>> ###############################################> >>> # Augmented Dickey-Fuller Test Unit Root Test #> >>> ###############################################> >>>> >>> Test regression drift> >>>> >>> <snip>> >>>> >>> Value of test-statistic is: -2.9624 4.4142> >>>> >>> Critical values for test statistics:> >>> 1pct 5pct 10pct> >>> tau2 -3.43 -2.86 -2.57> >>> phi1 6.43 4.59 3.78> >>>> >>> I interpret the test statistics as meaning we can reject the null > >>> hypothesis> >>> of a unit root (at a confidence level of 90% or better), hence the> >>> spread > >>> is> >>> mean-reverting. I get similar results from the adf.test() procedure.> >>>> >>> F.Y.I., I am running version 2.6.2 of R.> >>>> >>> Paul Teetor> >>> Elgin, IL USA> >>>> >>> _______________________________________________> >>> R-SIG-Finance at stat.math.ethz.ch mailing list> >>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance> >>> -- Subscriber-posting only.> >>> -- If you want to post, subscribe first.> >>>> > > > _______________________________________________> > R-SIG-Finance at stat.math.ethz.ch mailing list> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance> > -- Subscriber-posting only.> > -- If you want to post, subscribe first.> > > > > > -- > View this message in context: http://www.nabble.com/Fw%3A-Testing-for-cointegration%3A-Johansen-vs-Dickey-Fuller-tp21382220p21406957.html> Sent from the Rmetrics mailing list archive at Nabble.com.> > _______________________________________________> R-SIG-Finance at stat.math.ethz.ch mailing list> https://stat.ethz.ch/mailman/listinfo/r-sig-finance> -- Subscriber-posting only.> -- If you want to post, subscribe first.\n_________________________________________________________________\nTime for change? Find your ideal job with SEEK.\n\n%2F%3Ftracking%3Dsk%3Atl%3Ask%3Anine%3A0%3Ahottag%3Achange&_t=757263783&_r=SEEK_tagline&_m=EXT\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n \nSuppose Y and X are cointegrated. The cointegration regression can be written as\n \nY = a + bX.\n \nSetting a = 0 means that you are forcing the line between Y and X to go thru the origin. \nIf the ",
       "thread_id": "thread-3e81847dd7a0",
       "thread_depth": 2,
-      "month": "2009-01"
+      "month": "2009-01",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090112/e2d50228/attachment.pl"
+      ]
     },
     {
       "id": "msg-5934867471fe",
@@ -807,11 +822,14 @@
       "subject_clean": "Covariance in R - wrong?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090112/465ce0b0/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090112/465ce0b0/attachment.pl>",
+      "body_plain": "Hi,I am bit puzzled by the cov() function in RChecking a function I write, it seems that R compute the covariance between two variable as:1/(n-1) sum[(x-mean(x))*(y-mean(y))]While Excel divide the sum by n instead of (n-1)...which is the right way to do as far as I know...Has anyone already encountered this? or is it just me getting crazy?I use R 2.8.0 on Mac OS XThanks for your feedbackBest regardsJulien\n\n¡Descúbrelo! ¿Qué puedes hacer con el nuevo Windows Live?\n_________________________________________________________________\nDescubre todas las formas en que puedes estar en contacto con amigos y familiares.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,I am bit puzzled by the cov() function in RChecking a function I write, it seems that R compute the covariance between two variable as:1/(n-1) sum[(x-mean(x))*(y-mean(y))]While Excel divide the sum",
       "thread_id": "thread-39298d37b5d4",
       "thread_depth": 0,
-      "month": "2009-01"
+      "month": "2009-01",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090112/465ce0b0/attachment.pl"
+      ]
     },
     {
       "id": "msg-a65c036f5232",
@@ -843,11 +861,14 @@
       "references": [
         "<COL102-W36CDFD5E3A228A921A11C08FD80@phx.gbl>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090112/540081b9/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090112/540081b9/attachment.pl>",
+      "body_plain": "Also, have a look at the section on population and sample variance here:\nhttp://en.wikipedia.org/wiki/Variance\n\nSean.\n\nOn Mon, Jan 12, 2009 at 7:26 PM, julien cuisinier\n<j_cuisinier at hotmail.com>wrote:\n\n>\n>\n>\n> Hi,I am bit puzzled by the cov() function in RChecking a function I write,\n> it seems that R compute the covariance between two variable as:1/(n-1)\n> sum[(x-mean(x))*(y-mean(y))]While Excel divide the sum by n instead of\n> (n-1)...which is the right way to do as far as I know...Has anyone already\n> encountered this? or is it just me getting crazy?I use R 2.8.0 on Mac OS\n> XThanks for your feedbackBest regardsJulien\n>\n> ¡Descúbrelo! ¿Qué puedes hacer con el nuevo Windows Live?\n> _________________________________________________________________\n> Descubre todas las formas en que puedes estar en contacto con amigos y\n> familiares.\n>\n>        [[alternative HTML version deleted]]\n>\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\n\n-- \nSean Carmody\n\nThe Stubborn Mule\nhttp://www.stubbornmule.net\nhttp://twitter.com/seancarmody\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Also, have a look at the section on population and sample variance here:\nhttp://en.wikipedia.org/wiki/Variance\n\nSean.\n\nOn Mon, Jan 12, 2009 at 7:26 PM, julien cuisinier\n<j_cuisinier at hotmail.com>wro",
       "thread_id": "thread-39298d37b5d4",
       "thread_depth": 1,
-      "month": "2009-01"
+      "month": "2009-01",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090112/540081b9/attachment.pl"
+      ]
     },
     {
       "id": "msg-bd82474b5c34",
@@ -1006,11 +1027,14 @@
       "subject_clean": "PAW Update: Predictive analytics workshops and more case studies",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090113/39371159/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090113/39371159/attachment.pl>",
+      "body_plain": "Hi everyone,\n\nPredictive Analytics World's program for Feb 18-19 in San Francisco (\nwww.predictiveanalyticsworld.com) has grown a bit since my post several\nweeks ago, and is looking better than ever.  The conference covers today's\ncommercial deployment of predictive analytics, across industries and across\nsoftware vendors. In a nutshell, PAW is a warehouse of case studies.\n\nIn breaking news, the Netflix Prize leader slated to speak at PAW has now\nwon the Netflix Progress Prize (see\nwww.predictiveanalyticsworld.com/agenda.php#advancedapproaches)\n\nWe have two predictive analytics workshops that serve as a third-day option\non Feb 20 to complement the core conference program:\n\n\"The Best and the Worst of Predictive Analytics: Predictive Modeling Methods\nand Common Data Mining Mistakes\"\nInstructor: John F. Elder, Ph.D., CEO and Founder, Elder Research, Inc.\nwww.predictiveanalyticsworld.com/predictive_modeling_methods.php\n\n\"Taking Action with Analytics: The Decision-Centric Enterprise - Putting\nPredictive Analytics to Work Improving Every Business Decision\"\nInstructor: James Taylor, Co-Founder, Smart (enough) Systems\nwww.predictiveanalyticsworld.com/decision_centric_enterprise.php\n\nAnd the list of case studies has expanded - we now have case studies from\nall of: 3M, Acxiom, Affiliated Computer Services, Charles Schwab, Click\nForensics, Google, Linden Lab (Second Life), The National Rifle Association,\nPinnacol Assurance, Reed Elsevier, San Diego Supercomputer Center, Sun,\nTelenor, Wells Fargo Credit Card Services, Wells Fargo Internet Services\nGroup -- plus special examples from Anheuser-Busch, Disney, Hewlett-Packard,\nHSBC, IRS, Pfizer, Social Security Administration and WestWind Foundation.\n\nFor more info about the program, see:\nwww.predictiveanalyticsworld.com\n\nBe sure to register by January 18th for the Early Bird rate - save $200 at:\nwww.predictiveanalyticsworld.com/register.php\n\nIf you'd like our informative event updates, sign up at:\nwww.predictiveanalyticsworld.com/notifications.php\n\nFor a summary of business applications of predictive analytics - and a named\ncase study for each - see the article, \"Predictive Analytics Delivers Value\nAcross Business Applications\" at\nwww.predictiveanalyticsworld.com/businessapplications.php\n\nWhat is predictive analytics? See the Predictive Analytics Guide:\nwww.predictiveanalyticsworld.com/predictive_analytics.php\n\nTake the Predictive Analytics World survey (on applications)\nAs predictive analytics quickly expands across verticals and applications,\nwe need your help to understand what the evolving landscape looks like.\nPlease take a few minutes, answer a handful of questions, and help us keep\nyou informed:\nhttps://www.surveymonkey.com/s.aspx?sm=8dHx_2bFz7yxw3FPKlbi3OVg_3d_3d\n\nAvailable for immediate download: Free Industry Survey (on tools)\nDownload the Rexer Analytics 2008 Data Miner Survey report, covering the\nmost popular software tools, which verticals have embraced modeling and\nmore, at:\nhttp://www.predictiveanalyticsworld.com/survey-signup.php\n\nAnd finally, let us know if you have any questions.\n\nBest,\nElise Johnson\nPredictive Analytics World\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi everyone,\n\nPredictive Analytics World's program for Feb 18-19 in San Francisco (\nwww.predictiveanalyticsworld.com) has grown a bit since my post several\nweeks ago, and is looking better than ever. ",
       "thread_id": "thread-3b271ecaa8be",
       "thread_depth": 0,
-      "month": "2009-01"
+      "month": "2009-01",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090113/39371159/attachment.pl"
+      ]
     },
     {
       "id": "msg-df5eff799c82",
@@ -1022,11 +1046,14 @@
       "subject_clean": "batch processing in R for WINDOWS users",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090114/9a613a07/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090114/9a613a07/attachment.pl>",
+      "body_plain": "Sir\nI would like to know how to do batch processing in R in Windows.\nI have to analyze large volume of financial data. I want to make use of\nbatch processing for that. Please suggest me some methods to do that.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Sir\nI would like to know how to do batch processing in R in Windows.\nI have to analyze large volume of financial data. I want to make use of\nbatch processing for that. Please suggest me some methods t",
       "thread_id": "thread-df5eff799c82",
       "thread_depth": 0,
-      "month": "2009-01"
+      "month": "2009-01",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090114/9a613a07/attachment.pl"
+      ]
     },
     {
       "id": "msg-551d91b72c9c",
@@ -1109,11 +1136,14 @@
       "subject_clean": "extracting a subTable",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090114/e6ea43a6/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090114/e6ea43a6/attachment.pl>",
+      "body_plain": "Hi,\n\nI have a BIG table with data organized by ID, see example on Table#1\nbellow. I would like to extract a smaller table with the same number of\ncolumns. The rows should include only the last ROW of each ID. Table# 2\nis an example extracted form table #1. I tried using the SUBSET function\nand plan to loop, but I was wondering if someone out there has a more\nefficient way to accomplish this.\n\nYou recommendations are highly appreciated.\n\nJorge\n\t\n\n\tTable # 1\t\t\t\t\tTable # 2\n\n\tSeq\tID\tX1\tX2\t\tSeq\tID\tX1\nX2\t\t\n\t1\t15\t-616\t796\t\t12\t15\t-148\n878\t\t\n\t2\t15\t-661\t-455\t\t20\t20\t-515\n1,802\t\t\n\t3\t15\t-355\t-1,639\t\t27\t45\t-138\n179\t\t\n\t4\t15\t-1,226\t-97\t\t34\t70\t1,348\n840\t\t\n\t5\t15\t506\t985\n\n\t6\t15\t-612\t76\n\n\t7\t15\t947\t122\n\n\t8\t15\t-45\t1,980\n\n\t9\t15\t295\t-1,827\n\n\t10\t15\t1,490\t-743\n\n\t11\t15\t115\t1,283\n\n\t12\t15\t-148\t878\n\n\t13\t20\t359\t1,297\n\n\t14\t20\t-185\t-430\n\n\t15\t20\t481\t800\n\n\t16\t20\t1,567\t874\n\n\t17\t20\t2,365\t-167\n\n\t18\t20\t1,636\t1,649\n\n\t19\t20\t-2,741\t337\n\n\t20\t20\t-515\t1,802\n\n\t21\t45\t90\t624\n\n\t22\t45\t-221\t345\n\n\t23\t45\t-2,168\t-1,734\n\n\t24\t45\t1,056\t-1,070\n\n\t25\t45\t678\t-80\n\n\t26\t45\t1,747\t-74\n\n\t27\t45\t-138\t179\n\n\t28\t70\t1,152\t-3,167\n\n\t29\t70\t-802\t-337\n\n\t30\t70\t-388\t263\n\n\t31\t70\t812\t342\n\n\t32\t70\t-576\t972\n\n\t33\t70\t653\t-737\n\n\t34\t70\t1,348\t840\n\n\t\n\n\t\n\nJorge Nieves\nPhone 212.782.7083\nFax 212.642.7644\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI have a BIG table with data organized by ID, see example on Table#1\nbellow. I would like to extract a smaller table with the same number of\ncolumns. The rows should include only the last ROW of ",
       "thread_id": "thread-747a67fadf5f",
       "thread_depth": 0,
-      "month": "2009-01"
+      "month": "2009-01",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090114/e6ea43a6/attachment.pl"
+      ]
     },
     {
       "id": "msg-13858cc70625",
@@ -1234,11 +1264,14 @@
       "subject_clean": "Report production  in R?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090115/9fc89f00/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090115/9fc89f00/attachment.pl>",
+      "body_plain": "Hi List,\n \n \nIs anyone aware of a reporting package in R? \ne.g. if I compute many metrics on a portfolio & want to create directly in R a nice looking report\n \n \nAny idea/suggestion welcome\n \nMany thanks\nJulien\n\n_________________________________________________________________\nDescubre todas las formas en que puedes estar en contacto con amigos y familiares.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi List,\n \n \nIs anyone aware of a reporting package in R? \ne.g. if I compute many metrics on a portfolio & want to create directly in R a nice looking report\n \n \nAny idea/suggestion welcome\n \nMany tha",
       "thread_id": "thread-b68233f3ac45",
       "thread_depth": 0,
-      "month": "2009-01"
+      "month": "2009-01",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090115/9fc89f00/attachment.pl"
+      ]
     },
     {
       "id": "msg-db8d78f23184",
@@ -1289,11 +1322,14 @@
         "<COL102-W3E0F98584BCEEF42A08E08FD70@phx.gbl>",
         "<496F2146.6070706@braverock.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090115/18fd9ef7/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090115/18fd9ef7/attachment.pl>",
+      "body_plain": "I have actually started to use a document generation system called Webby,\nand a tool for integrating and syntax-highlighting text files called\nIdiopidae. It's much more flexible than Sweave (and much less painful to\ninstall). For example, you could integrate the output of an R script into a\nHTML or RTF (e.g. Word) document, as well as LaTeX.\n\nhttp://webby.rubyforge.org/\nhttp://www.zedshaw.com/projects/idiopidae/\n\nYou could also just use Idiopidae on its own, it might be all you need.\n\n\n\n\n2009/1/15 Brian G. Peterson <brian at braverock.com>\n\n> julien cuisinier wrote:\n>\n>> Is anyone aware of a reporting package in R? e.g. if I compute many\n>> metrics on a portfolio & want to create directly in R a nice looking report\n>>  Any idea/suggestion welcome\n>>\n>\n> Robert has already suggested Sweave.\n>\n> Note that with both graphics and text, you can also output to Postscript\n> and PDF files.  With a little work, you can combine your textual data into\n> tables (I usually use a data.frame) and output as a PDF.  With a little more\n> work, you can combine graphics and tables on a PDF page, all from inside R.\n>\n> There is also a plugin available for OpenOffice that works like Sweave in\n> OOo.\n>\n> For future reference, this question belonged on r-help, as it is not really\n> finance related.  Many threads on r-help over the years have covered this\n> topic.\n>\n> Regards,\n>\n>   - Brian\n>\n> --\n> Brian G. Peterson\n> http://braverock.com/brian/\n> Ph: 773-459-4973\n> IM: bgpbraverock\n>\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I have actually started to use a document generation system called Webby,\nand a tool for integrating and syntax-highlighting text files called\nIdiopidae. It's much more flexible than Sweave (and much ",
       "thread_id": "thread-b68233f3ac45",
       "thread_depth": 2,
-      "month": "2009-01"
+      "month": "2009-01",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090115/18fd9ef7/attachment.pl"
+      ]
     },
     {
       "id": "msg-fac595314ca1",
@@ -1390,11 +1426,14 @@
       "references": [
         "<7cb007bd0901190824h5f2bf869h2f21023139468cd8@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090119/9ae5c874/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090119/9ae5c874/attachment.pl>",
+      "body_plain": "Sergey,\n\nThe data.frame retval seems to work with 1 ticker, but not with 2. Can you\nfetch them one at a time and then merge the data frames?\n\nAlso, you can try passing the dates directly into blpGetData as strings.\n\nThe 1899 start date comes from COM/Microsoft Excel. If you look in\nas.chron.COMDate.R in the source, you can see the conversion function.\n\n-Ana\n\n\n2009/1/19 Sergey Goriatchev <sergeyg at gmail.com>\n\n> Hello everyone,\n>\n> I have two issues that I want to ask.\n>\n> 1)\n> I have problems with loading data with RBloomberg.\n> More precisely, I do not seem to be able to load data into a data.frame.\n> I get an error message:\n>\n> start.date      <- as.chron(\"1990-01-19\")\n> end.date        <- as.chron(\"2009-01-19\")\n>\n> conn <- blpConnect(show.days=\"week\", na.action=\"na\", periodicity=\"daily\")\n>\n> > bldata <- blpGetData(conn, c(\"ED4 Comdty\", \"ED12 Comdty\"), \"PX_LAST\",\n> start=start.date, end=end.date, retval=\"data.frame\")\n> Error in if (typ[n] == \"character\") { : argument is of length zero\n>\n> What does that error message mean and what can I do to avoid this error\n> message?\n>\n> 2)\n> If I load data from Bloomberg in matrix format, the date is converted\n> to a number. For example:\n>\n> > bldata <- blpGetData(conn, \"ED4 Comdty\", \"PX_LAST\", start=start.date,\n> end=end.date, retval=\"matrix\")\n> > head(bldata)\n>     [DATETIME] PX_LAST\n> [1,]      32892   91.36\n> [2,]      32895   91.37\n> [3,]      32896   91.38\n> [4,]      32897   91.38\n> [5,]      32898   91.34\n> [6,]      32899   91.28\n>\n> I tried to convert the number to normal date and by trial and error I\n> found the following:\n>\n> > as.Date(32892, \"1899-12-30\")\n> [1] \"1990-01-19\"\n>\n> Is it really true that count starts from December 30th 1899? Why?\n>\n> Thank you in advance for your help!\n>\n> Regards,\n> Sergey\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Sergey,\n\nThe data.frame retval seems to work with 1 ticker, but not with 2. Can you\nfetch them one at a time and then merge the data frames?\n\nAlso, you can try passing the dates directly into blpGetDa",
       "thread_id": "thread-8cb1b12279ac",
       "thread_depth": 1,
-      "month": "2009-01"
+      "month": "2009-01",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090119/9ae5c874/attachment.pl"
+      ]
     },
     {
       "id": "msg-88450205a2c2",
@@ -1427,11 +1466,14 @@
         "<7cb007bd0901190824h5f2bf869h2f21023139468cd8@mail.gmail.com>",
         "<18804.45735.725963.533360@ron.nulle.part>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090119/4a586487/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090119/4a586487/attachment.pl>",
+      "body_plain": "For very large data pulls with Bloomberg, I found it easier to pull into\nexcel and then use read.table to get into R.   Like Dirk said, for some\nreason, Bloomberg does not like it when are greedy with data pulls.\nI pulled fundamental data across the Russell 3000 for a long time period\ninto excel and then loaded into xts.  It was easier to check if the data was\nall there visually, then push into R.\n\nI used this code to create the xts objects from the flat files.\n\nf.import_data <- function(datamatrixfile) {\n#11/01/08\njj.holder <- read.table(datamatrixfile, header = TRUE, row.names = 1, sep =\n'\\t')\nxts.datamatrix <- xts(jj.holder, as.Date(rownames(jj.holder), format =\n'%m/%d/%Y'))\nreturn(xts.datamatrix)\n}\n\nHTH\n\n\nOn Mon, Jan 19, 2009 at 11:04 AM, Dirk Eddelbuettel <edd at debian.org> wrote:\n\n>\n> On 19 January 2009 at 17:24, Sergey Goriatchev wrote:\n> | Hello everyone,\n> |\n> | I have two issues that I want to ask.\n> |\n> | 1)\n> | I have problems with loading data with RBloomberg.\n> | More precisely, I do not seem to be able to load data into a data.frame.\n> | I get an error message:\n> |\n> | start.date    <- as.chron(\"1990-01-19\")\n> | end.date      <- as.chron(\"2009-01-19\")\n> |\n> | conn <- blpConnect(show.days=\"week\", na.action=\"na\", periodicity=\"daily\")\n> |\n> | > bldata <- blpGetData(conn, c(\"ED4 Comdty\", \"ED12 Comdty\"), \"PX_LAST\",\n> start=start.date, end=end.date, retval=\"data.frame\")\n> | Error in if (typ[n] == \"character\") { : argument is of length zero\n> |\n> | What does that error message mean and what can I do to avoid this error\n> message?\n>\n> Your problem is not really in the assignment to bldata. Your problme is\n> indicated by the 'argument is of length zero': you didn't get any data from\n> Bloomberg.  You need to fix that first.  As a first guess, try a less\n> 'greedy' retrieval.  You are unlikely to get 20 years of daily data in one\n> request.\n>\n> | 2)\n> | If I load data from Bloomberg in matrix format, the date is converted\n> | to a number. For example:\n> |\n> | > bldata <- blpGetData(conn, \"ED4 Comdty\", \"PX_LAST\", start=start.date,\n> end=end.date, retval=\"matrix\")\n> | > head(bldata)\n> |      [DATETIME] PX_LAST\n> | [1,]      32892   91.36\n> | [2,]      32895   91.37\n> | [3,]      32896   91.38\n> | [4,]      32897   91.38\n> | [5,]      32898   91.34\n> | [6,]      32899   91.28\n> |\n> | I tried to convert the number to normal date and by trial and error I\n> | found the following:\n> |\n> | > as.Date(32892, \"1899-12-30\")\n> | [1] \"1990-01-19\"\n> |\n> | Is it really true that count starts from December 30th 1899? Why?\n>\n> Different offsets for 'the first known day' between different applications\n> and systems, eg Excel uses something very different from Unix etc.\n>\n> Try return type 'zoo' instead of matrix -- zoo is a class that knows how to\n> deal with dates.  You may need to run    install.packages(\"zoo\")   first.\n>\n> Hope this helps, Dirk\n>\n> --\n> Three out of two people have difficulties with fractions.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\n\n-- \nMichael Sankowski, CFA, CAIA\n312.404.8717\nmichael.sankowski at gmail.com\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "For very large data pulls with Bloomberg, I found it easier to pull into\nexcel and then use read.table to get into R.   Like Dirk said, for some\nreason, Bloomberg does not like it when are greedy with",
       "thread_id": "thread-8cb1b12279ac",
       "thread_depth": 2,
-      "month": "2009-01"
+      "month": "2009-01",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090119/4a586487/attachment.pl"
+      ]
     },
     {
       "id": "msg-c354d9f695f9",
@@ -1468,11 +1510,14 @@
         "<b34262a80901190930u7e7b1547v9503320b1c3c249d@mail.gmail.com>",
         "<7cb007bd0901200004x2cfe61f6i89a5961dbfbf781c@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090120/7a392520/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090120/7a392520/attachment.pl>",
+      "body_plain": ">\n> Finally, thank you for your explanation of 1899 timestart. For some\n> reason, I always thought 01-01-1970 was the day from which count\n> begins in R.\n\n\nThe 1899 base only applies to RBloomberg, not R in general. See\ndocumentation for COMDate class in RDCOMclient.\n\n?\"COMDate-class\"\n\nR itself uses a 1970 base.\n\n> ?DateTimeClasses\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": ">\n> Finally, thank you for your explanation of 1899 timestart. For some\n> reason, I always thought 01-01-1970 was the day from which count\n> begins in R.\n\n\nThe 1899 base only applies to RBloomberg, no",
       "thread_id": "thread-8cb1b12279ac",
       "thread_depth": 4,
-      "month": "2009-01"
+      "month": "2009-01",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090120/7a392520/attachment.pl"
+      ]
     },
     {
       "id": "msg-e29bc3167e6d",
@@ -1684,11 +1729,14 @@
       "subject_clean": "ARMA-GARCH (Fixed Parameters)",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090124/c05db234/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090124/c05db234/attachment.pl>",
+      "body_plain": "Hi,\n\n \n\nThis is my first post to the mailing list. In R, is it possible to evaluate\nand ARMA(p,q)-GARCH(p',q') model, where some of the ARMA parameters are\nfixed. For example, an AR(4)-GARCH(1,1) model, fixing the coefficients on\nAR(2) and AR(3) to zero (subset ARMA mean equation)?\n\n \n\nI have already looked at fGarch but there appears to be no feature to fix\nparameter values (unlike in the separate arma/arima commands in R).\n\n \n\nThanks, Paul.\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\n \n\nThis is my first post to the mailing list. In R, is it possible to evaluate\nand ARMA(p,q)-GARCH(p',q') model, where some of the ARMA parameters are\nfixed. For example, an AR(4)-GARCH(1,1) mode",
       "thread_id": "thread-e2e59ca8f0f5",
       "thread_depth": 0,
-      "month": "2009-01"
+      "month": "2009-01",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090124/c05db234/attachment.pl"
+      ]
     },
     {
       "id": "msg-806f1a0e6c73",
@@ -1700,11 +1748,14 @@
       "subject_clean": "Rquantlib discount curve",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090125/99e23b45/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090125/99e23b45/attachment.pl>",
+      "body_plain": "Dear All,\n\nBeen looking into the Rquantlib package and have a newbie question sorry.\n\nIs it possible to get some flexibility over the inputs in the tsQuotes\nargument. The example gives;\n\ntsQuotes <- list(d1w  =0.0382,\n                 d1m  =0.0372,\n                 fut1=96.2875,\n                 fut2=96.7875,\n                 fut3=96.9875,\n                 fut4=96.6875,\n                 fut5=96.4875,\n                 fut6=96.3875,\n                 fut7=96.2875,\n                 fut8=96.0875,\n                 s3y  =0.0398,\n                 s5y  =0.0443,\n                 s10y =0.05165,\n                 s15y =0.055175)\n\nAnd ideally I would like to put more information in (or at least other) -\ns7y for instance. Tried looking round the files to see how the function is\nconstructed with no luck.\n\nRegards\n\n\nGlenn\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear All,\n\nBeen looking into the Rquantlib package and have a newbie question sorry.\n\nIs it possible to get some flexibility over the inputs in the tsQuotes\nargument. The example gives;\n\ntsQuotes <- l",
       "thread_id": "thread-806f1a0e6c73",
       "thread_depth": 0,
-      "month": "2009-01"
+      "month": "2009-01",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090125/99e23b45/attachment.pl"
+      ]
     },
     {
       "id": "msg-25c921c2dece",
@@ -2023,11 +2074,14 @@
         "<F9F2A641C593D7408925574C05A7BE77022A5E28@rhopost.rhotrading.com>",
         "<21690727.post@talk.nabble.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090127/b541f0e1/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090127/b541f0e1/attachment.pl>",
+      "body_plain": "The fact all the interests are paid at the end with the principal has no incidence on the compounding...\n \nCase 1: the book compound the IR while you are not. Since it spans several years (& assuming annual compounding) you must take it into account since you will earn interest on your interest\nCase 2: should not be compounded since over 6 months (still assuming annual compounding), i.e. 6% annual is 3% over 6 months since the interests to receive on second half of the year will be based on starting value (& not starting value + interest for first period of 6 months)\n \n \nRgds,\nJulien\n> Date: Tue, 27 Jan 2009 09:56:54 -0800> From: bogaso.christofer at gmail.com> To: r-sig-finance at stat.math.ethz.ch> Subject: Re: [R-SIG-Finance] [R-sig-finance] Plese help me to understand this> > > But Zero rate semblances with Zero coupon bond, where all Interests will be> paid at maturity. Then why it is compounded annually?> > > davidr-2 wrote:> > > > The text is compounding interest but you are not.> > HTH,> > -- David> > > > > > -----Original Message-----> > From: r-sig-finance-bounces at stat.math.ethz.ch> > [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Bogaso> > Sent: Tuesday, January 27, 2009 11:27 AM> > To: r-sig-finance at stat.math.ethz.ch> > Subject: [R-SIG-Finance] [R-sig-finance] Plese help me to understand> > this> > > > > > Hi all,> > > > Can anyone please help me to understand, whether there is any difference> > between \"Zero rate\" and \"Zero Yield\". I thought they are synonymous and> > both> > are used in Zero-coupon bond context. However I got different results in> > my> > textbook while those two are used in different places. Here is the> > problem :> > > > Case 1. Suppose 5-year spot yield is 7.6 p.a.. Now assume there is a> > receivable after 5 year worth $100. Then current value of this> > receivable is> > $100*(1+7.6*5/100)^-1. Am I correct? However in my textbook, it is> > reported> > as $100*(1+7.6/100)^-5.> > > > Case 2. Suppose 6 month spot rate 6.39 p.a.. Now assume there is a> > receivable after 6 months worth $100. Then current value of this> > receivable> > is $100*(1+6.39/100/2)^-1. Here my understanding is matching with my> > textbook.> > > > Please forgive me as I understand, this question is too fundamental. But> > still I think I am missing something important. Can anyone please help> > me?> > > > Regards,> > -- > > View this message in context:> > http://www.nabble.com/Plese-help-me-to-understand-this-tp21690077p216900> > 77.html> > Sent from the Rmetrics mailing list archive at Nabble.com.> > > > _______________________________________________> > R-SIG-Finance at stat.math.ethz.ch mailing list> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance> > -- Subscriber-posting only.> > -- If you want to post, subscribe first.> > > > _______________________________________________> > R-SIG-Finance at stat.math.ethz.ch mailing list> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance> > -- Subscriber-posting only.> > -- If you want to post, subscribe first.> > > > > > -- > View this message in context: http://www.nabble.com/Plese-help-me-to-understand-this-tp21690077p21690727.html> Sent from the Rmetrics mailing list archive at Nabble.com.> > _______________________________________________> R-SIG-Finance at stat.math.ethz.ch mailing list> https://stat.ethz.ch/mailman/listinfo/r-sig-finance> -- Subscriber-posting only.> -- If you want to post, subscribe first.\n_________________________________________________________________\n[[elided Hotmail spam]]\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "The fact all the interests are paid at the end with the principal has no incidence on the compounding...\n \nCase 1: the book compound the IR while you are not. Since it spans several years (& assuming ",
       "thread_id": "thread-ab9a4be3e432",
       "thread_depth": 3,
-      "month": "2009-01"
+      "month": "2009-01",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090127/b541f0e1/attachment.pl"
+      ]
     },
     {
       "id": "msg-a5078acd7179",
@@ -2039,11 +2093,14 @@
       "subject_clean": "How do I load Rmetrics indicator functions now",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090127/234f035d/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090127/234f035d/attachment.pl>",
+      "body_plain": "Recently (Remetrics 2.7, 2.8) functions like emaTA() , and any other\nfunction in Rmetrics was loaded with the library(Rmetrics) package.\n\nWe just updated our server and got the new Rmetrics package... now that no\nlonger works...\n\nIn which packages are all the standard indicator functions located?...\nlibrary(fMultivar) was my first choice... but it didn't seem to have them.\n\n\nTheo\n\n\n-- \nTheodore Van Rooy\nhttp://greentheo.scroggles.com\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Recently (Remetrics 2.7, 2.8) functions like emaTA() , and any other\nfunction in Rmetrics was loaded with the library(Rmetrics) package.\n\nWe just updated our server and got the new Rmetrics package...",
       "thread_id": "thread-a5078acd7179",
       "thread_depth": 0,
-      "month": "2009-01"
+      "month": "2009-01",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090127/234f035d/attachment.pl"
+      ]
     },
     {
       "id": "msg-65cbea378392",
@@ -2163,11 +2220,14 @@
       "subject_clean": "Copula in R",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090130/e2941ae4/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090130/e2941ae4/attachment.pl>",
+      "body_plain": "Hello,\nI try to reproduce copula fitting from Matlab by R. I constructed pieswise distribution: Generalised Pareto at the tails and empirical distribution estimated with Gaussian Kernel. Like this I obtain 15 CDF. However, I dont find my way to convert them to uniforms and fit copula.\n \nIf you could provide some help, I would be thanjful\n \nThank You\nYana\n\n\n      \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\nI try to reproduce copula fitting from Matlab by R. I constructed pieswise distribution: Generalised Pareto at the tails and empirical distribution estimated with Gaussian Kernel. Like this I o",
       "thread_id": "thread-9c0521feecd7",
       "thread_depth": 0,
-      "month": "2009-01"
+      "month": "2009-01",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090130/e2941ae4/attachment.pl"
+      ]
     },
     {
       "id": "msg-188e88f9dd21",
@@ -2256,11 +2316,14 @@
         "<21746856.post@talk.nabble.com>",
         "<F9F2A641C593D7408925574C05A7BE77022A639C@rhopost.rhotrading.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090130/4668e5bb/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090130/4668e5bb/attachment.pl>",
+      "body_plain": "Hi,\n\nI have a little input. For non-linear portfolio, where movements are mostly\nin tail, the parametric models does not do well for its fundamental normal\ndistributional assumptions, not even the EWMA which is thought to be a\npreferred bet for volatility clustering.\n\nEven simulation  model, in my experience is not a good candidate  for\nnon-linear instruments, specially for options; though there is no\ndistributional assumptions in historical simulation model, but it is unable\nto capture the movement in the tails, specially in volatile regime.\n\nI recommend the Extreme Value Theory (EVT) based VaR model  which is able to\ncapture movement in the tails. I have implemented Peaks Over Threshold\n(POT), a variant of EVT-based model in Matlab. If you like,  I may run you\nthrough.\n\nBest,\nDebashis\n\n\nOn 30/01/2009, davidr at rhotrading.com <davidr at rhotrading.com> wrote:\n>\n> Component VaR aside, Value-at-Risk is very difficult for options\n> and non-linear instruments in general. A number of years ago\n> RiskMetrics tried to use a delta-gamma approximation, but they\n> abandoned it soon since it really didn't work very well. You\n> may be able to find a paper or two on it somewhere under that name or\n> quadratic VaR, but many of them have been pulled.\n> (Check RiskMetrics.com and GloriaMundi.org.)\n> Finding the distribution of option values under an assumption of\n> a distribution assumption for the underlying is hard.\n> Taking volatility skew and such into account makes it harder.\n> It may be an interesting exercise to compute it, but using simulation\n> is going to be much easier and more useful in the end. Just make sure\n> you use a distribution for the underlying that has fat enough tails.\n>\n> My 2 cents.\n> David L. Reiner, PhD\n> Head Quant\n> Rho Trading Securities, LLC\n>\n>\n> -----Original Message-----\n> From: r-sig-finance-bounces at stat.math.ethz.ch\n> [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of megh\n> Sent: Friday, January 30, 2009 7:07 AM\n> To: r-sig-finance at stat.math.ethz.ch\n> Subject: Re: [R-SIG-Finance] [R-sig-finance] Conponent VaR for\n> someoption portfolio\n>\n>\n> Hi  Guy , thanks so much. This document is really useful. Although I\n> think\n> that will serve most of my purposes, still I found that they adopted\n> Simulation approach to calculate all those analytics. My question is\n> that,\n> is it possible to have those under Parametric approach?\n>\n> Thanks and regards,\n>\n>\n> Guy Yollin-2 wrote:\n> >\n> > I've used this paper as a guide to implementing cvar decomposition in\n> > R/S-PLUS:\n> >\n> > Yamai, Yasuhiro & Yoshiba, Toshinao, 2002.\n> > \"Comparative Analyses of Expected Shortfall and Value-at-Risk: Their\n> > Estimation Error, Decomposition, and Optimization,\"\n> > Monetary and Economic Studies, Institute for Monetary and Economic\n> > Studies, Bank of Japan, vol. 20(1), pages 87-121, January.\n> >\n> > It's available here:\n> >\n> > http://www.imes.boj.or.jp/english/publication/mes/2002/me20-1-4.pdf\n> >\n> > Best,\n> >\n> > -- Guy\n> >\n> >\n> > -----Original Message-----\n> > From: r-sig-finance-bounces at stat.math.ethz.ch\n> > [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of megh\n> > Sent: Wednesday, January 28, 2009 9:21 PM\n> > To: r-sig-finance at stat.math.ethz.ch\n> > Subject: [R-SIG-Finance] [R-sig-finance] Conponent VaR for some option\n> > portfolio\n> >\n> >\n> > Can people here please guide me how to calculate Componrnt VaR\n> > (sensitivity)\n> > of an option position, for a portfolio which consists of number of\n> stocks\n> > and option contracts (put ot call or both). Any document, research\n> paper\n> > over net is highly appreciated.\n> >\n> > Thanks\n> > --\n> > View this message in context:\n> >\n> http://www.nabble.com/Conponent-VaR-for-some-option-portfolio-tp21704929\n> p21704929.html\n> > Sent from the Rmetrics mailing list archive at Nabble.com.\n> >\n> > _______________________________________________\n> > R-SIG-Finance at stat.math.ethz.ch mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only.\n> > -- If you want to post, subscribe first.\n> >\n> > _______________________________________________\n> > R-SIG-Finance at stat.math.ethz.ch mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only.\n> > -- If you want to post, subscribe first.\n> >\n> >\n>\n> --\n> View this message in context:\n> http://www.nabble.com/Conponent-VaR-for-some-option-portfolio-tp21704929\n> p21746856.html\n> Sent from the Rmetrics mailing list archive at Nabble.com.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only.\n> -- If you want to post, subscribe first.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI have a little input. For non-linear portfolio, where movements are mostly\nin tail, the parametric models does not do well for its fundamental normal\ndistributional assumptions, not even the EWM",
       "thread_id": "thread-5116aa153b2e",
       "thread_depth": 4,
-      "month": "2009-01"
+      "month": "2009-01",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20090130/4668e5bb/attachment.pl"
+      ]
     },
     {
       "id": "msg-5c88c0f382fe",
