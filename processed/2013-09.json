@@ -13,11 +13,14 @@
       "subject_clean": "rmgarch: dccforecast() and mregfor",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130902/37addef9/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130902/37addef9/attachment.pl>",
+      "body_plain": "Dear all,\n\nI'm a first time user of this list. Please let me know if I need to provide\nmore info,etc.\nI have a question regarding dccforecast() and the number of external\nregressors needed.\n\nI'm using the dccforecast() function from the package \"rmgarch\" and use the\nsimple DCC model and a AR(1)-GARCH(1,1). The forecast works fine when I do\nNOT include external regressors. However, I have an error message from the\ndccforecast() function when I include the external regressors in the\nexternal.forecasts=list(mregfor = ...) option.\n\n\"Error: dccforecast-->error: wrong number of external regressors!...\"\n\n>From the documentation, I understand that I need to have unconstraint\nforecast of my ext. regr and these regressors must be the same as in the\nugarchspec(). I googled my problem, but nothing helpful came up. Anyone see\nthe mistake here ? I appreciate your help :) thanks!\n\nHere are the main steps I took and my code is below.\n\nstep (1):  univariate GARCH specification with ARMA(1,0), GARCH(1,1) and a\n842x17 matrix of external regressors. Then, I create a multispec object.\nstep (2):  varxfit( ... data matrix of 758x6,  and regressors of 758x17\ndimensions)\nstep (3): dccspec( multispec, ext.regr of 842x17  dimensions)\n              dccfit( dccspec, data of 842x6  and out.sample=84)\nstep (4) dccforecast ( dccfit,  n.ahead = 1 , n.roll = 5,  mregfor of\ndimension 842.17 )\n==>  and I get the embarrassing message with \"wrong number of ext.\nregressors!...\"\n\nMy code:\n###########################################################\nuniGarchSpec <- ugarchspec(mean.model = list(armaOrder=c(1,0),\n                                             external.regressors =\nlag(extRegr)),\n\nvariance.model=list(model=\"sGARCH\",\n                                             garchOrder=c(1,1)))\nmultiGarchSpec <- multispec(replicate(6, uniGarchSpec))\n# VAR\nvarFit <- varxfit(X=data.agriFact[-outSample.ind,c(5:9, 23)],\n                                p=1, postpad='constant', robust=FALSE,\nns=200,\n                                exogen=extRegr[-outSample.ind,])\n# DCC\ndccSpec <- dccspec(multiGarchSpec, VAR=TRUE, robust=FALSE,\n                             lag=1, lag.max=NULL,\n                             external.regressors=lag(extRegr),\n                             robust.control = list(\"gamma\" = 0.25,\n                                                   \"delta\" = 0.01, \"nc\" =\n10, \"ns\" = 250),\n                             dccOrder=c(1,1), model=c(\"DCC\"),\ndistribution=c(\"mvt\"),\n                             start.pars=list(dcca1=0.05, dccb1=0.816))\ndccFit <- dccfit(dccSpec, data=lag(data.agriFact[,c(5:9, 23)]),\n                                  VAR.fit = varFit, out.sample=84)\n# Forecast\ndccForecast <- dccforecast(dccFit, n.ahead=1,n.roll=5,\n                           external.forecasts=list(mregfor=lag(extRegr)))\n###########################################################\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,\n\nI'm a first time user of this list. Please let me know if I need to provide\nmore info,etc.\nI have a question regarding dccforecast() and the number of external\nregressors needed.\n\nI'm using",
       "thread_id": "thread-e8d91466ec17",
       "thread_depth": 0,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130902/37addef9/attachment.pl"
+      ]
     },
     {
       "id": "msg-e8ddba8edf9f",
@@ -47,11 +50,14 @@
       "subject_clean": "Bloomberg Data",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130902/c8aabd6d/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130902/c8aabd6d/attachment.pl>",
+      "body_plain": "I'm trying to obtain data for certain South African stocks through the\nBloomberg site, like:\n\nhttp://www.bloomberg.com/quote/ASR:SJ\n\nand am wondering if there is not an api available much like there is with\nyahoo or google that anyone is aware of.\n\nThanks,\n\nR. Vince\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I'm trying to obtain data for certain South African stocks through the\nBloomberg site, like:\n\nhttp://www.bloomberg.com/quote/ASR:SJ\n\nand am wondering if there is not an api available much like there i",
       "thread_id": "thread-09a3ab7f450a",
       "thread_depth": 0,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130902/c8aabd6d/attachment.pl"
+      ]
     },
     {
       "id": "msg-4128b5d2f5c5",
@@ -84,11 +90,14 @@
         "<CAAHNhKVk+uiesmCEsKP3icq4vc35j5wk4Ly=o4rm_jDV8fpA4Q@mail.gmail.com>",
         "<5224AE4E.7090707@braverock.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130902/edb0d9b1/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130902/edb0d9b1/attachment.pl>",
+      "body_plain": "Thank you Brian,\n\nI wasn't sure of this (thinking perhaps it has been created and I wasn't\naware). Thank yo ufor confirming thisto me. Ralph Vince\n\n\nOn Mon, Sep 2, 2013 at 11:27 AM, Brian G. Peterson <brian at braverock.com>wrote:\n\n> On 09/02/2013 10:21 AM, Ralph Vince wrote:\n>\n>> I'm trying to obtain data for certain South African stocks through the\n>> Bloomberg site, like:\n>>\n>> http://www.bloomberg.com/**quote/ASR:SJ<http://www.bloomberg.com/quote/ASR:SJ>\n>>\n>> and am wondering if there is not an api available much like there is with\n>> yahoo or google that anyone is aware of.\n>>\n>\n> Ralph,\n>\n> There is, to the best of my knowledge, no way to download historical data\n> from the Bloomberg website.  These 'Download' links are the hooks taken\n> advantage of by the getSymbols methods for Yahoo, Google, the Fed, and\n> other data sources.\n>\n> There is of course the 'Rbbg' (formerly RBloomberg) package which can\n> extract information from a Bloomberg terminal, if you have one handy.\n>\n> Regards,\n>\n> Brian\n>\n>\n> --\n> Brian G. Peterson\n> http://braverock.com/brian/\n> Ph: 773-459-4973\n> IM: bgpbraverock\n>\n> ______________________________**_________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/**listinfo/r-sig-finance<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thank you Brian,\n\nI wasn't sure of this (thinking perhaps it has been created and I wasn't\naware). Thank yo ufor confirming thisto me. Ralph Vince\n\n\nOn Mon, Sep 2, 2013 at 11:27 AM, Brian G. Peterson ",
       "thread_id": "thread-09a3ab7f450a",
       "thread_depth": 2,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130902/edb0d9b1/attachment.pl"
+      ]
     },
     {
       "id": "msg-c0fdca5a49dd",
@@ -194,11 +203,14 @@
       "subject_clean": "rugarch memory overload",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130906/746eec7b/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130906/746eec7b/attachment.pl>",
+      "body_plain": "Hello, I am trying to estimate GARCH parameters on a very large panel data\nset.  I am using the excellent rugarch package.  I am only interested in\nthe coefficients so I use the coef function as below:\n\nlibrary(rugarch)\n\ncoef(ugarchfit(spec=spec, data=data, solver='hybrid'))\n\nThe program blows up from lack of RAM, even using parallel processing, and\nalso using the data.table package.  Are there any suggestions on how to get\nthis to work?  All I care about is getting the coefficients.  Thank you.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello, I am trying to estimate GARCH parameters on a very large panel data\nset.  I am using the excellent rugarch package.  I am only interested in\nthe coefficients so I use the coef function as below",
       "thread_id": "thread-3561d8802bfb",
       "thread_depth": 0,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130906/746eec7b/attachment.pl"
+      ]
     },
     {
       "id": "msg-50a6a33e99d4",
@@ -273,11 +285,14 @@
       "subject_clean": "A question regarding the mcsGARCH model coding",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130909/12a26fdf/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130909/12a26fdf/attachment.pl>",
+      "body_plain": "Hi,\n\nI am very interested in GARCH modelling filed and I was trying to fit the\nmcsGARCH model to my data. I was following the code in this website:\nhttp://www.unstarched.net/2013/03/20/high-frequency-garch-the-multiplicative-component-garch-mcsgarch-model/\nEverything works OK until I try to fit the mscGARCH model using following\ncode:\nfit = ugarchfit(data = data_ts, spec = spec, DailyVar = f_sigma^2)\nIt comes with an error:\nError in !matchD : invalid argument type\nI am not pretty sure what this message means.\n\nI greatly appreciated your help!\n\nSincerely,\nAnne\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI am very interested in GARCH modelling filed and I was trying to fit the\nmcsGARCH model to my data. I was following the code in this website:\nhttp://www.unstarched.net/2013/03/20/high-frequency-",
       "thread_id": "thread-279e1a4a6533",
       "thread_depth": 0,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130909/12a26fdf/attachment.pl"
+      ]
     },
     {
       "id": "msg-6fa51401164f",
@@ -307,11 +322,14 @@
       "subject_clean": "unexpected output from filtering with mFilter package",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130915/42d30abd/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130915/42d30abd/attachment.pl>",
+      "body_plain": "Dear all,\n\nI am trying to run a Christiano FitzGerald band pass filter to estimate a\nlong-run trend (with period in excess of 70 years), using the mFilter\npackage. My data are the demeaned natural log of a commodity price index.\nMy problem is that the asymmetric CF filter output does not look right\naround the start and end points. In particular my long run trend has a peak\na few years before the end point, which I think shouldn’t be there (by\nreference to previous work and also just from looking at the data, which\nseem to be still trending up).\n\nThe R code below should replicate the issue. I also posted this question\nand charts here\nhttp://stats.stackexchange.com/questions/69930/band-pass-filter-giving-wrong-turning-pointa\ncouple of days ago with no answer so far. This post also has a chart\nof\nthe HP filter output for comparison - the HP filter output looks better but\nonly because there is something wrong with my CF filter - CF is best\npractice for this kind of data, I believe.\n\nI’m not sure if the unexpected turning point is the result of my\nmisunderstanding the CF filter, a consequence of how the filter is\nimplemented in mFilter, or something else. Any help would be very much\nappreciated indeed!\n\nThanks\n\nAidan.\n\n\n\nlibrary(mFilter)\n\nlibrary(ggplot2)\n\nlibrary(reshape2)\n\nd<-c(1.17, 1.11, 0.68, 0.83, 0.98, 1.01, 0.76, 0.52, 0.34, 0.36,\n\n0.18, 0.12, 0.07, -0.17, -0.47, -0.43, -0.01, -0.16, -0.51, -0.79,\n\n-0.69, -0.76, -0.86, -0.85, -0.78, -0.8, -0.89, -0.95, -0.83,\n\n-0.84, -0.96, -1.22, -1.41, -1.25, -0.94, -0.43, -0.58, -0.97,\n\n-0.82, -0.47, -0.44, -0.56, -0.55, -0.32, -0.31, -0.46, -0.34,\n\n-0.3, -0.25, -0.31, -0.57, -0.6, -0.42, -0.06, -0.3, -0.5, 0.12,\n\n0.3, 0.33, 0.24, 0.49, -0.18, -0.06, -0.15, -0.11, 0.02, 0.14,\n\n-0.3, -0.31, -0.28, -0.39, -0.94, -0.51, -0.74, -0.35, -0.37,\n\n-0.28, -0.22, -0.24, -0.36, -0.37, -0.32, -0.39, -0.45, -0.46,\n\n-0.48, -0.39, -0.21, 0.01, 0.02, 0.01, -0.06, -0.09, -0.04, -0.01,\n\n0, -0.02, 0.03, 0, -0.03, -0.05, -0.06, -0.07, -0.08, -0.11,\n\n-0.13, -0.15, -0.15, -0.18, -0.2, -0.24, -0.23, -0.25, -0.04,\n\n0.86, 0.8, 0.8, 0.81, 0.73, 1.03, 1.36, 1.33, 1.18, 1.06, 0.98,\n\n0.9, 0.22, 0.46, 0.25, 0.4, 0.59, 0.39, 0.33, 0.19, 0.11, 0.14,\n\n0.27, 0.19, -0.16, 0.11, 0.5, 0.32, 0.31, 0.46, 0.72, 1, 1.12,\n\n1.19, 1.47, 0.99, 1.23, 1.38, 1.35)\n\nd<-data.frame(orig.series=d)\n\nd$year<-as.numeric(row.names(d))\n\nfilter.output<-cffilter(d$orig.series,pl=70,pu=1500)\n\nd$long.run.trend<-filter.output$cycle\n\nd<-melt(d,id='year')\n\ngp<-ggplot(d) + geom_line(aes(x=year,y=value,colour=variable))\n\ngp\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,\n\nI am trying to run a Christiano FitzGerald band pass filter to estimate a\nlong-run trend (with period in excess of 70 years), using the mFilter\npackage. My data are the demeaned natural log",
       "thread_id": "thread-b9df2fceedd2",
       "thread_depth": 0,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130915/42d30abd/attachment.pl"
+      ]
     },
     {
       "id": "msg-a10e33119459",
@@ -344,11 +362,14 @@
         "<CADv5Py4Yp50tyQ8mc3-irDdtuZYAyLaOxwC1_k-OHxQ2qSFR3w@mail.gmail.com>",
         "<E2339A3600811248AB525B8FAB3A1BCE987BE025@srv-mail-101.zhaw.ch>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130915/5bba4afe/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130915/5bba4afe/attachment.pl>",
+      "body_plain": "thanks Marc. sorry I was wrong to use the word trend. I am actually looking\nfor long run cycles, with period in excess of 70 years, not a trend. the\ntheory is that commodity prices have long run cycles like this reflecting\nperiods of urbanization for example. filtering out these cycles is the\nfirst step in analysing the price series. we then take the residuals from\nthis and look for medium run and then short run cycles.\n\nunfortunately my long run cycle appears to be too prone to turning near the\nend points for some reason.\n\n\nOn Sun, Sep 15, 2013 at 10:47 AM, Wildi Marc (wlmr) <wlmr at zhaw.ch> wrote:\n\n> -You are running a bandpass filter for looking at a trend. But a bandpass\n> filter removes the trend! Ergo: you're not looking at the trend...\n>\n> Marc\n>\n> ________________________________________\n> Von: r-sig-finance-bounces at r-project.org [\n> r-sig-finance-bounces at r-project.org]&quot; im Auftrag von &quot;Aidan\n> Corcoran [aidan.corcoran11 at gmail.com]\n> Gesendet: Sonntag, 15. September 2013 11:25\n> An: r-sig-finance at r-project.org\n> Betreff: [R-SIG-Finance] unexpected output from filtering with mFilter\n>  package\n>\n> Dear all,\n>\n> I am trying to run a Christiano FitzGerald band pass filter to estimate a\n> long-run trend (with period in excess of 70 years), using the mFilter\n> package. My data are the demeaned natural log of a commodity price index.\n> My problem is that the asymmetric CF filter output does not look right\n> around the start and end points. In particular my long run trend has a peak\n> a few years before the end point, which I think shouldn’t be there (by\n> reference to previous work and also just from looking at the data, which\n> seem to be still trending up).\n>\n> The R code below should replicate the issue. I also posted this question\n> and charts here\n>\n> http://stats.stackexchange.com/questions/69930/band-pass-filter-giving-wrong-turning-pointa\n> couple of days ago with no answer so far. This post also has a chart\n> of\n> the HP filter output for comparison - the HP filter output looks better but\n> only because there is something wrong with my CF filter - CF is best\n> practice for this kind of data, I believe.\n>\n> I’m not sure if the unexpected turning point is the result of my\n> misunderstanding the CF filter, a consequence of how the filter is\n> implemented in mFilter, or something else. Any help would be very much\n> appreciated indeed!\n>\n> Thanks\n>\n> Aidan.\n>\n>\n>\n> library(mFilter)\n>\n> library(ggplot2)\n>\n> library(reshape2)\n>\n> d<-c(1.17, 1.11, 0.68, 0.83, 0.98, 1.01, 0.76, 0.52, 0.34, 0.36,\n>\n> 0.18, 0.12, 0.07, -0.17, -0.47, -0.43, -0.01, -0.16, -0.51, -0.79,\n>\n> -0.69, -0.76, -0.86, -0.85, -0.78, -0.8, -0.89, -0.95, -0.83,\n>\n> -0.84, -0.96, -1.22, -1.41, -1.25, -0.94, -0.43, -0.58, -0.97,\n>\n> -0.82, -0.47, -0.44, -0.56, -0.55, -0.32, -0.31, -0.46, -0.34,\n>\n> -0.3, -0.25, -0.31, -0.57, -0.6, -0.42, -0.06, -0.3, -0.5, 0.12,\n>\n> 0.3, 0.33, 0.24, 0.49, -0.18, -0.06, -0.15, -0.11, 0.02, 0.14,\n>\n> -0.3, -0.31, -0.28, -0.39, -0.94, -0.51, -0.74, -0.35, -0.37,\n>\n> -0.28, -0.22, -0.24, -0.36, -0.37, -0.32, -0.39, -0.45, -0.46,\n>\n> -0.48, -0.39, -0.21, 0.01, 0.02, 0.01, -0.06, -0.09, -0.04, -0.01,\n>\n> 0, -0.02, 0.03, 0, -0.03, -0.05, -0.06, -0.07, -0.08, -0.11,\n>\n> -0.13, -0.15, -0.15, -0.18, -0.2, -0.24, -0.23, -0.25, -0.04,\n>\n> 0.86, 0.8, 0.8, 0.81, 0.73, 1.03, 1.36, 1.33, 1.18, 1.06, 0.98,\n>\n> 0.9, 0.22, 0.46, 0.25, 0.4, 0.59, 0.39, 0.33, 0.19, 0.11, 0.14,\n>\n> 0.27, 0.19, -0.16, 0.11, 0.5, 0.32, 0.31, 0.46, 0.72, 1, 1.12,\n>\n> 1.19, 1.47, 0.99, 1.23, 1.38, 1.35)\n>\n> d<-data.frame(orig.series=d)\n>\n> d$year<-as.numeric(row.names(d))\n>\n> filter.output<-cffilter(d$orig.series,pl=70,pu=1500)\n>\n> d$long.run.trend<-filter.output$cycle\n>\n> d<-melt(d,id='year')\n>\n> gp<-ggplot(d) + geom_line(aes(x=year,y=value,colour=variable))\n>\n> gp\n>\n>         [[alternative HTML version deleted]]\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "thanks Marc. sorry I was wrong to use the word trend. I am actually looking\nfor long run cycles, with period in excess of 70 years, not a trend. the\ntheory is that commodity prices have long run cycle",
       "thread_id": "thread-b9df2fceedd2",
       "thread_depth": 2,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130915/5bba4afe/attachment.pl"
+      ]
     },
     {
       "id": "msg-7f84373261c6",
@@ -360,11 +381,14 @@
       "subject_clean": "Setting a new method for generic function correctly?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130921/0e1630b9/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130921/0e1630b9/attachment.pl>",
+      "body_plain": "Dear All,\n\nCan somebody explain me how to correctly set a new class-specific method\nfor generic functions (e.g. for \"plot\", \"summary\" and \"print\"). I simply\nprogrammed these functions with the class names and it works perfectly.\nE.g.:\n\nx<-2\ny<-3\nclass(x)<-\"newclass\"\nclass(y)<-\"newclass\"\nprint.newclass<-function(x){ cat(x*10) }\nprint(x)\nprint(y)\n\nHowever, I need the new methods for a new package, and the \"R CMD check\"\ngives me warnings that my approach is not correct. I have to define methods\nand do not use full names as \"print.newclass\".\nI read the \"Writing R Extensions\" and it is not explained there (at least\nto such level that I can get it) and didn't get anything understandable by\ngoogling.\n\nMany thanks in advance!\nMikhail\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear All,\n\nCan somebody explain me how to correctly set a new class-specific method\nfor generic functions (e.g. for \"plot\", \"summary\" and \"print\"). I simply\nprogrammed these functions with the class n",
       "thread_id": "thread-7f84373261c6",
       "thread_depth": 0,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130921/0e1630b9/attachment.pl"
+      ]
     },
     {
       "id": "msg-5186979fc839",
@@ -394,11 +418,14 @@
       "subject_clean": "Is there any function which will allow me to take selective lags of ARMA modelling part while doing ARMAX?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130922/ca449f81/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130922/ca449f81/attachment.pl>",
+      "body_plain": "HI,\n\nI am looking for a function or a method that allows me to use lags\nselectively in an ARMAX process\n\nwhile doing time series modelling.\n\nTo do the ARMA modelling of the data, I’ve used the following function to\nchoose only the selective\n\nlags where the ACF/PACF was significant where dal is the time series data\nfor aluminium.\n\ndal.arma= arma(dal, lag=list(ar=c(1,26),ma=c(1,4,7))) ; summary(dal.arma)\n\nWith the ARMAX function of R, I can’t take selective lags, and the function\nestimates the coefficients\n\non all the lags in between. Hence the function estimates all 26 lags for AR\nand all 7 for MA, giving me\n\nno freedom to choose lags in between when I want to do ARMAX.\n\nal.armax= armax(dal, order=c(26,0,7), xreg=xreg) ;   where xreg is a\ndata.frame type object consisting\n\nof lagged series of exogenous variables.\n\nBut, I want only ar1, ar26, ma1, ma4 and ma7 along with the exogenous\nvariables. Any idea how to\n\nsolve this? Any help would be greatly appreciated. Thanks!\n\n-- \n\nAparna Roy\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "HI,\n\nI am looking for a function or a method that allows me to use lags\nselectively in an ARMAX process\n\nwhile doing time series modelling.\n\nTo do the ARMA modelling of the data, I’ve used the followi",
       "thread_id": "thread-b9a41b389c42",
       "thread_depth": 0,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130922/ca449f81/attachment.pl"
+      ]
     },
     {
       "id": "msg-1ec457805cf2",
@@ -426,11 +453,14 @@
       "subject_clean": "How to get the algorithm for ARMA() function in R?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130922/4542cc78/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130922/4542cc78/attachment.pl>",
+      "body_plain": "I am trying to find out the algorithm used in the arma() function in R that\nestimates the coefficients\n\nof the AR and the MA parts. E.g.,\n\ndal.arma= arma(dal, lag=list(ar=c(1,26),ma=c(1,4,7)))\n\nMy project requires me to use exogenous variables along with the above arma\nmodelling with selective lags, and I can’t find a function to do that. Can\nanyone help me with this?\n\nAlso, to try to write my own code, I need the algorithm for the ARMA\nestimation process, especially,\n\nthe MA part’s algorithm. Any help in this regard would be deeply\nappreciated. Thanks!\n\n-- \n\nAparna Roy\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I am trying to find out the algorithm used in the arma() function in R that\nestimates the coefficients\n\nof the AR and the MA parts. E.g.,\n\ndal.arma= arma(dal, lag=list(ar=c(1,26),ma=c(1,4,7)))\n\nMy pro",
       "thread_id": "thread-7f8ecef6dbd8",
       "thread_depth": 0,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130922/4542cc78/attachment.pl"
+      ]
     },
     {
       "id": "msg-03e1e84f2e8b",
@@ -458,11 +488,14 @@
       "subject_clean": "How to obtain the algorithm for ugarchspec() and ugarchfit() functions?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130922/c984ba84/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130922/c984ba84/attachment.pl>",
+      "body_plain": "Hi,\n\nI am looking for a function that allows me to do garch (p,q) modelling with\nselective lags only for\n\np and q ( e.g. p1, p6 , m3, m6 etc.). But, since I couldn’t find such a\nfunction, I am trying to alter the code\n\nfor the above said functions to fit my need and hence, need the algorithm\nused in the above said\n\nfunctions.\n\nHow could I access the algorithms on which these functions were modelled?\nCould someone please\n\nhelp me with that? Thanks. Any help would be greatly appreciated. Thanks.\n\n-- \n\nAparna Roy\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI am looking for a function that allows me to do garch (p,q) modelling with\nselective lags only for\n\np and q ( e.g. p1, p6 , m3, m6 etc.). But, since I couldn’t find such a\nfunction, I am trying ",
       "thread_id": "thread-0df868cf5fed",
       "thread_depth": 0,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130922/c984ba84/attachment.pl"
+      ]
     },
     {
       "id": "msg-e0bb98fdcd38",
@@ -492,11 +525,14 @@
       "subject_clean": "rugarch by processing with plyr",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130923/32d4fac5/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130923/32d4fac5/attachment.pl>",
+      "body_plain": "I would like to estimate an EGARCH model by subject using the rugarch and\nplyr packages.  I am concerned that the external regressors named in the\nugarchspec function do not roll forward by subject.  For example, in the\ncode below, both subjects have the exact same dependent variables, but\ndifferent independent variables.  Yet, the parameter estimates for both\nsubjects are the exact same.  I think this is due to the independent\nvariables not changing by subject.  Am I correct?  If so, how can I work\naround this?  Thank you very much.\n\n    library(plyr)\n    library(rugarch)\n\n    set.seed(1000)\n\n    Y <- rnorm(200)\n\n    data <- data.frame(SUBJECT=c(rep('Alice', 200), rep('Bart', 200)),\nYVAR=rep(Y, 02), XVAR=rnorm(400))\n    data\n\n    spec <- ugarchspec(mean.model=list(armaOrder=c(00,00),\nexternal.regressors=data.matrix(data$XVAR), include.mean=TRUE),\nvariance.model=list(model='eGARCH', garchOrder=c(01,01)),\ndistribution.model='norm')\n\n    ddply(data, .(SUBJECT), function(x) coef(ugarchfit(spec=spec,\ndata=x$YVAR, solver='hybrid')))\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I would like to estimate an EGARCH model by subject using the rugarch and\nplyr packages.  I am concerned that the external regressors named in the\nugarchspec function do not roll forward by subject.  ",
       "thread_id": "thread-94ce6a3bdf46",
       "thread_depth": 0,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130923/32d4fac5/attachment.pl"
+      ]
     },
     {
       "id": "msg-3782b53ed449",
@@ -560,11 +596,14 @@
       "references": [
         "<524432A3.5060808@avignon.inra.fr>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130926/f5f3bb79/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130926/f5f3bb79/attachment.pl>",
+      "body_plain": "http://quant-day.blogspot.co.uk/2013/06/technicaland-not-technical-strategy.html\n\nJust saying. Not trying to be rude or anything. :)  \n\n\nKind regards,--  \nDominykas Grigonis\n\n\nOn Thursday, 26 September 2013 at 14:12, Olivier MARTIN wrote:\n\n> Hi all,\n>  \n> This my problem with the package quantstrat. When I execute  \n> demo(maCross) or demo(macd)\n> I obtain the following message for the step applyStrategy():\n>  \n> out<-applyStrategy(strat.st ,  \n> portfolios=portfolio.st,parameters=list(nFast=fastMA, nSlow=slowMA,  \n> nSig=signalMA,maType=maType),verbose=TRUE)\n> Erreur dans NextMethod(.Generic) :\n> dims [produit 1] ne correspond pas à la longueur de l'objet [9]\n> De plus : Message d'avis :\n> In which((if (!is.null(status)) ordersubset[, \"Order.Status\"] == :\n> Méthodes incompatibles (\"Ops.POSIXt\", \"Ops.Date\") pour \"<\"\n>  \n> Sorry my version is in french: this is an (approximate) translation:\n> Error in NextMethod(.Generic) :\n> dims [product 1] do not correspond to the size of object [9]\n> Moreover: warning message :\n> In which((if (!is.null(status)) ordersubset[, \"Order.Status\"] == :\n> incompatible methods (\"Ops.POSIXt\", \"Ops.Date\") pour \"<\"\n>  \n> I tried the package with the R version R-2.15.3 and the version R-3.0.1  \n> on Ubuntu system.\n> I think that therie is no pb on windows system.\n>  \n> Thanks for your help,\n> O.\n>  \n> _______________________________________________\n> R-SIG-Finance at r-project.org (mailto:R-SIG-Finance at r-project.org) mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>  \n>  \n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "http://quant-day.blogspot.co.uk/2013/06/technicaland-not-technical-strategy.html\n\nJust saying. Not trying to be rude or anything. :)  \n\n\nKind regards,--  \nDominykas Grigonis\n\n\nOn Thursday, 26 Septembe",
       "thread_id": "thread-6b249c80c6e5",
       "thread_depth": 1,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130926/f5f3bb79/attachment.pl"
+      ]
     },
     {
       "id": "msg-ce0d797eed8a",
@@ -647,11 +686,14 @@
       "subject_clean": "Trying to add custom indicators to chart.Posn",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130928/33347b64/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130928/33347b64/attachment.pl>",
+      "body_plain": "So my question is this: I'm running a trading strategy in quantstrat with\ncustom indicators (replicating the ichimoku system, for those that have\nheard of it), and I'd like to get a visual bead on the system by overlaying\nmy custom indicators directly on top of the position chart.\n\nMy data is QQQ from the start of 2007 to the end of August of 2013.\n\nHere's my indicator code:\n\nminAndMax <- function(twoNums) {\n  ret <- c(min(twoNums), max(twoNums))\n  return(ret)\n}\n\n# for those that find the terminology weird, here's a basic rundown\n# tenkanSen is similar to a fast SMA, except instead,\n# it's the mean of the highest high and lowest low of the past nFast periods\n# kijunSen is the same as above, except at nMed frequency\n# senkou A is the average of the two above, projected nMed periods ahead\n(lag nMed)\n# senkou B is similar to the first two, except at an nSlow frequency,\n# also projected nMed periods ahead\n# Chicou span in the original system is the current close projected nMed\nterms into the past\n# however, with computers, I instead opted to move the past nMed terms\nforward.\nichimoku <- function(HLC, nFast=9, nMed=26, nSlow=52) {\n  tenkanSen <- (runMax(Hi(HLC), nFast) + runMin(Lo(HLC), nFast))/2\n  kijunSen <- (runMax(Hi(HLC), nMed) + runMin(Lo(HLC), nMed))/2\n  senkouA <- lag(((tenkanSen+kijunSen)/2), nMed)\n  senkouB <- lag((runMax(Hi(HLC), nSlow) + runMin(Lo(HLC), nSlow))/2, nMed)\n  modChicouClose <- lag(Cl(HLC), nMed)\n  modChicouHi <- lag(Hi(HLC),nMed)\n  modChicouLo <- lag(Lo(HLC),nMed)\n  kumoMinMax <- apply(cbind(senkouA,senkouB),1,minAndMax)\n  indicators <- cbind(tenkanSen, kijunSen, senkouA, senkouB,\nmodChicouClose,\n                      modChicouHi, modChicouLo, t(kumoMinMax))\n  colnames(indicators) <-\nc(\"tenkanSen\",\"kijunSen\",\"senkouA\",\"senkouB\",\"modChicouClose\",\n                            \"modChicouHi\",\"modChicouLo\",\"kumoMin\",\"kumoMax\")\n  reclass(indicators, HLC)\n}\n\nHowever, when I try to do this: (one of my instruments is QQQ), I get the\nfollowing error:\n\nplot(add_TA(ichimoku(QQQ)))\nError in `[.xts`(x, is.finite(x <- as.numeric(x))) :\n  'i' or 'j' out of range\n\nAnd furthermore, the chart.Posn plot creates a new window for the new\nindicator, which sort of defeats the purpose of the entire point of\nplotting, as I took this exercise to try and replicate a \"flesh-and-blood\"\ntechnical trading strategy in quantstrat.\n\nSo, any help would be much appreciated.\n\nThanks so much.\n\nSincerely,\n\nIlya Kipnis\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "So my question is this: I'm running a trading strategy in quantstrat with\ncustom indicators (replicating the ichimoku system, for those that have\nheard of it), and I'd like to get a visual bead on the",
       "thread_id": "thread-f00bc2e140b2",
       "thread_depth": 0,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130928/33347b64/attachment.pl"
+      ]
     },
     {
       "id": "msg-fb603a1fa736",
@@ -681,11 +723,14 @@
       "subject_clean": "question about the high frequency package",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130929/62626f77/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130929/62626f77/attachment.pl>",
+      "body_plain": "Hi, all,\n\nI am trying to load the consolidated trades data  from WRDS TAQ database\nusing the highfrequency package in R. It didn't give me the price\ninformation which i am most interested in. Here is my output:\n\n     SYMBOL   EX        PRICE  SIZE   COND   CORR   G127\n<NA> \"SYMBOL\" \"TIME\"    \"SIZE\" \"G127\" \"CORR\" \"COND\" \"EX\"\n<NA> \"AAPL\"   \"4:03:53\" \"650\"  \"0\"    \"0\"    \"@F\"   \"P\"\n<NA> \"AAPL\"   \"4:11:53\" \"100\"  \"0\"    \"0\"    \"@F\"   \"P\"\n<NA> \"AAPL\"   \"4:23:33\" \"100\"  \"0\"    \"0\"    \"T\"    \"P\"\n<NA> \"AAPL\"   \"4:25:36\" \"200\"  \"0\"    \"0\"    \"T\"    \"P\"\n<NA> \"AAPL\"   \"4:44:24\" \"100\"  \"0\"    \"0\"    \"T\"    \"P\"\n\n\nHere is my code:\n\nfrom = \"2012-09-17\";\nto = \"2012-09-17\";\ndatasource = \"D:/data/\";\ndatadestination = \"D:/data/\";\nconvert( from=from, to=to, datasource=datasource,\ndatadestination=datadestination, trades =FALSE,quotes=FALSE,ticker=\"AAPL\",\ndir =FALSE, extension = \"csv\",\nheader =TRUE, tradecolnames =NULL, quotecolnames = NULL,\nformat=\"%Y%m%d %H:%M:%S\")\n\nxts_data = TAQLoad(tickers='AAPL',from = \"2012-09-17\",to =\n\"2012-09-17\",datasource=datadestination)\n\nhead(xts_data)\n\n\nCould anyone help me fix this? Many thanks!!!\n\nJun\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi, all,\n\nI am trying to load the consolidated trades data  from WRDS TAQ database\nusing the highfrequency package in R. It didn't give me the price\ninformation which i am most interested in. Here is ",
       "thread_id": "thread-9d0e33899c9c",
       "thread_depth": 0,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130929/62626f77/attachment.pl"
+      ]
     },
     {
       "id": "msg-86e6f07d0c22",
@@ -697,11 +742,14 @@
       "subject_clean": "Reading MetaStock data format in R",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/0b212f84/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/0b212f84/attachment.pl>",
+      "body_plain": "Hello,\n\nI am new at R and need some help because I am stuck in a project. I have financial data, which is stored in the MetaStock data format and is updated daily. For reading this data, I started to write a R-script. So far, I managed to read the Master file, which contains the information about the various securities in a directory, as well as reading the Fxxx.Dat data files. The data is stored in the Microsoft Binary Format, which was used for Basica under DOS. Thus, it has to be converted into the IEEE format for the floating point numbers. But here my problems start.\n\nI have a DLL-file with functions to convert the 4byte MBF format into IEEE format as well as from IEEE to MBF format. As recommended, this DLL is in the Windows/System32 directory. I use this DLL with Visual Basic and it works fine. In the R script, I included the following line\n\ndyn.load(\"MBFIEE32\", DLLpath=\"C:/Windows/System32\").\n\nHowever, testing if the DLL had been loaded with is.loaded(\"MBFIEE32\") returns FALSE. I have read the manual, but have not figured out what went wrong. Thus, my question is, what might I have overlooked, which could cause this error?\n\nI also have a file with the functions for the format conversions in C. After making slight modifications to ensure that the functions return void as requested, I wanted to compile the file with the command (using the shell feature of RStudio) R CMD SHLIB [-d] -o MBF2IEEE.DLL MBF2IEEE.c. I called this command from the directory where the C-file is stored. However, the file was not compiled. Does the C-file has to be stored in a particular directory? After reading the online help, I can not figure out, what went wrong. \n\nThanks for any help\n\nPeter  \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\nI am new at R and need some help because I am stuck in a project. I have financial data, which is stored in the MetaStock data format and is updated daily. For reading this data, I started to ",
       "thread_id": "thread-86e6f07d0c22",
       "thread_depth": 0,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/0b212f84/attachment.pl"
+      ]
     },
     {
       "id": "msg-8dc32ab1a89a",
@@ -731,11 +779,14 @@
       "subject_clean": "Ann: Course CART and Neural networks with R, 4-7 November, Barcelona (Spain).",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/eecf6a37/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/eecf6a37/attachment.pl>",
+      "body_plain": "Dear colleagues:\n\nRegistration is open for the course CLASSIFICATION AND REGRESSION TREES AND\nNEURAL NETWORKS WITH R - Second Edition.\n\nMembers of the list r-sig-finance will have a 20 % discount on the current fee.\n\nINSTRUCTORS: Dr. Llorenç Badiella (UAB, Spain), Dr. Joan Valls  (Biomedical\nResearch Institute of Lleida, Spain) and Dr. Montserrat Martínez-Alonso\n(Biomedical Research Institute of Lleida, Spain).\n\nDATES: November 4-7, 2013; 24 teaching hours.\n\nPLACE:  Premises of Sabadell of the Institut Català de Paleontologia Miquel\nCrusafont,  Sabadell,  Barcelona (Spain).\n\nOrganized by: Transmitting Science and the Institut Catalá de Paleontologia\nMiquel  Crusafont.\n\nMore information: http://www.transmittingscience.org/cart_with_r.htm or  writing\nto courses at transmittingscience.org\n\nThe main goal of the methods such as CART (Classification and Regression Trees),\nis to model and predict one response variable explained by a set of dependent\nvariables. This methods can be particularly effective to model interactions\nbetween explanatory variables. On the other hand, as a statistical model, a\nneural network is based on linear and non-linear combinations of explanatory\nvariables that interact with other combinations to predict or explain an outcome\nvariable. Both CART and neural networks methods can provide good results to\nexplain or predict an outcome variable, particularly when the number of\ninteractions is important. Nevertheless, these techniques also tend to over-fit\nthe data and a validation of the models is required. ROC methods, including a\nsensitivity/specificity analyses and/or external validations can be performed to\nassess the consistency of these techniques. Applications cover a wide range of\nproblems, including species classification in biology, prediction of the\nprognosis of a patient in biomedicine, etc.\n\nWith best regards\n\nSoledad De Esteban-Trivigno, PhD.\nAcademic Director\nsoledad.esteban at transmittingscience.org\nTransmitting Science\nwww.transmittingscience.org\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear colleagues:\n\nRegistration is open for the course CLASSIFICATION AND REGRESSION TREES AND\nNEURAL NETWORKS WITH R - Second Edition.\n\nMembers of the list r-sig-finance will have a 20 % discount on t",
       "thread_id": "thread-c2c6e2a1bd2b",
       "thread_depth": 0,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/eecf6a37/attachment.pl"
+      ]
     },
     {
       "id": "msg-eacdb3d65453",
@@ -750,11 +801,14 @@
         "<1380526116.29788.YahooMailNeo@web171502.mail.ir2.yahoo.com>",
         "<796F3B1C-0D52-44C3-B5F0-C5066329C658@gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/d978abab/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/d978abab/attachment.pl>",
+      "body_plain": "Hi Michael,\n\nthank you for your comments. I have learnt now that using the DLL file, will not work as I can not modify the DLL.\n\nCreating csv or Excel files, another proposal I got, is what I have to do already for another commercial econometric software (RATS from Estima) I use now for a couple of years. Thus, I limited this to weekly data for only a few instruments. However, I would like to run the analysis on a daily basis for more instruments. Therefore, I still look for a solution in R by using C-code. Unfortunately, I have only experience in programming in Visual Basic and Pascal/Delphi. Maybe having only the code for the functions is not sufficient and the C-file needs a few more lines? Something, I still have to explore.\n\nBest regards\nPeter\n\n\n________________________________\n Von: \"R. Michael Weylandt <michael.weylandt at gmail.com>\" <michael.weylandt at gmail.com>\n\nCC: \"r-sig-finance at r-project.org\" <r-sig-finance at r-project.org> \nGesendet: 14:45 Montag, 30.September 2013\nBetreff: Re: [R-SIG-Finance] Reading MetaStock data format in R\n\n\n\n\n\n\n> Hello,\n> \n> I am new at R and need some help because I am stuck in a project. I have financial data, which is stored in the MetaStock data format and is updated daily. For reading this data, I started to write a R-script. So far, I managed to read the Master file, which contains the information about the various securities in a directory, as well as reading the Fxxx.Dat data files. The data is stored in the Microsoft Binary Format, which was used for Basica under DOS. Thus, it has to be converted into the IEEE format for the floating point numbers. But here my problems start.\n\nGodspeed -- nothing quite like non-standard binary formats before the first morning coffee. \n\n\n> \n> I have a DLL-file with functions to convert the 4byte MBF format into IEEE format as well as from IEEE to MBF format. As recommended, this DLL is in the Windows/System32 directory. I use this DLL with Visual Basic and it works fine. In the R script, I included the following line\n> \n> dyn.load(\"MBFIEE32\", DLLpath=\"C:/Windows/System32\").\n\nDon't think it works like that -- anything you want exposed within R will need to return R objects or wrapper classes (SEXP's generally) -- if your DLL works for / was written for VB, it won't work un-modified in R. \n\n> \n> However, testing if the DLL had been loaded with is.loaded(\"MBFIEE32\") returns FALSE. I have read the manual, but have not figured out what went wrong. Thus, my question is, what might I have overlooked, which could cause this error?\n> \n> I also have a file with the functions for the format conversions in C. After making slight modifications to ensure that the functions return void as requested, I wanted to compile the file with the command (using the shell feature of RStudio) R CMD SHLIB [-d] -o MBF2IEEE.DLL MBF2IEEE.c. I called this command from the directory where the C-file is stored. However, the file was not compiled. Does the C-file has to be stored in a particular directory? After reading the online help, I can not figure out, what went wrong.\n> \n\nIs your R development environment set up properly? R is not officially supported to build under VS and I'd imagine the same applies to packages. \n\nTo test that, I'd try building the 'xts' package locally -- it's an easy (enough) build and relevant for finance work anyways. \n\nDepending on the scale of your data and the frequency you'll be doing this, it might be worth writing a standalone program which makes a csv file (or similar) and then just reading that into R so you can get on with your work. \n\nCheers,\nMichael\n\n\n> Thanks for any help\n> \n> Peter  \n>    [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Michael,\n\nthank you for your comments. I have learnt now that using the DLL file, will not work as I can not modify the DLL.\n\nCreating csv or Excel files, another proposal I got, is what I have to ",
       "thread_id": "thread-86e6f07d0c22",
       "thread_depth": 2,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/d978abab/attachment.pl"
+      ]
     },
     {
       "id": "msg-a4ccd055bc8d",
@@ -790,11 +844,14 @@
         "<796F3B1C-0D52-44C3-B5F0-C5066329C658@gmail.com>",
         "<1380549326.86740.YahooMailNeo@web171506.mail.ir2.yahoo.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/de1b1e45/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/de1b1e45/attachment.pl>",
+      "body_plain": "On Sep 30, 2013, at 9:55, Peter Fertig <pfertig at yahoo.de> wrote:\n\n> Hi Michael,\n> \n> thank you for your comments. I have learnt now that using the DLL file, will not work as I can not modify the DLL.\n\nYou don't need to modify it -- just wrap it in something which 'speaks R' rather than trying to call it directly. \n\nM\n\n\n> \n> Creating csv or Excel files, another proposal I got, is what I have to do already for another commercial econometric software (RATS from Estima) I use now for a couple of years. Thus, I limited this to weekly data for only a few instruments. However, I would like to run the analysis on a daily basis for more instruments. Therefore, I still look for a solution in R by using C-code. Unfortunately, I have only experience in programming in Visual Basic and Pascal/Delphi. Maybe having only the code for the functions is not sufficient and the C-file needs a few more lines? Something, I still have to explore.\n> \n> Best regards\n> Peter\n> \n> Von: \"R. Michael Weylandt <michael.weylandt at gmail.com>\" <michael.weylandt at gmail.com>\n> An: Peter Fertig <pfertig at yahoo.de> \n> CC: \"r-sig-finance at r-project.org\" <r-sig-finance at r-project.org> \n> Gesendet: 14:45 Montag, 30.September 2013\n> Betreff: Re: [R-SIG-Finance] Reading MetaStock data format in R\n> \n> \n> \n> On Sep 30, 2013, at 3:28, Peter Fertig <pfertig at yahoo.de> wrote:\n> \n> > Hello,\n> > \n> > I am new at R and need some help because I am stuck in a project. I have financial data, which is stored in the MetaStock data format and is updated daily. For reading this data, I started to write a R-script. So far, I managed to read the Master file, which contains the information about the various securities in a directory, as well as reading the Fxxx.Dat data files. The data is stored in the Microsoft Binary Format, which was used for Basica under DOS. Thus, it has to be converted into the IEEE format for the floating point numbers. But here my problems start.\n> \n> Godspeed -- nothing quite like non-standard binary formats before the first morning coffee. \n> \n> \n> > \n> > I have a DLL-file with functions to convert the 4byte MBF format into IEEE format as well as from IEEE to MBF format. As recommended, this DLL is in the Windows/System32 directory. I use this DLL with Visual Basic and it works fine. In the R script, I included the following line\n> > \n> > dyn.load(\"MBFIEE32\", DLLpath=\"C:/Windows/System32\").\n> \n> Don't think it works like that -- anything you want exposed within R will need to return R objects or wrapper classes (SEXP's generally) -- if your DLL works for / was written for VB, it won't work un-modified in R. \n> \n> > \n> > However, testing if the DLL had been loaded with is.loaded(\"MBFIEE32\") returns FALSE. I have read the manual, but have not figured out what went wrong. Thus, my question is, what might I have overlooked, which could cause this error?\n> > \n> > I also have a file with the functions for the format conversions in C. After making slight modifications to ensure that the functions return void as requested, I wanted to compile the file with the command (using the shell feature of RStudio) R CMD SHLIB [-d] -o MBF2IEEE.DLL MBF2IEEE.c. I called this command from the directory where the C-file is stored. However, the file was not compiled. Does the C-file has to be stored in a particular directory? After reading the online help, I can not figure out, what went wrong. \n> > \n> \n> Is your R development environment set up properly? R is not officially supported to build under VS and I'd imagine the same applies to packages. \n> \n> To test that, I'd try building the 'xts' package locally -- it's an easy (enough) build and relevant for finance work anyways. \n> \n> Depending on the scale of your data and the frequency you'll be doing this, it might be worth writing a standalone program which makes a csv file (or similar) and then just reading that into R so you can get on with your work. \n> \n> Cheers,\n> Michael\n> \n> \n> > Thanks for any help\n> > \n> > Peter  \n> >    [[alternative HTML version deleted]]\n> > \n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions should go.\n> \n> \n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "On Sep 30, 2013, at 9:55, Peter Fertig <pfertig at yahoo.de> wrote:\n\n> Hi Michael,\n> \n> thank you for your comments. I have learnt now that using the DLL file, will not work as I can not modify the DL",
       "thread_id": "thread-86e6f07d0c22",
       "thread_depth": 3,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/de1b1e45/attachment.pl"
+      ]
     },
     {
       "id": "msg-8b589d2478cd",
@@ -852,11 +909,14 @@
         "<1380549326.86740.YahooMailNeo@web171506.mail.ir2.yahoo.com>",
         "<52498C59.3050101@4dscape.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/6de03d5d/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/6de03d5d/attachment.pl>",
+      "body_plain": "Hi Alexios,\n\nthank you for your answer. Converting the MetaStock data into a csv file is not a problem. I can do this with Visual Basic easily. I want to use R for some time series analysis and want to use the results for trading systems in MetaStock or TradeStation. Thus, I would have two conversions for each security. This could be time consuming. Therefore, I look for a way to read/write the data directly from R. The problem I run into is just the conversion of the binary formats. Here, the solutions I have for Visual Basic don't work in R.\n\nBest regards\n\nPeter\n\n\n________________________________\n Von: alexios ghalanos <alexios at 4dscape.com>\n\nCC: \"R. Michael Weylandt <michael.weylandt at gmail.com>\" <michael.weylandt at gmail.com>; \"r-sig-finance at r-project.org\" <r-sig-finance at r-project.org> \nGesendet: 16:36 Montag, 30.September 2013\nBetreff: Re: [R-SIG-Finance] Reading MetaStock data format in R\n\n\nThe Metastock conversion topic was covered here before:\n\nhttps://stat.ethz.ch/pipermail/r-sig-finance/2009q4/005368.html\n\nHave a look at this open source C++ project for converting\nMetastock to csv, after which you can import into R.\n\nhttps://bitbucket.org/rudimeier/atem/overview\n\n\n-Alexios\n\nOn 30/09/2013 14:55, Peter Fertig wrote:\n> Hi Michael,\n> \n> thank you for your comments. I have learnt now that using the DLL file, will not work as I can not modify the DLL.\n> \n> Creating csv or Excel files, another proposal I got, is what I have to do already for another commercial econometric software (RATS from Estima) I use now for a couple of years. Thus, I limited this to weekly data for only a few instruments. However, I would like to run the analysis on a daily basis for more instruments. Therefore, I still look for a solution in R by using C-code. Unfortunately, I have only experience in programming in Visual Basic and Pascal/Delphi. Maybe having only the code for the functions is not sufficient and the C-file needs a few more lines? Something, I still have to explore.\n> \n> Best regards\n> Peter\n> \n> \n> ________________________________\n>  Von: \"R. Michael Weylandt <michael.weylandt at gmail.com>\" <michael.weylandt at gmail.com>\n> \n> CC: \"r-sig-finance at r-project.org\" <r-sig-finance at r-project.org> \n> Gesendet: 14:45 Montag, 30.September 2013\n> Betreff: Re: [R-SIG-Finance] Reading MetaStock data format in R\n> \n> \n> \n> \n> \n> \n>> Hello,\n>>\n>> I am new at R and need some help because I am stuck in a project. I have financial data, which is stored in the MetaStock data format and is updated daily. For reading this data, I started to write a R-script. So far, I managed to read the Master file, which contains the information about the various securities in a directory, as well as reading the Fxxx.Dat data files. The data is stored in the Microsoft Binary Format, which was used for Basica under DOS. Thus, it has to be converted into the IEEE format for the floating point numbers. But here my problems start.\n> \n> Godspeed -- nothing quite like non-standard binary formats before the first morning coffee. \n> \n> \n>>\n>> I have a DLL-file with functions to convert the 4byte MBF format into IEEE format as well as from IEEE to MBF format. As recommended, this DLL is in the Windows/System32 directory. I use this DLL with Visual Basic and it works fine. In the R script, I included the following line\n>>\n>> dyn.load(\"MBFIEE32\", DLLpath=\"C:/Windows/System32\").\n> \n> Don't think it works like that -- anything you want exposed within R will need to return R objects or wrapper classes (SEXP's generally) -- if your DLL works for / was written for VB, it won't work un-modified in R. \n> \n>>\n>> However, testing if the DLL had been loaded with is.loaded(\"MBFIEE32\") returns FALSE. I have read the manual, but have not figured out what went wrong. Thus, my question is, what might I have overlooked, which could cause this error?\n>>\n>> I also have a file with the functions for the format conversions in C. After making slight modifications to ensure that the functions return void as requested, I wanted to compile the file with the command (using the shell feature of RStudio) R CMD SHLIB [-d] -o MBF2IEEE.DLL MBF2IEEE.c. I called this command from the directory where the C-file is stored. However, the file was not compiled. Does the C-file has to be stored in a particular directory? After reading the online help, I can not figure out, what went wrong.\n>>\n> \n> Is your R development environment set up properly? R is not officially supported to build under VS and I'd imagine the same applies to packages. \n> \n> To test that, I'd try building the 'xts' package locally -- it's an easy (enough) build and relevant for finance work anyways. \n> \n> Depending on the scale of your data and the frequency you'll be doing this, it might be worth writing a standalone program which makes a csv file (or similar) and then just reading that into R so you can get on with your work. \n> \n> Cheers,\n> Michael\n> \n> \n>> Thanks for any help\n>>\n>> Peter  \n>>     [[alternative HTML version deleted]]\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n>     [[alternative HTML version deleted]]\n> \n> \n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n> \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Alexios,\n\nthank you for your answer. Converting the MetaStock data into a csv file is not a problem. I can do this with Visual Basic easily. I want to use R for some time series analysis and want t",
       "thread_id": "thread-86e6f07d0c22",
       "thread_depth": 4,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/6de03d5d/attachment.pl"
+      ]
     },
     {
       "id": "msg-980832dee29a",
@@ -928,11 +988,14 @@
       "subject_clean": "Parma Package QP optimization Failing and Ignoring Leverage Constraint",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/5bdc9fa0/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/5bdc9fa0/attachment.pl>",
+      "body_plain": "*Can someone please tell me why the following is not giving me a solution?*\n\n\nif (!is.loaded('etfdata')) data(etfdata)\n\nR = timeSeries::returns(etfdata)\n\n> myspec <-\nparmaspec(S=cov(R),forecast=100*abs(colMeans(R)),LB=-0.05,UB=0.05,budget=0,risk='EV',riskType='minrisk',target=0.0030346)\n> mysol <- parmasolve(myspec,type='QP')\n> mysol\n\n+---------------------------------+\n|        PARMA Portfolio          |\n+---------------------------------+\nNo.Assets               : 15\nProblem                 : QP\nRisk Measure            : EV\nObjective               : minrisk\nRisk                    : NA\nReward                  : NA\n\nError in Math.data.frame(list(Optimal_Weights = logical(0)), 4) :\n  non-numeric variable in data frame: Optimal_Weights\n\n*Whereas if I do the following I get a solution (and why is the \"leverage\"\nconstraint ignored?):*\n\n> myspec <-\nparmaspec(S=cov(R),forecast=100*abs(colMeans(R)),LB=-0.05,UB=0.05,budget=0,risk='EV',riskType='optimal',leverage=0.1)\n> mysol <- parmasolve(myspec,type='QP')\n> mysol\n\n+---------------------------------+\n|        PARMA Portfolio          |\n+---------------------------------+\nNo.Assets               : 15\nProblem                 : QP\nRisk Measure            : EV\nObjective               : optimal\nRisk                    : 3e-07\nReward                  : 0.0030346\n\n    Optimal_Weights\nEWG          0.0293\nEEM          0.0206\nEWL          0.0174\nTLT          0.0120\nEZA          0.0107\nEWA          0.0107\nEPP          0.0106\nEWC          0.0094\nIWO          0.0061\nIWN          0.0051\nIWF         -0.0078\nEWJ         -0.0214\nEWU         -0.0221\nIWD         -0.0309\nEWQ         -0.0500\n> sum(abs(mysol at solution$weight)/2)\n[1] 0.1321498\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "*Can someone please tell me why the following is not giving me a solution?*\n\n\nif (!is.loaded('etfdata')) data(etfdata)\n\nR = timeSeries::returns(etfdata)\n\n> myspec <-\nparmaspec(S=cov(R),forecast=100*ab",
       "thread_id": "thread-3abd2efb699d",
       "thread_depth": 0,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/5bdc9fa0/attachment.pl"
+      ]
     },
     {
       "id": "msg-83854bd47189",
@@ -980,11 +1043,14 @@
       "subject_clean": "Question on IBrokers",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/7404ceed/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/7404ceed/attachment.pl>",
+      "body_plain": "Hello:\n  I installed R and downloaded the most recent IBrokers on a new PC a few\ndays ago and ran the sample codes below:\n\n  tws <- twsConnect() # make a new connection to the TWS\n  reqCurrentTime(tws) # check the server’s timestamp\n  contract <- twsEquity(\"IBKR\",\"SMART\",\"ISLAND\") # equity specification\n  reqHistoricalData(tws,contract) # request historical data\n  twsDisconnect(tws)\n\n  I got error message from function reqHistoricalData:\n\n> reqHistoricalData(tws,contract) # request historical data\nwaiting for TWS reply on IBKR .... done.\nError in .Call(\"dimnames_zoo\", x) :\n  \"dimnames_zoo\" not resolved from current namespace (xts)\n\n  I tested the same codes using the old IBrokers (and old other R\npackages). Everything works fine.\n\n  Does anyone of you know how to fix it using new IBrokers? Thank you.\n\n  Best regards,\nQi\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello:\n  I installed R and downloaded the most recent IBrokers on a new PC a few\ndays ago and ran the sample codes below:\n\n  tws <- twsConnect() # make a new connection to the TWS\n  reqCurrentTime(tws",
       "thread_id": "thread-76245c0cc10d",
       "thread_depth": 0,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/7404ceed/attachment.pl"
+      ]
     },
     {
       "id": "msg-de826e123407",
@@ -999,11 +1065,14 @@
         "<CABQr56UyyUZaKwRy9nsfLmbkMikfRQpxHd0uhX7hhLXL7oiiFA@mail.gmail.com>",
         "<CA+kDFFXa8rFZiOvFwoe-ac2OZwb4W00FsWVKUpd0hxPcufCYgA@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/edf14194/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/edf14194/attachment.pl>",
+      "body_plain": "Thank you.\n\nHere are the sessionInfo():\n\n> sessionInfo()\nR version 3.0.1 (2013-05-16)\nPlatform: i386-w64-mingw32/i386 (32-bit)\nlocale:\n[1] LC_COLLATE=English_United States.1252\n[2] LC_CTYPE=English_United States.1252\n[3] LC_MONETARY=English_United States.1252\n[4] LC_NUMERIC=C\n[5] LC_TIME=English_United States.1252\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base\nother attached packages:\n[1] IBrokers_0.9-10 xts_0.9-7       zoo_1.7-10\nloaded via a namespace (and not attached):\n[1] grid_3.0.1      lattice_0.20-15 tools_3.0.1\n\n\nOn Mon, Sep 30, 2013 at 9:14 PM, Chinmay Patil <chinmay.patil at gmail.com>wrote:\n\n> You should also give output of sessionInfo() which will allows us to see\n> your complete setups (package versions wise).\n>\n>\n> On Tue, Oct 1, 2013 at 9:10 AM, Qi Li <qi.li22 at gmail.com> wrote:\n>\n> > Hello:\n> >   I installed R and downloaded the most recent IBrokers on a new PC a few\n> > days ago and ran the sample codes below:\n> >\n> >   tws <- twsConnect() # make a new connection to the TWS\n> >   reqCurrentTime(tws) # check the server’s timestamp\n> >   contract <- twsEquity(\"IBKR\",\"SMART\",\"ISLAND\") # equity specification\n> >   reqHistoricalData(tws,contract) # request historical data\n> >   twsDisconnect(tws)\n> >\n> >   I got error message from function reqHistoricalData:\n> >\n> > > reqHistoricalData(tws,contract) # request historical data\n> > waiting for TWS reply on IBKR .... done.\n> > Error in .Call(\"dimnames_zoo\", x) :\n> >   \"dimnames_zoo\" not resolved from current namespace (xts)\n> >\n> >   I tested the same codes using the old IBrokers (and old other R\n> > packages). Everything works fine.\n> >\n> >   Does anyone of you know how to fix it using new IBrokers? Thank you.\n> >\n> >   Best regards,\n> > Qi\n> >\n> >         [[alternative HTML version deleted]]\n> >\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions\n> > should go.\n> >\n>\n>         [[alternative HTML version deleted]]\n>\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thank you.\n\nHere are the sessionInfo():\n\n> sessionInfo()\nR version 3.0.1 (2013-05-16)\nPlatform: i386-w64-mingw32/i386 (32-bit)\nlocale:\n[1] LC_COLLATE=English_United States.1252\n[2] LC_CTYPE=English_Un",
       "thread_id": "thread-de826e123407",
       "thread_depth": 0,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/edf14194/attachment.pl"
+      ]
     },
     {
       "id": "msg-663058a339fb",
@@ -1018,11 +1087,14 @@
         "<CAJYra_g4_Q1wpKykixRU++9wmP5_GkUV04kft-18Sk0eaK82iQ@mail.gmail.com>",
         "<5249FA09.90009@4dscape.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/da5db0e6/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/da5db0e6/attachment.pl>",
+      "body_plain": "Thanks, sure you can use NLP.\n\nHowever, in case you are interested a leverage constraint can be handled in\nQP by rewriting the vector to solve for as the sum of a positive and\nnegative part. Please see\nhttp://zoonek.free.fr/blosxom/R/2012-06-01_Optimization.html\nThere is an example under \"Long-short constraints\".\n\n\n\nOn Mon, Sep 30, 2013 at 3:24 PM, alexios ghalanos <alexios at 4dscape.com>wrote:\n\n> 1. This works just fine: (LB and UB should be a vector)\n>\n> myspec<-parmaspec(S=cov(R),forecast=100*abs(colMeans(R)),LB=rep(-0.05,15),UB=rep(0.05,15),budget=0,risk='EV',riskType='minrisk',target=0.0030346)\n> mysol <- parmasolve(myspec,type='QP')\n> +---------------------------------+\n> |        PARMA Portfolio          |\n> +---------------------------------+\n> No.Assets               : 15\n> Problem                 : QP\n> Risk Measure            : EV\n> Objective               : minrisk\n> Risk                    : 3e-07\n> Reward                  : 0.0030346\n>\n>     Optimal_Weights\n> EWG          0.0293\n> EEM          0.0206\n> EWL          0.0174\n> TLT          0.0120\n> EZA          0.0107\n> EWA          0.0107\n> EPP          0.0106\n> EWC          0.0094\n> IWO          0.0061\n> IWN          0.0051\n> IWF         -0.0078\n> EWJ         -0.0214\n> EWU         -0.0221\n> IWD         -0.0309\n> EWQ         -0.0500\n>\n>\n> 2. You've set leverage with a quadratic solver. How do you suppose the\n> absolute value function can be accommodated in this problem?\n> This works:\n> myspec <-\n>\n> parmaspec(scenario=as.matrix(R),forecast=100*abs(colMeans(R)),LB=rep(-0.05,15),UB=rep(0.05,15),leverage=0.1,risk='EV',riskType='minrisk',target=0.0030346)\n> mysol <- parmasolve(myspec, type='NLP', w0=rep(0.01,15))\n> sum(abs(weights(mysol)))\n>\n> i.e. use a scenario matrix instead and solver as NLP (and make sure to\n> provide a set of starting weights 'w0').\n>\n>\n> I suppose I should add more checks/warnings.\n>\n>\n> Regards,\n>\n> Alexios\n>\n>\n>\n> On 30/09/2013 22:52, Preston Li wrote:\n> > *Can someone please tell me why the following is not giving me a\n> solution?*\n> >\n> >\n> > if (!is.loaded('etfdata')) data(etfdata)\n> >\n> > R = timeSeries::returns(etfdata)\n> >\n> >> myspec <-\n> >\n> parmaspec(S=cov(R),forecast=100*abs(colMeans(R)),LB=-0.05,UB=0.05,budget=0,risk='EV',riskType='minrisk',target=0.0030346)\n> >> mysol <- parmasolve(myspec,type='QP')\n> >> mysol\n> >\n> > +---------------------------------+\n> > |        PARMA Portfolio          |\n> > +---------------------------------+\n> > No.Assets               : 15\n> > Problem                 : QP\n> > Risk Measure            : EV\n> > Objective               : minrisk\n> > Risk                    : NA\n> > Reward                  : NA\n> >\n> > Error in Math.data.frame(list(Optimal_Weights = logical(0)), 4) :\n> >   non-numeric variable in data frame: Optimal_Weights\n> >\n> > *Whereas if I do the following I get a solution (and why is the\n> \"leverage\"\n> > constraint ignored?):*\n> >\n> >> myspec <-\n> >\n> parmaspec(S=cov(R),forecast=100*abs(colMeans(R)),LB=-0.05,UB=0.05,budget=0,risk='EV',riskType='optimal',leverage=0.1)\n> >> mysol <- parmasolve(myspec,type='QP')\n> >> mysol\n> >\n> > +---------------------------------+\n> > |        PARMA Portfolio          |\n> > +---------------------------------+\n> > No.Assets               : 15\n> > Problem                 : QP\n> > Risk Measure            : EV\n> > Objective               : optimal\n> > Risk                    : 3e-07\n> > Reward                  : 0.0030346\n> >\n> >     Optimal_Weights\n> > EWG          0.0293\n> > EEM          0.0206\n> > EWL          0.0174\n> > TLT          0.0120\n> > EZA          0.0107\n> > EWA          0.0107\n> > EPP          0.0106\n> > EWC          0.0094\n> > IWO          0.0061\n> > IWN          0.0051\n> > IWF         -0.0078\n> > EWJ         -0.0214\n> > EWU         -0.0221\n> > IWD         -0.0309\n> > EWQ         -0.0500\n> >> sum(abs(mysol at solution$weight)/2)\n> > [1] 0.1321498\n> >\n> >       [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions\n> should go.\n> >\n> >\n>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thanks, sure you can use NLP.\n\nHowever, in case you are interested a leverage constraint can be handled in\nQP by rewriting the vector to solve for as the sum of a positive and\nnegative part. Please se",
       "thread_id": "thread-3abd2efb699d",
       "thread_depth": 2,
-      "month": "2013-09"
+      "month": "2013-09",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20130930/da5db0e6/attachment.pl"
+      ]
     }
   ],
   "threads": [

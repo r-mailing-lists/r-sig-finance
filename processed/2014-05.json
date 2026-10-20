@@ -20,11 +20,14 @@
         "<CADv5Py45kjb1OiP3pWhi9jR902Yi1-uUz9rsDDa85X2Tjbm84w@mail.gmail.com>",
         "<CAA3Wa=tmXNmsLu6ZLQ097SV4dLUnJ3+5oDZo4T0q2c6HjVe=PQ@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140501/253e83d4/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140501/253e83d4/attachment.pl>",
+      "body_plain": "works perfectly!\nthanks for your help John!\n\n\nOn Thu, May 1, 2014 at 9:13 AM, John Laing <john.laing at gmail.com> wrote:\n\n> Um.... I've never seen that before. A quick Google yields this:\n> http://r.789695.n4.nabble.com/weird-error-with-a-lazyload-RData-file-in-a-package-td4662836.html\n>\n> And indeed, based on the detach statement above, it looks like you've left\n> your R session open. Can you try with a new session?\n>\n>\n> On Thu, May 1, 2014 at 9:02 AM, Aidan Corcoran <aidan.corcoran11 at gmail.com\n> > wrote:\n>\n>> hi John,\n>>\n>> thanks for making this change - unfortunately I'm having a little trouble\n>> with it...\n>>\n>>\n>> > detach(\"package:Rbbg\")\n>> > install.packages(\"Rbbg\", repos = \"http://r.findata.org\")\n>> trying URL 'http://r.findata.org/bin/windows/contrib/3.0/Rbbg_0.5.1.zip'\n>> Content type 'application/zip' length 41505 bytes (40 Kb)\n>> opened URL\n>> downloaded 40 Kb\n>> package ‘Rbbg’ successfully unpacked and MD5 sums checked\n>> The downloaded binary packages are in\n>>         D:\\Users\\corca\\AppData\\Local\\Temp\\RtmpamcWxR\\downloaded_packages\n>> > library(Rbbg)\n>> *> conn <- blpConnect(log.level=\"off\")*\n>> *Error: lazy-load database 'P' is corrupt*\n>> *In addition: Warning message:*\n>> *internal error -3 in R_decompress1 *\n>>\n>> > conn <- blpConnect(log.level='off')\n>> Error: lazy-load database 'P' is corrupt\n>> In addition: Warning messages:\n>> 1: restarting interrupted promise evaluation\n>> 2: internal error -3 in R_decompress1\n>>\n>>\n>>\n>> On Wed, Apr 30, 2014 at 9:43 PM, John Laing <john.laing at gmail.com> wrote:\n>>\n>>> I've added the option Aidan described and released in version 0.5.1,\n>>> available from the usual place: repos=\"http://r.findata.org\". Logging\n>>> can now be turned off by specifying log.level=\"off\" to blpConnect.\n>>>\n>>> -John\n>>>\n>>>\n>>> On Wed, Apr 30, 2014 at 6:13 PM, Aidan Corcoran <\n>>> aidan.corcoran11 at gmail.com> wrote:\n>>>\n>>>> i'm copying my exchange on this with John below.\n>>>> we don't have a solution yet but John is looking into it and may add an\n>>>> option to disable logging.\n>>>>\n>>>>\n>>>>\n>>>>\n>>>>  On Wed, Apr 30, 2014 at 5:30 PM, John Laing <john.laing at gmail.com>\n>>>>  wrote:\n>>>>\n>>>>>  I wouldn't touch the Windows registry. I'm going to look into this\n>>>>> \"couldn't get the lock\" error a little more. Another option is that I could\n>>>>> add an option to blpConnect to turn logging off. Would that work for you?\n>>>>>\n>>>>>\n>>>>> On Wed, Apr 30, 2014 at 5:17 PM, Aidan Corcoran <\n>>>>> aidan.corcoran11 at gmail.com> wrote:\n>>>>>\n>>>>>> thanks John.\n>>>>>>\n>>>>>> unfortunately no joy.\n>>>>>>\n>>>>>> > require(rJava)\n>>>>>> > .jinit()\n>>>>>> [1] 0\n>>>>>> > fh1 <- .jnew(\"java/util/logging/FileHandler\",\n>>>>>> \"%h/org.findata.blpwrapper.%g.log\")\n>>>>>> Error in .jnew(\"java/util/logging/FileHandler\",\n>>>>>> \"%h/org.findata.blpwrapper.%g.log\") :\n>>>>>>   java.io.IOException: Couldn't get lock for\n>>>>>> %h/org.findata.blpwrapper.%g.log\n>>>>>> > fh2 <- .jnew(\"java/util/logging/FileHandler\",\n>>>>>> \"%h/org.findata.blpwrapper.%g.log\", 0L, 1L, FALSE)\n>>>>>> Error in .jnew(\"java/util/logging/FileHandler\",\n>>>>>> \"%h/org.findata.blpwrapper.%g.log\",  :\n>>>>>>   java.io.IOException: Couldn't get lock for\n>>>>>> %h/org.findata.blpwrapper.%g.log\n>>>>>>\n>>>>>> Should I look into changing the HOME variable in the windows\n>>>>>> registry? If you think that might help I'll just check with IT that it's ok\n>>>>>> and whether it can be changed permanently.\n>>>>>>\n>>>>>>\n>>>>>> On Wed, Apr 30, 2014 at 4:52 PM, John Laing <john.laing at gmail.com>\n>>>>>>  wrote:\n>>>>>>\n>>>>>>> I don't think that changing your HOME will help. My thinking is that\n>>>>>>> Java's resolution of the pattern wildcard %h is probably the same as your\n>>>>>>> normal HOME, but changing that in R doesn't necessarily change it for Java.\n>>>>>>> A little fuzzy on the details.\n>>>>>>>\n>>>>>>> Another thought -- try this:\n>>>>>>>\n>>>>>>> require(rJava)\n>>>>>>> .jinit()\n>>>>>>>\n>>>>>>> fh1 <- .jnew(\"java/util/logging/FileHandler\",\n>>>>>>> \"%h/org.findata.blpwrapper.%g.log\")\n>>>>>>> fh2 <- .jnew(\"java/util/logging/FileHandler\",\n>>>>>>> \"%h/org.findata.blpwrapper.%g.log\", 0L, 1L, FALSE)\n>>>>>>>\n>>>>>>> The first is essentially what Rbbg tries to do, which is to open a\n>>>>>>> writeable log file. The second opens the same file but not writeably. Let\n>>>>>>> me know which (if either) works.\n>>>>>>>\n>>>>>>> -John\n>>>>>>>\n>>>>>>>\n>>>>>>> On Wed, Apr 30, 2014 at 3:49 PM, Aidan Corcoran <\n>>>>>>> aidan.corcoran11 at gmail.com> wrote:\n>>>>>>>\n>>>>>>>> Hi John,\n>>>>>>>>\n>>>>>>>>  it was set to a folder in D (a network drive), and I think the\n>>>>>>>> path uses a variable that gets populated with my user name at some point.\n>>>>>>>> however i tried the below and this didn't fix it.\n>>>>>>>> i do have write access to that folder as i just created a file in\n>>>>>>>> it.\n>>>>>>>>\n>>>>>>>> > Sys.setenv(HOME=\"C:\\\\rstartfolder\")\n>>>>>>>> > conn <- blpConnect()\n>>>>>>>> R version 3.0.3 (2014-03-06)\n>>>>>>>> rJava Version 0.9-6\n>>>>>>>> Rbbg Version 0.5.0\n>>>>>>>> Java environment initialized successfully.\n>>>>>>>> Looking for most recent blpapi3.jar file...\n>>>>>>>> Adding C:\\blp\\API\\APIv3\\JavaAPI\\v3.7.1.1\\lib\\blpapi3.jar to Java\n>>>>>>>> classpath\n>>>>>>>> Error in .jnew(\"org/findata/blpwrapper/Connection\", java.log.level)\n>>>>>>>> :\n>>>>>>>>   java.io.IOException: Couldn't get lock for\n>>>>>>>> %h/org.findata.blpwrapper.%g.log\n>>>>>>>> > Sys.getenv(\"HOME\")\n>>>>>>>> [1] \"C:\\\\rstartfolder\"\n>>>>>>>>\n>>>>>>>>\n>>>>>>>>\n>>>>>>>> On Wed, Apr 30, 2014 at 3:22 PM, John Laing <john.laing at gmail.com>\n>>>>>>>>  wrote:\n>>>>>>>>\n>>>>>>>>> Hi Aidan,\n>>>>>>>>>\n>>>>>>>>> C:\\ is probably not your home. From R try Sys.getenv(\"HOME\"). That\n>>>>>>>>> will give you a directory, and in there you should look for files named\n>>>>>>>>> like org.findata.blpwrapper.*\n>>>>>>>>>\n>>>>>>>>> -John\n>>>>>>>>>\n>>>>>>>>>\n>>>>>>>>> On Wed, Apr 30, 2014 at 2:09 PM, Aidan Corcoran <\n>>>>>>>>> aidan.corcoran11 at gmail.com> wrote:\n>>>>>>>>>\n>>>>>>>>>> hi John,\n>>>>>>>>>>\n>>>>>>>>>> thanks for your reply.\n>>>>>>>>>>\n>>>>>>>>>> I generally have write access to the C drive but I'm not sure\n>>>>>>>>>> exactly where the log file lives. If you could tell me then I will check on\n>>>>>>>>>> access and post back.\n>>>>>>>>>>\n>>>>>>>>>> thanks\n>>>>>>>>>> Aidan.\n>>>>>>>>>>\n>>>>>>>>>>\n>>>>>>>>>> On Wed, Apr 30, 2014 at 1:55 PM, John Laing <john.laing at gmail.com\n>>>>>>>>>> > wrote:\n>>>>>>>>>>\n>>>>>>>>>>> Aidan,\n>>>>>>>>>>>\n>>>>>>>>>>> The connection is failing as it attempts to open the log file.\n>>>>>>>>>>> Can you confirm whether you have write access to your home folder? My\n>>>>>>>>>>> Windows box is virtual as well, so that's not the cause... at least, not\n>>>>>>>>>>> directly.\n>>>>>>>>>>>\n>>>>>>>>>>> -John\n>>>>>>>>>>>\n>>>>>>>>>>>\n>>>>>>>>>>>\n>>>>>>>>>>> On Wed, Apr 30, 2014 at 1:35 PM, Aidan Corcoran <\n>>>>>>>>>>> aidan.corcoran11 at gmail.com> wrote:\n>>>>>>>>>>>\n>>>>>>>>>>>> hi all,\n>>>>>>>>>>>>\n>>>>>>>>>>>> I'm getting the below error when I try\n>>>>>>>>>>>> conn <- blpConnect()\n>>>>>>>>>>>>\n>>>>>>>>>>>> R version 3.0.3 (2014-03-06)\n>>>>>>>>>>>> rJava Version 0.9-6\n>>>>>>>>>>>> Rbbg Version 0.5.0\n>>>>>>>>>>>> Java environment initialized successfully.\n>>>>>>>>>>>> Looking for most recent blpapi3.jar file...\n>>>>>>>>>>>> Adding C:\\blp\\API\\APIv3\\JavaAPI\\v3.7.1.1\\lib\\blpapi3.jar to\n>>>>>>>>>>>> Java classpath\n>>>>>>>>>>>> *Error in .jnew(\"org/findata/blpwrapper/Connection\",\n>>>>>>>>>>>> java.log.level) : *\n>>>>>>>>>>>> *  java.io.IOException: Couldn't get lock for\n>>>>>>>>>>>> %h/org.findata.blpwrapper.%g.log*\n>>>>>>>>>>>>\n>>>>>>>>>>>>\n>>>>>>>>>>>> Can't seem to find a similar error on the web. My desktop is  a\n>>>>>>>>>>>> virtual\n>>>>>>>>>>>> desktop and this is my first time trying to get rbbg to work on\n>>>>>>>>>>>> this setup,\n>>>>>>>>>>>> so maybe this has something to do with. It's win7-64bit with R\n>>>>>>>>>>>> 3.0.3 and\n>>>>>>>>>>>> latest versions of all packages I believe.  The excel bloomberg\n>>>>>>>>>>>> API is\n>>>>>>>>>>>> working fine. If anyone could help me understand this error\n>>>>>>>>>>>> better or fix\n>>>>>>>>>>>> it that would be very much appreciated!\n>>>>>>>>>>>>\n>>>>>>>>>>>> thanks\n>>>>>>>>>>>>\n>>>>>>>>>>>>         [[alternative HTML version deleted]]\n>>>>>>>>>>>>\n>>>>>>>>>>>> _______________________________________________\n>>>>>>>>>>>> R-SIG-Finance at r-project.org mailing list\n>>>>>>>>>>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>>>>>>>>>>> -- Subscriber-posting only. If you want to post, subscribe\n>>>>>>>>>>>> first.\n>>>>>>>>>>>> -- Also note that this is not the r-help list where general R\n>>>>>>>>>>>> questions should go.\n>>>>>>>>>>>>\n>>>>>>>>>>>\n>>>>>>>>>>>\n>>>>>>>>>>\n>>>>>>>>>\n>>>>>>>>\n>>>>>>>\n>>>>>>\n>>>>>\n>>>>\n>>>>\n>>>> On Wed, Apr 30, 2014 at 1:55 PM, John Laing <john.laing at gmail.com>wrote:\n>>>>\n>>>>> Aidan,\n>>>>>\n>>>>> The connection is failing as it attempts to open the log file. Can you\n>>>>> confirm whether you have write access to your home folder? My Windows box\n>>>>> is virtual as well, so that's not the cause... at least, not directly.\n>>>>>\n>>>>> -John\n>>>>>\n>>>>>\n>>>>>\n>>>>> On Wed, Apr 30, 2014 at 1:35 PM, Aidan Corcoran <\n>>>>> aidan.corcoran11 at gmail.com> wrote:\n>>>>>\n>>>>>> hi all,\n>>>>>>\n>>>>>> I'm getting the below error when I try\n>>>>>> conn <- blpConnect()\n>>>>>>\n>>>>>> R version 3.0.3 (2014-03-06)\n>>>>>> rJava Version 0.9-6\n>>>>>> Rbbg Version 0.5.0\n>>>>>> Java environment initialized successfully.\n>>>>>> Looking for most recent blpapi3.jar file...\n>>>>>> Adding C:\\blp\\API\\APIv3\\JavaAPI\\v3.7.1.1\\lib\\blpapi3.jar to Java\n>>>>>> classpath\n>>>>>> *Error in .jnew(\"org/findata/blpwrapper/Connection\", java.log.level)\n>>>>>> : *\n>>>>>> *  java.io.IOException: Couldn't get lock for\n>>>>>> %h/org.findata.blpwrapper.%g.log*\n>>>>>>\n>>>>>>\n>>>>>> Can't seem to find a similar error on the web. My desktop is  a\n>>>>>> virtual\n>>>>>> desktop and this is my first time trying to get rbbg to work on this\n>>>>>> setup,\n>>>>>> so maybe this has something to do with. It's win7-64bit with R 3.0.3\n>>>>>> and\n>>>>>> latest versions of all packages I believe.  The excel bloomberg API is\n>>>>>> working fine. If anyone could help me understand this error better or\n>>>>>> fix\n>>>>>> it that would be very much appreciated!\n>>>>>>\n>>>>>> thanks\n>>>>>>\n>>>>>>         [[alternative HTML version deleted]]\n>>>>>>\n>>>>>> _______________________________________________\n>>>>>> R-SIG-Finance at r-project.org mailing list\n>>>>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>>>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>>>>> -- Also note that this is not the r-help list where general R\n>>>>>> questions should go.\n>>>>>>\n>>>>>\n>>>>>\n>>>>\n>>>\n>>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "works perfectly!\nthanks for your help John!\n\n\nOn Thu, May 1, 2014 at 9:13 AM, John Laing <john.laing at gmail.com> wrote:\n\n> Um.... I've never seen that before. A quick Google yields this:\n> http://r.",
       "thread_id": "thread-4b1e74bdcbf6",
       "thread_depth": 0,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140501/253e83d4/attachment.pl"
+      ]
     },
     {
       "id": "msg-0ebe121c27ec",
@@ -91,11 +94,14 @@
       "references": [
         "<D603B8CA9A18844FB6D4BE02C5C764C31AE930DA@EXCHMBOXA01.pc.factset.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140501/4b0aba92/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140501/4b0aba92/attachment.pl>",
+      "body_plain": "Take a look at the solution proposed here ->\nhttp://stackoverflow.com/questions/9842794/fastest-way-to-import-millions-of-files-in-r\n\nBasically, package 'data.table' provides a function called 'fread' which is\nsignificantly faster than other read options. I am using it for different\ntasks and I can confirm that it is fast.\n\nBest regards,\n\n\nOn Thu, May 1, 2014 at 4:47 PM, Steve Greiner <sgreiner at factset.com> wrote:\n\n> Okay, I've had it!!!..   Every time I read in a dataset using something\n> like:\n> returnmatrix = read.csv(\"S&P.csv\", header=TRUE, sep=\",\")\n>\n> It comes back with \"returnmatrix\" as mode list.   How can I quickly\n> convert the dataset to mode numerical?   This is pissing me off.  I can do\n> it manually by creating a new matrix and assigning values of the list\n> matrix to the values of the numerical matrix element by element, but it's\n> time consuming.  What can anybody recommend me?\n> Steve\n>\n> Steven P. Greiner, Ph.D.\n> Director of Portfolio Risk\n> FactSet Research Systems, Inc.\n> sgreiner at factset.com\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Take a look at the solution proposed here ->\nhttp://stackoverflow.com/questions/9842794/fastest-way-to-import-millions-of-files-in-r\n\nBasically, package 'data.table' provides a function called 'fread'",
       "thread_id": "thread-0ebe121c27ec",
       "thread_depth": 1,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140501/4b0aba92/attachment.pl"
+      ]
     },
     {
       "id": "msg-321668574072",
@@ -110,11 +116,14 @@
         "<D603B8CA9A18844FB6D4BE02C5C764C31AE930DA@EXCHMBOXA01.pc.factset.com>",
         "<CANfR6+=XoRzwEswr53xnkg_E4bodC9u+Q0gZGra4Yo9-7woBfQ@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140501/6bb4fc18/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140501/6bb4fc18/attachment.pl>",
+      "body_plain": "Sorry for multiple emails. Correct link is here\nhttp://stackoverflow.com/questions/1727772/quickly-reading-very-large-tables-as-dataframes-in-r\n\n\nOn Thu, May 1, 2014 at 6:24 PM, Mustafa Baydogan\n<baydoganmustafa at gmail.com>wrote:\n\n> Take a look at the solution proposed here ->\n> http://stackoverflow.com/questions/9842794/fastest-way-to-import-millions-of-files-in-r\n>\n> Basically, package 'data.table' provides a function called 'fread' which\n> is significantly faster than other read options. I am using it for\n> different tasks and I can confirm that it is fast.\n>\n> Best regards,\n>\n>\n> On Thu, May 1, 2014 at 4:47 PM, Steve Greiner <sgreiner at factset.com>wrote:\n>\n>> Okay, I've had it!!!..   Every time I read in a dataset using something\n>> like:\n>> returnmatrix = read.csv(\"S&P.csv\", header=TRUE, sep=\",\")\n>>\n>> It comes back with \"returnmatrix\" as mode list.   How can I quickly\n>> convert the dataset to mode numerical?   This is pissing me off.  I can do\n>> it manually by creating a new matrix and assigning values of the list\n>> matrix to the values of the numerical matrix element by element, but it's\n>> time consuming.  What can anybody recommend me?\n>> Steve\n>>\n>> Steven P. Greiner, Ph.D.\n>> Director of Portfolio Risk\n>> FactSet Research Systems, Inc.\n>> sgreiner at factset.com\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n>\n>\n\n\n-- \n*Mustafa Gökçe Baydoğan, PhD.*\nAssistant Professor\nBoğaziçi University\nDepartment of Industrial Engineering\n34342, Bebek, Istanbul, Turkey\nTel:   +90-212-359 7506\nFax:  +90-212-265 1800\nEmail: mustafa.baydogan at boun.edu.tr\nWeb:  www.mustafabaydogan.com\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Sorry for multiple emails. Correct link is here\nhttp://stackoverflow.com/questions/1727772/quickly-reading-very-large-tables-as-dataframes-in-r\n\n\nOn Thu, May 1, 2014 at 6:24 PM, Mustafa Baydogan\n<bayd",
       "thread_id": "thread-0ebe121c27ec",
       "thread_depth": 2,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140501/6bb4fc18/attachment.pl"
+      ]
     },
     {
       "id": "msg-f00dfafb91da",
@@ -144,11 +153,14 @@
       "references": [
         "<fe425fa4244d1d01f1707ec190bc1525@stevens.edu>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140501/d76fd0c3/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140501/d76fd0c3/attachment.pl>",
+      "body_plain": "Alec,\n \nNot sure if this is what you want but may have found a workaround. \n \nPost the execution of the \"head(tab)\" line, if you run \"dim(tab)\" you will find that the table contains 1344 rows but only one column i.e. AdjClose\n \nAs a workaround, I have added the following lines after your \"tab<-r\" line\n \n---------------------\n \ntabnew<-data.frame(index(tab),coredata(tab))\ncolnames(tabnew)<-c(\"Date\", \"AdjClose\")\ndim(tabnew) ## just to check if it has 1344 rows and two columns\nwrite.table(tabnew, file=\"\", quote=F) ## written to console instead of a file\n \n----------------------\n \nHope this helps\n \nregards\n \nSean\n \n \nOn Thursday, May 1, 2014 10:05 PM, aschmid1 <aschmid1 at stevens.edu> wrote:\n  \nI've been stuck for a while with seemingly simple task. I calculate \nreturns using data from yahoo:\netf = \"SPY\"\nstartDate = \"2008-12-01\"\nendDate = \"2014-04-04\"\nprc <- get.hist.quote(instrument = etf, startDate, endDate, quote = \n\"AdjClose\", provider = \"yahoo\" )\ntt<-as.zoo(prc)\ndates<-index(tt)\nr<-diff(log(tt))\ntab<-r\n> head(tab)\n               AdjClose\n2008-12-02  0.03776569\n2008-12-03  0.02372065\n2008-12-04 -0.02345690\n2008-12-05  0.03038800\n2008-12-08  0.03432357\n2008-12-09 -0.01657462\n\nBut when I save results to a file, dates are replaced:\n\nwrite.table(tab, file=filename, quote=F)\n\nHere is the contents of the output file:\nAdjClose\n1 0.0377656920201943\n2 0.0237206482126213\n3 -0.0234569003540432\n4 0.0303880024180421\n5 0.0343235654549394\n6 -0.0165746208209656\n\nWhat can be done about this?\nThanks! Alec\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Alec,\n \nNot sure if this is what you want but may have found a workaround. \n \nPost the execution of the \"head(tab)\" line, if you run \"dim(tab)\" you will find that the table contains 1344 rows but only",
       "thread_id": "thread-f00dfafb91da",
       "thread_depth": 1,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140501/d76fd0c3/attachment.pl"
+      ]
     },
     {
       "id": "msg-afbad08015e2",
@@ -162,11 +174,14 @@
       "references": [
         "<fe425fa4244d1d01f1707ec190bc1525@stevens.edu>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140502/c39f9171/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140502/c39f9171/attachment.pl>",
+      "body_plain": "Try\n\nwrite.zoo function. works out of the box.\n\nwrite.zoo(head(tab))\n## \"Index\" \"AdjClose\"\n## 2008-12-02 0.0377656920201943\n## 2008-12-03 0.0237206482126213\n## 2008-12-04 -0.0234569003540432\n## 2008-12-05 0.0303880024180421\n## 2008-12-08 0.0343235654549394\n## 2008-12-09 -0.0165746208209656\n\n\nOn Fri, May 2, 2014 at 12:34 AM, aschmid1 <aschmid1 at stevens.edu> wrote:\n\n> I've been stuck for a while with seemingly simple task. I calculate\n> returns using data from yahoo:\n> etf = \"SPY\"\n> startDate = \"2008-12-01\"\n> endDate = \"2014-04-04\"\n> prc <- get.hist.quote(instrument = etf, startDate, endDate, quote =\n> \"AdjClose\", provider = \"yahoo\" )\n> tt<-as.zoo(prc)\n> dates<-index(tt)\n> r<-diff(log(tt))\n> tab<-r\n>\n>> head(tab)\n>>\n>               AdjClose\n> 2008-12-02  0.03776569\n> 2008-12-03  0.02372065\n> 2008-12-04 -0.02345690\n> 2008-12-05  0.03038800\n> 2008-12-08  0.03432357\n> 2008-12-09 -0.01657462\n>\n> But when I save results to a file, dates are replaced:\n>\n> write.table(tab, file=filename, quote=F)\n>\n> Here is the contents of the output file:\n> AdjClose\n> 1 0.0377656920201943\n> 2 0.0237206482126213\n> 3 -0.0234569003540432\n> 4 0.0303880024180421\n> 5 0.0343235654549394\n> 6 -0.0165746208209656\n>\n> What can be done about this?\n> Thanks! Alec\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Try\n\nwrite.zoo function. works out of the box.\n\nwrite.zoo(head(tab))\n## \"Index\" \"AdjClose\"\n## 2008-12-02 0.0377656920201943\n## 2008-12-03 0.0237206482126213\n## 2008-12-04 -0.0234569003540432\n## 2008-1",
       "thread_id": "thread-f00dfafb91da",
       "thread_depth": 1,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140502/c39f9171/attachment.pl"
+      ]
     },
     {
       "id": "msg-d9fa7ab8dcc1",
@@ -277,11 +292,14 @@
         "<CAEGu7FsjEJ3oARUx=ktMB=6V_b4PVtv56LpekR1=qjSQnwm5=A@mail.gmail.com>",
         "<1399151812447-4689930.post@n4.nabble.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140504/b69c2fb1/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140504/b69c2fb1/attachment.pl>",
+      "body_plain": "Why not try a custom signal function that simply lags the signal by the\namount of periods?\n\nHere's a demo I wrote to demonstrate:\n\nsigLag <- function(label, data=mktdata, column, cross=FALSE, nLag=1){\n  colNum <- match.names(column, colnames(data))\n  ret_sig <- lag(data[,colNum], nLag)\n  if (isTRUE(cross))\n    ret_sig <- diff(ret_sig) == 1\n  if (!missing(label))\n    colnames(ret_sig) <- label\n  return(ret_sig)\n}\n\n#data boilerplate\n\ncurrency('USD')\nSys.setenv(TZ=\"UTC\")\n\nsymbols <- c(\"SPY\")\n\nstock(symbols, currency=\"USD\", multiplier=1)\ngetSymbols(symbols, src='yahoo',\n           index.class=c(\"POSIXt\",\"POSIXct\"),\n           from = \"1998-12-01\", adjust=TRUE)\n\n#initialization boilerplate\nrm(list=ls(.blotter), envir=.blotter)\ninitDate=\"1990-09-08\"\n\nstrategy.st=\"sigLagger\"\nportfolio.st=\"sigLagger\"\naccount.st=\"sigLagger\"\n\nrm.strat(portfolio.st)\nrm.strat(strategy.st)\ninitPortf(portfolio.st, symbols=symbols, initDate=initDate, currency='USD')\ninitAcct(account.st, portfolios=portfolio.st, initDate=initDate,\ncurrency='USD')\ninitOrders(portfolio.st, initDate=initDate)\n\n#strategy\nstrategy(strategy.st, store=TRUE)\n\nadd.indicator(strategy.st, name=\"RSI\",\narguments=list(price=quote(Cl(mktdata)), n=4), label=\"RSI\")\nadd.signal(strategy.st, name=\"sigThreshold\", arguments=list(column=\"RSI\",\nthreshold=25, cross=TRUE), label=\"longEntry\")\nadd.signal(strategy.st, name=\"sigLag\", arguments=list(column=\"longEntry\",\nnLag=5, cross=FALSE), label=\"longExit\")\nadd.rule(strategy.st, name=\"ruleSignal\", arguments=list(sigcol=\"longEntry\",\nsigval=TRUE, orderqty=100, ordertype=\"market\",\n                                                        orderside=\"long\",\nreplace=FALSE, prefer=\"Open\"), type=\"enter\", path.dep=TRUE)\nadd.rule(strategy.st, name=\"ruleSignal\", arguments=list(sigcol=\"longExit\",\nsigval=TRUE, orderqty=\"all\", ordertype=\"market\",\n                                                        orderside=\"long\",\nreplace=FALSE, prefer=\"Open\"), type=\"exit\", path.dep=TRUE)\n\nt1 <- Sys.time()\nout <- applyStrategy(strategy=strategy.st,portfolios=portfolio.st)\nt2 <- Sys.time()\nprint(t2-t1)\n\n######## ANALYTICS ##########\n\nupdatePortf(portfolio.st)\ndateRange <- time(getPortfolio(portfolio.st)$summary)[-1]\nupdateAcct(portfolio.st,dateRange)\nupdateEndEq(account.st)\n\n(tStats <- tradeStats(Portfolios = portfolio.st))\n\n\nOn Sat, May 3, 2014 at 5:16 PM, fc_11 <jyorio at gmail.com> wrote:\n\n> i've been trying to implement a similar 'holding period based' exit in a\n> similar fashion and tried Sergey's code today.  i get the following error\n> upon running applyStrategy using either sergey's 'seller' function and rule\n> or mine:\n>\n> Error in .firstCross(dindex, curIndex, \"gt\") :\n>   REAL() can only be applied to a 'numeric', not a 'integer'\n>\n>\n>\n> my exit logic:\n> add.rule(strategy.st, name = 'maxHoldingPeriod',arguments=list(x =\n> quote(Cl(mktdata)[,1]),timestamp,portfolio.st,maxp=10),type='exit',\n> enabled=TRUE)\n>\n>\n>\n> maxHoldingPeriod <- function (x, timestamp, portfolio, symbol,maxp)\n> {\n>   # updatePortf(portfolio, Symbols=symbol) #may or maynot work\n>   position<-(getPos(portfolio,symbol,timestamp,Columns=c(\"Pos.Qty\")))\n>   position_init<-index(position)\n>   pheld<-paste0(position_init, \"/\", timestamp)\n>   period<-as.numeric(nrow(x[pheld]))\n>   result<-as.xts(0,order.by=timestamp)\n>   colnames(result)<-c('HoldingPeriod')\n>   if(period>=maxp)\n>   {\n>     if(position[,1]>0)\n>     {\n>       result<-1\n>       addOrder(portfolio, symbol, timestamp, qty='all', ordertype='market',\n> side='long', prefer = 'Open',replace = TRUE,\n>                return = FALSE, ..., TxnFees = 0, label = \"MaxBarLong\")\n>     }\n>     if(position[,1]<0)\n>     {\n>       result<-1\n>       addOrder(portfolio, symbol, timestamp, qty='all', ordertype='market',\n> side='short', prefer = 'Open',replace = TRUE,\n>                return = FALSE, ..., TxnFees = 0, label = \"MaxBarShort\")\n>     }\n>   }\n>   return(result)\n> }\n>\n>\n>\n> --\n> View this message in context:\n> http://r.789695.n4.nabble.com/Writing-sell-rules-with-quantstrat-tp4389599p4689930.html\n> Sent from the Rmetrics mailing list archive at Nabble.com.\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Why not try a custom signal function that simply lags the signal by the\namount of periods?\n\nHere's a demo I wrote to demonstrate:\n\nsigLag <- function(label, data=mktdata, column, cross=FALSE, nLag=1){",
       "thread_id": "thread-8c8d6f15e4bf",
       "thread_depth": 1,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140504/b69c2fb1/attachment.pl"
+      ]
     },
     {
       "id": "msg-cbb7083d7be3",
@@ -311,11 +329,14 @@
       "subject_clean": "Is TTR::volatility(..., calc=\"close\") correct?",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140506/c8cf9eba/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140506/c8cf9eba/attachment.pl>",
+      "body_plain": "It's probably easiest to work with the code so here it is:\n\n\nif( calc==\"close\" ) {\n    # Add univariate case from Cedrick Johnson's R-SIG-Finance post\n    if( NCOL(OHLC) == 1 ) {\n      r <- ROC(OHLC[, 1], 1, ...)\n    } else {\n      r <- ROC(OHLC[, 4], 1, ...)\n    }\n    s <- sqrt(N) * runSD(r , n-1)\n  }\n\n\nIs runSD used correctly? To me the call should be: runSD(r, n=n,\nsample=TRUE).\n\nWhile at it, I would also like to have calc=\"close\", but assuming zero mean\nfor the returns. In this case, the above becomes: sqrt(N) *\nsqrt(runSum(r*r, n=n)/(n-1)). Is it ok if I add another method, like\ncalc=\"close.zero.mean\"?\n\nThanks\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "It's probably easiest to work with the code so here it is:\n\n\nif( calc==\"close\" ) {\n    # Add univariate case from Cedrick Johnson's R-SIG-Finance post\n    if( NCOL(OHLC) == 1 ) {\n      r <- ROC(OHLC[,",
       "thread_id": "thread-96ed8f603fab",
       "thread_depth": 0,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140506/c8cf9eba/attachment.pl"
+      ]
     },
     {
       "id": "msg-a942e4063008",
@@ -343,11 +364,14 @@
       "subject_clean": "getSymbols not properly accounting for GOOGL's stock split.",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140506/58f7b680/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140506/58f7b680/attachment.pl>",
+      "body_plain": "I'm trying adjust=TRUE on getSymbols(\"GOOGL\", src=\"yahoo\",\nfrom=\"1900-01-01\", adjust=TRUE), then doing plot(Cl(GOOGL)) and I'm seeing\nthat massive spike down when the stock split, instead of it being accounted\nfor.\n\nCan someone confirm this for me?\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I'm trying adjust=TRUE on getSymbols(\"GOOGL\", src=\"yahoo\",\nfrom=\"1900-01-01\", adjust=TRUE), then doing plot(Cl(GOOGL)) and I'm seeing\nthat massive spike down when the stock split, instead of it being ",
       "thread_id": "thread-c27fc0025400",
       "thread_depth": 0,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140506/58f7b680/attachment.pl"
+      ]
     },
     {
       "id": "msg-089b5253edaa",
@@ -446,11 +470,14 @@
       "subject_clean": "Implied Volatility",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140508/b9e0f6b3/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140508/b9e0f6b3/attachment.pl>",
+      "body_plain": "Dear Forum,\n\nI am not sure if I can raise this query here. I am trying to use Monte Carlo simulation for Call option VaR and for this I have simulated 1000 values each of the risk factors. I am using the Black Scholes for finding the premium. One of the input required to use Black Scholes is volatility besides Strike price, spot price, time to maturity and risk free rate.\n\nMy question is am I supposed to use Implied volatility or historical volatility? I tried to find out the answer through some sources but yet to get some concrete answer. I am using RQuantLib for calculating the Implied Volatility and its an European option.\n\nIf possible kindly guide. \n\n\nRegards\n\nKatherine Gobin\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear Forum,\n\nI am not sure if I can raise this query here. I am trying to use Monte Carlo simulation for Call option VaR and for this I have simulated 1000 values each of the risk factors. I am using ",
       "thread_id": "thread-cc7a4915dd23",
       "thread_depth": 0,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140508/b9e0f6b3/attachment.pl"
+      ]
     },
     {
       "id": "msg-f8b428a06b6b",
@@ -502,11 +529,14 @@
         "<1399507505595-4690163.post@n4.nabble.com>",
         "<CAPPM_gREytDoV27xBLpZ-M_3L8Ni=arsGb7gkPo0H-aEGS+U+A@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140509/59f8c96c/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140509/59f8c96c/attachment.pl>",
+      "body_plain": "Thanks for your quick response Joshua.\n\nDoes the code changes in r1609 intend to fix the successive short (or long)\ntrades that I'm describing in my email, or only the Warning: stack\nimbalance in 'lapply' message ? Although this warning message is no longer\nreported, and the results of the Luxor strategy changed after r1609 (ex.:\nNet.Trading.PL value changed, among other variables), I'm still observing\nthe same behaviour of successive short (or long) trades running the Luxor\ndemo code with the GBP/USD demo data available in quantstrat.\n\nMoreover, if I run luxor.1.strategy.basic.R demo code with a longer GBP/USD\ntime series, using 30 minutes bars as in the demo data (ex.: three years),\nI observed up to 5 successive short trades (i.e., Pos.Qty value of\nGBPUSD$posPL xts object equal to -500,000) and 4 successive long trades.\n\nFurther, looking at the firstCross.c in r1609 I'm seeing in\nthe switch(int_rel) statement that all comparisons are done by greater than\n('>'). I don't know whether this is correct or not.\n\nThanks for your support, I'm eager to finally adopt quantstrat !\n\nPablo\n\n\nOn Thu, May 8, 2014 at 8:09 AM, Joshua Ulrich <josh.m.ulrich at gmail.com>wrote:\n\n> On Wed, May 7, 2014 at 7:05 PM, fc_11 <jyorio at gmail.com> wrote:\n> > i also am getting the \"Warning: stack imbalance in 'lapply',\" warning\n> since\n> > the 1608 upgrade\n> >\n> Fixed in r1609.\n> --\n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thanks for your quick response Joshua.\n\nDoes the code changes in r1609 intend to fix the successive short (or long)\ntrades that I'm describing in my email, or only the Warning: stack\nimbalance in 'lap",
       "thread_id": "thread-a942e4063008",
       "thread_depth": 3,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140509/59f8c96c/attachment.pl"
+      ]
     },
     {
       "id": "msg-1a5e97267ede",
@@ -523,11 +553,14 @@
         "<CAPPM_gREytDoV27xBLpZ-M_3L8Ni=arsGb7gkPo0H-aEGS+U+A@mail.gmail.com>",
         "<CAPA9881vntWtiyjr9NrymAu==+PxD7HVfdQ2cxWp7j9M_crOOg@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140509/b744ea1c/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140509/b744ea1c/attachment.pl>",
+      "body_plain": "Just an additional comment:\nI had seen up to 4-5 successive short/long trades running\nluxor.1.strategy.basic.R demo code, with a longer GBP/USD time series, with\nlower code revisions (ex.: r15nn); r1609 is not the first time in which\nthis behaviour happened.\nThanks\nPablo\n\n\nOn Fri, May 9, 2014 at 1:09 AM, Pablo Rios <pablo.javier.rios at gmail.com>wrote:\n\n> Thanks for your quick response Joshua.\n>\n> Does the code changes in r1609 intend to fix the successive short (or\n> long) trades that I'm describing in my email, or only the Warning: stack\n> imbalance in 'lapply' message ? Although this warning message is no\n> longer reported, and the results of the Luxor strategy changed after r1609\n> (ex.: Net.Trading.PL value changed, among other variables), I'm still\n> observing the same behaviour of successive short (or long) trades running\n> the Luxor demo code with the GBP/USD demo data available in quantstrat.\n>\n> Moreover, if I run luxor.1.strategy.basic.R demo code with a longer\n> GBP/USD time series, using 30 minutes bars as in the demo data (ex.: three\n> years), I observed up to 5 successive short trades (i.e., Pos.Qty value of\n> GBPUSD$posPL xts object equal to -500,000) and 4 successive long trades.\n>\n> Further, looking at the firstCross.c in r1609 I'm seeing in\n> the switch(int_rel) statement that all comparisons are done by greater than\n> ('>'). I don't know whether this is correct or not.\n>\n> Thanks for your support, I'm eager to finally adopt quantstrat !\n>\n> Pablo\n>\n>\n> On Thu, May 8, 2014 at 8:09 AM, Joshua Ulrich <josh.m.ulrich at gmail.com>wrote:\n>\n>> On Wed, May 7, 2014 at 7:05 PM, fc_11 <jyorio at gmail.com> wrote:\n>> > i also am getting the \"Warning: stack imbalance in 'lapply',\" warning\n>> since\n>> > the 1608 upgrade\n>> >\n>> Fixed in r1609.\n>> --\n>> Joshua Ulrich  |  about.me/joshuaulrich\n>> FOSS Trading  |  www.fosstrading.com\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Just an additional comment:\nI had seen up to 4-5 successive short/long trades running\nluxor.1.strategy.basic.R demo code, with a longer GBP/USD time series, with\nlower code revisions (ex.: r15nn); r16",
       "thread_id": "thread-a942e4063008",
       "thread_depth": 4,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140509/b744ea1c/attachment.pl"
+      ]
     },
     {
       "id": "msg-0808f9da3c8d",
@@ -545,11 +578,14 @@
         "<CAPA9881vntWtiyjr9NrymAu==+PxD7HVfdQ2cxWp7j9M_crOOg@mail.gmail.com>",
         "<CAPA98824xmQBNZ6t6x0SDsQgO5159utVNboDoAaZgzMWHzMXkw@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140509/80f03f38/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140509/80f03f38/attachment.pl>",
+      "body_plain": "Pablo,\n\nThe luxor.1.strategy.basic.R strategy doesn't cancel old unfulfilled\nstoplimit orders, and hence there are positions\n\nbook  = getOrderBook(portfolio=portfolio.st)\nbook$forex$GBPUSD['2002-10-22/2002-10-24']\n\n> book$forex$GBPUSD['2002-10-22/2002-10-24']\n                    Order.Qty Order.Price Order.Type  Order.Side\nOrder.Threshold Order.Status Order.StatusTime      Prefer Order.Set\nTxn.Fees Rule         Time.In.Force\n2002-10-22 17:00:00 \"all\"     \"1.5453\"    \"market\"    \"long\"     NA\n     \"closed\"     \"2002-10-22 17:30:00\" \"\"     NA        \"-6\"\n\"Exit2SHORT\" \"\"\n2002-10-22 17:00:00 \"-1e+05\"  \"1.5447\"    \"stoplimit\" \"short\"    \"-5e-04\"\n     \"closed\"     \"2002-10-22 17:30:00\" \"Low\"  NA        \"0\"\n \"EnterSHORT\" \"\"\n2002-10-23 02:30:00 \"all\"     \"1.5485\"    \"market\"    \"short\"    NA\n     \"closed\"     \"2002-10-23 03:00:00\" \"\"     NA        \"-6\"\n\"Exit2LONG\"  \"\"\n2002-10-23 02:30:00 \"1e+05\"   \"1.5492\"    \"stoplimit\" \"long\"     \"5e-04\"\n      \"closed\"     \"2002-10-23 03:00:00\" \"High\" NA        \"0\"\n \"EnterLONG\"  \"\"\n2002-10-23 17:00:00 \"all\"     \"1.5468\"    \"market\"    \"long\"     NA\n     \"closed\"     \"2002-10-23 17:30:00\" \"\"     NA        \"-6\"\n\"Exit2SHORT\" \"\"\n2002-10-23 17:00:00 \"-1e+05\"  \"1.5463\"    \"stoplimit\" \"short\"    \"-5e-04\"\n     \"closed\"     \"2002-10-24 02:00:00\" \"Low\"  NA        \"0\"\n \"EnterSHORT\" \"\"\n2002-10-23 22:00:00 \"1e+05\"   \"1.5491\"    \"stoplimit\" \"long\"     \"5e-04\"\n      \"replaced\"   \"2002-10-24 11:00:00\" \"High\" NA        \"0\"\n \"EnterLONG\"  \"\"\n2002-10-24 01:30:00 \"-1e+05\"  \"1.5459\"    \"stoplimit\" \"short\"    \"-5e-04\"\n     \"closed\"     \"2002-10-24 03:00:00\" \"Low\"  NA        \"0\"\n \"EnterSHORT\" \"\"\n2002-10-24 11:00:00 \"all\"     \"1.5476\"    \"market\"    \"short\"    NA\n     \"closed\"     \"2002-10-24 11:30:00\" \"\"     NA        \"-6\"\n\"Exit2LONG\"  \"\"\n2002-10-24 11:00:00 \"1e+05\"   \"1.5493\"    \"stoplimit\" \"long\"     \"5e-04\"\n      \"closed\"     \"2002-10-24 12:00:00\" \"High\" NA        \"0\"\n \"EnterLONG\"  \"\"\n\n\n>From above orderbook you can see that at the short position taken\non 2002-10-24 02:00:00 is actually from the stoplimit order from 2002-10-23\n17:00:00. and the short position taken on 2002-10-24 03:00:00 is actually\nfrom the stoplimit order from 2002-10-24 01:30:00\n\n\n\n\n\nOn Fri, May 9, 2014 at 12:32 PM, Pablo Rios <pablo.javier.rios at gmail.com>wrote:\n\n> Just an additional comment:\n> I had seen up to 4-5 successive short/long trades running\n> luxor.1.strategy.basic.R demo code, with a longer GBP/USD time series, with\n> lower code revisions (ex.: r15nn); r1609 is not the first time in which\n> this behaviour happened.\n> Thanks\n> Pablo\n>\n>\n> On Fri, May 9, 2014 at 1:09 AM, Pablo Rios <pablo.javier.rios at gmail.com\n> >wrote:\n>\n> > Thanks for your quick response Joshua.\n> >\n> > Does the code changes in r1609 intend to fix the successive short (or\n> > long) trades that I'm describing in my email, or only the Warning: stack\n> > imbalance in 'lapply' message ? Although this warning message is no\n> > longer reported, and the results of the Luxor strategy changed after\n> r1609\n> > (ex.: Net.Trading.PL value changed, among other variables), I'm still\n> > observing the same behaviour of successive short (or long) trades running\n> > the Luxor demo code with the GBP/USD demo data available in quantstrat.\n> >\n> > Moreover, if I run luxor.1.strategy.basic.R demo code with a longer\n> > GBP/USD time series, using 30 minutes bars as in the demo data (ex.:\n> three\n> > years), I observed up to 5 successive short trades (i.e., Pos.Qty value\n> of\n> > GBPUSD$posPL xts object equal to -500,000) and 4 successive long trades.\n> >\n> > Further, looking at the firstCross.c in r1609 I'm seeing in\n> > the switch(int_rel) statement that all comparisons are done by greater\n> than\n> > ('>'). I don't know whether this is correct or not.\n> >\n> > Thanks for your support, I'm eager to finally adopt quantstrat !\n> >\n> > Pablo\n> >\n> >\n> > On Thu, May 8, 2014 at 8:09 AM, Joshua Ulrich <josh.m.ulrich at gmail.com\n> >wrote:\n> >\n> >> On Wed, May 7, 2014 at 7:05 PM, fc_11 <jyorio at gmail.com> wrote:\n> >> > i also am getting the \"Warning: stack imbalance in 'lapply',\" warning\n> >> since\n> >> > the 1608 upgrade\n> >> >\n> >> Fixed in r1609.\n> >> --\n> >> Joshua Ulrich  |  about.me/joshuaulrich\n> >> FOSS Trading  |  www.fosstrading.com\n> >>\n> >> _______________________________________________\n> >> R-SIG-Finance at r-project.org mailing list\n> >> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> >> -- Subscriber-posting only. If you want to post, subscribe first.\n> >> -- Also note that this is not the r-help list where general R questions\n> >> should go.\n> >>\n> >\n> >\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Pablo,\n\nThe luxor.1.strategy.basic.R strategy doesn't cancel old unfulfilled\nstoplimit orders, and hence there are positions\n\nbook  = getOrderBook(portfolio=portfolio.st)\nbook$forex$GBPUSD['2002-10-22",
       "thread_id": "thread-a942e4063008",
       "thread_depth": 5,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140509/80f03f38/attachment.pl"
+      ]
     },
     {
       "id": "msg-c875d0095863",
@@ -598,11 +634,14 @@
       "subject_clean": "Volume data",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140509/88a1ef1a/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140509/88a1ef1a/attachment.pl>",
+      "body_plain": "Does any one know of a source for historical daily  volume data from the\nCME ? This is for an academic study.  Thanks.\n\nAdam\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Does any one know of a source for historical daily  volume data from the\nCME ? This is for an academic study.  Thanks.\n\nAdam\n\n\t[[alternative HTML version deleted]]",
       "thread_id": "thread-dbc18d01c74c",
       "thread_depth": 0,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140509/88a1ef1a/attachment.pl"
+      ]
     },
     {
       "id": "msg-ac2db9e86b67",
@@ -616,11 +655,14 @@
       "references": [
         "<CAEEj48=g3E5PGBxnGRyd8adU-fopRSEJ01jf6HwrsF+4D8PXuQ@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140509/5aa98cb7/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140509/5aa98cb7/attachment.pl>",
+      "body_plain": "Check out Quandl\n\n\nOn Fri, May 9, 2014 at 2:01 PM, Adam Ginensky <adamno227 at gmail.com> wrote:\n\n> Does any one know of a source for historical daily  volume data from the\n> CME ? This is for an academic study.  Thanks.\n>\n> Adam\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Check out Quandl\n\n\nOn Fri, May 9, 2014 at 2:01 PM, Adam Ginensky <adamno227 at gmail.com> wrote:\n\n> Does any one know of a source for historical daily  volume data from the\n> CME ? This is for an acad",
       "thread_id": "thread-dbc18d01c74c",
       "thread_depth": 1,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140509/5aa98cb7/attachment.pl"
+      ]
     },
     {
       "id": "msg-aeb7a9f35c54",
@@ -652,11 +694,14 @@
       "subject_clean": "[Announce] YUIMA package on CRAN",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140510/26714a10/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140510/26714a10/attachment.pl>",
+      "body_plain": "Dear all,\nsome of you already know the existence of the Yuima Project and the related package.\nWe are pleased to announce that Yuima package has been recently released to its stable version on CRAN.\nThis JSS paper can serve as a manual\n\nhttp://www.jstatsoft.org/v57/i04\n\nAlthough Yuima is much more now (e.g. estimation for fractional OU sde, lead-lag estimation, several covariance estimators for asynch data, hypotheses testing, CARMA models, ecc) the JSS paper is a good start.\n\nStefano\nps: I hope announcement of packages is allowed by the mailing list policies\n\n\n\n\n\n-----------------------------------\nStefano M. Iacus\nDepartment of Economics,\nManagement and Quantitative Methods\nUniversity of Milan\nVia Conservatorio, 7\nI-20123 Milan - Italy\nPh.: +39 02 50321 461\nFax: +39 02 50321 505\nTwitter: @iacus\nhttp://scholar.google.com/citations?user=JBs9tJ4AAAAJ&hl=en\n\nHave a look at the new Master Degree in\nEconomics & Finance\nhttp://www.mef.unimi.it\nTwitter: @mefunimi\nFacebook: http://www.facebook.com/mefunimi\nEmail and further informations at: mef at unimi.it\n\n\n****************\nIl 5 x mille alla nostra Università è un investimento sui giovani,\nsui loro migliori progetti.\n\nSostiene la libera ricerca.\nAlimenta le loro speranze nel futuro.\n\nInvesti il tuo 5 x mille sui giovani.\n\nUniversità degli Studi di Milano\ncodice fiscale 80012650158\n\nhttp://www.unimi.it/13084.htm?utm_source=firmaMail&utm_medium=email&utm_content=linkFirmaEmail&utm_campaign=5xmille\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,\nsome of you already know the existence of the Yuima Project and the related package.\nWe are pleased to announce that Yuima package has been recently released to its stable version on CRAN.\nT",
       "thread_id": "thread-e8a92b85f547",
       "thread_depth": 0,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140510/26714a10/attachment.pl"
+      ]
     },
     {
       "id": "msg-5aad1103f596",
@@ -844,11 +889,14 @@
         "<CAPPM_gSa1=ZZa66ceVz7vjcqVvUEuJemQSUbUwY1B-0KridEUg@mail.gmail.com>",
         "<1399745861.24638.YahooMailNeo@web186003.mail.ir2.yahoo.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140510/44de7d0f/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140510/44de7d0f/attachment.pl>",
+      "body_plain": "I am also unclear about results Amarjit.\n\nFurthermore, why is the position = 0.0 after entering long at 2002-10-30\n13:00:00 (see flat Positionfill and CumPL lines) ? There's a long signal at\n2002-10-30 12:00:00 (see mktdata xts object) and the condition to enter\nlong is satisfied (i.e.: .threshold) at 13:00:00 (see order book). Is this\nanother anomaly with blotter/quantstrat ?\n\nPablo\n\n\n\nOn Sat, May 10, 2014 at 3:17 PM, amarjit chandhial <\na.chandhial at btinternet.com> wrote:\n\n>\n>\n> I am unclear. There are 3 different results, which of these is correct ?\n>\n>\n> (a) Humme, Peterson pp.34/78\n> http://www.rinfinance.com/agenda/2013/workshop/Humme+Peterson.pdf\n>\n>\n>\n> (b) Guy Yollin pp.24/78\n>\n> https://4310b1a9-a-a8fb2076-s-sites.googlegroups.com/a/r-programming.org/home/files/quantstrat-IV.pdf?attachauth=ANoY7cojS8K93NCMEI2gr1eWPE6nFGkEZAncLma__qYUXHgRzbbQCi1zrOZa5DnAANVw6nGZU9ppV1s69und3U7_uErEyb18pGOyH0UJsXtCsndrvcZWR4fB4mIJePELsQcuf3ksoDg3w7JV0TH_kpR3NDGBiDYzX9f43piDIk6vhfK5JMK68K1K7yqCZcHZ0krZzhRJ9Wq3KIZt5-399IqQ-Eeytar1o2n-VpqgoBIefXlC5iT6rlM%3D&attredirects=0\n>\n>\n>\n> (c) The latest run of the demo, blotter(rev 1607), quantstrat(rev 1610) -\n> chart.Posn attached.\n>\n>\n>\n> Amarjit\n>\n>\n>\n>    *From:* Joshua Ulrich <josh.m.ulrich at gmail.com>\n> *To:* Pablo Rios <pablo.javier.rios at gmail.com>\n> *Cc:* r-sig-finance <r-sig-finance at r-project.org>\n> *Sent:* Friday, 9 May 2014, 12:26\n>\n> *Subject:* Re: [R-SIG-Finance] Luxor strategy (quantstrat) - Why are\n> successive short (and long) trades happening ?\n>\n> On Thu, May 8, 2014 at 11:09 PM, Pablo Rios <pablo.javier.rios at gmail.com>\n> wrote:\n> > Thanks for your quick response Joshua.\n> >\n> > Does the code changes in r1609 intend to fix the successive short (or\n> long)\n> > trades that I'm describing in my email, or only the Warning: stack\n> imbalance\n> > in 'lapply' message ? Although this warning message is no longer\n> reported,\n> > and the results of the Luxor strategy changed after r1609 (ex.:\n> > Net.Trading.PL value changed, among other variables), I'm still\n> observing\n> > the same behaviour of successive short (or long) trades running the Luxor\n> > demo code with the GBP/USD demo data available in quantstrat.\n> >\n> r1609 only intended to fix the stack imbalance warning (as it says in\n> the commit log).\n>\n> > Moreover, if I run luxor.1.strategy.basic.R demo code with a longer\n> GBP/USD\n> > time series, using 30 minutes bars as in the demo data (ex.: three\n> years), I\n> > observed up to 5 successive short trades (i.e., Pos.Qty value of\n> > GBPUSD$posPL xts object equal to -500,000) and 4 successive long trades.\n> >\n> > Further, looking at the firstCross.c in r1609 I'm seeing in the\n> > switch(int_rel) statement that all comparisons are done by greater than\n> > ('>'). I don't know whether this is correct or not.\n> >\n> That was a careless error on my part.  r1610 corrects the comparisons.\n> Thank you very much for catching this.\n>\n> > Thanks for your support, I'm eager to finally adopt quantstrat !\n> >\n> > Pablo\n> >\n> >\n> > On Thu, May 8, 2014 at 8:09 AM, Joshua Ulrich <josh.m.ulrich at gmail.com>\n> > wrote:\n> >>\n> >> On Wed, May 7, 2014 at 7:05 PM, fc_11 <jyorio at gmail.com> wrote:\n> >> > i also am getting the \"Warning: stack imbalance in 'lapply',\" warning\n> >> > since\n> >> > the 1608 upgrade\n> >> >\n> >> Fixed in r1609.\n> >> --\n> >> Joshua Ulrich  |  about.me/joshuaulrich\n> >> FOSS Trading  |  www.fosstrading.com\n> >>\n> >> _______________________________________________\n> >> R-SIG-Finance at r-project.org mailing list\n> >> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> >> -- Subscriber-posting only. If you want to post, subscribe first.\n> >> -- Also note that this is not the r-help list where general R questions\n> >> should go.\n> >\n> >\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I am also unclear about results Amarjit.\n\nFurthermore, why is the position = 0.0 after entering long at 2002-10-30\n13:00:00 (see flat Positionfill and CumPL lines) ? There's a long signal at\n2002-10-3",
       "thread_id": "thread-a942e4063008",
       "thread_depth": 6,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140510/44de7d0f/attachment.pl"
+      ]
     },
     {
       "id": "msg-9aa56e82f601",
@@ -860,11 +908,14 @@
       "subject_clean": "GARCH fitted parametric distributions for copula fitting",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140512/09f435aa/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140512/09f435aa/attachment.pl>",
+      "body_plain": "Hello,\n\nI would greatly appreciate any insights into the problem described below,\nregarding using the data obtained from applying the functions of the\n'rugarch' package into those from the 'copula' package.\n\nI am endeavouring an investigation of dependencies between variables (i.e.\nstock quotes, exchange rates etc.) using copula functions. I first model\neach of my variables as an ARMA-GARCH process (or EGARCH/GJR to account for\nasymmetries) and then use these models in order to determine the\nbest-fitting copula.\n\nTake for example the case of stock quotes. After transforming them to log\nreturns ( using diff(log(stockData)) ), and investigating their correlation\nwith Kendall's thau and Spearman's rho, I fit an ARMA-GARCH model to each\nvariable (resulting in the so-called margin functions):\n\n## Choose conditional mean model for each variable i in the retStock xts\nobject\nautoarfima(data = retStock[,i], ar.max = 3, ma.max = 3, criterion = \"AIC\",\nmethod = \"full\", distr = \"std\")\n\n## Choose conditional variance model by comparing AICs for all combinations\nof GARCH orders limited to 3, with the ARMA(p,q) mean model selected above\nfor (i in 1:3){\n      for (j in 1:3){\n\nspec <- ugarchspec(variance.model=list(model=\"sGARCH\", garchOrder =\nc(i,j)), mean.model=list(armaOrder=c(p,q), distribution.model = \"std\")\n\nfit <- ugarchfit(spec = spec, data = retStock[,n])\n\n# record AIC for overall comparison after exiting the loop\n}\n\n}\n\nKeeping the uGARCHfit object with the best-fitting model, I move on to the\nbivariate copulas. For completing the \"Inference Functions for Margins\"\nmethod, I specifically need to input the observations from the *fitted\nparametric marginal distribution functions*, for which I use the\n*@fit$fitted.values* of each uGARCHfit object.\n\nHowever, the fitted values of the two models are, for some variables,\nnegatively correlated (as indicated by Kendall's tau and Spearman's rho),\nwhereas the original observations were positively correlated, leading to\nthe copula fitting breaking down (for Gumbel and Clayton copulas, but I\nwon't go into copula details, as my question only concerns the output data\nfrom the 'rugarch' package).\n\nMy overall question is, considering my approach and the need for inputting\nfitted parametric marginal distribution functions, are the fitted values\nfrom the uGARCHfit objects the right input data to be taking further into\nthe copula functions? Why are the fitted values negatively correlated, when\nthe originals were positively correlated?\n\nI am running everything in RStudio 0.98.501 with R 3.0.2 on Windows 8.1. If\nany further information is needed regarding my system specs or other\nimplementation details, let me know and I'll provide them as soon as\npossible.\n\nThank you very much for your assistance,\nSebastian\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\nI would greatly appreciate any insights into the problem described below,\nregarding using the data obtained from applying the functions of the\n'rugarch' package into those from the 'copula' pa",
       "thread_id": "thread-9aa56e82f601",
       "thread_depth": 0,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140512/09f435aa/attachment.pl"
+      ]
     },
     {
       "id": "msg-6c77ee2cdb12",
@@ -894,11 +945,14 @@
       "subject_clean": "fPortfolio and minimum variance portfolio",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140513/e27d3149/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140513/e27d3149/attachment.pl>",
+      "body_plain": "I'm using fPortfolio to determine the minimum variance portfolio which\nworks fine. However, I can't seem to get direct access to the Target Return\nand Risk values.\n\nresult <- minvariancePortfolio(data, globminSpec, \"LongOnly\")\n\n\nwill output\n\n\n[..]\n\nTarget Return and Risks:\n  mean     mu    Cov  Sigma\n0.0302 0.0302 0.0143 0.0143\n\n[..]\n\n\nThe question is how can I directly access \"mean\" and \"Sigma\"?\n\n\nI tried  getTargetReturn(result) but it returns \"NA\"\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I'm using fPortfolio to determine the minimum variance portfolio which\nworks fine. However, I can't seem to get direct access to the Target Return\nand Risk values.\n\nresult <- minvariancePortfolio(data",
       "thread_id": "thread-22b9f57aa38d",
       "thread_depth": 0,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140513/e27d3149/attachment.pl"
+      ]
     },
     {
       "id": "msg-c855e466e338",
@@ -946,11 +1000,14 @@
       "references": [
         "<CACu79pZGCOC2mQRCTbHPd5rvjGDn_7kqAQmKoSKM2b2in6KtXA@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140513/7c68dbc5/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140513/7c68dbc5/attachment.pl>",
+      "body_plain": "Try:\n\n\n library(fPortfolio)\n\n ?minvariancePortfolio\n\n\n#>From the Examples\n\n## data -\n   Data = SMALLCAP.RET\n   Data = Data[, c(\"BKE\", \"GG\", \"GYMB\", \"KRON\")]\n   Data\n   \n## spec -\n   Spec = portfolioSpec()\n   setTargetReturn(Spec) = mean(colMeans(Data))\n   Spec\n   \n## constraints -\n   Constraints = \"LongOnly\"\n   Constraints\n   \n## efficientPortfolio -\n#   efficientPortfolio(Data, Spec, Constraints)\n   \n## tangency Portfolio -\n#   tangencyPortfolio(Data, Spec, Constraints)   \n   \n## minvariancePortfolio -\n   result <- minvariancePortfolio(Data, Spec, Constraints)\n\n\n##########\n\n#Via result\n#-------------\n\n print(result)\n attributes(result)\n\n result at portfolio\n result at portfolio at portfolio\n result at portfolio at portfolio$targetReturn[1]\n result at portfolio at portfolio$targetRisk[2]\n\n\n\n\nAmarjit\n\n \n\n________________________________\n From: Albert Darenberg <albert.darenberg at gmail.com>\nTo: r-sig-finance at r-project.org \nSent: Tuesday, 13 May 2014, 0:01\nSubject: [R-SIG-Finance] fPortfolio and minimum variance portfolio\n  \n\nI'm using fPortfolio to determine the minimum variance portfolio which\nworks fine. However, I can't seem to get direct access to the Target Return\nand Risk values.\n\nresult <- minvariancePortfolio(data, globminSpec, \"LongOnly\")\n\n\nwill output\n\n\n[..]\n\nTarget Return and Risks:\n  mean     mu    Cov  Sigma\n0.0302 0.0302 0.0143 0.0143\n\n[..]\n\n\nThe question is how can I directly access \"mean\" and \"Sigma\"?\n\n\nI tried  getTargetReturn(result) but it returns \"NA\"\n\n    [[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Try:\n\n\n library(fPortfolio)\n\n ?minvariancePortfolio\n\n\n#>From the Examples\n\n## data -\n   Data = SMALLCAP.RET\n   Data = Data[, c(\"BKE\", \"GG\", \"GYMB\", \"KRON\")]\n   Data\n   \n## spec -\n   Spec = portfolioSp",
       "thread_id": "thread-22b9f57aa38d",
       "thread_depth": 1,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140513/7c68dbc5/attachment.pl"
+      ]
     },
     {
       "id": "msg-f4bf0e50c80e",
@@ -962,11 +1019,14 @@
       "subject_clean": "Excel price function",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140514/278ea626/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140514/278ea626/attachment.pl>",
+      "body_plain": "Dear R forum,\n\nEXCEL has some standard functions e.g. \n\n(1) PRICE function : Returns the price per $100 face value of a security that pays periodic interest.\n\n(2) COUPDAYBS : Returns the number of days from the beginning of the coupon period to the settlement date.\n\n(3) COUPDAYS : Returns the number of days in the coupon period that contains settlement date.\n\n(4) COUPDAYSNC : Returns the number of days from the settlement date to the next coupon date.\n\nKindly guide if R has some inbuilt functions giving the results same as obtained from Excel functions mentioned above.\n\nWith regards\n\nKatherine\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear R forum,\n\nEXCEL has some standard functions e.g. \n\n(1) PRICE function : Returns the price per $100 face value of a security that pays periodic interest.\n\n(2) COUPDAYBS : Returns the number of day",
       "thread_id": "thread-f4bf0e50c80e",
       "thread_depth": 0,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140514/278ea626/attachment.pl"
+      ]
     },
     {
       "id": "msg-cd2075b3e948",
@@ -978,11 +1038,14 @@
       "subject_clean": "fPortfolio and Matlab: Different results for the tagency portfolio",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140514/d8f2619e/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140514/d8f2619e/attachment.pl>",
+      "body_plain": "I'm trying to recreate the Matlab 2013 result for the tagency portfolio in\nfPortfolio. However, the resulting weights are not the same. I use the\nstandard parameters in both Matlab and fPortfolio. The Markowitz efficient\nfrontier is correct in both software suites. To validate this, I compared\nthe minimum variance portfolio and a few random portfolios with a given\nvariance on the efficient frontier.\nIn Matlab I use \"[PortRisk, PortReturn, PortWts] = portopt(ExpReturn,\nExpCovariance, 50)\" to calculate the efficient frontier and \"portalloc\n(PortRisk, PortReturn, PortWts, RisklessRate, BorrowRate, RiskAversion)\"\nfor the tangency portfolio.\nIs there a catch that I'm missing when recreating results with Matlab and\nfPortfolio?\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I'm trying to recreate the Matlab 2013 result for the tagency portfolio in\nfPortfolio. However, the resulting weights are not the same. I use the\nstandard parameters in both Matlab and fPortfolio. The",
       "thread_id": "thread-cd2075b3e948",
       "thread_depth": 0,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140514/d8f2619e/attachment.pl"
+      ]
     },
     {
       "id": "msg-1eb3fe219733",
@@ -1028,11 +1091,14 @@
       "subject_clean": "(no subject)",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140515/4da41471/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140515/4da41471/attachment.pl>",
+      "body_plain": "Dear R users:\n\nThe generalized beta G distribution is introduced in Alexander et al. (2012). The functions to calculate Computes the pdf, cdf, quantile and random numbers are included in R package Newdistns.\n\nCould some people share the coding to fit the data with the generalized beta G distribution?\n\nC. Alexander, G. M. Cordeiro, E. M. M. Ortega, Generalized beta-generated distributions, Compu-tational Statistics and Data Analysis 56 (2012) 1880-1897\n\nBest regards,\n\nWeihan\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear R users:\n\nThe generalized beta G distribution is introduced in Alexander et al. (2012). The functions to calculate Computes the pdf, cdf, quantile and random numbers are included in R package New",
       "thread_id": "thread-cc8ec7a7dd31",
       "thread_depth": 0,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140515/4da41471/attachment.pl"
+      ]
     },
     {
       "id": "msg-41d006e40211",
@@ -1044,11 +1110,14 @@
       "subject_clean": "A question on Time series analysis",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140516/0a37c4fe/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140516/0a37c4fe/attachment.pl>",
+      "body_plain": "Hi again,\n\nMy question is not directly related to R, but I still hope to get some\nquality feedback on my question.\n\nIn a typical time series analysis, we generally take logarithm of the\nunderlying variable and then fit models like ARIMA etc on that transformed\nvariable. This has a related benefit to getting linear trend for model\nvariable instead of quadratic\n\nThis essentially assumes that, the variable under study is strictly\npositive. However what if my variable is mix of positive, zero, and\nnegative? would it then make sense to fit model on the raw variable without\ntransforming it anyway?\n\nIs anybody aware of any standard policy to handle such situation?\n\nThanks for your input.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi again,\n\nMy question is not directly related to R, but I still hope to get some\nquality feedback on my question.\n\nIn a typical time series analysis, we generally take logarithm of the\nunderlying var",
       "thread_id": "thread-41d006e40211",
       "thread_depth": 0,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140516/0a37c4fe/attachment.pl"
+      ]
     },
     {
       "id": "msg-118c70221202",
@@ -1062,11 +1131,14 @@
       "references": [
         "<CA+dpOJnW6sziE=j41aerRX+KJVoQsLAVhcSuhfGj9sgkX1Gv6Q@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140515/592526a9/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140515/592526a9/attachment.pl>",
+      "body_plain": "Example is always good to include in your question…  \n\n\nAnyways, you do not just take logarithm. First of all you want time series to be stationary. This can be achieved in 2 ways:\n\n1. Fit the trend (fit line, polynomial or anything you want) and seasonality (if exists)\n3. Filtering\n2. First differencing\n\nThen do your ARMA analysis of residuals.\n\nIf we are talking about stock prices, then you can not really fit the trend for any forecasting purposes as stock price is a random process meaning that trend will not tell much.\n\nFor financial time series standard procedure is log-returns. It is not simple logarithm, it is differences of logarithms.\n\nKind regards,--  \nDominykas Grigonis\n\n\nOn Thursday, 15 May 2014 at 19:32, Christofer Bogaso wrote:\n\n> Hi again,\n>  \n> My question is not directly related to R, but I still hope to get some\n> quality feedback on my question.\n>  \n> In a typical time series analysis, we generally take logarithm of the\n> underlying variable and then fit models like ARIMA etc on that transformed\n> variable. This has a related benefit to getting linear trend for model\n> variable instead of quadratic\n>  \n> This essentially assumes that, the variable under study is strictly\n> positive. However what if my variable is mix of positive, zero, and\n> negative? would it then make sense to fit model on the raw variable without\n> transforming it anyway?\n>  \n> Is anybody aware of any standard policy to handle such situation?\n>  \n> Thanks for your input.\n>  \n> [[alternative HTML version deleted]]\n>  \n> _______________________________________________\n> R-SIG-Finance at r-project.org (mailto:R-SIG-Finance at r-project.org) mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>  \n>  \n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Example is always good to include in your question…  \n\n\nAnyways, you do not just take logarithm. First of all you want time series to be stationary. This can be achieved in 2 ways:\n\n1. Fit the trend (",
       "thread_id": "thread-41d006e40211",
       "thread_depth": 1,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140515/592526a9/attachment.pl"
+      ]
     },
     {
       "id": "msg-8cf65952ad0b",
@@ -1081,11 +1153,14 @@
         "<CA+dpOJnW6sziE=j41aerRX+KJVoQsLAVhcSuhfGj9sgkX1Gv6Q@mail.gmail.com>",
         "<1F88F31A9D8744CB8E001E5DAF4EEA21@gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140515/52380750/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140515/52380750/attachment.pl>",
+      "body_plain": "Apologise, misread your question. Probably because you have mixed it with ARMA analysis. It is not for arma analysis, it is a general procedure to transform data into workable form...\n\nLogarithm is used to model proportional growth and you cannot have growth for something that you do not have, meaning 0 is not the case and also, your data can never reach 0.\n\nIt is not really quadratic effect that it eliminates, but it is exponential (inverse of logarithm), if you were to remove quadratic effect you would take square root.\n\nIf you would provide some data, I might be able to give some advice on how to transform it. Also, if it is mixed of negative and positive, then maybe it is already stationary? If no, then maybe simple detrending would work?  \n\n\nKind regards,--  \nDominykas Grigonis\n\n\nOn Thursday, 15 May 2014 at 22:23, Dominykas Grigonis wrote:\n\n> Example is always good to include in your question…  \n>  \n>  \n> Anyways, you do not just take logarithm. First of all you want time series to be stationary. This can be achieved in 2 ways:\n>  \n> 1. Fit the trend (fit line, polynomial or anything you want) and seasonality (if exists)\n> 3. Filtering\n> 2. First differencing\n>  \n> Then do your ARMA analysis of residuals.\n>  \n> If we are talking about stock prices, then you can not really fit the trend for any forecasting purposes as stock price is a random process meaning that trend will not tell much.\n>  \n> For financial time series standard procedure is log-returns. It is not simple logarithm, it is differences of logarithms.\n>  \n> Kind regards,--  \n> Dominykas Grigonis\n>  \n>  \n> On Thursday, 15 May 2014 at 19:32, Christofer Bogaso wrote:\n>  \n> > Hi again,\n> >  \n> > My question is not directly related to R, but I still hope to get some\n> > quality feedback on my question.\n> >  \n> > In a typical time series analysis, we generally take logarithm of the\n> > underlying variable and then fit models like ARIMA etc on that transformed\n> > variable. This has a related benefit to getting linear trend for model\n> > variable instead of quadratic\n> >  \n> > This essentially assumes that, the variable under study is strictly\n> > positive. However what if my variable is mix of positive, zero, and\n> > negative? would it then make sense to fit model on the raw variable without\n> > transforming it anyway?\n> >  \n> > Is anybody aware of any standard policy to handle such situation?\n> >  \n> > Thanks for your input.\n> >  \n> > [[alternative HTML version deleted]]\n> >  \n> > _______________________________________________\n> > R-SIG-Finance at r-project.org (mailto:R-SIG-Finance at r-project.org) mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions should go.\n> >  \n> >  \n> >  \n>  \n>  \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Apologise, misread your question. Probably because you have mixed it with ARMA analysis. It is not for arma analysis, it is a general procedure to transform data into workable form...\n\nLogarithm is us",
       "thread_id": "thread-41d006e40211",
       "thread_depth": 2,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140515/52380750/attachment.pl"
+      ]
     },
     {
       "id": "msg-938dcac0fd8a",
@@ -1097,11 +1172,14 @@
       "subject_clean": "generalized beta G distribution",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140515/9748f796/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140515/9748f796/attachment.pl>",
+      "body_plain": "Dear R users:\n\nThe generalized beta G distribution is introduced in Alexander et al. (2012). The functions to calculate the pdf, cdf, quantile and random numbers are included in R package Newdistns.\n\nCould some people share the coding to fit the data with the generalized beta G distribution?\n\nC. Alexander, G. M. Cordeiro, E. M. M. Ortega, Generalized beta-generated distributions, Compu-tational Statistics and Data Analysis 56 (2012) 1880-1897\n\nBest regards,\n\nWeihan\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear R users:\n\nThe generalized beta G distribution is introduced in Alexander et al. (2012). The functions to calculate the pdf, cdf, quantile and random numbers are included in R package Newdistns.\n\n",
       "thread_id": "thread-938dcac0fd8a",
       "thread_depth": 0,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140515/9748f796/attachment.pl"
+      ]
     },
     {
       "id": "msg-ee217a149608",
@@ -1165,11 +1243,14 @@
       "references": [
         "<5375D721.3050201@googlemail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140516/71314872/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140516/71314872/attachment.pl>",
+      "body_plain": "Hi Johannes\n\nI remember than in the 2013 r-sig-finance conference, James Matteson talked\nabout the R package 'ecp', which he wrote and may just do what you want.\nIts on CRAN.\n\nCheers\nSoren\nhttp://censix.com\n\n\nOn Fri, May 16, 2014 at 11:15 AM, Johannes Moser <jzmoser at gmail.com> wrote:\n\n> Dear all,\n>\n> in the context of a scenario analysis framework I manually selected some\n> quiet and some stressful periods in the last 25 years of DAX returns. Now I\n> wish to confirm this choices by means of a change-point detection test in\n> R. The test ideally should pick changes in the conditional mean, more\n> importantly in the conditional variance and covariance structure.\n>\n> The test should be able to handle highly-dependent time series. So tests\n> that assume e.g. structural breaks in iid gaussian noise or assume\n> independence between the breaks in another way are not the right thing\n> (chow test etc.). I've already tried to apply tests that assume\n> independence to the standardized returns (after fitting a GARCH model and\n> extracting the volatility estimates) as the standardized returns can be\n> considered close to iid. But this approach didn't seem to work well\n> (package 'changepoint', test 'segneigh.var.css').  The results seem\n> intuitive when this test is applied to the rough returns series. But this\n> is clearly a violation of the independence assumption.\n>\n> I further tried the wavelet test for covariance stationarity (test\n> 'hwtos2' in the 'locits' package) but it is much too sensitive (e.g. it\n> rejects covariance stationarity in a simulated Gaussian GARCH(1,1) ). Also,\n> the test (and R syntax) that comes with the paper of Fryzlewicz (2014)\n> \"Multiple-change-point detection for auto-regressive conditional\n> heteroscedastic processe\" has been applied to the returns series, but I'm\n> not quite satisfied with the results.\n>\n> There are many more change-point detection packages and tests in R that I\n> have considered. But so far none seems to be appropriate for financial\n> returns and gives results that are interpretable in the context of\n> knowledge of crisis periods and visual examination of the series.\n>\n> Is there any test for change-points in highly-dependent data (such as\n> financial returns) that someone could recommend from his own experience?\n> I'd be more that thankful for any advice!\n>\n> Kind regards, Johannes\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Johannes\n\nI remember than in the 2013 r-sig-finance conference, James Matteson talked\nabout the R package 'ecp', which he wrote and may just do what you want.\nIts on CRAN.\n\nCheers\nSoren\nhttp://cens",
       "thread_id": "thread-ee217a149608",
       "thread_depth": 1,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140516/71314872/attachment.pl"
+      ]
     },
     {
       "id": "msg-e41d0b584ded",
@@ -1184,11 +1265,14 @@
         "<5375D721.3050201@googlemail.com>",
         "<CAOGDGTawsm2bVUHPgb0Qv-c8NW+bmg=CBcMZdfKPWHG9endLzw@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140516/4b9d171b/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140516/4b9d171b/attachment.pl>",
+      "body_plain": "Thanks a lot for your suggestions, Soren!\n\nI have already checked this package. First of all it has been removed \nfrom CRAN which raises my suspicion.\nIn the following related introduction it is stated on page 3, that\nquote\nThe procedures assume that observations are independent with finite αth \nabsolute moments, for some alpha in  (0,2].\nunquote\n\nhttps://www.google.de/url?sa=t&rct=j&q=&esrc=s&source=web&cd=3&ved=0CEQQFjAC&url=https%3A%2F%2Fcourses.cit.cornell.edu%2Fdm484%2Fpapers%2Fecp2013.pdf&ei=cFR2U-2jH-jm7AbC2YH4Cw&usg=AFQjCNEFEMcEaeVZx04qeO-8dee7FtxTgw&bvm=bv.66699033,d.ZGU&cad=rja\n\nThe financial returns that I want to analyze, however, are definitely \nnot independent.\n\n\n\n\n\nAm 16.05.2014 19:12, schrieb cen six:\n> Hi Johannes\n>\n> I remember than in the 2013 r-sig-finance conference, James Matteson \n> talked about the R package 'ecp', which he wrote and may just do what \n> you want. Its on CRAN.\n>\n> Cheers\n> Soren\n> http://censix.com\n>\n>\n> On Fri, May 16, 2014 at 11:15 AM, Johannes Moser <jzmoser at gmail.com \n> <mailto:jzmoser at gmail.com>> wrote:\n>\n>     Dear all,\n>\n>     in the context of a scenario analysis framework I manually\n>     selected some quiet and some stressful periods in the last 25\n>     years of DAX returns. Now I wish to confirm this choices by means\n>     of a change-point detection test in R. The test ideally should\n>     pick changes in the conditional mean, more importantly in the\n>     conditional variance and covariance structure.\n>\n>     The test should be able to handle highly-dependent time series. So\n>     tests that assume e.g. structural breaks in iid gaussian noise or\n>     assume independence between the breaks in another way are not the\n>     right thing (chow test etc.). I've already tried to apply tests\n>     that assume independence to the standardized returns (after\n>     fitting a GARCH model and extracting the volatility estimates) as\n>     the standardized returns can be considered close to iid. But this\n>     approach didn't seem to work well (package 'changepoint', test\n>     'segneigh.var.css').  The results seem intuitive when this test is\n>     applied to the rough returns series. But this is clearly a\n>     violation of the independence assumption.\n>\n>     I further tried the wavelet test for covariance stationarity (test\n>     'hwtos2' in the 'locits' package) but it is much too sensitive\n>     (e.g. it rejects covariance stationarity in a simulated Gaussian\n>     GARCH(1,1) ). Also, the test (and R syntax) that comes with the\n>     paper of Fryzlewicz (2014) \"Multiple-change-point detection for\n>     auto-regressive conditional heteroscedastic processe\" has been\n>     applied to the returns series, but I'm not quite satisfied with\n>     the results.\n>\n>     There are many more change-point detection packages and tests in R\n>     that I have considered. But so far none seems to be appropriate\n>     for financial returns and gives results that are interpretable in\n>     the context of knowledge of crisis periods and visual examination\n>     of the series.\n>\n>     Is there any test for change-points in highly-dependent data (such\n>     as financial returns) that someone could recommend from his own\n>     experience? I'd be more that thankful for any advice!\n>\n>     Kind regards, Johannes\n>\n>     _______________________________________________\n>     R-SIG-Finance at r-project.org <mailto:R-SIG-Finance at r-project.org>\n>     mailing list\n>     https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>     -- Subscriber-posting only. If you want to post, subscribe first.\n>     -- Also note that this is not the r-help list where general R\n>     questions should go.\n>\n>\n\n-- \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thanks a lot for your suggestions, Soren!\n\nI have already checked this package. First of all it has been removed \nfrom CRAN which raises my suspicion.\nIn the following related introduction it is state",
       "thread_id": "thread-ee217a149608",
       "thread_depth": 2,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140516/4b9d171b/attachment.pl"
+      ]
     },
     {
       "id": "msg-1bfd80149768",
@@ -1369,11 +1453,14 @@
       "subject_clean": "R/Finance 2014 photos",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140522/f6d10298/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140522/f6d10298/attachment.pl>",
+      "body_plain": "Dear friends,\n\nI post a short review (plus photos, find flickr link) of R/Finance 2014 conference in my blog\nhttp://quant-lab.com/2014/05/21/rfinance-2014-applied-finance-with-r/\n\nWelcome!\n\n\nSincerely,\nOleg Mubarakshin\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear friends,\n\nI post a short review (plus photos, find flickr link) of R/Finance 2014 conference in my blog\nhttp://quant-lab.com/2014/05/21/rfinance-2014-applied-finance-with-r/\n\nWelcome!\n\n\nSincerely",
       "thread_id": "thread-760900074d38",
       "thread_depth": 0,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140522/f6d10298/attachment.pl"
+      ]
     },
     {
       "id": "msg-fc361b630f25",
@@ -1419,11 +1506,14 @@
       "subject_clean": "Collaborative R, Python, MATLAB, and Excel plotting. Also Streaming Graphs.",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140522/c04c5faa/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140522/c04c5faa/attachment.pl>",
+      "body_plain": "Dear R Sig Finance friends,\n\nMy name is Matt, and I'm a part of Plotly <http://plot.ly>. We're an online\ngraphing and analytics project.\n\nWe've recently set up a way for folks to collaboratively write plots from\ndifferent languages onto the same plot. You can do that with our R API,\nggplot2, Python, matplotlib, MATLAB, and even by uploading Excel data. It's\nall collaborative, online, and does version control for your data and\nplots. Here is an example, in an IPython Notebook:\n\nnbviewer.ipython.org/gist/msund/61cdbd5b22c103fffb84\n\nWe've recently had a lot of finance-inclined users, so we thought we'd\nreach out to this group. We'd love to get your input, tips, feedback, and\nadvice. As the project is quite new, we get a lot of benefit from feedback.\nIf you have questions, suggestions, need Plotly on your own servers, or\nwould like to contribute on GitHub, we'd love to talk!\n\nM\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear R Sig Finance friends,\n\nMy name is Matt, and I'm a part of Plotly <http://plot.ly>. We're an online\ngraphing and analytics project.\n\nWe've recently set up a way for folks to collaboratively write",
       "thread_id": "thread-58af48f1d93d",
       "thread_depth": 0,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140522/c04c5faa/attachment.pl"
+      ]
     },
     {
       "id": "msg-7f614acc80f5",
@@ -1435,11 +1525,14 @@
       "subject_clean": "Rbbg (formerly RBloomberg) -- Pulling portfolio data",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140522/219fc272/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140522/219fc272/attachment.pl>",
+      "body_plain": "Hi - I have portfolios set up with Bloomberg. I can pull various portfolio data into Excel using the Bloomberg API (ie the formula =BDS(\"U12345567-00 Client\",\"PORTFOLIO_DATA\") pulls a list of tickers, position size, market value, etc into Excel).\n\nI'm trying to find a way to pull the same data into R using the RBbg, but can't find a way to make it work. The package seems to be working, and I'm just not sure if there's a way to pull the data I want.\n\nDoes anyone have experience with this?\n\nThanks in advance.\n\n- Paul\n\nExample:\n\nlibrary(Rbbg)\nconn <- blpConnect()\n\nbds(conn, \"AAPL US Equity\", \"DVD_HIST\")[1:3, ]\n\nbds(conn, \"U1392424-30 CLIENT\", \"PORTFOLIO_DATA\")\n\nblpDisconnect(conn)\n\nGives the output:\n\n\n> library(Rbbg)\n> conn <- blpConnect()\nR version 3.1.0 (2014-04-10)\nrJava Version 0.9-6\nRbbg Version 0.5.1\nJava environment initialized successfully.\nLooking for most recent blpapi3.jar file...\nAdding C:\\blp\\API\\APIv3\\JavaAPI\\v3.7.1.1\\lib\\blpapi3.jar to Java classpath\nBloomberg API Version 3.7.1.1\n>\n> bds(conn, \"AAPL US Equity\", \"DVD_HIST\")[1:3, ]\n  Declared Date    Ex-Date Record Date Payable Date Dividend Amount Dividend Frequency\n1    2014-04-23 2014-05-08  2014-05-12   2014-05-15            3.29            Quarter\n2    2014-01-27 2014-02-06  2014-02-10   2014-02-13            3.05            Quarter\n3    2013-10-28 2013-11-06  2013-11-11   2013-11-14            3.05            Quarter\n  Dividend Type\n1  Regular Cash\n2  Regular Cash\n3  Regular Cash\n>\n> bds(conn, \"U1392424-30 CLIENT\", \"PORTFOLIO_DATA\")\nError in .jcall(\"RJavaTools\", \"Ljava/lang/Object;\", \"invokeMethod\", cl,  :\n  org.findata.blpwrapper.WrapperException: unknown field error type NOT_APPLICABLE_TO_PORT_DATA\n>\n> blpDisconnect(conn)\n          used (Mb) gc trigger (Mb) max used  (Mb)\nNcells  531868 28.5     899071 48.1   871205  46.6\nVcells 1643056 12.6   10353599 79.0 39467884 301.2\n\n\n\nPaul Sarran\nResearch Analyst\nUS Value Equity\n\nMesirow Financial\n353 North Clark Street\nChicago, Illinois 60654\noffice: (312) 595-6921\nemail: psarran at mesirowfinancial.com\n\nVisit us on the Web at mesirowfinancial.com\n\nThis communication may contain privileged and/or confidential information. It is intended solely for the use of the addressee. If you are not the intended recipient, you are strictly prohibited from disclosing, copying, distributing or using any of this information. If you received this communication in error, please contact the sender immediately and destroy the material in its entirety, whether electronic or hard copy. Confidential, proprietary or time-sensitive communications should not be transmitted via the Internet, as there can be no assurance of actual or timely delivery, receipt and/or confidentiality. This is not an offer, or solicitation of any offer to buy or sell any security, investment or other product.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi - I have portfolios set up with Bloomberg. I can pull various portfolio data into Excel using the Bloomberg API (ie the formula =BDS(\"U12345567-00 Client\",\"PORTFOLIO_DATA\") pulls a list of tickers,",
       "thread_id": "thread-7f614acc80f5",
       "thread_depth": 0,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140522/219fc272/attachment.pl"
+      ]
     },
     {
       "id": "msg-2826cad019ce",
@@ -1504,11 +1597,14 @@
       "subject_clean": "R Bitcoin Charts API packge 1.0.1 released",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140526/1e3ddcdd/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140526/1e3ddcdd/attachment.pl>",
+      "body_plain": "Hi Folks,\n\nI am pleased to announce the release of the R Bitcoin Charts API package version 1.0.1.\n\nIf you're interested in financial data pertaining to Bitcoin then do take a look at this package, which can be found here:\n\nhttp://cran.r-project.org/web/packages/rbitcoinchartsapi/\n\n\nQuestions and comments are welcomed.\n\n\nTom\n\n\nThomas P. Fuller,  MSc\nPresident\n\nCoherent Logic Limited\nHigh Performance  Software Engineering\n\nthomas.fuller at coherentlogic.com\nIM:  thospfuller (Yahoo)\n \n\n\n8229 Boone Blvd. Suite 730\nVienna, VA 22182\nUnited States of America\n\nmobile:  +1.312.694.3313\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Folks,\n\nI am pleased to announce the release of the R Bitcoin Charts API package version 1.0.1.\n\nIf you're interested in financial data pertaining to Bitcoin then do take a look at this package, wh",
       "thread_id": "thread-5df9a45b456a",
       "thread_depth": 0,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140526/1e3ddcdd/attachment.pl"
+      ]
     },
     {
       "id": "msg-e390e0082e2b",
@@ -1746,11 +1842,14 @@
       "subject_clean": "Simulating returns using copula and SPD distribution",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140528/5502c9f6/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140528/5502c9f6/attachment.pl>",
+      "body_plain": "Hi,\n\nI am fitting some SPD distributions to past returns and some Copula to\nsimulate the dependance.\nI am struggling with the simulation part, as the returns I simulate a\nclearly out of line after some time.\n\nI have attached some sample code in order to clarify the point.\n\nI first calibrate the SPD distribution on the past returns:\n\n#Calibrating the SPD distributioon the residuals of an ARMA+GARCH\n\n*spec.u1 = ugarchspec(mean.model=list(armaOrder=c(1,1)),\ndistribution=\"std\")*\n\n*fit.u1 = ugarchfit(spec.u1, return.u1)*\n\n*z.u1= residuals(fit.u1, standardize=TRUE)*\n\n*gpd.u1 = spdfit(z.u1, upper=1. - tailFraction, lower=tailFraction)*\n\n\n#Calibrating the SPD distributioon the residuals of an ARMA+GARCH\n\n*spec.u2 = ugarchspec(mean.model=list(armaOrder=c(1,1)),\ndistribution=\"std\")*\n\n*fit.u2 = ugarchfit(spec.u2, return.u1)*\n\n*z.u2= residuals(fit.u2, standardize=TRUE)*\n\n*gpd.u2 = spdfit(z.u2, upper=1. - tailFraction, lower=tailFraction)*\n\n\nThen, once we have all this set, we need to calibrate the Copula of our\nchoice\n\n\n#Calibrate the Copula\n\n#We extract the residuals from the xts into a vector\n\n*res.u1 = as.vector(z.u1[,1])*\n\n*res.u2 = as.vector(z.u2[,1])*\n\n#We transform the margin to uniform\n\n*U.u1 = pspd(res.u1, gpd.u1)*\n\n*U.u2 = pspd(res.u2, gpd.u2)*\n\n\n\n#We create the matrix to help us calibrate the Copula\n\n*test <-list()*\n\n*test[[1]] = U.u1*\n\n*test[[2]] = U.u2*\n\n*test_matrix = do.call(rbind, test)*\n\n\n\n*set.seed(123)*\n\n\n\n#We define the Copula we want to use\n\n*tcopula<-tCopula(param=0.5, dim=2, dispstr = \"ex\", df =6)*\n\n#We fit the Copula with maximum Likelihood\n\n*fit.mpl <- fitCopula(tcopula, t(test_matrix), method=\"ml\")*\n\n\n\n#We get back the parameters\n\n#Rho\n\n*rho.fit = fit.mpl at copula at parameters[1]*\n\n#Degrees of Freedom\n\n*df.fit = fit.mpl at copula at parameters[2]*\n\n\n\n#Create fitted t-copula object\n\n*t.cop.fit = tCopula(param=rho.fit, dim=2, df=df.fit)*\n\n\n\n*margins = c(\"t\", \"t\")*\n\n*paramMargins = list(list(df=df.fit),list(df=df.fit))*\n\n\n\n#Create fitted custom distribution object\n\n*myBvd.tcop.fit = mvdc(copula=t.cop.fit, margins = margins, paramMargins=\nparamMargins)*\n\n\n\nIf all is well, I should be able to run some simulations and simulate my\nreturns from this set up:\n\n\n#Generate random numbers from the Copula\n\n*u = rMvdc(nsim, myBvd.tcop.fit)*\n\n*u.1 = u[,1]*\n\n#Generate the simulated returns\n\n*sim.u1 = ugarchsim(fit.u1, n.sim=nsim, startMethod=\"sample\", m.sim=1,*\n\n*                    custom.dist=list(name=\"sample\",distfit=matrix(u.1,\nncol=1)))*\n\n#Get back the simulated returns\n\n*sim.u1.returns = sim.u1 at simulation$seriesSim*\n\n\n\nThe problem lies in the order of magnitude the simulated returns. I can get\nsome occurrence of +26% for example, which is clearly wrong.\n\n\nCould someone point me on the wrong part?\n\nI have also a remaining question:\n\nIn the univariate case, we can simulate the random number with *rspd(n =\ndays, gpd.u1)*, and they will be in accordance with the gpd distribtuion\ncalibrated.\n\nIn the multivariate case, can I consider this step to be taken care of by\nthe random number of the Copula since it has been calibrated on the margins\ntransformed to Uniform by the gpd distribution function?\n\n\nThanks\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI am fitting some SPD distributions to past returns and some Copula to\nsimulate the dependance.\nI am struggling with the simulation part, as the returns I simulate a\nclearly out of line after som",
       "thread_id": "thread-e4e4ed879040",
       "thread_depth": 0,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140528/5502c9f6/attachment.pl"
+      ]
     },
     {
       "id": "msg-7f4d460d6551",
@@ -1806,11 +1905,14 @@
         "<CAD0NpoB_DvotgaS2t0-cXcXUieHDejvU0PQttquYv9xRpjxGDA@mail.gmail.com>",
         "<53861A5F.2060500@4dscape.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140528/452b2dc8/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140528/452b2dc8/attachment.pl>",
+      "body_plain": "Alexios,\n\nThanks.\nI thought about that but if I translate u back to z using the following\nfunction:\nu.1.sim = qspd(u.1, gpd.spx)\n\nI get zillions of NA.\n\n> head(u.1)\n[1] -1.19669066  1.86539169  0.41492263  0.07366442 -0.80536637  1.09567877\n> head(u.1.sim)\n[1]         NA         NA -0.1510786 -1.5404552         NA         NA\n\nSo there is still something wrong but I can not pinpoint it.\n\nThanks\n\n\n\n2014-05-28 18:18 GMT+01:00 alexios ghalanos <alexios at 4dscape.com>:\n\n> You've missed a step. Think about it:\n> 1. You take z.\n> 2. Fit an spd.\n> 3. Transform it to U using pspd.\n> 4. Fit a copula on U.\n> 5. Sample from copula to generate u.\n> 6. Need to translate u back to z (step 1) using the quantile function\n> (qspd) and the estimated parameters from step 2.\n>\n> i.e. you've missed step 6.\n>\n>\n> -Alexios\n>\n> On 28/05/2014 16:53, Guillaume PEALAT wrote:\n> > Hi,\n> >\n> > I am fitting some SPD distributions to past returns and some Copula to\n> > simulate the dependance.\n> > I am struggling with the simulation part, as the returns I simulate a\n> > clearly out of line after some time.\n> >\n> > I have attached some sample code in order to clarify the point.\n> >\n> > I first calibrate the SPD distribution on the past returns:\n> >\n> > #Calibrating the SPD distributioon the residuals of an ARMA+GARCH\n> >\n> > *spec.u1 = ugarchspec(mean.model=list(armaOrder=c(1,1)),\n> > distribution=\"std\")*\n> >\n> > *fit.u1 = ugarchfit(spec.u1, return.u1)*\n> >\n> > *z.u1= residuals(fit.u1, standardize=TRUE)*\n> >\n> > *gpd.u1 = spdfit(z.u1, upper=1. - tailFraction, lower=tailFraction)*\n> >\n> >\n> > #Calibrating the SPD distributioon the residuals of an ARMA+GARCH\n> >\n> > *spec.u2 = ugarchspec(mean.model=list(armaOrder=c(1,1)),\n> > distribution=\"std\")*\n> >\n> > *fit.u2 = ugarchfit(spec.u2, return.u1)*\n> >\n> > *z.u2= residuals(fit.u2, standardize=TRUE)*\n> >\n> > *gpd.u2 = spdfit(z.u2, upper=1. - tailFraction, lower=tailFraction)*\n> >\n> >\n> > Then, once we have all this set, we need to calibrate the Copula of our\n> > choice\n> >\n> >\n> > #Calibrate the Copula\n> >\n> > #We extract the residuals from the xts into a vector\n> >\n> > *res.u1 = as.vector(z.u1[,1])*\n> >\n> > *res.u2 = as.vector(z.u2[,1])*\n> >\n> > #We transform the margin to uniform\n> >\n> > *U.u1 = pspd(res.u1, gpd.u1)*\n> >\n> > *U.u2 = pspd(res.u2, gpd.u2)*\n> >\n> >\n> >\n> > #We create the matrix to help us calibrate the Copula\n> >\n> > *test <-list()*\n> >\n> > *test[[1]] = U.u1*\n> >\n> > *test[[2]] = U.u2*\n> >\n> > *test_matrix = do.call(rbind, test)*\n> >\n> >\n> >\n> > *set.seed(123)*\n> >\n> >\n> >\n> > #We define the Copula we want to use\n> >\n> > *tcopula<-tCopula(param=0.5, dim=2, dispstr = \"ex\", df =6)*\n> >\n> > #We fit the Copula with maximum Likelihood\n> >\n> > *fit.mpl <- fitCopula(tcopula, t(test_matrix), method=\"ml\")*\n> >\n> >\n> >\n> > #We get back the parameters\n> >\n> > #Rho\n> >\n> > *rho.fit = fit.mpl at copula at parameters[1]*\n> >\n> > #Degrees of Freedom\n> >\n> > *df.fit = fit.mpl at copula at parameters[2]*\n> >\n> >\n> >\n> > #Create fitted t-copula object\n> >\n> > *t.cop.fit = tCopula(param=rho.fit, dim=2, df=df.fit)*\n> >\n> >\n> >\n> > *margins = c(\"t\", \"t\")*\n> >\n> > *paramMargins = list(list(df=df.fit),list(df=df.fit))*\n> >\n> >\n> >\n> > #Create fitted custom distribution object\n> >\n> > *myBvd.tcop.fit = mvdc(copula=t.cop.fit, margins = margins, paramMargins=\n> > paramMargins)*\n> >\n> >\n> >\n> > If all is well, I should be able to run some simulations and simulate my\n> > returns from this set up:\n> >\n> >\n> > #Generate random numbers from the Copula\n> >\n> > *u = rMvdc(nsim, myBvd.tcop.fit)*\n> >\n> > *u.1 = u[,1]*\n> >\n> > #Generate the simulated returns\n> >\n> > *sim.u1 = ugarchsim(fit.u1, n.sim=nsim, startMethod=\"sample\", m.sim=1,*\n> >\n> > *                    custom.dist=list(name=\"sample\",distfit=matrix(u.1,\n> > ncol=1)))*\n> >\n> > #Get back the simulated returns\n> >\n> > *sim.u1.returns = sim.u1 at simulation$seriesSim*\n> >\n> >\n> >\n> > The problem lies in the order of magnitude the simulated returns. I can\n> get\n> > some occurrence of +26% for example, which is clearly wrong.\n> >\n> >\n> > Could someone point me on the wrong part?\n> >\n> > I have also a remaining question:\n> >\n> > In the univariate case, we can simulate the random number with *rspd(n =\n> > days, gpd.u1)*, and they will be in accordance with the gpd distribtuion\n> > calibrated.\n> >\n> > In the multivariate case, can I consider this step to be taken care of by\n> > the random number of the Copula since it has been calibrated on the\n> margins\n> > transformed to Uniform by the gpd distribution function?\n> >\n> >\n> > Thanks\n> >\n> >       [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions\n> should go.\n> >\n> >\n>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Alexios,\n\nThanks.\nI thought about that but if I translate u back to z using the following\nfunction:\nu.1.sim = qspd(u.1, gpd.spx)\n\nI get zillions of NA.\n\n> head(u.1)\n[1] -1.19669066  1.86539169  0.4149",
       "thread_id": "thread-e4e4ed879040",
       "thread_depth": 2,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140528/452b2dc8/attachment.pl"
+      ]
     },
     {
       "id": "msg-ee043bb38755",
@@ -1850,11 +1952,14 @@
         "<53861A5F.2060500@4dscape.com>",
         "<CAD0NpoD=FtSZ9LKtvguWSoikQzvqw0Mdjir9TC=o3kQUimLYCA@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140528/f5b6aae9/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140528/f5b6aae9/attachment.pl>",
+      "body_plain": "I’m sorry but you need to think a little bit about what you are doing here.\n\nHow can your ‘u’ be negative or greater than 1 ? Any CDF transformation (p*) should return a set of probabilities [0,1].\nDo you wonder why you get “zillions” of NA when you feed q* with anything other than [0,1] bounded numbers?\n\nRetrace your steps and think about what you are doing rather than mechanically following a recipe.\n\n-Alexios\n\nOn 28 May 2014, at 18:29, Guillaume PEALAT <guillaume.pealat at gmail.com> wrote:\n\n> Alexios,\n> \n> Thanks.\n> I thought about that but if I translate u back to z using the following function:\n> u.1.sim = qspd(u.1, gpd.spx)\n> \n> I get zillions of NA.\n> \n> > head(u.1)\n> [1] -1.19669066  1.86539169  0.41492263  0.07366442 -0.80536637  1.09567877\n> > head(u.1.sim)\n> [1]         NA         NA -0.1510786 -1.5404552         NA         NA\n> \n> So there is still something wrong but I can not pinpoint it.\n> \n> Thanks\n> \n> \n> \n> 2014-05-28 18:18 GMT+01:00 alexios ghalanos <alexios at 4dscape.com>:\n> You've missed a step. Think about it:\n> 1. You take z.\n> 2. Fit an spd.\n> 3. Transform it to U using pspd.\n> 4. Fit a copula on U.\n> 5. Sample from copula to generate u.\n> 6. Need to translate u back to z (step 1) using the quantile function\n> (qspd) and the estimated parameters from step 2.\n> \n> i.e. you've missed step 6.\n> \n> \n> -Alexios\n> \n> On 28/05/2014 16:53, Guillaume PEALAT wrote:\n> > Hi,\n> >\n> > I am fitting some SPD distributions to past returns and some Copula to\n> > simulate the dependance.\n> > I am struggling with the simulation part, as the returns I simulate a\n> > clearly out of line after some time.\n> >\n> > I have attached some sample code in order to clarify the point.\n> >\n> > I first calibrate the SPD distribution on the past returns:\n> >\n> > #Calibrating the SPD distributioon the residuals of an ARMA+GARCH\n> >\n> > *spec.u1 = ugarchspec(mean.model=list(armaOrder=c(1,1)),\n> > distribution=\"std\")*\n> >\n> > *fit.u1 = ugarchfit(spec.u1, return.u1)*\n> >\n> > *z.u1= residuals(fit.u1, standardize=TRUE)*\n> >\n> > *gpd.u1 = spdfit(z.u1, upper=1. - tailFraction, lower=tailFraction)*\n> >\n> >\n> > #Calibrating the SPD distributioon the residuals of an ARMA+GARCH\n> >\n> > *spec.u2 = ugarchspec(mean.model=list(armaOrder=c(1,1)),\n> > distribution=\"std\")*\n> >\n> > *fit.u2 = ugarchfit(spec.u2, return.u1)*\n> >\n> > *z.u2= residuals(fit.u2, standardize=TRUE)*\n> >\n> > *gpd.u2 = spdfit(z.u2, upper=1. - tailFraction, lower=tailFraction)*\n> >\n> >\n> > Then, once we have all this set, we need to calibrate the Copula of our\n> > choice\n> >\n> >\n> > #Calibrate the Copula\n> >\n> > #We extract the residuals from the xts into a vector\n> >\n> > *res.u1 = as.vector(z.u1[,1])*\n> >\n> > *res.u2 = as.vector(z.u2[,1])*\n> >\n> > #We transform the margin to uniform\n> >\n> > *U.u1 = pspd(res.u1, gpd.u1)*\n> >\n> > *U.u2 = pspd(res.u2, gpd.u2)*\n> >\n> >\n> >\n> > #We create the matrix to help us calibrate the Copula\n> >\n> > *test <-list()*\n> >\n> > *test[[1]] = U.u1*\n> >\n> > *test[[2]] = U.u2*\n> >\n> > *test_matrix = do.call(rbind, test)*\n> >\n> >\n> >\n> > *set.seed(123)*\n> >\n> >\n> >\n> > #We define the Copula we want to use\n> >\n> > *tcopula<-tCopula(param=0.5, dim=2, dispstr = \"ex\", df =6)*\n> >\n> > #We fit the Copula with maximum Likelihood\n> >\n> > *fit.mpl <- fitCopula(tcopula, t(test_matrix), method=\"ml\")*\n> >\n> >\n> >\n> > #We get back the parameters\n> >\n> > #Rho\n> >\n> > *rho.fit = fit.mpl at copula at parameters[1]*\n> >\n> > #Degrees of Freedom\n> >\n> > *df.fit = fit.mpl at copula at parameters[2]*\n> >\n> >\n> >\n> > #Create fitted t-copula object\n> >\n> > *t.cop.fit = tCopula(param=rho.fit, dim=2, df=df.fit)*\n> >\n> >\n> >\n> > *margins = c(\"t\", \"t\")*\n> >\n> > *paramMargins = list(list(df=df.fit),list(df=df.fit))*\n> >\n> >\n> >\n> > #Create fitted custom distribution object\n> >\n> > *myBvd.tcop.fit = mvdc(copula=t.cop.fit, margins = margins, paramMargins=\n> > paramMargins)*\n> >\n> >\n> >\n> > If all is well, I should be able to run some simulations and simulate my\n> > returns from this set up:\n> >\n> >\n> > #Generate random numbers from the Copula\n> >\n> > *u = rMvdc(nsim, myBvd.tcop.fit)*\n> >\n> > *u.1 = u[,1]*\n> >\n> > #Generate the simulated returns\n> >\n> > *sim.u1 = ugarchsim(fit.u1, n.sim=nsim, startMethod=\"sample\", m.sim=1,*\n> >\n> > *                    custom.dist=list(name=\"sample\",distfit=matrix(u.1,\n> > ncol=1)))*\n> >\n> > #Get back the simulated returns\n> >\n> > *sim.u1.returns = sim.u1 at simulation$seriesSim*\n> >\n> >\n> >\n> > The problem lies in the order of magnitude the simulated returns. I can get\n> > some occurrence of +26% for example, which is clearly wrong.\n> >\n> >\n> > Could someone point me on the wrong part?\n> >\n> > I have also a remaining question:\n> >\n> > In the univariate case, we can simulate the random number with *rspd(n =\n> > days, gpd.u1)*, and they will be in accordance with the gpd distribtuion\n> > calibrated.\n> >\n> > In the multivariate case, can I consider this step to be taken care of by\n> > the random number of the Copula since it has been calibrated on the margins\n> > transformed to Uniform by the gpd distribution function?\n> >\n> >\n> > Thanks\n> >\n> >       [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> > https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions should go.\n> >\n> >\n> \n> \n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I’m sorry but you need to think a little bit about what you are doing here.\n\nHow can your ‘u’ be negative or greater than 1 ? Any CDF transformation (p*) should return a set of probabilities [0,1].\nDo",
       "thread_id": "thread-e4e4ed879040",
       "thread_depth": 3,
-      "month": "2014-05"
+      "month": "2014-05",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140528/f5b6aae9/attachment.pl"
+      ]
     },
     {
       "id": "msg-f049e162eaa4",

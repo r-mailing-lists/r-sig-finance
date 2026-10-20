@@ -65,11 +65,14 @@
       "subject_clean": "reading high frequency data",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140803/591686ce/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140803/591686ce/attachment.pl>",
+      "body_plain": "Dear All,\n\nI am trying to read some high frequency data using \"read.zoo\", but keeping\ngetting some errors. Any help/suggestions would be really appreciated.\nBelow is a sample of my data and the error message i am getting:\n\n\n  date time Last Price  06/20/2014 3:30:00 1962.48  06/20/2014 3:35:00\n1962.2  06/20/2014 3:40:00 1961.67  06/20/2014 3:45:00 1962.18  06/20/2014\n3:50:00 1962.9  06/20/2014 3:55:00 1962.35  06/20/2014 4:00:00 1962.4\n06/20/2014 4:05:00 1962.24\n\nfmt <- \"%m/%d/%Y %H:%M:%S\"\nz <- read.zoo(\"sp_hf.csv\",header=TRUE,index=1:2, tz = \"\", format = fmt)\n\n*Error in scan(file, what, nmax, sep, dec, quote, skip, nlines, na.strings,\n : *\n*  line 1 did not have 2 elements*\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear All,\n\nI am trying to read some high frequency data using \"read.zoo\", but keeping\ngetting some errors. Any help/suggestions would be really appreciated.\nBelow is a sample of my data and the error ",
       "thread_id": "thread-926ff7e60862",
       "thread_depth": 0,
-      "month": "2014-08"
+      "month": "2014-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140803/591686ce/attachment.pl"
+      ]
     },
     {
       "id": "msg-0ec07a4fea99",
@@ -169,11 +172,14 @@
       "references": [
         "<CAM8YH=Yb299xHh8=A-vZm5nY5MnTQ3N8PTp3f7n7Ph7b3w=N=w@mail.gmail.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140805/7ddef50d/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140805/7ddef50d/attachment.pl>",
+      "body_plain": "I think I can shed a little light on what I experienced.  Since I was using\n30 minute bars, the transaction price was coming from the next bar, and in\nparticular the closing price.  When I set ruleSignal() parameter prefer to\nprefer='Open', the trailing stop line no longer exhibits the drop.\n\nAnd so while the open price of the next bar is not guaranteed naturally,\nit's much closer in reality to the close of the current bar when compared\nto waiting 30 minutes for the end of the next bar.\n\n--\nsm\nStergios Marinopoulos\n\n\nOn Mon, Aug 4, 2014 at 10:46 AM, stergios marinopoulos <\nstergenator at gmail.com> wrote:\n\n> Hi,\n>\n> I have been experimenting with trailing stops in quantstrat.  I noticed in\n> the order book that ocassionaly a replacement row for the trailing stop\n> order chain occurs when no recent high price has been acheived, and appears\n> to replaced with a \"lower\" high price.  I do not think this is suposed to\n> occur (but I could be wrong as I do not fully understand the replacement\n> rules)\n>\n> My intuition tells me that a new chaining order in the order book should\n> only occur when a new high price has been acheived.\n>\n> You can see an example of the \"lowered\" high price in the attached jpg\n> file near 4/16/14 and 4/17/14.  I have also attached a modified macd.R I\n> used to create this chart.\n> (Here's a pdf version of the chart that was too big for the mailing list:\n> https://dl.dropboxusercontent.com/u/56008826/Macd-TrailingStop-Annotated.pdf\n> )\n>\n> I would appreicate any comment regarding the lowering high price.\n>\n> Thank you,\n>\n> --\n> sm\n> Stergios Marinopoulos\n>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I think I can shed a little light on what I experienced.  Since I was using\n30 minute bars, the transaction price was coming from the next bar, and in\nparticular the closing price.  When I set ruleSig",
       "thread_id": "thread-947058b1d90e",
       "thread_depth": 1,
-      "month": "2014-08"
+      "month": "2014-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140805/7ddef50d/attachment.pl"
+      ]
     },
     {
       "id": "msg-3a3ccc45d737",
@@ -185,11 +191,14 @@
       "subject_clean": "Need help getting stop-loss and take-profit orders to work with indicators",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140805/ce6bf71e/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140805/ce6bf71e/attachment.pl>",
+      "body_plain": "Okay, so my issue is that I'm trying to debunk a trading system I found\nonline, and it involves using an indicator for a stop-loss and a\ntake-profit type of order. I based my syntax on the luxor demo, aside from\nusing an order.price argument, but I'm not sure of how to make the exact\nsyntax work.\n\nHere's a minimum reproducible example.\n\n**************************************************************************************\n\nhammer <- function(OHLC, profMargin=1.5) {\n  dailyMax <- pmax(Op(OHLC), Cl(OHLC))\n  dailyMin <- pmin(Op(OHLC), Cl(OHLC))\n  upShadow <- Hi(OHLC) - dailyMax\n  dnShadow <- dailyMin - Lo(OHLC)\n  body <- dailyMax-dailyMin\n  hammerDay <- dnShadow/body > 2 & dnShadow/upShadow > 5\n  hammers <- OHLC[hammerDay==1,]\n  hammers$stopLoss <- 4/3*Lo(hammers)-1/3*Hi(hammers)\n  hammers$takeProfit <- Hi(hammers) +\n(Hi(hammers)-hammers$stopLoss)*profMargin\n  hammers <- cbind(hammerDay, hammers$stopLoss, hammers$takeProfit)\n  hammers$stopLoss <- na.locf(hammers$stopLoss)\n  hammers$takeProfit <- na.locf(hammers$takeProfit)\n  colnames(hammers) <- c(\"hammer\", \"SL\", \"TP\")\n  return(hammers)\n}\n\nsigAND <- function(label, data=mktdata, columns,  cross = FALSE) {\n  ret_sig = NULL\n  colNums <- rep(0, length(columns))\n  for(i in 1:length(columns)) {\n    colNums[i] <- match.names(columns[i], colnames(data))\n  }\n  ret_sig <- data[, colNums[1]]\n  for(i in 2:length(colNums)) {\n    ret_sig <- ret_sig & data[, colNums[i]]\n  }\n  ret_sig <- ret_sig*1\n  if (isTRUE(cross))\n    ret_sig <- diff(ret_sig) == 1\n  colnames(ret_sig) <- label\n  return(ret_sig)\n}\n\nlagATR <- function(HLC, n=14, maType, lag=1, ...) {\n  ATR <- ATR(HLC, n=n, maType=maType, ...)\n  ATR <- lag(ATR, lag)\n  out <- ATR$atr\n  colnames(out) <- \"atr\"\n  return(out)\n}\n\nosDollarATR <- function(orderside, tradeSize, pctATR, maxPctATR=pctATR,\ndata, timestamp, symbol,\n         prefer=\"Open\", portfolio, integerQty=TRUE, atrMod=\"\", rebal=FALSE,\n...) {\n  if(tradeSize > 0 & orderside == \"short\"){\n    tradeSize <- tradeSize*-1\n  }\n  pos <- getPosQty(portfolio, symbol, timestamp)\n  atrString <- paste0(\"atr\",atrMod)\n  atrCol <- grep(atrString, colnames(mktdata))\n  if(length(atrCol)==0) {\n    stop(paste(\"Term\", atrString, \"not found in mktdata column names.\"))\n  }\n  atrTimeStamp <- mktdata[timestamp, atrCol]\n  if(is.na(atrTimeStamp) | atrTimeStamp==0) {\n    stop(paste(\"ATR corresponding to\",atrString,\"is invalid at this point\nin time.\n               Add a logical operator to account for this.\"))\n  }\n  dollarATR <- pos*atrTimeStamp\n  desiredDollarATR <- pctATR*tradeSize\n  remainingRiskCapacity <- tradeSize*maxPctATR-dollarATR\n\n  if(orderside == \"long\"){\n    qty <- min(tradeSize*pctATR/atrTimeStamp,\nremainingRiskCapacity/atrTimeStamp)\n  } else {\n    qty <- max(tradeSize*pctATR/atrTimeStamp,\nremainingRiskCapacity/atrTimeStamp)\n  }\n\n  if(integerQty) {\n    qty <- trunc(qty)\n  }\n  if(!rebal) {\n    if(orderside == \"long\" & qty < 0) {\n      qty <- 0\n    }\n    if(orderside == \"short\" & qty > 0) {\n      qty <- 0\n    }\n  }\n  if(rebal) {\n    if(pos == 0) {\n      qty <- 0\n    }\n  }\n  return(qty)\n}\n\nrequire(quantstrat)\nrequire(PerformanceAnalytics)\n\ninitDate=\"1990-01-01\"\nfrom=\"2003-01-01\"\nto=as.character(Sys.Date())\noptions(width=70)\nverbose=TRUE\n\noptions(\"getSymbols.warning4.0\"=FALSE)\nrm(list=ls(.blotter), envir=.blotter)\n\ncurrency('USD')\nSys.setenv(TZ=\"UTC\")\nsymbols <- c(\"XLB\")\nsuppressMessages(getSymbols(symbols, from=from, to=to, src=\"yahoo\",\nadjust=TRUE))\nstock(symbols, currency=\"USD\", multiplier=1)\n\n#trade sizing and initial equity settings\ntradeSize <- 100000\ninitEq <- tradeSize*length(symbols)\n\nstrategy.st <- portfolio.st <- account.st <- \"Hammer_4TP\"\nrm.strat(portfolio.st)\nrm.strat(strategy.st)\ninitPortf(portfolio.st, symbols=symbols, initDate=initDate, currency='USD')\ninitAcct(account.st, portfolios=portfolio.st, initDate=initDate,\ncurrency='USD',initEq=initEq)\ninitOrders(portfolio.st, initDate=initDate)\nstrategy(strategy.st, store=TRUE)\n\n#parameters\nnSMA1=10\nnSMA2=30\nnSMA3=5\nprofMargin=1.8\n\nperiod=10\npctATR=.1\n\n\n#indicators\nadd.indicator(strategy.st, name=\"lagATR\",\n              arguments=list(HLC=quote(HLC(mktdata)), n=period),\n              label=\"atrX\")\n\nadd.indicator(strategy.st, name=\"hammer\",\n              arguments=list(OHLC=quote(OHLC(mktdata)),\nprofMargin=profMargin),\n              label=\"hammer\")\n\nadd.indicator(strategy.st, name=\"SMA\",\n              arguments=list(x=quote(Cl(mktdata)), n=nSMA1),\n              label=\"sma1\")\n\nadd.indicator(strategy.st, name=\"SMA\",\n              arguments=list(x=quote(Cl(mktdata)), n=nSMA2),\n              label=\"sma2\")\n\nadd.indicator(strategy.st, name=\"SMA\",\n              arguments=list(x=quote(Cl(mktdata)), n=nSMA3),\n              label=\"sma3\")\n#signals\nadd.signal(strategy.st, name=\"sigComparison\",\n           arguments=list(columns=c(\"SMA.sma1\", \"SMA.sma2\"),\nrelationship=\"gt\"),\n           label=\"upTrend\")\n\nadd.signal(strategy.st, name=\"sigComparison\",\n           arguments=list(columns=c(\"SMA.sma3\", \"SMA.sma1\"),\nrelationship=\"lt\"),\n           label=\"pullback\")\n\nadd.signal(strategy.st, name=\"sigThreshold\",\n           arguments=list(column=\"hammer.hammer\", threshold=.5,\n                          relationship=\"gt\", cross=TRUE),\n           label=\"hammerDay\")\n\nadd.signal(strategy.st, name=\"sigAND\",\n           arguments=list(columns=c(\"upTrend\", \"pullback\", \"hammerDay\"),\n                          cross=TRUE),\n           label=\"longEntry\")\n\nadd.signal(strategy.st, name=\"sigCrossover\",\n           arguments=list(columns=c(\"Close\", \"SL.hammer\"),\nrelationship=\"lt\"),\n           label=\"stopExit\")\n\nadd.signal(strategy.st, name=\"sigCrossover\",\n           arguments=list(columns=c(\"Close\", \"TP.hammer\"),\nrelationship=\"gt\"),\n           label=\"profitExit\")\n\nadd.signal(strategy.st, name=\"sigCrossover\",\n           arguments=list(columns=c(\"SMA.sma1\", \"SMA.sma2\"),\nrelationship=\"lt\"),\n           label=\"SMAexit\")\n#rules\nadd.rule(strategy.st, name=\"ruleSignal\",\n         arguments=list(sigcol=\"longEntry\",\n                        sigval=TRUE,\n                        ordertype=\"stoplimit\",\n                        orderside=\"long\",\n                        replace=FALSE,\n                        osFUN=osDollarATR,\n                        tradeSize=tradeSize,\n                        prefer=\"High\",\n                        pctATR=pctATR,\n                        atrMod=\"X\",\n                        orderset=\"orders\"),\n         type=\"enter\", path.dep=TRUE)\n\nadd.rule(strategy.st, name=\"ruleSignal\",\n         arguments=list(sigcol=\"longEntry\",\n                        sigval=TRUE,\n                        ordertype=\"stoplimit\",\n                        orderside=\"long\",\n                        replace=FALSE,\n                        pctATR=pctATR,\n                        orderqty='all',\n                        order.price=quote(mktdata$SL.hammer[timestamp])\n                        orderset=\"orders\"),\n         type=\"chain\",\n         parent=\"longEntry\",\n         label=\"stopLossLong\",\n         path.dep=TRUE)\n\nadd.rule(strategy.st, name=\"ruleSignal\",\n         arguments=list(sigcol=\"longEntry\",\n                        sigval=TRUE,\n                        ordertype=\"stoplimit\",\n                        orderside=\"long\",\n                        replace=FALSE,\n                        pctATR=pctATR,\n                        orderqty='all',\n                        order.price=quote(mktdata$TP.hammer[timestamp]),\n                        orderset=\"orders\"),\n         type=\"chain\",\n         parent=\"longEntry\",\n         label=\"takeProfitLong\",\n         path.dep=TRUE)\n\n# add.rule(strategy.st, name=\"ruleSignal\",\n#          arguments=list(sigcol=\"stopExit\", sigval=TRUE, orderqty=\"all\",\nordertype=\"market\",\n#                         orderside=\"long\", replace=FALSE, prefer=\"Open\",\norderset=\"orders\"),\n#          type=\"exit\", path.dep=TRUE)\n#\n# add.rule(strategy.st, name=\"ruleSignal\",\n#          arguments=list(sigcol=\"profitExit\", sigval=TRUE, orderqty=\"all\",\nordertype=\"market\",\n#                         orderside=\"long\", replace=FALSE, prefer=\"Open\",\norderset=\"orders\"),\n#          type=\"exit\", path.dep=TRUE)\n#\n# add.rule(strategy.st, name=\"ruleSignal\",\n#          arguments=list(sigcol=\"SMAexit\", sigval=TRUE, orderqty=\"all\",\nordertype=\"market\",\n#                         orderside=\"long\", replace=FALSE, prefer=\"Open\",\norderset=\"orders\"),\n#          type=\"exit\", path.dep=TRUE)\n\n#apply strategy\nt1 <- Sys.time()\nout <- applyStrategy(strategy=strategy.st,portfolios=portfolio.st)\nt2 <- Sys.time()\nprint(t2-t1)\n\n#set up analytics\nupdatePortf(portfolio.st)\ndateRange <- time(getPortfolio(portfolio.st)$summary)[-1]\nupdateAcct(portfolio.st,dateRange)\nupdateEndEq(account.st)\n\nchart.Posn(portfolio.st, \"XLB\")\nadd_TA(SMA(Cl(XLB), n=nSMA1), on=1, lwd=1.5, col=\"blue\")\nadd_TA(SMA(Cl(XLB), n=nSMA2), on=1, lwd=1.5, col=\"purple\")\nadd_TA(SMA(Cl(XLB), n=nSMA3), on=1, lwd=1.5, col=\"orange\")\ntmp <- hammer(OHLC=OHLC(XLB), profMargin=profMargin)\nadd_TA(tmp$hammer)\nadd_TA(tmp$SL, on=1, col=\"red\", lwd=1.5)\nadd_TA(tmp$TP, on=1, col=\"green\", lwd=1.5)\n\n***************************************************************************************************\n\nRight now, my exit rules aren't working. Commented out are a couple of\nmarket orders that wait for the exit day to actually pass, and are\ntherefore delayed a day in terms of stopping out or taking a profit.\n\nMy question is what is the correct syntax to get my formal chain orders to\nwork properly and use the actual market data columns for their stopping\nvalues?\n\nThanks.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Okay, so my issue is that I'm trying to debunk a trading system I found\nonline, and it involves using an indicator for a stop-loss and a\ntake-profit type of order. I based my syntax on the luxor demo,",
       "thread_id": "thread-3a3ccc45d737",
       "thread_depth": 0,
-      "month": "2014-08"
+      "month": "2014-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140805/ce6bf71e/attachment.pl"
+      ]
     },
     {
       "id": "msg-927ad55111d8",
@@ -238,11 +247,14 @@
       "subject_clean": "Web Application for Option traders",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140805/54453cc9/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140805/54453cc9/attachment.pl>",
+      "body_plain": "Hello,\n\nA friend of mine and I developed a web application in R with Shiny for\nOption Traders.  We would like to hear your input and we welcome all\nsuggestions.  Here is the link:\n\nhttp://trading.shinyapps.io/ploption/\n\nThanks!\nHenry Spivey\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hello,\n\nA friend of mine and I developed a web application in R with Shiny for\nOption Traders.  We would like to hear your input and we welcome all\nsuggestions.  Here is the link:\n\nhttp://trading.shin",
       "thread_id": "thread-586f59ed2e3d",
       "thread_depth": 0,
-      "month": "2014-08"
+      "month": "2014-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140805/54453cc9/attachment.pl"
+      ]
     },
     {
       "id": "msg-d07a08d65096",
@@ -254,11 +266,14 @@
       "subject_clean": "chartSerieries (quantmod) : data range",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140806/b8969d1f/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140806/b8969d1f/attachment.pl>",
+      "body_plain": "Hi,\n\nI apply the chartSeries (quantmod) function to plot a time series. The\nfunction provides the data range on top of the graph:\n\n[1994-06-01 03:00:00/2013-12-01 02:00:00].\n\nThe data are monthly from 1994-06-01 through 2013-12-01.\n\nIs it possible to get rid of the range in the graph, or have it\n[1994-06-01/2013-12-01]?\n\n-Hannu\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI apply the chartSeries (quantmod) function to plot a time series. The\nfunction provides the data range on top of the graph:\n\n[1994-06-01 03:00:00/2013-12-01 02:00:00].\n\nThe data are monthly from",
       "thread_id": "thread-d07a08d65096",
       "thread_depth": 0,
-      "month": "2014-08"
+      "month": "2014-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140806/b8969d1f/attachment.pl"
+      ]
     },
     {
       "id": "msg-4555aa2d54ac",
@@ -270,11 +285,14 @@
       "subject_clean": "chartSerieries (quantmod) : data range",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140806/82c65017/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140806/82c65017/attachment.pl>",
+      "body_plain": "This works :\n\nIbov=getSymbols('^BVSP', src='yahoo',from='2000-01-01',auto.assign=FALSE)\nIBOV <- to.monthly(Ibov,indexAt='lastof')[\"2000-08-31/2014-07-31\"]\nchartSeries(IBOV,theme=chartTheme('white'),TA=NULL)\nnames = index(IBOV)\nIBOV = timeSeries(IBOV, names)\nchartSeries(IBOV,theme=chartTheme('white'),TA=NULL)\n\nRobert\n\n\n2014-08-06 4:56 GMT-03:00 Hannu Kahra <hkahra at gmail.com>:\n\n> Hi,\n>\n> I apply the chartSeries (quantmod) function to plot a time series. The\n> function provides the data range on top of the graph:\n>\n> [1994-06-01 03:00:00/2013-12-01 02:00:00].\n>\n> The data are monthly from 1994-06-01 through 2013-12-01.\n>\n> Is it possible to get rid of the range in the graph, or have it\n> [1994-06-01/2013-12-01]?\n>\n> -Hannu\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "This works :\n\nIbov=getSymbols('^BVSP', src='yahoo',from='2000-01-01',auto.assign=FALSE)\nIBOV <- to.monthly(Ibov,indexAt='lastof')[\"2000-08-31/2014-07-31\"]\nchartSeries(IBOV,theme=chartTheme('white'),TA",
       "thread_id": "thread-4555aa2d54ac",
       "thread_depth": 0,
-      "month": "2014-08"
+      "month": "2014-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140806/82c65017/attachment.pl"
+      ]
     },
     {
       "id": "msg-f85c764fb9ec",
@@ -516,11 +534,14 @@
       "subject_clean": "plot.forecast showing numbers instead of dates on x-axis of a weekly time series",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140807/2711694a/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140807/2711694a/attachment.pl>",
+      "body_plain": "Having trouble showing dates on the x-axis (using plot.forecast) of a\nweekly time series (forecast object produced by forecast) instead of\nnumbers. (The x-axis labels of the attached chart range from 0 to 300\ninstead of dates.) I notice the print function doesn't show dates as well.\nIs it because I am converting a timeSeries object to a ts object? Is it due\nto the weekly periodicity?\n\nHope this isn't too basic a question!\n\nThanks for your help in Advance.\n\nJohn E. Kaprich, CFA\n\n> library(timeSeries)\n> library(forecast)\n>\n> DataFVM <- read.table(\"Data Forecast (FVM).txt\", header=TRUE, sep=\"\\t\",\ncolClasses = c(\"character\", \"numeric\",\n\"numeric\",\"numeric\",\"numeric\",\"numeric\",\"numeric\",\"numeric\"))\n>\n> DataFVMTs <- timeSeries (DataFVM[-1], DataFVM[[1]], format = \"%Y/%m/%d\")\n> as.ts (DataFVMTs)\n> is.timeSeries (DataFVMTs)\nTRUE\n>\n> head(DataFVMTs)\n\nGMT\n           X10yrInflationSwap MOVE.Index Initial.Jobless.Claims\nUSSOC.CURNCY SPX.Earn.Yld\n2009-06-26              94.04      159.0                 598.25\n0.216       6.2203\n2009-07-03              93.98      149.1                 592.50\n0.201       5.9356\n2009-07-10              92.82      135.9                 580.25\n0.194       6.0565\n2009-07-17              95.36      156.3                 568.25\n0.191       5.6613\n2009-07-24              94.82      143.6                 566.50\n0.196       5.4343\n2009-07-31              94.47      138.5                 562.00\n0.201       5.3887\n           Global.Sovereogn.Spread Quality.Spread\n2009-06-26                 469.605           1.77\n2009-07-03                 442.265           1.78\n2009-07-10                 458.125           1.76\n2009-07-17                 415.269           1.75\n2009-07-24                 398.715           1.67\n2009-07-31                 402.360           1.51\n\n > MOVE <- tbats(DataFVMTs[,2])\n\n> fcMOVE <- forecast(MOVE, h=24)\n\n> print(fcMOVE)\n\n Point Forecast    Lo 80    Hi 80    Lo 95    Hi 95\n266       55.14267 49.81179 61.04407 47.20169 64.41961\n267       54.72591 47.78525 62.67467 44.47486 67.33973\n268       55.34932 47.17508 64.93995 43.34857 70.67240\n269       55.92950 46.78320 66.86394 42.56346 73.49284\n270       56.46898 46.52149 68.54349 41.98595 75.94792\n271       56.97021 46.34421 70.03259 41.54669 78.11946\n272       57.43557 46.22430 71.36601 41.20457 80.06015\n273       57.86732 46.14446 72.56835 40.93317 81.80718\n274       58.26766 46.09299 73.65807 40.71449 83.38849\n275       58.63865 46.06170 74.64969 40.53581 84.82602\n276       58.98227 46.04471 75.55500 40.38783 86.13752\n277       59.30037 46.03770 76.38379 40.26363 87.33774\n278       59.59473 46.03749 77.14435 40.15794 88.43910\n279       59.86700 46.04167 77.84380 40.06672 89.45225\n280       60.11875 46.04845 78.48830 39.98682 90.38640\n281       60.35144 46.05648 79.08326 39.91578 91.24955\n282       60.56645 46.06476 79.63344 39.85165 92.04875\n283       60.76506 46.07252 80.14305 39.79290 92.79022\n284       60.94847 46.07922 80.61585 39.73831 93.47946\n285       61.11780 46.08447 81.05519 39.68690 94.12138\n286       61.27410 46.08798 81.46409 39.63789 94.72036\n287       61.41834 46.08958 81.84525 39.59069 95.28032\n288       61.55143 46.08915 82.20110 39.54478 95.80477\n289       61.67420 46.08663 82.53385 39.49979 96.29689\n\n > plot.forecast(fcMOVE)\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Having trouble showing dates on the x-axis (using plot.forecast) of a\nweekly time series (forecast object produced by forecast) instead of\nnumbers. (The x-axis labels of the attached chart range from ",
       "thread_id": "thread-455a894dac76",
       "thread_depth": 0,
-      "month": "2014-08"
+      "month": "2014-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140807/2711694a/attachment.pl"
+      ]
     },
     {
       "id": "msg-0c722ecb7d7e",
@@ -534,11 +555,14 @@
       "references": [
         "<1407453867708-4695217.post@n4.nabble.com>"
       ],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140808/5ef42165/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140808/5ef42165/attachment.pl>",
+      "body_plain": "You can get started with some toy examples using the rugarch package and\nChapter 8 of this book:\n\nhttp://www.amazon.com/Introduction-Quantitative-Finance-Gergely-Dar%C3%B3czi-ebook/dp/B00GUKM7CS/\n\nThis is strictly a cookbook approach and I would not recommend it for\nreal-world / production VaR analysis without a lot more homework on your\npart.\n\nSurprise surprise - it's helpful if you know what you're doing and\nespecially what your output 'means'...for that, see Jorion's text as a bare\nminimum introduction to the field.\n\n\n\nOn Fri, Aug 8, 2014 at 9:24 AM, kyan <keiyanliew at hotmail.com> wrote:\n\n> Hi guys,\n>\n> I am currently new to R and am trying to forecast Value at Risk (VaR) using\n> the simple moving average (MA) and EWMA. Can anyone provide me with a code\n> to do this? I have already acquired my data and calculated the returns. It\n> is a portfolio consisting of 4 assets (stock markets) with weight 0.25\n> each.\n>\n> Also, i am trying to forecast VaR on previous dates, specifically, from\n> 1/1/07 to 31/12/07 and compare it to the actual results. I would appreciate\n> it if you guys can help me out with the coding as i am confused with using\n> either the rolling apply/sapply function for this.\n>\n> Thanks alot in advance!\n>\n>\n>\n> --\n> View this message in context:\n> http://r.789695.n4.nabble.com/EWMA-and-MA-to-calculate-Value-at-Risk-tp4695217.html\n> Sent from the Rmetrics mailing list archive at Nabble.com.\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "You can get started with some toy examples using the rugarch package and\nChapter 8 of this book:\n\nhttp://www.amazon.com/Introduction-Quantitative-Finance-Gergely-Dar%C3%B3czi-ebook/dp/B00GUKM7CS/\n\nThi",
       "thread_id": "thread-c48a2bea5406",
       "thread_depth": 1,
-      "month": "2014-08"
+      "month": "2014-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140808/5ef42165/attachment.pl"
+      ]
     },
     {
       "id": "msg-39344c4d274f",
@@ -744,11 +768,14 @@
       "subject_clean": "\"ugarchspec\" question on GJR-GARCH model specification",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140811/fd5dcbb9/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140811/fd5dcbb9/attachment.pl>",
+      "body_plain": "Hi there\n\nI'd like to ask for help regarding the correct way to write an\nARMA(0,0)-GJR-GARCH(1,1) model from \"ugarchspec/ugarchfit\" output.\n\nTo make the question reproduceable, I am using Tsay's lecture:\nhttp://faculty.chicagobooth.edu/ruey.tsay/teaching/bs41202/sp2011/lec5-11.pdf\nand accompanying data:\nhttp://faculty.chicagobooth.edu/ruey.tsay/teaching/bs41202/sp2011/m-ibm2609.txt\n\nReading in and transforming the data:\n\nlibrary(fGarch)\nlibrary(rugarch)\n\nda=read.table(\"C:/Users/Gareth/Desktop/Masters/Code/RCode/Tsay\nworkings/m-ibm2609.txt\",header=T,sep=\"\",row.names=1)\nibmlog=log(da$ibm+1)\n\n1. The initial (and logical) attempt is as follows:\n\ngjrgarch.spec5<-ugarchspec(variance.model=list(model=\"gjrGARCH\",garchOrder=c(1,1)),\n                           mean.model=list(armaOrder=c(0,0),include.mean=T,\n                           archm=F,arfima=F),distribution.model=\"std\")\nmod.fit.gjrgarch5<-ugarchfit(spec=gjrgarch.spec5,data=ibmlog)\nshow(mod.fit.gjrgarch5)\n\nOutput:\n               Estimate  Std. Error  t value Pr(>|t|)\nmu         0.012048    0.001872   6.4374 0.000000\nomega    0.000399    0.000146   2.7386 0.006170\nalpha1    0.063089    0.027832   2.2668 0.023406\nbeta1      0.807147    0.048368  16.6875 0.000000\ngamma1  0.093631    0.049654   1.8857 0.059338\nshape      6.672720    1.327638   5.0260 0.000001\n\nIs this the output to use in writing up a GJR-GARCH(1,1) model, with\nStudent t-distr. residuals?\n\n2. The second attempt follows (per information in the\"ugarchspec\" vignette):\n\ngjrgch.spec5<-ugarchspec(variance.model=list(model=\"fGARCH\",garchOrder=c(1,1),\n\nsubmodel=\"GJRGARCH\"),mean.model=list(armaOrder=c(0,0),include.mean=T,\n                archm=F,arfima=F),distribution.model=\"std\")\nmod.fit.gjrgch5<-ugarchfit(spec=gjrgch.spec5,data=ibmlog)\nshow(mod.fit.gjrgch5)\n\nThis 2nd attempt output, below, matches Tsay's notes (p.9), but specifies\nan APARCH model format (per Tsay's notes, p.5):\n             Estimate  Std. Error  t value Pr(>|t|)\nmu        0.012048    0.001872   6.4377 0.000000\nomega   0.000399    0.000146   2.7384 0.006173\nalpha1   0.104681    0.027973   3.7422 0.000182\nbeta1    0.807113    0.048381  16.6824 0.000000\neta11    0.223600    0.115947   1.9285 0.053796\nshape   6.672451    1.327378   5.0268 0.000000\n\nSo, according to Tsay, the output here allows me to write up an APARCH\nmodel, although I specify the submodel=\"GJRGARCH\".\nMy goal is to use estimates in GJR-GARCH model format.\n\n3. Tsay's actual code that gets almost the identical output as (2) above is:\n\nm5=garchFit(~aparch(1,1),data=ibmlog,trace=F,delta=2,leverage=T,include.delta=F,cond.dist=\"std\")\nsummary(m5)\n\n        mu       omega         alpha1         gamma1       beta1\nshape\n0.01204765  0.00039898  0.10467694  0.22366008  0.80711061  6.67328733\n\n\nDoes the output from (1) correctly specify the GJR-GARCH model estimates\n(p.5 in Tsay's notes), in the context of this example?\ni.e. can I put the estimates from (1) into the GJR-GARCH model format?\n\nMany thanks\nGareth McEwan\n\n\nNOTE: the APARCH model specifies the GJR-GARCH when \"delta=2\" (and, I\nassume, when \"leverage=T\"). I am just not sure how to use these estimates\nwhen writing out the GJR-GARCH model.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi there\n\nI'd like to ask for help regarding the correct way to write an\nARMA(0,0)-GJR-GARCH(1,1) model from \"ugarchspec/ugarchfit\" output.\n\nTo make the question reproduceable, I am using Tsay's lectu",
       "thread_id": "thread-54f2ccc54b2d",
       "thread_depth": 0,
-      "month": "2014-08"
+      "month": "2014-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140811/fd5dcbb9/attachment.pl"
+      ]
     },
     {
       "id": "msg-cb1aac9be051",
@@ -812,11 +839,14 @@
       "subject_clean": "GJR-GARCH",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140812/f34b59bc/attachment.pl>",
-      "body_snippet": "An embedded and charset-unspecified text was scrubbed...\nName: not available\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140812/f34b59bc/attachment.pl>",
+      "body_plain": "Dear all,\n\nI really enjoy working with the rugarch package and now my first question came up.\nI have a problem regarding the GJR-GARCH model implementation in the rugarch package in R.\n\nI want to fit it to the EURO STOXX 50 index return series, but after fitting it, there is still significant autocorrelation at lag 1 and the Sign Bias tests show still evidence for asymmetric effects.\nThere is no such problem with the GARCH(2,1) and EGARCH(2,1), only with the GJR-GARCH(2,1). I checked several other orders of the model, but it didn’t help.\nThere is no error message, the GJR model just fails to incorporate the asymmetric effects and the alpha estimates are zero.\nI tried all solvers, changed the starting value, and increased the iteration numbers. The GJR-GARCH nested in the APARCH or fGARCH function yield the same problem.\n\nI was asking myself, whether the failure is just due to the model itself or if there could be numerical problems, even there is no error message.\n\n\nHere is my code for the model specification and fitting:\nSTOXX50.tgarch21.spec=ugarchspec(variance.model=list(model=\"gjrGARCH\",garchOrder=c(2,1)),mean.model=list(armaOrder=c(5,0)),fixed.pars=list(ar1=0,ar2=0,ar4=0),distribution.model=\"sstd\")\nSTOXX50.tgarch21.st.fit=ugarchfit(spec=STOXX50.tgarch21.spec,rtnSTOXX50,solver=\"hybrid\")\nSTOXX50.tgarch21.st.fit\n\n\nI retrieved the data from the yahoo finance website:\nsymbol.vec = c(\"^STOXX50E\")\ngetSymbols(symbol.vec,from=\"2000-01-03\",to=\"2013-12-31\")\nSTOXX50=STOXX50E[,\"STOXX50E.Adjusted\",drop=F]\nlength(STOXX50)\nrtnSTOXX50=CalculateReturns(STOXX50, method=\"log\")\nrtnSTOXX50=rtnSTOXX50 [-1,]\ncolnames(rtnSTOXX50)=\"STOXX50\"\n\n\nI would be deeply grateful for any advice.\nThank you very much in advance for your answer.\n\nRegards,\nUrs\n \n\n\n\n\n\n\n\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear all,\n\nI really enjoy working with the rugarch package and now my first question came up.\nI have a problem regarding the GJR-GARCH model implementation in the rugarch package in R.\n\nI want to fit ",
       "thread_id": "thread-2767f95dfc9b",
       "thread_depth": 0,
-      "month": "2014-08"
+      "month": "2014-08",
+      "restored_from": [
+        "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20140812/f34b59bc/attachment.pl"
+      ]
     },
     {
       "id": "msg-d00a161dbf2c",
