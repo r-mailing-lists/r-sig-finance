@@ -17,7 +17,8 @@
       "body_snippet": "Hello,\n\nI'm trying to get a custom colour on a plot background to no avail.\nI also tried via custom theme and via the rect function described below.\n\nmyTheme <- chart_theme()\nmyTheme$col$bg <- \"#6C7B8",
       "thread_id": "thread-28f24e7e02f2",
       "thread_depth": 0,
-      "month": "2025-12"
+      "month": "2025-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2025q4/015279.html"
     },
     {
       "id": "msg-f8adcc28f4b6",
@@ -33,7 +34,8 @@
       "body_snippet": "I'm wondering if there is an option to skip a non-convergent combo of garch\ninput parameters within the loop upon different parameter values.\nI thought something like\nif(convergence(ugarchfit(GARCHspe",
       "thread_id": "thread-f8adcc28f4b6",
       "thread_depth": 0,
-      "month": "2025-12"
+      "month": "2025-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2025q4/015280.html"
     },
     {
       "id": "msg-541c87a141fe",
@@ -47,11 +49,12 @@
       "references": [
         "<CAOTSzfm+JqSxVSNvh0XwaizniLUQe1_jC1HwA6xszdFSNyVjEQ@mail.gmail.com>"
       ],
-      "body_plain": "Hi Anatoly, try wrapping it in a ?try/catch? function. Additionally, I suggest you switch to tsgarch. rugarch is in minimal maintenance mode it?s the intention to slowly transition everyone to use the new package. With the exception of a few models/features, there is little missing from tsgarch and it is a more robust/modern GARCH package.\n\nAlexios\n\n> On Dec 18, 2025, at 07:17, Anatoly Schmidt <as8098 at nyu.edu> wrote:\n> \n> ?I'm wondering if there is an option to skip a non-convergent combo of garch\n> input parameters within the loop upon different parameter values.\n> I thought something like\n> if(convergence(ugarchfit(GARCHspec, solver=\"hybrid\", returns)) != \"0\") {\n>      print(\"NA\")\n>      next\n> }\n> It did not give an error for the runs with 'good' parameters. But in case\n> of a 'bad' parameter combo, I got the following:\n> \n> error in evaluating the argument 'object' in selecting a method for\n> function 'convergence': object 'B' not found\n> \n> Thanks much, Alec\n> \n> --\n> Anatoly Schmidt\n> Adjunct Professor, Finance and Risk Engineering, NYU Tandon School\n> https://www.linkedin.com/in/alec-schmidt-9a761716/\n> \n>    [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
-      "body_snippet": "Hi Anatoly, try wrapping it in a ?try/catch? function. Additionally, I suggest you switch to tsgarch. rugarch is in minimal maintenance mode it?s the intention to slowly transition everyone to use the",
+      "body_plain": "Hi Anatoly, try wrapping it in a ‘try/catch’ function. Additionally, I suggest you switch to tsgarch. rugarch is in minimal maintenance mode it’s the intention to slowly transition everyone to use the new package. With the exception of a few models/features, there is little missing from tsgarch and it is a more robust/modern GARCH package.\n\nAlexios\n\n> On Dec 18, 2025, at 07:17, Anatoly Schmidt <as8098 at nyu.edu> wrote:\n> \n> ﻿I'm wondering if there is an option to skip a non-convergent combo of garch\n> input parameters within the loop upon different parameter values.\n> I thought something like\n> if(convergence(ugarchfit(GARCHspec, solver=\"hybrid\", returns)) != \"0\") {\n>      print(\"NA\")\n>      next\n> }\n> It did not give an error for the runs with 'good' parameters. But in case\n> of a 'bad' parameter combo, I got the following:\n> \n> error in evaluating the argument 'object' in selecting a method for\n> function 'convergence': object 'B' not found\n> \n> Thanks much, Alec\n> \n> --\n> Anatoly Schmidt\n> Adjunct Professor, Finance and Risk Engineering, NYU Tandon School\n> https://www.linkedin.com/in/alec-schmidt-9a761716/\n> \n>    [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Hi Anatoly, try wrapping it in a ‘try/catch’ function. Additionally, I suggest you switch to tsgarch. rugarch is in minimal maintenance mode it’s the intention to slowly transition everyone to use the",
       "thread_id": "thread-f8adcc28f4b6",
       "thread_depth": 1,
-      "month": "2025-12"
+      "month": "2025-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2025q4/015281.html"
     },
     {
       "id": "msg-73b152484ac9",
@@ -66,11 +69,12 @@
         "<CAOTSzfm+JqSxVSNvh0XwaizniLUQe1_jC1HwA6xszdFSNyVjEQ@mail.gmail.com>",
         "<EFA60067-0F99-41BD-B9AA-43E4D16FE74D@4dscape.com>"
       ],
-      "body_plain": "Thank you Alexios.\nBefore I got your reply, I checked ChatGPT. One of its solutions was the\none I tried and reported below its failure. But another was:\n\ntry(fit <- ugarchfit(GARCHspec, solver=\"hybrid\", returns))\n    if(inherits(fit, \"try-error\")){\n      message(\"  --> fit failed (error). Skipping.\")\n      next\n    }\nAnd it works! Surprisingly, I never get the message \"fit failed (error).\nSkipping\".\nInstead, I have the system message\nError in robustvcv(fun = f, pars = ipars[estidx, 1], nlag = nlag, hess =\nfit$hessian, : object 'B' not found\n\n(which I guess points at switching to another solver)\n\nor\nError : $ operator is invalid for atomic vectors\n\nbut then the process continued with other parameters.\n\nCheers, Alec\n\n\nOn Wed, Dec 17, 2025 at 7:28?PM Alexios Galanos <alexios at 4dscape.com> wrote:\n\n> Hi Anatoly, try wrapping it in a ?try/catch? function. Additionally, I\n> suggest you switch to tsgarch. rugarch is in minimal maintenance mode it?s\n> the intention to slowly transition everyone to use the new package. With\n> the exception of a few models/features, there is little missing from\n> tsgarch and it is a more robust/modern GARCH package.\n>\n> Alexios\n>\n> > On Dec 18, 2025, at 07:17, Anatoly Schmidt <as8098 at nyu.edu> wrote:\n> >\n> > ?I'm wondering if there is an option to skip a non-convergent combo of\n> garch\n> > input parameters within the loop upon different parameter values.\n> > I thought something like\n> > if(convergence(ugarchfit(GARCHspec, solver=\"hybrid\", returns)) != \"0\") {\n> >      print(\"NA\")\n> >      next\n> > }\n> > It did not give an error for the runs with 'good' parameters. But in case\n> > of a 'bad' parameter combo, I got the following:\n> >\n> > error in evaluating the argument 'object' in selecting a method for\n> > function 'convergence': object 'B' not found\n> >\n> > Thanks much, Alec\n> >\n> > --\n> > Anatoly Schmidt\n> > Adjunct Professor, Finance and Risk Engineering, NYU Tandon School\n> >\n> https://urldefense.proofpoint.com/v2/url?u=https-3A__www.linkedin.com_in_alec-2Dschmidt-2D9a761716_&d=DwIFaQ&c=slrrB7dE8n7gBJbeO0g-IQ&r=CPekRlIiK6v83hOL1MBVGQ&m=z7JjOM861jrHuHRwto8z69jfs02lutlHGQzgMwPUXXJxJaNXKUmFwvLnTfS4HCRs&s=v3bFfvL5vv7OGPOY8aI2-gvB5C0EY9kSZMkdwgAAi9A&e=\n> >\n> >    [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> >\n> https://urldefense.proofpoint.com/v2/url?u=https-3A__stat.ethz.ch_mailman_listinfo_r-2Dsig-2Dfinance&d=DwIFaQ&c=slrrB7dE8n7gBJbeO0g-IQ&r=CPekRlIiK6v83hOL1MBVGQ&m=z7JjOM861jrHuHRwto8z69jfs02lutlHGQzgMwPUXXJxJaNXKUmFwvLnTfS4HCRs&s=3B4nRdRsIxyJWDtSQUmiyJyUmDBmG1wuoWPxNQqSMV0&e=\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_plain": "Thank you Alexios.\nBefore I got your reply, I checked ChatGPT. One of its solutions was the\none I tried and reported below its failure. But another was:\n\ntry(fit <- ugarchfit(GARCHspec, solver=\"hybrid\", returns))\n    if(inherits(fit, \"try-error\")){\n      message(\"  --> fit failed (error). Skipping.\")\n      next\n    }\nAnd it works! Surprisingly, I never get the message \"fit failed (error).\nSkipping\".\nInstead, I have the system message\nError in robustvcv(fun = f, pars = ipars[estidx, 1], nlag = nlag, hess =\nfit$hessian, : object 'B' not found\n\n(which I guess points at switching to another solver)\n\nor\nError : $ operator is invalid for atomic vectors\n\nbut then the process continued with other parameters.\n\nCheers, Alec\n\n\nOn Wed, Dec 17, 2025 at 7:28 PM Alexios Galanos <alexios at 4dscape.com> wrote:\n\n> Hi Anatoly, try wrapping it in a ‘try/catch’ function. Additionally, I\n> suggest you switch to tsgarch. rugarch is in minimal maintenance mode it’s\n> the intention to slowly transition everyone to use the new package. With\n> the exception of a few models/features, there is little missing from\n> tsgarch and it is a more robust/modern GARCH package.\n>\n> Alexios\n>\n> > On Dec 18, 2025, at 07:17, Anatoly Schmidt <as8098 at nyu.edu> wrote:\n> >\n> > ﻿I'm wondering if there is an option to skip a non-convergent combo of\n> garch\n> > input parameters within the loop upon different parameter values.\n> > I thought something like\n> > if(convergence(ugarchfit(GARCHspec, solver=\"hybrid\", returns)) != \"0\") {\n> >      print(\"NA\")\n> >      next\n> > }\n> > It did not give an error for the runs with 'good' parameters. But in case\n> > of a 'bad' parameter combo, I got the following:\n> >\n> > error in evaluating the argument 'object' in selecting a method for\n> > function 'convergence': object 'B' not found\n> >\n> > Thanks much, Alec\n> >\n> > --\n> > Anatoly Schmidt\n> > Adjunct Professor, Finance and Risk Engineering, NYU Tandon School\n> >\n> https://urldefense.proofpoint.com/v2/url?u=https-3A__www.linkedin.com_in_alec-2Dschmidt-2D9a761716_&d=DwIFaQ&c=slrrB7dE8n7gBJbeO0g-IQ&r=CPekRlIiK6v83hOL1MBVGQ&m=z7JjOM861jrHuHRwto8z69jfs02lutlHGQzgMwPUXXJxJaNXKUmFwvLnTfS4HCRs&s=v3bFfvL5vv7OGPOY8aI2-gvB5C0EY9kSZMkdwgAAi9A&e=\n> >\n> >    [[alternative HTML version deleted]]\n> >\n> > _______________________________________________\n> > R-SIG-Finance at r-project.org mailing list\n> >\n> https://urldefense.proofpoint.com/v2/url?u=https-3A__stat.ethz.ch_mailman_listinfo_r-2Dsig-2Dfinance&d=DwIFaQ&c=slrrB7dE8n7gBJbeO0g-IQ&r=CPekRlIiK6v83hOL1MBVGQ&m=z7JjOM861jrHuHRwto8z69jfs02lutlHGQzgMwPUXXJxJaNXKUmFwvLnTfS4HCRs&s=3B4nRdRsIxyJWDtSQUmiyJyUmDBmG1wuoWPxNQqSMV0&e=\n> > -- Subscriber-posting only. If you want to post, subscribe first.\n> > -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
       "body_snippet": "Thank you Alexios.\nBefore I got your reply, I checked ChatGPT. One of its solutions was the\none I tried and reported below its failure. But another was:\n\ntry(fit <- ugarchfit(GARCHspec, solver=\"hybrid",
       "thread_id": "thread-f8adcc28f4b6",
       "thread_depth": 2,
-      "month": "2025-12"
+      "month": "2025-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2025q4/015282.html"
     },
     {
       "id": "msg-d479909d860c",
@@ -86,7 +90,8 @@
       "body_snippet": "Hello,\n\nI'm downloading quote data using the getSymbols() function.  It works very\nwell but downloads two additional columns for a few symbols,\nnamely _mean_log and _sd_log.\nTherefore, the traditional",
       "thread_id": "thread-d479909d860c",
       "thread_depth": 0,
-      "month": "2025-12"
+      "month": "2025-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2025q4/015283.html"
     },
     {
       "id": "msg-020808e82b02",
@@ -102,7 +107,8 @@
       "body_snippet": "Hello,\n\nPlease disregard my previous message for it was wrong.  The correct one is\nbelow.\n\nI'm downloading quote data using the getSymbols() function.  It works very\nwell but it downloads two addition",
       "thread_id": "thread-020808e82b02",
       "thread_depth": 0,
-      "month": "2025-12"
+      "month": "2025-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2025q4/015284.html"
     },
     {
       "id": "msg-82026affb699",
@@ -120,7 +126,8 @@
       "body_snippet": "library(quantmod)\n\nkeepohlc <- function(x) {\n    ohlc <- c(\".Open\",\".High\",\".Low\",\".Close\")\n    iV <- sapply(ohlc, \\(s) {grep(s,colnames(x))})\n    x[,iV]\n}\n\ngetSymbols(\"MSFT\")\n\nhead(MSFT)\n\n           ",
       "thread_id": "thread-d479909d860c",
       "thread_depth": 1,
-      "month": "2025-12"
+      "month": "2025-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2025q4/015285.html"
     },
     {
       "id": "msg-767ef78f4861",
@@ -139,7 +146,8 @@
       "body_snippet": "Hello Eric,\n\nThanks for the reply!  Your answer was correct however the my problem was\nnot explained correctly, my apologies to everyone.\nThe issue is that once a list is built from the symbols that w",
       "thread_id": "thread-d479909d860c",
       "thread_depth": 2,
-      "month": "2025-12"
+      "month": "2025-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2025q4/015286.html"
     },
     {
       "id": "msg-8055ecdcd14b",
@@ -159,7 +167,8 @@
       "body_snippet": "On Mon, 29 Dec 2025, Andre Luiz Tietbohl Ramos writes:\n\n> Hello Eric,\n>\n> Thanks for the reply!  Your answer was correct however the my problem was\n> not explained correctly, my apologies to everyone.",
       "thread_id": "thread-d479909d860c",
       "thread_depth": 3,
-      "month": "2025-12"
+      "month": "2025-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2025q4/015287.html"
     },
     {
       "id": "msg-440d0e7a3f24",
@@ -180,7 +189,8 @@
       "body_snippet": "Hello,\n\nThanks for the interest, Enrico. It is below.\nR> R> tickers\n \"AALR3.SA\"  \"AGRO3.SA\"  \"ALPA3.SA\"  \"ALPA4.SA\"  \"ALUP11.SA\" \"AMER3.SA\"  \"\nAMOB3.SA\"  \"ANIM3.SA\"  \"ASAI3.SA\"  \"AURE3.SA\"  \"AZUL4.SA\"",
       "thread_id": "thread-d479909d860c",
       "thread_depth": 4,
-      "month": "2025-12"
+      "month": "2025-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2025q4/015288.html"
     },
     {
       "id": "msg-6fb55c68c4ea",
@@ -202,7 +212,8 @@
       "body_snippet": "I am not able to reproduce your problem but I may have a solution that\nwill help.\nThe result of my\nnames(tickers)\ndoesn't have those strange objects.\nIn any case, try this workaround. Replace\n\ntickers",
       "thread_id": "thread-d479909d860c",
       "thread_depth": 5,
-      "month": "2025-12"
+      "month": "2025-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2025q4/015289.html"
     },
     {
       "id": "msg-45968165bb60",
@@ -224,7 +235,8 @@
       "body_snippet": "On 29 December 2025 at 11:23, Andre Luiz Tietbohl Ramos wrote:\n| I chose to put everything in a list and operate on it.\n\nWelcome to programming, and debugging. In your list processing, fundamentally\np",
       "thread_id": "thread-d479909d860c",
       "thread_depth": 5,
-      "month": "2025-12"
+      "month": "2025-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2025q4/015290.html"
     },
     {
       "id": "msg-2d9c42156f77",
@@ -246,7 +258,8 @@
       "body_snippet": "On Mon, 29 Dec 2025, Andre Luiz Tietbohl Ramos writes:\n\n> Em seg., 29 de dez. de 2025 ?s 10:25, Enrico Schumann <es at enricoschumann.net>\n> escreveu:\n>>\n>> Could you please post a small, reproducible",
       "thread_id": "thread-d479909d860c",
       "thread_depth": 5,
-      "month": "2025-12"
+      "month": "2025-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2025q4/015291.html"
     },
     {
       "id": "msg-70d58a5affe8",
@@ -269,7 +282,8 @@
       "body_snippet": "Hello everyone,\n\nI solved the problem! I had nothing to do with any of the aspects\nexplained.  It might seem even funny to some...\nMy lack of in depth knowledge about the R platform was the culprit.  ",
       "thread_id": "thread-d479909d860c",
       "thread_depth": 6,
-      "month": "2025-12"
+      "month": "2025-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2025q4/015292.html"
     },
     {
       "id": "msg-76e545612f8e",
@@ -293,7 +307,8 @@
       "body_snippet": "On Tue, 30 Dec 2025, Andre Luiz Tietbohl Ramos writes:\n\n> Hello everyone,\n>\n> I solved the problem! I had nothing to do with any of the aspects\n> explained.  It might seem even funny to some...\n> My l",
       "thread_id": "thread-d479909d860c",
       "thread_depth": 7,
-      "month": "2025-12"
+      "month": "2025-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2025q4/015293.html"
     }
   ],
   "threads": [

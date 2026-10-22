@@ -13,11 +13,12 @@
       "subject_clean": "ruragrch package using external regressors",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "I?m using the rugarch package to estimate an ARMA(1,0)-GJR-GARCH(1,1) model with dummy variable but i don't know how to do to add the dummy as an external regressor in the variance equation.\n\nI want to estimate the following model:\n\ny(t)=mu+c1y(t-1)+epsilon(t)\nsigma(t)?=omega+aplpha1*epsilon(t-1)?+gamma1*epsilon(t-1)?*I(t-1)+gamma2*epsilon(t-1)?*I(t-1)*dummy+theta*dummy+beta1*sigma(t-1)?\n\nI will be very grateful if you tells me how to add this part of equation epsilon(t-1)?*I(t-1)*dummy in the variance specification of the GJR-GARCH in rugarch package in R (my problem is how to compute residuals epsilon(t-1)).\n\ni think that in the case of y(t)=epsilon(t) i can use this program:\n\n\nlibrary(xlsx)\n\nkospi_call<-read.xlsx(\"/Users/emnakhemakhem/Desktop/Untitleddddd.xlsx ?,2) #variables: time, rendement, dummy\n\n\nresult=xts(kospi_call[,-1],order.by=kospi_call[,1], as.Date(rownames(kospi_call)))\n\n\nt=length(result[,-1])\n\ns = rep(0,t)\n\ntest<-result[,1]\n\n\nfor(i in 1:t){\n\n  if(test[i]<0){s[i]=1}\n\n}\n\n\n# eps.neg represents the leverage effect regressor\n\neps.neg <- xts(test*s)\n\ncolnames(eps.neg)<-\"eps.neg\"\n\n# lag eps.neg\n\neps.neg.lag = lag(eps.neg,1)\n\neps.neg.lag.carree=eps.neg.lag^2\n\n#interaction variable=dummy*epsilon(t-1)*I(t-1)\n\ndummy<-result[,2]\n\ninteraction<-dummy*eps.neg.lag.carree\n\n\ninputs2<-na.omit(cbind(test, interaction, join=\"left\"))\n\n\naug.s.spec <- ugarchspec(variance.model = list(model='sGARCH', garchOrder=c(1,1),\n\n                        external.regressors = inputs2[,2], variance.targeting = T),\n\n                        mean.model = list(armaOrder=c(0,0)),fixed.pars=list(mu = 0))\n\nsetbounds(aug.s.spec)<-list(\"vxreg1\"=c(-1, 1))\n\naug.s.fit <- ugarchfit(spec=aug.s.spec, data=inputs2[,1])\n\nSo my question is, if my program is correct, how to get eps.neg.lag  in the case of AR(1)-GJR-GARCH(1,1)?\n\nI will be very grateful if you help me to get the solution\n\nBest regards,\n\n\nEmna\n\n\n\t[[alternative HTML version deleted]]",
-      "body_snippet": "I?m using the rugarch package to estimate an ARMA(1,0)-GJR-GARCH(1,1) model with dummy variable but i don't know how to do to add the dummy as an external regressor in the variance equation.\n\nI want t",
+      "body_plain": "I’m using the rugarch package to estimate an ARMA(1,0)-GJR-GARCH(1,1) model with dummy variable but i don't know how to do to add the dummy as an external regressor in the variance equation.\n\nI want to estimate the following model:\n\ny(t)=mu+c1y(t-1)+epsilon(t)\nsigma(t)²=omega+aplpha1*epsilon(t-1)²+gamma1*epsilon(t-1)²*I(t-1)+gamma2*epsilon(t-1)²*I(t-1)*dummy+theta*dummy+beta1*sigma(t-1)²\n\nI will be very grateful if you tells me how to add this part of equation epsilon(t-1)²*I(t-1)*dummy in the variance specification of the GJR-GARCH in rugarch package in R (my problem is how to compute residuals epsilon(t-1)).\n\ni think that in the case of y(t)=epsilon(t) i can use this program:\n\n\nlibrary(xlsx)\n\nkospi_call<-read.xlsx(\"/Users/emnakhemakhem/Desktop/Untitleddddd.xlsx »,2) #variables: time, rendement, dummy\n\n\nresult=xts(kospi_call[,-1],order.by=kospi_call[,1], as.Date(rownames(kospi_call)))\n\n\nt=length(result[,-1])\n\ns = rep(0,t)\n\ntest<-result[,1]\n\n\nfor(i in 1:t){\n\n  if(test[i]<0){s[i]=1}\n\n}\n\n\n# eps.neg represents the leverage effect regressor\n\neps.neg <- xts(test*s)\n\ncolnames(eps.neg)<-\"eps.neg\"\n\n# lag eps.neg\n\neps.neg.lag = lag(eps.neg,1)\n\neps.neg.lag.carree=eps.neg.lag^2\n\n#interaction variable=dummy*epsilon(t-1)*I(t-1)\n\ndummy<-result[,2]\n\ninteraction<-dummy*eps.neg.lag.carree\n\n\ninputs2<-na.omit(cbind(test, interaction, join=\"left\"))\n\n\naug.s.spec <- ugarchspec(variance.model = list(model='sGARCH', garchOrder=c(1,1),\n\n                        external.regressors = inputs2[,2], variance.targeting = T),\n\n                        mean.model = list(armaOrder=c(0,0)),fixed.pars=list(mu = 0))\n\nsetbounds(aug.s.spec)<-list(\"vxreg1\"=c(-1, 1))\n\naug.s.fit <- ugarchfit(spec=aug.s.spec, data=inputs2[,1])\n\nSo my question is, if my program is correct, how to get eps.neg.lag  in the case of AR(1)-GJR-GARCH(1,1)?\n\nI will be very grateful if you help me to get the solution\n\nBest regards,\n\n\nEmna\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "I’m using the rugarch package to estimate an ARMA(1,0)-GJR-GARCH(1,1) model with dummy variable but i don't know how to do to add the dummy as an external regressor in the variance equation.\n\nI want t",
       "thread_id": "thread-498eabcf950a",
       "thread_depth": 0,
-      "month": "2017-10"
+      "month": "2017-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q4/014425.html"
     },
     {
       "id": "msg-b49d90e8caaa",
@@ -31,11 +32,12 @@
       "references": [
         "<AM5PR0202MB2515D3A05C039B51980AEAAEF6720@AM5PR0202MB2515.eurprd02.prod.outlook.com>"
       ],
-      "body_plain": "I get this message but I am a member (\n\nR-SIG-Finance mailing list membership configuration for emna_khemakhem at hotmail.com, emna\n\nemna_khemakhem at hotmail.com, emna's subscription status, password, and options for the R-SIG-Finance mailing list.\n)\n\nso i don't know why i cannot post my question?\n\n\nbest regards,\n\nEmna Khemakhem\n\n\n\n\n________________________________\nDe : R-SIG-Finance <r-sig-finance-bounces at r-project.org> de la part de khemakhem emna <emna_khemakhem at hotmail.com>\nEnvoy? : mercredi 4 octobre 2017 11:05:17\n? : r-sig-finance at r-project.org\nObjet : [R-SIG-Finance] ruragrch package using external regressors\n\n\nI?m using the rugarch package to estimate an ARMA(1,0)-GJR-GARCH(1,1) model with dummy variable but i don't know how to do to add the dummy as an external regressor in the variance equation.\n\nI want to estimate the following model:\n\ny(t)=mu+c1y(t-1)+epsilon(t)\nsigma(t)?=omega+aplpha1*epsilon(t-1)?+gamma1*epsilon(t-1)?*I(t-1)+gamma2*epsilon(t-1)?*I(t-1)*dummy+theta*dummy+beta1*sigma(t-1)?\n\nI will be very grateful if you tells me how to add this part of equation epsilon(t-1)?*I(t-1)*dummy in the variance specification of the GJR-GARCH in rugarch package in R (my problem is how to compute residuals epsilon(t-1)).\n\ni think that in the case of y(t)=epsilon(t) i can use this program:\n\n\nlibrary(xlsx)\n\nkospi_call<-read.xlsx(\"/Users/emnakhemakhem/Desktop/Untitleddddd.xlsx ?,2) #variables: time, rendement, dummy\n\n\nresult=xts(kospi_call[,-1],order.by=kospi_call[,1], as.Date(rownames(kospi_call)))\n\n\nt=length(result[,-1])\n\ns = rep(0,t)\n\ntest<-result[,1]\n\n\nfor(i in 1:t){\n\n  if(test[i]<0){s[i]=1}\n\n}\n\n\n# eps.neg represents the leverage effect regressor\n\neps.neg <- xts(test*s)\n\ncolnames(eps.neg)<-\"eps.neg\"\n\n# lag eps.neg\n\neps.neg.lag = lag(eps.neg,1)\n\neps.neg.lag.carree=eps.neg.lag^2\n\n#interaction variable=dummy*epsilon(t-1)*I(t-1)\n\ndummy<-result[,2]\n\ninteraction<-dummy*eps.neg.lag.carree\n\n\ninputs2<-na.omit(cbind(test, interaction, join=\"left\"))\n\n\naug.s.spec <- ugarchspec(variance.model = list(model='sGARCH', garchOrder=c(1,1),\n\n                        external.regressors = inputs2[,2], variance.targeting = T),\n\n                        mean.model = list(armaOrder=c(0,0)),fixed.pars=list(mu = 0))\n\nsetbounds(aug.s.spec)<-list(\"vxreg1\"=c(-1, 1))\n\naug.s.fit <- ugarchfit(spec=aug.s.spec, data=inputs2[,1])\n\nSo my question is, if my program is correct, how to get eps.neg.lag  in the case of AR(1)-GJR-GARCH(1,1)?\n\nI will be very grateful if you help me to get the solution\n\nBest regards,\n\n\nEmna\n\n\n        [[alternative HTML version deleted]]\n\n\n\t[[alternative HTML version deleted]]",
+      "body_plain": "I get this message but I am a member (\n\nR-SIG-Finance mailing list membership configuration for emna_khemakhem at hotmail.com, emna\n\nemna_khemakhem at hotmail.com, emna's subscription status, password, and options for the R-SIG-Finance mailing list.\n)\n\nso i don't know why i cannot post my question?\n\n\nbest regards,\n\nEmna Khemakhem\n\n\n\n\n________________________________\nDe : R-SIG-Finance <r-sig-finance-bounces at r-project.org> de la part de khemakhem emna <emna_khemakhem at hotmail.com>\nEnvoyé : mercredi 4 octobre 2017 11:05:17\nÀ : r-sig-finance at r-project.org\nObjet : [R-SIG-Finance] ruragrch package using external regressors\n\n\nI?m using the rugarch package to estimate an ARMA(1,0)-GJR-GARCH(1,1) model with dummy variable but i don't know how to do to add the dummy as an external regressor in the variance equation.\n\nI want to estimate the following model:\n\ny(t)=mu+c1y(t-1)+epsilon(t)\nsigma(t)?=omega+aplpha1*epsilon(t-1)?+gamma1*epsilon(t-1)?*I(t-1)+gamma2*epsilon(t-1)?*I(t-1)*dummy+theta*dummy+beta1*sigma(t-1)?\n\nI will be very grateful if you tells me how to add this part of equation epsilon(t-1)?*I(t-1)*dummy in the variance specification of the GJR-GARCH in rugarch package in R (my problem is how to compute residuals epsilon(t-1)).\n\ni think that in the case of y(t)=epsilon(t) i can use this program:\n\n\nlibrary(xlsx)\n\nkospi_call<-read.xlsx(\"/Users/emnakhemakhem/Desktop/Untitleddddd.xlsx ?,2) #variables: time, rendement, dummy\n\n\nresult=xts(kospi_call[,-1],order.by=kospi_call[,1], as.Date(rownames(kospi_call)))\n\n\nt=length(result[,-1])\n\ns = rep(0,t)\n\ntest<-result[,1]\n\n\nfor(i in 1:t){\n\n  if(test[i]<0){s[i]=1}\n\n}\n\n\n# eps.neg represents the leverage effect regressor\n\neps.neg <- xts(test*s)\n\ncolnames(eps.neg)<-\"eps.neg\"\n\n# lag eps.neg\n\neps.neg.lag = lag(eps.neg,1)\n\neps.neg.lag.carree=eps.neg.lag^2\n\n#interaction variable=dummy*epsilon(t-1)*I(t-1)\n\ndummy<-result[,2]\n\ninteraction<-dummy*eps.neg.lag.carree\n\n\ninputs2<-na.omit(cbind(test, interaction, join=\"left\"))\n\n\naug.s.spec <- ugarchspec(variance.model = list(model='sGARCH', garchOrder=c(1,1),\n\n                        external.regressors = inputs2[,2], variance.targeting = T),\n\n                        mean.model = list(armaOrder=c(0,0)),fixed.pars=list(mu = 0))\n\nsetbounds(aug.s.spec)<-list(\"vxreg1\"=c(-1, 1))\n\naug.s.fit <- ugarchfit(spec=aug.s.spec, data=inputs2[,1])\n\nSo my question is, if my program is correct, how to get eps.neg.lag  in the case of AR(1)-GJR-GARCH(1,1)?\n\nI will be very grateful if you help me to get the solution\n\nBest regards,\n\n\nEmna\n\n\n        [[alternative HTML version deleted]]\n\n\n\t[[alternative HTML version deleted]]",
       "body_snippet": "I get this message but I am a member (\n\nR-SIG-Finance mailing list membership configuration for emna_khemakhem at hotmail.com, emna\n\nemna_khemakhem at hotmail.com, emna's subscription status, password",
       "thread_id": "thread-498eabcf950a",
       "thread_depth": 1,
-      "month": "2017-10"
+      "month": "2017-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q4/014426.html"
     },
     {
       "id": "msg-19fd64216849",
@@ -53,7 +55,8 @@
       "body_snippet": "Dear allCan someone suggest some good resources/package on Financial Risk Management based on R? I would like to use them for a graduate class i teach. Thanks in advance.\nRegards,Pankaj K Agarwal\n+91-",
       "thread_id": "thread-19fd64216849",
       "thread_depth": 0,
-      "month": "2017-10"
+      "month": "2017-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q4/014427.html"
     },
     {
       "id": "msg-edf6073e5987",
@@ -72,7 +75,8 @@
       "body_snippet": "Quoting Pankaj K Agarwal via R-SIG-Finance <r-sig-finance at r-project.org>:\n\n> Dear all Can someone suggest some good resources/package on  \n> Financial Risk Management based on R? I would like to us",
       "thread_id": "thread-19fd64216849",
       "thread_depth": 1,
-      "month": "2017-10"
+      "month": "2017-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q4/014428.html"
     },
     {
       "id": "msg-3a44d25955e7",
@@ -92,7 +96,8 @@
       "body_snippet": "Dear EnricoI did. The listings are very specialized and do not seem to be suitable for wide coverage of tools. Thanks anyway.\nRegards,Pankaj K Agarwal\n+91-98397-11444http://in.linkedin.com/in/pankajka",
       "thread_id": "thread-19fd64216849",
       "thread_depth": 2,
-      "month": "2017-10"
+      "month": "2017-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q4/014429.html"
     },
     {
       "id": "msg-475840a534d3",
@@ -111,7 +116,8 @@
       "body_snippet": "On 10/16/2017 04:35 AM, Pankaj K Agarwal via R-SIG-Finance wrote:\n> Dear allCan someone suggest some good resources/package on Financial Risk Management based on R? I would like to use them for a grad",
       "thread_id": "thread-19fd64216849",
       "thread_depth": 1,
-      "month": "2017-10"
+      "month": "2017-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q4/014430.html"
     },
     {
       "id": "msg-0508a36cb30b",
@@ -127,11 +133,12 @@
         "<714631349.861145.1508146544390@mail.yahoo.com>",
         "<66780b8b-00b7-0f9b-747f-dd4701e3ecb1@braverock.com>"
       ],
-      "body_plain": "On Mon, 2017-10-16 at 05:43 -0500, Brian G. Peterson wrote:\n> On 10/16/2017 04:35 AM, Pankaj K Agarwal via R-SIG-Finance wrote:\n> > Dear allCan someone suggest some good resources/package on\n> > Financial Risk Management based on R? I would like to use them for\n> > a graduate class i teach. Thanks in advance.\n> > Regards,Pankaj K Agarwal\n> > +91-98397-11444http://in.linkedin.com/in/pankajkagarwal/\n> \n> For a book length survey treatment of packages for these topics, see?\n> Bernhard Pfaff's excellent 'Financial Risk Modeling and Portfolio?\n> Optimization with R, 2nd Edition'.\n> \n> Enrico's suggestion of the task view certainly includes 'very?\n> specialized' resources, but also includes a number of more\n> fundamental?resources, such as PerformanceAnalytics and rugarch.\n> \n\nI should also have mentioned McNeil, Frey, and Embrechts \"Quantitative\nRisk Management\" and the accompanying R package QRM.\n\nIf you are a bit more specific about what topics you plan to cover, I\nam certain that the list could suggest more resources.\n\nRegards,\n\nBrian",
+      "body_plain": "On Mon, 2017-10-16 at 05:43 -0500, Brian G. Peterson wrote:\n> On 10/16/2017 04:35 AM, Pankaj K Agarwal via R-SIG-Finance wrote:\n> > Dear allCan someone suggest some good resources/package on\n> > Financial Risk Management based on R? I would like to use them for\n> > a graduate class i teach. Thanks in advance.\n> > Regards,Pankaj K Agarwal\n> > +91-98397-11444http://in.linkedin.com/in/pankajkagarwal/\n> \n> For a book length survey treatment of packages for these topics, see \n> Bernhard Pfaff's excellent 'Financial Risk Modeling and Portfolio \n> Optimization with R, 2nd Edition'.\n> \n> Enrico's suggestion of the task view certainly includes 'very \n> specialized' resources, but also includes a number of more\n> fundamental resources, such as PerformanceAnalytics and rugarch.\n> \n\nI should also have mentioned McNeil, Frey, and Embrechts \"Quantitative\nRisk Management\" and the accompanying R package QRM.\n\nIf you are a bit more specific about what topics you plan to cover, I\nam certain that the list could suggest more resources.\n\nRegards,\n\nBrian",
       "body_snippet": "On Mon, 2017-10-16 at 05:43 -0500, Brian G. Peterson wrote:\n> On 10/16/2017 04:35 AM, Pankaj K Agarwal via R-SIG-Finance wrote:\n> > Dear allCan someone suggest some good resources/package on\n> > Finan",
       "thread_id": "thread-19fd64216849",
       "thread_depth": 2,
-      "month": "2017-10"
+      "month": "2017-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q4/014431.html"
     },
     {
       "id": "msg-4cd8bbe3e17b",
@@ -152,7 +159,8 @@
       "body_snippet": "Rupert's \"Statistics and Data Analysis for Financial Engineering\"  is R based. I use rugarch package in my courses. - Terry Leitch\n\n________________________________\nFrom: R-SIG-Finance <r-sig-finance-",
       "thread_id": "thread-19fd64216849",
       "thread_depth": 3,
-      "month": "2017-10"
+      "month": "2017-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q4/014432.html"
     },
     {
       "id": "msg-6fce5f892284",
@@ -174,7 +182,8 @@
       "body_snippet": "Thanks a lot Brian and Terry for your time.\nRegards,Pankaj K Agarwal\n+91-98397-11444http://in.linkedin.com/in/pankajkagarwal/ \n\n    On Monday 16 October 2017, 7:59:16 PM IST, Terry Leitch <tleitch1 at",
       "thread_id": "thread-19fd64216849",
       "thread_depth": 4,
-      "month": "2017-10"
+      "month": "2017-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q4/014433.html"
     },
     {
       "id": "msg-f719c71b630d",
@@ -194,11 +203,12 @@
         "<84153428.172784.1508210821008@mail.yahoo.com>",
         "<CABHS13eQ3=nXBDwDw5YWzvAFSRUV6aQUrianEsy97i97ek+aUg@mail.gmail.com>"
       ],
-      "body_plain": "Dear RamosriskR?is great. Thanks again buddy.\nRegards,Pankaj K Agarwal\n+91-98397-11444http://in.linkedin.com/in/pankajkagarwal/ \n\n    On Tuesday 17 October 2017, 4:23:51 PM IST, Henrique Ramos <hpramos4 at gmail.com> wrote:  \n \n Dear Agarwal,\nYou can find some historical-simulation-based calculations of risk measures on the riskR package (with the capital \"R\" at the end).\nRegards,\n \n|  | Livre de v?rus. www.avast.com.  |\n\n\n2017-10-17 1:27 GMT-02:00 Pankaj K Agarwal via R-SIG-Finance <r-sig-finance at r-project.org>:\n\nThanks a lot Brian and Terry for your time.\nRegards,Pankaj K Agarwal\n+91-98397-11444http://in.linkedin.com/in/ pankajkagarwal/\n\n? ? On Monday 16 October 2017, 7:59:16 PM IST, Terry Leitch <tleitch1 at jhu.edu> wrote:\n\n?Rupert's \"Statistics and Data Analysis for Financial Engineering\"? is R based. I use rugarch package in my courses. - Terry Leitch\n\n______________________________ __\nFrom: R-SIG-Finance <r-sig-finance-bounces at r- project.org> on behalf of Brian G. Peterson <brian at braverock.com>\nSent: Monday, October 16, 2017 8:04:33 AM\nTo: r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] R packages/resources for Financial Risk Management\n\nOn Mon, 2017-10-16 at 05:43 -0500, Brian G. Peterson wrote:\n> On 10/16/2017 04:35 AM, Pankaj K Agarwal via R-SIG-Finance wrote:\n> > Dear allCan someone suggest some good resources/package on\n> > Financial Risk Management based on R? I would like to use them for\n> > a graduate class i teach. Thanks in advance.\n> > Regards,Pankaj K Agarwal\n> > +91-98397-11444http://in.linkedin.com/in/ pankajkagarwal/\n>\n> For a book length survey treatment of packages for these topics, see\n> Bernhard Pfaff's excellent 'Financial Risk Modeling and Portfolio\n> Optimization with R, 2nd Edition'.\n>\n> Enrico's suggestion of the task view certainly includes 'very\n> specialized' resources, but also includes a number of more\n> fundamental resources, such as PerformanceAnalytics and rugarch.\n>\n\nI should also have mentioned McNeil, Frey, and Embrechts \"Quantitative\nRisk Management\" and the accompanying R package QRM.\n\nIf you are a bit more specific about what topics you plan to cover, I\nam certain that the list could suggest more resources.\n\nRegards,\n\nBrian\n\n______________________________ _________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/ listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n??? [[alternative HTML version deleted]]\n\n______________________________ _________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/ listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n? ? ? ? [[alternative HTML version deleted]]\n\n______________________________ _________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/ listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \n--\nHenrique P. Ramos\n\n\n\t[[alternative HTML version deleted]]",
-      "body_snippet": "Dear RamosriskR?is great. Thanks again buddy.\nRegards,Pankaj K Agarwal\n+91-98397-11444http://in.linkedin.com/in/pankajkagarwal/ \n\n    On Tuesday 17 October 2017, 4:23:51 PM IST, Henrique Ramos <hpramo",
+      "body_plain": "Dear RamosriskR is great. Thanks again buddy.\nRegards,Pankaj K Agarwal\n+91-98397-11444http://in.linkedin.com/in/pankajkagarwal/ \n\n    On Tuesday 17 October 2017, 4:23:51 PM IST, Henrique Ramos <hpramos4 at gmail.com> wrote:  \n \n Dear Agarwal,\nYou can find some historical-simulation-based calculations of risk measures on the riskR package (with the capital \"R\" at the end).\nRegards,\n \n|  | Livre de vírus. www.avast.com.  |\n\n\n2017-10-17 1:27 GMT-02:00 Pankaj K Agarwal via R-SIG-Finance <r-sig-finance at r-project.org>:\n\nThanks a lot Brian and Terry for your time.\nRegards,Pankaj K Agarwal\n+91-98397-11444http://in.linkedin.com/in/ pankajkagarwal/\n\n    On Monday 16 October 2017, 7:59:16 PM IST, Terry Leitch <tleitch1 at jhu.edu> wrote:\n\n Rupert's \"Statistics and Data Analysis for Financial Engineering\"  is R based. I use rugarch package in my courses. - Terry Leitch\n\n______________________________ __\nFrom: R-SIG-Finance <r-sig-finance-bounces at r- project.org> on behalf of Brian G. Peterson <brian at braverock.com>\nSent: Monday, October 16, 2017 8:04:33 AM\nTo: r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] R packages/resources for Financial Risk Management\n\nOn Mon, 2017-10-16 at 05:43 -0500, Brian G. Peterson wrote:\n> On 10/16/2017 04:35 AM, Pankaj K Agarwal via R-SIG-Finance wrote:\n> > Dear allCan someone suggest some good resources/package on\n> > Financial Risk Management based on R? I would like to use them for\n> > a graduate class i teach. Thanks in advance.\n> > Regards,Pankaj K Agarwal\n> > +91-98397-11444http://in.linkedin.com/in/ pankajkagarwal/\n>\n> For a book length survey treatment of packages for these topics, see\n> Bernhard Pfaff's excellent 'Financial Risk Modeling and Portfolio\n> Optimization with R, 2nd Edition'.\n>\n> Enrico's suggestion of the task view certainly includes 'very\n> specialized' resources, but also includes a number of more\n> fundamental resources, such as PerformanceAnalytics and rugarch.\n>\n\nI should also have mentioned McNeil, Frey, and Embrechts \"Quantitative\nRisk Management\" and the accompanying R package QRM.\n\nIf you are a bit more specific about what topics you plan to cover, I\nam certain that the list could suggest more resources.\n\nRegards,\n\nBrian\n\n______________________________ _________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/ listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n    [[alternative HTML version deleted]]\n\n______________________________ _________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/ listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n? ? ?   [[alternative HTML version deleted]]\n\n______________________________ _________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/ listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \n--\nHenrique P. Ramos\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Dear RamosriskR is great. Thanks again buddy.\nRegards,Pankaj K Agarwal\n+91-98397-11444http://in.linkedin.com/in/pankajkagarwal/ \n\n    On Tuesday 17 October 2017, 4:23:51 PM IST, Henrique Ramos <hpramo",
       "thread_id": "thread-f719c71b630d",
       "thread_depth": 0,
-      "month": "2017-10"
+      "month": "2017-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q4/014434.html"
     },
     {
       "id": "msg-22bec504fd2e",
@@ -216,7 +226,8 @@
       "body_snippet": "Hi,\n\n\nJust sharing a list of books which I have on R & Business/Finance, with worked example in R & respective packages, with regard to the recent discussion on R packages in finance. Later editions m",
       "thread_id": "thread-22bec504fd2e",
       "thread_depth": 0,
-      "month": "2017-10"
+      "month": "2017-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q4/014435.html"
     },
     {
       "id": "msg-eaf39db001a0",
@@ -235,7 +246,8 @@
       "body_snippet": "Thanks for that list, Wong.\n\nAnother one:  Processing and Analyzing Financial Data with R. Free book\navailable in the following links:\n\n*https://sites.google.com/view/pafdR/home\n<https://sites.google.",
       "thread_id": "thread-22bec504fd2e",
       "thread_depth": 1,
-      "month": "2017-10"
+      "month": "2017-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q4/014436.html"
     },
     {
       "id": "msg-33d45c3b0bca",
@@ -255,7 +267,8 @@
       "body_snippet": "You're most welcome Ramos. Here're 2 books of mine which I left out earlier in the previous post:\n\n\n  1.  An Introduction to Analysis of Financial Data with R. Wiley. 2013.\n  2.  Automated Trading wit",
       "thread_id": "thread-22bec504fd2e",
       "thread_depth": 2,
-      "month": "2017-10"
+      "month": "2017-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q4/014437.html"
     },
     {
       "id": "msg-bc2d2bf05d3b",
@@ -276,7 +289,8 @@
       "body_snippet": "Chris Conlan's book uses Yahoo getSymbols, so he'll have to update that.\n\nI'm not sure if anyone has yet listed the book Harry Georgakopoulos and I\nworked on--Quantitative trading with R.\n\n(I wrote ch",
       "thread_id": "thread-22bec504fd2e",
       "thread_depth": 3,
-      "month": "2017-10"
+      "month": "2017-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q4/014438.html"
     },
     {
       "id": "msg-2f3724101139",
@@ -294,7 +308,8 @@
       "body_snippet": "Hi Steve,\n\n\nGood idea. Just give me a few days.\n\n\nSincerely,\n\n\nNelson Wong\n\n\n________________________________\nFrom: Steve Wisdom <swisdom at gmail.com>\nSent: 25 October 2017 16:28\nTo: nelsonyswong at ",
       "thread_id": "thread-2f3724101139",
       "thread_depth": 0,
-      "month": "2017-10"
+      "month": "2017-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q4/014439.html"
     },
     {
       "id": "msg-0b37eaf9c1da",
@@ -313,7 +328,8 @@
       "body_snippet": "I found the PortfolioAnalytics documentation (vignette's, etc) also very\nuseful.\n\n\nErol Biceroglu\n416-275-7970\n*LinkedIn <http://ca.linkedin.com/in/erolbiceroglu> | Wordpress\n<https://propfoliomanagem",
       "thread_id": "thread-2f3724101139",
       "thread_depth": 1,
-      "month": "2017-10"
+      "month": "2017-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q4/014440.html"
     }
   ],
   "threads": [

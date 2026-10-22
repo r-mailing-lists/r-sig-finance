@@ -17,7 +17,8 @@
       "body_snippet": "R/Finance 2018: Applied Finance with R\nJune 1 and 2, 2018\nUniversity of Illinois at Chicago\n\n\nCall For Papers\n\nThe tenth annual R/Finance conference for applied finance using R will\nbe held June 1 and",
       "thread_id": "thread-a964501324c6",
       "thread_depth": 0,
-      "month": "2018-01"
+      "month": "2018-01",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014480.html"
     },
     {
       "id": "msg-630fa8e472db",
@@ -33,7 +34,8 @@
       "body_snippet": "Dear all,\n\nI would like to implement an automated order routing for a FX-Strategy on multiple currencies. There is a short and good documentation called \"Real Time Market Data and Trade Execution with",
       "thread_id": "thread-630fa8e472db",
       "thread_depth": 0,
-      "month": "2018-01"
+      "month": "2018-01",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014481.html"
     },
     {
       "id": "msg-d84b2fcfc359",
@@ -45,11 +47,12 @@
       "subject_clean": "PortfolioAnalytics with turnover constraint",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "Dear All,\n\nI am trying to use the PortfolioAnalytics package to run an optimization with a turnover constraint.  I didn't see any examples in the demos.  The example code below runs in I set the portfolio up using equal weights:\n\ninit.portf <- portfolio.spec(assets=funds)\n\nBut if I instead try to use a named vector of initial weights, as described in the docs, as such:\n\ninit.portf <- portfolio.spec(assets=wgts) # Does not work with this line added\n\nI get an error when I try to run the optimization:\n\n11:57:01  > minStdDev.DE <- optimize.portfolio(R=R, portfolio=init.portf, optimize_method=\"DEoptim\", search_size = 2000)\n Show Traceback\n\n Rerun with Debug\n Error in result[2, ] <- rep(1/length(seed), length(seed)) :\n  incorrect number of subscripts on matrix\n\nThe portfolio.spec function did take in the initial weights properly, as shown using the print function:\n\n11:57:01  > print.default(init.portf)\n$assets\n   CA CTAG  DS  EM EQM\n1 0.1  0.3 0.4 0.1 0.1\n\nCan anyone provide me with a working example using both initial weights and a turnover constraint?  I don't care it if uses DEoptim or some other optimizer, I just want to get started with something.\n\nThanks,\n\nRoger\n\n\nlibrary(PortfolioAnalytics)\n\ndata(edhec)\nR <- edhec[, 1:5]\ncolnames(R) <- c(\"CA\", \"CTAG\", \"DS\", \"EM\", \"EQM\")\nfunds <- colnames(R)\nwgts <- data.frame(\"CA\" = .1, \"CTAG\" = .3, \"DS\" = .4, \"EM\" = .1, \"EQM\" = .1)\nwgts\n\n# Set up portfolio with objectives and constraints\ninit.portf <- portfolio.spec(assets=funds)\ninit.portf <- portfolio.spec(assets=wgts) # Does not work with this line added\ninit.portf <- add.constraint(portfolio = init.portf, type=\"weight_sum\", min_sum = .99, max_sum = 1.01)\ninit.portf <- add.constraint(portfolio = init.portf, type=\"long_only\")\ninit.portf <- add.constraint(portfolio = init.portf, type=\"turnover\", turnover_target = .2)\n\n# Add an objective to minimize portfolio standard deviation\ninit.portf <- add.objective(portfolio=init.portf, type=\"risk\", name=\"StdDev\")\nprint.default(init.portf)\n\n# Solve with DEoptim\nminStdDev.DE <- optimize.portfolio(R=R, portfolio=init.portf, optimize_method=\"DEoptim\", search_size = 2000)\nminStdDev.DE\n\n\n\n\n\nThis message and any attachments are for the intended recipient?s use only. This message may contain confidential, proprietary or legally privileged information. No right to confidential or privileged treatment of this message is waived or lost by an error in transmission.\nIf you have received this message in error, please immediately notify the sender by e-mail, delete the message, any attachments and all copies from your system and destroy any hard copies. You must not, directly or indirectly, use, disclose, distribute, print or copy any part of this message or any attachments if you are not the intended recipient.",
+      "body_plain": "Dear All,\n\nI am trying to use the PortfolioAnalytics package to run an optimization with a turnover constraint.  I didn't see any examples in the demos.  The example code below runs in I set the portfolio up using equal weights:\n\ninit.portf <- portfolio.spec(assets=funds)\n\nBut if I instead try to use a named vector of initial weights, as described in the docs, as such:\n\ninit.portf <- portfolio.spec(assets=wgts) # Does not work with this line added\n\nI get an error when I try to run the optimization:\n\n11:57:01  > minStdDev.DE <- optimize.portfolio(R=R, portfolio=init.portf, optimize_method=\"DEoptim\", search_size = 2000)\n Show Traceback\n\n Rerun with Debug\n Error in result[2, ] <- rep(1/length(seed), length(seed)) :\n  incorrect number of subscripts on matrix\n\nThe portfolio.spec function did take in the initial weights properly, as shown using the print function:\n\n11:57:01  > print.default(init.portf)\n$assets\n   CA CTAG  DS  EM EQM\n1 0.1  0.3 0.4 0.1 0.1\n\nCan anyone provide me with a working example using both initial weights and a turnover constraint?  I don't care it if uses DEoptim or some other optimizer, I just want to get started with something.\n\nThanks,\n\nRoger\n\n\nlibrary(PortfolioAnalytics)\n\ndata(edhec)\nR <- edhec[, 1:5]\ncolnames(R) <- c(\"CA\", \"CTAG\", \"DS\", \"EM\", \"EQM\")\nfunds <- colnames(R)\nwgts <- data.frame(\"CA\" = .1, \"CTAG\" = .3, \"DS\" = .4, \"EM\" = .1, \"EQM\" = .1)\nwgts\n\n# Set up portfolio with objectives and constraints\ninit.portf <- portfolio.spec(assets=funds)\ninit.portf <- portfolio.spec(assets=wgts) # Does not work with this line added\ninit.portf <- add.constraint(portfolio = init.portf, type=\"weight_sum\", min_sum = .99, max_sum = 1.01)\ninit.portf <- add.constraint(portfolio = init.portf, type=\"long_only\")\ninit.portf <- add.constraint(portfolio = init.portf, type=\"turnover\", turnover_target = .2)\n\n# Add an objective to minimize portfolio standard deviation\ninit.portf <- add.objective(portfolio=init.portf, type=\"risk\", name=\"StdDev\")\nprint.default(init.portf)\n\n# Solve with DEoptim\nminStdDev.DE <- optimize.portfolio(R=R, portfolio=init.portf, optimize_method=\"DEoptim\", search_size = 2000)\nminStdDev.DE\n\n\n\n\n\nThis message and any attachments are for the intended recipient’s use only. This message may contain confidential, proprietary or legally privileged information. No right to confidential or privileged treatment of this message is waived or lost by an error in transmission.\nIf you have received this message in error, please immediately notify the sender by e-mail, delete the message, any attachments and all copies from your system and destroy any hard copies. You must not, directly or indirectly, use, disclose, distribute, print or copy any part of this message or any attachments if you are not the intended recipient.",
       "body_snippet": "Dear All,\n\nI am trying to use the PortfolioAnalytics package to run an optimization with a turnover constraint.  I didn't see any examples in the demos.  The example code below runs in I set the portf",
       "thread_id": "thread-d84b2fcfc359",
       "thread_depth": 0,
-      "month": "2018-01"
+      "month": "2018-01",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014482.html"
     },
     {
       "id": "msg-e1c4e261bdf0",
@@ -63,11 +66,12 @@
       "references": [
         "<147b70ee3210404c8ba6fa1f2007eab1@USNYMMSG001.rth.ad.rothschild.com>"
       ],
-      "body_plain": "Roger,\n\nThe \"assets\" argument for the portfolio.spec function should be a vector.\nYou are passing in a data.frame object.\n\nTry defining your wgts object as follows\nwgts <- c(\"CA\" = .1, \"CTAG\" = .3, \"DS\" = .4, \"EM\" = .1, \"EQM\" = .1)\n\nBest,\nRoss\n\n\nOn Thu, Jan 18, 2018 at 11:06 AM, Bos, Roger <roger.bos at rothschild.com>\nwrote:\n\n> Dear All,\n>\n> I am trying to use the PortfolioAnalytics package to run an optimization\n> with a turnover constraint.  I didn't see any examples in the demos.  The\n> example code below runs in I set the portfolio up using equal weights:\n>\n> init.portf <- portfolio.spec(assets=funds)\n>\n> But if I instead try to use a named vector of initial weights, as\n> described in the docs, as such:\n>\n> init.portf <- portfolio.spec(assets=wgts) # Does not work with this line\n> added\n>\n> I get an error when I try to run the optimization:\n>\n> 11:57:01  > minStdDev.DE <- optimize.portfolio(R=R, portfolio=init.portf,\n> optimize_method=\"DEoptim\", search_size = 2000)\n>  Show Traceback\n>\n>  Rerun with Debug\n>  Error in result[2, ] <- rep(1/length(seed), length(seed)) :\n>   incorrect number of subscripts on matrix\n>\n> The portfolio.spec function did take in the initial weights properly, as\n> shown using the print function:\n>\n> 11:57:01  > print.default(init.portf)\n> $assets\n>    CA CTAG  DS  EM EQM\n> 1 0.1  0.3 0.4 0.1 0.1\n>\n> Can anyone provide me with a working example using both initial weights\n> and a turnover constraint?  I don't care it if uses DEoptim or some other\n> optimizer, I just want to get started with something.\n>\n> Thanks,\n>\n> Roger\n>\n>\n> library(PortfolioAnalytics)\n>\n> data(edhec)\n> R <- edhec[, 1:5]\n> colnames(R) <- c(\"CA\", \"CTAG\", \"DS\", \"EM\", \"EQM\")\n> funds <- colnames(R)\n> wgts <- data.frame(\"CA\" = .1, \"CTAG\" = .3, \"DS\" = .4, \"EM\" = .1, \"EQM\" =\n> .1)\n> wgts\n>\n> # Set up portfolio with objectives and constraints\n> init.portf <- portfolio.spec(assets=funds)\n> init.portf <- portfolio.spec(assets=wgts) # Does not work with this line\n> added\n> init.portf <- add.constraint(portfolio = init.portf, type=\"weight_sum\",\n> min_sum = .99, max_sum = 1.01)\n> init.portf <- add.constraint(portfolio = init.portf, type=\"long_only\")\n> init.portf <- add.constraint(portfolio = init.portf, type=\"turnover\",\n> turnover_target = .2)\n>\n> # Add an objective to minimize portfolio standard deviation\n> init.portf <- add.objective(portfolio=init.portf, type=\"risk\",\n> name=\"StdDev\")\n> print.default(init.portf)\n>\n> # Solve with DEoptim\n> minStdDev.DE <- optimize.portfolio(R=R, portfolio=init.portf,\n> optimize_method=\"DEoptim\", search_size = 2000)\n> minStdDev.DE\n>\n>\n>\n>\n>\n> This message and any attachments are for the intended recipient?s use\n> only. This message may contain confidential, proprietary or legally\n> privileged information. No right to confidential or privileged treatment of\n> this message is waived or lost by an error in transmission.\n> If you have received this message in error, please immediately notify the\n> sender by e-mail, delete the message, any attachments and all copies from\n> your system and destroy any hard copies. You must not, directly or\n> indirectly, use, disclose, distribute, print or copy any part of this\n> message or any attachments if you are not the intended recipient.\n>\n>\n>\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n\n\t[[alternative HTML version deleted]]",
+      "body_plain": "Roger,\n\nThe \"assets\" argument for the portfolio.spec function should be a vector.\nYou are passing in a data.frame object.\n\nTry defining your wgts object as follows\nwgts <- c(\"CA\" = .1, \"CTAG\" = .3, \"DS\" = .4, \"EM\" = .1, \"EQM\" = .1)\n\nBest,\nRoss\n\n\nOn Thu, Jan 18, 2018 at 11:06 AM, Bos, Roger <roger.bos at rothschild.com>\nwrote:\n\n> Dear All,\n>\n> I am trying to use the PortfolioAnalytics package to run an optimization\n> with a turnover constraint.  I didn't see any examples in the demos.  The\n> example code below runs in I set the portfolio up using equal weights:\n>\n> init.portf <- portfolio.spec(assets=funds)\n>\n> But if I instead try to use a named vector of initial weights, as\n> described in the docs, as such:\n>\n> init.portf <- portfolio.spec(assets=wgts) # Does not work with this line\n> added\n>\n> I get an error when I try to run the optimization:\n>\n> 11:57:01  > minStdDev.DE <- optimize.portfolio(R=R, portfolio=init.portf,\n> optimize_method=\"DEoptim\", search_size = 2000)\n>  Show Traceback\n>\n>  Rerun with Debug\n>  Error in result[2, ] <- rep(1/length(seed), length(seed)) :\n>   incorrect number of subscripts on matrix\n>\n> The portfolio.spec function did take in the initial weights properly, as\n> shown using the print function:\n>\n> 11:57:01  > print.default(init.portf)\n> $assets\n>    CA CTAG  DS  EM EQM\n> 1 0.1  0.3 0.4 0.1 0.1\n>\n> Can anyone provide me with a working example using both initial weights\n> and a turnover constraint?  I don't care it if uses DEoptim or some other\n> optimizer, I just want to get started with something.\n>\n> Thanks,\n>\n> Roger\n>\n>\n> library(PortfolioAnalytics)\n>\n> data(edhec)\n> R <- edhec[, 1:5]\n> colnames(R) <- c(\"CA\", \"CTAG\", \"DS\", \"EM\", \"EQM\")\n> funds <- colnames(R)\n> wgts <- data.frame(\"CA\" = .1, \"CTAG\" = .3, \"DS\" = .4, \"EM\" = .1, \"EQM\" =\n> .1)\n> wgts\n>\n> # Set up portfolio with objectives and constraints\n> init.portf <- portfolio.spec(assets=funds)\n> init.portf <- portfolio.spec(assets=wgts) # Does not work with this line\n> added\n> init.portf <- add.constraint(portfolio = init.portf, type=\"weight_sum\",\n> min_sum = .99, max_sum = 1.01)\n> init.portf <- add.constraint(portfolio = init.portf, type=\"long_only\")\n> init.portf <- add.constraint(portfolio = init.portf, type=\"turnover\",\n> turnover_target = .2)\n>\n> # Add an objective to minimize portfolio standard deviation\n> init.portf <- add.objective(portfolio=init.portf, type=\"risk\",\n> name=\"StdDev\")\n> print.default(init.portf)\n>\n> # Solve with DEoptim\n> minStdDev.DE <- optimize.portfolio(R=R, portfolio=init.portf,\n> optimize_method=\"DEoptim\", search_size = 2000)\n> minStdDev.DE\n>\n>\n>\n>\n>\n> This message and any attachments are for the intended recipient’s use\n> only. This message may contain confidential, proprietary or legally\n> privileged information. No right to confidential or privileged treatment of\n> this message is waived or lost by an error in transmission.\n> If you have received this message in error, please immediately notify the\n> sender by e-mail, delete the message, any attachments and all copies from\n> your system and destroy any hard copies. You must not, directly or\n> indirectly, use, disclose, distribute, print or copy any part of this\n> message or any attachments if you are not the intended recipient.\n>\n>\n>\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n\n\t[[alternative HTML version deleted]]",
       "body_snippet": "Roger,\n\nThe \"assets\" argument for the portfolio.spec function should be a vector.\nYou are passing in a data.frame object.\n\nTry defining your wgts object as follows\nwgts <- c(\"CA\" = .1, \"CTAG\" = .3, \"D",
       "thread_id": "thread-d84b2fcfc359",
       "thread_depth": 1,
-      "month": "2018-01"
+      "month": "2018-01",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014483.html"
     },
     {
       "id": "msg-7dfd6c127e41",
@@ -82,11 +86,12 @@
         "<147b70ee3210404c8ba6fa1f2007eab1@USNYMMSG001.rth.ad.rothschild.com>",
         "<CAEESW=VUKHD-iWLUSXkewGbW1Rk80_CCNtgxef-Etp9TLp_GFg@mail.gmail.com>"
       ],
-      "body_plain": "That worked!  Thanks so much Ross. I really look forward to using this package.\n\n-----Original Message-----\nFrom: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On Behalf Of Ross Bennett\nSent: Thursday, January 18, 2018 12:26 PM\nTo: r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] PortfolioAnalytics with turnover constraint\n\nRoger,\n\nThe \"assets\" argument for the portfolio.spec function should be a vector.\nYou are passing in a data.frame object.\n\nTry defining your wgts object as follows wgts <- c(\"CA\" = .1, \"CTAG\" = .3, \"DS\" = .4, \"EM\" = .1, \"EQM\" = .1)\n\nBest,\nRoss\n\n\nOn Thu, Jan 18, 2018 at 11:06 AM, Bos, Roger <roger.bos at rothschild.com>\nwrote:\n\n> Dear All,\n>\n> I am trying to use the PortfolioAnalytics package to run an\n> optimization with a turnover constraint.  I didn't see any examples in\n> the demos.  The example code below runs in I set the portfolio up using equal weights:\n>\n> init.portf <- portfolio.spec(assets=funds)\n>\n> But if I instead try to use a named vector of initial weights, as\n> described in the docs, as such:\n>\n> init.portf <- portfolio.spec(assets=wgts) # Does not work with this\n> line added\n>\n> I get an error when I try to run the optimization:\n>\n> 11:57:01  > minStdDev.DE <- optimize.portfolio(R=R,\n> portfolio=init.portf, optimize_method=\"DEoptim\", search_size = 2000)\n> Show Traceback\n>\n>  Rerun with Debug\n>  Error in result[2, ] <- rep(1/length(seed), length(seed)) :\n>   incorrect number of subscripts on matrix\n>\n> The portfolio.spec function did take in the initial weights properly,\n> as shown using the print function:\n>\n> 11:57:01  > print.default(init.portf)\n> $assets\n>    CA CTAG  DS  EM EQM\n> 1 0.1  0.3 0.4 0.1 0.1\n>\n> Can anyone provide me with a working example using both initial\n> weights and a turnover constraint?  I don't care it if uses DEoptim or\n> some other optimizer, I just want to get started with something.\n>\n> Thanks,\n>\n> Roger\n>\n>\n> library(PortfolioAnalytics)\n>\n> data(edhec)\n> R <- edhec[, 1:5]\n> colnames(R) <- c(\"CA\", \"CTAG\", \"DS\", \"EM\", \"EQM\") funds <- colnames(R)\n> wgts <- data.frame(\"CA\" = .1, \"CTAG\" = .3, \"DS\" = .4, \"EM\" = .1, \"EQM\"\n> =\n> .1)\n> wgts\n>\n> # Set up portfolio with objectives and constraints init.portf <-\n> portfolio.spec(assets=funds) init.portf <- portfolio.spec(assets=wgts)\n> # Does not work with this line added init.portf <-\n> add.constraint(portfolio = init.portf, type=\"weight_sum\", min_sum =\n> .99, max_sum = 1.01) init.portf <- add.constraint(portfolio =\n> init.portf, type=\"long_only\") init.portf <- add.constraint(portfolio =\n> init.portf, type=\"turnover\", turnover_target = .2)\n>\n> # Add an objective to minimize portfolio standard deviation init.portf\n> <- add.objective(portfolio=init.portf, type=\"risk\",\n> name=\"StdDev\")\n> print.default(init.portf)\n>\n> # Solve with DEoptim\n> minStdDev.DE <- optimize.portfolio(R=R, portfolio=init.portf,\n> optimize_method=\"DEoptim\", search_size = 2000) minStdDev.DE\n>\n>\n>\n>\n>\n> This message and any attachments are for the intended recipient?s use\n> only. This message may contain confidential, proprietary or legally\n> privileged information. No right to confidential or privileged\n> treatment of this message is waived or lost by an error in transmission.\n> If you have received this message in error, please immediately notify\n> the sender by e-mail, delete the message, any attachments and all\n> copies from your system and destroy any hard copies. You must not,\n> directly or indirectly, use, disclose, distribute, print or copy any\n> part of this message or any attachments if you are not the intended recipient.\n>\n>\n>\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R\n> questions should go.\n\n[[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\n\nThis message and any attachments are for the intended recipient?s use only. This message may contain confidential, proprietary or legally privileged information. No right to confidential or privileged treatment of this message is waived or lost by an error in transmission.\nIf you have received this message in error, please immediately notify the sender by e-mail, delete the message, any attachments and all copies from your system and destroy any hard copies. You must not, directly or indirectly, use, disclose, distribute, print or copy any part of this message or any attachments if you are not the intended recipient.",
+      "body_plain": "That worked!  Thanks so much Ross. I really look forward to using this package.\n\n-----Original Message-----\nFrom: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On Behalf Of Ross Bennett\nSent: Thursday, January 18, 2018 12:26 PM\nTo: r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] PortfolioAnalytics with turnover constraint\n\nRoger,\n\nThe \"assets\" argument for the portfolio.spec function should be a vector.\nYou are passing in a data.frame object.\n\nTry defining your wgts object as follows wgts <- c(\"CA\" = .1, \"CTAG\" = .3, \"DS\" = .4, \"EM\" = .1, \"EQM\" = .1)\n\nBest,\nRoss\n\n\nOn Thu, Jan 18, 2018 at 11:06 AM, Bos, Roger <roger.bos at rothschild.com>\nwrote:\n\n> Dear All,\n>\n> I am trying to use the PortfolioAnalytics package to run an\n> optimization with a turnover constraint.  I didn't see any examples in\n> the demos.  The example code below runs in I set the portfolio up using equal weights:\n>\n> init.portf <- portfolio.spec(assets=funds)\n>\n> But if I instead try to use a named vector of initial weights, as\n> described in the docs, as such:\n>\n> init.portf <- portfolio.spec(assets=wgts) # Does not work with this\n> line added\n>\n> I get an error when I try to run the optimization:\n>\n> 11:57:01  > minStdDev.DE <- optimize.portfolio(R=R,\n> portfolio=init.portf, optimize_method=\"DEoptim\", search_size = 2000)\n> Show Traceback\n>\n>  Rerun with Debug\n>  Error in result[2, ] <- rep(1/length(seed), length(seed)) :\n>   incorrect number of subscripts on matrix\n>\n> The portfolio.spec function did take in the initial weights properly,\n> as shown using the print function:\n>\n> 11:57:01  > print.default(init.portf)\n> $assets\n>    CA CTAG  DS  EM EQM\n> 1 0.1  0.3 0.4 0.1 0.1\n>\n> Can anyone provide me with a working example using both initial\n> weights and a turnover constraint?  I don't care it if uses DEoptim or\n> some other optimizer, I just want to get started with something.\n>\n> Thanks,\n>\n> Roger\n>\n>\n> library(PortfolioAnalytics)\n>\n> data(edhec)\n> R <- edhec[, 1:5]\n> colnames(R) <- c(\"CA\", \"CTAG\", \"DS\", \"EM\", \"EQM\") funds <- colnames(R)\n> wgts <- data.frame(\"CA\" = .1, \"CTAG\" = .3, \"DS\" = .4, \"EM\" = .1, \"EQM\"\n> =\n> .1)\n> wgts\n>\n> # Set up portfolio with objectives and constraints init.portf <-\n> portfolio.spec(assets=funds) init.portf <- portfolio.spec(assets=wgts)\n> # Does not work with this line added init.portf <-\n> add.constraint(portfolio = init.portf, type=\"weight_sum\", min_sum =\n> .99, max_sum = 1.01) init.portf <- add.constraint(portfolio =\n> init.portf, type=\"long_only\") init.portf <- add.constraint(portfolio =\n> init.portf, type=\"turnover\", turnover_target = .2)\n>\n> # Add an objective to minimize portfolio standard deviation init.portf\n> <- add.objective(portfolio=init.portf, type=\"risk\",\n> name=\"StdDev\")\n> print.default(init.portf)\n>\n> # Solve with DEoptim\n> minStdDev.DE <- optimize.portfolio(R=R, portfolio=init.portf,\n> optimize_method=\"DEoptim\", search_size = 2000) minStdDev.DE\n>\n>\n>\n>\n>\n> This message and any attachments are for the intended recipient’s use\n> only. This message may contain confidential, proprietary or legally\n> privileged information. No right to confidential or privileged\n> treatment of this message is waived or lost by an error in transmission.\n> If you have received this message in error, please immediately notify\n> the sender by e-mail, delete the message, any attachments and all\n> copies from your system and destroy any hard copies. You must not,\n> directly or indirectly, use, disclose, distribute, print or copy any\n> part of this message or any attachments if you are not the intended recipient.\n>\n>\n>\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R\n> questions should go.\n\n[[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\n\nThis message and any attachments are for the intended recipient’s use only. This message may contain confidential, proprietary or legally privileged information. No right to confidential or privileged treatment of this message is waived or lost by an error in transmission.\nIf you have received this message in error, please immediately notify the sender by e-mail, delete the message, any attachments and all copies from your system and destroy any hard copies. You must not, directly or indirectly, use, disclose, distribute, print or copy any part of this message or any attachments if you are not the intended recipient.",
       "body_snippet": "That worked!  Thanks so much Ross. I really look forward to using this package.\n\n-----Original Message-----\nFrom: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On Behalf Of Ross Bennet",
       "thread_id": "thread-d84b2fcfc359",
       "thread_depth": 2,
-      "month": "2018-01"
+      "month": "2018-01",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014484.html"
     },
     {
       "id": "msg-9c496a83e7ed",
@@ -102,7 +107,8 @@
       "body_snippet": "Hello - \n\nAre there still open spots to present?  I know the deadline is Feb 2\n\nRegards - Daniel",
       "thread_id": "thread-9c496a83e7ed",
       "thread_depth": 0,
-      "month": "2018-01"
+      "month": "2018-01",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014485.html"
     },
     {
       "id": "msg-08d25278721f",
@@ -120,7 +126,8 @@
       "body_snippet": "On Fri, Jan 19, 2018 at 9:26 AM, Daniel Melendez\n<danielmelendez at alum.northwestern.edu> wrote:\n> Hello -\n>\n> Are there still open spots to present?  I know the deadline is Feb 2\n>\nThere are no pre-",
       "thread_id": "thread-9c496a83e7ed",
       "thread_depth": 1,
-      "month": "2018-01"
+      "month": "2018-01",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014486.html"
     },
     {
       "id": "msg-ef0a0a5e99e6",
@@ -135,11 +142,12 @@
         "<D68B27D5-A543-453B-BDD9-370A0E3F2939@alum.northwestern.edu>",
         "<CAPPM_gSNeBkO=B+yRgzeVVLbF3C9uoX2fSOwrXiFZT8WvQJU=Q@mail.gmail.com>"
       ],
-      "body_plain": "Thanks Josh and Luis, I?ll proceed with the submission. \n\nRegards - Daniel\n\n> On Jan 19, 2018, at 9:35 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> \n> On Fri, Jan 19, 2018 at 9:26 AM, Daniel Melendez\n> <danielmelendez at alum.northwestern.edu> wrote:\n>> Hello -\n>> \n>> Are there still open spots to present?  I know the deadline is Feb 2\n>> \n> There are no pre-specified number of open spots.  We will not know the\n> number and types of slots until after the deadline, and after all\n> submissions have been evaluated.\n> \n>> Regards - Daniel\n>> \n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n> \n> \n> \n> -- \n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com\n> R/Finance 2018 | www.rinfinance.com",
-      "body_snippet": "Thanks Josh and Luis, I?ll proceed with the submission. \n\nRegards - Daniel\n\n> On Jan 19, 2018, at 9:35 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> \n> On Fri, Jan 19, 2018 at 9:26 AM, Danie",
+      "body_plain": "Thanks Josh and Luis, I’ll proceed with the submission. \n\nRegards - Daniel\n\n> On Jan 19, 2018, at 9:35 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> \n> On Fri, Jan 19, 2018 at 9:26 AM, Daniel Melendez\n> <danielmelendez at alum.northwestern.edu> wrote:\n>> Hello -\n>> \n>> Are there still open spots to present?  I know the deadline is Feb 2\n>> \n> There are no pre-specified number of open spots.  We will not know the\n> number and types of slots until after the deadline, and after all\n> submissions have been evaluated.\n> \n>> Regards - Daniel\n>> \n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n> \n> \n> \n> -- \n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com\n> R/Finance 2018 | www.rinfinance.com",
+      "body_snippet": "Thanks Josh and Luis, I’ll proceed with the submission. \n\nRegards - Daniel\n\n> On Jan 19, 2018, at 9:35 AM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> \n> On Fri, Jan 19, 2018 at 9:26 AM, Danie",
       "thread_id": "thread-9c496a83e7ed",
       "thread_depth": 2,
-      "month": "2018-01"
+      "month": "2018-01",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014487.html"
     },
     {
       "id": "msg-7f0e12ed46ea",
@@ -155,7 +163,8 @@
       "body_snippet": "I use old IBrokers R package in Linux and I don't advise it to a new starter. It doesn't work with newer API versions, some patches needed. It has limited functionalities.  \nBecause your trading algor",
       "thread_id": "thread-7f0e12ed46ea",
       "thread_depth": 0,
-      "month": "2018-01"
+      "month": "2018-01",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014488.html"
     },
     {
       "id": "msg-111aec0e79b0",
@@ -171,7 +180,8 @@
       "body_snippet": "Hi Alexios (and others),\n\nFirst, thank you for creating rmgarch, it's great.\n\nI'm trying to generate simulations using dccsim from a spec, and find that\nwhen I specify a single value for rseed, the si",
       "thread_id": "thread-111aec0e79b0",
       "thread_depth": 0,
-      "month": "2018-01"
+      "month": "2018-01",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014489.html"
     },
     {
       "id": "msg-1b8fab5a4afe",
@@ -189,7 +199,8 @@
       "body_snippet": "Hi Josh,\n\nThanks for reporting this...I'll investigate further when time permits.\n\nIn the meantime, if you let the rseed=NULL, the returned object will \ninclude the seeds used which can then be passed",
       "thread_id": "thread-111aec0e79b0",
       "thread_depth": 1,
-      "month": "2018-01"
+      "month": "2018-01",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014490.html"
     },
     {
       "id": "msg-947beb15e9ec",
@@ -208,7 +219,8 @@
       "body_snippet": "I'll try that, thanks!\n\nOn Wed, Jan 24, 2018 at 10:15 PM, alexios galanos <alexios at 4dscape.com>\nwrote:\n\n> Hi Josh,\n>\n> Thanks for reporting this...I'll investigate further when time permits.\n>\n> In",
       "thread_id": "thread-111aec0e79b0",
       "thread_depth": 2,
-      "month": "2018-01"
+      "month": "2018-01",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014491.html"
     },
     {
       "id": "msg-bfb0b3ad80e0",
@@ -224,7 +236,8 @@
       "body_snippet": "Dear R-sig-finance Group,\n\nI have 3 of questions about the PortfolioAnalytics package:\n\n1) I'm using DEOptim optimization.  And I use the following initialization:\n\n  i.portf <- portfolio.spec(assets=",
       "thread_id": "thread-bfb0b3ad80e0",
       "thread_depth": 0,
-      "month": "2018-01"
+      "month": "2018-01",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014492.html"
     },
     {
       "id": "msg-50c3455419d0",
@@ -242,7 +255,8 @@
       "body_snippet": "On 01/26/2018 03:05 PM, Ed Herranz wrote:\n> Dear R-sig-finance Group,\n> \n> I have 3 of questions about the PortfolioAnalytics package:\n> \n> 1) I'm using DEOptim optimization.  And I use the following ",
       "thread_id": "thread-bfb0b3ad80e0",
       "thread_depth": 1,
-      "month": "2018-01"
+      "month": "2018-01",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014493.html"
     },
     {
       "id": "msg-2a3b67ed5746",
@@ -261,7 +275,8 @@
       "body_snippet": "Thank you Brian. I did not mean to put the same group in both calls; that\nwas a typo.\n\nOn Sun, Jan 28, 2018 at 6:47 AM Brian G. Peterson <brian at braverock.com>\nwrote:\n\n> On 01/26/2018 03:05 PM, Ed H",
       "thread_id": "thread-bfb0b3ad80e0",
       "thread_depth": 2,
-      "month": "2018-01"
+      "month": "2018-01",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014494.html"
     },
     {
       "id": "msg-ed2d741e7281",
@@ -277,7 +292,8 @@
       "body_snippet": "Hello,\n\nI am using quantstrat.\n\nI have noticed that the prefer argument is acceptable to be sent in many functions.\n\nI would like make a 'decision to buy' based on yesterday's Closing price.\nI would l",
       "thread_id": "thread-ed2d741e7281",
       "thread_depth": 0,
-      "month": "2018-01"
+      "month": "2018-01",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014495.html"
     },
     {
       "id": "msg-98f95803214c",
@@ -295,7 +311,8 @@
       "body_snippet": "They go in your rules, not in the applyStrategy call, to my knowledge.\n\nOn Mon, Jan 29, 2018 at 2:30 PM, Andre Mikulec <andre_mikulec at hotmail.com>\nwrote:\n\n> Hello,\n>\n> I am using quantstrat.\n>\n> I ",
       "thread_id": "thread-ed2d741e7281",
       "thread_depth": 1,
-      "month": "2018-01"
+      "month": "2018-01",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014496.html"
     },
     {
       "id": "msg-8f4fdad60ab4",
@@ -314,7 +331,8 @@
       "body_snippet": "Here \"prefer = 'Open' is  shown\nhttps://github.com/braverock/quantstrat/blob/b32907739c1aca80cb9a49de79a980e1b9922bc5/demo/rocema.R\n\n  # * using prefer='Open' on next bar\n  applyStrategy(s, p, paramet",
       "thread_id": "thread-ed2d741e7281",
       "thread_depth": 2,
-      "month": "2018-01"
+      "month": "2018-01",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014497.html"
     },
     {
       "id": "msg-d0b1016b90f0",
@@ -333,7 +351,8 @@
       "body_snippet": "Here \"prefer = 'Open' is  shown\nhttps://github.com/braverock/quantstrat/blob/b32907739c1aca80cb9a49de79a980e1b9922bc5/demo/rocema.R\n\n  # * using prefer='Open' on next bar\n  applyStrategy(s, p, paramet",
       "thread_id": "thread-ed2d741e7281",
       "thread_depth": 2,
-      "month": "2018-01"
+      "month": "2018-01",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014498.html"
     },
     {
       "id": "msg-cb16de6f5995",
@@ -349,7 +368,8 @@
       "body_snippet": "Hello,\n\n\nI am starting to work on setting up our own locally hosted Bloomberg database using a Bloomberg data license.  Any tips for setting this up?  Any R code which can do most of setup work?  Any ",
       "thread_id": "thread-cb16de6f5995",
       "thread_depth": 0,
-      "month": "2018-01"
+      "month": "2018-01",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014499.html"
     },
     {
       "id": "msg-cda5003fae23",
@@ -365,7 +385,8 @@
       "body_snippet": "Quoting \"Rassenti, Luca\" <Luca.Rassenti at kochind.com>:\n\n> Hello,\n>\n> I am starting to work on setting up our own locally hosted Bloomberg  \n> database using a Bloomberg data license.  Any tips for s",
       "thread_id": "thread-cb16de6f5995",
       "thread_depth": 1,
-      "month": "2018-01"
+      "month": "2018-01",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014500.html"
     }
   ],
   "threads": [

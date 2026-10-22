@@ -17,7 +17,8 @@
       "body_snippet": "I (and my students) used to download historical prices from yahoo finance\nwith the Quantmod function getSymbols(). It seems that it now requires\nyahoo premium service. Is there a way around? If not, a",
       "thread_id": "thread-080e34b34737",
       "thread_depth": 0,
-      "month": "2024-11"
+      "month": "2024-11",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2024q4/015218.html"
     },
     {
       "id": "msg-5387d6a6fd57",
@@ -35,7 +36,8 @@
       "body_snippet": "On 22 November 2024 at 11:41, Anatoly Schmidt wrote:\n| I (and my students) used to download historical prices from yahoo finance\n| with the Quantmod function getSymbols(). It seems that it now require",
       "thread_id": "thread-080e34b34737",
       "thread_depth": 1,
-      "month": "2024-11"
+      "month": "2024-11",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2024q4/015219.html"
     },
     {
       "id": "msg-e9967b301d56",
@@ -55,7 +57,8 @@
       "body_snippet": "I had to delete the screenshot as my message below violates the size\nconstraint imposed by r-sig-finance. It can be seen on the yahoo finance\nwebsite.\n\nOn Fri, Nov 22, 2024 at 12:07?PM Anatoly Schmidt",
       "thread_id": "thread-e9967b301d56",
       "thread_depth": 0,
-      "month": "2024-11"
+      "month": "2024-11",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2024q4/015220.html"
     },
     {
       "id": "msg-33df96e8d438",
@@ -76,7 +79,8 @@
       "body_snippet": "I just tried a basic getSymbols('SPY', from = '1990-01-01'), and it went\noff without a hitch.\n\nOn Fri, Nov 22, 2024 at 12:13?PM Anatoly Schmidt <as8098 at nyu.edu> wrote:\n\n> I had to delete the screen",
       "thread_id": "thread-e9967b301d56",
       "thread_depth": 1,
-      "month": "2024-11"
+      "month": "2024-11",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2024q4/015221.html"
     },
     {
       "id": "msg-8aa7771dd75c",
@@ -97,7 +101,8 @@
       "body_snippet": "I might be on a lagged version in the session I just was running, but I\ndon't see an issue either.\n\n> getSymbols(\"SPY\")\n\n[1] \"SPY\"\n\n> head(SPY)\n\n           SPY.Open SPY.High SPY.Low SPY.Close SPY.Volu",
       "thread_id": "thread-e9967b301d56",
       "thread_depth": 1,
-      "month": "2024-11"
+      "month": "2024-11",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2024q4/015222.html"
     },
     {
       "id": "msg-a2688173a7ee",
@@ -114,11 +119,12 @@
         "<CAOTSzfn8EOGdn4SReQh7NKeAqvRELvM8BRP23vcv_GFr=Ooouw@mail.gmail.com>",
         "<CAOTSzfncSFg1dSYLnDxFf6aXckXCGX=nH3Zuz9RJGHw3XwOR6w@mail.gmail.com>"
       ],
-      "body_plain": "On 22 November 2024 at 12:13, Anatoly Schmidt wrote:\n| I had to delete the screenshot as my message below violates the size constraint\n| imposed by r-sig-finance. It can be seen on the yahoo finance website.?\n\nYep. And we are not fan of screen shots either.\n \n| On Fri, Nov 22, 2024 at 12:07?PM Anatoly Schmidt <as8098 at nyu.edu> wrote:\n| \n|     Thank?you Dirk,\n|     I concluded that yahoo requires premium service after seeing the lock on\n|     the download? link. Here is a screenshot. When I click?on the lock, yahoo\n|     invites me to subscribe a premium service:\n| \n| \n|     When I run your example\n|     X <- getSymbols(\"SPY\", from=\"2024-11-01\"),?\n\nYou can't do the assignment unless you set the option I showed in my initial email.\n\n|     I have the following output:\n| \n|     Warning: SPY download failed; trying again.\n|     Error in getSymbols.yahoo(Symbols = \"SPY\", env = <environment>, verbose = FALSE,  :\n|       Unable to import ?SPY?.\n|     SPY download failed after two attempts. Error message:?\n| \n|     HTTP error 401.\n\nSo we need to debug this.\n\nFor kicks, I just installed quantmod and its five depedencies on a fresh r2u\ncontainer running Ubuntu 24.04.  No options, no nothing:\n\n  root at d17b04bef87d:/# R -q\n  > library(quantmod)\n  Loading required package: xts\n  Loading required package: zoo\n  \n  Attaching package: ?zoo?\n  \n  The following objects are masked from ?package:base?:\n  \n      as.Date, as.Date.numeric\n  \n  Loading required package: TTR\n  Registered S3 method overwritten by 'quantmod':\n    method            from\n    as.zoo.data.frame zoo \n  > getSymbols(\"SPY\", from=\"2024-11-01\")\n  [1] \"SPY\"\n  > SPY\n             SPY.Open SPY.High SPY.Low SPY.Close SPY.Volume SPY.Adjusted\n  2024-11-01   571.32   575.55  570.62    571.04   45667500       571.04\n  2024-11-04   571.18   572.50  567.89    569.81   38217000       569.81\n  2024-11-05   570.74   576.74  570.52    576.70   39478300       576.70\n  2024-11-06   589.20   591.93  585.39    591.04   68182000       591.04\n  2024-11-07   593.08   596.65  593.00    595.61   47233200       595.61\n  2024-11-08   596.17   599.64  596.17    598.19   46444900       598.19\n  2024-11-11   599.81   600.17  597.00    598.76   37586800       598.76\n  2024-11-12   598.68   599.29  594.37    596.90   43006100       596.90\n  2024-11-13   597.37   599.23  594.96    597.19   47388600       597.19\n  2024-11-14   597.32   597.81  592.65    593.35   38904100       593.35\n  2024-11-15   589.72   590.20  583.86    585.75   75988800       585.75\n  2024-11-18   586.22   589.49  585.34    588.15   37084100       588.15\n  2024-11-19   584.71   591.04  584.03    590.30   49412000       590.30\n  2024-11-20   590.38   590.79  584.63    590.50   50032600       590.50\n  2024-11-21   593.40   595.12  587.45    593.67   46565100       593.67\n  > \n\nSo the arrow still points at your setup. \n\nDirk\n\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_plain": "On 22 November 2024 at 12:13, Anatoly Schmidt wrote:\n| I had to delete the screenshot as my message below violates the size constraint\n| imposed by r-sig-finance. It can be seen on the yahoo finance website. \n\nYep. And we are not fan of screen shots either.\n \n| On Fri, Nov 22, 2024 at 12:07 PM Anatoly Schmidt <as8098 at nyu.edu> wrote:\n| \n|     Thank you Dirk,\n|     I concluded that yahoo requires premium service after seeing the lock on\n|     the download  link. Here is a screenshot. When I click on the lock, yahoo\n|     invites me to subscribe a premium service:\n| \n| \n|     When I run your example\n|     X <- getSymbols(\"SPY\", from=\"2024-11-01\"), \n\nYou can't do the assignment unless you set the option I showed in my initial email.\n\n|     I have the following output:\n| \n|     Warning: SPY download failed; trying again.\n|     Error in getSymbols.yahoo(Symbols = \"SPY\", env = <environment>, verbose = FALSE,  :\n|       Unable to import “SPY”.\n|     SPY download failed after two attempts. Error message: \n| \n|     HTTP error 401.\n\nSo we need to debug this.\n\nFor kicks, I just installed quantmod and its five depedencies on a fresh r2u\ncontainer running Ubuntu 24.04.  No options, no nothing:\n\n  root at d17b04bef87d:/# R -q\n  > library(quantmod)\n  Loading required package: xts\n  Loading required package: zoo\n  \n  Attaching package: ‘zoo’\n  \n  The following objects are masked from ‘package:base’:\n  \n      as.Date, as.Date.numeric\n  \n  Loading required package: TTR\n  Registered S3 method overwritten by 'quantmod':\n    method            from\n    as.zoo.data.frame zoo \n  > getSymbols(\"SPY\", from=\"2024-11-01\")\n  [1] \"SPY\"\n  > SPY\n             SPY.Open SPY.High SPY.Low SPY.Close SPY.Volume SPY.Adjusted\n  2024-11-01   571.32   575.55  570.62    571.04   45667500       571.04\n  2024-11-04   571.18   572.50  567.89    569.81   38217000       569.81\n  2024-11-05   570.74   576.74  570.52    576.70   39478300       576.70\n  2024-11-06   589.20   591.93  585.39    591.04   68182000       591.04\n  2024-11-07   593.08   596.65  593.00    595.61   47233200       595.61\n  2024-11-08   596.17   599.64  596.17    598.19   46444900       598.19\n  2024-11-11   599.81   600.17  597.00    598.76   37586800       598.76\n  2024-11-12   598.68   599.29  594.37    596.90   43006100       596.90\n  2024-11-13   597.37   599.23  594.96    597.19   47388600       597.19\n  2024-11-14   597.32   597.81  592.65    593.35   38904100       593.35\n  2024-11-15   589.72   590.20  583.86    585.75   75988800       585.75\n  2024-11-18   586.22   589.49  585.34    588.15   37084100       588.15\n  2024-11-19   584.71   591.04  584.03    590.30   49412000       590.30\n  2024-11-20   590.38   590.79  584.63    590.50   50032600       590.50\n  2024-11-21   593.40   595.12  587.45    593.67   46565100       593.67\n  > \n\nSo the arrow still points at your setup. \n\nDirk\n\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
       "body_snippet": "On 22 November 2024 at 12:13, Anatoly Schmidt wrote:\n| I had to delete the screenshot as my message below violates the size constraint\n| imposed by r-sig-finance. It can be seen on the yahoo finance w",
       "thread_id": "thread-e9967b301d56",
       "thread_depth": 1,
-      "month": "2024-11"
+      "month": "2024-11",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2024q4/015223.html"
     },
     {
       "id": "msg-7f432a517f3b",
@@ -140,7 +146,8 @@
       "body_snippet": "I reloaded quantmod, and my script works now fine.\nStill, one cannot download prices from the yahoo finance website to a xls\nfile for free anymore.\nThank you all.\nAlec\n\nOn Fri, Nov 22, 2024 at 12:40?P",
       "thread_id": "thread-e9967b301d56",
       "thread_depth": 2,
-      "month": "2024-11"
+      "month": "2024-11",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2024q4/015224.html"
     },
     {
       "id": "msg-a12662c84e09",
@@ -159,11 +166,12 @@
         "<26432.49647.352866.558315@rob.eddelbuettel.com>",
         "<CAOTSzfnjNfw44+53x3W+-mMv__jFM3W6n_gxC0zZtRQHn4+BUg@mail.gmail.com>"
       ],
-      "body_plain": "On 22 November 2024 at 12:48, Anatoly Schmidt wrote:\n| I reloaded quantmod, and my script?works now fine.\n\nGood, and as expected. There were recent changes in the code one needs to\naccommodate recent changes at the website.\n\n| Still, one cannot download prices from the yahoo finance website to a xls file\n| for free anymore.\n\nWell for that you may have to talk to Yahoo! rather than this list.\n\nIt was _years_ ago that exchanges started to derive more than half their\ntotal revenue from data sales. That we still get this data this is a small\nmiracle, and in large part due to some folks tirelessly toiling away to\nupdate the code. It is appreciated.\n\nCheers, Dirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
-      "body_snippet": "On 22 November 2024 at 12:48, Anatoly Schmidt wrote:\n| I reloaded quantmod, and my script?works now fine.\n\nGood, and as expected. There were recent changes in the code one needs to\naccommodate recent ",
+      "body_plain": "On 22 November 2024 at 12:48, Anatoly Schmidt wrote:\n| I reloaded quantmod, and my script works now fine.\n\nGood, and as expected. There were recent changes in the code one needs to\naccommodate recent changes at the website.\n\n| Still, one cannot download prices from the yahoo finance website to a xls file\n| for free anymore.\n\nWell for that you may have to talk to Yahoo! rather than this list.\n\nIt was _years_ ago that exchanges started to derive more than half their\ntotal revenue from data sales. That we still get this data this is a small\nmiracle, and in large part due to some folks tirelessly toiling away to\nupdate the code. It is appreciated.\n\nCheers, Dirk\n\n-- \ndirk.eddelbuettel.com | @eddelbuettel | edd at debian.org",
+      "body_snippet": "On 22 November 2024 at 12:48, Anatoly Schmidt wrote:\n| I reloaded quantmod, and my script works now fine.\n\nGood, and as expected. There were recent changes in the code one needs to\naccommodate recent ",
       "thread_id": "thread-e9967b301d56",
       "thread_depth": 3,
-      "month": "2024-11"
+      "month": "2024-11",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2024q4/015225.html"
     }
   ],
   "threads": [

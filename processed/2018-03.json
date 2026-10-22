@@ -17,7 +17,8 @@
       "body_snippet": "Dear Sir or Madam,\n\n\nI am trying to fit an AR-t-(E)GARCH model in stock log return data using the rugarch package.\n\nMy code is :\n\ninstall.packages(\"rugarch\")\nlibrary(rugarch)\ndata <- read.csv2(\"C:/Use",
       "thread_id": "thread-62aa876d9674",
       "thread_depth": 0,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014525.html"
     },
     {
       "id": "msg-26aa65aa1706",
@@ -35,7 +36,8 @@
       "body_snippet": "Standardized residuals would be approx. normally distributed. Those are the shocks. Standardization here means filetering of vol clustering. So you get the garch shocks which are approx normal. You ca",
       "thread_id": "thread-62aa876d9674",
       "thread_depth": 1,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014526.html"
     },
     {
       "id": "msg-029da35731c7",
@@ -54,7 +56,8 @@
       "body_snippet": "Dear Ibrahim,\n\n\nFirst of all, I would like to sincerely thank you for your reply!\n\nIndeed, standardized residuals are approx. normally distributed in my model.\n\nIf I understood correctly, I should do ",
       "thread_id": "thread-62aa876d9674",
       "thread_depth": 2,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014527.html"
     },
     {
       "id": "msg-9a34e56dbb53",
@@ -70,11 +73,12 @@
         "<9DC0297C-D387-4347-948E-681AA263109F@gmail.com>",
         "<AM0PR0602MB3492B1ADBE4EC6CB411054B98FC60@AM0PR0602MB3492.eurprd06.prod.outlook.com>"
       ],
-      "body_plain": "Andreas, you can just extract the numeric values from the output :\nEither coredata() or as.numeric().\n\nrugarch was designed to work with xts as it was the author?s opinion at the time that it was the gold standard for working with timeseries data in the context of GARCH models and greatly simplified design decisions.\n\nRegards,\n\nAlexios\n\n> On Mar 1, 2018, at 10:37 AM, Andreas Bregiannis <bregiannis.andreas at hotmail.com> wrote:\n> \n> Dear Ibrahim,\n> \n> \n> First of all, I would like to sincerely thank you for your reply!\n> \n> Indeed, standardized residuals are approx. normally distributed in my model.\n> \n> If I understood correctly, I should do the following to transform them in uniform: pnorm(residuals(egarcht.fit,standardize=TRUE)). I just did it and I checked through a histogram that indeed they look like uniform.\n> \n> Thank you very much!\n> \n> So, do you think that my code, in general, is right? Is it reasonable that in the output of the standardized residuals, I received also the dates? I am asking because I also used fgarch package and in the output I received just the standardized residuals without the dates, so after that I just use the ecdf and I convert them.\n> \n> \n> Best regards,\n> \n> Andreas\n> \n> \n> \n> ________________________________\n> ???: ibrahim ergen <ibrahimergen at gmail.com>\n> ????????: ??????, 1 ??????? 2018 6:49 ??\n> ????: Andreas Bregiannis\n> ????.: r-sig-finance at r-project.org\n> ????: Re: [R-SIG-Finance] Question about rugarch\n> \n> \n> Standardized residuals would be approx. normally distributed. Those are the shocks. Standardization here means filetering of vol clustering. So you get the garch shocks which are approx normal. You can use pnorm function to transform them to uniform distribution.\n> \n> Best\n> Ibrahim\n> \n> Sent from my iPhone\n> \n>> On Mar 1, 2018, at 11:32 AM, Andreas Bregiannis <bregiannis.andreas at hotmail.com> wrote:\n>> \n>> Dear Sir or Madam,\n>> \n>> \n>> I am trying to fit an AR-t-(E)GARCH model in stock log return data using the rugarch package.\n>> \n>> My code is :\n>> \n>> install.packages(\"rugarch\")\n>> library(rugarch)\n>> data <- read.csv2(\"C:/Users/bregi/Desktop/Thesis/R/euro.csv\",header = TRUE,sep=\";\")\n>> lr.AEX<- diff(log(data$AEX))  ## log returns of stock market index AEX\n>> egarcht.spec=ugarchspec(variance.model=list(model=\"eGARCH\",garchOrder=c(2,1)),\n>>                      mean.model=list(armaOrder=c(1,0)),distribution.model = \"std\")\n>> egarcht.fit = ugarchfit(egarcht.spec, lr.AEX)\n>> \n>> The problem is that I want to transform my standardized residuals to follow uniform distribution. But when I run the following:\n>> res<-residuals(egarcht.fit, standardize=TRUE)\n>> ecdf(res)\n>> plot.ecdf(res)\n>> I realized that they have not transformed. I think that I found the problem but I don't know how to fix it.\n>> When I run residuals(egarcht.fit, standardize=TRUE) I get data in the following form:\n>> 1970-01-02 01:00:00 -0.3766309  instead of just -0.3766309.\n>> \n>> After that, I tried to solve this problem by doing:\n>> \n>> require(xts)\n>> time <- date[2:3914]\n>> lrAEX.xts <- na.omit(xts(x = lr.AEX, order.by = time))\n>> \n>> egarcht.spec=ugarchspec(variance.model=list(model=\"eGARCH\",garchOrder=c(2,1)),\n>>                      mean.model=list(armaOrder=c(1,0)),distribution.model = \"std\")\n>> egarcht.fit = ugarchfit(egarcht.spec, data=lrAEX.xts)\n>> \n>> residuals(egarcht.fit,standardize=TRUE)[1]\n>> \n>> But the only improvement is that I receive the real dates of my data\n>> \n>>                [,1]\n>> 2001-01-02 -0.3766309\n>> \n>> However, my goal is to receive only the residuals ( so only -0.3766309).\n>> \n>> \n>> Could you please tell me if you know how I can achieve this?\n>> \n>> Thank you in advance.\n>> \n>> Kind regards,\n>> Andreas\n>> \n>> \n>>   [[alternative HTML version deleted]]\n>> \n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> R-SIG-Finance Info Page<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\n> stat.ethz.ch\n> To see the collection of prior postings to the list, visit the R-SIG-Finance Archives. Using R-SIG-Finance: To post a message to all the list members ...\n> \n> \n> \n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n> \n>    [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
-      "body_snippet": "Andreas, you can just extract the numeric values from the output :\nEither coredata() or as.numeric().\n\nrugarch was designed to work with xts as it was the author?s opinion at the time that it was the ",
+      "body_plain": "Andreas, you can just extract the numeric values from the output :\nEither coredata() or as.numeric().\n\nrugarch was designed to work with xts as it was the author’s opinion at the time that it was the gold standard for working with timeseries data in the context of GARCH models and greatly simplified design decisions.\n\nRegards,\n\nAlexios\n\n> On Mar 1, 2018, at 10:37 AM, Andreas Bregiannis <bregiannis.andreas at hotmail.com> wrote:\n> \n> Dear Ibrahim,\n> \n> \n> First of all, I would like to sincerely thank you for your reply!\n> \n> Indeed, standardized residuals are approx. normally distributed in my model.\n> \n> If I understood correctly, I should do the following to transform them in uniform: pnorm(residuals(egarcht.fit,standardize=TRUE)). I just did it and I checked through a histogram that indeed they look like uniform.\n> \n> Thank you very much!\n> \n> So, do you think that my code, in general, is right? Is it reasonable that in the output of the standardized residuals, I received also the dates? I am asking because I also used fgarch package and in the output I received just the standardized residuals without the dates, so after that I just use the ecdf and I convert them.\n> \n> \n> Best regards,\n> \n> Andreas\n> \n> \n> \n> ________________________________\n> Áðü: ibrahim ergen <ibrahimergen at gmail.com>\n> Ó???????: ??????, 1 ????ßïõ 2018 6:49 ìì\n> ?ñïò: Andreas Bregiannis\n> Êïéí.: r-sig-finance at r-project.org\n> ÈÝìá: Re: [R-SIG-Finance] Question about rugarch\n> \n> \n> Standardized residuals would be approx. normally distributed. Those are the shocks. Standardization here means filetering of vol clustering. So you get the garch shocks which are approx normal. You can use pnorm function to transform them to uniform distribution.\n> \n> Best\n> Ibrahim\n> \n> Sent from my iPhone\n> \n>> On Mar 1, 2018, at 11:32 AM, Andreas Bregiannis <bregiannis.andreas at hotmail.com> wrote:\n>> \n>> Dear Sir or Madam,\n>> \n>> \n>> I am trying to fit an AR-t-(E)GARCH model in stock log return data using the rugarch package.\n>> \n>> My code is :\n>> \n>> install.packages(\"rugarch\")\n>> library(rugarch)\n>> data <- read.csv2(\"C:/Users/bregi/Desktop/Thesis/R/euro.csv\",header = TRUE,sep=\";\")\n>> lr.AEX<- diff(log(data$AEX))  ## log returns of stock market index AEX\n>> egarcht.spec=ugarchspec(variance.model=list(model=\"eGARCH\",garchOrder=c(2,1)),\n>>                      mean.model=list(armaOrder=c(1,0)),distribution.model = \"std\")\n>> egarcht.fit = ugarchfit(egarcht.spec, lr.AEX)\n>> \n>> The problem is that I want to transform my standardized residuals to follow uniform distribution. But when I run the following:\n>> res<-residuals(egarcht.fit, standardize=TRUE)\n>> ecdf(res)\n>> plot.ecdf(res)\n>> I realized that they have not transformed. I think that I found the problem but I don't know how to fix it.\n>> When I run residuals(egarcht.fit, standardize=TRUE) I get data in the following form:\n>> 1970-01-02 01:00:00 -0.3766309  instead of just -0.3766309.\n>> \n>> After that, I tried to solve this problem by doing:\n>> \n>> require(xts)\n>> time <- date[2:3914]\n>> lrAEX.xts <- na.omit(xts(x = lr.AEX, order.by = time))\n>> \n>> egarcht.spec=ugarchspec(variance.model=list(model=\"eGARCH\",garchOrder=c(2,1)),\n>>                      mean.model=list(armaOrder=c(1,0)),distribution.model = \"std\")\n>> egarcht.fit = ugarchfit(egarcht.spec, data=lrAEX.xts)\n>> \n>> residuals(egarcht.fit,standardize=TRUE)[1]\n>> \n>> But the only improvement is that I receive the real dates of my data\n>> \n>>                [,1]\n>> 2001-01-02 -0.3766309\n>> \n>> However, my goal is to receive only the residuals ( so only -0.3766309).\n>> \n>> \n>> Could you please tell me if you know how I can achieve this?\n>> \n>> Thank you in advance.\n>> \n>> Kind regards,\n>> Andreas\n>> \n>> \n>>   [[alternative HTML version deleted]]\n>> \n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> R-SIG-Finance Info Page<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\n> stat.ethz.ch\n> To see the collection of prior postings to the list, visit the R-SIG-Finance Archives. Using R-SIG-Finance: To post a message to all the list members ...\n> \n> \n> \n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n> \n>    [[alternative HTML version deleted]]\n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_snippet": "Andreas, you can just extract the numeric values from the output :\nEither coredata() or as.numeric().\n\nrugarch was designed to work with xts as it was the author’s opinion at the time that it was the ",
       "thread_id": "thread-62aa876d9674",
       "thread_depth": 3,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014528.html"
     },
     {
       "id": "msg-6dd1cd4c1430",
@@ -91,11 +95,12 @@
         "<AM0PR0602MB3492B1ADBE4EC6CB411054B98FC60@AM0PR0602MB3492.eurprd06.prod.outlook.com>",
         "<22F8AA06-DABD-4A13-BC76-E07C716A0EB1@4dscape.com>"
       ],
-      "body_plain": "Yes, that worked great!\n\nThank you so much for all your assistance!\n\n\nBest regards,\n\nAndreas\n\n________________________________\n???: Alexios Ghalanos <alexios at 4dscape.com>\n????????: ??????, 1 ??????? 2018 8:08 ??\n????: Andreas Bregiannis\n????.: ibrahim ergen; r-sig-finance at r-project.org\n????: Re: [R-SIG-Finance] ??: Question about rugarch\n\nAndreas, you can just extract the numeric values from the output :\nEither coredata() or as.numeric().\n\nrugarch was designed to work with xts as it was the author?s opinion at the time that it was the gold standard for working with timeseries data in the context of GARCH models and greatly simplified design decisions.\n\nRegards,\n\nAlexios\n\n> On Mar 1, 2018, at 10:37 AM, Andreas Bregiannis <bregiannis.andreas at hotmail.com> wrote:\n>\n> Dear Ibrahim,\n>\n>\n> First of all, I would like to sincerely thank you for your reply!\n>\n> Indeed, standardized residuals are approx. normally distributed in my model.\n>\n> If I understood correctly, I should do the following to transform them in uniform: pnorm(residuals(egarcht.fit,standardize=TRUE)). I just did it and I checked through a histogram that indeed they look like uniform.\n>\n> Thank you very much!\n>\n> So, do you think that my code, in general, is right? Is it reasonable that in the output of the standardized residuals, I received also the dates? I am asking because I also used fgarch package and in the output I received just the standardized residuals without the dates, so after that I just use the ecdf and I convert them.\n>\n>\n> Best regards,\n>\n> Andreas\n>\n>\n>\n> ________________________________\n> ???: ibrahim ergen <ibrahimergen at gmail.com>\n> ????????: ??????, 1 ??????? 2018 6:49 ??\n> ????: Andreas Bregiannis\n> ????.: r-sig-finance at r-project.org\n> ????: Re: [R-SIG-Finance] Question about rugarch\n>\n>\n> Standardized residuals would be approx. normally distributed. Those are the shocks. Standardization here means filetering of vol clustering. So you get the garch shocks which are approx normal. You can use pnorm function to transform them to uniform distribution.\n>\n> Best\n> Ibrahim\n>\n> Sent from my iPhone\n>\n>> On Mar 1, 2018, at 11:32 AM, Andreas Bregiannis <bregiannis.andreas at hotmail.com> wrote:\n>>\n>> Dear Sir or Madam,\n>>\n>>\n>> I am trying to fit an AR-t-(E)GARCH model in stock log return data using the rugarch package.\n>>\n>> My code is :\n>>\n>> install.packages(\"rugarch\")\n>> library(rugarch)\n>> data <- read.csv2(\"C:/Users/bregi/Desktop/Thesis/R/euro.csv\",header = TRUE,sep=\";\")\n>> lr.AEX<- diff(log(data$AEX))  ## log returns of stock market index AEX\n>> egarcht.spec=ugarchspec(variance.model=list(model=\"eGARCH\",garchOrder=c(2,1)),\n>>                      mean.model=list(armaOrder=c(1,0)),distribution.model = \"std\")\n>> egarcht.fit = ugarchfit(egarcht.spec, lr.AEX)\n>>\n>> The problem is that I want to transform my standardized residuals to follow uniform distribution. But when I run the following:\n>> res<-residuals(egarcht.fit, standardize=TRUE)\n>> ecdf(res)\n>> plot.ecdf(res)\n>> I realized that they have not transformed. I think that I found the problem but I don't know how to fix it.\n>> When I run residuals(egarcht.fit, standardize=TRUE) I get data in the following form:\n>> 1970-01-02 01:00:00 -0.3766309  instead of just -0.3766309.\n>>\n>> After that, I tried to solve this problem by doing:\n>>\n>> require(xts)\n>> time <- date[2:3914]\n>> lrAEX.xts <- na.omit(xts(x = lr.AEX, order.by = time))\n>>\n>> egarcht.spec=ugarchspec(variance.model=list(model=\"eGARCH\",garchOrder=c(2,1)),\n>>                      mean.model=list(armaOrder=c(1,0)),distribution.model = \"std\")\n>> egarcht.fit = ugarchfit(egarcht.spec, data=lrAEX.xts)\n>>\n>> residuals(egarcht.fit,standardize=TRUE)[1]\n>>\n>> But the only improvement is that I receive the real dates of my data\n>>\n>>                [,1]\n>> 2001-01-02 -0.3766309\n>>\n>> However, my goal is to receive only the residuals ( so only -0.3766309).\n>>\n>>\n>> Could you please tell me if you know how I can achieve this?\n>>\n>> Thank you in advance.\n>>\n>> Kind regards,\n>> Andreas\n>>\n>>\n>>   [[alternative HTML version deleted]]\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\nR-SIG-Finance Info Page<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\nstat.ethz.ch\nTo see the collection of prior postings to the list, visit the R-SIG-Finance Archives. Using R-SIG-Finance: To post a message to all the list members ...\n\n\n\n> R-SIG-Finance Info Page<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\nR-SIG-Finance Info Page<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\nstat.ethz.ch\nTo see the collection of prior postings to the list, visit the R-SIG-Finance Archives. Using R-SIG-Finance: To post a message to all the list members ...\n\n\n\n> stat.ethz.ch\n> To see the collection of prior postings to the list, visit the R-SIG-Finance Archives. Using R-SIG-Finance: To post a message to all the list members ...\n>\n>\n>\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n>\n>    [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\nR-SIG-Finance Info Page<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\nstat.ethz.ch\nTo see the collection of prior postings to the list, visit the R-SIG-Finance Archives. Using R-SIG-Finance: To post a message to all the list members ...\n\n\n\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\t[[alternative HTML version deleted]]",
-      "body_snippet": "Yes, that worked great!\n\nThank you so much for all your assistance!\n\n\nBest regards,\n\nAndreas\n\n________________________________\n???: Alexios Ghalanos <alexios at 4dscape.com>\n????????: ??????, 1 ??????",
+      "body_plain": "Yes, that worked great!\n\nThank you so much for all your assistance!\n\n\nBest regards,\n\nAndreas\n\n________________________________\nΑπό: Alexios Ghalanos <alexios at 4dscape.com>\nΣτά?????: ??????, 1 ????ίου 2018 8:08 μμ\nΠρος: Andreas Bregiannis\nΚοιν.: ibrahim ergen; r-sig-finance at r-project.org\nΘέμα: Re: [R-SIG-Finance] Απ: Question about rugarch\n\nAndreas, you can just extract the numeric values from the output :\nEither coredata() or as.numeric().\n\nrugarch was designed to work with xts as it was the author’s opinion at the time that it was the gold standard for working with timeseries data in the context of GARCH models and greatly simplified design decisions.\n\nRegards,\n\nAlexios\n\n> On Mar 1, 2018, at 10:37 AM, Andreas Bregiannis <bregiannis.andreas at hotmail.com> wrote:\n>\n> Dear Ibrahim,\n>\n>\n> First of all, I would like to sincerely thank you for your reply!\n>\n> Indeed, standardized residuals are approx. normally distributed in my model.\n>\n> If I understood correctly, I should do the following to transform them in uniform: pnorm(residuals(egarcht.fit,standardize=TRUE)). I just did it and I checked through a histogram that indeed they look like uniform.\n>\n> Thank you very much!\n>\n> So, do you think that my code, in general, is right? Is it reasonable that in the output of the standardized residuals, I received also the dates? I am asking because I also used fgarch package and in the output I received just the standardized residuals without the dates, so after that I just use the ecdf and I convert them.\n>\n>\n> Best regards,\n>\n> Andreas\n>\n>\n>\n> ________________________________\n> Áðü: ibrahim ergen <ibrahimergen at gmail.com>\n> Ó???????: ??????, 1 ????ßïõ 2018 6:49 ìì\n> ?ñïò: Andreas Bregiannis\n> Êïéí.: r-sig-finance at r-project.org\n> ÈÝìá: Re: [R-SIG-Finance] Question about rugarch\n>\n>\n> Standardized residuals would be approx. normally distributed. Those are the shocks. Standardization here means filetering of vol clustering. So you get the garch shocks which are approx normal. You can use pnorm function to transform them to uniform distribution.\n>\n> Best\n> Ibrahim\n>\n> Sent from my iPhone\n>\n>> On Mar 1, 2018, at 11:32 AM, Andreas Bregiannis <bregiannis.andreas at hotmail.com> wrote:\n>>\n>> Dear Sir or Madam,\n>>\n>>\n>> I am trying to fit an AR-t-(E)GARCH model in stock log return data using the rugarch package.\n>>\n>> My code is :\n>>\n>> install.packages(\"rugarch\")\n>> library(rugarch)\n>> data <- read.csv2(\"C:/Users/bregi/Desktop/Thesis/R/euro.csv\",header = TRUE,sep=\";\")\n>> lr.AEX<- diff(log(data$AEX))  ## log returns of stock market index AEX\n>> egarcht.spec=ugarchspec(variance.model=list(model=\"eGARCH\",garchOrder=c(2,1)),\n>>                      mean.model=list(armaOrder=c(1,0)),distribution.model = \"std\")\n>> egarcht.fit = ugarchfit(egarcht.spec, lr.AEX)\n>>\n>> The problem is that I want to transform my standardized residuals to follow uniform distribution. But when I run the following:\n>> res<-residuals(egarcht.fit, standardize=TRUE)\n>> ecdf(res)\n>> plot.ecdf(res)\n>> I realized that they have not transformed. I think that I found the problem but I don't know how to fix it.\n>> When I run residuals(egarcht.fit, standardize=TRUE) I get data in the following form:\n>> 1970-01-02 01:00:00 -0.3766309  instead of just -0.3766309.\n>>\n>> After that, I tried to solve this problem by doing:\n>>\n>> require(xts)\n>> time <- date[2:3914]\n>> lrAEX.xts <- na.omit(xts(x = lr.AEX, order.by = time))\n>>\n>> egarcht.spec=ugarchspec(variance.model=list(model=\"eGARCH\",garchOrder=c(2,1)),\n>>                      mean.model=list(armaOrder=c(1,0)),distribution.model = \"std\")\n>> egarcht.fit = ugarchfit(egarcht.spec, data=lrAEX.xts)\n>>\n>> residuals(egarcht.fit,standardize=TRUE)[1]\n>>\n>> But the only improvement is that I receive the real dates of my data\n>>\n>>                [,1]\n>> 2001-01-02 -0.3766309\n>>\n>> However, my goal is to receive only the residuals ( so only -0.3766309).\n>>\n>>\n>> Could you please tell me if you know how I can achieve this?\n>>\n>> Thank you in advance.\n>>\n>> Kind regards,\n>> Andreas\n>>\n>>\n>>   [[alternative HTML version deleted]]\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\nR-SIG-Finance Info Page<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\nstat.ethz.ch\nTo see the collection of prior postings to the list, visit the R-SIG-Finance Archives. Using R-SIG-Finance: To post a message to all the list members ...\n\n\n\n> R-SIG-Finance Info Page<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\nR-SIG-Finance Info Page<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\nstat.ethz.ch\nTo see the collection of prior postings to the list, visit the R-SIG-Finance Archives. Using R-SIG-Finance: To post a message to all the list members ...\n\n\n\n> stat.ethz.ch\n> To see the collection of prior postings to the list, visit the R-SIG-Finance Archives. Using R-SIG-Finance: To post a message to all the list members ...\n>\n>\n>\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n>\n>    [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\nR-SIG-Finance Info Page<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\nstat.ethz.ch\nTo see the collection of prior postings to the list, visit the R-SIG-Finance Archives. Using R-SIG-Finance: To post a message to all the list members ...\n\n\n\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Yes, that worked great!\n\nThank you so much for all your assistance!\n\n\nBest regards,\n\nAndreas\n\n________________________________\nΑπό: Alexios Ghalanos <alexios at 4dscape.com>\nΣτά?????: ??????, 1 ????ίο",
       "thread_id": "thread-62aa876d9674",
       "thread_depth": 4,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014529.html"
     },
     {
       "id": "msg-79cd9a65549f",
@@ -114,7 +119,8 @@
       "body_snippet": "Hi Antoine,\n  Yes - it handles turnover constraints. Check out the second to last\nexample from ?solveQPXT.\nBob\n\nOn Tue, Mar 6, 2018 at 9:03 AM, Antoine <antoinegg7 at yahoo.fr> wrote:\n\n> Hello Bob,\n>\n",
       "thread_id": "thread-79cd9a65549f",
       "thread_depth": 0,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014530.html"
     },
     {
       "id": "msg-e2282010abc3",
@@ -130,7 +136,8 @@
       "body_snippet": "Say I have a portfolio of 100 stocks and want to find a subset of 20 stocks with minimum tracking error in respect to the original portfolio. I wonder if a solver to this problem is implemented in som",
       "thread_id": "thread-e2282010abc3",
       "thread_depth": 0,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014531.html"
     },
     {
       "id": "msg-9cdd13596d8a",
@@ -144,11 +151,12 @@
       "references": [
         "<1520474119352.56010@stevens.edu>"
       ],
-      "body_plain": "Alec,\nYou could regress the returns of the 100-stock portfolio on the?returns of the 100 stocks, using the Lasso or Elastic Net(there are R packages glmnet and elasticnet?for these methods)?to zero out most of the regression?coefficients.\nVivek RaoBoston, MA\n      From: Alec Schmidt <aschmid1 at stevens.edu>\n To: \"r-sig-finance at r-project.org\" <r-sig-finance at r-project.org> \n Sent: Wednesday, March 7, 2018 8:55 PM\n Subject: [R-SIG-Finance] Minimizing tracking error with restricted number of stocks\n   \nSay I have a portfolio of 100 stocks and want to find a subset of 20 stocks with minimum tracking error in respect to the original portfolio. I wonder if a solver to this problem is implemented in some R-based library.\n\nThanks! Alec\n\n??? [[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\n   \n\t[[alternative HTML version deleted]]",
-      "body_snippet": "Alec,\nYou could regress the returns of the 100-stock portfolio on the?returns of the 100 stocks, using the Lasso or Elastic Net(there are R packages glmnet and elasticnet?for these methods)?to zero ou",
+      "body_plain": "Alec,\nYou could regress the returns of the 100-stock portfolio on the returns of the 100 stocks, using the Lasso or Elastic Net(there are R packages glmnet and elasticnet for these methods) to zero out most of the regression coefficients.\nVivek RaoBoston, MA\n      From: Alec Schmidt <aschmid1 at stevens.edu>\n To: \"r-sig-finance at r-project.org\" <r-sig-finance at r-project.org> \n Sent: Wednesday, March 7, 2018 8:55 PM\n Subject: [R-SIG-Finance] Minimizing tracking error with restricted number of stocks\n   \nSay I have a portfolio of 100 stocks and want to find a subset of 20 stocks with minimum tracking error in respect to the original portfolio. I wonder if a solver to this problem is implemented in some R-based library.\n\nThanks! Alec\n\n    [[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\n   \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Alec,\nYou could regress the returns of the 100-stock portfolio on the returns of the 100 stocks, using the Lasso or Elastic Net(there are R packages glmnet and elasticnet for these methods) to zero ou",
       "thread_id": "thread-e2282010abc3",
       "thread_depth": 1,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014532.html"
     },
     {
       "id": "msg-51c23e6a337b",
@@ -166,7 +174,8 @@
       "body_snippet": "On 03/07/2018 07:55 PM, Alec Schmidt wrote:\n> Say I have a portfolio of 100 stocks and want to find a subset of 20 stocks with minimum tracking error in respect to the original portfolio. I wonder if ",
       "thread_id": "thread-e2282010abc3",
       "thread_depth": 1,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014533.html"
     },
     {
       "id": "msg-90e85327b29f",
@@ -185,7 +194,8 @@
       "body_snippet": "Thank you Brian. I searched PortfolioAnalytics.pdf for 'tracking' but didn't find one. Are there any implementation examples?\n________________________________________\nFrom: R-SIG-Finance <r-sig-financ",
       "thread_id": "thread-e2282010abc3",
       "thread_depth": 2,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014534.html"
     },
     {
       "id": "msg-b1fbc0839b10",
@@ -205,7 +215,8 @@
       "body_snippet": "On 03/07/2018 08:39 PM, Alec Schmidt wrote:\n> Thank you Brian. I searched PortfolioAnalytics.pdf for 'tracking' but didn't find one. Are there any implementation examples?\n\nSee Ross Bennett's tutorial",
       "thread_id": "thread-e2282010abc3",
       "thread_depth": 3,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014535.html"
     },
     {
       "id": "msg-71074776bff6",
@@ -226,7 +237,8 @@
       "body_snippet": "Great presentation, thanks for sharing the link\n\nSent from my iPad\n\n> On Mar 7, 2018, at 10:00 PM, Brian G. Peterson <brian at braverock.com> wrote:\n> \n>> On 03/07/2018 08:39 PM, Alec Schmidt wrote:\n>",
       "thread_id": "thread-e2282010abc3",
       "thread_depth": 4,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014536.html"
     },
     {
       "id": "msg-e9e41bf65bc4",
@@ -248,7 +260,8 @@
       "body_snippet": "This is a very handy doc indeed. I'm not sure though that examples on #29 - #31 address the problem I'm looking into. Namely, I need minimum tracking error with explicit constraint on the number of st",
       "thread_id": "thread-e2282010abc3",
       "thread_depth": 5,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014537.html"
     },
     {
       "id": "msg-0615b11e3cbb",
@@ -271,7 +284,8 @@
       "body_snippet": "Alec,\n\nI do not believe that there is a closed form optimization solution for\nwhat you are trying to do.  In other words, I am agreeing with Coleman\net. al.\n\nThat is not the same thing as saying that ",
       "thread_id": "thread-e2282010abc3",
       "thread_depth": 6,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014538.html"
     },
     {
       "id": "msg-82f85238ec81",
@@ -295,7 +309,8 @@
       "body_snippet": "Thank you Brian,\n position_limit constraint - that's exactly what I needed. But then I guess that's how NP-hard problem looks like: it may need lots of resampling.\nBest, Alec\n_________________________",
       "thread_id": "thread-e2282010abc3",
       "thread_depth": 7,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014539.html"
     },
     {
       "id": "msg-923da6708571",
@@ -313,7 +328,8 @@
       "body_snippet": "Dear all,I am using a dataset of monthly asset returns. I subset it with window() call of package zoo. When i try to compute Modified VaR on this subset, i am getting the following error:\nError in dim",
       "thread_id": "thread-923da6708571",
       "thread_depth": 0,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014540.html"
     },
     {
       "id": "msg-a10b4c5c9e9c",
@@ -332,7 +348,8 @@
       "body_snippet": "It would be easier for others to help you if you provided a\nreproducible example.  Here are some tips on how to create one:\nhttps://stackoverflow.com/q/5963269/271616\n\nAlso, please follow the posting ",
       "thread_id": "thread-923da6708571",
       "thread_depth": 1,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014541.html"
     },
     {
       "id": "msg-02f5f1809393",
@@ -348,7 +365,8 @@
       "body_snippet": "Dear all,\n\nCould you please tell me if there is any package or code available for the\n(time-varying) Symmetrized Joe-Clayton copula in R?\nIn copula package, I think that there is only the Joe-Clayton ",
       "thread_id": "thread-02f5f1809393",
       "thread_depth": 0,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014542.html"
     },
     {
       "id": "msg-5437cafd9f3f",
@@ -362,11 +380,12 @@
       "references": [
         "<CACkfrsHp9ks9Dc_Bvd=7_TsfsW9Gd4DXvfFTuDjBe330WgmWMw@mail.gmail.com>"
       ],
-      "body_plain": "It?s possible the ?VineCopula? package may have what you?re looking for.\n\nCheck out the ?BiCop? function documentation for a list of available\ncopulas.\n\nOn Mon, Mar 12, 2018 at 12:37 PM Gus Br <gus.br1990 at gmail.com> wrote:\n\n> Dear all,\n>\n> Could you please tell me if there is any package or code available for the\n> (time-varying) Symmetrized Joe-Clayton copula in R?\n> In copula package, I think that there is only the Joe-Clayton copula.\n>\n> Thank you in advance!\n> Gus\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n-- \n\nErol Biceroglu\n*LinkedIn <http://ca.linkedin.com/in/erolbiceroglu> | Wordpress\n<https://propfoliomanagement.wordpress.com/>*\n\n\t[[alternative HTML version deleted]]",
-      "body_snippet": "It?s possible the ?VineCopula? package may have what you?re looking for.\n\nCheck out the ?BiCop? function documentation for a list of available\ncopulas.\n\nOn Mon, Mar 12, 2018 at 12:37 PM Gus Br <gus.br",
+      "body_plain": "It’s possible the “VineCopula” package may have what you’re looking for.\n\nCheck out the “BiCop” function documentation for a list of available\ncopulas.\n\nOn Mon, Mar 12, 2018 at 12:37 PM Gus Br <gus.br1990 at gmail.com> wrote:\n\n> Dear all,\n>\n> Could you please tell me if there is any package or code available for the\n> (time-varying) Symmetrized Joe-Clayton copula in R?\n> In copula package, I think that there is only the Joe-Clayton copula.\n>\n> Thank you in advance!\n> Gus\n>\n>         [[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n-- \n\nErol Biceroglu\n*LinkedIn <http://ca.linkedin.com/in/erolbiceroglu> | Wordpress\n<https://propfoliomanagement.wordpress.com/>*\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "It’s possible the “VineCopula” package may have what you’re looking for.\n\nCheck out the “BiCop” function documentation for a list of available\ncopulas.\n\nOn Mon, Mar 12, 2018 at 12:37 PM Gus Br <gus.br",
       "thread_id": "thread-02f5f1809393",
       "thread_depth": 1,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014543.html"
     },
     {
       "id": "msg-43848db61c4a",
@@ -378,11 +397,12 @@
       "subject_clean": "Question on highfrequency package",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "Hi,\n\nI?m trying to use the highfrequency package and I have a question on Jump detection using the ABDJumpTest function in realized.R which is called from function harModel\n\nLooking at the current code for this function, I see:\n\nABDJumptest = function(RV, BPV, TQ){ # Comput jump detection stat mentioned in roughing paper\n    mu1  = sqrt(2/pi);\n    n = length(RV);\n    zstat = ((1/n)^(-1/2))*((RV-BPV)/RV)*(  (mu1^(-4) + 2*(mu1^(-2))-5) * pmax( 1,TQ*(BPV^(-2)) )   )^(-1/2); \n    return(zstat);\n}\n\nI believe this is trying to implement Equation 18 in this paper: http://www.nber.org/papers/w11775.pdf <http://www.nber.org/papers/w11775.pdf>\n\nIf I read the paper correctly, n should be the number of observations per day.  For example if we are passing in 5 minute returns, n should be the number of 5 minute intervals during a trading day.\n\nIn the current code, n is being used as the number of days in the set of returns.\n\nDoes anybody have any thoughts on this?   I?m new to R-Sig and I?m more of a Python than a R programmer, so if this is the wrong forum, would appreciate someone pointing me to the right forum.\n\nBest,\n\nSal\n\n\n\n\n\t[[alternative HTML version deleted]]",
-      "body_snippet": "Hi,\n\nI?m trying to use the highfrequency package and I have a question on Jump detection using the ABDJumpTest function in realized.R which is called from function harModel\n\nLooking at the current cod",
+      "body_plain": "Hi,\n\nI’m trying to use the highfrequency package and I have a question on Jump detection using the ABDJumpTest function in realized.R which is called from function harModel\n\nLooking at the current code for this function, I see:\n\nABDJumptest = function(RV, BPV, TQ){ # Comput jump detection stat mentioned in roughing paper\n    mu1  = sqrt(2/pi);\n    n = length(RV);\n    zstat = ((1/n)^(-1/2))*((RV-BPV)/RV)*(  (mu1^(-4) + 2*(mu1^(-2))-5) * pmax( 1,TQ*(BPV^(-2)) )   )^(-1/2); \n    return(zstat);\n}\n\nI believe this is trying to implement Equation 18 in this paper: http://www.nber.org/papers/w11775.pdf <http://www.nber.org/papers/w11775.pdf>\n\nIf I read the paper correctly, n should be the number of observations per day.  For example if we are passing in 5 minute returns, n should be the number of 5 minute intervals during a trading day.\n\nIn the current code, n is being used as the number of days in the set of returns.\n\nDoes anybody have any thoughts on this?   I’m new to R-Sig and I’m more of a Python than a R programmer, so if this is the wrong forum, would appreciate someone pointing me to the right forum.\n\nBest,\n\nSal\n\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi,\n\nI’m trying to use the highfrequency package and I have a question on Jump detection using the ABDJumpTest function in realized.R which is called from function harModel\n\nLooking at the current cod",
       "thread_id": "thread-43848db61c4a",
       "thread_depth": 0,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014544.html"
     },
     {
       "id": "msg-2355761edc20",
@@ -397,11 +417,12 @@
         "<CACkfrsHp9ks9Dc_Bvd=7_TsfsW9Gd4DXvfFTuDjBe330WgmWMw@mail.gmail.com>",
         "<CACjNfmkojGRhe04m7Wpk4ZktRuUF7_QpqC5Qp7dWp+L2jWQvwQ@mail.gmail.com>"
       ],
-      "body_plain": "Dear Erol,\n\nThank you for your reply. Unfortunately, in VineCopula package, I only find\nthe Joe-Clayton and the rotated Joe-Clayton copula but not the\nSymmetrized.one.\n\n\n2018-03-12 17:42 GMT+01:00 Erol Biceroglu <erol.biceroglu at alumni.utoronto.ca\n>:\n\n> It?s possible the ?VineCopula? package may have what you?re looking for.\n>\n> Check out the ?BiCop? function documentation for a list of available\n> copulas.\n>\n> On Mon, Mar 12, 2018 at 12:37 PM Gus Br <gus.br1990 at gmail.com> wrote:\n>\n>> Dear all,\n>>\n>> Could you please tell me if there is any package or code available for the\n>> (time-varying) Symmetrized Joe-Clayton copula in R?\n>> In copula package, I think that there is only the Joe-Clayton copula.\n>>\n>> Thank you in advance!\n>> Gus\n>>\n>>         [[alternative HTML version deleted]]\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n> --\n>\n> Erol Biceroglu\n> *LinkedIn <http://ca.linkedin.com/in/erolbiceroglu> | Wordpress\n> <https://propfoliomanagement.wordpress.com/>*\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_plain": "Dear Erol,\n\nThank you for your reply. Unfortunately, in VineCopula package, I only find\nthe Joe-Clayton and the rotated Joe-Clayton copula but not the\nSymmetrized.one.\n\n\n2018-03-12 17:42 GMT+01:00 Erol Biceroglu <erol.biceroglu at alumni.utoronto.ca\n>:\n\n> It’s possible the “VineCopula” package may have what you’re looking for.\n>\n> Check out the “BiCop” function documentation for a list of available\n> copulas.\n>\n> On Mon, Mar 12, 2018 at 12:37 PM Gus Br <gus.br1990 at gmail.com> wrote:\n>\n>> Dear all,\n>>\n>> Could you please tell me if there is any package or code available for the\n>> (time-varying) Symmetrized Joe-Clayton copula in R?\n>> In copula package, I think that there is only the Joe-Clayton copula.\n>>\n>> Thank you in advance!\n>> Gus\n>>\n>>         [[alternative HTML version deleted]]\n>>\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions\n>> should go.\n>>\n> --\n>\n> Erol Biceroglu\n> *LinkedIn <http://ca.linkedin.com/in/erolbiceroglu> | Wordpress\n> <https://propfoliomanagement.wordpress.com/>*\n>\n\n\t[[alternative HTML version deleted]]",
       "body_snippet": "Dear Erol,\n\nThank you for your reply. Unfortunately, in VineCopula package, I only find\nthe Joe-Clayton and the rotated Joe-Clayton copula but not the\nSymmetrized.one.\n\n\n2018-03-12 17:42 GMT+01:00 Ero",
       "thread_id": "thread-02f5f1809393",
       "thread_depth": 2,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014545.html"
     },
     {
       "id": "msg-1b5dea511e30",
@@ -421,7 +442,8 @@
       "body_snippet": "Dear Joshua SirHere is my data and my code:\nR Version 3.4.2\n1. Data:File:data.csvMonthly returns of 210 assets from April 2006 till March 2015\n2. Code:#Reading filedat1<-read.csv(\"data.csv\",header=TRU",
       "thread_id": "thread-923da6708571",
       "thread_depth": 2,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014546.html"
     },
     {
       "id": "msg-a798efa6305f",
@@ -439,7 +461,8 @@
       "body_snippet": "Apologies that data file was not attached in the previous mail\nDear Joshua SirHere is my data and my code:\nR Version 3.4.2\n1. Data:File:data.csvMonthly returns of 210 assets from April 2006 till March",
       "thread_id": "thread-a798efa6305f",
       "thread_depth": 0,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014547.html"
     },
     {
       "id": "msg-2776261b5e6f",
@@ -460,7 +483,8 @@
       "body_snippet": "Well, your code is completely mangled by posting in HTML, as Josh told\nyou would likely happen.\n\nIn any case, You haven't provided a reproducible example.\n\nrequire(PerformanceAnalytics)\ndata(edhec) # ",
       "thread_id": "thread-923da6708571",
       "thread_depth": 3,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014548.html"
     },
     {
       "id": "msg-140cfd2e4b7e",
@@ -476,7 +500,8 @@
       "body_snippet": "Dear R-Sig-Finance Committee,\n\n\nHi, my name is Woo-Young Kang and I would like to ask a question regarding the \"rugarch\" package in R program if you don't mind.\n\n\nThe title is \"Restriction test (H0: a",
       "thread_id": "thread-140cfd2e4b7e",
       "thread_depth": 0,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014549.html"
     },
     {
       "id": "msg-90b783a4d5b7",
@@ -494,7 +519,8 @@
       "body_snippet": "You posted a lot of questions/follow up questions on stack exchange, but \nyou have not taken the time to summarize what these are in this forum or \nprovide data with which we can replicate the problem",
       "thread_id": "thread-140cfd2e4b7e",
       "thread_depth": 1,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014550.html"
     },
     {
       "id": "msg-47b88204ff28",
@@ -512,7 +538,8 @@
       "body_snippet": "Hi R-sig-finance committee?\nI am a R beginner,  wish my primary question will not bother you.\nI am using your ugarchfit function to make a garch fit, and I have got replicating the Sigma of the in.sam",
       "thread_id": "thread-47b88204ff28",
       "thread_depth": 0,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014551.html"
     },
     {
       "id": "msg-1d95b7065d59",
@@ -528,7 +555,8 @@
       "body_snippet": "Hello,\n\nI've searched the archives and googled around and haven't found an answer\nto what seems like a basic OHLC data adjustment question.\n\nIt seems there are 5 options for adjusting data via quantmo",
       "thread_id": "thread-1d95b7065d59",
       "thread_depth": 0,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014552.html"
     },
     {
       "id": "msg-f1c03fc6549f",
@@ -552,7 +580,8 @@
       "body_snippet": "I have a sample of daily portfolio returns and would like to estimate the weights using 252-day periods, starting with the 1st day of the sample, and do rebalancing every 126 days. How do I define the",
       "thread_id": "thread-e2282010abc3",
       "thread_depth": 7,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014553.html"
     },
     {
       "id": "msg-89cbb4447d73",
@@ -568,7 +597,8 @@
       "body_snippet": "http://www.rinfinance.com/\n\n\nDoes anybody know when the registration will be available? The above webpage says it would be open in the spring in March but the month is already ending.\n\n\n\n\t[[alternativ",
       "thread_id": "thread-89cbb4447d73",
       "thread_depth": 0,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014554.html"
     },
     {
       "id": "msg-b3ccc0034679",
@@ -586,7 +616,8 @@
       "body_snippet": "On 03/26/2018 06:38 AM, Sillas Gonzaga wrote:\n> http://www.rinfinance.com/\n> \n> \n> Does anybody know when the registration will be available? The above webpage says it would be open in the spring in M",
       "thread_id": "thread-89cbb4447d73",
       "thread_depth": 1,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014555.html"
     },
     {
       "id": "msg-40472dddd6d6",
@@ -605,7 +636,8 @@
       "body_snippet": "Brian,\n\nThank you for the reply. I'm from Brazil, so I need to plan the trip and book the flight tickets quite in advance, that's why I'm asking. Glad to know it's going to be open soon. I'm looking f",
       "thread_id": "thread-89cbb4447d73",
       "thread_depth": 2,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014556.html"
     },
     {
       "id": "msg-6b6e3effc4db",
@@ -621,7 +653,8 @@
       "body_snippet": "Hi\n\nI am using this call to obtain the historical data for the SNFE SPI \nfuture contract.? Here is the full code I am using:\n\nlibrary(\"IBrokers\")\ncloseAllConnections()\n\n# IBrokersRef()\n\ntws <- twsConn",
       "thread_id": "thread-6b6e3effc4db",
       "thread_depth": 0,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014557.html"
     },
     {
       "id": "msg-d9fdd8b904c2",
@@ -633,11 +666,12 @@
       "subject_clean": "CAViaR",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "Hello everyone,\n\nsince this is my first post here I would like to introduce myself:\n\nMy Name is Pit Goetz and I am currently working on my Ph.D. thesis in\nfinance.\nI usually do different stuff, wich is why I ask for help here:\n\n\nI want to use the CAViaR Model by Engle and Manganelli (2004) in R and I\nfound the following package for it:\n\nhttps://github.com/steinarv/quantileVaR\n\nit looks rather similar to the code provided by Manganelli on his\nwebsite:\n\nhttp://www.simonemanganelli.org/Simone/Research.html\nAt: CAViaR: Conditional Autoregressive Value at Risk by Regression\nQuantiles (with Robert Engle), 2004, Journal of Business & Economic\nStatistics, 22(4): 367-381\n\n\nUnfortunytely the R package has only a limited amount of description and\ncomments, wich is why I am here:\n\nDoes anyone have any experience with this package or with CAViaR in R in\ngeneral and can help me on how to code or use it?\n\n\nBest rgards,\nPit Goetz\n\nResearch Associate\nMartin-Luther-Universit?t Halle-Wittenberg\nChair of Finance & Banking\n \nGro?e Steinstra?e 73 | D-06108 Halle | Germany\nTel 0049 345 5523452\n\n \n\n\n-------------- next part --------------\nAn HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20180328/5aa07a70/attachment.html>",
+      "body_plain": "Hello everyone,\n\nsince this is my first post here I would like to introduce myself:\n\nMy Name is Pit Goetz and I am currently working on my Ph.D. thesis in\nfinance.\nI usually do different stuff, wich is why I ask for help here:\n\n\nI want to use the CAViaR Model by Engle and Manganelli (2004) in R and I\nfound the following package for it:\n\nhttps://github.com/steinarv/quantileVaR\n\nit looks rather similar to the code provided by Manganelli on his\nwebsite:\n\nhttp://www.simonemanganelli.org/Simone/Research.html\nAt: CAViaR: Conditional Autoregressive Value at Risk by Regression\nQuantiles (with Robert Engle), 2004, Journal of Business & Economic\nStatistics, 22(4): 367-381\n\n\nUnfortunytely the R package has only a limited amount of description and\ncomments, wich is why I am here:\n\nDoes anyone have any experience with this package or with CAViaR in R in\ngeneral and can help me on how to code or use it?\n\n\nBest rgards,\nPit Goetz\n\nResearch Associate\nMartin-Luther-Universität Halle-Wittenberg\nChair of Finance & Banking\n \nGroße Steinstraße 73 | D-06108 Halle | Germany\nTel 0049 345 5523452\n\n \n\n\n-------------- next part --------------\nAn HTML attachment was scrubbed...\nURL: <https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20180328/5aa07a70/attachment.html>",
       "body_snippet": "Hello everyone,\n\nsince this is my first post here I would like to introduce myself:\n\nMy Name is Pit Goetz and I am currently working on my Ph.D. thesis in\nfinance.\nI usually do different stuff, wich i",
       "thread_id": "thread-d9fdd8b904c2",
       "thread_depth": 0,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014558.html"
     },
     {
       "id": "msg-c948e1ea7f42",
@@ -651,11 +685,12 @@
       "references": [
         "<5ABB8814020000F80006C1F2@gwia0.itz.uni-halle.de>"
       ],
-      "body_plain": "Hey Pit,\nI and my lab implemented some CAViaR parametric forms in R.\nTake a look: https://github.com/PedroBSB/Caviar\nCheers.\nPedro\n\nOn Wed, Mar 28, 2018, 7:18 AM Pit G?tz <pit.goetz at wiwi.uni-halle.de> wrote:\n\n> Hello everyone,\n>\n> since this is my first post here I would like to introduce myself:\n>\n> My Name is Pit Goetz and I am currently working on my Ph.D. thesis in\n> finance.\n> I usually do different stuff, wich is why I ask for help here:\n>\n>\n> I want to use the CAViaR Model by Engle and Manganelli (2004) in R and I\n> found the following package for it:\n>\n> https://github.com/steinarv/quantileVaR\n>\n> it looks rather similar to the code provided by Manganelli on his website:\n>\n> http://www.simonemanganelli.org/Simone/Research.html\n> At: CAViaR: Conditional Autoregressive Value at Risk by Regression\n> Quantiles (with Robert Engle), 2004, Journal of Business & Economic\n> Statistics, 22(4): 367-381\n>\n>\n> Unfortunytely the R package has only a limited amount of description and\n> comments, wich is why I am here:\n>\n> Does anyone have any experience with this package or with CAViaR in R in\n> general and can help me on how to code or use it?\n>\n>\n> Best rgards,\n> Pit Goetz\n>\n> Research Associate\n>\n> *Martin-Luther-Universit?t Halle-Wittenberg*\n>\n> Chair of Finance & Banking\n>\n>\n>\n> Gro?e Steinstra?e 73 | D-06108 Halle | Germany\n> Tel 0049 345 5523452\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
-      "body_snippet": "Hey Pit,\nI and my lab implemented some CAViaR parametric forms in R.\nTake a look: https://github.com/PedroBSB/Caviar\nCheers.\nPedro\n\nOn Wed, Mar 28, 2018, 7:18 AM Pit G?tz <pit.goetz at wiwi.uni-halle.",
+      "body_plain": "Hey Pit,\nI and my lab implemented some CAViaR parametric forms in R.\nTake a look: https://github.com/PedroBSB/Caviar\nCheers.\nPedro\n\nOn Wed, Mar 28, 2018, 7:18 AM Pit Götz <pit.goetz at wiwi.uni-halle.de> wrote:\n\n> Hello everyone,\n>\n> since this is my first post here I would like to introduce myself:\n>\n> My Name is Pit Goetz and I am currently working on my Ph.D. thesis in\n> finance.\n> I usually do different stuff, wich is why I ask for help here:\n>\n>\n> I want to use the CAViaR Model by Engle and Manganelli (2004) in R and I\n> found the following package for it:\n>\n> https://github.com/steinarv/quantileVaR\n>\n> it looks rather similar to the code provided by Manganelli on his website:\n>\n> http://www.simonemanganelli.org/Simone/Research.html\n> At: CAViaR: Conditional Autoregressive Value at Risk by Regression\n> Quantiles (with Robert Engle), 2004, Journal of Business & Economic\n> Statistics, 22(4): 367-381\n>\n>\n> Unfortunytely the R package has only a limited amount of description and\n> comments, wich is why I am here:\n>\n> Does anyone have any experience with this package or with CAViaR in R in\n> general and can help me on how to code or use it?\n>\n>\n> Best rgards,\n> Pit Goetz\n>\n> Research Associate\n>\n> *Martin-Luther-Universität Halle-Wittenberg*\n>\n> Chair of Finance & Banking\n>\n>\n>\n> Große Steinstraße 73 | D-06108 Halle | Germany\n> Tel 0049 345 5523452\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hey Pit,\nI and my lab implemented some CAViaR parametric forms in R.\nTake a look: https://github.com/PedroBSB/Caviar\nCheers.\nPedro\n\nOn Wed, Mar 28, 2018, 7:18 AM Pit Götz <pit.goetz at wiwi.uni-halle.",
       "thread_id": "thread-d9fdd8b904c2",
       "thread_depth": 1,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014559.html"
     },
     {
       "id": "msg-5a326f45a3ae",
@@ -673,7 +708,8 @@
       "body_snippet": "Hey Stephen,\n\nalthough the contracts themselves are continuous in time, trading hours \non a stock exchange are not. I think the function reports the right \ndata, so let me mention a possible economic ",
       "thread_id": "thread-6b6e3effc4db",
       "thread_depth": 1,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014560.html"
     },
     {
       "id": "msg-8de360b276d3",
@@ -685,11 +721,12 @@
       "subject_clean": "Using quantstrat with options",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "Has anyone used quantstrat with options?  I?ve found lots of examples where people are using it with equities and one where someone is using it with futures but have not been able to find any examples of people using it with options yet.  I?m trying to backtest some index options strategies, and wanted to ask about a pragmatic way of using quantstrat when there are so many symbols involved (one per strike / maturity).   Also there is a lot of market data involved since I?m using 1 minute bars, so I was wondering whether I should create a subset of my market data for the minimum required before feeding it to quantstrat or whether people have done something where quantstrat can look up the data it needs from indexed files on disk as it runs and does not need to hold it in memory.\n\nBest,\n\nSal",
-      "body_snippet": "Has anyone used quantstrat with options?  I?ve found lots of examples where people are using it with equities and one where someone is using it with futures but have not been able to find any examples",
+      "body_plain": "Has anyone used quantstrat with options?  I’ve found lots of examples where people are using it with equities and one where someone is using it with futures but have not been able to find any examples of people using it with options yet.  I’m trying to backtest some index options strategies, and wanted to ask about a pragmatic way of using quantstrat when there are so many symbols involved (one per strike / maturity).   Also there is a lot of market data involved since I’m using 1 minute bars, so I was wondering whether I should create a subset of my market data for the minimum required before feeding it to quantstrat or whether people have done something where quantstrat can look up the data it needs from indexed files on disk as it runs and does not need to hold it in memory.\n\nBest,\n\nSal",
+      "body_snippet": "Has anyone used quantstrat with options?  I’ve found lots of examples where people are using it with equities and one where someone is using it with futures but have not been able to find any examples",
       "thread_id": "thread-8de360b276d3",
       "thread_depth": 0,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014561.html"
     },
     {
       "id": "msg-b9f3429b3c42",
@@ -703,11 +740,12 @@
       "references": [
         "<F076941E-9FA9-4ABA-BA11-BADEF5125113@gmail.com>"
       ],
-      "body_plain": "There should conceptually be no difficulty with lots of symbols and 1-\nminute data.  We pretty routinely use quantstrat on tick data or 1-\nsecond data.\n\nWe pretty regularly segment our backtests with a loop around the calls\nto applyStrategy that load data monthly or quarterly, add symbols to\nportfolios or create new portfolios for each segment, and then run that\nsubset of the overall backtest series.\n\nI do not trade options, so I can't help there, but you should be able\nto manage the meta-data for the contracts by adding fields to your\ninstrument definitions.  If things like tick sizes and multipliers are\nset correctly for the root symbol, then the accounting should work.\n\nRegards,\n\nBrian\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock\n\nOn Thu, 2018-03-29 at 12:17 -0500, Sal Abbasi wrote:\n> Has anyone used quantstrat with options?  I?ve found lots of examples\n> where people are using it with equities and one where someone is\n> using it with futures but have not been able to find any examples of\n> people using it with options yet.  I?m trying to backtest some index\n> options strategies, and wanted to ask about a pragmatic way of using\n> quantstrat when there are so many symbols involved (one per strike /\n> maturity).   Also there is a lot of market data involved since I?m\n> using 1 minute bars, so I was wondering whether I should create a\n> subset of my market data for the minimum required before feeding it\n> to quantstrat or whether people have done something where quantstrat\n> can look up the data it needs from indexed files on disk as it runs\n> and does not need to hold it in memory.\n> \n> Best,\n> \n> Sal\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R\n> questions should go.\n>",
+      "body_plain": "There should conceptually be no difficulty with lots of symbols and 1-\nminute data.  We pretty routinely use quantstrat on tick data or 1-\nsecond data.\n\nWe pretty regularly segment our backtests with a loop around the calls\nto applyStrategy that load data monthly or quarterly, add symbols to\nportfolios or create new portfolios for each segment, and then run that\nsubset of the overall backtest series.\n\nI do not trade options, so I can't help there, but you should be able\nto manage the meta-data for the contracts by adding fields to your\ninstrument definitions.  If things like tick sizes and multipliers are\nset correctly for the root symbol, then the accounting should work.\n\nRegards,\n\nBrian\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock\n\nOn Thu, 2018-03-29 at 12:17 -0500, Sal Abbasi wrote:\n> Has anyone used quantstrat with options?  I’ve found lots of examples\n> where people are using it with equities and one where someone is\n> using it with futures but have not been able to find any examples of\n> people using it with options yet.  I’m trying to backtest some index\n> options strategies, and wanted to ask about a pragmatic way of using\n> quantstrat when there are so many symbols involved (one per strike /\n> maturity).   Also there is a lot of market data involved since I’m\n> using 1 minute bars, so I was wondering whether I should create a\n> subset of my market data for the minimum required before feeding it\n> to quantstrat or whether people have done something where quantstrat\n> can look up the data it needs from indexed files on disk as it runs\n> and does not need to hold it in memory.\n> \n> Best,\n> \n> Sal\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R\n> questions should go.\n>",
       "body_snippet": "There should conceptually be no difficulty with lots of symbols and 1-\nminute data.  We pretty routinely use quantstrat on tick data or 1-\nsecond data.\n\nWe pretty regularly segment our backtests with ",
       "thread_id": "thread-8de360b276d3",
       "thread_depth": 1,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014562.html"
     },
     {
       "id": "msg-cc5c9f2a2515",
@@ -722,11 +760,12 @@
         "<F076941E-9FA9-4ABA-BA11-BADEF5125113@gmail.com>",
         "<1522344736.17100.141.camel@braverock.com>"
       ],
-      "body_plain": "Thank you.  Just loaded up a few symbols and it seems to be working great so far.\n\n> On Mar 29, 2018, at 12:32 PM, Brian G. Peterson <brian at braverock.com> wrote:\n> \n> There should conceptually be no difficulty with lots of symbols and 1-\n> minute data.  We pretty routinely use quantstrat on tick data or 1-\n> second data.\n> \n> We pretty regularly segment our backtests with a loop around the calls\n> to applyStrategy that load data monthly or quarterly, add symbols to\n> portfolios or create new portfolios for each segment, and then run that\n> subset of the overall backtest series.\n> \n> I do not trade options, so I can't help there, but you should be able\n> to manage the meta-data for the contracts by adding fields to your\n> instrument definitions.  If things like tick sizes and multipliers are\n> set correctly for the root symbol, then the accounting should work.\n> \n> Regards,\n> \n> Brian\n> \n> -- \n> Brian G. Peterson\n> http://braverock.com/brian/\n> Ph: 773-459-4973\n> IM: bgpbraverock\n> \n> On Thu, 2018-03-29 at 12:17 -0500, Sal Abbasi wrote:\n>> Has anyone used quantstrat with options?  I?ve found lots of examples\n>> where people are using it with equities and one where someone is\n>> using it with futures but have not been able to find any examples of\n>> people using it with options yet.  I?m trying to backtest some index\n>> options strategies, and wanted to ask about a pragmatic way of using\n>> quantstrat when there are so many symbols involved (one per strike /\n>> maturity).   Also there is a lot of market data involved since I?m\n>> using 1 minute bars, so I was wondering whether I should create a\n>> subset of my market data for the minimum required before feeding it\n>> to quantstrat or whether people have done something where quantstrat\n>> can look up the data it needs from indexed files on disk as it runs\n>> and does not need to hold it in memory.\n>> \n>> Best,\n>> \n>> Sal\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R\n>> questions should go.\n>>",
+      "body_plain": "Thank you.  Just loaded up a few symbols and it seems to be working great so far.\n\n> On Mar 29, 2018, at 12:32 PM, Brian G. Peterson <brian at braverock.com> wrote:\n> \n> There should conceptually be no difficulty with lots of symbols and 1-\n> minute data.  We pretty routinely use quantstrat on tick data or 1-\n> second data.\n> \n> We pretty regularly segment our backtests with a loop around the calls\n> to applyStrategy that load data monthly or quarterly, add symbols to\n> portfolios or create new portfolios for each segment, and then run that\n> subset of the overall backtest series.\n> \n> I do not trade options, so I can't help there, but you should be able\n> to manage the meta-data for the contracts by adding fields to your\n> instrument definitions.  If things like tick sizes and multipliers are\n> set correctly for the root symbol, then the accounting should work.\n> \n> Regards,\n> \n> Brian\n> \n> -- \n> Brian G. Peterson\n> http://braverock.com/brian/\n> Ph: 773-459-4973\n> IM: bgpbraverock\n> \n> On Thu, 2018-03-29 at 12:17 -0500, Sal Abbasi wrote:\n>> Has anyone used quantstrat with options?  I’ve found lots of examples\n>> where people are using it with equities and one where someone is\n>> using it with futures but have not been able to find any examples of\n>> people using it with options yet.  I’m trying to backtest some index\n>> options strategies, and wanted to ask about a pragmatic way of using\n>> quantstrat when there are so many symbols involved (one per strike /\n>> maturity).   Also there is a lot of market data involved since I’m\n>> using 1 minute bars, so I was wondering whether I should create a\n>> subset of my market data for the minimum required before feeding it\n>> to quantstrat or whether people have done something where quantstrat\n>> can look up the data it needs from indexed files on disk as it runs\n>> and does not need to hold it in memory.\n>> \n>> Best,\n>> \n>> Sal\n>> _______________________________________________\n>> R-SIG-Finance at r-project.org mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R\n>> questions should go.\n>>",
       "body_snippet": "Thank you.  Just loaded up a few symbols and it seems to be working great so far.\n\n> On Mar 29, 2018, at 12:32 PM, Brian G. Peterson <brian at braverock.com> wrote:\n> \n> There should conceptually be n",
       "thread_id": "thread-8de360b276d3",
       "thread_depth": 2,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014563.html"
     },
     {
       "id": "msg-e73bbe0e6062",
@@ -742,7 +781,8 @@
       "body_snippet": "Hi,\n\nI am looking for some good books/materials specializing on Market risk\nmanagement for various FX products.\n\nCan you point me to some good reference?\n\nThanks in advance.",
       "thread_id": "thread-e73bbe0e6062",
       "thread_depth": 0,
-      "month": "2018-03"
+      "month": "2018-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2018q1/014564.html"
     }
   ],
   "threads": [

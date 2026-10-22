@@ -13,11 +13,12 @@
       "subject_clean": "Constrained portfolio optimization with DEoptim",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "Hi guys,\n\nI?m working on a portfolio optimization problem\n\nThe problem I?m trying to solve is of the form Min risk s.t. return = X\n\nFor each asset I have simulated 1000 paths for the development in asset\nprices over 10 years.\n\nThe risk measure I?d like to minimize is YoY shortfall risk, but could be\nany risk metric that takes the information from the scenarios into\nconsideration.\n\nLikewise, the return is the mean annualized return over all the scenarios.\n\nI have tried solving this problem using DEoptim, where deviations from the\nrequired return is penalized. Similar to the approach applied here:\nhttps://cran.r-project.org/web/packages/DEoptim/vignettes/\nDEoptimPortfolioOptimization.pdf\n\nI am unable to achieve convergence where the constraint is fulfilled.\n\nMy object function is of the form\n\nObj <- function(Return data, portfolio weights, target return){\n\nNormalize weights to 1\n\ncalculate portfolio return\n\ncalculate risk metric\n\ncalculate deviation from target return\n\nreturn (risk metric + deviation from target return*1e6)\n\n}\n\nAny pointers on how to formulate and solve this problem would be much\nappreciated.\n\nThank you.\n\n\n\nKristian Lind\n\n\t[[alternative HTML version deleted]]",
-      "body_snippet": "Hi guys,\n\nI?m working on a portfolio optimization problem\n\nThe problem I?m trying to solve is of the form Min risk s.t. return = X\n\nFor each asset I have simulated 1000 paths for the development in as",
+      "body_plain": "Hi guys,\n\nI’m working on a portfolio optimization problem\n\nThe problem I’m trying to solve is of the form Min risk s.t. return = X\n\nFor each asset I have simulated 1000 paths for the development in asset\nprices over 10 years.\n\nThe risk measure I’d like to minimize is YoY shortfall risk, but could be\nany risk metric that takes the information from the scenarios into\nconsideration.\n\nLikewise, the return is the mean annualized return over all the scenarios.\n\nI have tried solving this problem using DEoptim, where deviations from the\nrequired return is penalized. Similar to the approach applied here:\nhttps://cran.r-project.org/web/packages/DEoptim/vignettes/\nDEoptimPortfolioOptimization.pdf\n\nI am unable to achieve convergence where the constraint is fulfilled.\n\nMy object function is of the form\n\nObj <- function(Return data, portfolio weights, target return){\n\nNormalize weights to 1\n\ncalculate portfolio return\n\ncalculate risk metric\n\ncalculate deviation from target return\n\nreturn (risk metric + deviation from target return*1e6)\n\n}\n\nAny pointers on how to formulate and solve this problem would be much\nappreciated.\n\nThank you.\n\n\n\nKristian Lind\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi guys,\n\nI’m working on a portfolio optimization problem\n\nThe problem I’m trying to solve is of the form Min risk s.t. return = X\n\nFor each asset I have simulated 1000 paths for the development in as",
       "thread_id": "thread-bb14084a6091",
       "thread_depth": 0,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014074.html"
     },
     {
       "id": "msg-71cb2c7af1d0",
@@ -31,11 +32,12 @@
       "references": [
         "<CAK0QJvxob1C-763TbRJ9Q6=vOWZswyntHSd6TxL0w_s5stucsw@mail.gmail.com>"
       ],
-      "body_plain": "On Tue, 2016-10-04 at 13:04 +0200, Kristian Lind wrote:\n> Hi guys,\n> \n> I?m working on a portfolio optimization problem\n> \n> The problem I?m trying to solve is of the form Min risk s.t. return = X\n> \n> For each asset I have simulated 1000 paths for the development in asset\n> prices over 10 years.\n> \n> The risk measure I?d like to minimize is YoY shortfall risk, but could be\n> any risk metric that takes the information from the scenarios into\n> consideration.\n> \n> Likewise, the return is the mean annualized return over all the scenarios.\n> \n> I have tried solving this problem using DEoptim, where deviations from the\n> required return is penalized. Similar to the approach applied here:\n> https://cran.r-project.org/web/packages/DEoptim/vignettes/\n> DEoptimPortfolioOptimization.pdf\n> \n> I am unable to achieve convergence where the constraint is fulfilled.\n> \n> My object function is of the form\n> \n> Obj <- function(Return data, portfolio weights, target return){\n> \n> Normalize weights to 1\n> calculate portfolio return\n> calculate risk metric\n> calculate deviation from target return\n> return (risk metric + deviation from target return*1e6)\n> \n> }\n> \n> Any pointers on how to formulate and solve this problem would be much\n> appreciated.\n\nYou haven't provided a reproducible example, making it hard to help you.\n\nYou can easily do this type of optimization with PortfolioAnalytics,\nincluding the use of DEoptim, pso, GenSA, or random search as a global\nsolver.  The modular objective function of PortfolioAnalytics should\nallow you to specify your problem pretty easily.  You'll need to pass in\nyour 'scenarios', and use functions in your objective that expect this\ndata and know how to apply weights to it, but that should be pretty\nsimple.\n\nTo get to a general answer to your question, you need to determine a few\nthings.\n\nIs there a solution that meets your constraints?  Many portfolios are\nover-constrained, and are unable to meet the objectives as defined.  In\nthese cases you need to be able to relax constraints to get to the\nclosest solution.  It often helps to plot the unconstrained and\nconstrained feasible spaces (e.g. with random portfolios from\nPortfolioAnalytics) to see if you've overconstrained things.  \n\nYou don't appear to be using 'fnMap' to apply your full investment\n(cardinality) constraint.  Using this tells DEoptim what the final\nparameter values were, and doesn't hide them inside your custom\nobjective.\n\nYou're attempting to perform a penalized optimization with:\n\nreturn (risk metric + deviation from target return*1e6)\n\nIs this the right weighting/penalty between your objectives? Typically,\nif you have no significant preference between your objectives, you want\nto use a multiplier first to get them to similar overall scale.  Then\nyou want to separately penalize (with a large multiplier) deviation from\nyour constraint.  In this case, you are penalizing overshooting and\nmissing below the return in the same way.  This will give the optimizer\nvery little indication on direction to improve the solution.  It can\nalso make sense to plot the path the optimizer takes to see if you're\ngetting close to a solution.\n\nYour use of 'scenarios' could be messing you up.  DEoptim permutes\n'parameters', which are typically weights in portfolio optimization\nspace.  It then applies the objective function passing the parameters\ninto the objective. You've said that you're using a annualized mean\nacross the scenarios and an annualized shortfall risk across the\nscenarios.  You're losing quite a lot of dimensionality by reducing 1000\nscenarios on each asset to one number.  Doing simple linear combinations\nof these will not take things like covariances into account, even though\nby saying that you care about shortfall risk, I'd assume what you really\nwant is *portfolio* shortfall.  I would be concerned that the loss of\ndimensionality suggested by your description would make it difficult to\nget a realistic solution.   \n\nThere are several more things that could cause this to fail to converge.\nI've covered the most likely ones, but further investigation would\nrequire a reproducible example.\n\nRegards,\n\nBrian\n\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
-      "body_snippet": "On Tue, 2016-10-04 at 13:04 +0200, Kristian Lind wrote:\n> Hi guys,\n> \n> I?m working on a portfolio optimization problem\n> \n> The problem I?m trying to solve is of the form Min risk s.t. return = X\n> \n",
+      "body_plain": "On Tue, 2016-10-04 at 13:04 +0200, Kristian Lind wrote:\n> Hi guys,\n> \n> I’m working on a portfolio optimization problem\n> \n> The problem I’m trying to solve is of the form Min risk s.t. return = X\n> \n> For each asset I have simulated 1000 paths for the development in asset\n> prices over 10 years.\n> \n> The risk measure I’d like to minimize is YoY shortfall risk, but could be\n> any risk metric that takes the information from the scenarios into\n> consideration.\n> \n> Likewise, the return is the mean annualized return over all the scenarios.\n> \n> I have tried solving this problem using DEoptim, where deviations from the\n> required return is penalized. Similar to the approach applied here:\n> https://cran.r-project.org/web/packages/DEoptim/vignettes/\n> DEoptimPortfolioOptimization.pdf\n> \n> I am unable to achieve convergence where the constraint is fulfilled.\n> \n> My object function is of the form\n> \n> Obj <- function(Return data, portfolio weights, target return){\n> \n> Normalize weights to 1\n> calculate portfolio return\n> calculate risk metric\n> calculate deviation from target return\n> return (risk metric + deviation from target return*1e6)\n> \n> }\n> \n> Any pointers on how to formulate and solve this problem would be much\n> appreciated.\n\nYou haven't provided a reproducible example, making it hard to help you.\n\nYou can easily do this type of optimization with PortfolioAnalytics,\nincluding the use of DEoptim, pso, GenSA, or random search as a global\nsolver.  The modular objective function of PortfolioAnalytics should\nallow you to specify your problem pretty easily.  You'll need to pass in\nyour 'scenarios', and use functions in your objective that expect this\ndata and know how to apply weights to it, but that should be pretty\nsimple.\n\nTo get to a general answer to your question, you need to determine a few\nthings.\n\nIs there a solution that meets your constraints?  Many portfolios are\nover-constrained, and are unable to meet the objectives as defined.  In\nthese cases you need to be able to relax constraints to get to the\nclosest solution.  It often helps to plot the unconstrained and\nconstrained feasible spaces (e.g. with random portfolios from\nPortfolioAnalytics) to see if you've overconstrained things.  \n\nYou don't appear to be using 'fnMap' to apply your full investment\n(cardinality) constraint.  Using this tells DEoptim what the final\nparameter values were, and doesn't hide them inside your custom\nobjective.\n\nYou're attempting to perform a penalized optimization with:\n\nreturn (risk metric + deviation from target return*1e6)\n\nIs this the right weighting/penalty between your objectives? Typically,\nif you have no significant preference between your objectives, you want\nto use a multiplier first to get them to similar overall scale.  Then\nyou want to separately penalize (with a large multiplier) deviation from\nyour constraint.  In this case, you are penalizing overshooting and\nmissing below the return in the same way.  This will give the optimizer\nvery little indication on direction to improve the solution.  It can\nalso make sense to plot the path the optimizer takes to see if you're\ngetting close to a solution.\n\nYour use of 'scenarios' could be messing you up.  DEoptim permutes\n'parameters', which are typically weights in portfolio optimization\nspace.  It then applies the objective function passing the parameters\ninto the objective. You've said that you're using a annualized mean\nacross the scenarios and an annualized shortfall risk across the\nscenarios.  You're losing quite a lot of dimensionality by reducing 1000\nscenarios on each asset to one number.  Doing simple linear combinations\nof these will not take things like covariances into account, even though\nby saying that you care about shortfall risk, I'd assume what you really\nwant is *portfolio* shortfall.  I would be concerned that the loss of\ndimensionality suggested by your description would make it difficult to\nget a realistic solution.   \n\nThere are several more things that could cause this to fail to converge.\nI've covered the most likely ones, but further investigation would\nrequire a reproducible example.\n\nRegards,\n\nBrian\n\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
+      "body_snippet": "On Tue, 2016-10-04 at 13:04 +0200, Kristian Lind wrote:\n> Hi guys,\n> \n> I’m working on a portfolio optimization problem\n> \n> The problem I’m trying to solve is of the form Min risk s.t. return = X\n> \n",
       "thread_id": "thread-bb14084a6091",
       "thread_depth": 1,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014075.html"
     },
     {
       "id": "msg-14d17964183f",
@@ -51,7 +53,8 @@
       "body_snippet": "Hi all,\n\nI am looking for an answer to a specific question, I have been going through the threads to look for anything relevant first before I post a new thread.  I haven't found anything.  Is there a",
       "thread_id": "thread-14d17964183f",
       "thread_depth": 0,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014077.html"
     },
     {
       "id": "msg-bee3a8ae375e",
@@ -67,7 +70,8 @@
       "body_snippet": "Hello,\nI have downloaded the time series of crude oil in to R ( from a local excel\nfile(csv/text tab delimited) in C drive)and the data ( OHLC) is being\ndisplayed in my R.Studio.\nAm able to ascertain ",
       "thread_id": "thread-bee3a8ae375e",
       "thread_depth": 0,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014078.html"
     },
     {
       "id": "msg-49c4b19e6f96",
@@ -85,7 +89,8 @@
       "body_snippet": "On 10/08/2016 10:55 PM, Ramesh wrote:\n> I have downloaded the time series of crude oil in to R ( from a local excel\n> file(csv/text tab delimited) in C drive)and the data ( OHLC) is being\n> displayed ",
       "thread_id": "thread-bee3a8ae375e",
       "thread_depth": 1,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014079.html"
     },
     {
       "id": "msg-b9e4e865e06f",
@@ -103,7 +108,8 @@
       "body_snippet": "On 10/08/2016 10:29 PM, Michael Chen wrote:\n> I am looking for an answer to a specific question, I have been going\n> through the threads to look for anything relevant first before I post\n> a new threa",
       "thread_id": "thread-14d17964183f",
       "thread_depth": 1,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014080.html"
     },
     {
       "id": "msg-f04060c54665",
@@ -119,7 +125,8 @@
       "body_snippet": "I have a question about the use of the \"mu\" parameter in the functions\nStdDev, VaR e CVaR.\nAs reference data we can use data in the paper \"Vignette: Portfolio\nOptimization with CVaR budgets in Portfol",
       "thread_id": "thread-f04060c54665",
       "thread_depth": 0,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014081.html"
     },
     {
       "id": "msg-715115d25e62",
@@ -137,7 +144,8 @@
       "body_snippet": "Hi Marco,\n\nCan you put together a minimal reproducible example [1,2] so that it's\neasier for others to answer your question?\n\nFor this problem, I'd recommend using the edhec data distributed with\nPerf",
       "thread_id": "thread-f04060c54665",
       "thread_depth": 1,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014082.html"
     },
     {
       "id": "msg-30e9beebb7ff",
@@ -156,7 +164,8 @@
       "body_snippet": "Hi Michael,\n\nthanks for your reply, I apologize for the not full clarity of my question.\nIn the following, I try to report a full example.\n\n#Library\n*library(PerformanceAnalytics)*\n*library(PortfolioA",
       "thread_id": "thread-f04060c54665",
       "thread_depth": 2,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014083.html"
     },
     {
       "id": "msg-38b3e10e36ab",
@@ -176,7 +185,8 @@
       "body_snippet": "I attach what I think is a syntactically correct version of the email, \nwhich looks like it was pasted from HTML.\n\nWe'll try to take a look.\n\nRegards,\n\nBrian\n\nOn 10/12/2016 04:34 AM, Marco Mastrangeli",
       "thread_id": "thread-f04060c54665",
       "thread_depth": 3,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014084.html"
     },
     {
       "id": "msg-970608d5a65f",
@@ -197,7 +207,8 @@
       "body_snippet": "Thanks Brian, I will avoid HTML format next time.\n\nBest regards,\nMarco\n\nOn Wed, Oct 12, 2016 at 12:21 PM, Brian G. Peterson <brian at braverock.com>\nwrote:\n\n> I attach what I think is a syntactically ",
       "thread_id": "thread-f04060c54665",
       "thread_depth": 4,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014085.html"
     },
     {
       "id": "msg-7879ac723f15",
@@ -218,7 +229,8 @@
       "body_snippet": "The issue seems to be in the calculation of the co-skewness and co-kurtosis.\n\nIn particular, when calling ES directly, the user-supplied mu gets\nused to calculate M3 and M4. When called through Portfo",
       "thread_id": "thread-f04060c54665",
       "thread_depth": 4,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014086.html"
     },
     {
       "id": "msg-d3dac6bf0e0c",
@@ -240,7 +252,8 @@
       "body_snippet": "Yes, agreed.  This gets handled correctly, I think in\noptimize.portfolio(), but when constrained_objective is called directly,\nit looks like set.portfolio.moments doesn't merge arguments from ... or\nt",
       "thread_id": "thread-f04060c54665",
       "thread_depth": 5,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014087.html"
     },
     {
       "id": "msg-636920dd46b2",
@@ -263,7 +276,8 @@
       "body_snippet": "Thanks Michael and Brian for your support, it was very helpful!\nI have also noted that in the VaR example (my example 1) there is a match\nwith the *constrained_objective *and the VaR function because ",
       "thread_id": "thread-f04060c54665",
       "thread_depth": 6,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014088.html"
     },
     {
       "id": "msg-e3e158ed329d",
@@ -279,7 +293,8 @@
       "body_snippet": "Dear all,\n\nFirst I want to say thanks for the beautiful rugarch package!\n\nI am trying to replicate some results and I would like to know if there is\nany adjustment that I can do to run the egarch mode",
       "thread_id": "thread-e3e158ed329d",
       "thread_depth": 0,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014089.html"
     },
     {
       "id": "msg-0718c178e114",
@@ -297,7 +312,8 @@
       "body_snippet": "Rather than answer the question, I'll talk past it.\n\nI'm not convinced that it's worthwhile to worry about a garch model with \nless than 100 observations.  See:\n\nhttp://www.portfolioprobe.com/2012/09/",
       "thread_id": "thread-e3e158ed329d",
       "thread_depth": 1,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014090.html"
     },
     {
       "id": "msg-b4218f558f88",
@@ -313,7 +329,8 @@
       "body_snippet": "Hi,\n\nSuppose that I have the following loop for estimating ARMA models on a \nseries of log-returns. The loop varies both the p and the q orders \nbetween 0 and 10. The returned objects are the matrices",
       "thread_id": "thread-b4218f558f88",
       "thread_depth": 0,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014091.html"
     },
     {
       "id": "msg-02bc077cd0e1",
@@ -329,7 +346,8 @@
       "body_snippet": "Hello,\n\nI would like to put you the other question that I have about how to use \nloops for in R. The first is entitled ?Loop For ? ARMA model estimation \nand selection?. If you take a look and try to ",
       "thread_id": "thread-02bc077cd0e1",
       "thread_depth": 0,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014092.html"
     },
     {
       "id": "msg-a6d50dbd3f2e",
@@ -347,7 +365,8 @@
       "body_snippet": "Sorry there is a repo.\n\nIn my description I wanted to say that the test for the correctness of \nthe stz residual distribution is the Pearson Adjusted Chi-Square, not \nthe JB.\n\nApologies.\n\n\nIl 16/10/20",
       "thread_id": "thread-02bc077cd0e1",
       "thread_depth": 1,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014093.html"
     },
     {
       "id": "msg-472558ad8a10",
@@ -363,7 +382,8 @@
       "body_snippet": "Hello,\n\nafter I updated all my R packages today, loading the rugarch library yields\na memory not mapped error.\n\n> sessionInfo()\nR version 3.3.1 (2016-06-21)\nPlatform: x86_64-pc-linux-gnu (64-bit)\nRunn",
       "thread_id": "thread-472558ad8a10",
       "thread_depth": 0,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014094.html"
     },
     {
       "id": "msg-d99f9f4c27d1",
@@ -381,7 +401,8 @@
       "body_snippet": "Hello,\n\nI just wanted to let you know that wiping all R packages and starting from\nscratch solved my problem. Sorry for not trying that first.\n\nRegards\nSebastian\n\n\n2016-10-18 17:15 GMT+02:00 Sebastian",
       "thread_id": "thread-472558ad8a10",
       "thread_depth": 1,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014095.html"
     },
     {
       "id": "msg-0ce35ef224e4",
@@ -396,11 +417,12 @@
         "<CAK0QJvxob1C-763TbRJ9Q6=vOWZswyntHSd6TxL0w_s5stucsw@mail.gmail.com>",
         "<1475582513.14041.262.camel@brian-rcg>"
       ],
-      "body_plain": "Hi Brian*,*\n\nThank you for your reply. It has been very helpful.\n\nI have, as you suggested, tried to set my problem up within\nPortfolioAnalytics.\n\nI have formulated the constrained optimization using two custom objective\nfunctions.\n\nOne calculating a risk measure.\n\nobjectfunc <- function(R, weights, Nassets)\n\nmyfun <- function(x,y){rowSums(x*y)}\n\nPF.Ret <- matrix(data = NA, nrow = nrow(R), ncol = ncol(R)/Nassets)\n\nfor(i in 1:(ncol(R)/Nassets))\n\n{\n\n  j <- i*Nassets-(Nassets-1)\n\n  PF.Ret[,i] = myfun(R[,j:(j+Nassets-1)],weights)\n\n}\n\ndate <- index(R)\n\nPF.Ret <- xts(PF.Ret, date)\n\nPF.Ret <- log(1+PF.Ret)\n\nlist <- list()\n\nfor (i in 1:ncol(PF.Ret))\n\n{\n\n  list[[i]] <- apply.yearly(PF.Ret[,i], sum)\n\n}\n\nPF.Ret.Yearly <- matrix(data = unlist(list), nrow=10, ncol = 1000,\nbyrow=FALSE)\n\nmatrix1 <- matrix(data= NA, nrow= 10, ncol= 1)\n\nfor (i in 1:10)\n\n{\n\n  mean.ret <- mean(PF.Ret.Yearly[i,])\n\n  sorted <- sort(PF.Ret.Yearly[i,])\n\n  ES_5_pct <- mean(sorted[1:ceiling(length(sorted)*.05)])\n\n  matrix1[i,1] <- -( mean.ret -ES_5_pct)\n\n}\n\nYOY_Shortfall_Risk <- mean(matrix1)\n\nreturn(YOY_Shortfall_Risk)\n\n}\n\nAnother calculating the deviation between a set target return and the\nportfolio return given the weights. Deviation from the target return is\npenalized.\n\nretcons <- function(R, weights, targetreturn, Nassets){\n\n  myfun <- function(x,y){rowSums(x*y)}\n\n  PF.Ret <- matrix(data = NA, nrow = nrow(R), ncol = ncol(R)/Nassets)\n\n  for(i in 1:(ncol(R)/Nassets))\n\n  {\n\n    j <- i*Nassets-(Nassets-1)\n\n    PF.Ret[,i] = myfun(R[,j:(j+Nassets-1)],weights)\n\n  }\n\n  date <- index(R)\n\n  PF.Ret <- xts(PF.Ret, date)\n\n  PF.Ret <- log(1+PF.Ret)\n\n  PF.Ret.Ann <- Return.annualized(PF.Ret, scale = 4)\n\n  PF.Ret.Dev <- abs(mean(PF.Ret.Ann)-targetreturn)\n\n  return(PF.Ret.Dev*1e6)\n\n  }\n\nPortfolio specification:\n\npf <- portfolio.spec(assets = 3)\n\npf <- add.constraint(portfolio=pf, type=\"leverage\", min_sum=0.99,\nmax_sum=1.01)\n\npf <- add.constraint(portfolio=pf, type=\"long_only\"\n\npf <- add.objective(portfolio = pf, name = \"objectfunc\", type = \"risk\",\narguments= list(Nassets=length(pf$assets)))\n\npf <- add.objective(portfolio = pf, name = \"retcons\", type = \"return\",\narguments= list(targetreturn = 0.04, Nassets=length(pf$assets)))\n\nOptimizing portfolio:\n\npf.opt <- optimize.portfolio(R, portfolio = pf, optimize_method =\n\"DEoptim\", search_size = 500, trace = FALSE)\n\nWhen I try to run this I receive the following error message:\n\nobjective name objectfunc generated an error or warning: Error in\n`[.xts`(R, , j:(j + Nassets - 1)) : subscript out of bounds\n\nobjective name retcons generated an error or warning: Error in `[.xts`(R, ,\nj:(j + Nassets - 1)) : subscript out of bounds\n\nI can?t figure out why because the functions are working as they should and\nthe subscript remains within bounds.\n\nIf I try to apply DEoptim() directly to the functions one by one this works\nwithout any problems. This leads me to believe that the two objectives are\nsomehow formulated wrong.\n\nAny advice would be very helpful.\n\nThanks.\n\nKristian\n\nBelow is some test data. These are returns for 3 assets over 2 distinct\nscenarios.\n\n\n\n        0001Asset1           0001Asset2      0001Asset3\n                  0002Asset1       0002Asset2         0002Asset3\n\n2016-03-31               0.0009770000       0.016740000     0.016579000\n          -0.023776400     -0.0041489000     0.001512000\n\n2016-06-30              -0.0029404272       0.007377501\n0.015908257                0.043515031      0.0007250080     0.001240125\n\n2016-09-30               0.0104448377      -0.019819554\n0.015738547                0.050726217      0.0313854548     0.001350281\n\n2016-12-31              -0.0062679854       0.010671942\n0.016125757               -0.004518026     -0.0117857549     0.001689061\n\n2017-03-31              -0.0079445226      -0.044670060\n-0.004612912                0.001194696     -0.0058016987     0.052340217\n\n2017-06-30              -0.0443293966      -0.019210789    -0.004226186\n           0.021539797     -0.0179612891     0.054908697\n\n2017-09-30               0.0237102390       0.011401810\n-0.003435808               -0.011847182     -0.0126964053     0.056605700\n\n2017-12-31              -0.0015399460       0.035813794\n-0.002748625               -0.019542495      0.0101302728     0.058266442\n\n2018-03-31              -0.0113292330       0.007312157\n0.056380215               -0.010737433     -0.0069353566     0.045971561\n\n2018-06-30              -0.0096110793      -0.002711140\n    0.056623046               -0.003262799      0.0008645106     0.047599867\n\n2018-09-30               0.0094151500      -0.024227124\n0.058750803               -0.005936063      0.0023834633     0.048860875\n\n2018-12-31               0.0191824507      -0.010843099\n0.060146334               -0.036474625      0.0081957339     0.050592614\n\n2019-03-31               0.0216149159      -0.012509716\n-0.005685334               -0.016999378      0.0039543321     0.057437136\n\n2019-06-30              -0.0353713241      -0.027056842\n-0.005359282               -0.001568024      0.0055240254     0.056829074\n\n2019-09-30               0.0068256915       0.033676676\n-0.005547267               -0.005307774      0.0558182435     0.056924521\n\n2019-12-31               0.0402950042       0.008506863\n-0.005229621               -0.008069375      0.0104593718     0.058275726\n\n2020-03-31              -0.0236441279       0.002491410\n-0.035715118               -0.013556053     -0.0092781424     0.035725279\n\n2020-06-30              -0.0227378309       0.040566982\n-0.036422326               -0.018606615      0.0213017461     0.035333312\n\n2020-09-30              -0.0331522369      -0.013661001\n-0.035461805                0.013950153     -0.0062701658     0.035735389\n\n2020-12-31              -0.0022381617       0.004761732\n-0.034474179               -0.007912498      0.0449173126     0.035830771\n\n2021-03-31              -0.0123584293      -0.023198797\n-0.094912448               -0.024782130      0.0126045150     0.013769555\n\n2021-06-30              -0.0230952138      -0.037092732\n-0.096008937               -0.012783368      0.0202277100     0.013955651\n\n2021-09-30              -0.0382849524      -0.039174543\n-0.096453235                0.011270169     -0.0004279631     0.014892660\n\n2021-12-31               0.0192312397      -0.042090156\n-0.094958812               -0.003473503      0.0197412514     0.015052186\n\n2022-03-31              -0.0176720249      -0.051753716\n-0.002995036                0.011147463      0.0061838217     0.076329091\n\n2022-06-30               0.0171345591      -0.047152874\n-0.003502619               -0.021507033      0.0245421282     0.078357061\n\n2022-09-30              -0.0058656456      -0.051551676\n-0.003696614               -0.003655445     -0.0096960956     0.082151077\n\n2022-12-31              -0.0170921376      -0.066373600\n-0.003710194                0.021982228      0.0415787788     0.083333940\n\n2023-03-31               0.0163444872      -0.004762518\n0.041507377               -0.026366926      0.0203368716     0.048861009\n\n2023-06-30              -0.0208268986      -0.015490012\n0.041058936                0.003762363      0.0189784762     0.051571131\n\n2023-09-30              -0.0004284279      -0.002227971\n0.040723178               -0.005698759      0.0233511708     0.055240586\n\n2023-12-31               0.0141513274      -0.023746263\n0.041881996               -0.022127398      0.0182298784     0.057153451\n\n2024-03-31               0.0105922202      -0.009016968\n0.037171059               -0.016926364      0.0488771263     0.067117695\n\n2024-06-30               0.0245418561       0.004764987\n0.038838652               -0.010630231      0.0416277761     0.069258579\n\n2024-09-30               0.0116387526       0.016551947\n0.038733564                0.032021448      0.0528662570     0.072442630\n\n2024-12-31              -0.0415150970       0.002499012     0.039572718\n              0.067227381      0.0440336173     0.073641408\n\n2025-03-31              -0.0315214326       0.023107293\n-0.056239231               -0.038364755      0.0214378006     0.009960962\n\n2025-06-30              -0.0153207849       0.011894464\n-0.056741703                0.022417838      0.0340254762     0.013183042\n\n2025-09-30              -0.0375576999       0.059433097\n-0.056916400               -0.008105189      0.0429868190     0.014451492\n\n2025-12-31              -0.0253597219       0.042178684\n-0.055637987                0.033767714      0.0166919155     0.021603579\n\nDen tirsdag den 4. oktober 2016 skrev Brian G. Peterson <brian at braverock.com\n>:\n\n> On Tue, 2016-10-04 at 13:04 +0200, Kristian Lind wrote:\n> > Hi guys,\n> >\n> > I?m working on a portfolio optimization problem\n> >\n> > The problem I?m trying to solve is of the form Min risk s.t. return = X\n> >\n> > For each asset I have simulated 1000 paths for the development in asset\n> > prices over 10 years.\n> >\n> > The risk measure I?d like to minimize is YoY shortfall risk, but could be\n> > any risk metric that takes the information from the scenarios into\n> > consideration.\n> >\n> > Likewise, the return is the mean annualized return over all the\n> scenarios.\n> >\n> > I have tried solving this problem using DEoptim, where deviations from\n> the\n> > required return is penalized. Similar to the approach applied here:\n> > https://cran.r-project.org/web/packages/DEoptim/vignettes/\n> > DEoptimPortfolioOptimization.pdf\n> >\n> > I am unable to achieve convergence where the constraint is fulfilled.\n> >\n> > My object function is of the form\n> >\n> > Obj <- function(Return data, portfolio weights, target return){\n> >\n> > Normalize weights to 1\n> > calculate portfolio return\n> > calculate risk metric\n> > calculate deviation from target return\n> > return (risk metric + deviation from target return*1e6)\n> >\n> > }\n> >\n> > Any pointers on how to formulate and solve this problem would be much\n> > appreciated.\n>\n> You haven't provided a reproducible example, making it hard to help you.\n>\n> You can easily do this type of optimization with PortfolioAnalytics,\n> including the use of DEoptim, pso, GenSA, or random search as a global\n> solver.  The modular objective function of PortfolioAnalytics should\n> allow you to specify your problem pretty easily.  You'll need to pass in\n> your 'scenarios', and use functions in your objective that expect this\n> data and know how to apply weights to it, but that should be pretty\n> simple.\n>\n> To get to a general answer to your question, you need to determine a few\n> things.\n>\n> Is there a solution that meets your constraints?  Many portfolios are\n> over-constrained, and are unable to meet the objectives as defined.  In\n> these cases you need to be able to relax constraints to get to the\n> closest solution.  It often helps to plot the unconstrained and\n> constrained feasible spaces (e.g. with random portfolios from\n> PortfolioAnalytics) to see if you've overconstrained things.\n>\n> You don't appear to be using 'fnMap' to apply your full investment\n> (cardinality) constraint.  Using this tells DEoptim what the final\n> parameter values were, and doesn't hide them inside your custom\n> objective.\n>\n> You're attempting to perform a penalized optimization with:\n>\n> return (risk metric + deviation from target return*1e6)\n>\n> Is this the right weighting/penalty between your objectives? Typically,\n> if you have no significant preference between your objectives, you want\n> to use a multiplier first to get them to similar overall scale.  Then\n> you want to separately penalize (with a large multiplier) deviation from\n> your constraint.  In this case, you are penalizing overshooting and\n> missing below the return in the same way.  This will give the optimizer\n> very little indication on direction to improve the solution.  It can\n> also make sense to plot the path the optimizer takes to see if you're\n> getting close to a solution.\n>\n> Your use of 'scenarios' could be messing you up.  DEoptim permutes\n> 'parameters', which are typically weights in portfolio optimization\n> space.  It then applies the objective function passing the parameters\n> into the objective. You've said that you're using a annualized mean\n> across the scenarios and an annualized shortfall risk across the\n> scenarios.  You're losing quite a lot of dimensionality by reducing 1000\n> scenarios on each asset to one number.  Doing simple linear combinations\n> of these will not take things like covariances into account, even though\n> by saying that you care about shortfall risk, I'd assume what you really\n> want is *portfolio* shortfall.  I would be concerned that the loss of\n> dimensionality suggested by your description would make it difficult to\n> get a realistic solution.\n>\n> There are several more things that could cause this to fail to converge.\n> I've covered the most likely ones, but further investigation would\n> require a reproducible example.\n>\n> Regards,\n>\n> Brian\n>\n>\n> --\n> Brian G. Peterson\n> http://braverock.com/brian/\n> Ph: 773-459-4973\n> IM: bgpbraverock\n>\n>\n>\n>\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_plain": "Hi Brian*,*\n\nThank you for your reply. It has been very helpful.\n\nI have, as you suggested, tried to set my problem up within\nPortfolioAnalytics.\n\nI have formulated the constrained optimization using two custom objective\nfunctions.\n\nOne calculating a risk measure.\n\nobjectfunc <- function(R, weights, Nassets)\n\nmyfun <- function(x,y){rowSums(x*y)}\n\nPF.Ret <- matrix(data = NA, nrow = nrow(R), ncol = ncol(R)/Nassets)\n\nfor(i in 1:(ncol(R)/Nassets))\n\n{\n\n  j <- i*Nassets-(Nassets-1)\n\n  PF.Ret[,i] = myfun(R[,j:(j+Nassets-1)],weights)\n\n}\n\ndate <- index(R)\n\nPF.Ret <- xts(PF.Ret, date)\n\nPF.Ret <- log(1+PF.Ret)\n\nlist <- list()\n\nfor (i in 1:ncol(PF.Ret))\n\n{\n\n  list[[i]] <- apply.yearly(PF.Ret[,i], sum)\n\n}\n\nPF.Ret.Yearly <- matrix(data = unlist(list), nrow=10, ncol = 1000,\nbyrow=FALSE)\n\nmatrix1 <- matrix(data= NA, nrow= 10, ncol= 1)\n\nfor (i in 1:10)\n\n{\n\n  mean.ret <- mean(PF.Ret.Yearly[i,])\n\n  sorted <- sort(PF.Ret.Yearly[i,])\n\n  ES_5_pct <- mean(sorted[1:ceiling(length(sorted)*.05)])\n\n  matrix1[i,1] <- -( mean.ret -ES_5_pct)\n\n}\n\nYOY_Shortfall_Risk <- mean(matrix1)\n\nreturn(YOY_Shortfall_Risk)\n\n}\n\nAnother calculating the deviation between a set target return and the\nportfolio return given the weights. Deviation from the target return is\npenalized.\n\nretcons <- function(R, weights, targetreturn, Nassets){\n\n  myfun <- function(x,y){rowSums(x*y)}\n\n  PF.Ret <- matrix(data = NA, nrow = nrow(R), ncol = ncol(R)/Nassets)\n\n  for(i in 1:(ncol(R)/Nassets))\n\n  {\n\n    j <- i*Nassets-(Nassets-1)\n\n    PF.Ret[,i] = myfun(R[,j:(j+Nassets-1)],weights)\n\n  }\n\n  date <- index(R)\n\n  PF.Ret <- xts(PF.Ret, date)\n\n  PF.Ret <- log(1+PF.Ret)\n\n  PF.Ret.Ann <- Return.annualized(PF.Ret, scale = 4)\n\n  PF.Ret.Dev <- abs(mean(PF.Ret.Ann)-targetreturn)\n\n  return(PF.Ret.Dev*1e6)\n\n  }\n\nPortfolio specification:\n\npf <- portfolio.spec(assets = 3)\n\npf <- add.constraint(portfolio=pf, type=\"leverage\", min_sum=0.99,\nmax_sum=1.01)\n\npf <- add.constraint(portfolio=pf, type=\"long_only\"\n\npf <- add.objective(portfolio = pf, name = \"objectfunc\", type = \"risk\",\narguments= list(Nassets=length(pf$assets)))\n\npf <- add.objective(portfolio = pf, name = \"retcons\", type = \"return\",\narguments= list(targetreturn = 0.04, Nassets=length(pf$assets)))\n\nOptimizing portfolio:\n\npf.opt <- optimize.portfolio(R, portfolio = pf, optimize_method =\n\"DEoptim\", search_size = 500, trace = FALSE)\n\nWhen I try to run this I receive the following error message:\n\nobjective name objectfunc generated an error or warning: Error in\n`[.xts`(R, , j:(j + Nassets - 1)) : subscript out of bounds\n\nobjective name retcons generated an error or warning: Error in `[.xts`(R, ,\nj:(j + Nassets - 1)) : subscript out of bounds\n\nI can’t figure out why because the functions are working as they should and\nthe subscript remains within bounds.\n\nIf I try to apply DEoptim() directly to the functions one by one this works\nwithout any problems. This leads me to believe that the two objectives are\nsomehow formulated wrong.\n\nAny advice would be very helpful.\n\nThanks.\n\nKristian\n\nBelow is some test data. These are returns for 3 assets over 2 distinct\nscenarios.\n\n\n\n        0001Asset1           0001Asset2      0001Asset3\n                  0002Asset1       0002Asset2         0002Asset3\n\n2016-03-31               0.0009770000       0.016740000     0.016579000\n          -0.023776400     -0.0041489000     0.001512000\n\n2016-06-30              -0.0029404272       0.007377501\n0.015908257                0.043515031      0.0007250080     0.001240125\n\n2016-09-30               0.0104448377      -0.019819554\n0.015738547                0.050726217      0.0313854548     0.001350281\n\n2016-12-31              -0.0062679854       0.010671942\n0.016125757               -0.004518026     -0.0117857549     0.001689061\n\n2017-03-31              -0.0079445226      -0.044670060\n-0.004612912                0.001194696     -0.0058016987     0.052340217\n\n2017-06-30              -0.0443293966      -0.019210789    -0.004226186\n           0.021539797     -0.0179612891     0.054908697\n\n2017-09-30               0.0237102390       0.011401810\n-0.003435808               -0.011847182     -0.0126964053     0.056605700\n\n2017-12-31              -0.0015399460       0.035813794\n-0.002748625               -0.019542495      0.0101302728     0.058266442\n\n2018-03-31              -0.0113292330       0.007312157\n0.056380215               -0.010737433     -0.0069353566     0.045971561\n\n2018-06-30              -0.0096110793      -0.002711140\n    0.056623046               -0.003262799      0.0008645106     0.047599867\n\n2018-09-30               0.0094151500      -0.024227124\n0.058750803               -0.005936063      0.0023834633     0.048860875\n\n2018-12-31               0.0191824507      -0.010843099\n0.060146334               -0.036474625      0.0081957339     0.050592614\n\n2019-03-31               0.0216149159      -0.012509716\n-0.005685334               -0.016999378      0.0039543321     0.057437136\n\n2019-06-30              -0.0353713241      -0.027056842\n-0.005359282               -0.001568024      0.0055240254     0.056829074\n\n2019-09-30               0.0068256915       0.033676676\n-0.005547267               -0.005307774      0.0558182435     0.056924521\n\n2019-12-31               0.0402950042       0.008506863\n-0.005229621               -0.008069375      0.0104593718     0.058275726\n\n2020-03-31              -0.0236441279       0.002491410\n-0.035715118               -0.013556053     -0.0092781424     0.035725279\n\n2020-06-30              -0.0227378309       0.040566982\n-0.036422326               -0.018606615      0.0213017461     0.035333312\n\n2020-09-30              -0.0331522369      -0.013661001\n-0.035461805                0.013950153     -0.0062701658     0.035735389\n\n2020-12-31              -0.0022381617       0.004761732\n-0.034474179               -0.007912498      0.0449173126     0.035830771\n\n2021-03-31              -0.0123584293      -0.023198797\n-0.094912448               -0.024782130      0.0126045150     0.013769555\n\n2021-06-30              -0.0230952138      -0.037092732\n-0.096008937               -0.012783368      0.0202277100     0.013955651\n\n2021-09-30              -0.0382849524      -0.039174543\n-0.096453235                0.011270169     -0.0004279631     0.014892660\n\n2021-12-31               0.0192312397      -0.042090156\n-0.094958812               -0.003473503      0.0197412514     0.015052186\n\n2022-03-31              -0.0176720249      -0.051753716\n-0.002995036                0.011147463      0.0061838217     0.076329091\n\n2022-06-30               0.0171345591      -0.047152874\n-0.003502619               -0.021507033      0.0245421282     0.078357061\n\n2022-09-30              -0.0058656456      -0.051551676\n-0.003696614               -0.003655445     -0.0096960956     0.082151077\n\n2022-12-31              -0.0170921376      -0.066373600\n-0.003710194                0.021982228      0.0415787788     0.083333940\n\n2023-03-31               0.0163444872      -0.004762518\n0.041507377               -0.026366926      0.0203368716     0.048861009\n\n2023-06-30              -0.0208268986      -0.015490012\n0.041058936                0.003762363      0.0189784762     0.051571131\n\n2023-09-30              -0.0004284279      -0.002227971\n0.040723178               -0.005698759      0.0233511708     0.055240586\n\n2023-12-31               0.0141513274      -0.023746263\n0.041881996               -0.022127398      0.0182298784     0.057153451\n\n2024-03-31               0.0105922202      -0.009016968\n0.037171059               -0.016926364      0.0488771263     0.067117695\n\n2024-06-30               0.0245418561       0.004764987\n0.038838652               -0.010630231      0.0416277761     0.069258579\n\n2024-09-30               0.0116387526       0.016551947\n0.038733564                0.032021448      0.0528662570     0.072442630\n\n2024-12-31              -0.0415150970       0.002499012     0.039572718\n              0.067227381      0.0440336173     0.073641408\n\n2025-03-31              -0.0315214326       0.023107293\n-0.056239231               -0.038364755      0.0214378006     0.009960962\n\n2025-06-30              -0.0153207849       0.011894464\n-0.056741703                0.022417838      0.0340254762     0.013183042\n\n2025-09-30              -0.0375576999       0.059433097\n-0.056916400               -0.008105189      0.0429868190     0.014451492\n\n2025-12-31              -0.0253597219       0.042178684\n-0.055637987                0.033767714      0.0166919155     0.021603579\n\nDen tirsdag den 4. oktober 2016 skrev Brian G. Peterson <brian at braverock.com\n>:\n\n> On Tue, 2016-10-04 at 13:04 +0200, Kristian Lind wrote:\n> > Hi guys,\n> >\n> > I’m working on a portfolio optimization problem\n> >\n> > The problem I’m trying to solve is of the form Min risk s.t. return = X\n> >\n> > For each asset I have simulated 1000 paths for the development in asset\n> > prices over 10 years.\n> >\n> > The risk measure I’d like to minimize is YoY shortfall risk, but could be\n> > any risk metric that takes the information from the scenarios into\n> > consideration.\n> >\n> > Likewise, the return is the mean annualized return over all the\n> scenarios.\n> >\n> > I have tried solving this problem using DEoptim, where deviations from\n> the\n> > required return is penalized. Similar to the approach applied here:\n> > https://cran.r-project.org/web/packages/DEoptim/vignettes/\n> > DEoptimPortfolioOptimization.pdf\n> >\n> > I am unable to achieve convergence where the constraint is fulfilled.\n> >\n> > My object function is of the form\n> >\n> > Obj <- function(Return data, portfolio weights, target return){\n> >\n> > Normalize weights to 1\n> > calculate portfolio return\n> > calculate risk metric\n> > calculate deviation from target return\n> > return (risk metric + deviation from target return*1e6)\n> >\n> > }\n> >\n> > Any pointers on how to formulate and solve this problem would be much\n> > appreciated.\n>\n> You haven't provided a reproducible example, making it hard to help you.\n>\n> You can easily do this type of optimization with PortfolioAnalytics,\n> including the use of DEoptim, pso, GenSA, or random search as a global\n> solver.  The modular objective function of PortfolioAnalytics should\n> allow you to specify your problem pretty easily.  You'll need to pass in\n> your 'scenarios', and use functions in your objective that expect this\n> data and know how to apply weights to it, but that should be pretty\n> simple.\n>\n> To get to a general answer to your question, you need to determine a few\n> things.\n>\n> Is there a solution that meets your constraints?  Many portfolios are\n> over-constrained, and are unable to meet the objectives as defined.  In\n> these cases you need to be able to relax constraints to get to the\n> closest solution.  It often helps to plot the unconstrained and\n> constrained feasible spaces (e.g. with random portfolios from\n> PortfolioAnalytics) to see if you've overconstrained things.\n>\n> You don't appear to be using 'fnMap' to apply your full investment\n> (cardinality) constraint.  Using this tells DEoptim what the final\n> parameter values were, and doesn't hide them inside your custom\n> objective.\n>\n> You're attempting to perform a penalized optimization with:\n>\n> return (risk metric + deviation from target return*1e6)\n>\n> Is this the right weighting/penalty between your objectives? Typically,\n> if you have no significant preference between your objectives, you want\n> to use a multiplier first to get them to similar overall scale.  Then\n> you want to separately penalize (with a large multiplier) deviation from\n> your constraint.  In this case, you are penalizing overshooting and\n> missing below the return in the same way.  This will give the optimizer\n> very little indication on direction to improve the solution.  It can\n> also make sense to plot the path the optimizer takes to see if you're\n> getting close to a solution.\n>\n> Your use of 'scenarios' could be messing you up.  DEoptim permutes\n> 'parameters', which are typically weights in portfolio optimization\n> space.  It then applies the objective function passing the parameters\n> into the objective. You've said that you're using a annualized mean\n> across the scenarios and an annualized shortfall risk across the\n> scenarios.  You're losing quite a lot of dimensionality by reducing 1000\n> scenarios on each asset to one number.  Doing simple linear combinations\n> of these will not take things like covariances into account, even though\n> by saying that you care about shortfall risk, I'd assume what you really\n> want is *portfolio* shortfall.  I would be concerned that the loss of\n> dimensionality suggested by your description would make it difficult to\n> get a realistic solution.\n>\n> There are several more things that could cause this to fail to converge.\n> I've covered the most likely ones, but further investigation would\n> require a reproducible example.\n>\n> Regards,\n>\n> Brian\n>\n>\n> --\n> Brian G. Peterson\n> http://braverock.com/brian/\n> Ph: 773-459-4973\n> IM: bgpbraverock\n>\n>\n>\n>\n>\n\n\t[[alternative HTML version deleted]]",
       "body_snippet": "Hi Brian*,*\n\nThank you for your reply. It has been very helpful.\n\nI have, as you suggested, tried to set my problem up within\nPortfolioAnalytics.\n\nI have formulated the constrained optimization using ",
       "thread_id": "thread-bb14084a6091",
       "thread_depth": 2,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014096.html"
     },
     {
       "id": "msg-91b5ac01cde6",
@@ -416,7 +438,8 @@
       "body_snippet": "Hi there. I have a question about custom endpoints. Currently, in R, you\ncan set endpoints to weekly, monthly, quarterly, etc...\n\nHowever, I was wondering if there was a way to do this:\n\nAssuming you ",
       "thread_id": "thread-91b5ac01cde6",
       "thread_depth": 0,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014097.html"
     },
     {
       "id": "msg-ea6ecfb00bf9",
@@ -432,7 +455,8 @@
       "body_snippet": "If it is an xts object I would do something like :\n\napply.monthly(s, function(x) last(x[ .indexmday(x) <= 15 ]))\n\n\n-----Original Message-----\nFrom: \"Ilya Kipnis\" [ilya.kipnis at gmail.com]\nDate: 10/20",
       "thread_id": "thread-ea6ecfb00bf9",
       "thread_depth": 0,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014098.html"
     },
     {
       "id": "msg-c34d550c799b",
@@ -448,7 +472,8 @@
       "body_snippet": "Hi folks,\n\nnew to this mailing list and not very proficient with R in general yet, so\napologies in advance.\n\nall of the demos I could see were using stock data pulled from\nyahoo/google, etc -- mine is",
       "thread_id": "thread-c34d550c799b",
       "thread_depth": 0,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014099.html"
     },
     {
       "id": "msg-184821fbc313",
@@ -466,7 +491,8 @@
       "body_snippet": "Hi Jon,\n\nFirst off, check the parameters on your add.indicator call for your SMA\nfunction.\n\nSecondly, your data is only 37 observations long and you have a setting of\n200.\n\nPlease fix these two issues",
       "thread_id": "thread-c34d550c799b",
       "thread_depth": 1,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014100.html"
     },
     {
       "id": "msg-7443c04adc6a",
@@ -485,7 +511,8 @@
       "body_snippet": "Hi Jon,\n\nAs mentioned by Ilya, your arguments to SMA are incorrect. Also your\nprogram is missing the signal function. You need to convert your indicator\ninto a signal using add.signal function before ",
       "thread_id": "thread-c34d550c799b",
       "thread_depth": 2,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014101.html"
     },
     {
       "id": "msg-c7321e9b5e99",
@@ -504,7 +531,8 @@
       "body_snippet": "ah - i shortened the dataset for brevity, didn't think about the SMA (the\nactual dataset is far larger). I also see that in the add.indicator call i\nused n=SMA where it should have been n=nSMA.\n\nThank",
       "thread_id": "thread-c34d550c799b",
       "thread_depth": 2,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014102.html"
     },
     {
       "id": "msg-0ba2d955573a",
@@ -524,7 +552,8 @@
       "body_snippet": "Thanks Kevin. I actually had just failed to copy-paste the add.signal calls\nand figured that out pretty quickly after fixing the previous error.\n\nWhat I have below is what I've got now (and it runs). ",
       "thread_id": "thread-c34d550c799b",
       "thread_depth": 3,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014103.html"
     },
     {
       "id": "msg-0890e3633c12",
@@ -542,7 +571,8 @@
       "body_snippet": "Hi everybody,\nfirst of all thanks for making the Rmetrics suite available to all. I really find these libraries very useful.\nI have an issue installing the PortfolioAttribution package. The usual comm",
       "thread_id": "thread-0890e3633c12",
       "thread_depth": 0,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014104.html"
     },
     {
       "id": "msg-07433064bbfc",
@@ -561,7 +591,8 @@
       "body_snippet": "2016-10-28 16:04 GMT+02:00 fceci via R-SIG-Finance\n<r-sig-finance at r-project.org>:\n>\n> Hi everybody,\n> first of all thanks for making the Rmetrics suite available to all. I really find these librari",
       "thread_id": "thread-0890e3633c12",
       "thread_depth": 1,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014105.html"
     },
     {
       "id": "msg-98501b2f02be",
@@ -577,11 +608,12 @@
         "<1974313049.534536.1477663487342@mail.yahoo.com>",
         "<CAPLrYESLgRx5YYk-XHeeB7NpU5K_W50Pb=hmH1RBjbhrJHOSyQ@mail.gmail.com>"
       ],
-      "body_plain": "On Fri, Oct 28, 2016 at 12:45 PM, Daniel Cegie?ka\n<daniel.cegielka at gmail.com> wrote:\n> 2016-10-28 16:04 GMT+02:00 fceci via R-SIG-Finance\n> <r-sig-finance at r-project.org>:\n>>\n>> Hi everybody,\n>> first of all thanks for making the Rmetrics suite available to all. I really find these libraries very useful.\n>> I have an issue installing the PortfolioAttribution package. The usual command  install.packages(\"PortfolioAttribution\",repos=\"http://R-Forge.R-project.org\") does not work and indeed the link to the tar.gz file:http://download.r-forge.r-project.org/src/contrib/PortfolioAttribution_0.3.tar.gz\n>> returns a 404 error.\n>> Is this package still available somewhere?\n\nThe package is still available on R-Forge.  For some reason, R-Forge\nis not providing the tar.gz file produced by R CMD build, but the\nsource is available.  You can install from source yourself by\nfollowing the instructions in this StackOverflow Q+A:\nhttp://stackoverflow.com/q/11105131/271616\n\n>> Thanks! Frank\n>>\n>\n> Hi Frank,\n>\n> https://github.com/R-Finance/PortfolioAttribution\n>\nThis is a read-only mirror.  R-Forge is still the authoritative\nrepository for this package.  Regardless, GitHub does not provide the\ntar.gz files produced by R CMD build that Frank is asking for.\n\n> Best regards,\n> Daniel\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2016 | www.rinfinance.com",
-      "body_snippet": "On Fri, Oct 28, 2016 at 12:45 PM, Daniel Cegie?ka\n<daniel.cegielka at gmail.com> wrote:\n> 2016-10-28 16:04 GMT+02:00 fceci via R-SIG-Finance\n> <r-sig-finance at r-project.org>:\n>>\n>> Hi everybody,\n>> ",
+      "body_plain": "On Fri, Oct 28, 2016 at 12:45 PM, Daniel Cegiełka\n<daniel.cegielka at gmail.com> wrote:\n> 2016-10-28 16:04 GMT+02:00 fceci via R-SIG-Finance\n> <r-sig-finance at r-project.org>:\n>>\n>> Hi everybody,\n>> first of all thanks for making the Rmetrics suite available to all. I really find these libraries very useful.\n>> I have an issue installing the PortfolioAttribution package. The usual command  install.packages(\"PortfolioAttribution\",repos=\"http://R-Forge.R-project.org\") does not work and indeed the link to the tar.gz file:http://download.r-forge.r-project.org/src/contrib/PortfolioAttribution_0.3.tar.gz\n>> returns a 404 error.\n>> Is this package still available somewhere?\n\nThe package is still available on R-Forge.  For some reason, R-Forge\nis not providing the tar.gz file produced by R CMD build, but the\nsource is available.  You can install from source yourself by\nfollowing the instructions in this StackOverflow Q+A:\nhttp://stackoverflow.com/q/11105131/271616\n\n>> Thanks! Frank\n>>\n>\n> Hi Frank,\n>\n> https://github.com/R-Finance/PortfolioAttribution\n>\nThis is a read-only mirror.  R-Forge is still the authoritative\nrepository for this package.  Regardless, GitHub does not provide the\ntar.gz files produced by R CMD build that Frank is asking for.\n\n> Best regards,\n> Daniel\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2016 | www.rinfinance.com",
+      "body_snippet": "On Fri, Oct 28, 2016 at 12:45 PM, Daniel Cegiełka\n<daniel.cegielka at gmail.com> wrote:\n> 2016-10-28 16:04 GMT+02:00 fceci via R-SIG-Finance\n> <r-sig-finance at r-project.org>:\n>>\n>> Hi everybody,\n>> ",
       "thread_id": "thread-0890e3633c12",
       "thread_depth": 2,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014106.html"
     },
     {
       "id": "msg-ae541ef6fa2d",
@@ -598,11 +630,12 @@
         "<CAPLrYESLgRx5YYk-XHeeB7NpU5K_W50Pb=hmH1RBjbhrJHOSyQ@mail.gmail.com>",
         "<CAPPM_gTcqFL9Lcu36nNPDaDCYom5Z-vh3u2CYRVT6aNDazdFtQ@mail.gmail.com>"
       ],
-      "body_plain": "Thanks guys, I'll give it a try. \n\n    On Friday, October 28, 2016 7:55 PM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n \n\n On Fri, Oct 28, 2016 at 12:45 PM, Daniel Cegie?ka\n<daniel.cegielka at gmail.com> wrote:\n> 2016-10-28 16:04 GMT+02:00 fceci via R-SIG-Finance\n> <r-sig-finance at r-project.org>:\n>>\n>> Hi everybody,\n>> first of all thanks for making the Rmetrics suite available to all. I really find these libraries very useful.\n>> I have an issue installing the PortfolioAttribution package. The usual command? install.packages(\"PortfolioAttribution\",repos=\"http://R-Forge.R-project.org\") does not work and indeed the link to the tar.gz file:http://download.r-forge.r-project.org/src/contrib/PortfolioAttribution_0.3.tar.gz\n>> returns a 404 error.\n>> Is this package still available somewhere?\n\nThe package is still available on R-Forge.? For some reason, R-Forge\nis not providing the tar.gz file produced by R CMD build, but the\nsource is available.? You can install from source yourself by\nfollowing the instructions in this StackOverflow Q+A:\nhttp://stackoverflow.com/q/11105131/271616\n\n>> Thanks! Frank\n>>\n>\n> Hi Frank,\n>\n> https://github.com/R-Finance/PortfolioAttribution\n>\nThis is a read-only mirror.? R-Forge is still the authoritative\nrepository for this package.? Regardless, GitHub does not provide the\ntar.gz files produced by R CMD build that Frank is asking for.\n\n> Best regards,\n> Daniel\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich? |? about.me/joshuaulrich\nFOSS Trading? |? www.fosstrading.com\nR/Finance 2016 | www.rinfinance.com\n\n   \n\t[[alternative HTML version deleted]]",
-      "body_snippet": "Thanks guys, I'll give it a try. \n\n    On Friday, October 28, 2016 7:55 PM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n \n\n On Fri, Oct 28, 2016 at 12:45 PM, Daniel Cegie?ka\n<daniel.cegielka at ",
+      "body_plain": "Thanks guys, I'll give it a try. \n\n    On Friday, October 28, 2016 7:55 PM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n \n\n On Fri, Oct 28, 2016 at 12:45 PM, Daniel Cegiełka\n<daniel.cegielka at gmail.com> wrote:\n> 2016-10-28 16:04 GMT+02:00 fceci via R-SIG-Finance\n> <r-sig-finance at r-project.org>:\n>>\n>> Hi everybody,\n>> first of all thanks for making the Rmetrics suite available to all. I really find these libraries very useful.\n>> I have an issue installing the PortfolioAttribution package. The usual command  install.packages(\"PortfolioAttribution\",repos=\"http://R-Forge.R-project.org\") does not work and indeed the link to the tar.gz file:http://download.r-forge.r-project.org/src/contrib/PortfolioAttribution_0.3.tar.gz\n>> returns a 404 error.\n>> Is this package still available somewhere?\n\nThe package is still available on R-Forge.  For some reason, R-Forge\nis not providing the tar.gz file produced by R CMD build, but the\nsource is available.  You can install from source yourself by\nfollowing the instructions in this StackOverflow Q+A:\nhttp://stackoverflow.com/q/11105131/271616\n\n>> Thanks! Frank\n>>\n>\n> Hi Frank,\n>\n> https://github.com/R-Finance/PortfolioAttribution\n>\nThis is a read-only mirror.  R-Forge is still the authoritative\nrepository for this package.  Regardless, GitHub does not provide the\ntar.gz files produced by R CMD build that Frank is asking for.\n\n> Best regards,\n> Daniel\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2016 | www.rinfinance.com\n\n   \n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thanks guys, I'll give it a try. \n\n    On Friday, October 28, 2016 7:55 PM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n \n\n On Fri, Oct 28, 2016 at 12:45 PM, Daniel Cegiełka\n<daniel.cegielka at ",
       "thread_id": "thread-0890e3633c12",
       "thread_depth": 3,
-      "month": "2016-10"
+      "month": "2016-10",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2016q4/014107.html"
     }
   ],
   "threads": [

@@ -17,7 +17,8 @@
       "body_snippet": "The R/Finance 2017 program is published!\n\nThe conference will take place on May 19 and 20, at UIC in Chicago.\nBuilding on the success of the previous conferences in 2009-2016, we\nexpect more than 250 ",
       "thread_id": "thread-6299018e199f",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014282.html"
     },
     {
       "id": "msg-4fd40c74c380",
@@ -29,11 +30,12 @@
       "subject_clean": "Blotter returns question, portfolio vs account",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "All,\n\nI am looking into calculating portfolio and/or account returns using blotter.  (I am also trying to learn better the difference between portfolios and accounts.)  So I created a simple example pasted below.  I get a portfolio return of 6.9% which matches my manual calculation, but I get an account return of -2.0%, so I asking why that might be?  The table below shows the portfolio returns, the account returns, and account returns I calculated myself and the account returns I calculated myself match pretty closely to the portfolio returns:\n\n> cbind(portfolio_rets, account_rets, account_test)\n              IBM.DailyEndEq                e1            End.Eq\n1950-01-01                NA                NA                NA\n2017-01-03                NA                NA      0.00716868674699\n2017-01-04  0.01963852409639  0.00526341880180  0.01238108125628\n2017-01-05 -0.00337348192771 -0.01564818890663 -0.00330850771915\n2017-01-06  0.00500001204819  0.00840183742261  0.00491998823213\n2017-01-09 -0.01132533132530 -0.01624412256496 -0.01108951224615\n2017-01-10 -0.01283126506024 -0.00152318430183 -0.01270498106907\n2017-01-11  0.01343371084337  0.02660636928014  0.01347266762995\n2017-01-12  0.00120480120482 -0.01206680763400  0.00119223248882\n2017-01-13 -0.00367470481928 -0.00487363426366 -0.00363203936229\n2017-01-17  0.00331327108434  0.00701374936220  0.00328673965069\n2017-01-18 -0.00656624096386 -0.00984688664341 -0.00649232239259\n2017-01-19  0.00006021084337  0.00667025027784  0.00005992206127\n2017-01-20  0.02253015060241  0.02246858690647  0.02242074842540\n2017-01-23  0.00289154216867 -0.01920589668888  0.00281440041956\n2017-01-24  0.02933731927711  0.02636952850479  0.02847450756285\n2017-01-25  0.01439758433735 -0.01451393499485  0.01358726027017\n2017-01-26  0.00222898192771 -0.01199589056355  0.00207533240522\n2017-01-27 -0.00819277710843 -0.01039858078750 -0.00761222976352\n2017-01-27 -0.00000001807229                NA                NA\n2017-01-27                NA  0.00826043493841 -0.00000001692047\n2017-01-30  0.00000000000000  0.00000001807229  0.00000000000000\n2017-01-31  0.00000000000000  0.00000000000000  0.00000000000000\n\n\nI tried to figure it out discrepancy with AcctReturns by running the code in AcctReturns interactively, but it uses a non-exported function called .getBySymbol, so I got stuck there.\n\n\nWhile I am here, I would be happy to get some advice.  If I want to calculate the returns for three strategies, say a small cap fund, mid cap fund, and large cap fund, should I have 3 portfolios in one account or 3 accounts each with one portfolio?  I am leaning towards the latter, but then I am wondering why the difference between portfolio and account?\n\nThanks,\n\nRoger\n\n\nrequire(blotter)\nrequire(FinancialInstrument)\nrequire(quantmod)\nrm(.blotter)\nif(!exists(\".instrument\")) .instrument <<- new.env()\nif(!exists(\".blotter\")) .blotter <<- new.env()\n\ncurrency(\"USD\")\nsymbols = c(\"IBM\")\nfor(symbol in symbols){ # establish tradable instruments\n  stock(symbol, currency=\"USD\", multiplier=1)\n}\n\ngetSymbols(symbols, from='2017-01-01', to='2017-01-31', src='yahoo', index.class=c(\"POSIXt\",\"POSIXct\"))\n\ninitPortf(\"p\", symbols=symbols, currency=\"USD\")\n\n## Trades must be made in date order.\naddTxn(Portfolio = \"p\", Symbol = \"IBM\", TxnDate = '2017-01-03', TxnQty = 1, TxnPrice = 166, TxnFees = 00)\naddTxn(\"p\", \"IBM\", '2017-01-27', -1, 177.30, TxnFees = 0)\n\nupdatePortf(Portfolio=\"p\",Dates='2017-01')\n\ninitAcct(name=\"a\", portfolios=\"p\", initEq=166, currency=\"USD\")\nupdateAcct(\"a\",'2017-01')\nupdateEndEq(\"a\",'2017-01')\n\nportfolio_rets <- PortfReturns(Account=\"a\", Dates=\"2017\", Portfolios=\"p\")\nReturn.cumulative(rets)\n\naccount_rets <- AcctReturns(Account=\"a\", Dates=\"2017\", Portfolios=\"p\")\nReturn.cumulative(arets)\n\np = getPortfolio(\"p\")\na = getAccount(\"a\")\n\naccount_test <- CalculateReturns(a$summary$End.Eq)\ncbind(portfolio_rets, account_rets, account_test)\n\n\n\n\nThis message and any attachments are for the intended recipient?s use only. This message may contain confidential, proprietary or legally privileged information. No right to confidential or privileged treatment of this message is waived or lost by an error in transmission.\nIf you have received this message in error, please immediately notify the sender by e-mail, delete the message, any attachments and all copies from your system and destroy any hard copies. You must not, directly or indirectly, use, disclose, distribute, print or copy any part of this message or any attachments if you are not the intended recipient.",
+      "body_plain": "All,\n\nI am looking into calculating portfolio and/or account returns using blotter.  (I am also trying to learn better the difference between portfolios and accounts.)  So I created a simple example pasted below.  I get a portfolio return of 6.9% which matches my manual calculation, but I get an account return of -2.0%, so I asking why that might be?  The table below shows the portfolio returns, the account returns, and account returns I calculated myself and the account returns I calculated myself match pretty closely to the portfolio returns:\n\n> cbind(portfolio_rets, account_rets, account_test)\n              IBM.DailyEndEq                e1            End.Eq\n1950-01-01                NA                NA                NA\n2017-01-03                NA                NA      0.00716868674699\n2017-01-04  0.01963852409639  0.00526341880180  0.01238108125628\n2017-01-05 -0.00337348192771 -0.01564818890663 -0.00330850771915\n2017-01-06  0.00500001204819  0.00840183742261  0.00491998823213\n2017-01-09 -0.01132533132530 -0.01624412256496 -0.01108951224615\n2017-01-10 -0.01283126506024 -0.00152318430183 -0.01270498106907\n2017-01-11  0.01343371084337  0.02660636928014  0.01347266762995\n2017-01-12  0.00120480120482 -0.01206680763400  0.00119223248882\n2017-01-13 -0.00367470481928 -0.00487363426366 -0.00363203936229\n2017-01-17  0.00331327108434  0.00701374936220  0.00328673965069\n2017-01-18 -0.00656624096386 -0.00984688664341 -0.00649232239259\n2017-01-19  0.00006021084337  0.00667025027784  0.00005992206127\n2017-01-20  0.02253015060241  0.02246858690647  0.02242074842540\n2017-01-23  0.00289154216867 -0.01920589668888  0.00281440041956\n2017-01-24  0.02933731927711  0.02636952850479  0.02847450756285\n2017-01-25  0.01439758433735 -0.01451393499485  0.01358726027017\n2017-01-26  0.00222898192771 -0.01199589056355  0.00207533240522\n2017-01-27 -0.00819277710843 -0.01039858078750 -0.00761222976352\n2017-01-27 -0.00000001807229                NA                NA\n2017-01-27                NA  0.00826043493841 -0.00000001692047\n2017-01-30  0.00000000000000  0.00000001807229  0.00000000000000\n2017-01-31  0.00000000000000  0.00000000000000  0.00000000000000\n\n\nI tried to figure it out discrepancy with AcctReturns by running the code in AcctReturns interactively, but it uses a non-exported function called .getBySymbol, so I got stuck there.\n\n\nWhile I am here, I would be happy to get some advice.  If I want to calculate the returns for three strategies, say a small cap fund, mid cap fund, and large cap fund, should I have 3 portfolios in one account or 3 accounts each with one portfolio?  I am leaning towards the latter, but then I am wondering why the difference between portfolio and account?\n\nThanks,\n\nRoger\n\n\nrequire(blotter)\nrequire(FinancialInstrument)\nrequire(quantmod)\nrm(.blotter)\nif(!exists(\".instrument\")) .instrument <<- new.env()\nif(!exists(\".blotter\")) .blotter <<- new.env()\n\ncurrency(\"USD\")\nsymbols = c(\"IBM\")\nfor(symbol in symbols){ # establish tradable instruments\n  stock(symbol, currency=\"USD\", multiplier=1)\n}\n\ngetSymbols(symbols, from='2017-01-01', to='2017-01-31', src='yahoo', index.class=c(\"POSIXt\",\"POSIXct\"))\n\ninitPortf(\"p\", symbols=symbols, currency=\"USD\")\n\n## Trades must be made in date order.\naddTxn(Portfolio = \"p\", Symbol = \"IBM\", TxnDate = '2017-01-03', TxnQty = 1, TxnPrice = 166, TxnFees = 00)\naddTxn(\"p\", \"IBM\", '2017-01-27', -1, 177.30, TxnFees = 0)\n\nupdatePortf(Portfolio=\"p\",Dates='2017-01')\n\ninitAcct(name=\"a\", portfolios=\"p\", initEq=166, currency=\"USD\")\nupdateAcct(\"a\",'2017-01')\nupdateEndEq(\"a\",'2017-01')\n\nportfolio_rets <- PortfReturns(Account=\"a\", Dates=\"2017\", Portfolios=\"p\")\nReturn.cumulative(rets)\n\naccount_rets <- AcctReturns(Account=\"a\", Dates=\"2017\", Portfolios=\"p\")\nReturn.cumulative(arets)\n\np = getPortfolio(\"p\")\na = getAccount(\"a\")\n\naccount_test <- CalculateReturns(a$summary$End.Eq)\ncbind(portfolio_rets, account_rets, account_test)\n\n\n\n\nThis message and any attachments are for the intended recipient’s use only. This message may contain confidential, proprietary or legally privileged information. No right to confidential or privileged treatment of this message is waived or lost by an error in transmission.\nIf you have received this message in error, please immediately notify the sender by e-mail, delete the message, any attachments and all copies from your system and destroy any hard copies. You must not, directly or indirectly, use, disclose, distribute, print or copy any part of this message or any attachments if you are not the intended recipient.",
       "body_snippet": "All,\n\nI am looking into calculating portfolio and/or account returns using blotter.  (I am also trying to learn better the difference between portfolios and accounts.)  So I created a simple example p",
       "thread_id": "thread-4fd40c74c380",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014283.html"
     },
     {
       "id": "msg-896c6fce3620",
@@ -49,7 +51,8 @@
       "body_snippet": "All,\n\nI have a simple blotter example where I am adding cash, adding a withdrawal, and an interest payment to an account.  It shows up in the account.a object in the .blotter environment, but the actu",
       "thread_id": "thread-896c6fce3620",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014284.html"
     },
     {
       "id": "msg-215649f5f739",
@@ -67,7 +70,8 @@
       "body_snippet": "Quick reminder that prices increase 50% on Monday!\n\nOn Mon, May 1, 2017 at 12:13 PM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> The R/Finance 2017 program is published!\n>\n> The conference wil",
       "thread_id": "thread-6299018e199f",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014285.html"
     },
     {
       "id": "msg-141c9d6a62e4",
@@ -86,7 +90,8 @@
       "body_snippet": "Last reminder.  Early-bird registration ends tonight!\n\nOn Fri, May 5, 2017 at 3:09 PM, Joshua Ulrich <josh.m.ulrich at gmail.com> wrote:\n> Quick reminder that prices increase 50% on Monday!\n>\n> On Mon",
       "thread_id": "thread-6299018e199f",
       "thread_depth": 2,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014286.html"
     },
     {
       "id": "msg-a1b697c9284c",
@@ -102,7 +107,8 @@
       "body_snippet": "I am trying to implement a simple moving average strategy with rebalancing.\n\nI have tried to follow the Guy Yollin tutorial as closely as possible.\n\n\nI run the CheckBlotterUpdate function and get:\n\n\n\"",
       "thread_id": "thread-a1b697c9284c",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014287.html"
     },
     {
       "id": "msg-84c5cc26c006",
@@ -116,11 +122,12 @@
       "references": [
         "<DM5PR01MB23292B745E83142D2C2D24D6B8EC0@DM5PR01MB2329.prod.exchangelabs.com>"
       ],
-      "body_plain": "Brian,\n\nAlmost there, you just need to update the portfolio, account, and ending equity after you apply the strategy.  You code works fine after you add those lines as shown below:\n\nout <- applyStrategy.rebalancing(strategy='simplemoving',\n  portfolios='multisimplemoving')\n\n# START NEW CODE\n#update\ntradeStrategy=\"multisimplemoving\"\nupdatePortf(tradeStrategy)\nupdateAcct(tradeStrategy)\nupdateEndEq(tradeStrategy)\n#END NEW CODE\n\nsource(\"checkBlotterUpdate.R\")\ncheckBlotterUpdate('multisimplemoving', 'multisimplemoving')\n\n\nThanks,\n\nRoger\n\n\n-----Original Message-----\nFrom: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On Behalf Of Brian Aaron\nSent: Wednesday, May 10, 2017 12:03 PM\nTo: r-sig-finance at r-project.org\nSubject: [R-SIG-Finance] Account object not updating. Ending Equity remains the same.\n\nI am trying to implement a simple moving average strategy with rebalancing.\n\nI have tried to follow the Guy Yollin tutorial as closely as possible.\n\n\nI run the CheckBlotterUpdate function and get:\n\n\n\"portfolio P&L doesn't match account P&L\"\n\n\nA review of the ending equity in the account object shows that it has not been updated.\n\n\nCodes is below.\n\n\nThank you for any feedback.\n\n\nBrian Aaron\n\nlibrary(quantstrat)\nlibrary(blotter)\n\nstartdate <- \"1995-08-18\"\nenddate <- \"1999-01-01\"\ninitDate <- \"1995-08-17\"\n\nsymbols <- c('SPY', 'MDY')\n\ngetSymbols(symbols,\n           src=\"yahoo\",\n           from=startdate,\n           to=enddate,\n           index.class=c(\"POSIXt\",\"POSIXct\"),\n           adjust=TRUE)\n\n\n#Initial equity\ninitEq <- 1000000\n\ncurrency(\"USD\")\nSys.setenv(TZ=\"UTC\")\nstock(primary_id= symbols, currency=\"USD\", multiplier=1)\n\nstrategy(\"simplemoving\", store=TRUE)\n\nadd.indicator(strategy = \"simplemoving\",\n              name = \"SMA\",\n              arguments = list(x=quote(Cl(mktdata)),\n                               n=50),\n              label='firstsma')\n\nadd.indicator(strategy = \"simplemoving\",\n              name = \"SMA\",\n              arguments = list(x=quote(Cl(mktdata)),\n                               n=200),\n              label=\"secondsma\")\n\n#Add Buying Signal\nadd.signal(strategy=\"simplemoving\",\n           name=\"sigCrossover\",\n           arguments=list(columns=c(\"firstsma\",\"secondsma\"),\n                          relationship=\"gt\"),\n           label=\"buysignal\")\n\n#Add Selling Signal\nadd.signal(strategy=\"simplemoving\",\n           name=\"sigCrossover\",\n           arguments=list(columns=c(\"firstsma\",\"secondsma\"),\n                          relationship=\"lt\"),\n           label=\"sellsignal\")\n\n#Add Enter Rule\nadd.rule(strategy=\"simplemoving\",\n         name='ruleSignal',\n         arguments=list(sigcol=\"buysignal\",\n                        sigval=TRUE,\n                        orderqty=100000,\n                        ordertype='market',\n                        orderside='long',\n                        osFUN='osMaxPos'),\n         type='enter',\n         path.dep=TRUE)\n\n#Add Exit Rule\nadd.rule(strategy=\"simplemoving\",\n         name='ruleSignal',\n         arguments=list(sigcol=\"sellsignal\",\n                        sigval=TRUE,\n                        orderqty='all',\n                        ordertype='market',\n                        orderside='long',\n                        pricemethod=\"market\"),\n         type='exit',\n         path.dep=TRUE)\n\n# add rebalancing\nadd.rule('simplemoving', 'rulePctEquity',\n         arguments=list(rebalance_on='months',\n                        trade.percent=1/length(symbols),\n                        refprice=quote(\n                            last(getPrice(mktdata)[paste('::',as.character(curIndex),sep='')][,1])\n                        ),\n                        digits=0\n         ),\n         type='rebalance',\n         label='rebalance'\n)\n\nrm.strat(name=\"multisimplemoving\")\n\ninitPortf(name=\"multisimplemoving\",\n          symbols = symbols,\n          initDate=initDate)\ninitAcct(name=\"multisimplemoving\",\n         portfolios=\"multisimplemoving\",\n         initDate=initDate,\n         initEq=initEq)\ninitOrders(portfolio=\"multisimplemoving\",\n           initDate=initDate)\n\n#Add position limits\nposval <- initEq/length(symbols)\n\nfor(symbol in symbols){\n    pos<-round((posval/first(getPrice(get(symbol)))),-2)\n    addPosLimit('multisimplemoving',symbol,initDate, maxpos=pos,minpos=-pos) }\n\nout <- applyStrategy.rebalancing(strategy='simplemoving',\n                                 portfolios='multisimplemoving')\n\nsource(\"checkBlotterUpdate.R\")\ncheckBlotterUpdate('multisimplemoving', 'multisimplemoving')\n\n#Strategy Equity Curve\nacct <- getAccount(Account=\"multisimplemoving\")\nprint(acct$summary)\n\n\n\n\n\n[[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\n\nThis message and any attachments are for the intended recipient?s use only. This message may contain confidential, proprietary or legally privileged information. No right to confidential or privileged treatment of this message is waived or lost by an error in transmission.\nIf you have received this message in error, please immediately notify the sender by e-mail, delete the message, any attachments and all copies from your system and destroy any hard copies. You must not, directly or indirectly, use, disclose, distribute, print or copy any part of this message or any attachments if you are not the intended recipient.",
+      "body_plain": "Brian,\n\nAlmost there, you just need to update the portfolio, account, and ending equity after you apply the strategy.  You code works fine after you add those lines as shown below:\n\nout <- applyStrategy.rebalancing(strategy='simplemoving',\n  portfolios='multisimplemoving')\n\n# START NEW CODE\n#update\ntradeStrategy=\"multisimplemoving\"\nupdatePortf(tradeStrategy)\nupdateAcct(tradeStrategy)\nupdateEndEq(tradeStrategy)\n#END NEW CODE\n\nsource(\"checkBlotterUpdate.R\")\ncheckBlotterUpdate('multisimplemoving', 'multisimplemoving')\n\n\nThanks,\n\nRoger\n\n\n-----Original Message-----\nFrom: R-SIG-Finance [mailto:r-sig-finance-bounces at r-project.org] On Behalf Of Brian Aaron\nSent: Wednesday, May 10, 2017 12:03 PM\nTo: r-sig-finance at r-project.org\nSubject: [R-SIG-Finance] Account object not updating. Ending Equity remains the same.\n\nI am trying to implement a simple moving average strategy with rebalancing.\n\nI have tried to follow the Guy Yollin tutorial as closely as possible.\n\n\nI run the CheckBlotterUpdate function and get:\n\n\n\"portfolio P&L doesn't match account P&L\"\n\n\nA review of the ending equity in the account object shows that it has not been updated.\n\n\nCodes is below.\n\n\nThank you for any feedback.\n\n\nBrian Aaron\n\nlibrary(quantstrat)\nlibrary(blotter)\n\nstartdate <- \"1995-08-18\"\nenddate <- \"1999-01-01\"\ninitDate <- \"1995-08-17\"\n\nsymbols <- c('SPY', 'MDY')\n\ngetSymbols(symbols,\n           src=\"yahoo\",\n           from=startdate,\n           to=enddate,\n           index.class=c(\"POSIXt\",\"POSIXct\"),\n           adjust=TRUE)\n\n\n#Initial equity\ninitEq <- 1000000\n\ncurrency(\"USD\")\nSys.setenv(TZ=\"UTC\")\nstock(primary_id= symbols, currency=\"USD\", multiplier=1)\n\nstrategy(\"simplemoving\", store=TRUE)\n\nadd.indicator(strategy = \"simplemoving\",\n              name = \"SMA\",\n              arguments = list(x=quote(Cl(mktdata)),\n                               n=50),\n              label='firstsma')\n\nadd.indicator(strategy = \"simplemoving\",\n              name = \"SMA\",\n              arguments = list(x=quote(Cl(mktdata)),\n                               n=200),\n              label=\"secondsma\")\n\n#Add Buying Signal\nadd.signal(strategy=\"simplemoving\",\n           name=\"sigCrossover\",\n           arguments=list(columns=c(\"firstsma\",\"secondsma\"),\n                          relationship=\"gt\"),\n           label=\"buysignal\")\n\n#Add Selling Signal\nadd.signal(strategy=\"simplemoving\",\n           name=\"sigCrossover\",\n           arguments=list(columns=c(\"firstsma\",\"secondsma\"),\n                          relationship=\"lt\"),\n           label=\"sellsignal\")\n\n#Add Enter Rule\nadd.rule(strategy=\"simplemoving\",\n         name='ruleSignal',\n         arguments=list(sigcol=\"buysignal\",\n                        sigval=TRUE,\n                        orderqty=100000,\n                        ordertype='market',\n                        orderside='long',\n                        osFUN='osMaxPos'),\n         type='enter',\n         path.dep=TRUE)\n\n#Add Exit Rule\nadd.rule(strategy=\"simplemoving\",\n         name='ruleSignal',\n         arguments=list(sigcol=\"sellsignal\",\n                        sigval=TRUE,\n                        orderqty='all',\n                        ordertype='market',\n                        orderside='long',\n                        pricemethod=\"market\"),\n         type='exit',\n         path.dep=TRUE)\n\n# add rebalancing\nadd.rule('simplemoving', 'rulePctEquity',\n         arguments=list(rebalance_on='months',\n                        trade.percent=1/length(symbols),\n                        refprice=quote(\n                            last(getPrice(mktdata)[paste('::',as.character(curIndex),sep='')][,1])\n                        ),\n                        digits=0\n         ),\n         type='rebalance',\n         label='rebalance'\n)\n\nrm.strat(name=\"multisimplemoving\")\n\ninitPortf(name=\"multisimplemoving\",\n          symbols = symbols,\n          initDate=initDate)\ninitAcct(name=\"multisimplemoving\",\n         portfolios=\"multisimplemoving\",\n         initDate=initDate,\n         initEq=initEq)\ninitOrders(portfolio=\"multisimplemoving\",\n           initDate=initDate)\n\n#Add position limits\nposval <- initEq/length(symbols)\n\nfor(symbol in symbols){\n    pos<-round((posval/first(getPrice(get(symbol)))),-2)\n    addPosLimit('multisimplemoving',symbol,initDate, maxpos=pos,minpos=-pos) }\n\nout <- applyStrategy.rebalancing(strategy='simplemoving',\n                                 portfolios='multisimplemoving')\n\nsource(\"checkBlotterUpdate.R\")\ncheckBlotterUpdate('multisimplemoving', 'multisimplemoving')\n\n#Strategy Equity Curve\nacct <- getAccount(Account=\"multisimplemoving\")\nprint(acct$summary)\n\n\n\n\n\n[[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at r-project.org mailing list https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\n\nThis message and any attachments are for the intended recipient’s use only. This message may contain confidential, proprietary or legally privileged information. No right to confidential or privileged treatment of this message is waived or lost by an error in transmission.\nIf you have received this message in error, please immediately notify the sender by e-mail, delete the message, any attachments and all copies from your system and destroy any hard copies. You must not, directly or indirectly, use, disclose, distribute, print or copy any part of this message or any attachments if you are not the intended recipient.",
       "body_snippet": "Brian,\n\nAlmost there, you just need to update the portfolio, account, and ending equity after you apply the strategy.  You code works fine after you add those lines as shown below:\n\nout <- applyStrate",
       "thread_id": "thread-a1b697c9284c",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014288.html"
     },
     {
       "id": "msg-ed7dc6529068",
@@ -136,7 +143,8 @@
       "body_snippet": "Dear all,\n\nI have a question regarding the creditr package.\n\nIf I input spread at *2000* use spread_to_upfront then the\nupfront_to_spread function, the output is a spread of *1962.592*, not a\nspread o",
       "thread_id": "thread-ed7dc6529068",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014289.html"
     },
     {
       "id": "msg-c138f43fb31d",
@@ -152,7 +160,8 @@
       "body_snippet": "Hi,\n\nI have multiple symbols (futures contracts) of one product and I would like\nto access a data frame with their meta information. I would then parse the\nmeta info into an add.indicator argument lis",
       "thread_id": "thread-c138f43fb31d",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014290.html"
     },
     {
       "id": "msg-5a112506c20b",
@@ -170,7 +179,8 @@
       "body_snippet": "On 05/12/2017 03:58 AM, Oskar Gottlieb wrote:\n> I have multiple symbols (futures contracts) of one product and I would like\n> to access a data frame with their meta information. I would then parse the",
       "thread_id": "thread-c138f43fb31d",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014291.html"
     },
     {
       "id": "msg-8c4921dd8960",
@@ -189,7 +199,8 @@
       "body_snippet": "Hi Brian,\n\nThanks for the quick reply!\nI was aware of the instrument objects, I just did not know there were the\ninstrument_attr(), instrument.table() functions. This solves the need for\nexternal meta",
       "thread_id": "thread-c138f43fb31d",
       "thread_depth": 2,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014292.html"
     },
     {
       "id": "msg-ff81b2687acc",
@@ -209,7 +220,8 @@
       "body_snippet": "You asked:\n\n> The best way to get the attribute then, would be to call\n> 'getInstrument(symbol)$newAttribute'?\n\nYes.\n\nHere's an example:\n\n###\n\ngetInstrument('ESH8')\n\n# primary_id????????:\"ES_H8\"\n# cur",
       "thread_id": "thread-c138f43fb31d",
       "thread_depth": 3,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014293.html"
     },
     {
       "id": "msg-4ece641dd3e5",
@@ -225,7 +237,8 @@
       "body_snippet": "I executed the following commands in R:\n\n     library(quantmod)\n     optData = getOptionChain( \"XOM\", Exp=NULL )\n     nrow(optData)\n\nThe last command returned NULL. What am I doing wrong?\n\nBob",
       "thread_id": "thread-4ece641dd3e5",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014294.html"
     },
     {
       "id": "msg-be7c24afe680",
@@ -243,7 +256,8 @@
       "body_snippet": "It looks like some of the dependencies don't load automatically. I was using\nR x64 3.2.2:\n\n1) Updated my R to the later version\n2) I installed package jsonlite  (\"package:\"jsonlite\"cannot be loaded.\")",
       "thread_id": "thread-4ece641dd3e5",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014295.html"
     },
     {
       "id": "msg-d905debb7f63",
@@ -262,7 +276,8 @@
       "body_snippet": "On Fri, May 12, 2017 at 1:02 PM, Frank <frankm60606 at gmail.com> wrote:\n> It looks like some of the dependencies don't load automatically. I was using\n> R x64 3.2.2:\n>\nThey load automatically.  They ",
       "thread_id": "thread-4ece641dd3e5",
       "thread_depth": 2,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014296.html"
     },
     {
       "id": "msg-741acb09f53c",
@@ -282,7 +297,8 @@
       "body_snippet": "Joshua and Frank,\n\nThanks for your responses. I am using version 3.2.2 of R. I \ninstalled/reinstalled jsonlite and curl. I still get the same problem. I \nthen updated my version of quantmod. After doi",
       "thread_id": "thread-4ece641dd3e5",
       "thread_depth": 3,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014297.html"
     },
     {
       "id": "msg-7745e1653a4b",
@@ -303,7 +319,8 @@
       "body_snippet": "On Fri, May 12, 2017 at 3:39 PM, Robert Sherry <rsherry8 at comcast.net> wrote:\n> Joshua and Frank,\n>\n> Thanks for your responses. I am using version 3.2.2 of R. I\n> installed/reinstalled jsonlite and",
       "thread_id": "thread-4ece641dd3e5",
       "thread_depth": 4,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014298.html"
     },
     {
       "id": "msg-dc2d3dd5e750",
@@ -315,11 +332,12 @@
       "subject_clean": "turning returns back into an index",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "I?ve looked everywhere for a C optimised R library function that will accumulate returns with interim levels but can?t find it. \n\nso a function that is the inverse of Return.calculate() from PerformanceAnalytics\n\nor, something like this:\n\nrtns <- rnorm(100, sd=0.01)\nindex <- vector(, length = length(rtns)+1)\nindex[1] <- 100\nfor ( i in 1:length(rtns) ) {\n  index[i+1] <- index[i] * (1+rtns[i])\n}\n\ncheers.",
-      "body_snippet": "I?ve looked everywhere for a C optimised R library function that will accumulate returns with interim levels but can?t find it. \n\nso a function that is the inverse of Return.calculate() from Performan",
+      "body_plain": "I’ve looked everywhere for a C optimised R library function that will accumulate returns with interim levels but can’t find it. \n\nso a function that is the inverse of Return.calculate() from PerformanceAnalytics\n\nor, something like this:\n\nrtns <- rnorm(100, sd=0.01)\nindex <- vector(, length = length(rtns)+1)\nindex[1] <- 100\nfor ( i in 1:length(rtns) ) {\n  index[i+1] <- index[i] * (1+rtns[i])\n}\n\ncheers.",
+      "body_snippet": "I’ve looked everywhere for a C optimised R library function that will accumulate returns with interim levels but can’t find it. \n\nso a function that is the inverse of Return.calculate() from Performan",
       "thread_id": "thread-dc2d3dd5e750",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014299.html"
     },
     {
       "id": "msg-bfa8382f0711",
@@ -333,11 +351,12 @@
       "references": [
         "<11F6992B-9085-4ABB-81F8-AB86687EBC96@icloud.com>"
       ],
-      "body_plain": "cumprod(1+return_vector) to get an index starting from 1.\ncumprod(1+return_vector)*100 to get an index starting at 100\n\nOn Sun, May 14, 2017 at 9:11 AM, blank <bruvnor at icloud.com> wrote:\n\n> I?ve looked everywhere for a C optimised R library function that will\n> accumulate returns with interim levels but can?t find it.\n>\n> so a function that is the inverse of Return.calculate() from\n> PerformanceAnalytics\n>\n> or, something like this:\n>\n> rtns <- rnorm(100, sd=0.01)\n> index <- vector(, length = length(rtns)+1)\n> index[1] <- 100\n> for ( i in 1:length(rtns) ) {\n>   index[i+1] <- index[i] * (1+rtns[i])\n> }\n>\n> cheers.\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n\n\t[[alternative HTML version deleted]]",
-      "body_snippet": "cumprod(1+return_vector) to get an index starting from 1.\ncumprod(1+return_vector)*100 to get an index starting at 100\n\nOn Sun, May 14, 2017 at 9:11 AM, blank <bruvnor at icloud.com> wrote:\n\n> I?ve lo",
+      "body_plain": "cumprod(1+return_vector) to get an index starting from 1.\ncumprod(1+return_vector)*100 to get an index starting at 100\n\nOn Sun, May 14, 2017 at 9:11 AM, blank <bruvnor at icloud.com> wrote:\n\n> I’ve looked everywhere for a C optimised R library function that will\n> accumulate returns with interim levels but can’t find it.\n>\n> so a function that is the inverse of Return.calculate() from\n> PerformanceAnalytics\n>\n> or, something like this:\n>\n> rtns <- rnorm(100, sd=0.01)\n> index <- vector(, length = length(rtns)+1)\n> index[1] <- 100\n> for ( i in 1:length(rtns) ) {\n>   index[i+1] <- index[i] * (1+rtns[i])\n> }\n>\n> cheers.\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "cumprod(1+return_vector) to get an index starting from 1.\ncumprod(1+return_vector)*100 to get an index starting at 100\n\nOn Sun, May 14, 2017 at 9:11 AM, blank <bruvnor at icloud.com> wrote:\n\n> I’ve lo",
       "thread_id": "thread-dc2d3dd5e750",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014300.html"
     },
     {
       "id": "msg-7597b57f96e7",
@@ -358,7 +377,8 @@
       "body_snippet": "Hi Brian,\n\nthanks! Last thing, I believe I had it working prior to the weekend, but\nnow calling getInstrument(symbol) inside the 'add.indicator' function\nresults simply in error of \"object 'symbol' no",
       "thread_id": "thread-c138f43fb31d",
       "thread_depth": 4,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014301.html"
     },
     {
       "id": "msg-bde9cbd32259",
@@ -374,7 +394,8 @@
       "body_snippet": "All,  Did anyone notice that Yahoo did not update last night.  I have been running a Yahoo down  for a year and half and it did not update for the first time.   Did anyone else experience this?   I am",
       "thread_id": "thread-bde9cbd32259",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014302.html"
     },
     {
       "id": "msg-cb03724af0e3",
@@ -392,7 +413,8 @@
       "body_snippet": "I saw some talk about Yahoo changing something that broke the package, but\nfor some it was still working in Rstudio, but don't quote me on that.  It\nhas been fixed on the latest version (probably on g",
       "thread_id": "thread-bde9cbd32259",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014303.html"
     },
     {
       "id": "msg-ee1d0e81a609",
@@ -410,7 +432,8 @@
       "body_snippet": "On Tue, 16 May 2017, Daniel Mack wrote:\n\n> All, Did anyone notice that Yahoo did not update last night.  \n> I have been running a Yahoo down for a year and half and it \n> did not update for the first ",
       "thread_id": "thread-bde9cbd32259",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014304.html"
     },
     {
       "id": "msg-d1b96a0cf663",
@@ -429,7 +452,8 @@
       "body_snippet": "And now I cannot download from yahoo at all (it worked until 20 min ago):\n\ntrying URL 'http://chart.yahoo.com/table.csv?s=AAPL&a=5&b=01&c=2012&d=4&e=12&f=2017&g=d&q=q&y=0&z=AAPL&x=.csv'\ndownload error",
       "thread_id": "thread-bde9cbd32259",
       "thread_depth": 2,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014305.html"
     },
     {
       "id": "msg-be6c3bc1605a",
@@ -449,7 +473,8 @@
       "body_snippet": "On Tue, 16 May 2017, Alec Schmidt wrote:\n\n> And now I cannot download from yahoo at all (it worked until 20 min ago):\n> \n> trying URL 'http://chart.yahoo.com/table.csv?s=AAPL&a=5&b=01&c=2012&d=4&e=12&",
       "thread_id": "thread-bde9cbd32259",
       "thread_depth": 3,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014306.html"
     },
     {
       "id": "msg-dae9d28e8809",
@@ -461,11 +486,12 @@
       "subject_clean": "blotter package funciton addTxns",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "All,\n\nI cloned the blotter package on github and took a look at the amzn_test.R demo file and I see a call to addTxns, but I don't see that function listed in R folder of the package.  I see addTxn, but not addTxns.  addTxns is listed in the NAMESPACE folder as an exported function.  I can still see the function code by typing the function name, but  Could someone please point out something simple that I am obviously missing?\n\nThanks,\n\nRoger\n\n### Start Example Code ###\n\nlibrary(blotter)\n\n# Remove portfolio and account data if run previously\ntry(rm(\"portfolio.amzn_port\",\"account.amzn_acct\",pos=.blotter), silent = TRUE)\n\n# load the example data\ndata(\"amzn\")\ncurrency(\"USD\")\nstock(\"amzn\",currency=\"USD\",multiplier=1)\n# Initialize the Portfolio\ninitPortf(\"amzn_port\",symbols=\"amzn\",initDate=\"2010-01-14\")\ninitAcct(\"amzn_acct\",portfolios=\"amzn_port\",initDate=\"2010-01-14\", initEq=10000)\n# look at the transactions data\namzn.trades\n# Add the transactions to the portfolio\nblotter:::addTxns(\"amzn_port\",\"amzn\",TxnData=amzn.trades,verbose=TRUE)\n\n\n\n\nThis message and any attachments are for the intended recipient?s use only. This message may contain confidential, proprietary or legally privileged information. No right to confidential or privileged treatment of this message is waived or lost by an error in transmission.\nIf you have received this message in error, please immediately notify the sender by e-mail, delete the message, any attachments and all copies from your system and destroy any hard copies. You must not, directly or indirectly, use, disclose, distribute, print or copy any part of this message or any attachments if you are not the intended recipient.",
+      "body_plain": "All,\n\nI cloned the blotter package on github and took a look at the amzn_test.R demo file and I see a call to addTxns, but I don't see that function listed in R folder of the package.  I see addTxn, but not addTxns.  addTxns is listed in the NAMESPACE folder as an exported function.  I can still see the function code by typing the function name, but  Could someone please point out something simple that I am obviously missing?\n\nThanks,\n\nRoger\n\n### Start Example Code ###\n\nlibrary(blotter)\n\n# Remove portfolio and account data if run previously\ntry(rm(\"portfolio.amzn_port\",\"account.amzn_acct\",pos=.blotter), silent = TRUE)\n\n# load the example data\ndata(\"amzn\")\ncurrency(\"USD\")\nstock(\"amzn\",currency=\"USD\",multiplier=1)\n# Initialize the Portfolio\ninitPortf(\"amzn_port\",symbols=\"amzn\",initDate=\"2010-01-14\")\ninitAcct(\"amzn_acct\",portfolios=\"amzn_port\",initDate=\"2010-01-14\", initEq=10000)\n# look at the transactions data\namzn.trades\n# Add the transactions to the portfolio\nblotter:::addTxns(\"amzn_port\",\"amzn\",TxnData=amzn.trades,verbose=TRUE)\n\n\n\n\nThis message and any attachments are for the intended recipient’s use only. This message may contain confidential, proprietary or legally privileged information. No right to confidential or privileged treatment of this message is waived or lost by an error in transmission.\nIf you have received this message in error, please immediately notify the sender by e-mail, delete the message, any attachments and all copies from your system and destroy any hard copies. You must not, directly or indirectly, use, disclose, distribute, print or copy any part of this message or any attachments if you are not the intended recipient.",
       "body_snippet": "All,\n\nI cloned the blotter package on github and took a look at the amzn_test.R demo file and I see a call to addTxns, but I don't see that function listed in R folder of the package.  I see addTxn, b",
       "thread_id": "thread-dae9d28e8809",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014307.html"
     },
     {
       "id": "msg-9522abe20fb3",
@@ -479,11 +505,12 @@
       "references": [
         "<9f36a91f70154bffafbc96d539fd9e20@USNYMMSG001.rth.ad.rothschild.com>"
       ],
-      "body_plain": "The code and documentation for the addTxns function are in the addTxn.R\nfile (lines 167-201).\n\nOn Tue, 2017-05-16 at 20:03 +0000, Bos, Roger wrote:\n> All,\n> \n> I cloned the blotter package on github and took a look at the\n> amzn_test.R demo file and I see a call to addTxns, but I don't see\n> that function listed in R folder of the package.??I see addTxn, but\n> not addTxns.??addTxns is listed in the NAMESPACE folder as an\n> exported function.??I can still see the function code by typing the\n> function name, but??Could someone please point out something simple\n> that I am obviously missing?\n> \n> Thanks,\n> \n> Roger\n> \n> ### Start Example Code ###\n> \n> library(blotter)\n> \n> # Remove portfolio and account data if run previously\n> try(rm(\"portfolio.amzn_port\",\"account.amzn_acct\",pos=.blotter),\n> silent = TRUE)\n> \n> # load the example data\n> data(\"amzn\")\n> currency(\"USD\")\n> stock(\"amzn\",currency=\"USD\",multiplier=1)\n> # Initialize the Portfolio\n> initPortf(\"amzn_port\",symbols=\"amzn\",initDate=\"2010-01-14\")\n> initAcct(\"amzn_acct\",portfolios=\"amzn_port\",initDate=\"2010-01-14\",\n> initEq=10000)\n> # look at the transactions data\n> amzn.trades\n> # Add the transactions to the portfolio\n> blotter:::addTxns(\"amzn_port\",\"amzn\",TxnData=amzn.trades,verbose=TRUE\n> )\n> \n> \n> \n> \n> This message and any attachments are for the intended recipient?s use\n> only. This message may contain confidential, proprietary or legally\n> privileged information. No right to confidential or privileged\n> treatment of this message is waived or lost by an error in\n> transmission.\n> If you have received this message in error, please immediately notify\n> the sender by e-mail, delete the message, any attachments and all\n> copies from your system and destroy any hard copies. You must not,\n> directly or indirectly, use, disclose, distribute, print or copy any\n> part of this message or any attachments if you are not the intended\n> recipient.\n> \n> \n> \n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R\n> questions should go.\n>",
+      "body_plain": "The code and documentation for the addTxns function are in the addTxn.R\nfile (lines 167-201).\n\nOn Tue, 2017-05-16 at 20:03 +0000, Bos, Roger wrote:\n> All,\n> \n> I cloned the blotter package on github and took a look at the\n> amzn_test.R demo file and I see a call to addTxns, but I don't see\n> that function listed in R folder of the package.  I see addTxn, but\n> not addTxns.  addTxns is listed in the NAMESPACE folder as an\n> exported function.  I can still see the function code by typing the\n> function name, but  Could someone please point out something simple\n> that I am obviously missing?\n> \n> Thanks,\n> \n> Roger\n> \n> ### Start Example Code ###\n> \n> library(blotter)\n> \n> # Remove portfolio and account data if run previously\n> try(rm(\"portfolio.amzn_port\",\"account.amzn_acct\",pos=.blotter),\n> silent = TRUE)\n> \n> # load the example data\n> data(\"amzn\")\n> currency(\"USD\")\n> stock(\"amzn\",currency=\"USD\",multiplier=1)\n> # Initialize the Portfolio\n> initPortf(\"amzn_port\",symbols=\"amzn\",initDate=\"2010-01-14\")\n> initAcct(\"amzn_acct\",portfolios=\"amzn_port\",initDate=\"2010-01-14\",\n> initEq=10000)\n> # look at the transactions data\n> amzn.trades\n> # Add the transactions to the portfolio\n> blotter:::addTxns(\"amzn_port\",\"amzn\",TxnData=amzn.trades,verbose=TRUE\n> )\n> \n> \n> \n> \n> This message and any attachments are for the intended recipient’s use\n> only. This message may contain confidential, proprietary or legally\n> privileged information. No right to confidential or privileged\n> treatment of this message is waived or lost by an error in\n> transmission.\n> If you have received this message in error, please immediately notify\n> the sender by e-mail, delete the message, any attachments and all\n> copies from your system and destroy any hard copies. You must not,\n> directly or indirectly, use, disclose, distribute, print or copy any\n> part of this message or any attachments if you are not the intended\n> recipient.\n> \n> \n> \n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R\n> questions should go.\n>",
       "body_snippet": "The code and documentation for the addTxns function are in the addTxn.R\nfile (lines 167-201).\n\nOn Tue, 2017-05-16 at 20:03 +0000, Bos, Roger wrote:\n> All,\n> \n> I cloned the blotter package on github a",
       "thread_id": "thread-dae9d28e8809",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014308.html"
     },
     {
       "id": "msg-090f57a20b81",
@@ -504,7 +531,8 @@
       "body_snippet": "Can confirm. Having issues downloading from Yahoo, getting a 502 error.\nShould I reinstall quantmod?\n\nOn Tue, May 16, 2017 at 3:02 PM, R P Herrold <herrold at owlriver.com> wrote:\n\n> On Tue, 16 May 20",
       "thread_id": "thread-bde9cbd32259",
       "thread_depth": 4,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014309.html"
     },
     {
       "id": "msg-d0d05b2f33ec",
@@ -526,7 +554,8 @@
       "body_snippet": "On Tue, 16 May 2017, Ilya Kipnis wrote:\n\n> Can confirm. Having issues downloading from Yahoo, getting a 502 error.\n> Should I reinstall quantmod?\n\nIf your personal vehicle runs out of fuel, would you ",
       "thread_id": "thread-bde9cbd32259",
       "thread_depth": 5,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014310.html"
     },
     {
       "id": "msg-3d8f3d233419",
@@ -549,7 +578,8 @@
       "body_snippet": "Google still works\n\n\nOn May 16, 2017 4:25 PM, \"R P Herrold\" <herrold at owlriver.com> wrote:\n\n> On Tue, 16 May 2017, Ilya Kipnis wrote:\n>\n> > Can confirm. Having issues downloading from Yahoo, getting",
       "thread_id": "thread-bde9cbd32259",
       "thread_depth": 6,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014311.html"
     },
     {
       "id": "msg-3c5fa4aace23",
@@ -573,7 +603,8 @@
       "body_snippet": "Roger,\nI'm getting nervous with yahoo outage. Google works indeed, but it provides only closing but not adjusted prices. Any way around?\nThanks, Alec\n  \n________________________________________\nFrom: ",
       "thread_id": "thread-bde9cbd32259",
       "thread_depth": 7,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014312.html"
     },
     {
       "id": "msg-cff9b2955c47",
@@ -589,7 +620,8 @@
       "body_snippet": "Hi all,\n\nJust wanted to let the list know that Yahoo Finance changed their API\nand most download functions will no longer work.  It looks like\ngetting it working will require creating and tracking a s",
       "thread_id": "thread-cff9b2955c47",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014313.html"
     },
     {
       "id": "msg-d5cc802ab882",
@@ -614,7 +646,8 @@
       "body_snippet": "Pasting\nhttps://ichart.finance.yahoo.com/table.csv?s=XLE&a=0&b=01&c=1998&d=11&e=30&f=2016&g=d&q=q&y=0&z=XLE&x=.csv\nin a browser yields the following message from yahoo:\n\n\"Will be right back... Thank y",
       "thread_id": "thread-bde9cbd32259",
       "thread_depth": 8,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014314.html"
     },
     {
       "id": "msg-43dbac384cd5",
@@ -640,7 +673,8 @@
       "body_snippet": "On Tue, May 16, 2017 at 8:12 PM, Erol Biceroglu\n<erol.biceroglu at alumni.utoronto.ca> wrote:\n> Pasting\n> https://ichart.finance.yahoo.com/table.csv?s=XLE&a=0&b=01&c=1998&d=11&e=30&f=2016&g=d&q=q&y=0&",
       "thread_id": "thread-bde9cbd32259",
       "thread_depth": 9,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014315.html"
     },
     {
       "id": "msg-c806c5d815c5",
@@ -658,7 +692,8 @@
       "body_snippet": "IMHO it's not necessarily quantmod problem. I use get.hist.quote() from tseries, which, too,  yields the same error 502.\n________________________________________\nFrom: R-SIG-Finance <r-sig-finance-bou",
       "thread_id": "thread-cff9b2955c47",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014316.html"
     },
     {
       "id": "msg-d0ef6a7ff986",
@@ -685,7 +720,8 @@
       "body_snippet": "Too bad... thanks for the feedback.\n\n\nErol Biceroglu\n416-275-7970\n*LinkedIn <http://ca.linkedin.com/in/erolbiceroglu> | Wordpress\n<https://propfoliomanagement.wordpress.com/>*\n\nOn Tue, May 16, 2017 at",
       "thread_id": "thread-bde9cbd32259",
       "thread_depth": 10,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014317.html"
     },
     {
       "id": "msg-b487f0a2d0fe",
@@ -704,7 +740,8 @@
       "body_snippet": "On Tue, May 16, 2017 at 8:17 PM, Alec Schmidt <aschmid1 at stevens.edu> wrote:\n> IMHO it's not necessarily quantmod problem. I use get.hist.quote() from tseries, which, too,  yields the same error 502",
       "thread_id": "thread-cff9b2955c47",
       "thread_depth": 2,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014318.html"
     },
     {
       "id": "msg-9a6a1dc2a18b",
@@ -720,7 +757,8 @@
       "body_snippet": "Hello,\n\n  first of all I am new to this list, so I hope I am posting my request\ncorrectly. If not, plese let me know.\n\nI have a problem trying to install  RQuantlib on OS X, in particular on.a\nMacBook",
       "thread_id": "thread-9a6a1dc2a18b",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014319.html"
     },
     {
       "id": "msg-32c3ad3a1c2f",
@@ -736,7 +774,8 @@
       "body_snippet": "When I run the following two commands:\n\n     library(quantmod)\n\n     d1=getDividends( \"XOM\" )\n\nI get the messages:\n\nError in download.file(paste(yahoo.URL, Symbol.name, \"&a=\", from.m, \n\"&b=\",  :\n   ca",
       "thread_id": "thread-32c3ad3a1c2f",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014320.html"
     },
     {
       "id": "msg-d8b4ff4f5148",
@@ -754,7 +793,8 @@
       "body_snippet": "On Wed, May 17, 2017 at 4:23 PM, Robert Sherry <rsherry8 at comcast.net> wrote:\n> When I run the following two commands:\n>\n>     library(quantmod)\n>\n>     d1=getDividends( \"XOM\" )\n>\n> I get the messag",
       "thread_id": "thread-32c3ad3a1c2f",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014321.html"
     },
     {
       "id": "msg-37659270754d",
@@ -772,7 +812,8 @@
       "body_snippet": "Some notes from tinkering with a potential fix:\n\n- You need an established session with cookies to download data\n- The URL requires a 'crumb'\n- The columns of the CSV are in OHLCAV order (vs OHLCVA)\n-",
       "thread_id": "thread-cff9b2955c47",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014322.html"
     },
     {
       "id": "msg-393c882e6004",
@@ -792,7 +833,8 @@
       "body_snippet": "On Wed, May 17, 2017 at 8:55 PM, Ernest Stokely <wizardchef at gmail.com> wrote:\n> Sorry if this is a neophyte question, but when I execute\n>\n> devtools::install_github(\"joshuaulrich/quantmod\", ref=\"1",
       "thread_id": "thread-393c882e6004",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014323.html"
     },
     {
       "id": "msg-a88abb13e619",
@@ -808,7 +850,8 @@
       "body_snippet": "Hi All,\n\nI wanted to let the list know that this year's conference is being\nlive-streamed by Microsoft.  The stream includes slides and audio.\n\nAll but a few presentations will be recorded, and they w",
       "thread_id": "thread-a88abb13e619",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014324.html"
     },
     {
       "id": "msg-6052cd5b1c1a",
@@ -824,7 +867,8 @@
       "body_snippet": "Hi All,\nI am trying to install blotter on R 3.4, but getting 404 error and R forge\npage says failed to build (rev. 1749) so unavailable. Anyone know how I can\nget an older revision to install from sou",
       "thread_id": "thread-6052cd5b1c1a",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014325.html"
     },
     {
       "id": "msg-29892c9cb7b8",
@@ -842,7 +886,8 @@
       "body_snippet": "We moved blotter from R-Forge to GitHub awhile ago.  You can find it here:\nhttps://github.com/braverock/blotter\n\nOn Fri, May 19, 2017 at 1:46 PM, John Kumar via R-SIG-Finance\n<r-sig-finance at r-proje",
       "thread_id": "thread-6052cd5b1c1a",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014326.html"
     },
     {
       "id": "msg-60f73b83515f",
@@ -861,7 +906,8 @@
       "body_snippet": "Maybe it would be better to add support for Alpha Vantage\n\nhttp://www.alphavantage.co\nhttp://www.alphavantage.co/#about\n\nend examples:\nhttp://www.alphavantage.co/documentation/\n\nDaniel",
       "thread_id": "thread-cff9b2955c47",
       "thread_depth": 2,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014327.html"
     },
     {
       "id": "msg-75fcbba67825",
@@ -877,7 +923,8 @@
       "body_snippet": "All,\n\nI am working on a research project and I am using Performance Analytics \nto calculate VaR and CVaR.  I am also using the modified (Cornish \nFisher) methods.  I was hoping someone could provide r",
       "thread_id": "thread-75fcbba67825",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014328.html"
     },
     {
       "id": "msg-f5717a9b4e1e",
@@ -893,7 +940,8 @@
       "body_snippet": "All,\n\n\nI have carved on all methods in MultivariateMoments.R so I can all them \ndirectly\n\nI am working on the modified var calculations.  I ran the mVaR.MM on my \ndata and the results were odd.  I rer",
       "thread_id": "thread-f5717a9b4e1e",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014329.html"
     },
     {
       "id": "msg-6d10f9fec9cf",
@@ -912,7 +960,8 @@
       "body_snippet": "Gentlemen,\n\nI so appreciate this feedback.  I do have a followup just so I fully \nunderstand.  The functions mVaR.MM and mES.MM both require the raw 3rd \nand 4th moments, not the standardized skewness",
       "thread_id": "thread-6d10f9fec9cf",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014330.html"
     },
     {
       "id": "msg-a3b7bc12c979",
@@ -930,7 +979,8 @@
       "body_snippet": "Dries is our Google Summer of Code student working on this project for\nGSoC 2017:\n\nhttps://github.com/rstats-gsoc/gsoc2017/wiki/Improved-Functionality-for\n-Higher-Order-Comoment-Estimation-in-Performa",
       "thread_id": "thread-6d10f9fec9cf",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014331.html"
     },
     {
       "id": "msg-21816416852c",
@@ -946,7 +996,8 @@
       "body_snippet": "Hi All,\nIf I take the basic luxor strategy (which trades) and change the instrument\nto AAPL or another stock, getSymbols method and to date it gives me the\nfollowing error:\n\nError in addTxn(Portfolio ",
       "thread_id": "thread-21816416852c",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014332.html"
     },
     {
       "id": "msg-8ad3795131db",
@@ -964,7 +1015,8 @@
       "body_snippet": "This is a bug that was introduced here:\nhttps://github.com/braverock/blotter/commit/24b578628415111885d29ef97d5ab0eed1c7bb75\n\nHere's a *minimal* reproducible example:\nrequire(blotter)\ncurrency(\"USD\")\n",
       "thread_id": "thread-21816416852c",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014333.html"
     },
     {
       "id": "msg-d884db569f8b",
@@ -983,7 +1035,8 @@
       "body_snippet": "2017-05-24 19:45 GMT+02:00 Joshua Ulrich <josh.m.ulrich at gmail.com>:\n>\n> This is a bug that was introduced here:\n> https://github.com/braverock/blotter/commit/24b578628415111885d29ef97d5ab0eed1c7bb7",
       "thread_id": "thread-21816416852c",
       "thread_depth": 2,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014334.html"
     },
     {
       "id": "msg-7e6a3fc30202",
@@ -1004,7 +1057,8 @@
       "body_snippet": "---------- Forwarded message ----------\n\n\n\nok, I found a bug.\n\nhttps://github.com/braverock/blotter/blob/master/R/addTxn.R#L81\n\nas.Date(\"2017-01-01\") return time-based object:\n\nif(!is.timeBased(TxnDat",
       "thread_id": "thread-7e6a3fc30202",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014335.html"
     },
     {
       "id": "msg-13b129e2deaf",
@@ -1020,11 +1074,12 @@
         "<CAPPM_gRnZnhcDYr246t9r_ZfjVEP2UdV-KQO6=Y8ohN9XiGZVw@mail.gmail.com>",
         "<CAPLrYERQFWwx_uBR7fL+eehjw0rHrtxkdYTdGbHwXo8_TQYRdg@mail.gmail.com>"
       ],
-      "body_plain": "On Wed, May 24, 2017 at 1:10 PM, Daniel Cegie?ka\n<daniel.cegielka at gmail.com> wrote:\n> 2017-05-24 19:45 GMT+02:00 Joshua Ulrich <josh.m.ulrich at gmail.com>:\n>>\n>> This is a bug that was introduced here:\n>> https://github.com/braverock/blotter/commit/24b578628415111885d29ef97d5ab0eed1c7bb75\n>\n>\n> https://github.com/braverock/blotter/commit/24b578628415111885d29ef97d5ab0eed1c7bb75#diff-7347fe5a0f184f79ef064e92e3beb297R69\n>\n> https://github.com/braverock/blotter/blob/master/R/addTxn.R#L85\n>\n> why end() from stats?\n>\nBecause stats::end is the generic.\n\n> https://github.com/braverock/blotter/blob/master/R/addTxn.R#L154\n>\n> Should be end.xts(), eg:\n>\nend.xts() is not exported from the xts namespace.  And it's generally\na bad idea to call methods directly, because you do not know if that\nmethod will be able to handle objects of different classes.\n\n> end.xts <- function (x, ...)\n> {\n>     if (!length(x)) {\n>         index(x[length(.index(x)), ])\n>     } else\n>         index(x[NROW(x), ])\n> }\n>\n> If I understood the problem correctly...\n>\n> Best,\n> Daniel\n>\n>\n>>\n>>\n>>\n>> Here's a *minimal* reproducible example:\n>> require(blotter)\n>> currency(\"USD\")\n>> initPortf(\"test\", symbols=\"AAPL\", currency=\"USD\")\n>>\n>> addTxn(\"test\", \"AAPL\", as.Date(\"2017-01-01\"),  1, 10)\n>> addTxn(\"test\", \"AAPL\", as.Date(\"2017-01-02\"), -1, 10)\n>>\n>> Thanks for the report!  I'll work on a fix.\n>>\n>> Best,\n>> Josh\n>>\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2017 | www.rinfinance.com",
-      "body_snippet": "On Wed, May 24, 2017 at 1:10 PM, Daniel Cegie?ka\n<daniel.cegielka at gmail.com> wrote:\n> 2017-05-24 19:45 GMT+02:00 Joshua Ulrich <josh.m.ulrich at gmail.com>:\n>>\n>> This is a bug that was introduced ",
+      "body_plain": "On Wed, May 24, 2017 at 1:10 PM, Daniel Cegiełka\n<daniel.cegielka at gmail.com> wrote:\n> 2017-05-24 19:45 GMT+02:00 Joshua Ulrich <josh.m.ulrich at gmail.com>:\n>>\n>> This is a bug that was introduced here:\n>> https://github.com/braverock/blotter/commit/24b578628415111885d29ef97d5ab0eed1c7bb75\n>\n>\n> https://github.com/braverock/blotter/commit/24b578628415111885d29ef97d5ab0eed1c7bb75#diff-7347fe5a0f184f79ef064e92e3beb297R69\n>\n> https://github.com/braverock/blotter/blob/master/R/addTxn.R#L85\n>\n> why end() from stats?\n>\nBecause stats::end is the generic.\n\n> https://github.com/braverock/blotter/blob/master/R/addTxn.R#L154\n>\n> Should be end.xts(), eg:\n>\nend.xts() is not exported from the xts namespace.  And it's generally\na bad idea to call methods directly, because you do not know if that\nmethod will be able to handle objects of different classes.\n\n> end.xts <- function (x, ...)\n> {\n>     if (!length(x)) {\n>         index(x[length(.index(x)), ])\n>     } else\n>         index(x[NROW(x), ])\n> }\n>\n> If I understood the problem correctly...\n>\n> Best,\n> Daniel\n>\n>\n>>\n>>\n>>\n>> Here's a *minimal* reproducible example:\n>> require(blotter)\n>> currency(\"USD\")\n>> initPortf(\"test\", symbols=\"AAPL\", currency=\"USD\")\n>>\n>> addTxn(\"test\", \"AAPL\", as.Date(\"2017-01-01\"),  1, 10)\n>> addTxn(\"test\", \"AAPL\", as.Date(\"2017-01-02\"), -1, 10)\n>>\n>> Thanks for the report!  I'll work on a fix.\n>>\n>> Best,\n>> Josh\n>>\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2017 | www.rinfinance.com",
+      "body_snippet": "On Wed, May 24, 2017 at 1:10 PM, Daniel Cegiełka\n<daniel.cegielka at gmail.com> wrote:\n> 2017-05-24 19:45 GMT+02:00 Joshua Ulrich <josh.m.ulrich at gmail.com>:\n>>\n>> This is a bug that was introduced ",
       "thread_id": "thread-21816416852c",
       "thread_depth": 3,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014336.html"
     },
     {
       "id": "msg-b9a9da7b5e0d",
@@ -1042,11 +1097,12 @@
         "<CAPLrYERFdNPLPfYrKVn45iKSCLWDvaL+HnbG4=nscN2BML5guw@mail.gmail.com>",
         "<CAPLrYES35G7B3KqLm0gGLYC3757uqAhPd4qyq6zwATX8k6gPDw@mail.gmail.com>"
       ],
-      "body_plain": "On Wed, May 24, 2017 at 2:37 PM, Daniel Cegie?ka\n<daniel.cegielka at gmail.com> wrote:\n>\n> ok, I found a bug.\n>\n> https://github.com/braverock/blotter/blob/master/R/addTxn.R#L81\n>\n> as.Date(\"2017-01-01\") return time-based object:\n>\n> if(!is.timeBased(TxnDate) ){\n> TxnDate<-as.POSIXct(TxnDate)\n> }\n>\n> and TxnDate != POSIXct\n>\nYes, I arrived at the same conclusion before I sent my initial email.\nI mentioned it in the bug report I created:\nhttps://github.com/braverock/blotter/issues/51\n\nApologies for not mentioning it in the email... there was no need for\nyou to spend time on it.\n\n> Best,\n> Daniel\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2017 | www.rinfinance.com",
-      "body_snippet": "On Wed, May 24, 2017 at 2:37 PM, Daniel Cegie?ka\n<daniel.cegielka at gmail.com> wrote:\n>\n> ok, I found a bug.\n>\n> https://github.com/braverock/blotter/blob/master/R/addTxn.R#L81\n>\n> as.Date(\"2017-01-0",
+      "body_plain": "On Wed, May 24, 2017 at 2:37 PM, Daniel Cegiełka\n<daniel.cegielka at gmail.com> wrote:\n>\n> ok, I found a bug.\n>\n> https://github.com/braverock/blotter/blob/master/R/addTxn.R#L81\n>\n> as.Date(\"2017-01-01\") return time-based object:\n>\n> if(!is.timeBased(TxnDate) ){\n> TxnDate<-as.POSIXct(TxnDate)\n> }\n>\n> and TxnDate != POSIXct\n>\nYes, I arrived at the same conclusion before I sent my initial email.\nI mentioned it in the bug report I created:\nhttps://github.com/braverock/blotter/issues/51\n\nApologies for not mentioning it in the email... there was no need for\nyou to spend time on it.\n\n> Best,\n> Daniel\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2017 | www.rinfinance.com",
+      "body_snippet": "On Wed, May 24, 2017 at 2:37 PM, Daniel Cegiełka\n<daniel.cegielka at gmail.com> wrote:\n>\n> ok, I found a bug.\n>\n> https://github.com/braverock/blotter/blob/master/R/addTxn.R#L81\n>\n> as.Date(\"2017-01-0",
       "thread_id": "thread-7e6a3fc30202",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014337.html"
     },
     {
       "id": "msg-3fd5eeb91e09",
@@ -1063,11 +1119,12 @@
         "<CAPLrYERQFWwx_uBR7fL+eehjw0rHrtxkdYTdGbHwXo8_TQYRdg@mail.gmail.com>",
         "<CAPPM_gRRF0WGxD1bQiqJnO6Jow0dBoRD=MV57pM7t2hLOe2cgw@mail.gmail.com>"
       ],
-      "body_plain": "Thanks for taking the time to look at this guys. Sorry for the verbose example but minimal means different things to different people depending on their skills, or lack thereof in my case. Cheers\nJohn\n\n-----Original Message-----\nFrom: Joshua Ulrich [mailto:josh.m.ulrich at gmail.com] \nSent: Wednesday, 24 May 2017 10:31 PM\nTo: Daniel Cegie?ka <daniel.cegielka at gmail.com>\nCc: John Kumar <rjkft at yahoo.com>; r-sig-finance <R-SIG-Finance at r-project.org>\nSubject: Re: [R-SIG-Finance] Error in addTxn - Quantstrat\n\nOn Wed, May 24, 2017 at 1:10 PM, Daniel Cegie?ka <daniel.cegielka at gmail.com> wrote:\n> 2017-05-24 19:45 GMT+02:00 Joshua Ulrich <josh.m.ulrich at gmail.com>:\n>>\n>> This is a bug that was introduced here:\n>> https://github.com/braverock/blotter/commit/24b578628415111885d29ef97\n>> d5ab0eed1c7bb75\n>\n>\n> https://github.com/braverock/blotter/commit/24b578628415111885d29ef97d\n> 5ab0eed1c7bb75#diff-7347fe5a0f184f79ef064e92e3beb297R69\n>\n> https://github.com/braverock/blotter/blob/master/R/addTxn.R#L85\n>\n> why end() from stats?\n>\nBecause stats::end is the generic.\n\n> https://github.com/braverock/blotter/blob/master/R/addTxn.R#L154\n>\n> Should be end.xts(), eg:\n>\nend.xts() is not exported from the xts namespace.  And it's generally a bad idea to call methods directly, because you do not know if that method will be able to handle objects of different classes.\n\n> end.xts <- function (x, ...)\n> {\n>     if (!length(x)) {\n>         index(x[length(.index(x)), ])\n>     } else\n>         index(x[NROW(x), ])\n> }\n>\n> If I understood the problem correctly...\n>\n> Best,\n> Daniel\n>\n>\n>>\n>>\n>>\n>> Here's a *minimal* reproducible example:\n>> require(blotter)\n>> currency(\"USD\")\n>> initPortf(\"test\", symbols=\"AAPL\", currency=\"USD\")\n>>\n>> addTxn(\"test\", \"AAPL\", as.Date(\"2017-01-01\"),  1, 10) addTxn(\"test\", \n>> \"AAPL\", as.Date(\"2017-01-02\"), -1, 10)\n>>\n>> Thanks for the report!  I'll work on a fix.\n>>\n>> Best,\n>> Josh\n>>\n\n\n\n--\nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2017 | www.rinfinance.com",
+      "body_plain": "Thanks for taking the time to look at this guys. Sorry for the verbose example but minimal means different things to different people depending on their skills, or lack thereof in my case. Cheers\nJohn\n\n-----Original Message-----\nFrom: Joshua Ulrich [mailto:josh.m.ulrich at gmail.com] \nSent: Wednesday, 24 May 2017 10:31 PM\nTo: Daniel Cegiełka <daniel.cegielka at gmail.com>\nCc: John Kumar <rjkft at yahoo.com>; r-sig-finance <R-SIG-Finance at r-project.org>\nSubject: Re: [R-SIG-Finance] Error in addTxn - Quantstrat\n\nOn Wed, May 24, 2017 at 1:10 PM, Daniel Cegiełka <daniel.cegielka at gmail.com> wrote:\n> 2017-05-24 19:45 GMT+02:00 Joshua Ulrich <josh.m.ulrich at gmail.com>:\n>>\n>> This is a bug that was introduced here:\n>> https://github.com/braverock/blotter/commit/24b578628415111885d29ef97\n>> d5ab0eed1c7bb75\n>\n>\n> https://github.com/braverock/blotter/commit/24b578628415111885d29ef97d\n> 5ab0eed1c7bb75#diff-7347fe5a0f184f79ef064e92e3beb297R69\n>\n> https://github.com/braverock/blotter/blob/master/R/addTxn.R#L85\n>\n> why end() from stats?\n>\nBecause stats::end is the generic.\n\n> https://github.com/braverock/blotter/blob/master/R/addTxn.R#L154\n>\n> Should be end.xts(), eg:\n>\nend.xts() is not exported from the xts namespace.  And it's generally a bad idea to call methods directly, because you do not know if that method will be able to handle objects of different classes.\n\n> end.xts <- function (x, ...)\n> {\n>     if (!length(x)) {\n>         index(x[length(.index(x)), ])\n>     } else\n>         index(x[NROW(x), ])\n> }\n>\n> If I understood the problem correctly...\n>\n> Best,\n> Daniel\n>\n>\n>>\n>>\n>>\n>> Here's a *minimal* reproducible example:\n>> require(blotter)\n>> currency(\"USD\")\n>> initPortf(\"test\", symbols=\"AAPL\", currency=\"USD\")\n>>\n>> addTxn(\"test\", \"AAPL\", as.Date(\"2017-01-01\"),  1, 10) addTxn(\"test\", \n>> \"AAPL\", as.Date(\"2017-01-02\"), -1, 10)\n>>\n>> Thanks for the report!  I'll work on a fix.\n>>\n>> Best,\n>> Josh\n>>\n\n\n\n--\nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2017 | www.rinfinance.com",
       "body_snippet": "Thanks for taking the time to look at this guys. Sorry for the verbose example but minimal means different things to different people depending on their skills, or lack thereof in my case. Cheers\nJohn",
       "thread_id": "thread-21816416852c",
       "thread_depth": 4,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014338.html"
     },
     {
       "id": "msg-8e9fd776a20d",
@@ -1085,11 +1142,12 @@
         "<CAPPM_gRRF0WGxD1bQiqJnO6Jow0dBoRD=MV57pM7t2hLOe2cgw@mail.gmail.com>",
         "<00d201d2d4ce$d86d7810$89486830$@yahoo.com>"
       ],
-      "body_plain": "This is now fixed in:\nhttps://github.com/braverock/blotter/commit/537f7870665859346a1157b2bc786c6d7325f6fb\n\nThanks for the report!\n\nOn Wed, May 24, 2017 at 3:46 PM, John Kumar <rjkft at yahoo.com> wrote:\n\n> Thanks for taking the time to look at this guys. Sorry for the verbose\n> example but minimal means different things to different people depending on\n> their skills, or lack thereof in my case. Cheers\n> John\n>\n> -----Original Message-----\n> From: Joshua Ulrich [mailto:josh.m.ulrich at gmail.com]\n> Sent: Wednesday, 24 May 2017 10:31 PM\n> To: Daniel Cegie?ka <daniel.cegielka at gmail.com>\n> Cc: John Kumar <rjkft at yahoo.com>; r-sig-finance <\n> R-SIG-Finance at r-project.org>\n> Subject: Re: [R-SIG-Finance] Error in addTxn - Quantstrat\n>\n> On Wed, May 24, 2017 at 1:10 PM, Daniel Cegie?ka <\n> daniel.cegielka at gmail.com> wrote:\n> > 2017-05-24 19:45 GMT+02:00 Joshua Ulrich <josh.m.ulrich at gmail.com>:\n> >>\n> >> This is a bug that was introduced here:\n> >> https://github.com/braverock/blotter/commit/24b578628415111885d29ef97\n> >> d5ab0eed1c7bb75\n> >\n> >\n> > https://github.com/braverock/blotter/commit/24b578628415111885d29ef97d\n> > 5ab0eed1c7bb75#diff-7347fe5a0f184f79ef064e92e3beb297R69\n> >\n> > https://github.com/braverock/blotter/blob/master/R/addTxn.R#L85\n> >\n> > why end() from stats?\n> >\n> Because stats::end is the generic.\n>\n> > https://github.com/braverock/blotter/blob/master/R/addTxn.R#L154\n> >\n> > Should be end.xts(), eg:\n> >\n> end.xts() is not exported from the xts namespace.  And it's generally a\n> bad idea to call methods directly, because you do not know if that method\n> will be able to handle objects of different classes.\n>\n> > end.xts <- function (x, ...)\n> > {\n> >     if (!length(x)) {\n> >         index(x[length(.index(x)), ])\n> >     } else\n> >         index(x[NROW(x), ])\n> > }\n> >\n> > If I understood the problem correctly...\n> >\n> > Best,\n> > Daniel\n> >\n> >\n> >>\n> >>\n> >>\n> >> Here's a *minimal* reproducible example:\n> >> require(blotter)\n> >> currency(\"USD\")\n> >> initPortf(\"test\", symbols=\"AAPL\", currency=\"USD\")\n> >>\n> >> addTxn(\"test\", \"AAPL\", as.Date(\"2017-01-01\"),  1, 10) addTxn(\"test\",\n> >> \"AAPL\", as.Date(\"2017-01-02\"), -1, 10)\n> >>\n> >> Thanks for the report!  I'll work on a fix.\n> >>\n> >> Best,\n> >> Josh\n> >>\n>\n>\n>\n> --\n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com\n> R/Finance 2017 | www.rinfinance.com\n>\n>\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2017 | www.rinfinance.com\n\n\t[[alternative HTML version deleted]]",
+      "body_plain": "This is now fixed in:\nhttps://github.com/braverock/blotter/commit/537f7870665859346a1157b2bc786c6d7325f6fb\n\nThanks for the report!\n\nOn Wed, May 24, 2017 at 3:46 PM, John Kumar <rjkft at yahoo.com> wrote:\n\n> Thanks for taking the time to look at this guys. Sorry for the verbose\n> example but minimal means different things to different people depending on\n> their skills, or lack thereof in my case. Cheers\n> John\n>\n> -----Original Message-----\n> From: Joshua Ulrich [mailto:josh.m.ulrich at gmail.com]\n> Sent: Wednesday, 24 May 2017 10:31 PM\n> To: Daniel Cegiełka <daniel.cegielka at gmail.com>\n> Cc: John Kumar <rjkft at yahoo.com>; r-sig-finance <\n> R-SIG-Finance at r-project.org>\n> Subject: Re: [R-SIG-Finance] Error in addTxn - Quantstrat\n>\n> On Wed, May 24, 2017 at 1:10 PM, Daniel Cegiełka <\n> daniel.cegielka at gmail.com> wrote:\n> > 2017-05-24 19:45 GMT+02:00 Joshua Ulrich <josh.m.ulrich at gmail.com>:\n> >>\n> >> This is a bug that was introduced here:\n> >> https://github.com/braverock/blotter/commit/24b578628415111885d29ef97\n> >> d5ab0eed1c7bb75\n> >\n> >\n> > https://github.com/braverock/blotter/commit/24b578628415111885d29ef97d\n> > 5ab0eed1c7bb75#diff-7347fe5a0f184f79ef064e92e3beb297R69\n> >\n> > https://github.com/braverock/blotter/blob/master/R/addTxn.R#L85\n> >\n> > why end() from stats?\n> >\n> Because stats::end is the generic.\n>\n> > https://github.com/braverock/blotter/blob/master/R/addTxn.R#L154\n> >\n> > Should be end.xts(), eg:\n> >\n> end.xts() is not exported from the xts namespace.  And it's generally a\n> bad idea to call methods directly, because you do not know if that method\n> will be able to handle objects of different classes.\n>\n> > end.xts <- function (x, ...)\n> > {\n> >     if (!length(x)) {\n> >         index(x[length(.index(x)), ])\n> >     } else\n> >         index(x[NROW(x), ])\n> > }\n> >\n> > If I understood the problem correctly...\n> >\n> > Best,\n> > Daniel\n> >\n> >\n> >>\n> >>\n> >>\n> >> Here's a *minimal* reproducible example:\n> >> require(blotter)\n> >> currency(\"USD\")\n> >> initPortf(\"test\", symbols=\"AAPL\", currency=\"USD\")\n> >>\n> >> addTxn(\"test\", \"AAPL\", as.Date(\"2017-01-01\"),  1, 10) addTxn(\"test\",\n> >> \"AAPL\", as.Date(\"2017-01-02\"), -1, 10)\n> >>\n> >> Thanks for the report!  I'll work on a fix.\n> >>\n> >> Best,\n> >> Josh\n> >>\n>\n>\n>\n> --\n> Joshua Ulrich  |  about.me/joshuaulrich\n> FOSS Trading  |  www.fosstrading.com\n> R/Finance 2017 | www.rinfinance.com\n>\n>\n\n\n-- \nJoshua Ulrich  |  about.me/joshuaulrich\nFOSS Trading  |  www.fosstrading.com\nR/Finance 2017 | www.rinfinance.com\n\n\t[[alternative HTML version deleted]]",
       "body_snippet": "This is now fixed in:\nhttps://github.com/braverock/blotter/commit/537f7870665859346a1157b2bc786c6d7325f6fb\n\nThanks for the report!\n\nOn Wed, May 24, 2017 at 3:46 PM, John Kumar <rjkft at yahoo.com> wro",
       "thread_id": "thread-21816416852c",
       "thread_depth": 5,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014339.html"
     },
     {
       "id": "msg-0e3b903dddef",
@@ -1105,7 +1163,8 @@
       "body_snippet": "Hi,\n\n\nIs it possible to add a \"disabled\" option to the parameter distribution (for stoploss, stoptrailing, takeprofit)? So the typical parameter distribution contains a vector of integers, but how wou",
       "thread_id": "thread-0e3b903dddef",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014340.html"
     },
     {
       "id": "msg-a793a868e05f",
@@ -1123,7 +1182,8 @@
       "body_snippet": "On Fri, 2017-05-26 at 10:34 +0000, Atakan Okan wrote:\n> Is it possible to add a \"disabled\" option to the parameter\n> distribution (for stoploss, stoptrailing, takeprofit)? So the typical\n> parameter d",
       "thread_id": "thread-0e3b903dddef",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014341.html"
     },
     {
       "id": "msg-b52c4624cb9f",
@@ -1139,7 +1199,8 @@
       "body_snippet": "Hi,\nI try to back-out the yield from a US Treasury note giving clean price using the function \"FixedRateBondYield\".\nThe procedure generate an error (See below).\n\nIs this a structural problem or could ",
       "thread_id": "thread-b52c4624cb9f",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014342.html"
     },
     {
       "id": "msg-df8db05ab73b",
@@ -1153,11 +1214,12 @@
       "references": [
         "<253B4FA1ECEEB54DB661809CB677345537E9E333@NOR-EXC01.northview.local>"
       ],
-      "body_plain": "Hi,\n\nI found a problem with the function \"AmericanOptionImpliedVolatility\" in RQantLib which return an error for a specific set of conditions (but cannot identifies exactly what are these).\nI present a case related to a short term, very deep in-the-money put with negative interest rate that generate error message. I present a reproducible example below.\nI found the related function \"AmericanOption\" with default produce similar error when use in a routine to back-out the implied volatility.\nHowever, I found good result (no error)  when using the engine=\"CrankNicolson\" :  a na?ve routine for backing-out the implied vol with this function return a volatility.\nThere's a work around but think this information may add more stability to RQL.\n\nBest Regards\nCharles\n\n\nCase\nRQuantLib Version 4.2\n\nR version 3.3.2 (64bits)\n\nlibrary(RQuantLib)\n\nprice = 14.5\nstrike = 65\nSpot= 50.5\nRate = -0.00361\nDividendYield = 0\nVolatility = 0.296\nYearToMaturity = 3/365\n\n# error when Implied Vol\nAmericanOptionImpliedVolatility(\"put\", price,Spot, strike, DividendYield, Rate,YearToMaturity, Volatility)\n\nError in americanOptionImpliedVolatilityEngine(type, value, underlying,  :\n\n../../../QuantLib-1.6.2/ql/math/solver1d.hpp:202: In function `QuantLib::Real QuantLib::Solver1D<Impl>::solve(const F&, QuantLib::Real, QuantLib::Real, QuantLib::Real, QuantLib::Real) const [with F = QuantLib::{anonymous}::PriceError; Impl = QuantLib::Brent; QuantLib::Real = double]':\nroot not bracketed: f[1e-007,4] -> [1.955446e-003,3.006858e+000]\n\n#also generate error\nAmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity, Volatility)\n\n# works well\nAmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity, Volatility,timeSteps=150, gridPoints=149, engine=\"CrankNicolson\")\n# backing out the implied vol naively works\nfImpliedVol(Volatility,price,\"put\", Spot, strike, DividendYield, Rate,YearToMaturity)\n\n\nfImpliedVol<-function(iniVol,Premium,Callput, Spot, Strike, DivYield, Rate,YrtoMat){\n  ftm<-function(ImpVol,Premium,Callput, Spot, Strike, DivYield, Rate,YrtoMat, iVol)\n  {\n    ov<-AmericanOption(type=Callput, underlying=Spot, strike=Strike,dividendYield=DivYield, riskFreeRate=Rate, maturity=YrtoMat,volatility=ImpVol,\n                       timeSteps=150, gridPoints=149, engine= \"CrankNicolson\")\n    er<-(Premium-ov$value)^2\n  }\n  imp<-optimize(f=ftm,c(lower = 0, upper = 1.5), tol = 1e-4,Premium,Callput,Spot, Strike, DivYield, Rate,YrtoMat)\n  return(imp$minimum)\n}\n\n> sessionInfo()\nR version 3.3.2 (2016-10-31)\nPlatform: x86_64-w64-mingw32/x64 (64-bit)\nRunning under: Windows >= 8 x64 (build 9200)\n\nlocale:\n[1] LC_COLLATE=English_United States.1252  LC_CTYPE=English_United States.1252    LC_MONETARY=English_United States.1252\n[4] LC_NUMERIC=C                           LC_TIME=English_United States.1252\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base\n\nother attached packages:\n[1] RQuantLib_0.4.3 dplyr_0.5.0\n\nloaded via a namespace (and not attached):\n[1] zoo_1.8-0        magrittr_1.5     R6_2.1.2         assertthat_0.2.0 DBI_0.6-1        tools_3.3.2      tibble_1.0       Rcpp_0.12.10\n [9] grid_3.3.2       lattice_0.20-34\n\n\n>\n\n\n\n\n\t[[alternative HTML version deleted]]",
+      "body_plain": "Hi,\n\nI found a problem with the function \"AmericanOptionImpliedVolatility\" in RQantLib which return an error for a specific set of conditions (but cannot identifies exactly what are these).\nI present a case related to a short term, very deep in-the-money put with negative interest rate that generate error message. I present a reproducible example below.\nI found the related function \"AmericanOption\" with default produce similar error when use in a routine to back-out the implied volatility.\nHowever, I found good result (no error)  when using the engine=\"CrankNicolson\" :  a naïve routine for backing-out the implied vol with this function return a volatility.\nThere's a work around but think this information may add more stability to RQL.\n\nBest Regards\nCharles\n\n\nCase\nRQuantLib Version 4.2\n\nR version 3.3.2 (64bits)\n\nlibrary(RQuantLib)\n\nprice = 14.5\nstrike = 65\nSpot= 50.5\nRate = -0.00361\nDividendYield = 0\nVolatility = 0.296\nYearToMaturity = 3/365\n\n# error when Implied Vol\nAmericanOptionImpliedVolatility(\"put\", price,Spot, strike, DividendYield, Rate,YearToMaturity, Volatility)\n\nError in americanOptionImpliedVolatilityEngine(type, value, underlying,  :\n\n../../../QuantLib-1.6.2/ql/math/solver1d.hpp:202: In function `QuantLib::Real QuantLib::Solver1D<Impl>::solve(const F&, QuantLib::Real, QuantLib::Real, QuantLib::Real, QuantLib::Real) const [with F = QuantLib::{anonymous}::PriceError; Impl = QuantLib::Brent; QuantLib::Real = double]':\nroot not bracketed: f[1e-007,4] -> [1.955446e-003,3.006858e+000]\n\n#also generate error\nAmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity, Volatility)\n\n# works well\nAmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity, Volatility,timeSteps=150, gridPoints=149, engine=\"CrankNicolson\")\n# backing out the implied vol naively works\nfImpliedVol(Volatility,price,\"put\", Spot, strike, DividendYield, Rate,YearToMaturity)\n\n\nfImpliedVol<-function(iniVol,Premium,Callput, Spot, Strike, DivYield, Rate,YrtoMat){\n  ftm<-function(ImpVol,Premium,Callput, Spot, Strike, DivYield, Rate,YrtoMat, iVol)\n  {\n    ov<-AmericanOption(type=Callput, underlying=Spot, strike=Strike,dividendYield=DivYield, riskFreeRate=Rate, maturity=YrtoMat,volatility=ImpVol,\n                       timeSteps=150, gridPoints=149, engine= \"CrankNicolson\")\n    er<-(Premium-ov$value)^2\n  }\n  imp<-optimize(f=ftm,c(lower = 0, upper = 1.5), tol = 1e-4,Premium,Callput,Spot, Strike, DivYield, Rate,YrtoMat)\n  return(imp$minimum)\n}\n\n> sessionInfo()\nR version 3.3.2 (2016-10-31)\nPlatform: x86_64-w64-mingw32/x64 (64-bit)\nRunning under: Windows >= 8 x64 (build 9200)\n\nlocale:\n[1] LC_COLLATE=English_United States.1252  LC_CTYPE=English_United States.1252    LC_MONETARY=English_United States.1252\n[4] LC_NUMERIC=C                           LC_TIME=English_United States.1252\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base\n\nother attached packages:\n[1] RQuantLib_0.4.3 dplyr_0.5.0\n\nloaded via a namespace (and not attached):\n[1] zoo_1.8-0        magrittr_1.5     R6_2.1.2         assertthat_0.2.0 DBI_0.6-1        tools_3.3.2      tibble_1.0       Rcpp_0.12.10\n [9] grid_3.3.2       lattice_0.20-34\n\n\n>\n\n\n\n\n\t[[alternative HTML version deleted]]",
       "body_snippet": "Hi,\n\nI found a problem with the function \"AmericanOptionImpliedVolatility\" in RQantLib which return an error for a specific set of conditions (but cannot identifies exactly what are these).\nI present ",
       "thread_id": "thread-df8db05ab73b",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014343.html"
     },
     {
       "id": "msg-641421041b12",
@@ -1175,7 +1237,8 @@
       "body_snippet": "Not sure, but maturity=effectivedate+1 . Since setllementDays=1, the bond matures on the same day you pay for it. Was that your intention?\n\n________________________________\nFrom: R-SIG-Finance <r-sig-",
       "thread_id": "thread-b52c4624cb9f",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014344.html"
     },
     {
       "id": "msg-a367fe7bcbdf",
@@ -1190,11 +1253,12 @@
         "<253B4FA1ECEEB54DB661809CB677345537E9E333@NOR-EXC01.northview.local>",
         "<253B4FA1ECEEB54DB661809CB6773455F69B4624@NOR-EXC01.northview.local>"
       ],
-      "body_plain": "Charles, my suggestion (which I doubt you will like) is to wrap your calls\nto implied volatility root finders (quant lib or any others) in a try block\nthat returns NA on error.  Your example (very little or no time value) can\nbe common if you are using mid prices from bid-ask quotes.  Note that when\nyou plug the answer from your sum of squares root finding routine back into\nAmericanOption you get a value slightly above 14.5.\n\nOn Fri, May 26, 2017 at 11:46 AM, Charles Duranceau <cduranceau at nial.ky>\nwrote:\n\n> Hi,\n>\n> I found a problem with the function \"AmericanOptionImpliedVolatility\" in\n> RQantLib which return an error for a specific set of conditions (but cannot\n> identifies exactly what are these).\n> I present a case related to a short term, very deep in-the-money put with\n> negative interest rate that generate error message. I present a\n> reproducible example below.\n> I found the related function \"AmericanOption\" with default produce similar\n> error when use in a routine to back-out the implied volatility.\n> However, I found good result (no error)  when using the\n> engine=\"CrankNicolson\" :  a na?ve routine for backing-out the implied vol\n> with this function return a volatility.\n> There's a work around but think this information may add more stability to\n> RQL.\n>\n> Best Regards\n> Charles\n>\n>\n> Case\n> RQuantLib Version 4.2\n>\n> R version 3.3.2 (64bits)\n>\n> library(RQuantLib)\n>\n> price = 14.5\n> strike = 65\n> Spot= 50.5\n> Rate = -0.00361\n> DividendYield = 0\n> Volatility = 0.296\n> YearToMaturity = 3/365\n>\n> # error when Implied Vol\n> AmericanOptionImpliedVolatility(\"put\", price,Spot, strike, DividendYield,\n> Rate,YearToMaturity, Volatility)\n>\n> Error in americanOptionImpliedVolatilityEngine(type, value, underlying,  :\n>\n> ../../../QuantLib-1.6.2/ql/math/solver1d.hpp:202: In function\n> `QuantLib::Real QuantLib::Solver1D<Impl>::solve(const F&, QuantLib::Real,\n> QuantLib::Real, QuantLib::Real, QuantLib::Real) const [with F =\n> QuantLib::{anonymous}::PriceError; Impl = QuantLib::Brent; QuantLib::Real\n> = double]':\n> root not bracketed: f[1e-007,4] -> [1.955446e-003,3.006858e+000]\n>\n> #also generate error\n> AmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity,\n> Volatility)\n>\n> # works well\n> AmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity,\n> Volatility,timeSteps=150, gridPoints=149, engine=\"CrankNicolson\")\n> # backing out the implied vol naively works\n> fImpliedVol(Volatility,price,\"put\", Spot, strike, DividendYield,\n> Rate,YearToMaturity)\n>\n>\n> fImpliedVol<-function(iniVol,Premium,Callput, Spot, Strike, DivYield,\n> Rate,YrtoMat){\n>   ftm<-function(ImpVol,Premium,Callput, Spot, Strike, DivYield,\n> Rate,YrtoMat, iVol)\n>   {\n>     ov<-AmericanOption(type=Callput, underlying=Spot,\n> strike=Strike,dividendYield=DivYield, riskFreeRate=Rate,\n> maturity=YrtoMat,volatility=ImpVol,\n>                        timeSteps=150, gridPoints=149, engine=\n> \"CrankNicolson\")\n>     er<-(Premium-ov$value)^2\n>   }\n>   imp<-optimize(f=ftm,c(lower = 0, upper = 1.5), tol =\n> 1e-4,Premium,Callput,Spot, Strike, DivYield, Rate,YrtoMat)\n>   return(imp$minimum)\n> }\n>\n> > sessionInfo()\n> R version 3.3.2 (2016-10-31)\n> Platform: x86_64-w64-mingw32/x64 (64-bit)\n> Running under: Windows >= 8 x64 (build 9200)\n>\n> locale:\n> [1] LC_COLLATE=English_United States.1252  LC_CTYPE=English_United\n> States.1252    LC_MONETARY=English_United States.1252\n> [4] LC_NUMERIC=C                           LC_TIME=English_United\n> States.1252\n>\n> attached base packages:\n> [1] stats     graphics  grDevices utils     datasets  methods   base\n>\n> other attached packages:\n> [1] RQuantLib_0.4.3 dplyr_0.5.0\n>\n> loaded via a namespace (and not attached):\n> [1] zoo_1.8-0        magrittr_1.5     R6_2.1.2         assertthat_0.2.0\n> DBI_0.6-1        tools_3.3.2      tibble_1.0       Rcpp_0.12.10\n>  [9] grid_3.3.2       lattice_0.20-34\n>\n>\n> >\n>\n>\n>\n>\n>         [[alternative HTML version deleted]]\n>\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
+      "body_plain": "Charles, my suggestion (which I doubt you will like) is to wrap your calls\nto implied volatility root finders (quant lib or any others) in a try block\nthat returns NA on error.  Your example (very little or no time value) can\nbe common if you are using mid prices from bid-ask quotes.  Note that when\nyou plug the answer from your sum of squares root finding routine back into\nAmericanOption you get a value slightly above 14.5.\n\nOn Fri, May 26, 2017 at 11:46 AM, Charles Duranceau <cduranceau at nial.ky>\nwrote:\n\n> Hi,\n>\n> I found a problem with the function \"AmericanOptionImpliedVolatility\" in\n> RQantLib which return an error for a specific set of conditions (but cannot\n> identifies exactly what are these).\n> I present a case related to a short term, very deep in-the-money put with\n> negative interest rate that generate error message. I present a\n> reproducible example below.\n> I found the related function \"AmericanOption\" with default produce similar\n> error when use in a routine to back-out the implied volatility.\n> However, I found good result (no error)  when using the\n> engine=\"CrankNicolson\" :  a naïve routine for backing-out the implied vol\n> with this function return a volatility.\n> There's a work around but think this information may add more stability to\n> RQL.\n>\n> Best Regards\n> Charles\n>\n>\n> Case\n> RQuantLib Version 4.2\n>\n> R version 3.3.2 (64bits)\n>\n> library(RQuantLib)\n>\n> price = 14.5\n> strike = 65\n> Spot= 50.5\n> Rate = -0.00361\n> DividendYield = 0\n> Volatility = 0.296\n> YearToMaturity = 3/365\n>\n> # error when Implied Vol\n> AmericanOptionImpliedVolatility(\"put\", price,Spot, strike, DividendYield,\n> Rate,YearToMaturity, Volatility)\n>\n> Error in americanOptionImpliedVolatilityEngine(type, value, underlying,  :\n>\n> ../../../QuantLib-1.6.2/ql/math/solver1d.hpp:202: In function\n> `QuantLib::Real QuantLib::Solver1D<Impl>::solve(const F&, QuantLib::Real,\n> QuantLib::Real, QuantLib::Real, QuantLib::Real) const [with F =\n> QuantLib::{anonymous}::PriceError; Impl = QuantLib::Brent; QuantLib::Real\n> = double]':\n> root not bracketed: f[1e-007,4] -> [1.955446e-003,3.006858e+000]\n>\n> #also generate error\n> AmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity,\n> Volatility)\n>\n> # works well\n> AmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity,\n> Volatility,timeSteps=150, gridPoints=149, engine=\"CrankNicolson\")\n> # backing out the implied vol naively works\n> fImpliedVol(Volatility,price,\"put\", Spot, strike, DividendYield,\n> Rate,YearToMaturity)\n>\n>\n> fImpliedVol<-function(iniVol,Premium,Callput, Spot, Strike, DivYield,\n> Rate,YrtoMat){\n>   ftm<-function(ImpVol,Premium,Callput, Spot, Strike, DivYield,\n> Rate,YrtoMat, iVol)\n>   {\n>     ov<-AmericanOption(type=Callput, underlying=Spot,\n> strike=Strike,dividendYield=DivYield, riskFreeRate=Rate,\n> maturity=YrtoMat,volatility=ImpVol,\n>                        timeSteps=150, gridPoints=149, engine=\n> \"CrankNicolson\")\n>     er<-(Premium-ov$value)^2\n>   }\n>   imp<-optimize(f=ftm,c(lower = 0, upper = 1.5), tol =\n> 1e-4,Premium,Callput,Spot, Strike, DivYield, Rate,YrtoMat)\n>   return(imp$minimum)\n> }\n>\n> > sessionInfo()\n> R version 3.3.2 (2016-10-31)\n> Platform: x86_64-w64-mingw32/x64 (64-bit)\n> Running under: Windows >= 8 x64 (build 9200)\n>\n> locale:\n> [1] LC_COLLATE=English_United States.1252  LC_CTYPE=English_United\n> States.1252    LC_MONETARY=English_United States.1252\n> [4] LC_NUMERIC=C                           LC_TIME=English_United\n> States.1252\n>\n> attached base packages:\n> [1] stats     graphics  grDevices utils     datasets  methods   base\n>\n> other attached packages:\n> [1] RQuantLib_0.4.3 dplyr_0.5.0\n>\n> loaded via a namespace (and not attached):\n> [1] zoo_1.8-0        magrittr_1.5     R6_2.1.2         assertthat_0.2.0\n> DBI_0.6-1        tools_3.3.2      tibble_1.0       Rcpp_0.12.10\n>  [9] grid_3.3.2       lattice_0.20-34\n>\n>\n> >\n>\n>\n>\n>\n>         [[alternative HTML version deleted]]\n>\n>\n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions\n> should go.\n>\n\n\t[[alternative HTML version deleted]]",
       "body_snippet": "Charles, my suggestion (which I doubt you will like) is to wrap your calls\nto implied volatility root finders (quant lib or any others) in a try block\nthat returns NA on error.  Your example (very lit",
       "thread_id": "thread-df8db05ab73b",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014345.html"
     },
     {
       "id": "msg-5e22e10f4f5f",
@@ -1210,7 +1274,8 @@
       "body_snippet": "I'm not sure how to ask this with the proper terminology, but here goes:\n\nThe BDH() function in RBLPAPI returns, for a list of symbols (e.g., 'SPX Index','RIY Index','IBM Equity') a list of closing pr",
       "thread_id": "thread-5e22e10f4f5f",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014346.html"
     },
     {
       "id": "msg-8f312efe7080",
@@ -1228,7 +1293,8 @@
       "body_snippet": "Hi Michael,\n  Try not to post twice - this is really more of a general R question.  To\nanswer the question, however, turn each element of your resultlist into an\nxts (or zoo)  object so that you have ",
       "thread_id": "thread-5e22e10f4f5f",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014347.html"
     },
     {
       "id": "msg-5fb023ab1cee",
@@ -1246,7 +1312,8 @@
       "body_snippet": "2017-05-26 22:58 GMT+02:00 Michael Ashton <m.ashton at enduringinvestments.com>:\n> I'm not sure how to ask this with the proper terminology, but here goes:\n\n> So, if I run the query with 3 symbols, I ",
       "thread_id": "thread-5e22e10f4f5f",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014348.html"
     },
     {
       "id": "msg-19af2ef39f1c",
@@ -1262,11 +1329,12 @@
         "<253B4FA1ECEEB54DB661809CB6773455F69B4624@NOR-EXC01.northview.local>",
         "<CAHdfS94+zS5Qt+xMDRkL4M04p832RFB05N+5qu0aLuUwmWBtsQ@mail.gmail.com>"
       ],
-      "body_plain": "Thank you Robert,\nI agree with you this is an extreme case and I don?t expect too much accuracy from the implied volatility I get, but my concern was more about the error message (a NA would have been more desirable)\nBy changing the engine I managed a workaround but I thought RQL team (or someone else having the same problem) could be interested with that non-desirable behavior.\n\nRegards\n\n\nFrom: Robert Harlow [mailto:rharlow86 at gmail.com]\nSent: Friday, May 26, 2017 3:32 PM\nTo: Charles Duranceau\nCc: r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] RQuantLib: AmericanOptionImpliedVolatility bug\n\nCharles, my suggestion (which I doubt you will like) is to wrap your calls to implied volatility root finders (quant lib or any others) in a try block that returns NA on error.  Your example (very little or no time value) can be common if you are using mid prices from bid-ask quotes.  Note that when you plug the answer from your sum of squares root finding routine back into AmericanOption you get a value slightly above 14.5.\n\nOn Fri, May 26, 2017 at 11:46 AM, Charles Duranceau <cduranceau at nial.ky<mailto:cduranceau at nial.ky>> wrote:\nHi,\n\nI found a problem with the function \"AmericanOptionImpliedVolatility\" in RQantLib which return an error for a specific set of conditions (but cannot identifies exactly what are these).\nI present a case related to a short term, very deep in-the-money put with negative interest rate that generate error message. I present a reproducible example below.\nI found the related function \"AmericanOption\" with default produce similar error when use in a routine to back-out the implied volatility.\nHowever, I found good result (no error)  when using the engine=\"CrankNicolson\" :  a na?ve routine for backing-out the implied vol with this function return a volatility.\nThere's a work around but think this information may add more stability to RQL.\n\nBest Regards\nCharles\n\n\nCase\nRQuantLib Version 4.2\n\nR version 3.3.2 (64bits)\n\nlibrary(RQuantLib)\n\nprice = 14.5\nstrike = 65\nSpot= 50.5\nRate = -0.00361\nDividendYield = 0\nVolatility = 0.296\nYearToMaturity = 3/365\n\n# error when Implied Vol\nAmericanOptionImpliedVolatility(\"put\", price,Spot, strike, DividendYield, Rate,YearToMaturity, Volatility)\n\nError in americanOptionImpliedVolatilityEngine(type, value, underlying,  :\n\n../../../QuantLib-1.6.2/ql/math/solver1d.hpp:202: In function `QuantLib::Real QuantLib::Solver1D<Impl>::solve(const F&, QuantLib::Real, QuantLib::Real, QuantLib::Real, QuantLib::Real) const [with F = QuantLib::{anonymous}::PriceError; Impl = QuantLib::Brent; QuantLib::Real = double]':\nroot not bracketed: f[1e-007,4] -> [1.955446e-003,3.006858e+000]\n\n#also generate error\nAmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity, Volatility)\n\n# works well\nAmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity, Volatility,timeSteps=150, gridPoints=149, engine=\"CrankNicolson\")\n# backing out the implied vol naively works\nfImpliedVol(Volatility,price,\"put\", Spot, strike, DividendYield, Rate,YearToMaturity)\n\n\nfImpliedVol<-function(iniVol,Premium,Callput, Spot, Strike, DivYield, Rate,YrtoMat){\n  ftm<-function(ImpVol,Premium,Callput, Spot, Strike, DivYield, Rate,YrtoMat, iVol)\n  {\n    ov<-AmericanOption(type=Callput, underlying=Spot, strike=Strike,dividendYield=DivYield, riskFreeRate=Rate, maturity=YrtoMat,volatility=ImpVol,\n                       timeSteps=150, gridPoints=149, engine= \"CrankNicolson\")\n    er<-(Premium-ov$value)^2\n  }\n  imp<-optimize(f=ftm,c(lower = 0, upper = 1.5), tol = 1e-4,Premium,Callput,Spot, Strike, DivYield, Rate,YrtoMat)\n  return(imp$minimum)\n}\n\n> sessionInfo()\nR version 3.3.2 (2016-10-31)\nPlatform: x86_64-w64-mingw32/x64 (64-bit)\nRunning under: Windows >= 8 x64 (build 9200)\n\nlocale:\n[1] LC_COLLATE=English_United States.1252  LC_CTYPE=English_United States.1252    LC_MONETARY=English_United States.1252\n[4] LC_NUMERIC=C                           LC_TIME=English_United States.1252\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base\n\nother attached packages:\n[1] RQuantLib_0.4.3 dplyr_0.5.0\n\nloaded via a namespace (and not attached):\n[1] zoo_1.8-0        magrittr_1.5     R6_2.1.2         assertthat_0.2.0 DBI_0.6-1        tools_3.3.2      tibble_1.0       Rcpp_0.12.10\n [9] grid_3.3.2       lattice_0.20-34\n\n\n>\n\n\n\n\n        [[alternative HTML version deleted]]\n\n\n_______________________________________________\nR-SIG-Finance at r-project.org<mailto:R-SIG-Finance at r-project.org> mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\n\t[[alternative HTML version deleted]]",
-      "body_snippet": "Thank you Robert,\nI agree with you this is an extreme case and I don?t expect too much accuracy from the implied volatility I get, but my concern was more about the error message (a NA would have been",
+      "body_plain": "Thank you Robert,\nI agree with you this is an extreme case and I don’t expect too much accuracy from the implied volatility I get, but my concern was more about the error message (a NA would have been more desirable)\nBy changing the engine I managed a workaround but I thought RQL team (or someone else having the same problem) could be interested with that non-desirable behavior.\n\nRegards\n\n\nFrom: Robert Harlow [mailto:rharlow86 at gmail.com]\nSent: Friday, May 26, 2017 3:32 PM\nTo: Charles Duranceau\nCc: r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] RQuantLib: AmericanOptionImpliedVolatility bug\n\nCharles, my suggestion (which I doubt you will like) is to wrap your calls to implied volatility root finders (quant lib or any others) in a try block that returns NA on error.  Your example (very little or no time value) can be common if you are using mid prices from bid-ask quotes.  Note that when you plug the answer from your sum of squares root finding routine back into AmericanOption you get a value slightly above 14.5.\n\nOn Fri, May 26, 2017 at 11:46 AM, Charles Duranceau <cduranceau at nial.ky<mailto:cduranceau at nial.ky>> wrote:\nHi,\n\nI found a problem with the function \"AmericanOptionImpliedVolatility\" in RQantLib which return an error for a specific set of conditions (but cannot identifies exactly what are these).\nI present a case related to a short term, very deep in-the-money put with negative interest rate that generate error message. I present a reproducible example below.\nI found the related function \"AmericanOption\" with default produce similar error when use in a routine to back-out the implied volatility.\nHowever, I found good result (no error)  when using the engine=\"CrankNicolson\" :  a naïve routine for backing-out the implied vol with this function return a volatility.\nThere's a work around but think this information may add more stability to RQL.\n\nBest Regards\nCharles\n\n\nCase\nRQuantLib Version 4.2\n\nR version 3.3.2 (64bits)\n\nlibrary(RQuantLib)\n\nprice = 14.5\nstrike = 65\nSpot= 50.5\nRate = -0.00361\nDividendYield = 0\nVolatility = 0.296\nYearToMaturity = 3/365\n\n# error when Implied Vol\nAmericanOptionImpliedVolatility(\"put\", price,Spot, strike, DividendYield, Rate,YearToMaturity, Volatility)\n\nError in americanOptionImpliedVolatilityEngine(type, value, underlying,  :\n\n../../../QuantLib-1.6.2/ql/math/solver1d.hpp:202: In function `QuantLib::Real QuantLib::Solver1D<Impl>::solve(const F&, QuantLib::Real, QuantLib::Real, QuantLib::Real, QuantLib::Real) const [with F = QuantLib::{anonymous}::PriceError; Impl = QuantLib::Brent; QuantLib::Real = double]':\nroot not bracketed: f[1e-007,4] -> [1.955446e-003,3.006858e+000]\n\n#also generate error\nAmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity, Volatility)\n\n# works well\nAmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity, Volatility,timeSteps=150, gridPoints=149, engine=\"CrankNicolson\")\n# backing out the implied vol naively works\nfImpliedVol(Volatility,price,\"put\", Spot, strike, DividendYield, Rate,YearToMaturity)\n\n\nfImpliedVol<-function(iniVol,Premium,Callput, Spot, Strike, DivYield, Rate,YrtoMat){\n  ftm<-function(ImpVol,Premium,Callput, Spot, Strike, DivYield, Rate,YrtoMat, iVol)\n  {\n    ov<-AmericanOption(type=Callput, underlying=Spot, strike=Strike,dividendYield=DivYield, riskFreeRate=Rate, maturity=YrtoMat,volatility=ImpVol,\n                       timeSteps=150, gridPoints=149, engine= \"CrankNicolson\")\n    er<-(Premium-ov$value)^2\n  }\n  imp<-optimize(f=ftm,c(lower = 0, upper = 1.5), tol = 1e-4,Premium,Callput,Spot, Strike, DivYield, Rate,YrtoMat)\n  return(imp$minimum)\n}\n\n> sessionInfo()\nR version 3.3.2 (2016-10-31)\nPlatform: x86_64-w64-mingw32/x64 (64-bit)\nRunning under: Windows >= 8 x64 (build 9200)\n\nlocale:\n[1] LC_COLLATE=English_United States.1252  LC_CTYPE=English_United States.1252    LC_MONETARY=English_United States.1252\n[4] LC_NUMERIC=C                           LC_TIME=English_United States.1252\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base\n\nother attached packages:\n[1] RQuantLib_0.4.3 dplyr_0.5.0\n\nloaded via a namespace (and not attached):\n[1] zoo_1.8-0        magrittr_1.5     R6_2.1.2         assertthat_0.2.0 DBI_0.6-1        tools_3.3.2      tibble_1.0       Rcpp_0.12.10\n [9] grid_3.3.2       lattice_0.20-34\n\n\n>\n\n\n\n\n        [[alternative HTML version deleted]]\n\n\n_______________________________________________\nR-SIG-Finance at r-project.org<mailto:R-SIG-Finance at r-project.org> mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Thank you Robert,\nI agree with you this is an extreme case and I don’t expect too much accuracy from the implied volatility I get, but my concern was more about the error message (a NA would have been",
       "thread_id": "thread-df8db05ab73b",
       "thread_depth": 2,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014349.html"
     },
     {
       "id": "msg-6636fe5d5190",
@@ -1285,7 +1353,8 @@
       "body_snippet": "Hi Terry,\nyou are right, the last settlement day of the bond is on Dec 30th as the bond redeems on a week end so the next business day as you point out fall after the redemption.\nHowever, the day befo",
       "thread_id": "thread-b52c4624cb9f",
       "thread_depth": 2,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014350.html"
     },
     {
       "id": "msg-835695f4a596",
@@ -1302,11 +1371,12 @@
         "<CAHdfS94+zS5Qt+xMDRkL4M04p832RFB05N+5qu0aLuUwmWBtsQ@mail.gmail.com>",
         "<253B4FA1ECEEB54DB661809CB6773455F69B67F9@NOR-EXC01.northview.local>"
       ],
-      "body_plain": "Doesn't the error message say root not bracketed? That is informative because it means there is no root, or no implied volatility, that gives you back your price of 14.5- this is what you should expect given your inputs.  In order for a volatility to exist an option must have a positive time value.\n\nBob\n\n> On May 26, 2017, at 6:55 PM, Charles Duranceau <cduranceau at nial.ky> wrote:\n> \n> Thank you Robert,\n> I agree with you this is an extreme case and I don?t expect too much accuracy from the implied volatility I get, but my concern was more about the error message (a NA would have been more desirable)\n> By changing the engine I managed a workaround but I thought RQL team (or someone else having the same problem) could be interested with that non-desirable behavior.\n>  \n> Regards\n>  \n>  \n> From: Robert Harlow [mailto:rharlow86 at gmail.com] \n> Sent: Friday, May 26, 2017 3:32 PM\n> To: Charles Duranceau\n> Cc: r-sig-finance at r-project.org\n> Subject: Re: [R-SIG-Finance] RQuantLib: AmericanOptionImpliedVolatility bug\n>  \n> Charles, my suggestion (which I doubt you will like) is to wrap your calls to implied volatility root finders (quant lib or any others) in a try block that returns NA on error.  Your example (very little or no time value) can be common if you are using mid prices from bid-ask quotes.  Note that when you plug the answer from your sum of squares root finding routine back into AmericanOption you get a value slightly above 14.5.\n>  \n> On Fri, May 26, 2017 at 11:46 AM, Charles Duranceau <cduranceau at nial.ky> wrote:\n> Hi,\n> \n> I found a problem with the function \"AmericanOptionImpliedVolatility\" in RQantLib which return an error for a specific set of conditions (but cannot identifies exactly what are these).\n> I present a case related to a short term, very deep in-the-money put with negative interest rate that generate error message. I present a reproducible example below.\n> I found the related function \"AmericanOption\" with default produce similar error when use in a routine to back-out the implied volatility.\n> However, I found good result (no error)  when using the engine=\"CrankNicolson\" :  a na?ve routine for backing-out the implied vol with this function return a volatility.\n> There's a work around but think this information may add more stability to RQL.\n> \n> Best Regards\n> Charles\n> \n> \n> Case\n> RQuantLib Version 4.2\n> \n> R version 3.3.2 (64bits)\n> \n> library(RQuantLib)\n> \n> price = 14.5\n> strike = 65\n> Spot= 50.5\n> Rate = -0.00361\n> DividendYield = 0\n> Volatility = 0.296\n> YearToMaturity = 3/365\n> \n> # error when Implied Vol\n> AmericanOptionImpliedVolatility(\"put\", price,Spot, strike, DividendYield, Rate,YearToMaturity, Volatility)\n> \n> Error in americanOptionImpliedVolatilityEngine(type, value, underlying,  :\n> \n> ../../../QuantLib-1.6.2/ql/math/solver1d.hpp:202: In function `QuantLib::Real QuantLib::Solver1D<Impl>::solve(const F&, QuantLib::Real, QuantLib::Real, QuantLib::Real, QuantLib::Real) const [with F = QuantLib::{anonymous}::PriceError; Impl = QuantLib::Brent; QuantLib::Real = double]':\n> root not bracketed: f[1e-007,4] -> [1.955446e-003,3.006858e+000]\n> \n> #also generate error\n> AmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity, Volatility)\n> \n> # works well\n> AmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity, Volatility,timeSteps=150, gridPoints=149, engine=\"CrankNicolson\")\n> # backing out the implied vol naively works\n> fImpliedVol(Volatility,price,\"put\", Spot, strike, DividendYield, Rate,YearToMaturity)\n> \n> \n> fImpliedVol<-function(iniVol,Premium,Callput, Spot, Strike, DivYield, Rate,YrtoMat){\n>   ftm<-function(ImpVol,Premium,Callput, Spot, Strike, DivYield, Rate,YrtoMat, iVol)\n>   {\n>     ov<-AmericanOption(type=Callput, underlying=Spot, strike=Strike,dividendYield=DivYield, riskFreeRate=Rate, maturity=YrtoMat,volatility=ImpVol,\n>                        timeSteps=150, gridPoints=149, engine= \"CrankNicolson\")\n>     er<-(Premium-ov$value)^2\n>   }\n>   imp<-optimize(f=ftm,c(lower = 0, upper = 1.5), tol = 1e-4,Premium,Callput,Spot, Strike, DivYield, Rate,YrtoMat)\n>   return(imp$minimum)\n> }\n> \n> > sessionInfo()\n> R version 3.3.2 (2016-10-31)\n> Platform: x86_64-w64-mingw32/x64 (64-bit)\n> Running under: Windows >= 8 x64 (build 9200)\n> \n> locale:\n> [1] LC_COLLATE=English_United States.1252  LC_CTYPE=English_United States.1252    LC_MONETARY=English_United States.1252\n> [4] LC_NUMERIC=C                           LC_TIME=English_United States.1252\n> \n> attached base packages:\n> [1] stats     graphics  grDevices utils     datasets  methods   base\n> \n> other attached packages:\n> [1] RQuantLib_0.4.3 dplyr_0.5.0\n> \n> loaded via a namespace (and not attached):\n> [1] zoo_1.8-0        magrittr_1.5     R6_2.1.2         assertthat_0.2.0 DBI_0.6-1        tools_3.3.2      tibble_1.0       Rcpp_0.12.10\n>  [9] grid_3.3.2       lattice_0.20-34\n> \n> \n> >\n> \n> \n> \n> \n>         [[alternative HTML version deleted]]\n> \n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>  \n\n\t[[alternative HTML version deleted]]",
+      "body_plain": "Doesn't the error message say root not bracketed? That is informative because it means there is no root, or no implied volatility, that gives you back your price of 14.5- this is what you should expect given your inputs.  In order for a volatility to exist an option must have a positive time value.\n\nBob\n\n> On May 26, 2017, at 6:55 PM, Charles Duranceau <cduranceau at nial.ky> wrote:\n> \n> Thank you Robert,\n> I agree with you this is an extreme case and I don’t expect too much accuracy from the implied volatility I get, but my concern was more about the error message (a NA would have been more desirable)\n> By changing the engine I managed a workaround but I thought RQL team (or someone else having the same problem) could be interested with that non-desirable behavior.\n>  \n> Regards\n>  \n>  \n> From: Robert Harlow [mailto:rharlow86 at gmail.com] \n> Sent: Friday, May 26, 2017 3:32 PM\n> To: Charles Duranceau\n> Cc: r-sig-finance at r-project.org\n> Subject: Re: [R-SIG-Finance] RQuantLib: AmericanOptionImpliedVolatility bug\n>  \n> Charles, my suggestion (which I doubt you will like) is to wrap your calls to implied volatility root finders (quant lib or any others) in a try block that returns NA on error.  Your example (very little or no time value) can be common if you are using mid prices from bid-ask quotes.  Note that when you plug the answer from your sum of squares root finding routine back into AmericanOption you get a value slightly above 14.5.\n>  \n> On Fri, May 26, 2017 at 11:46 AM, Charles Duranceau <cduranceau at nial.ky> wrote:\n> Hi,\n> \n> I found a problem with the function \"AmericanOptionImpliedVolatility\" in RQantLib which return an error for a specific set of conditions (but cannot identifies exactly what are these).\n> I present a case related to a short term, very deep in-the-money put with negative interest rate that generate error message. I present a reproducible example below.\n> I found the related function \"AmericanOption\" with default produce similar error when use in a routine to back-out the implied volatility.\n> However, I found good result (no error)  when using the engine=\"CrankNicolson\" :  a naïve routine for backing-out the implied vol with this function return a volatility.\n> There's a work around but think this information may add more stability to RQL.\n> \n> Best Regards\n> Charles\n> \n> \n> Case\n> RQuantLib Version 4.2\n> \n> R version 3.3.2 (64bits)\n> \n> library(RQuantLib)\n> \n> price = 14.5\n> strike = 65\n> Spot= 50.5\n> Rate = -0.00361\n> DividendYield = 0\n> Volatility = 0.296\n> YearToMaturity = 3/365\n> \n> # error when Implied Vol\n> AmericanOptionImpliedVolatility(\"put\", price,Spot, strike, DividendYield, Rate,YearToMaturity, Volatility)\n> \n> Error in americanOptionImpliedVolatilityEngine(type, value, underlying,  :\n> \n> ../../../QuantLib-1.6.2/ql/math/solver1d.hpp:202: In function `QuantLib::Real QuantLib::Solver1D<Impl>::solve(const F&, QuantLib::Real, QuantLib::Real, QuantLib::Real, QuantLib::Real) const [with F = QuantLib::{anonymous}::PriceError; Impl = QuantLib::Brent; QuantLib::Real = double]':\n> root not bracketed: f[1e-007,4] -> [1.955446e-003,3.006858e+000]\n> \n> #also generate error\n> AmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity, Volatility)\n> \n> # works well\n> AmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity, Volatility,timeSteps=150, gridPoints=149, engine=\"CrankNicolson\")\n> # backing out the implied vol naively works\n> fImpliedVol(Volatility,price,\"put\", Spot, strike, DividendYield, Rate,YearToMaturity)\n> \n> \n> fImpliedVol<-function(iniVol,Premium,Callput, Spot, Strike, DivYield, Rate,YrtoMat){\n>   ftm<-function(ImpVol,Premium,Callput, Spot, Strike, DivYield, Rate,YrtoMat, iVol)\n>   {\n>     ov<-AmericanOption(type=Callput, underlying=Spot, strike=Strike,dividendYield=DivYield, riskFreeRate=Rate, maturity=YrtoMat,volatility=ImpVol,\n>                        timeSteps=150, gridPoints=149, engine= \"CrankNicolson\")\n>     er<-(Premium-ov$value)^2\n>   }\n>   imp<-optimize(f=ftm,c(lower = 0, upper = 1.5), tol = 1e-4,Premium,Callput,Spot, Strike, DivYield, Rate,YrtoMat)\n>   return(imp$minimum)\n> }\n> \n> > sessionInfo()\n> R version 3.3.2 (2016-10-31)\n> Platform: x86_64-w64-mingw32/x64 (64-bit)\n> Running under: Windows >= 8 x64 (build 9200)\n> \n> locale:\n> [1] LC_COLLATE=English_United States.1252  LC_CTYPE=English_United States.1252    LC_MONETARY=English_United States.1252\n> [4] LC_NUMERIC=C                           LC_TIME=English_United States.1252\n> \n> attached base packages:\n> [1] stats     graphics  grDevices utils     datasets  methods   base\n> \n> other attached packages:\n> [1] RQuantLib_0.4.3 dplyr_0.5.0\n> \n> loaded via a namespace (and not attached):\n> [1] zoo_1.8-0        magrittr_1.5     R6_2.1.2         assertthat_0.2.0 DBI_0.6-1        tools_3.3.2      tibble_1.0       Rcpp_0.12.10\n>  [9] grid_3.3.2       lattice_0.20-34\n> \n> \n> >\n> \n> \n> \n> \n>         [[alternative HTML version deleted]]\n> \n> \n> _______________________________________________\n> R-SIG-Finance at r-project.org mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.\n>  \n\n\t[[alternative HTML version deleted]]",
       "body_snippet": "Doesn't the error message say root not bracketed? That is informative because it means there is no root, or no implied volatility, that gives you back your price of 14.5- this is what you should expec",
       "thread_id": "thread-df8db05ab73b",
       "thread_depth": 3,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014351.html"
     },
     {
       "id": "msg-b4335dc09aac",
@@ -1326,7 +1396,8 @@
       "body_snippet": "You don't accrue because you haven't settled. Accruel begins when possess the bond. You possess it the day it matures. It can happen but makes no sense as it's just an exchange of cash for cash in pra",
       "thread_id": "thread-b52c4624cb9f",
       "thread_depth": 3,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014352.html"
     },
     {
       "id": "msg-adb9a327c9b9",
@@ -1338,11 +1409,12 @@
       "subject_clean": "Adding \"Stoploss disabled\" to the parameter distribution for apply.paramset",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "Tried doing a simple MACD Long-only strategy but couldn't manage to get it working. The take profit rule doesn't seem to work as well, since changing its threshold does not affect the net pnl. Below is a minimal (as much as I could) reproducible code:\n\n\n#AAPL google?finance data\n#MACD cross\n\n\nlibrary(quantmod)\nlibrary(xts)\nlibrary(quantstrat)\n\n\ngetSymbols(\"AAPL\", src = \"google\")\nplot(Cl(AAPL))\n\n\n.strategy <- new.env()\n.blotter ?<- new.env() ? ? ? ? ? ? ? ? ? ? ? ? ? ?\n\n\ncurrency('USD')\nstock(\"AAPL\", currency=\"USD\", multiplier=1,tick_size= 0.01)\n\n\nstrategy.st <- \"reproducible_strategy\"\nrm.strat(strategy.st) ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?\n\n\ninitDate = as.character(as.Date(index(AAPL[1])-1)) ? ? ? ? ? ? ? ? ? ?\ninitPortf(strategy.st,?\n? ? ? ? ? \"AAPL\",?\n? ? ? ? ? initDate=initDate,?\n? ? ? ? ? currency = \"USD\")\ninitAcct(strategy.st,?\n? ? ? ? ?portfolios=strategy.st,?\n? ? ? ? ?initDate=initDate,?\n? ? ? ? ?initEq=1000,?\n? ? ? ? ?currency = \"USD\")\ninitOrders(portfolio=strategy.st,\n? ? ? ? ? ?initDate=initDate) ? ? ? ? ? ? ? ? ? ? ? ??\nstrategy(strategy.st,store=TRUE)\n\n\ntxn.model <- 0\n\n\nadd.indicator(strategy.st, ?\n? ? ? ? ? ? ? name = \"MACD\",?\n? ? ? ? ? ? ? arguments = list(x=Cl(AAPL)),?\n? ? ? ? ? ? ? label='macd')?\n\n\nadd.signal(strategy.st,name=\"sigCrossover\",\n? ? ? ? ? ?arguments = list(columns=c(\"macd.macd\",\"signal.macd\"),\n? ? ? ? ? ? ? ? ? ? ? ? ? ? relationship=\"gt\"),\n? ? ? ? ? ?label=\"macd.gt.signal\")?\n\n\nadd.signal(strategy.st,name=\"sigCrossover\",\n? ? ? ? ? ?arguments = list(columns=c(\"macd.macd\",\"signal.macd\"),\n? ? ? ? ? ? ? ? ? ? ? ? ? ? relationship=\"lt\"),\n? ? ? ? ? ?label=\"macd.lt.signal\")\n\n\n# Long Entry Rule-----------------------------------------------------------------------------\nadd.rule(strategy.st,\n? ? ? ? ?name='ruleSignal',\n? ? ? ? ?arguments = list(sigcol=\"macd.gt.signal\",\n? ? ? ? ? ? ? ? ? ? ? ? ? sigval=TRUE,\n? ? ? ? ? ? ? ? ? ? ? ? ? prefer=\"Open\",?\n? ? ? ? ? ? ? ? ? ? ? ? ? orderqty= 10,?\n\n? ? ? ? ? ? ? ? ? ? ? ? ? ordertype='market',\n? ? ? ? ? ? ? ? ? ? ? ? ? orderside='long',\n? ? ? ? ? ? ? ? ? ? ? ? ? orderset='ocolong',\n? ? ? ? ? ? ? ? ? ? ? ? ? TxnFees = 0),\n? ? ? ? ?type='enter',\n? ? ? ? ?label='longenter',\n? ? ? ? ?enabled=FALSE\n\n)\n\n\n# Long Exit Rule-------------------------------------------------------------------\nadd.rule(strategy.st,\n? ? ? ? ?name='ruleSignal',\n? ? ? ? ?arguments = list(sigcol=\"macd.lt.signal\",\n? ? ? ? ? ? ? ? ? ? ? ? ? sigval=TRUE,\n? ? ? ? ? ? ? ? ? ? ? ? ? prefer=\"Open\",?\n? ? ? ? ? ? ? ? ? ? ? ? ? orderqty='all',\n? ? ? ? ? ? ? ? ? ? ? ? ? ordertype='market',\n? ? ? ? ? ? ? ? ? ? ? ? ? orderside='long',\n? ? ? ? ? ? ? ? ? ? ? ? ? orderset='ocolong',\n? ? ? ? ? ? ? ? ? ? ? ? ? TxnFees = 0),\n? ? ? ? ?type='exit',\n? ? ? ? ?label='longexit',\n? ? ? ? ?enabled=FALSE\n\n)\n\n\n\n\n\n\n# Long Take Profit Rule\nTakeProfitDistanceRANGE <- seq(1,5,by=4)\nlongTakeProfitDistance <- TakeProfitDistanceRANGE[1]\n\n\nadd.rule(strategy.st, name = \"ruleSignal\",\n? ? ? ? ?arguments = list(sigcol=\"macd.lt.signal\",\n? ? ? ? ? ? ? ? ? ? ? ? ? sigval=TRUE,\n? ? ? ? ? ? ? ? ? ? ? ? ? ordertype=\"limit\",\n? ? ? ? ? ? ? ? ? ? ? ? ? orderside=\"long\",\n? ? ? ? ? ? ? ? ? ? ? ? ? replace=FALSE,\n? ? ? ? ? ? ? ? ? ? ? ? ? tmult=FALSE,\n? ? ? ? ? ? ? ? ? ? ? ? ? threshold=quote(longTakeProfitDistance),?\n? ? ? ? ? ? ? ? ? ? ? ? ? orderqty=\"all\",\n? ? ? ? ? ? ? ? ? ? ? ? ? orderset=\"ocolong\",\n? ? ? ? ? ? ? ? ? ? ? ? ? TxnFees = 0),\n? ? ? ? ?type = \"chain\",?\n? ? ? ? ?parent=\"longenter\",\n? ? ? ? ?label = \"TakeProfitLong\",\n? ? ? ? ?enabled = FALSE\n)\n\n\n\n\n\n\n#Optimization----------------------------------------------------\nparamset.label.name <- \"MACD_OPT\"\nmacdSignalRANGE <- ? seq(50,100,by=10)\n\n\n\n\n#MACD Signal Distribution\nadd.distribution(strategy.st,\n? ? ? ? ? ? ? ? ?paramset.label = paramset.label.name,\n? ? ? ? ? ? ? ? ?component.type = 'indicator',\n? ? ? ? ? ? ? ? ?component.label = \"macd\",\n? ? ? ? ? ? ? ? ?variable = list( nSig = macdSignalRANGE ),\n? ? ? ? ? ? ? ? ?label = \"macdSignalRANGE\")\n\n\n#Long Take Profit Optimization\nadd.distribution(strategy.st,\n? ? ? ? ? ? ? ? ?paramset.label = paramset.label.name,\n? ? ? ? ? ? ? ? ?component.type = \"chain\",\n? ? ? ? ? ? ? ? ?component.label = \"TakeProfitLong\",\n? ? ? ? ? ? ? ? ?variable = list( threshold = TakeProfitDistanceRANGE ),\n? ? ? ? ? ? ? ? ?label = \"TakeProfitLONG\")\n\n\n#Long TP On/Off\nadd.distribution( strategy=strategy.st,\n? ? ? ? ? ? ? ? ? paramset.label = paramset.label.name,\n? ? ? ? ? ? ? ? ? component.type = 'chain',\n? ? ? ? ? ? ? ? ? component.label = 'TakeProfitLong',\n? ? ? ? ? ? ? ? ? variable = list(enabled = c(TRUE,FALSE)),\n? ? ? ? ? ? ? ? ? label = 'TPOnOff'\n)\n\n\n\n\nenable.rule(strategy.st,type=\"enter\",label=\"longenter\", enable = TRUE)?\nenable.rule(strategy.st,type=\"exit\",label=\"longexit\", enable = TRUE)\nenable.rule(strategy.st,type=\"chain\",label=\"TakeProfitLong\", enable = TRUE)\nsummary(getStrategy(strategy.st)) ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?\n\n\n\n\nif (Sys.info()[\"sysname\"] == \"Windows\"){\n? library(doSNOW)\n? cl <- makeCluster(4)\n\n? registerDoSNOW(cl) ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ??\n}\nif(Sys.info()[\"sysname\"] == \"Linux\") {\n? library(doMC)\n? registerDoMC(cores=4)\n? getDoParWorkers()\n}\n\n\nresults <- apply.paramset(strategy.st,\n? ? ? ? ? ? ? ? ? ? ? ? ? paramset.label=paramset.label.name,\n? ? ? ? ? ? ? ? ? ? ? ? ? portfolio=strategy.st,?\n? ? ? ? ? ? ? ? ? ? ? ? ? account=strategy.st,\n? ? ? ? ? ? ? ? ? ? ? ? ? nsamples=0,\n? ? ? ? ? ? ? ? ? ? ? ? ? verbose = TRUE,\n? ? ? ? ? ? ? ? ? ? ? ? ? calc = \"slave\")\n\n\nif(Sys.info()[\"sysname\"] == \"Windows\"){ ?snow::stopCluster(cl) }\n\n\nresults.df <- data.frame(results$tradeStats)",
+      "body_plain": "Tried doing a simple MACD Long-only strategy but couldn't manage to get it working. The take profit rule doesn't seem to work as well, since changing its threshold does not affect the net pnl. Below is a minimal (as much as I could) reproducible code:\n\n\n#AAPL google finance data\n#MACD cross\n\n\nlibrary(quantmod)\nlibrary(xts)\nlibrary(quantstrat)\n\n\ngetSymbols(\"AAPL\", src = \"google\")\nplot(Cl(AAPL))\n\n\n.strategy <- new.env()\n.blotter  <- new.env()   ? ? ? ? ? ? ? ? ? ? ? ? ?\n\n\ncurrency('USD')\nstock(\"AAPL\", currency=\"USD\", multiplier=1,tick_size= 0.01)\n\n\nstrategy.st <- \"reproducible_strategy\"\nrm.strat(strategy.st)   ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?\n\n\ninitDate = as.character(as.Date(index(AAPL[1])-1))   ? ? ? ? ? ? ? ?  \ninitPortf(strategy.st, \n  ? ? ?   \"AAPL\", \n  ? ? ?   initDate=initDate, \n  ? ? ?   currency = \"USD\")\ninitAcct(strategy.st, \n  ? ?    portfolios=strategy.st, \n  ? ?    initDate=initDate, \n  ? ?    initEq=1000, \n  ? ?    currency = \"USD\")\ninitOrders(portfolio=strategy.st,\n  ? ? ?    initDate=initDate)   ? ? ? ? ? ? ? ? ? ?   \nstrategy(strategy.st,store=TRUE)\n\n\ntxn.model <- 0\n\n\nadd.indicator(strategy.st,  \n? ? ? ? ? ?   name = \"MACD\", \n  ? ? ? ? ?   arguments = list(x=Cl(AAPL)), \n  ? ? ? ? ?   label='macd') \n\n\nadd.signal(strategy.st,name=\"sigCrossover\",\n  ? ? ?    arguments = list(columns=c(\"macd.macd\",\"signal.macd\"),\n  ? ? ? ? ? ? ? ? ? ? ? ?   relationship=\"gt\"),\n  ? ? ?    label=\"macd.gt.signal\") \n\n\nadd.signal(strategy.st,name=\"sigCrossover\",\n  ? ? ?    arguments = list(columns=c(\"macd.macd\",\"signal.macd\"),\n  ? ? ? ? ? ? ? ? ? ? ? ?   relationship=\"lt\"),\n  ? ? ?    label=\"macd.lt.signal\")\n\n\n# Long Entry Rule-----------------------------------------------------------------------------\nadd.rule(strategy.st,\n  ? ?    name='ruleSignal',\n  ? ?    arguments = list(sigcol=\"macd.gt.signal\",\n  ? ? ? ? ? ? ? ? ? ? ?   sigval=TRUE,\n  ? ? ? ? ? ? ? ? ? ? ?   prefer=\"Open\", \n  ? ? ? ? ? ? ? ? ? ? ?   orderqty= 10, \n\n? ? ? ? ? ? ? ? ? ? ? ?   ordertype='market',\n  ? ? ? ? ? ? ? ? ? ? ?   orderside='long',\n  ? ? ? ? ? ? ? ? ? ? ?   orderset='ocolong',\n  ? ? ? ? ? ? ? ? ? ? ?   TxnFees = 0),\n  ? ?    type='enter',\n  ? ?    label='longenter',\n  ? ?    enabled=FALSE\n\n)\n\n\n# Long Exit Rule-------------------------------------------------------------------\nadd.rule(strategy.st,\n  ? ?    name='ruleSignal',\n  ? ?    arguments = list(sigcol=\"macd.lt.signal\",\n  ? ? ? ? ? ? ? ? ? ? ?   sigval=TRUE,\n  ? ? ? ? ? ? ? ? ? ? ?   prefer=\"Open\", \n  ? ? ? ? ? ? ? ? ? ? ?   orderqty='all',\n  ? ? ? ? ? ? ? ? ? ? ?   ordertype='market',\n  ? ? ? ? ? ? ? ? ? ? ?   orderside='long',\n  ? ? ? ? ? ? ? ? ? ? ?   orderset='ocolong',\n  ? ? ? ? ? ? ? ? ? ? ?   TxnFees = 0),\n  ? ?    type='exit',\n  ? ?    label='longexit',\n  ? ?    enabled=FALSE\n\n)\n\n\n\n\n\n\n# Long Take Profit Rule\nTakeProfitDistanceRANGE <- seq(1,5,by=4)\nlongTakeProfitDistance <- TakeProfitDistanceRANGE[1]\n\n\nadd.rule(strategy.st, name = \"ruleSignal\",\n  ? ?    arguments = list(sigcol=\"macd.lt.signal\",\n  ? ? ? ? ? ? ? ? ? ? ?   sigval=TRUE,\n  ? ? ? ? ? ? ? ? ? ? ?   ordertype=\"limit\",\n  ? ? ? ? ? ? ? ? ? ? ?   orderside=\"long\",\n  ? ? ? ? ? ? ? ? ? ? ?   replace=FALSE,\n  ? ? ? ? ? ? ? ? ? ? ?   tmult=FALSE,\n  ? ? ? ? ? ? ? ? ? ? ?   threshold=quote(longTakeProfitDistance), \n  ? ? ? ? ? ? ? ? ? ? ?   orderqty=\"all\",\n  ? ? ? ? ? ? ? ? ? ? ?   orderset=\"ocolong\",\n  ? ? ? ? ? ? ? ? ? ? ?   TxnFees = 0),\n  ? ?    type = \"chain\", \n  ? ?    parent=\"longenter\",\n  ? ?    label = \"TakeProfitLong\",\n  ? ?    enabled = FALSE\n)\n\n\n\n\n\n\n#Optimization----------------------------------------------------\nparamset.label.name <- \"MACD_OPT\"\nmacdSignalRANGE <-   seq(50,100,by=10)\n\n\n\n\n#MACD Signal Distribution\nadd.distribution(strategy.st,\n  ? ? ? ? ? ?    paramset.label = paramset.label.name,\n  ? ? ? ? ? ?    component.type = 'indicator',\n  ? ? ? ? ? ?    component.label = \"macd\",\n  ? ? ? ? ? ?    variable = list( nSig = macdSignalRANGE ),\n  ? ? ? ? ? ?    label = \"macdSignalRANGE\")\n\n\n#Long Take Profit Optimization\nadd.distribution(strategy.st,\n  ? ? ? ? ? ?    paramset.label = paramset.label.name,\n  ? ? ? ? ? ?    component.type = \"chain\",\n  ? ? ? ? ? ?    component.label = \"TakeProfitLong\",\n  ? ? ? ? ? ?    variable = list( threshold = TakeProfitDistanceRANGE ),\n  ? ? ? ? ? ?    label = \"TakeProfitLONG\")\n\n\n#Long TP On/Off\nadd.distribution( strategy=strategy.st,\n  ? ? ? ? ? ? ?   paramset.label = paramset.label.name,\n  ? ? ? ? ? ? ?   component.type = 'chain',\n  ? ? ? ? ? ? ?   component.label = 'TakeProfitLong',\n  ? ? ? ? ? ? ?   variable = list(enabled = c(TRUE,FALSE)),\n  ? ? ? ? ? ? ?   label = 'TPOnOff'\n)\n\n\n\n\nenable.rule(strategy.st,type=\"enter\",label=\"longenter\", enable = TRUE) \nenable.rule(strategy.st,type=\"exit\",label=\"longexit\", enable = TRUE)\nenable.rule(strategy.st,type=\"chain\",label=\"TakeProfitLong\", enable = TRUE)\nsummary(getStrategy(strategy.st))   ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?\n\n\n\n\nif (Sys.info()[\"sysname\"] == \"Windows\"){\n  library(doSNOW)\n  cl <- makeCluster(4)\n\n  registerDoSNOW(cl)   ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? \n}\nif(Sys.info()[\"sysname\"] == \"Linux\") {\n  library(doMC)\n  registerDoMC(cores=4)\n  getDoParWorkers()\n}\n\n\nresults <- apply.paramset(strategy.st,\n  ? ? ? ? ? ? ? ? ? ? ?   paramset.label=paramset.label.name,\n  ? ? ? ? ? ? ? ? ? ? ?   portfolio=strategy.st, \n  ? ? ? ? ? ? ? ? ? ? ?   account=strategy.st,\n  ? ? ? ? ? ? ? ? ? ? ?   nsamples=0,\n  ? ? ? ? ? ? ? ? ? ? ?   verbose = TRUE,\n  ? ? ? ? ? ? ? ? ? ? ?   calc = \"slave\")\n\n\nif(Sys.info()[\"sysname\"] == \"Windows\"){  snow::stopCluster(cl) }\n\n\nresults.df <- data.frame(results$tradeStats)",
       "body_snippet": "Tried doing a simple MACD Long-only strategy but couldn't manage to get it working. The take profit rule doesn't seem to work as well, since changing its threshold does not affect the net pnl. Below i",
       "thread_id": "thread-adb9a327c9b9",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014353.html"
     },
     {
       "id": "msg-c44179624442",
@@ -1360,7 +1432,8 @@
       "body_snippet": "________________________________\nFrom: Atakan Okan <atakanokan at outlook.com>\nSent: Saturday, May 27, 2017 9:11 PM\nTo: r-sig-finance at r-project.org\nSubject: Adding \"Stoploss disabled\" to the parame",
       "thread_id": "thread-adb9a327c9b9",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014354.html"
     },
     {
       "id": "msg-c4a9d60f33a4",
@@ -1376,7 +1449,8 @@
       "body_snippet": "Hello all,\n\nI am trying to backtest  a long/short portfolio using Return.Portfolio but\nam running into some sort of error, or I do not fully understand how to use\nreturn.portfolio.\n\nFor a quarterly re",
       "thread_id": "thread-c4a9d60f33a4",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014355.html"
     },
     {
       "id": "msg-1b66a7fc7b2b",
@@ -1392,7 +1466,8 @@
       "body_snippet": "Zitat von Michael Ashton <m.ashton at enduringinvestments.com>:\n\n> I'm not sure how to ask this with the proper terminology, but here goes:\n>\n> The BDH() function in RBLPAPI returns, for a list of sym",
       "thread_id": "thread-5e22e10f4f5f",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014356.html"
     },
     {
       "id": "msg-f75e5a9cc633",
@@ -1410,7 +1485,8 @@
       "body_snippet": "On 05/29/2017 02:32 AM, ROUX, Nicolas wrote:\n> Hello all,\n>\n> I am trying to backtest  a long/short portfolio using Return.Portfolio\n> but am running into some sort of error, or I do not fully underst",
       "thread_id": "thread-c4a9d60f33a4",
       "thread_depth": 1,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014357.html"
     },
     {
       "id": "msg-10b5cbf2f386",
@@ -1429,7 +1505,8 @@
       "body_snippet": "Weights need to sum to 1 at every period. Create a dummy asset with return\nof 0 and assign it a weight of 1 - rowSum(weights) and things will work.\n\nOn Mon, May 29, 2017 at 5:49 AM, Brian G. Peterson ",
       "thread_id": "thread-c4a9d60f33a4",
       "thread_depth": 2,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014358.html"
     },
     {
       "id": "msg-18559f3a0bd6",
@@ -1449,7 +1526,8 @@
       "body_snippet": "Hi,\n\nSo if all the assets are shorted in one period and sum of the weights\nequals -1 (as was the case in my example but hidden columns), the dummy\nvariable's weight is 2?\n\nThanks,\n\nNicolas\n\nOn 29 May ",
       "thread_id": "thread-c4a9d60f33a4",
       "thread_depth": 3,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014359.html"
     },
     {
       "id": "msg-0b73d8757d3b",
@@ -1470,7 +1548,8 @@
       "body_snippet": "Correct.\n\nOn Mon, May 29, 2017 at 10:50 AM, ROUX, Nicolas <nicolas.roux at hec.edu>\nwrote:\n\n> Hi,\n>\n> So if all the assets are shorted in one period and sum of the weights\n> equals -1 (as was the case",
       "thread_id": "thread-c4a9d60f33a4",
       "thread_depth": 4,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014360.html"
     },
     {
       "id": "msg-ec9567aa899f",
@@ -1486,7 +1565,8 @@
       "body_snippet": "Hi all,\n\nI was playing around with the nonparametric entropy pooling approach\nfrom Meucci to integrate external views (EntropyProg() in\nPortfolioAnalytics).\n\nWhile in theory the approach looks very ap",
       "thread_id": "thread-ec9567aa899f",
       "thread_depth": 0,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014361.html"
     },
     {
       "id": "msg-d48e9dea0b54",
@@ -1504,11 +1584,12 @@
         "<253B4FA1ECEEB54DB661809CB6773455F69B67F9@NOR-EXC01.northview.local>",
         "<B7B14D24-408F-4F8D-A7AC-976D403B864F@gmail.com>"
       ],
-      "body_plain": "Hi Robert,\nThank you for your feedback. I don?t disagree with you. There must be a (positive) time value in the option in order to have an implied volatility. But the implied volatility is function of the model (pricing engine).\nI now think the problem is located to the engine=\"BaroneAdesiWhaley\" when risk free rate is negative.\n\nLet me take another approach by calculating the premium for the same option (with the same parameter) using an arbitrary volatility of 30% (below I paste the example) so using directly the option valuation to calculate the premium I will get\n\nOption intrinsic value = 14.49957\nEuropeanOption = 14.5019 => this is expected:  very little time value due to deep in-the-money and little time before expiration\nAmericanOption, engine=\"CrankNicolson\"= 14.5019 => it is floored to European option value but the early exercise has no value as rate is negative\nAmericanOption, engine=\"BaroneAdesiWhaley\" = error message => this is not expected\n\n ?Error in americanOptionEngine(type, underlying, strike, dividendYield,  : forward + displacement (-8.68397e+012 + 0) must be positive?\n\nI suspect here the engine=\"BaroneAdesiWhaley\" does not behave well under a negative rate. I don?t have this error when rate is positive. Adding a positive (and higher) dividend yield does not help either which isolate the problem to the rate side.\nMy understanding of BAW approximation for non-dividend American put is that it is not optimal to exercise when rates are negative (negative carry) and thus should default to the European option value.\n\nRegards\n\nReplication in R\n\nlibrary(RQuantLib)\nstrike = 65\nSpot= 50.5\nRate = -0.00361\nDividendYield = 0\nVolatility = 0.3\nYearToMaturity = 3/365\n\n(strike-Spot)*exp((Rate-DividendYield)*YearToMaturity) # intrinsic value\nEuropeanOption(\"put\", Spot, strike,DividendYield, Rate,YearToMaturity, Volatility)\nAmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity, Volatility,timeSteps=150, gridPoints=149, engine=\"CrankNicolson\")\nAmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity, Volatility,timeSteps=150, gridPoints=149, engine=\"BaroneAdesiWhaley\") # error\n\n\n\nFrom: Robert Harlow [mailto:rharlow86 at gmail.com]\nSent: Saturday, May 27, 2017 6:10 AM\nTo: Charles Duranceau\nCc: r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] RQuantLib: AmericanOptionImpliedVolatility bug\n\nDoesn't the error message say root not bracketed? That is informative because it means there is no root, or no implied volatility, that gives you back your price of 14.5- this is what you should expect given your inputs.  In order for a volatility to exist an option must have a positive time value.\n\nBob\n\nOn May 26, 2017, at 6:55 PM, Charles Duranceau <cduranceau at nial.ky<mailto:cduranceau at nial.ky>> wrote:\nThank you Robert,\nI agree with you this is an extreme case and I don?t expect too much accuracy from the implied volatility I get, but my concern was more about the error message (a NA would have been more desirable)\nBy changing the engine I managed a workaround but I thought RQL team (or someone else having the same problem) could be interested with that non-desirable behavior.\n\nRegards\n\n\nFrom: Robert Harlow [mailto:rharlow86 at gmail.com]\nSent: Friday, May 26, 2017 3:32 PM\nTo: Charles Duranceau\nCc: r-sig-finance at r-project.org<mailto:r-sig-finance at r-project.org>\nSubject: Re: [R-SIG-Finance] RQuantLib: AmericanOptionImpliedVolatility bug\n\nCharles, my suggestion (which I doubt you will like) is to wrap your calls to implied volatility root finders (quant lib or any others) in a try block that returns NA on error.  Your example (very little or no time value) can be common if you are using mid prices from bid-ask quotes.  Note that when you plug the answer from your sum of squares root finding routine back into AmericanOption you get a value slightly above 14.5.\n\nOn Fri, May 26, 2017 at 11:46 AM, Charles Duranceau <cduranceau at nial.ky<mailto:cduranceau at nial.ky>> wrote:\nHi,\n\nI found a problem with the function \"AmericanOptionImpliedVolatility\" in RQantLib which return an error for a specific set of conditions (but cannot identifies exactly what are these).\nI present a case related to a short term, very deep in-the-money put with negative interest rate that generate error message. I present a reproducible example below.\nI found the related function \"AmericanOption\" with default produce similar error when use in a routine to back-out the implied volatility.\nHowever, I found good result (no error)  when using the engine=\"CrankNicolson\" :  a na?ve routine for backing-out the implied vol with this function return a volatility.\nThere's a work around but think this information may add more stability to RQL.\n\nBest Regards\nCharles\n\n\nCase\nRQuantLib Version 4.2\n\nR version 3.3.2 (64bits)\n\nlibrary(RQuantLib)\n\nprice = 14.5\nstrike = 65\nSpot= 50.5\nRate = -0.00361\nDividendYield = 0\nVolatility = 0.296\nYearToMaturity = 3/365\n\n# error when Implied Vol\nAmericanOptionImpliedVolatility(\"put\", price,Spot, strike, DividendYield, Rate,YearToMaturity, Volatility)\n\nError in americanOptionImpliedVolatilityEngine(type, value, underlying,  :\n\n../../../QuantLib-1.6.2/ql/math/solver1d.hpp:202: In function `QuantLib::Real QuantLib::Solver1D<Impl>::solve(const F&, QuantLib::Real, QuantLib::Real, QuantLib::Real, QuantLib::Real) const [with F = QuantLib::{anonymous}::PriceError; Impl = QuantLib::Brent; QuantLib::Real = double]':\nroot not bracketed: f[1e-007,4] -> [1.955446e-003,3.006858e+000]\n\n#also generate error\nAmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity, Volatility)\n\n# works well\nAmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity, Volatility,timeSteps=150, gridPoints=149, engine=\"CrankNicolson\")\n# backing out the implied vol naively works\nfImpliedVol(Volatility,price,\"put\", Spot, strike, DividendYield, Rate,YearToMaturity)\n\n\nfImpliedVol<-function(iniVol,Premium,Callput, Spot, Strike, DivYield, Rate,YrtoMat){\n  ftm<-function(ImpVol,Premium,Callput, Spot, Strike, DivYield, Rate,YrtoMat, iVol)\n  {\n    ov<-AmericanOption(type=Callput, underlying=Spot, strike=Strike,dividendYield=DivYield, riskFreeRate=Rate, maturity=YrtoMat,volatility=ImpVol,\n                       timeSteps=150, gridPoints=149, engine= \"CrankNicolson\")\n    er<-(Premium-ov$value)^2\n  }\n  imp<-optimize(f=ftm,c(lower = 0, upper = 1.5), tol = 1e-4,Premium,Callput,Spot, Strike, DivYield, Rate,YrtoMat)\n  return(imp$minimum)\n}\n\n> sessionInfo()\nR version 3.3.2 (2016-10-31)\nPlatform: x86_64-w64-mingw32/x64 (64-bit)\nRunning under: Windows >= 8 x64 (build 9200)\n\nlocale:\n[1] LC_COLLATE=English_United States.1252  LC_CTYPE=English_United States.1252    LC_MONETARY=English_United States.1252\n[4] LC_NUMERIC=C                           LC_TIME=English_United States.1252\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base\n\nother attached packages:\n[1] RQuantLib_0.4.3 dplyr_0.5.0\n\nloaded via a namespace (and not attached):\n[1] zoo_1.8-0        magrittr_1.5     R6_2.1.2         assertthat_0.2.0 DBI_0.6-1        tools_3.3.2      tibble_1.0       Rcpp_0.12.10\n [9] grid_3.3.2       lattice_0.20-34\n\n\n>\n\n\n\n\n        [[alternative HTML version deleted]]\n\n\n_______________________________________________\nR-SIG-Finance at r-project.org<mailto:R-SIG-Finance at r-project.org> mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\n\t[[alternative HTML version deleted]]",
-      "body_snippet": "Hi Robert,\nThank you for your feedback. I don?t disagree with you. There must be a (positive) time value in the option in order to have an implied volatility. But the implied volatility is function of",
+      "body_plain": "Hi Robert,\nThank you for your feedback. I don’t disagree with you. There must be a (positive) time value in the option in order to have an implied volatility. But the implied volatility is function of the model (pricing engine).\nI now think the problem is located to the engine=\"BaroneAdesiWhaley\" when risk free rate is negative.\n\nLet me take another approach by calculating the premium for the same option (with the same parameter) using an arbitrary volatility of 30% (below I paste the example) so using directly the option valuation to calculate the premium I will get\n\nOption intrinsic value = 14.49957\nEuropeanOption = 14.5019 => this is expected:  very little time value due to deep in-the-money and little time before expiration\nAmericanOption, engine=\"CrankNicolson\"= 14.5019 => it is floored to European option value but the early exercise has no value as rate is negative\nAmericanOption, engine=\"BaroneAdesiWhaley\" = error message => this is not expected\n\n “Error in americanOptionEngine(type, underlying, strike, dividendYield,  : forward + displacement (-8.68397e+012 + 0) must be positive”\n\nI suspect here the engine=\"BaroneAdesiWhaley\" does not behave well under a negative rate. I don’t have this error when rate is positive. Adding a positive (and higher) dividend yield does not help either which isolate the problem to the rate side.\nMy understanding of BAW approximation for non-dividend American put is that it is not optimal to exercise when rates are negative (negative carry) and thus should default to the European option value.\n\nRegards\n\nReplication in R\n\nlibrary(RQuantLib)\nstrike = 65\nSpot= 50.5\nRate = -0.00361\nDividendYield = 0\nVolatility = 0.3\nYearToMaturity = 3/365\n\n(strike-Spot)*exp((Rate-DividendYield)*YearToMaturity) # intrinsic value\nEuropeanOption(\"put\", Spot, strike,DividendYield, Rate,YearToMaturity, Volatility)\nAmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity, Volatility,timeSteps=150, gridPoints=149, engine=\"CrankNicolson\")\nAmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity, Volatility,timeSteps=150, gridPoints=149, engine=\"BaroneAdesiWhaley\") # error\n\n\n\nFrom: Robert Harlow [mailto:rharlow86 at gmail.com]\nSent: Saturday, May 27, 2017 6:10 AM\nTo: Charles Duranceau\nCc: r-sig-finance at r-project.org\nSubject: Re: [R-SIG-Finance] RQuantLib: AmericanOptionImpliedVolatility bug\n\nDoesn't the error message say root not bracketed? That is informative because it means there is no root, or no implied volatility, that gives you back your price of 14.5- this is what you should expect given your inputs.  In order for a volatility to exist an option must have a positive time value.\n\nBob\n\nOn May 26, 2017, at 6:55 PM, Charles Duranceau <cduranceau at nial.ky<mailto:cduranceau at nial.ky>> wrote:\nThank you Robert,\nI agree with you this is an extreme case and I don’t expect too much accuracy from the implied volatility I get, but my concern was more about the error message (a NA would have been more desirable)\nBy changing the engine I managed a workaround but I thought RQL team (or someone else having the same problem) could be interested with that non-desirable behavior.\n\nRegards\n\n\nFrom: Robert Harlow [mailto:rharlow86 at gmail.com]\nSent: Friday, May 26, 2017 3:32 PM\nTo: Charles Duranceau\nCc: r-sig-finance at r-project.org<mailto:r-sig-finance at r-project.org>\nSubject: Re: [R-SIG-Finance] RQuantLib: AmericanOptionImpliedVolatility bug\n\nCharles, my suggestion (which I doubt you will like) is to wrap your calls to implied volatility root finders (quant lib or any others) in a try block that returns NA on error.  Your example (very little or no time value) can be common if you are using mid prices from bid-ask quotes.  Note that when you plug the answer from your sum of squares root finding routine back into AmericanOption you get a value slightly above 14.5.\n\nOn Fri, May 26, 2017 at 11:46 AM, Charles Duranceau <cduranceau at nial.ky<mailto:cduranceau at nial.ky>> wrote:\nHi,\n\nI found a problem with the function \"AmericanOptionImpliedVolatility\" in RQantLib which return an error for a specific set of conditions (but cannot identifies exactly what are these).\nI present a case related to a short term, very deep in-the-money put with negative interest rate that generate error message. I present a reproducible example below.\nI found the related function \"AmericanOption\" with default produce similar error when use in a routine to back-out the implied volatility.\nHowever, I found good result (no error)  when using the engine=\"CrankNicolson\" :  a naïve routine for backing-out the implied vol with this function return a volatility.\nThere's a work around but think this information may add more stability to RQL.\n\nBest Regards\nCharles\n\n\nCase\nRQuantLib Version 4.2\n\nR version 3.3.2 (64bits)\n\nlibrary(RQuantLib)\n\nprice = 14.5\nstrike = 65\nSpot= 50.5\nRate = -0.00361\nDividendYield = 0\nVolatility = 0.296\nYearToMaturity = 3/365\n\n# error when Implied Vol\nAmericanOptionImpliedVolatility(\"put\", price,Spot, strike, DividendYield, Rate,YearToMaturity, Volatility)\n\nError in americanOptionImpliedVolatilityEngine(type, value, underlying,  :\n\n../../../QuantLib-1.6.2/ql/math/solver1d.hpp:202: In function `QuantLib::Real QuantLib::Solver1D<Impl>::solve(const F&, QuantLib::Real, QuantLib::Real, QuantLib::Real, QuantLib::Real) const [with F = QuantLib::{anonymous}::PriceError; Impl = QuantLib::Brent; QuantLib::Real = double]':\nroot not bracketed: f[1e-007,4] -> [1.955446e-003,3.006858e+000]\n\n#also generate error\nAmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity, Volatility)\n\n# works well\nAmericanOption(\"put\", Spot, strike, DividendYield, Rate,YearToMaturity, Volatility,timeSteps=150, gridPoints=149, engine=\"CrankNicolson\")\n# backing out the implied vol naively works\nfImpliedVol(Volatility,price,\"put\", Spot, strike, DividendYield, Rate,YearToMaturity)\n\n\nfImpliedVol<-function(iniVol,Premium,Callput, Spot, Strike, DivYield, Rate,YrtoMat){\n  ftm<-function(ImpVol,Premium,Callput, Spot, Strike, DivYield, Rate,YrtoMat, iVol)\n  {\n    ov<-AmericanOption(type=Callput, underlying=Spot, strike=Strike,dividendYield=DivYield, riskFreeRate=Rate, maturity=YrtoMat,volatility=ImpVol,\n                       timeSteps=150, gridPoints=149, engine= \"CrankNicolson\")\n    er<-(Premium-ov$value)^2\n  }\n  imp<-optimize(f=ftm,c(lower = 0, upper = 1.5), tol = 1e-4,Premium,Callput,Spot, Strike, DivYield, Rate,YrtoMat)\n  return(imp$minimum)\n}\n\n> sessionInfo()\nR version 3.3.2 (2016-10-31)\nPlatform: x86_64-w64-mingw32/x64 (64-bit)\nRunning under: Windows >= 8 x64 (build 9200)\n\nlocale:\n[1] LC_COLLATE=English_United States.1252  LC_CTYPE=English_United States.1252    LC_MONETARY=English_United States.1252\n[4] LC_NUMERIC=C                           LC_TIME=English_United States.1252\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base\n\nother attached packages:\n[1] RQuantLib_0.4.3 dplyr_0.5.0\n\nloaded via a namespace (and not attached):\n[1] zoo_1.8-0        magrittr_1.5     R6_2.1.2         assertthat_0.2.0 DBI_0.6-1        tools_3.3.2      tibble_1.0       Rcpp_0.12.10\n [9] grid_3.3.2       lattice_0.20-34\n\n\n>\n\n\n\n\n        [[alternative HTML version deleted]]\n\n\n_______________________________________________\nR-SIG-Finance at r-project.org<mailto:R-SIG-Finance at r-project.org> mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance<https://stat.ethz.ch/mailman/listinfo/r-sig-finance>\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.\n\n\n\t[[alternative HTML version deleted]]",
+      "body_snippet": "Hi Robert,\nThank you for your feedback. I don’t disagree with you. There must be a (positive) time value in the option in order to have an implied volatility. But the implied volatility is function of",
       "thread_id": "thread-df8db05ab73b",
       "thread_depth": 4,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014362.html"
     },
     {
       "id": "msg-6af6c995ee14",
@@ -1529,7 +1610,8 @@
       "body_snippet": "Hi Terry,\nThe settlement delay drives the accruals calculation, not the (clean) bond price.\nIn practical term, if you possess that bond the day before it matures you need to mark it as of that date (v",
       "thread_id": "thread-b52c4624cb9f",
       "thread_depth": 4,
-      "month": "2017-05"
+      "month": "2017-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q2/014363.html"
     }
   ],
   "threads": [

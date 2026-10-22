@@ -19,7 +19,8 @@
       "body_snippet": "The rgarch package on r-forge already implements this functionality.\n\nCheck here for download locations:\nhttp://rgarch.r-forge.r-project.org/download.html\n\nSee the ugarchspec function for details.\n\n-A",
       "thread_id": "thread-83d4a68feec8",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006103.html"
     },
     {
       "id": "msg-9a24d4b668cc",
@@ -35,7 +36,8 @@
       "body_snippet": "Hi everyone,\n\nI am a recent graduate from IIT Chicago and have completed my MS\ndegree in finance (with concentrations in financial engineering,\ninvestment management and trading). I am currently looki",
       "thread_id": "thread-9a24d4b668cc",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006105.html"
     },
     {
       "id": "msg-95e004c931fb",
@@ -53,7 +55,8 @@
       "body_snippet": "Thanks for reporting this. I'll have a look.\n\nOn Sat, May 1, 2010 at 1:45 AM, Kyle Matoba <kmmatoba at stanford.edu> wrote:\n> Wanted to raise this in case it wasn't known (its version 1.1.8):\n>\n>> lib",
       "thread_id": "thread-95e004c931fb",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006106.html"
     },
     {
       "id": "msg-272a9040963d",
@@ -73,6 +76,7 @@
       "thread_id": "thread-272a9040963d",
       "thread_depth": 0,
       "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006107.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100503/700e8d71/attachment.pl"
       ]
@@ -91,11 +95,12 @@
         "<111060c21001270608i6c2e773dwe15e47f07a076dcd@mail.gmail.com>",
         "<COL124-W23C3C519F82969834C7A30E5F20@phx.gbl>"
       ],
-      "body_plain": "karla hernandez villafuerte a ?crit :\n> Hi!\n>  \n> I have taken your recomendation and I am trying to apply the \n> methodology suggested by Kejriwal and Perron in the paper \"Testing for \n> Multiple Structural Changes in Cointegrated Regression Models\". I \n> think that if I use the \"strucchange\" package and the function \n> \"breakpoints\", I will get the break points and dates with the same \n> methodology described in the paper.\ntrue. So the good news for this paper is that all the estimation part is \nalready available thanks to the strucchange pkg\n>  \n> In order to prove if the number of breaks found by the \"breakpoint\" \n> function is significant I want to apply the sup-Wald test. I am not \n> sure if a normal supWald test is correct of if I need to implement \n> some kind of modifications. In my case all the coefficients are \n> allowed to change. I send you the program that I am using.\nI feel you will need to look more precisely into the paper:\n-KP don't use fluctuation if I remember well, no?\n-the test statistic (here wald test) is right, but they use also \nmodified forms  in case of autocorellation or endogeneity\n-the critical values have to be taken from their paper\n\nHope this helps\n\nMatthieu\n>  \n> > ##BREAKS POINTS CALCULATION\n> >\n> > lrun\n>\n> YX[, 1] ~ YX[, 2] + dattowork[, 1] + 0\n> >\n> > #Empirical Fluctuation process\n> > flproc <- efp(lrun, type = \"RE\")\n> > print(sctest(flproc))\n>  \n>         RE test (recursive estimates test)\n> data:  flproc\n> RE = 3.6801, p-value = 6.893e-12\n>  \n> > #Bai and Perron\n> > breaks<-breakpoints(lrun, h = 0.15, breaks = 3, hpc = c(\"none\"))\n> > print(breaks)\n>          Optimal 4-segment partition:\n> Call:\n> breakpoints.formula(formula = lrun, h = 0.15, breaks = 3, hpc = c(\"none\"))\n> Breakpoints at observation number:\n> 54 127 155\n> Corresponding to breakdates:\n> 1994(7) 2000(8) 2002(12)\n>\n> > dummy<-ts(rep(1,length(YXSR[,1])),start=startlag,frequency=12)\n> > dummy1<-dummy; \n> dummy1[breaks$breakpoints[1]:(breaks$breakpoints[2]-1)]<-0\n> > dummy2<-dummy; \n> dummy2[breaks$breakpoints[2]:(breaks$breakpoints[3]-1)]<-0\n> > lrunbreak<-update.formula(lrun, . ~ . + dummy1 + dummy2)\n> > longrbreak<-dyn$lm(lrunbreak)\n>\n> > Waldt<-wald.test(vcov(longrbreak), longrbreak$coefficients, Terms=3:4)\n> > print(Waldt)\n> Wald test:\n> ----------\n> Chi-squared test:\n> X2 = 28.0, df = 2, P(> X2) = 8.2e-07\n>\n>  \n> In advance thank you for your help!,\n>  \n>  \n> Karla Hern?ndez\n>  \n>  \n>  \n>  \n>  \n>  \n>  \n>\n>  \n> ------------------------------------------------------------------------\n> Date: Wed, 27 Jan 2010 15:08:05 +0100\n> Subject: Re: [R-SIG-Finance] Cointegration, more than one structural break\n> From: matthieu.stigler at gmail.com\n> To: karlavhv142 at hotmail.com\n> CC: r-sig-finance at stat.math.ethz.ch\n>\n> Hi\n>\n> Testing for multiple breaks in the cointegration framewk is \n> unfortunately for now not possible in R.\n>\n> For one break, you have a test in the urca/vars package, as well as \n> the Gregory Hansen Test (I had implemented it so I can send once raw \n> code if needed).\n>\n> If you want to implement a test for multiple breaks in cointegration, \n> have a look at the work of Kejriwal and Perron.\n>\n> Hope this helps\n>\n> Mat\n>\n>\n>\n> 2010/1/25 karla hernandez villafuerte <karlavhv142 at hotmail.com \n> <mailto:karlavhv142 at hotmail.com>>\n>\n>\n>\n>\n>     Dear Members:\n>\n>\n>\n>     I want to analyse the cointegration rank using the Engle and\n>     Granger methodology and taking into account the presence of more\n>     than one structural break in the long run relation.\n>\n>     I can not find how to do that using R. If some one have a\n>     suggestion I would be very glad.\n>\n>\n>\n>     Thank you!\n>\n>\n>\n>     Karla H.\n>\n>     _________________________________________________________________\n>\n>\n>            [[alternative HTML version deleted]]\n>\n>     _______________________________________________\n>     R-SIG-Finance at stat.math.ethz.ch\n>     <mailto:R-SIG-Finance at stat.math.ethz.ch> mailing list\n>     https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>     -- Subscriber-posting only. If you want to post, subscribe first.\n>     -- Also note that this is not the r-help list where general R\n>     questions should go.\n>\n>\n>\n> ------------------------------------------------------------------------\n> Con Hotmail hay una forma muy f?cil de encontrar tus emails: \n> organ?zalos por carpetas. Conoce c?mo \n> <http://www.descubrewindowslive.com/hotmail/organizacion.asp>",
-      "body_snippet": "karla hernandez villafuerte a ?crit :\n> Hi!\n>  \n> I have taken your recomendation and I am trying to apply the \n> methodology suggested by Kejriwal and Perron in the paper \"Testing for \n> Multiple Str",
+      "body_plain": "karla hernandez villafuerte a écrit :\n> Hi!\n>  \n> I have taken your recomendation and I am trying to apply the \n> methodology suggested by Kejriwal and Perron in the paper \"Testing for \n> Multiple Structural Changes in Cointegrated Regression Models\". I \n> think that if I use the \"strucchange\" package and the function \n> \"breakpoints\", I will get the break points and dates with the same \n> methodology described in the paper.\ntrue. So the good news for this paper is that all the estimation part is \nalready available thanks to the strucchange pkg\n>  \n> In order to prove if the number of breaks found by the \"breakpoint\" \n> function is significant I want to apply the sup-Wald test. I am not \n> sure if a normal supWald test is correct of if I need to implement \n> some kind of modifications. In my case all the coefficients are \n> allowed to change. I send you the program that I am using.\nI feel you will need to look more precisely into the paper:\n-KP don't use fluctuation if I remember well, no?\n-the test statistic (here wald test) is right, but they use also \nmodified forms  in case of autocorellation or endogeneity\n-the critical values have to be taken from their paper\n\nHope this helps\n\nMatthieu\n>  \n> > ##BREAKS POINTS CALCULATION\n> >\n> > lrun\n>\n> YX[, 1] ~ YX[, 2] + dattowork[, 1] + 0\n> >\n> > #Empirical Fluctuation process\n> > flproc <- efp(lrun, type = \"RE\")\n> > print(sctest(flproc))\n>  \n>         RE test (recursive estimates test)\n> data:  flproc\n> RE = 3.6801, p-value = 6.893e-12\n>  \n> > #Bai and Perron\n> > breaks<-breakpoints(lrun, h = 0.15, breaks = 3, hpc = c(\"none\"))\n> > print(breaks)\n>          Optimal 4-segment partition:\n> Call:\n> breakpoints.formula(formula = lrun, h = 0.15, breaks = 3, hpc = c(\"none\"))\n> Breakpoints at observation number:\n> 54 127 155\n> Corresponding to breakdates:\n> 1994(7) 2000(8) 2002(12)\n>\n> > dummy<-ts(rep(1,length(YXSR[,1])),start=startlag,frequency=12)\n> > dummy1<-dummy; \n> dummy1[breaks$breakpoints[1]:(breaks$breakpoints[2]-1)]<-0\n> > dummy2<-dummy; \n> dummy2[breaks$breakpoints[2]:(breaks$breakpoints[3]-1)]<-0\n> > lrunbreak<-update.formula(lrun, . ~ . + dummy1 + dummy2)\n> > longrbreak<-dyn$lm(lrunbreak)\n>\n> > Waldt<-wald.test(vcov(longrbreak), longrbreak$coefficients, Terms=3:4)\n> > print(Waldt)\n> Wald test:\n> ----------\n> Chi-squared test:\n> X2 = 28.0, df = 2, P(> X2) = 8.2e-07\n>\n>  \n> In advance thank you for your help!,\n>  \n>  \n> Karla Hernández\n>  \n>  \n>  \n>  \n>  \n>  \n>  \n>\n>  \n> ------------------------------------------------------------------------\n> Date: Wed, 27 Jan 2010 15:08:05 +0100\n> Subject: Re: [R-SIG-Finance] Cointegration, more than one structural break\n> From: matthieu.stigler at gmail.com\n> To: karlavhv142 at hotmail.com\n> CC: r-sig-finance at stat.math.ethz.ch\n>\n> Hi\n>\n> Testing for multiple breaks in the cointegration framewk is \n> unfortunately for now not possible in R.\n>\n> For one break, you have a test in the urca/vars package, as well as \n> the Gregory Hansen Test (I had implemented it so I can send once raw \n> code if needed).\n>\n> If you want to implement a test for multiple breaks in cointegration, \n> have a look at the work of Kejriwal and Perron.\n>\n> Hope this helps\n>\n> Mat\n>\n>\n>\n> 2010/1/25 karla hernandez villafuerte <karlavhv142 at hotmail.com \n> <mailto:karlavhv142 at hotmail.com>>\n>\n>\n>\n>\n>     Dear Members:\n>\n>\n>\n>     I want to analyse the cointegration rank using the Engle and\n>     Granger methodology and taking into account the presence of more\n>     than one structural break in the long run relation.\n>\n>     I can not find how to do that using R. If some one have a\n>     suggestion I would be very glad.\n>\n>\n>\n>     Thank you!\n>\n>\n>\n>     Karla H.\n>\n>     _________________________________________________________________\n>\n>\n>            [[alternative HTML version deleted]]\n>\n>     _______________________________________________\n>     R-SIG-Finance at stat.math.ethz.ch\n>     <mailto:R-SIG-Finance at stat.math.ethz.ch> mailing list\n>     https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>     -- Subscriber-posting only. If you want to post, subscribe first.\n>     -- Also note that this is not the r-help list where general R\n>     questions should go.\n>\n>\n>\n> ------------------------------------------------------------------------\n> Con Hotmail hay una forma muy fácil de encontrar tus emails: \n> organízalos por carpetas. Conoce cómo \n> <http://www.descubrewindowslive.com/hotmail/organizacion.asp>",
+      "body_snippet": "karla hernandez villafuerte a écrit :\n> Hi!\n>  \n> I have taken your recomendation and I am trying to apply the \n> methodology suggested by Kejriwal and Perron in the paper \"Testing for \n> Multiple Str",
       "thread_id": "thread-272a9040963d",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006108.html"
     },
     {
       "id": "msg-963024824485",
@@ -111,7 +116,8 @@
       "body_snippet": "Dear useRs,\n\nPlease help me find the ideal candidates for 2 R programming consulting\npositions at XLSolutions Corp. \n\nThe job entails building custom applications for our end users. R\nprogramming is v",
       "thread_id": "thread-963024824485",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006109.html"
     },
     {
       "id": "msg-2464a45f9890",
@@ -129,11 +135,12 @@
         "<4BD96BC0.5070907@braverock.com>",
         "<260117.97523.qm@web23405.mail.ird.yahoo.com>"
       ],
-      "body_plain": "It seems like the error occurs when you run updatePortf() for a date where one of the symbols are not defined. So TE_N9 doesn't have a row for the date '2009-01-02' which is causing this error. I guess this will happen often as there might be holidays or non trading days which might be different for different symbols (maybe trading on different exchanges, etc..).  Are there any work-arounds to this problem?\n\nAlso is it possible to add or remove symbols to a portfolio object later than initPortf? \n\nThanks\n\n\n Wolfgang Wu\n\n\n\n----- Urspr?ngliche Mail ----\nVon: Wolfgang Wu <wobwu22 at yahoo.de>\nAn: Brian G. Peterson <brian at braverock.com>; R SIG Finance <R-SIG-Finance at stat.math.ethz.ch>\nGesendet: Donnerstag, den 29. April 2010, 14:44:32 Uhr\nBetreff: Re: [R-SIG-Finance] Blotter - Setting up a futures_series\n\nSorry for being a pain in the neck but I've got another problem\n\nWhen running the folloing code I get the error when I call updatePortf(): Error in if (!all(i <= 0)) stop(\"only zeros may be mixed with negative subscripts\") : \n  missing value where TRUE/FALSE needed\n\n#Example\nlibrary(FinancialInstrument)\nlibrary(blotter)\ncurrency(\"USD\", multiplier=1);    \nfuture(\"TE\", \"USD\", 1000)\nfuture_series(\"TE\", \"M9\", \"2009-01-02\", \"2009-01-03\")\nfuture_series(\"TE\", \"N9\", \"2009-01-03\", \"2009-01-04\")\n\nTE_M9 <- xts(rbind(cbind(54.28, 55.92, 53.57, 55.73, 78959, 1), cbind(55.50, 55.70, 54.38, 55.63,  75464, 2)), order.by=as.Date(c(\"2009-01-02\", \"2009-01-03\")))\ncolnames(TE_M9) <- c(\"Open\",\"High\",\"Low\",\"Close\",\"Volume\", \"OpenInterest\");\n\nTE_N9 <- xts(rbind(cbind(54.28, 55.92, 53.57, 55.73, 78959, 1), cbind(55.50, 55.70, 54.38, 55.63,  75464, 2)), order.by=as.Date(c(\"2009-01-03\", \"2009-01-04\")))\ncolnames(TE_N9) <- c(\"Open\",\"High\",\"Low\",\"Close\",\"Volume\", \"OpenInterest\");\n\ninitPortf(name='fPortfolio', symbols = c('TE_M9', 'TE_N9'), initPosQty = 0, initDate='2009-01-01')\ninitAcct(name='fAccount',portfolios='fPortfolio', initDate='2009-01-01', initEq=10000000);\naddTxn('fPortfolio', Symbol='TE_M9', TxnDate=\"2009-01-02\", TxnPrice=55, TxnQty=100, TxnFees=0, verbose=TRUE);\nupdatePortf(Portfolio='fPortfolio', Dates = \"2009-01-02\");\n#-----------------------------------------------\n\nAny idea what I am doing wrong or where the problem is?\n\nThanks!!\n\nWolfgang Wu\n\n\n\n----- Urspr?ngliche Mail ----\nVon: Brian G. Peterson <brian at braverock.com>\nAn: Wolfgang Wu <wobwu22 at yahoo.de>; R SIG Finance <R-SIG-Finance at stat.math.ethz.ch>\nGesendet: Donnerstag, den 29. April 2010, 12:21:36 Uhr\nBetreff: Re: AW: [R-SIG-Finance] Blotter - Setting up a futures_series\n\nOn 04/29/2010 02:15 AM, Wolfgang Wu wrote:\n> Understood.\n>\n> But in order to mark the book at some point you will need historical data of the contracts. How is the link from the contract specifications, using the future() and future_series() functions to the actual\n> historical data. What would be the equivalent to the example of a stock like this:\n>\n> #Defined the stock as financial instrument\n> stock(\"GSPC\",currency=\"USD\",multiplier=1)\n> #Get the historical data for variable with name \"GSPC\"\n> getSymbols('^GSPC', src='yahoo', index.class=c(\"POSIXt\",\"POSIXct\"),from='1998-01-01')\n>\n> Assuming I have the time series for CLM9 and CLN9 in an xts format\n>    \n\n\nFinancialInstrument uses an underscore to separate the root symbol \n(primary_id) from the series symbol (suffix_id).  In your example, this \nmeans that your historical contract series data should be named\n\nCL_M9\nCL_N9\n\nSo that the blotter code can find them (blotter follows the quantmod \nconvention of naming market data for the instrument)\n\nyou can see this by doing\n\nls(pos=.instrument)\n\nwhich will show you the environment where the instrument definition \nobjects are kept.\n\nRegards,\n\n   - Brian\n\n\n> CLM9\n>              Open  High   Low Close Volume OpenInterest\n> 2009-03-23 54.28 55.92 53.57 55.73  78959       187205\n> 2009-03-24 55.50 55.70 54.38 55.63  75464       190182\n> 2009-03-25 55.35 55.58 53.50 54.19 119624       198422\n> ...\n> 2009-05-19 59.16 60.48 58.55 59.65  40957         1838\n>\n> and\n>\n> CLN9\n>              Open  High   Low Close Volume OpenInterest\n> 2009-04-22 50.95 51.14 49.72 50.70  95249       178023\n> 2009-04-23 50.38 51.38 50.09 51.07  90781       181605\n> 2009-04-24 51.13 53.09 50.40 52.94  70061       187690\n> ...\n> 2009-06-22 69.89 69.89 66.25 66.93  32070         4299\n>\n> Regards,\n>\n>\n>   Wolfgang Wu\n>\n>\n>\n> ----- Urspr?ngliche Mail ----\n> Von: Brian G. Peterson<brian at braverock.com>\n> An: Wolfgang Wu<wobwu22 at yahoo.de>\n> CC: R SIG Finance<R-SIG-Finance at stat.math.ethz.ch>\n> Gesendet: Donnerstag, den 29. April 2010, 0:28:48 Uhr\n> Betreff: Re: [R-SIG-Finance] Blotter - Setting up a futures_series\n>\n> Wolfgang Wu wrote:\n>    \n>> Hello,\n>>\n>> I am playing around with blotter and am trying to set up several futures contracts. So assume I've got data for the crude oil future CL. I want to set up futures for the June 09 and July 09 contract.\n>> What I've done is the following:\n>>\n>> currency(\"USD\", multiplier=1);    future(\"CL\", \"USD\", 1000, identifiers=c(\"CLM9\", \"CLN9\"))\n>> future_series(\"CL\", \"M9\", \"2009-03-23\", \"2009-05-19\")\n>> future_series(\"CL\", \"N9\", \"2009-04-22\", \"2009-06-22\")\n>>\n>>\n>> 1.) How do I link the future to the future_series? I assume this is by using the primary_id, correct?\n>>      \n> correct\n>\n>    \n>> 2.) What do I specify in the identifiers in the futures function?\n>>      \n> anything or nothing at all.  identifiers are for other symbols, e.g. Bloomberg, Reuters, etc.  In your example, I would probably not add identifiers to the main contract.\n>\n>    \n>> 3.) What is the multiplier in the future mean? Is it the value for one tick or for one point? So for oil one tick is 10 USD and one point move is 1000 USD.\n>>      \n> 'point value' in your terminology.  It is used to get from the price to the notional value in the listed currency.  I'll probably add tick value to the model later this week.\n>\n>    \n>> Thanks!!!\n>>      \n> You're welcome.\n>\n> Regards,\n>\n>     - Brian\n>\n>    \n>> Wolfgang Wu\n>>\n>>\n>>\n>> _______________________________________________\n>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n>>      \n>\n> -- Brian G. Peterson\n> http://braverock.com/brian/\n> Ph: 773-459-4973\n> IM: bgpbraverock\n>\n>\n>\n>    \n\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock\n\n\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.",
+      "body_plain": "It seems like the error occurs when you run updatePortf() for a date where one of the symbols are not defined. So TE_N9 doesn't have a row for the date '2009-01-02' which is causing this error. I guess this will happen often as there might be holidays or non trading days which might be different for different symbols (maybe trading on different exchanges, etc..).  Are there any work-arounds to this problem?\n\nAlso is it possible to add or remove symbols to a portfolio object later than initPortf? \n\nThanks\n\n\n Wolfgang Wu\n\n\n\n----- Ursprüngliche Mail ----\nVon: Wolfgang Wu <wobwu22 at yahoo.de>\nAn: Brian G. Peterson <brian at braverock.com>; R SIG Finance <R-SIG-Finance at stat.math.ethz.ch>\nGesendet: Donnerstag, den 29. April 2010, 14:44:32 Uhr\nBetreff: Re: [R-SIG-Finance] Blotter - Setting up a futures_series\n\nSorry for being a pain in the neck but I've got another problem\n\nWhen running the folloing code I get the error when I call updatePortf(): Error in if (!all(i <= 0)) stop(\"only zeros may be mixed with negative subscripts\") : \n  missing value where TRUE/FALSE needed\n\n#Example\nlibrary(FinancialInstrument)\nlibrary(blotter)\ncurrency(\"USD\", multiplier=1);    \nfuture(\"TE\", \"USD\", 1000)\nfuture_series(\"TE\", \"M9\", \"2009-01-02\", \"2009-01-03\")\nfuture_series(\"TE\", \"N9\", \"2009-01-03\", \"2009-01-04\")\n\nTE_M9 <- xts(rbind(cbind(54.28, 55.92, 53.57, 55.73, 78959, 1), cbind(55.50, 55.70, 54.38, 55.63,  75464, 2)), order.by=as.Date(c(\"2009-01-02\", \"2009-01-03\")))\ncolnames(TE_M9) <- c(\"Open\",\"High\",\"Low\",\"Close\",\"Volume\", \"OpenInterest\");\n\nTE_N9 <- xts(rbind(cbind(54.28, 55.92, 53.57, 55.73, 78959, 1), cbind(55.50, 55.70, 54.38, 55.63,  75464, 2)), order.by=as.Date(c(\"2009-01-03\", \"2009-01-04\")))\ncolnames(TE_N9) <- c(\"Open\",\"High\",\"Low\",\"Close\",\"Volume\", \"OpenInterest\");\n\ninitPortf(name='fPortfolio', symbols = c('TE_M9', 'TE_N9'), initPosQty = 0, initDate='2009-01-01')\ninitAcct(name='fAccount',portfolios='fPortfolio', initDate='2009-01-01', initEq=10000000);\naddTxn('fPortfolio', Symbol='TE_M9', TxnDate=\"2009-01-02\", TxnPrice=55, TxnQty=100, TxnFees=0, verbose=TRUE);\nupdatePortf(Portfolio='fPortfolio', Dates = \"2009-01-02\");\n#-----------------------------------------------\n\nAny idea what I am doing wrong or where the problem is?\n\nThanks!!\n\nWolfgang Wu\n\n\n\n----- Ursprüngliche Mail ----\nVon: Brian G. Peterson <brian at braverock.com>\nAn: Wolfgang Wu <wobwu22 at yahoo.de>; R SIG Finance <R-SIG-Finance at stat.math.ethz.ch>\nGesendet: Donnerstag, den 29. April 2010, 12:21:36 Uhr\nBetreff: Re: AW: [R-SIG-Finance] Blotter - Setting up a futures_series\n\nOn 04/29/2010 02:15 AM, Wolfgang Wu wrote:\n> Understood.\n>\n> But in order to mark the book at some point you will need historical data of the contracts. How is the link from the contract specifications, using the future() and future_series() functions to the actual\n> historical data. What would be the equivalent to the example of a stock like this:\n>\n> #Defined the stock as financial instrument\n> stock(\"GSPC\",currency=\"USD\",multiplier=1)\n> #Get the historical data for variable with name \"GSPC\"\n> getSymbols('^GSPC', src='yahoo', index.class=c(\"POSIXt\",\"POSIXct\"),from='1998-01-01')\n>\n> Assuming I have the time series for CLM9 and CLN9 in an xts format\n>    \n\n\nFinancialInstrument uses an underscore to separate the root symbol \n(primary_id) from the series symbol (suffix_id).  In your example, this \nmeans that your historical contract series data should be named\n\nCL_M9\nCL_N9\n\nSo that the blotter code can find them (blotter follows the quantmod \nconvention of naming market data for the instrument)\n\nyou can see this by doing\n\nls(pos=.instrument)\n\nwhich will show you the environment where the instrument definition \nobjects are kept.\n\nRegards,\n\n   - Brian\n\n\n> CLM9\n>              Open  High   Low Close Volume OpenInterest\n> 2009-03-23 54.28 55.92 53.57 55.73  78959       187205\n> 2009-03-24 55.50 55.70 54.38 55.63  75464       190182\n> 2009-03-25 55.35 55.58 53.50 54.19 119624       198422\n> ...\n> 2009-05-19 59.16 60.48 58.55 59.65  40957         1838\n>\n> and\n>\n> CLN9\n>              Open  High   Low Close Volume OpenInterest\n> 2009-04-22 50.95 51.14 49.72 50.70  95249       178023\n> 2009-04-23 50.38 51.38 50.09 51.07  90781       181605\n> 2009-04-24 51.13 53.09 50.40 52.94  70061       187690\n> ...\n> 2009-06-22 69.89 69.89 66.25 66.93  32070         4299\n>\n> Regards,\n>\n>\n>   Wolfgang Wu\n>\n>\n>\n> ----- Ursprüngliche Mail ----\n> Von: Brian G. Peterson<brian at braverock.com>\n> An: Wolfgang Wu<wobwu22 at yahoo.de>\n> CC: R SIG Finance<R-SIG-Finance at stat.math.ethz.ch>\n> Gesendet: Donnerstag, den 29. April 2010, 0:28:48 Uhr\n> Betreff: Re: [R-SIG-Finance] Blotter - Setting up a futures_series\n>\n> Wolfgang Wu wrote:\n>    \n>> Hello,\n>>\n>> I am playing around with blotter and am trying to set up several futures contracts. So assume I've got data for the crude oil future CL. I want to set up futures for the June 09 and July 09 contract.\n>> What I've done is the following:\n>>\n>> currency(\"USD\", multiplier=1);    future(\"CL\", \"USD\", 1000, identifiers=c(\"CLM9\", \"CLN9\"))\n>> future_series(\"CL\", \"M9\", \"2009-03-23\", \"2009-05-19\")\n>> future_series(\"CL\", \"N9\", \"2009-04-22\", \"2009-06-22\")\n>>\n>>\n>> 1.) How do I link the future to the future_series? I assume this is by using the primary_id, correct?\n>>      \n> correct\n>\n>    \n>> 2.) What do I specify in the identifiers in the futures function?\n>>      \n> anything or nothing at all.  identifiers are for other symbols, e.g. Bloomberg, Reuters, etc.  In your example, I would probably not add identifiers to the main contract.\n>\n>    \n>> 3.) What is the multiplier in the future mean? Is it the value for one tick or for one point? So for oil one tick is 10 USD and one point move is 1000 USD.\n>>      \n> 'point value' in your terminology.  It is used to get from the price to the notional value in the listed currency.  I'll probably add tick value to the model later this week.\n>\n>    \n>> Thanks!!!\n>>      \n> You're welcome.\n>\n> Regards,\n>\n>     - Brian\n>\n>    \n>> Wolfgang Wu\n>>\n>>\n>>\n>> _______________________________________________\n>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n>>      \n>\n> -- Brian G. Peterson\n> http://braverock.com/brian/\n> Ph: 773-459-4973\n> IM: bgpbraverock\n>\n>\n>\n>    \n\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock\n\n\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.",
       "body_snippet": "It seems like the error occurs when you run updatePortf() for a date where one of the symbols are not defined. So TE_N9 doesn't have a row for the date '2009-01-02' which is causing this error. I gues",
       "thread_id": "thread-2464a45f9890",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006110.html"
     },
     {
       "id": "msg-155c3058011d",
@@ -152,11 +159,12 @@
         "<260117.97523.qm@web23405.mail.ird.yahoo.com>",
         "<42510.32835.qm@web23403.mail.ird.yahoo.com>"
       ],
-      "body_plain": "Wolfgang Wu wrote:\n> It seems like the error occurs when you run updatePortf() for a date where one of the symbols are not defined. So TE_N9 doesn't have a row for the date '2009-01-02' which is causing this error. I guess this will happen often as there might be holidays or non trading days which might be different for different symbols (maybe trading on different exchanges, etc..).  Are there any work-arounds to this problem?\n\nThat sounds like a bug.  I'll check and fix it to make sure updatePortf won't \ntry to update a particular instrument beyond it's last traded date.  Ideally, \nthe historical instrument data will be tested with 'try' and a warning rather \nthan a fatal error will be generated.  I'll try to get to it tomorrow or over \nthe weekend.\n\n> Also is it possible to add or remove symbols to a portfolio object later than initPortf? \n\nOn the list of functions to write...  contributed functions welcome.\n\nRegards,\n\n    - Brian\n\n> Thanks\n> \n> \n>  Wolfgang Wu\n> \n> \n> \n> ----- Urspr?ngliche Mail ----\n> Von: Wolfgang Wu <wobwu22 at yahoo.de>\n> An: Brian G. Peterson <brian at braverock.com>; R SIG Finance <R-SIG-Finance at stat.math.ethz.ch>\n> Gesendet: Donnerstag, den 29. April 2010, 14:44:32 Uhr\n> Betreff: Re: [R-SIG-Finance] Blotter - Setting up a futures_series\n> \n> Sorry for being a pain in the neck but I've got another problem\n> \n> When running the folloing code I get the error when I call updatePortf(): Error in if (!all(i <= 0)) stop(\"only zeros may be mixed with negative subscripts\") : \n>   missing value where TRUE/FALSE needed\n> \n> #Example\n> library(FinancialInstrument)\n> library(blotter)\n> currency(\"USD\", multiplier=1);    \n> future(\"TE\", \"USD\", 1000)\n> future_series(\"TE\", \"M9\", \"2009-01-02\", \"2009-01-03\")\n> future_series(\"TE\", \"N9\", \"2009-01-03\", \"2009-01-04\")\n> \n> TE_M9 <- xts(rbind(cbind(54.28, 55.92, 53.57, 55.73, 78959, 1), cbind(55.50, 55.70, 54.38, 55.63,  75464, 2)), order.by=as.Date(c(\"2009-01-02\", \"2009-01-03\")))\n> colnames(TE_M9) <- c(\"Open\",\"High\",\"Low\",\"Close\",\"Volume\", \"OpenInterest\");\n> \n> TE_N9 <- xts(rbind(cbind(54.28, 55.92, 53.57, 55.73, 78959, 1), cbind(55.50, 55.70, 54.38, 55.63,  75464, 2)), order.by=as.Date(c(\"2009-01-03\", \"2009-01-04\")))\n> colnames(TE_N9) <- c(\"Open\",\"High\",\"Low\",\"Close\",\"Volume\", \"OpenInterest\");\n> \n> initPortf(name='fPortfolio', symbols = c('TE_M9', 'TE_N9'), initPosQty = 0, initDate='2009-01-01')\n> initAcct(name='fAccount',portfolios='fPortfolio', initDate='2009-01-01', initEq=10000000);\n> addTxn('fPortfolio', Symbol='TE_M9', TxnDate=\"2009-01-02\", TxnPrice=55, TxnQty=100, TxnFees=0, verbose=TRUE);\n> updatePortf(Portfolio='fPortfolio', Dates = \"2009-01-02\");\n> #-----------------------------------------------\n> \n> Any idea what I am doing wrong or where the problem is?\n> \n> Thanks!!\n> \n> Wolfgang Wu\n> \n> \n> \n> ----- Urspr?ngliche Mail ----\n> Von: Brian G. Peterson <brian at braverock.com>\n> An: Wolfgang Wu <wobwu22 at yahoo.de>; R SIG Finance <R-SIG-Finance at stat.math.ethz.ch>\n> Gesendet: Donnerstag, den 29. April 2010, 12:21:36 Uhr\n> Betreff: Re: AW: [R-SIG-Finance] Blotter - Setting up a futures_series\n> \n> On 04/29/2010 02:15 AM, Wolfgang Wu wrote:\n>> Understood.\n>>\n>> But in order to mark the book at some point you will need historical data of the contracts. How is the link from the contract specifications, using the future() and future_series() functions to the actual\n>> historical data. What would be the equivalent to the example of a stock like this:\n>>\n>> #Defined the stock as financial instrument\n>> stock(\"GSPC\",currency=\"USD\",multiplier=1)\n>> #Get the historical data for variable with name \"GSPC\"\n>> getSymbols('^GSPC', src='yahoo', index.class=c(\"POSIXt\",\"POSIXct\"),from='1998-01-01')\n>>\n>> Assuming I have the time series for CLM9 and CLN9 in an xts format\n>>    \n> \n> \n> FinancialInstrument uses an underscore to separate the root symbol \n> (primary_id) from the series symbol (suffix_id).  In your example, this \n> means that your historical contract series data should be named\n> \n> CL_M9\n> CL_N9\n> \n> So that the blotter code can find them (blotter follows the quantmod \n> convention of naming market data for the instrument)\n> \n> you can see this by doing\n> \n> ls(pos=.instrument)\n> \n> which will show you the environment where the instrument definition \n> objects are kept.\n> \n> Regards,\n> \n>    - Brian\n> \n> \n>> CLM9\n>>              Open  High   Low Close Volume OpenInterest\n>> 2009-03-23 54.28 55.92 53.57 55.73  78959       187205\n>> 2009-03-24 55.50 55.70 54.38 55.63  75464       190182\n>> 2009-03-25 55.35 55.58 53.50 54.19 119624       198422\n>> ...\n>> 2009-05-19 59.16 60.48 58.55 59.65  40957         1838\n>>\n>> and\n>>\n>> CLN9\n>>              Open  High   Low Close Volume OpenInterest\n>> 2009-04-22 50.95 51.14 49.72 50.70  95249       178023\n>> 2009-04-23 50.38 51.38 50.09 51.07  90781       181605\n>> 2009-04-24 51.13 53.09 50.40 52.94  70061       187690\n>> ...\n>> 2009-06-22 69.89 69.89 66.25 66.93  32070         4299\n>>\n>> Regards,\n>>\n>>\n>>   Wolfgang Wu\n>>\n>>\n>>\n>> ----- Urspr?ngliche Mail ----\n>> Von: Brian G. Peterson<brian at braverock.com>\n>> An: Wolfgang Wu<wobwu22 at yahoo.de>\n>> CC: R SIG Finance<R-SIG-Finance at stat.math.ethz.ch>\n>> Gesendet: Donnerstag, den 29. April 2010, 0:28:48 Uhr\n>> Betreff: Re: [R-SIG-Finance] Blotter - Setting up a futures_series\n>>\n>> Wolfgang Wu wrote:\n>>    \n>>> Hello,\n>>>\n>>> I am playing around with blotter and am trying to set up several futures contracts. So assume I've got data for the crude oil future CL. I want to set up futures for the June 09 and July 09 contract.\n>>> What I've done is the following:\n>>>\n>>> currency(\"USD\", multiplier=1);    future(\"CL\", \"USD\", 1000, identifiers=c(\"CLM9\", \"CLN9\"))\n>>> future_series(\"CL\", \"M9\", \"2009-03-23\", \"2009-05-19\")\n>>> future_series(\"CL\", \"N9\", \"2009-04-22\", \"2009-06-22\")\n>>>\n>>>\n>>> 1.) How do I link the future to the future_series? I assume this is by using the primary_id, correct?\n>>>      \n>> correct\n>>\n>>    \n>>> 2.) What do I specify in the identifiers in the futures function?\n>>>      \n>> anything or nothing at all.  identifiers are for other symbols, e.g. Bloomberg, Reuters, etc.  In your example, I would probably not add identifiers to the main contract.\n>>\n>>    \n>>> 3.) What is the multiplier in the future mean? Is it the value for one tick or for one point? So for oil one tick is 10 USD and one point move is 1000 USD.\n>>>      \n>> 'point value' in your terminology.  It is used to get from the price to the notional value in the listed currency.  I'll probably add tick value to the model later this week.\n>>\n>>    \n>>> Thanks!!!\n>>>      \n>> You're welcome.\n>>\n>> Regards,\n>>\n>>     - Brian\n>>\n>>    \n>>> Wolfgang Wu\n\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
+      "body_plain": "Wolfgang Wu wrote:\n> It seems like the error occurs when you run updatePortf() for a date where one of the symbols are not defined. So TE_N9 doesn't have a row for the date '2009-01-02' which is causing this error. I guess this will happen often as there might be holidays or non trading days which might be different for different symbols (maybe trading on different exchanges, etc..).  Are there any work-arounds to this problem?\n\nThat sounds like a bug.  I'll check and fix it to make sure updatePortf won't \ntry to update a particular instrument beyond it's last traded date.  Ideally, \nthe historical instrument data will be tested with 'try' and a warning rather \nthan a fatal error will be generated.  I'll try to get to it tomorrow or over \nthe weekend.\n\n> Also is it possible to add or remove symbols to a portfolio object later than initPortf? \n\nOn the list of functions to write...  contributed functions welcome.\n\nRegards,\n\n    - Brian\n\n> Thanks\n> \n> \n>  Wolfgang Wu\n> \n> \n> \n> ----- Ursprüngliche Mail ----\n> Von: Wolfgang Wu <wobwu22 at yahoo.de>\n> An: Brian G. Peterson <brian at braverock.com>; R SIG Finance <R-SIG-Finance at stat.math.ethz.ch>\n> Gesendet: Donnerstag, den 29. April 2010, 14:44:32 Uhr\n> Betreff: Re: [R-SIG-Finance] Blotter - Setting up a futures_series\n> \n> Sorry for being a pain in the neck but I've got another problem\n> \n> When running the folloing code I get the error when I call updatePortf(): Error in if (!all(i <= 0)) stop(\"only zeros may be mixed with negative subscripts\") : \n>   missing value where TRUE/FALSE needed\n> \n> #Example\n> library(FinancialInstrument)\n> library(blotter)\n> currency(\"USD\", multiplier=1);    \n> future(\"TE\", \"USD\", 1000)\n> future_series(\"TE\", \"M9\", \"2009-01-02\", \"2009-01-03\")\n> future_series(\"TE\", \"N9\", \"2009-01-03\", \"2009-01-04\")\n> \n> TE_M9 <- xts(rbind(cbind(54.28, 55.92, 53.57, 55.73, 78959, 1), cbind(55.50, 55.70, 54.38, 55.63,  75464, 2)), order.by=as.Date(c(\"2009-01-02\", \"2009-01-03\")))\n> colnames(TE_M9) <- c(\"Open\",\"High\",\"Low\",\"Close\",\"Volume\", \"OpenInterest\");\n> \n> TE_N9 <- xts(rbind(cbind(54.28, 55.92, 53.57, 55.73, 78959, 1), cbind(55.50, 55.70, 54.38, 55.63,  75464, 2)), order.by=as.Date(c(\"2009-01-03\", \"2009-01-04\")))\n> colnames(TE_N9) <- c(\"Open\",\"High\",\"Low\",\"Close\",\"Volume\", \"OpenInterest\");\n> \n> initPortf(name='fPortfolio', symbols = c('TE_M9', 'TE_N9'), initPosQty = 0, initDate='2009-01-01')\n> initAcct(name='fAccount',portfolios='fPortfolio', initDate='2009-01-01', initEq=10000000);\n> addTxn('fPortfolio', Symbol='TE_M9', TxnDate=\"2009-01-02\", TxnPrice=55, TxnQty=100, TxnFees=0, verbose=TRUE);\n> updatePortf(Portfolio='fPortfolio', Dates = \"2009-01-02\");\n> #-----------------------------------------------\n> \n> Any idea what I am doing wrong or where the problem is?\n> \n> Thanks!!\n> \n> Wolfgang Wu\n> \n> \n> \n> ----- Ursprüngliche Mail ----\n> Von: Brian G. Peterson <brian at braverock.com>\n> An: Wolfgang Wu <wobwu22 at yahoo.de>; R SIG Finance <R-SIG-Finance at stat.math.ethz.ch>\n> Gesendet: Donnerstag, den 29. April 2010, 12:21:36 Uhr\n> Betreff: Re: AW: [R-SIG-Finance] Blotter - Setting up a futures_series\n> \n> On 04/29/2010 02:15 AM, Wolfgang Wu wrote:\n>> Understood.\n>>\n>> But in order to mark the book at some point you will need historical data of the contracts. How is the link from the contract specifications, using the future() and future_series() functions to the actual\n>> historical data. What would be the equivalent to the example of a stock like this:\n>>\n>> #Defined the stock as financial instrument\n>> stock(\"GSPC\",currency=\"USD\",multiplier=1)\n>> #Get the historical data for variable with name \"GSPC\"\n>> getSymbols('^GSPC', src='yahoo', index.class=c(\"POSIXt\",\"POSIXct\"),from='1998-01-01')\n>>\n>> Assuming I have the time series for CLM9 and CLN9 in an xts format\n>>    \n> \n> \n> FinancialInstrument uses an underscore to separate the root symbol \n> (primary_id) from the series symbol (suffix_id).  In your example, this \n> means that your historical contract series data should be named\n> \n> CL_M9\n> CL_N9\n> \n> So that the blotter code can find them (blotter follows the quantmod \n> convention of naming market data for the instrument)\n> \n> you can see this by doing\n> \n> ls(pos=.instrument)\n> \n> which will show you the environment where the instrument definition \n> objects are kept.\n> \n> Regards,\n> \n>    - Brian\n> \n> \n>> CLM9\n>>              Open  High   Low Close Volume OpenInterest\n>> 2009-03-23 54.28 55.92 53.57 55.73  78959       187205\n>> 2009-03-24 55.50 55.70 54.38 55.63  75464       190182\n>> 2009-03-25 55.35 55.58 53.50 54.19 119624       198422\n>> ...\n>> 2009-05-19 59.16 60.48 58.55 59.65  40957         1838\n>>\n>> and\n>>\n>> CLN9\n>>              Open  High   Low Close Volume OpenInterest\n>> 2009-04-22 50.95 51.14 49.72 50.70  95249       178023\n>> 2009-04-23 50.38 51.38 50.09 51.07  90781       181605\n>> 2009-04-24 51.13 53.09 50.40 52.94  70061       187690\n>> ...\n>> 2009-06-22 69.89 69.89 66.25 66.93  32070         4299\n>>\n>> Regards,\n>>\n>>\n>>   Wolfgang Wu\n>>\n>>\n>>\n>> ----- Ursprüngliche Mail ----\n>> Von: Brian G. Peterson<brian at braverock.com>\n>> An: Wolfgang Wu<wobwu22 at yahoo.de>\n>> CC: R SIG Finance<R-SIG-Finance at stat.math.ethz.ch>\n>> Gesendet: Donnerstag, den 29. April 2010, 0:28:48 Uhr\n>> Betreff: Re: [R-SIG-Finance] Blotter - Setting up a futures_series\n>>\n>> Wolfgang Wu wrote:\n>>    \n>>> Hello,\n>>>\n>>> I am playing around with blotter and am trying to set up several futures contracts. So assume I've got data for the crude oil future CL. I want to set up futures for the June 09 and July 09 contract.\n>>> What I've done is the following:\n>>>\n>>> currency(\"USD\", multiplier=1);    future(\"CL\", \"USD\", 1000, identifiers=c(\"CLM9\", \"CLN9\"))\n>>> future_series(\"CL\", \"M9\", \"2009-03-23\", \"2009-05-19\")\n>>> future_series(\"CL\", \"N9\", \"2009-04-22\", \"2009-06-22\")\n>>>\n>>>\n>>> 1.) How do I link the future to the future_series? I assume this is by using the primary_id, correct?\n>>>      \n>> correct\n>>\n>>    \n>>> 2.) What do I specify in the identifiers in the futures function?\n>>>      \n>> anything or nothing at all.  identifiers are for other symbols, e.g. Bloomberg, Reuters, etc.  In your example, I would probably not add identifiers to the main contract.\n>>\n>>    \n>>> 3.) What is the multiplier in the future mean? Is it the value for one tick or for one point? So for oil one tick is 10 USD and one point move is 1000 USD.\n>>>      \n>> 'point value' in your terminology.  It is used to get from the price to the notional value in the listed currency.  I'll probably add tick value to the model later this week.\n>>\n>>    \n>>> Thanks!!!\n>>>      \n>> You're welcome.\n>>\n>> Regards,\n>>\n>>     - Brian\n>>\n>>    \n>>> Wolfgang Wu\n\n\n-- \nBrian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
       "body_snippet": "Wolfgang Wu wrote:\n> It seems like the error occurs when you run updatePortf() for a date where one of the symbols are not defined. So TE_N9 doesn't have a row for the date '2009-01-02' which is causi",
       "thread_id": "thread-2464a45f9890",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006111.html"
     },
     {
       "id": "msg-c7ead73b433b",
@@ -172,7 +180,8 @@
       "body_snippet": "Guys,\n\nI've noticed a small problem in PerformanceAnalytics, Return.excess does not like timeseries with only 1 elements. Obviously this situation does not happen often, but getting around the issue i",
       "thread_id": "thread-c7ead73b433b",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006112.html"
     },
     {
       "id": "msg-99bf7687ccd8",
@@ -190,7 +199,8 @@
       "body_snippet": "A time series with only one element is not a 'series'.\n\nIn the case of excess returns, with only one return the excess return is the \nreturn of your asset minus the return of the risk free or benchmar",
       "thread_id": "thread-c7ead73b433b",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006113.html"
     },
     {
       "id": "msg-ef8742e2e376",
@@ -206,7 +216,8 @@
       "body_snippet": "Dear all,\n\nI'm trying to use rgarch for garch modelling.\nI've downloaded the package from the R-forge but I can't manage to install\nit since a Bessel package is required. Searching for this Bessel pac",
       "thread_id": "thread-ef8742e2e376",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006114.html"
     },
     {
       "id": "msg-a90f24240246",
@@ -224,7 +235,8 @@
       "body_snippet": "The Bessel package is on R-forge:\nhttp://r-forge.r-project.org/projects/specfun/\n\nTry rseek.org (or another R-friendly search engine) next time.\n\nBest,\n--\nJoshua Ulrich\nFOSS Trading: www.fosstrading.c",
       "thread_id": "thread-ef8742e2e376",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006115.html"
     },
     {
       "id": "msg-f4bf0482b84f",
@@ -243,7 +255,8 @@
       "body_snippet": "Dear Joshua,\n\nThanks a lot, it works fine now.\n\nRegards,\nMaxime.\n-- \nView this message in context: http://r.789695.n4.nabble.com/Problem-with-rgarch-package-tp2133015p2133281.html\nSent from the Rmetri",
       "thread_id": "thread-ef8742e2e376",
       "thread_depth": 2,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006116.html"
     },
     {
       "id": "msg-28c03a614d36",
@@ -260,6 +273,7 @@
       "thread_id": "thread-28c03a614d36",
       "thread_depth": 0,
       "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006117.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100507/a1a8758e/attachment.pl"
       ]
@@ -276,11 +290,12 @@
       "references": [
         "<COL124-W33875A9F3ACD54C38EDD79E5F60@phx.gbl>"
       ],
-      "body_plain": "why don't you select your lags based on the VAR model, and take use it \nfor the VECM? (with one lag less than VAR!)\nsee:\n\n?VARselect\n\n\nHope this help\n\nBtw, next time, provide reproducible code please!\n\nkarla hernandez villafuerte a ?crit :\n>  \n>\n> Dear Members:\n>\n>  \n>\n> I am working with the function ca.jo from the URCA package in order to know the range of cointegration between two variables. I am trying to calculate the optimum value of the lags (called K in the function). But the package does not provide the AIC and the logLink values for objets like this.\n>\n> I am using the function like in the following example:\n>\n>  \n>\n> ca.jo(YX, type = c(\"trace\"), ecdet = c(\"none\"), K = 2, spec=c(\"longrun\"), season = NULL, dumvar = NULL)\n>\n>\n> I want to ask if someone knows a way to calculate the k optimum.\n>\n>  \n>\n> Thanks a lot!\n>\n>  \n>\n> Karla Hern?ndez\n>  \t\t \t   \t\t  \n> _________________________________________________________________\n> Organizar y compartir tus documentos nunca fue tan f?cil. Hotmail te da 25 GB gratis. Ver m?s\n>\n> \t[[alternative HTML version deleted]]\n>\n>   \n> ------------------------------------------------------------------------\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
+      "body_plain": "why don't you select your lags based on the VAR model, and take use it \nfor the VECM? (with one lag less than VAR!)\nsee:\n\n?VARselect\n\n\nHope this help\n\nBtw, next time, provide reproducible code please!\n\nkarla hernandez villafuerte a écrit :\n>  \n>\n> Dear Members:\n>\n>  \n>\n> I am working with the function ca.jo from the URCA package in order to know the range of cointegration between two variables. I am trying to calculate the optimum value of the lags (called K in the function). But the package does not provide the AIC and the logLink values for objets like this.\n>\n> I am using the function like in the following example:\n>\n>  \n>\n> ca.jo(YX, type = c(\"trace\"), ecdet = c(\"none\"), K = 2, spec=c(\"longrun\"), season = NULL, dumvar = NULL)\n>\n>\n> I want to ask if someone knows a way to calculate the k optimum.\n>\n>  \n>\n> Thanks a lot!\n>\n>  \n>\n> Karla Hernández\n>  \t\t \t   \t\t  \n> _________________________________________________________________\n> Organizar y compartir tus documentos nunca fue tan fácil. Hotmail te da 25 GB gratis. Ver más\n>\n> \t[[alternative HTML version deleted]]\n>\n>   \n> ------------------------------------------------------------------------\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. If you want to post, subscribe first.\n> -- Also note that this is not the r-help list where general R questions should go.",
       "body_snippet": "why don't you select your lags based on the VAR model, and take use it \nfor the VECM? (with one lag less than VAR!)\nsee:\n\n?VARselect\n\n\nHope this help\n\nBtw, next time, provide reproducible code please!",
       "thread_id": "thread-28c03a614d36",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006118.html"
     },
     {
       "id": "msg-64ec97eae062",
@@ -297,6 +312,7 @@
       "thread_id": "thread-64ec97eae062",
       "thread_depth": 0,
       "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006119.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100508/a5ea0e75/attachment.pl"
       ]
@@ -315,7 +331,8 @@
       "body_snippet": "Hi all,\n\n\nI am looking for help with a problem with finding the efficient frontier \nfor a portfolio subject to quite restrictive constraints.\n\nI am using fPortfolio - see the sample code and data belo",
       "thread_id": "thread-88f811382b39",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006120.html"
     },
     {
       "id": "msg-63750684442c",
@@ -333,7 +350,8 @@
       "body_snippet": "This question has nothing to do with finance, despite the title of Carmona's \nbook.  In the future, please direct non-finance questions to r-help.\n\nThe book was written quite a while ago for S-Plus.  ",
       "thread_id": "thread-64ec97eae062",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006121.html"
     },
     {
       "id": "msg-d71d9cf0ea3a",
@@ -350,6 +368,7 @@
       "thread_id": "thread-d71d9cf0ea3a",
       "thread_depth": 0,
       "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006122.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100510/9c5ef80a/attachment.pl"
       ]
@@ -370,7 +389,8 @@
       "body_snippet": "Have you looked at ?to.period in xts?  If so, why didn't that work for you?\n--\nJoshua Ulrich\nFOSS Trading: www.fosstrading.com\n\n\n\nOn Mon, May 10, 2010 at 9:50 AM, mam3xs <mam3xs at gmail.com> wrote:\n>",
       "thread_id": "thread-d71d9cf0ea3a",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006123.html"
     },
     {
       "id": "msg-5b527f744ab9",
@@ -389,6 +409,7 @@
       "thread_id": "thread-d71d9cf0ea3a",
       "thread_depth": 1,
       "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006124.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100510/db9d13b1/attachment.pl"
       ]
@@ -410,7 +431,8 @@
       "body_snippet": "On Mon, May 10, 2010 at 10:33 AM, mam3xs <mam3xs at gmail.com> wrote:\n> Hi Josh,\n>\n> I've tried to.daily function before I posted the note. Basically, I am\n> trying to aggregate the return data, the c",
       "thread_id": "thread-d71d9cf0ea3a",
       "thread_depth": 2,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006125.html"
     },
     {
       "id": "msg-b011e833b6c1",
@@ -429,7 +451,8 @@
       "body_snippet": "Brian,\n\nI have a patched version of the function, I attach it at the end of this mail.\n\nI'm having problems with the SharpeRatio function as well.\n\n>SharpeRatio(managers[,1,drop=FALSE], FUN=\"StdDev\")\n",
       "thread_id": "thread-c7ead73b433b",
       "thread_depth": 2,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006126.html"
     },
     {
       "id": "msg-3a9b7ded487b",
@@ -449,11 +472,12 @@
         "<42510.32835.qm@web23403.mail.ird.yahoo.com>",
         "<4BE29DF6.3000703@braverock.com>"
       ],
-      "body_plain": "The best I could come up with is to write a quick function to check if it is possible to call updatePortf() function. To do this I test if each symbol in the portfolio has a row for the passed in date.\n\n#function to test if you can get the value of the portfolio\nfCanValue <- function(Portfolio, Date){\n    canValue <- TRUE;\n    tempInstr <- names(fPortfolio);\n    for (i in 1:length(tempInstr)){ \n        xtsInstr <- get(tempInstr[i])\n        if (length(index(xtsInstr[Date])) == 0) {canValue = FALSE}\n    }\n    return(canValue);\n}\n\nThis might work if one of the symbols might be missing a day or so because of a holiday. I am then just not calling updatePortf().\n\n\nHow is the best way to solve the general problem that updatePortf() seems to assume that there is a row for the date you pass in for every symbol?Is the best route to solve this \na) to remove the symbol from the portfolio when there are no more prices? Can I just delete the xts table in portfolio and the profit and loss calculation will still work?\nb) ignore symbols that have 0 position and only produce an error when you have a position in a symbol but no price? There might be still problems with holidays and missing data.\nc) try to use the last available price to mark a symbol?\n\nRegards,\n \nWolfgang Wu\n\n\n\n----- Urspr?ngliche Mail ----\nVon: Brian G. Peterson <brian at braverock.com>\nAn: Wolfgang Wu <wobwu22 at yahoo.de>\nCC: R SIG Finance <R-SIG-Finance at stat.math.ethz.ch>\nGesendet: Donnerstag, den 6. Mai 2010, 11:46:14 Uhr\nBetreff: Re: AW: [R-SIG-Finance] Blotter - Setting up a futures_series\n\nWolfgang Wu wrote:\n> It seems like the error occurs when you run updatePortf() for a date where one of the symbols are not defined. So TE_N9 doesn't have a row for the date '2009-01-02' which is causing this error. I guess this will happen often as there might be holidays or non trading days which might be different for different symbols (maybe trading on different exchanges, etc..).  Are there any work-arounds to this problem?\n\nThat sounds like a bug.  I'll check and fix it to make sure updatePortf won't try to update a particular instrument beyond it's last traded date.  Ideally, the historical instrument data will be tested with 'try' and a warning rather than a fatal error will be generated.  I'll try to get to it tomorrow or over the weekend.\n\n> Also is it possible to add or remove symbols to a portfolio object later than initPortf? \n\nOn the list of functions to write...  contributed functions welcome.\n\nRegards,\n\n   - Brian\n\n> Thanks\n> \n> \n>  Wolfgang Wu\n> \n> \n> \n> ----- Urspr?ngliche Mail ----\n> Von: Wolfgang Wu <wobwu22 at yahoo.de>\n> An: Brian G. Peterson <brian at braverock.com>; R SIG Finance <R-SIG-Finance at stat.math.ethz.ch>\n> Gesendet: Donnerstag, den 29. April 2010, 14:44:32 Uhr\n> Betreff: Re: [R-SIG-Finance] Blotter - Setting up a futures_series\n> \n> Sorry for being a pain in the neck but I've got another problem\n> \n> When running the folloing code I get the error when I call updatePortf(): Error in if (!all(i <= 0)) stop(\"only zeros may be mixed with negative subscripts\") :   missing value where TRUE/FALSE needed\n> \n> #Example\n> library(FinancialInstrument)\n> library(blotter)\n> currency(\"USD\", multiplier=1);    future(\"TE\", \"USD\", 1000)\n> future_series(\"TE\", \"M9\", \"2009-01-02\", \"2009-01-03\")\n> future_series(\"TE\", \"N9\", \"2009-01-03\", \"2009-01-04\")\n> \n> TE_M9 <- xts(rbind(cbind(54.28, 55.92, 53.57, 55.73, 78959, 1), cbind(55.50, 55.70, 54.38, 55.63,  75464, 2)), order.by=as.Date(c(\"2009-01-02\", \"2009-01-03\")))\n> colnames(TE_M9) <- c(\"Open\",\"High\",\"Low\",\"Close\",\"Volume\", \"OpenInterest\");\n> \n> TE_N9 <- xts(rbind(cbind(54.28, 55.92, 53.57, 55.73, 78959, 1), cbind(55.50, 55.70, 54.38, 55.63,  75464, 2)), order.by=as.Date(c(\"2009-01-03\", \"2009-01-04\")))\n> colnames(TE_N9) <- c(\"Open\",\"High\",\"Low\",\"Close\",\"Volume\", \"OpenInterest\");\n> \n> initPortf(name='fPortfolio', symbols = c('TE_M9', 'TE_N9'), initPosQty = 0, initDate='2009-01-01')\n> initAcct(name='fAccount',portfolios='fPortfolio', initDate='2009-01-01', initEq=10000000);\n> addTxn('fPortfolio', Symbol='TE_M9', TxnDate=\"2009-01-02\", TxnPrice=55, TxnQty=100, TxnFees=0, verbose=TRUE);\n> updatePortf(Portfolio='fPortfolio', Dates = \"2009-01-02\");\n> #-----------------------------------------------\n> \n> Any idea what I am doing wrong or where the problem is?\n> \n> Thanks!!\n> \n> Wolfgang Wu\n> \n> \n> \n> ----- Urspr?ngliche Mail ----\n> Von: Brian G. Peterson <brian at braverock.com>\n> An: Wolfgang Wu <wobwu22 at yahoo.de>; R SIG Finance <R-SIG-Finance at stat.math.ethz.ch>\n> Gesendet: Donnerstag, den 29. April 2010, 12:21:36 Uhr\n> Betreff: Re: AW: [R-SIG-Finance] Blotter - Setting up a futures_series\n> \n> On 04/29/2010 02:15 AM, Wolfgang Wu wrote:\n>> Understood.\n>> \n>> But in order to mark the book at some point you will need historical data of the contracts. How is the link from the contract specifications, using the future() and future_series() functions to the actual\n>> historical data. What would be the equivalent to the example of a stock like this:\n>> \n>> #Defined the stock as financial instrument\n>> stock(\"GSPC\",currency=\"USD\",multiplier=1)\n>> #Get the historical data for variable with name \"GSPC\"\n>> getSymbols('^GSPC', src='yahoo', index.class=c(\"POSIXt\",\"POSIXct\"),from='1998-01-01')\n>> \n>> Assuming I have the time series for CLM9 and CLN9 in an xts format\n>>    \n> \n> \n> FinancialInstrument uses an underscore to separate the root symbol (primary_id) from the series symbol (suffix_id).  In your example, this means that your historical contract series data should be named\n> \n> CL_M9\n> CL_N9\n> \n> So that the blotter code can find them (blotter follows the quantmod convention of naming market data for the instrument)\n> \n> you can see this by doing\n> \n> ls(pos=.instrument)\n> \n> which will show you the environment where the instrument definition objects are kept.\n> \n> Regards,\n> \n>    - Brian\n> \n> \n>> CLM9\n>>              Open  High   Low Close Volume OpenInterest\n>> 2009-03-23 54.28 55.92 53.57 55.73  78959       187205\n>> 2009-03-24 55.50 55.70 54.38 55.63  75464       190182\n>> 2009-03-25 55.35 55.58 53.50 54.19 119624       198422\n>> ...\n>> 2009-05-19 59.16 60.48 58.55 59.65  40957         1838\n>> \n>> and\n>> \n>> CLN9\n>>              Open  High   Low Close Volume OpenInterest\n>> 2009-04-22 50.95 51.14 49.72 50.70  95249       178023\n>> 2009-04-23 50.38 51.38 50.09 51.07  90781       181605\n>> 2009-04-24 51.13 53.09 50.40 52.94  70061       187690\n>> ...\n>> 2009-06-22 69.89 69.89 66.25 66.93  32070         4299\n>> \n>> Regards,\n>> \n>> \n>>   Wolfgang Wu\n>> \n>> \n>> \n>> ----- Urspr?ngliche Mail ----\n>> Von: Brian G. Peterson<brian at braverock.com>\n>> An: Wolfgang Wu<wobwu22 at yahoo.de>\n>> CC: R SIG Finance<R-SIG-Finance at stat.math.ethz.ch>\n>> Gesendet: Donnerstag, den 29. April 2010, 0:28:48 Uhr\n>> Betreff: Re: [R-SIG-Finance] Blotter - Setting up a futures_series\n>> \n>> Wolfgang Wu wrote:\n>>    \n>>> Hello,\n>>> \n>>> I am playing around with blotter and am trying to set up several futures contracts. So assume I've got data for the crude oil future CL. I want to set up futures for the June 09 and July 09 contract.\n>>> What I've done is the following:\n>>> \n>>> currency(\"USD\", multiplier=1);    future(\"CL\", \"USD\", 1000, identifiers=c(\"CLM9\", \"CLN9\"))\n>>> future_series(\"CL\", \"M9\", \"2009-03-23\", \"2009-05-19\")\n>>> future_series(\"CL\", \"N9\", \"2009-04-22\", \"2009-06-22\")\n>>> \n>>> \n>>> 1.) How do I link the future to the future_series? I assume this is by using the primary_id, correct?\n>>>      \n>> correct\n>> \n>>    \n>>> 2.) What do I specify in the identifiers in the futures function?\n>>>      \n>> anything or nothing at all.  identifiers are for other symbols, e.g. Bloomberg, Reuters, etc.  In your example, I would probably not add identifiers to the main contract.\n>> \n>>    \n>>> 3.) What is the multiplier in the future mean? Is it the value for one tick or for one point? So for oil one tick is 10 USD and one point move is 1000 USD.\n>>>      \n>> 'point value' in your terminology.  It is used to get from the price to the notional value in the listed currency.  I'll probably add tick value to the model later this week.\n>> \n>>    \n>>> Thanks!!!\n>>>      \n>> You're welcome.\n>> \n>> Regards,\n>> \n>>     - Brian\n>> \n>>    \n>>> Wolfgang Wu\n\n\n-- Brian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
+      "body_plain": "The best I could come up with is to write a quick function to check if it is possible to call updatePortf() function. To do this I test if each symbol in the portfolio has a row for the passed in date.\n\n#function to test if you can get the value of the portfolio\nfCanValue <- function(Portfolio, Date){\n    canValue <- TRUE;\n    tempInstr <- names(fPortfolio);\n    for (i in 1:length(tempInstr)){ \n        xtsInstr <- get(tempInstr[i])\n        if (length(index(xtsInstr[Date])) == 0) {canValue = FALSE}\n    }\n    return(canValue);\n}\n\nThis might work if one of the symbols might be missing a day or so because of a holiday. I am then just not calling updatePortf().\n\n\nHow is the best way to solve the general problem that updatePortf() seems to assume that there is a row for the date you pass in for every symbol?Is the best route to solve this \na) to remove the symbol from the portfolio when there are no more prices? Can I just delete the xts table in portfolio and the profit and loss calculation will still work?\nb) ignore symbols that have 0 position and only produce an error when you have a position in a symbol but no price? There might be still problems with holidays and missing data.\nc) try to use the last available price to mark a symbol?\n\nRegards,\n \nWolfgang Wu\n\n\n\n----- Ursprüngliche Mail ----\nVon: Brian G. Peterson <brian at braverock.com>\nAn: Wolfgang Wu <wobwu22 at yahoo.de>\nCC: R SIG Finance <R-SIG-Finance at stat.math.ethz.ch>\nGesendet: Donnerstag, den 6. Mai 2010, 11:46:14 Uhr\nBetreff: Re: AW: [R-SIG-Finance] Blotter - Setting up a futures_series\n\nWolfgang Wu wrote:\n> It seems like the error occurs when you run updatePortf() for a date where one of the symbols are not defined. So TE_N9 doesn't have a row for the date '2009-01-02' which is causing this error. I guess this will happen often as there might be holidays or non trading days which might be different for different symbols (maybe trading on different exchanges, etc..).  Are there any work-arounds to this problem?\n\nThat sounds like a bug.  I'll check and fix it to make sure updatePortf won't try to update a particular instrument beyond it's last traded date.  Ideally, the historical instrument data will be tested with 'try' and a warning rather than a fatal error will be generated.  I'll try to get to it tomorrow or over the weekend.\n\n> Also is it possible to add or remove symbols to a portfolio object later than initPortf? \n\nOn the list of functions to write...  contributed functions welcome.\n\nRegards,\n\n   - Brian\n\n> Thanks\n> \n> \n>  Wolfgang Wu\n> \n> \n> \n> ----- Ursprüngliche Mail ----\n> Von: Wolfgang Wu <wobwu22 at yahoo.de>\n> An: Brian G. Peterson <brian at braverock.com>; R SIG Finance <R-SIG-Finance at stat.math.ethz.ch>\n> Gesendet: Donnerstag, den 29. April 2010, 14:44:32 Uhr\n> Betreff: Re: [R-SIG-Finance] Blotter - Setting up a futures_series\n> \n> Sorry for being a pain in the neck but I've got another problem\n> \n> When running the folloing code I get the error when I call updatePortf(): Error in if (!all(i <= 0)) stop(\"only zeros may be mixed with negative subscripts\") :   missing value where TRUE/FALSE needed\n> \n> #Example\n> library(FinancialInstrument)\n> library(blotter)\n> currency(\"USD\", multiplier=1);    future(\"TE\", \"USD\", 1000)\n> future_series(\"TE\", \"M9\", \"2009-01-02\", \"2009-01-03\")\n> future_series(\"TE\", \"N9\", \"2009-01-03\", \"2009-01-04\")\n> \n> TE_M9 <- xts(rbind(cbind(54.28, 55.92, 53.57, 55.73, 78959, 1), cbind(55.50, 55.70, 54.38, 55.63,  75464, 2)), order.by=as.Date(c(\"2009-01-02\", \"2009-01-03\")))\n> colnames(TE_M9) <- c(\"Open\",\"High\",\"Low\",\"Close\",\"Volume\", \"OpenInterest\");\n> \n> TE_N9 <- xts(rbind(cbind(54.28, 55.92, 53.57, 55.73, 78959, 1), cbind(55.50, 55.70, 54.38, 55.63,  75464, 2)), order.by=as.Date(c(\"2009-01-03\", \"2009-01-04\")))\n> colnames(TE_N9) <- c(\"Open\",\"High\",\"Low\",\"Close\",\"Volume\", \"OpenInterest\");\n> \n> initPortf(name='fPortfolio', symbols = c('TE_M9', 'TE_N9'), initPosQty = 0, initDate='2009-01-01')\n> initAcct(name='fAccount',portfolios='fPortfolio', initDate='2009-01-01', initEq=10000000);\n> addTxn('fPortfolio', Symbol='TE_M9', TxnDate=\"2009-01-02\", TxnPrice=55, TxnQty=100, TxnFees=0, verbose=TRUE);\n> updatePortf(Portfolio='fPortfolio', Dates = \"2009-01-02\");\n> #-----------------------------------------------\n> \n> Any idea what I am doing wrong or where the problem is?\n> \n> Thanks!!\n> \n> Wolfgang Wu\n> \n> \n> \n> ----- Ursprüngliche Mail ----\n> Von: Brian G. Peterson <brian at braverock.com>\n> An: Wolfgang Wu <wobwu22 at yahoo.de>; R SIG Finance <R-SIG-Finance at stat.math.ethz.ch>\n> Gesendet: Donnerstag, den 29. April 2010, 12:21:36 Uhr\n> Betreff: Re: AW: [R-SIG-Finance] Blotter - Setting up a futures_series\n> \n> On 04/29/2010 02:15 AM, Wolfgang Wu wrote:\n>> Understood.\n>> \n>> But in order to mark the book at some point you will need historical data of the contracts. How is the link from the contract specifications, using the future() and future_series() functions to the actual\n>> historical data. What would be the equivalent to the example of a stock like this:\n>> \n>> #Defined the stock as financial instrument\n>> stock(\"GSPC\",currency=\"USD\",multiplier=1)\n>> #Get the historical data for variable with name \"GSPC\"\n>> getSymbols('^GSPC', src='yahoo', index.class=c(\"POSIXt\",\"POSIXct\"),from='1998-01-01')\n>> \n>> Assuming I have the time series for CLM9 and CLN9 in an xts format\n>>    \n> \n> \n> FinancialInstrument uses an underscore to separate the root symbol (primary_id) from the series symbol (suffix_id).  In your example, this means that your historical contract series data should be named\n> \n> CL_M9\n> CL_N9\n> \n> So that the blotter code can find them (blotter follows the quantmod convention of naming market data for the instrument)\n> \n> you can see this by doing\n> \n> ls(pos=.instrument)\n> \n> which will show you the environment where the instrument definition objects are kept.\n> \n> Regards,\n> \n>    - Brian\n> \n> \n>> CLM9\n>>              Open  High   Low Close Volume OpenInterest\n>> 2009-03-23 54.28 55.92 53.57 55.73  78959       187205\n>> 2009-03-24 55.50 55.70 54.38 55.63  75464       190182\n>> 2009-03-25 55.35 55.58 53.50 54.19 119624       198422\n>> ...\n>> 2009-05-19 59.16 60.48 58.55 59.65  40957         1838\n>> \n>> and\n>> \n>> CLN9\n>>              Open  High   Low Close Volume OpenInterest\n>> 2009-04-22 50.95 51.14 49.72 50.70  95249       178023\n>> 2009-04-23 50.38 51.38 50.09 51.07  90781       181605\n>> 2009-04-24 51.13 53.09 50.40 52.94  70061       187690\n>> ...\n>> 2009-06-22 69.89 69.89 66.25 66.93  32070         4299\n>> \n>> Regards,\n>> \n>> \n>>   Wolfgang Wu\n>> \n>> \n>> \n>> ----- Ursprüngliche Mail ----\n>> Von: Brian G. Peterson<brian at braverock.com>\n>> An: Wolfgang Wu<wobwu22 at yahoo.de>\n>> CC: R SIG Finance<R-SIG-Finance at stat.math.ethz.ch>\n>> Gesendet: Donnerstag, den 29. April 2010, 0:28:48 Uhr\n>> Betreff: Re: [R-SIG-Finance] Blotter - Setting up a futures_series\n>> \n>> Wolfgang Wu wrote:\n>>    \n>>> Hello,\n>>> \n>>> I am playing around with blotter and am trying to set up several futures contracts. So assume I've got data for the crude oil future CL. I want to set up futures for the June 09 and July 09 contract.\n>>> What I've done is the following:\n>>> \n>>> currency(\"USD\", multiplier=1);    future(\"CL\", \"USD\", 1000, identifiers=c(\"CLM9\", \"CLN9\"))\n>>> future_series(\"CL\", \"M9\", \"2009-03-23\", \"2009-05-19\")\n>>> future_series(\"CL\", \"N9\", \"2009-04-22\", \"2009-06-22\")\n>>> \n>>> \n>>> 1.) How do I link the future to the future_series? I assume this is by using the primary_id, correct?\n>>>      \n>> correct\n>> \n>>    \n>>> 2.) What do I specify in the identifiers in the futures function?\n>>>      \n>> anything or nothing at all.  identifiers are for other symbols, e.g. Bloomberg, Reuters, etc.  In your example, I would probably not add identifiers to the main contract.\n>> \n>>    \n>>> 3.) What is the multiplier in the future mean? Is it the value for one tick or for one point? So for oil one tick is 10 USD and one point move is 1000 USD.\n>>>      \n>> 'point value' in your terminology.  It is used to get from the price to the notional value in the listed currency.  I'll probably add tick value to the model later this week.\n>> \n>>    \n>>> Thanks!!!\n>>>      \n>> You're welcome.\n>> \n>> Regards,\n>> \n>>     - Brian\n>> \n>>    \n>>> Wolfgang Wu\n\n\n-- Brian G. Peterson\nhttp://braverock.com/brian/\nPh: 773-459-4973\nIM: bgpbraverock",
       "body_snippet": "The best I could come up with is to write a quick function to check if it is possible to call updatePortf() function. To do this I test if each symbol in the portfolio has a row for the passed in date",
       "thread_id": "thread-2464a45f9890",
       "thread_depth": 2,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006127.html"
     },
     {
       "id": "msg-9efeb70f2fcc",
@@ -473,7 +497,8 @@
       "body_snippet": "On 05/10/2010 10:52 AM, Giuseppe Milicia wrote:\n> Brian,\n>\n> I have a patched version of the function, I attach it at the end of this mail.\n\nThanks for your patch, it is in SVN on R-Forge, and will be",
       "thread_id": "thread-c7ead73b433b",
       "thread_depth": 3,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006128.html"
     },
     {
       "id": "msg-d804b776c5e7",
@@ -494,7 +519,8 @@
       "body_snippet": "Brian\n\nThanks for the fix, it works as expected...\n\nCheers!\n\n//Giuseppe\n________________________________________\nFrom: Brian G. Peterson [brian at braverock.com]\nSent: 11 May 2010 15:33\nTo: Giuseppe M",
       "thread_id": "thread-c7ead73b433b",
       "thread_depth": 4,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006129.html"
     },
     {
       "id": "msg-140ec7d8025a",
@@ -510,7 +536,8 @@
       "body_snippet": "Dear all,\n\nI am trying to use the garchFit function like for instance below:\n\ngf<-garchFit(formula=~aparch(1,1),data=y_export,include.delta=FALSE,cond.dist=\"sstd\",trace=FALSE)\n\nI suppose the initial v",
       "thread_id": "thread-140ec7d8025a",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006130.html"
     },
     {
       "id": "msg-8bd9193e995b",
@@ -526,7 +553,8 @@
       "body_snippet": "Hello,\n\nI am importing data, say S&P 500 from yahoo:\n\n     SPyf<-yahooSeries(\"^GSPC\", file=\"SPyahoo.csv\", frequency=\"daily\", \nnDaysBack=400)\n     SPCOMPd<-(SPyf[,4])\n     a<-time(SPCOMPd)\n     SPd<-zo",
       "thread_id": "thread-8bd9193e995b",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006131.html"
     },
     {
       "id": "msg-94a08e5595c4",
@@ -545,6 +573,7 @@
       "thread_id": "thread-8bd9193e995b",
       "thread_depth": 1,
       "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006132.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100512/5de6c727/attachment.pl"
       ]
@@ -565,7 +594,8 @@
       "body_snippet": "Try\n\nlibrary(fImport)\nlibrary(zoo)\nSPyf<-yahooSeries(\"^GSPC\", file=\"SPyahoo.csv\", frequency=\"daily\", nDaysBack=400)\nz <- as.zoo(SPyf)\nz[,1] <- (z[,2]+z[,3])/2\ncolnames(z)[1]  <- \"hilo\"\n\nSee the three ",
       "thread_id": "thread-8bd9193e995b",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006133.html"
     },
     {
       "id": "msg-f223f292d5c5",
@@ -582,6 +612,7 @@
       "thread_id": "thread-f223f292d5c5",
       "thread_depth": 0,
       "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006134.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100513/652825ff/attachment.pl"
       ]
@@ -601,6 +632,7 @@
       "thread_id": "thread-736d73e0a40e",
       "thread_depth": 0,
       "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006135.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100513/026bf3b6/attachment.pl"
       ]
@@ -621,7 +653,8 @@
       "body_snippet": "Hi there. from a quick glance at you code I see this:\n\nThe residuals for GDX  and GLD are obviously identical at all\ntimes(GLD$RES==GDX$RES) , so you do NOT need the symbol loop within the\ndate loop.\n",
       "thread_id": "thread-736d73e0a40e",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006136.html"
     },
     {
       "id": "msg-45eac2421b81",
@@ -639,7 +672,8 @@
       "body_snippet": "Hi Trey,\n\nGood example code.\n\nI believe you want to change the sign of the residuals for one of the symbols:\n\nreplace:\nGLD$RES <- residuals(mod.bd)\nGDX$RES <- residuals(mod.bd)\n\nwith:\nGLD$RES <- resid",
       "thread_id": "thread-736d73e0a40e",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006137.html"
     },
     {
       "id": "msg-a6ae62e354c8",
@@ -655,7 +689,8 @@
       "body_snippet": "Hi all,\n\nI got the daily stock return data from 2005 - 2008, calculated from HF\nminute data. (Thanks to Jeff and Josh).\n\nNow, I set 05 - 07yr as the carlibration period for estimating the\nparameters o",
       "thread_id": "thread-a6ae62e354c8",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006138.html"
     },
     {
       "id": "msg-344a4d8f02cd",
@@ -673,7 +708,8 @@
       "body_snippet": "Should \"AA.day.forecast.data\" contain the series oh one step ahead \nforecasts? If yes, you need to index it also!\n\nAA.day.forecast.data[i-start+1] <- garch.pred[,1]\n\nBtw, if you are doing it with a lo",
       "thread_id": "thread-a6ae62e354c8",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006139.html"
     },
     {
       "id": "msg-8d02764392fe",
@@ -693,6 +729,7 @@
       "thread_id": "thread-a6ae62e354c8",
       "thread_depth": 2,
       "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006140.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100514/d7acc2a3/attachment.pl"
       ]
@@ -711,7 +748,8 @@
       "body_snippet": "Hello.\n\nI have a non-stationary time series of returns and I would like to calculate the standard error for the mean of that series.\n\nWhen I use the White-estimator or assume constant variance I got t",
       "thread_id": "thread-bdcde2c6a39e",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006141.html"
     },
     {
       "id": "msg-6854bda1b35b",
@@ -728,6 +766,7 @@
       "thread_id": "thread-6854bda1b35b",
       "thread_depth": 0,
       "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006142.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100515/db17b5f5/attachment.pl"
       ]
@@ -749,7 +788,8 @@
       "body_snippet": "Hi to the list. I am looking for a fast way to manually edit an xts object\nin R, i.e. by using the de(..) function. See example.\n\nrequire(xts)\nrequire(quantmod)\ngetSymbols(\"YHOO\")\nis.xts(YHOO) #TRUE\n\n",
       "thread_id": "thread-28c03a614d36",
       "thread_depth": 2,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006143.html"
     },
     {
       "id": "msg-8c9d089e06d3",
@@ -769,7 +809,8 @@
       "body_snippet": "On 16 May 2010 at 20:19, me at censix.com wrote:\n| Hi to the list. I am looking for a fast way to manually edit an xts object\n| in R, i.e. by using the de(..) function. See example.\n| \n| require(xts)\n",
       "thread_id": "thread-28c03a614d36",
       "thread_depth": 3,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006144.html"
     },
     {
       "id": "msg-6d2c6dae7416",
@@ -790,7 +831,8 @@
       "body_snippet": "I am not too sure what needs you have in terms of editing, but one last comment to consider.  \n\nTo further complicate, the internal index of an xts object is not what you see with \"index()\". It is act",
       "thread_id": "thread-28c03a614d36",
       "thread_depth": 4,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006145.html"
     },
     {
       "id": "msg-29b9fc553f0c",
@@ -806,7 +848,8 @@
       "body_snippet": "Dear All,\n       I have created a HDF5 file using Python + Pytables. The HDF5\nfile stores tick-data and as such is quite huge in size. I am planning\nto use R/zoo/xts combination for analytics. The tri",
       "thread_id": "thread-29b9fc553f0c",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006146.html"
     },
     {
       "id": "msg-d517daf258c9",
@@ -824,7 +867,8 @@
       "body_snippet": "Hi Monoj\nI tested hdf5 with R and in my opinion there is no sense to use it\nwith xts/zoo for tick data.\nIf you will work with R, then much better is to store xts objects (or\nR objects) directly on the",
       "thread_id": "thread-29b9fc553f0c",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006147.html"
     },
     {
       "id": "msg-4983a47441f3",
@@ -839,11 +883,12 @@
         "<AANLkTinCnNq0gqB6mRgPbxA8KFjyqrgAOrBXAexDZsX7@mail.gmail.com>",
         "<AANLkTinZLHlv1sL5RpXcbAkGPY-ibw9d15yM-S9W3WT6@mail.gmail.com>"
       ],
-      "body_plain": "Daniel - that's interesting feedback.\n\nJeff: I did a quick search on indexing packages and it seems its still\nin development stages - looks very promising thou. I am more than\nhappy to test it out and give feedback/suggestions.\n\nHopefully we could do a comparision/benchmarking of few different\nalternatives (including commercial tools like kdb).\n\nManoj\n\n2010/5/18 Daniel Cegie?ka <daniel.cegielka at gmail.com>:\n> Hi Monoj\n> I tested hdf5 with R and in my opinion there is no sense to use it\n> with xts/zoo for tick data.\n> If you will work with R, then much better is to store xts objects (or\n> R objects) directly on the disk (it's simpler, faster and better way).\n>\n> Check (Jeff Ryan) packages:\n> RBerkeley: https://r-forge.r-project.org/projects/rberkeley/\n> indexing: http://r-forge.r-project.org/projects/indexing/\n>\n> example for RBerkeley:\n>\n> bdb <- db_create()\n> db_open(bdb,file='blotter.db') ? # load db_file from disc\n>\n> # and some quary\n> unserialize(db_get(dbh,key='GOOG'))['2010-02-17::2010-02-25',4])\n>\n>\n> If you need ultra fast solution, you must try Jeff's indexing package ;)\n>\n> regards,\n> daniel\n>\n>\n>\n>\n> 2010/5/17 Manoj <manojsw at gmail.com>\n>>\n>> Dear All,\n>> ? ? ? I have created a HDF5 file using Python + Pytables. The HDF5\n>> file stores tick-data and as such is quite huge in size. I am planning\n>> to use R/zoo/xts combination for analytics. The tricky bit is that I\n>> am unable to find a good wrapper to access/query the HDF5 created by\n>> Pytables (keeping intact all the nice features such as indices etc of\n>> HDF5 file) . ?The hdf5 library in R wouldn't help given the size of\n>> the file.\n>>\n>> ? ? ?One (crude) option is to query data using Python/Pytables, write\n>> to an output file and invoke R for analytics. The question is - could\n>> this task be done in a more efficient fashion? Is there a good\n>> HDF5/Pytables wrapper that could help me do the task completely within\n>> R?\n>>\n>> ? ? Any tips/suggestions would be greatly appreciated.\n>>\n>> Thanks.\n>>\n>> Manoj\n>>\n>> _______________________________________________\n>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n>",
+      "body_plain": "Daniel - that's interesting feedback.\n\nJeff: I did a quick search on indexing packages and it seems its still\nin development stages - looks very promising thou. I am more than\nhappy to test it out and give feedback/suggestions.\n\nHopefully we could do a comparision/benchmarking of few different\nalternatives (including commercial tools like kdb).\n\nManoj\n\n2010/5/18 Daniel Cegiełka <daniel.cegielka at gmail.com>:\n> Hi Monoj\n> I tested hdf5 with R and in my opinion there is no sense to use it\n> with xts/zoo for tick data.\n> If you will work with R, then much better is to store xts objects (or\n> R objects) directly on the disk (it's simpler, faster and better way).\n>\n> Check (Jeff Ryan) packages:\n> RBerkeley: https://r-forge.r-project.org/projects/rberkeley/\n> indexing: http://r-forge.r-project.org/projects/indexing/\n>\n> example for RBerkeley:\n>\n> bdb <- db_create()\n> db_open(bdb,file='blotter.db')   # load db_file from disc\n>\n> # and some quary\n> unserialize(db_get(dbh,key='GOOG'))['2010-02-17::2010-02-25',4])\n>\n>\n> If you need ultra fast solution, you must try Jeff's indexing package ;)\n>\n> regards,\n> daniel\n>\n>\n>\n>\n> 2010/5/17 Manoj <manojsw at gmail.com>\n>>\n>> Dear All,\n>>       I have created a HDF5 file using Python + Pytables. The HDF5\n>> file stores tick-data and as such is quite huge in size. I am planning\n>> to use R/zoo/xts combination for analytics. The tricky bit is that I\n>> am unable to find a good wrapper to access/query the HDF5 created by\n>> Pytables (keeping intact all the nice features such as indices etc of\n>> HDF5 file) .  The hdf5 library in R wouldn't help given the size of\n>> the file.\n>>\n>>      One (crude) option is to query data using Python/Pytables, write\n>> to an output file and invoke R for analytics. The question is - could\n>> this task be done in a more efficient fashion? Is there a good\n>> HDF5/Pytables wrapper that could help me do the task completely within\n>> R?\n>>\n>>     Any tips/suggestions would be greatly appreciated.\n>>\n>> Thanks.\n>>\n>> Manoj\n>>\n>> _______________________________________________\n>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>> -- Subscriber-posting only. If you want to post, subscribe first.\n>> -- Also note that this is not the r-help list where general R questions should go.\n>",
       "body_snippet": "Daniel - that's interesting feedback.\n\nJeff: I did a quick search on indexing packages and it seems its still\nin development stages - looks very promising thou. I am more than\nhappy to test it out and",
       "thread_id": "thread-29b9fc553f0c",
       "thread_depth": 2,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006148.html"
     },
     {
       "id": "msg-aa85ed4beb0c",
@@ -859,11 +904,12 @@
         "<AANLkTinZLHlv1sL5RpXcbAkGPY-ibw9d15yM-S9W3WT6@mail.gmail.com>",
         "<AANLkTilnnBWjpJ4Yhyf1k-1hcDV0RTC98erYExFnfk-Q@mail.gmail.com>"
       ],
-      "body_plain": "Manoj, this is not a financial subject  - you should send this to\nr-sig-hpc list.\n\n> Hopefully we could do a comparision/benchmarking of few different\n> alternatives (including commercial tools like kdb).\n\nNow indexing is still under development, but ability to work with high\nperformance with TB of tick data it was one of primary design goal of\nindexing package. Inside xts code you can find nice optimized C code\nfor low latency and high performance. And when you join xts with\nindexing package you can compare it even with kdb... (next point - you\ncan use indexing as a shared memory for many R instances).\n\nIndexing will work nice event with many TB of tick data and you don't\nhave latency from TCP stack (kdb).\n\nIt need(?) only some nice compression solution...\n\nregards,\ndaniel\n\n\nW dniu 18 maja 2010 05:56 u?ytkownik Manoj <manojsw at gmail.com> napisa?:\n> Daniel - that's interesting feedback.\n>\n> Jeff: I did a quick search on indexing packages and it seems its still\n> in development stages - looks very promising thou. I am more than\n> happy to test it out and give feedback/suggestions.\n>\n> Hopefully we could do a comparision/benchmarking of few different\n> alternatives (including commercial tools like kdb).\n>\n> Manoj\n>\n> 2010/5/18 Daniel Cegie?ka <daniel.cegielka at gmail.com>:\n>> Hi Monoj\n>> I tested hdf5 with R and in my opinion there is no sense to use it\n>> with xts/zoo for tick data.\n>> If you will work with R, then much better is to store xts objects (or\n>> R objects) directly on the disk (it's simpler, faster and better way).\n>>\n>> Check (Jeff Ryan) packages:\n>> RBerkeley: https://r-forge.r-project.org/projects/rberkeley/\n>> indexing: http://r-forge.r-project.org/projects/indexing/\n>>\n>> example for RBerkeley:\n>>\n>> bdb <- db_create()\n>> db_open(bdb,file='blotter.db') ? # load db_file from disc\n>>\n>> # and some quary\n>> unserialize(db_get(dbh,key='GOOG'))['2010-02-17::2010-02-25',4])\n>>\n>>\n>> If you need ultra fast solution, you must try Jeff's indexing package ;)\n>>\n>> regards,\n>> daniel\n>>\n>>\n>>\n>>\n>> 2010/5/17 Manoj <manojsw at gmail.com>\n>>>\n>>> Dear All,\n>>> ? ? ? I have created a HDF5 file using Python + Pytables. The HDF5\n>>> file stores tick-data and as such is quite huge in size. I am planning\n>>> to use R/zoo/xts combination for analytics. The tricky bit is that I\n>>> am unable to find a good wrapper to access/query the HDF5 created by\n>>> Pytables (keeping intact all the nice features such as indices etc of\n>>> HDF5 file) . ?The hdf5 library in R wouldn't help given the size of\n>>> the file.\n>>>\n>>> ? ? ?One (crude) option is to query data using Python/Pytables, write\n>>> to an output file and invoke R for analytics. The question is - could\n>>> this task be done in a more efficient fashion? Is there a good\n>>> HDF5/Pytables wrapper that could help me do the task completely within\n>>> R?\n>>>\n>>> ? ? Any tips/suggestions would be greatly appreciated.\n>>>\n>>> Thanks.\n>>>\n>>> Manoj\n>>>\n>>> _______________________________________________\n>>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>> -- Also note that this is not the r-help list where general R questions should go.\n>>\n>",
+      "body_plain": "Manoj, this is not a financial subject  - you should send this to\nr-sig-hpc list.\n\n> Hopefully we could do a comparision/benchmarking of few different\n> alternatives (including commercial tools like kdb).\n\nNow indexing is still under development, but ability to work with high\nperformance with TB of tick data it was one of primary design goal of\nindexing package. Inside xts code you can find nice optimized C code\nfor low latency and high performance. And when you join xts with\nindexing package you can compare it even with kdb... (next point - you\ncan use indexing as a shared memory for many R instances).\n\nIndexing will work nice event with many TB of tick data and you don't\nhave latency from TCP stack (kdb).\n\nIt need(?) only some nice compression solution...\n\nregards,\ndaniel\n\n\nW dniu 18 maja 2010 05:56 użytkownik Manoj <manojsw at gmail.com> napisał:\n> Daniel - that's interesting feedback.\n>\n> Jeff: I did a quick search on indexing packages and it seems its still\n> in development stages - looks very promising thou. I am more than\n> happy to test it out and give feedback/suggestions.\n>\n> Hopefully we could do a comparision/benchmarking of few different\n> alternatives (including commercial tools like kdb).\n>\n> Manoj\n>\n> 2010/5/18 Daniel Cegiełka <daniel.cegielka at gmail.com>:\n>> Hi Monoj\n>> I tested hdf5 with R and in my opinion there is no sense to use it\n>> with xts/zoo for tick data.\n>> If you will work with R, then much better is to store xts objects (or\n>> R objects) directly on the disk (it's simpler, faster and better way).\n>>\n>> Check (Jeff Ryan) packages:\n>> RBerkeley: https://r-forge.r-project.org/projects/rberkeley/\n>> indexing: http://r-forge.r-project.org/projects/indexing/\n>>\n>> example for RBerkeley:\n>>\n>> bdb <- db_create()\n>> db_open(bdb,file='blotter.db')   # load db_file from disc\n>>\n>> # and some quary\n>> unserialize(db_get(dbh,key='GOOG'))['2010-02-17::2010-02-25',4])\n>>\n>>\n>> If you need ultra fast solution, you must try Jeff's indexing package ;)\n>>\n>> regards,\n>> daniel\n>>\n>>\n>>\n>>\n>> 2010/5/17 Manoj <manojsw at gmail.com>\n>>>\n>>> Dear All,\n>>>       I have created a HDF5 file using Python + Pytables. The HDF5\n>>> file stores tick-data and as such is quite huge in size. I am planning\n>>> to use R/zoo/xts combination for analytics. The tricky bit is that I\n>>> am unable to find a good wrapper to access/query the HDF5 created by\n>>> Pytables (keeping intact all the nice features such as indices etc of\n>>> HDF5 file) .  The hdf5 library in R wouldn't help given the size of\n>>> the file.\n>>>\n>>>      One (crude) option is to query data using Python/Pytables, write\n>>> to an output file and invoke R for analytics. The question is - could\n>>> this task be done in a more efficient fashion? Is there a good\n>>> HDF5/Pytables wrapper that could help me do the task completely within\n>>> R?\n>>>\n>>>     Any tips/suggestions would be greatly appreciated.\n>>>\n>>> Thanks.\n>>>\n>>> Manoj\n>>>\n>>> _______________________________________________\n>>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>> -- Also note that this is not the r-help list where general R questions should go.\n>>\n>",
       "body_snippet": "Manoj, this is not a financial subject  - you should send this to\nr-sig-hpc list.\n\n> Hopefully we could do a comparision/benchmarking of few different\n> alternatives (including commercial tools like k",
       "thread_id": "thread-29b9fc553f0c",
       "thread_depth": 3,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006149.html"
     },
     {
       "id": "msg-65244f712677",
@@ -880,11 +926,12 @@
         "<AANLkTilnnBWjpJ4Yhyf1k-1hcDV0RTC98erYExFnfk-Q@mail.gmail.com>",
         "<AANLkTikxuiULNqtyy243jUKkR0gPUscGWkiT6hLzWEGa@mail.gmail.com>"
       ],
-      "body_plain": "Yes, indexing is my answer to an out-of-core data solution. \n\nIt is essentially a data.frame on disk, where OS level mmap is used to manage the process efficiently and transparently. \n\nIt is under very active development and really is quite far from \"stable\", though it is functional and being used internally on data that is fairly large.\n\nThe parts that make it fast are the facts that is column oriented (like data.frames) and that traditional indexing tools are available by default. Currently sorted indexing is implemented, but bitmap variants are in the works, as well as compression tools for bitmaps. The LZO algorithm is part of the development as well as more high performance variants related to some advanced compression schemes that allow for relational algebra on the compressed bitmaps. \n\nAs Daniel stated though this isn't really 'finance' per se, so I'll stop here. \n\nWhen the progress is further along, I will make announcements to the list(s). I am also presenting this at useR in DC this summer. \n\nBenchmarks against the Kdb's of the world would indeed be fun. I don't think they allow that... I wonder why? ;-)\n\nJeff\nSent via BlackBerry from T-Mobile\n\n-----Original Message-----\nFrom: Daniel Cegie?ka <daniel.cegielka at gmail.com>\nDate: Tue, 18 May 2010 16:23:36 \nTo: Manoj<manojsw at gmail.com>\nCc: <r-sig-finance at stat.math.ethz.ch>\nSubject: Re: [R-SIG-Finance] R + HDF5 + Pytables\n\nManoj, this is not a financial subject  - you should send this to\nr-sig-hpc list.\n\n> Hopefully we could do a comparision/benchmarking of few different\n> alternatives (including commercial tools like kdb).\n\nNow indexing is still under development, but ability to work with high\nperformance with TB of tick data it was one of primary design goal of\nindexing package. Inside xts code you can find nice optimized C code\nfor low latency and high performance. And when you join xts with\nindexing package you can compare it even with kdb... (next point - you\ncan use indexing as a shared memory for many R instances).\n\nIndexing will work nice event with many TB of tick data and you don't\nhave latency from TCP stack (kdb).\n\nIt need(?) only some nice compression solution...\n\nregards,\ndaniel\n\n\nW dniu 18 maja 2010 05:56 u?ytkownik Manoj <manojsw at gmail.com> napisa?:\n> Daniel - that's interesting feedback.\n>\n> Jeff: I did a quick search on indexing packages and it seems its still\n> in development stages - looks very promising thou. I am more than\n> happy to test it out and give feedback/suggestions.\n>\n> Hopefully we could do a comparision/benchmarking of few different\n> alternatives (including commercial tools like kdb).\n>\n> Manoj\n>\n> 2010/5/18 Daniel Cegie?ka <daniel.cegielka at gmail.com>:\n>> Hi Monoj\n>> I tested hdf5 with R and in my opinion there is no sense to use it\n>> with xts/zoo for tick data.\n>> If you will work with R, then much better is to store xts objects (or\n>> R objects) directly on the disk (it's simpler, faster and better way).\n>>\n>> Check (Jeff Ryan) packages:\n>> RBerkeley: https://r-forge.r-project.org/projects/rberkeley/\n>> indexing: http://r-forge.r-project.org/projects/indexing/\n>>\n>> example for RBerkeley:\n>>\n>> bdb <- db_create()\n>> db_open(bdb,file='blotter.db') ? # load db_file from disc\n>>\n>> # and some quary\n>> unserialize(db_get(dbh,key='GOOG'))['2010-02-17::2010-02-25',4])\n>>\n>>\n>> If you need ultra fast solution, you must try Jeff's indexing package ;)\n>>\n>> regards,\n>> daniel\n>>\n>>\n>>\n>>\n>> 2010/5/17 Manoj <manojsw at gmail.com>\n>>>\n>>> Dear All,\n>>> ? ? ? I have created a HDF5 file using Python + Pytables. The HDF5\n>>> file stores tick-data and as such is quite huge in size. I am planning\n>>> to use R/zoo/xts combination for analytics. The tricky bit is that I\n>>> am unable to find a good wrapper to access/query the HDF5 created by\n>>> Pytables (keeping intact all the nice features such as indices etc of\n>>> HDF5 file) . ?The hdf5 library in R wouldn't help given the size of\n>>> the file.\n>>>\n>>> ? ? ?One (crude) option is to query data using Python/Pytables, write\n>>> to an output file and invoke R for analytics. The question is - could\n>>> this task be done in a more efficient fashion? Is there a good\n>>> HDF5/Pytables wrapper that could help me do the task completely within\n>>> R?\n>>>\n>>> ? ? Any tips/suggestions would be greatly appreciated.\n>>>\n>>> Thanks.\n>>>\n>>> Manoj\n>>>\n>>> _______________________________________________\n>>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>> -- Also note that this is not the r-help list where general R questions should go.\n>>\n>\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.",
+      "body_plain": "Yes, indexing is my answer to an out-of-core data solution. \n\nIt is essentially a data.frame on disk, where OS level mmap is used to manage the process efficiently and transparently. \n\nIt is under very active development and really is quite far from \"stable\", though it is functional and being used internally on data that is fairly large.\n\nThe parts that make it fast are the facts that is column oriented (like data.frames) and that traditional indexing tools are available by default. Currently sorted indexing is implemented, but bitmap variants are in the works, as well as compression tools for bitmaps. The LZO algorithm is part of the development as well as more high performance variants related to some advanced compression schemes that allow for relational algebra on the compressed bitmaps. \n\nAs Daniel stated though this isn't really 'finance' per se, so I'll stop here. \n\nWhen the progress is further along, I will make announcements to the list(s). I am also presenting this at useR in DC this summer. \n\nBenchmarks against the Kdb's of the world would indeed be fun. I don't think they allow that... I wonder why? ;-)\n\nJeff\nSent via BlackBerry from T-Mobile\n\n-----Original Message-----\nFrom: Daniel Cegiełka <daniel.cegielka at gmail.com>\nDate: Tue, 18 May 2010 16:23:36 \nTo: Manoj<manojsw at gmail.com>\nCc: <r-sig-finance at stat.math.ethz.ch>\nSubject: Re: [R-SIG-Finance] R + HDF5 + Pytables\n\nManoj, this is not a financial subject  - you should send this to\nr-sig-hpc list.\n\n> Hopefully we could do a comparision/benchmarking of few different\n> alternatives (including commercial tools like kdb).\n\nNow indexing is still under development, but ability to work with high\nperformance with TB of tick data it was one of primary design goal of\nindexing package. Inside xts code you can find nice optimized C code\nfor low latency and high performance. And when you join xts with\nindexing package you can compare it even with kdb... (next point - you\ncan use indexing as a shared memory for many R instances).\n\nIndexing will work nice event with many TB of tick data and you don't\nhave latency from TCP stack (kdb).\n\nIt need(?) only some nice compression solution...\n\nregards,\ndaniel\n\n\nW dniu 18 maja 2010 05:56 użytkownik Manoj <manojsw at gmail.com> napisał:\n> Daniel - that's interesting feedback.\n>\n> Jeff: I did a quick search on indexing packages and it seems its still\n> in development stages - looks very promising thou. I am more than\n> happy to test it out and give feedback/suggestions.\n>\n> Hopefully we could do a comparision/benchmarking of few different\n> alternatives (including commercial tools like kdb).\n>\n> Manoj\n>\n> 2010/5/18 Daniel Cegiełka <daniel.cegielka at gmail.com>:\n>> Hi Monoj\n>> I tested hdf5 with R and in my opinion there is no sense to use it\n>> with xts/zoo for tick data.\n>> If you will work with R, then much better is to store xts objects (or\n>> R objects) directly on the disk (it's simpler, faster and better way).\n>>\n>> Check (Jeff Ryan) packages:\n>> RBerkeley: https://r-forge.r-project.org/projects/rberkeley/\n>> indexing: http://r-forge.r-project.org/projects/indexing/\n>>\n>> example for RBerkeley:\n>>\n>> bdb <- db_create()\n>> db_open(bdb,file='blotter.db')   # load db_file from disc\n>>\n>> # and some quary\n>> unserialize(db_get(dbh,key='GOOG'))['2010-02-17::2010-02-25',4])\n>>\n>>\n>> If you need ultra fast solution, you must try Jeff's indexing package ;)\n>>\n>> regards,\n>> daniel\n>>\n>>\n>>\n>>\n>> 2010/5/17 Manoj <manojsw at gmail.com>\n>>>\n>>> Dear All,\n>>>       I have created a HDF5 file using Python + Pytables. The HDF5\n>>> file stores tick-data and as such is quite huge in size. I am planning\n>>> to use R/zoo/xts combination for analytics. The tricky bit is that I\n>>> am unable to find a good wrapper to access/query the HDF5 created by\n>>> Pytables (keeping intact all the nice features such as indices etc of\n>>> HDF5 file) .  The hdf5 library in R wouldn't help given the size of\n>>> the file.\n>>>\n>>>      One (crude) option is to query data using Python/Pytables, write\n>>> to an output file and invoke R for analytics. The question is - could\n>>> this task be done in a more efficient fashion? Is there a good\n>>> HDF5/Pytables wrapper that could help me do the task completely within\n>>> R?\n>>>\n>>>     Any tips/suggestions would be greatly appreciated.\n>>>\n>>> Thanks.\n>>>\n>>> Manoj\n>>>\n>>> _______________________________________________\n>>> R-SIG-Finance at stat.math.ethz.ch mailing list\n>>> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>> -- Subscriber-posting only. If you want to post, subscribe first.\n>>> -- Also note that this is not the r-help list where general R questions should go.\n>>\n>\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.",
       "body_snippet": "Yes, indexing is my answer to an out-of-core data solution. \n\nIt is essentially a data.frame on disk, where OS level mmap is used to manage the process efficiently and transparently. \n\nIt is under ver",
       "thread_id": "thread-29b9fc553f0c",
       "thread_depth": 4,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006150.html"
     },
     {
       "id": "msg-0bda2cf719e8",
@@ -901,6 +948,7 @@
       "thread_id": "thread-0bda2cf719e8",
       "thread_depth": 0,
       "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006151.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100520/b4c3d278/attachment.pl"
       ]
@@ -921,7 +969,8 @@
       "body_snippet": "http://blog.fosstrading.com/2009/11/opentick-alternatives.html\n\n\nWith IBrokers and XTS package you are able to capture market data\n(tick: last trade, bid, ask...) from TWS and store it on disk with\nRB",
       "thread_id": "thread-0bda2cf719e8",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006152.html"
     },
     {
       "id": "msg-4f2b98fe8b8e",
@@ -938,6 +987,7 @@
       "thread_id": "thread-4f2b98fe8b8e",
       "thread_depth": 0,
       "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006153.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100520/41363bca/attachment.pl"
       ]
@@ -958,7 +1008,8 @@
       "body_snippet": "On Thu, 20 May 2010, Jeff Hamann wrote:\n\n> I'm trying to test some a simple concepts and need sub-day \n> historical prices (hourly?) for the previous 12 months for a \n> set of ETFs.\n>\n> I've been sear",
       "thread_id": "thread-4f2b98fe8b8e",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006154.html"
     },
     {
       "id": "msg-8f2ec72e7b9c",
@@ -976,7 +1027,8 @@
       "body_snippet": "On Thu, 20 May 2010, Geoffrey Smith wrote:\n\n> Hello, is anybody aware of a cheaper alternative to Bloomberg and the\n> RBloomberg package to get tick data via R?  Thank you very much.  Geoff\n\nWithin R,",
       "thread_id": "thread-0bda2cf719e8",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006155.html"
     },
     {
       "id": "msg-62ace02c8bb9",
@@ -992,7 +1044,8 @@
       "body_snippet": "Hi\n\nWhen importing a big data frame, I like to \"attach\" its variables so \nthey are direclty available. I don't see how to do this with zoo... Does \nanyone has an idea how I could do that?\n\nTake a zoo ",
       "thread_id": "thread-62ace02c8bb9",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006156.html"
     },
     {
       "id": "msg-531400a841c2",
@@ -1010,7 +1063,8 @@
       "body_snippet": "Mat,\n\nzoo/xts are not data frames.  For zoo/xts, the underlying storage object is a \nmatrix, so you can certainly access columns using the $ operator, but unlike a \ndata frame, it is not actually stor",
       "thread_id": "thread-62ace02c8bb9",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006157.html"
     },
     {
       "id": "msg-99b9a4091e41",
@@ -1028,7 +1082,8 @@
       "body_snippet": "Try this:\n\n   attach(as.list(zoo1))\n\nAlso this works:\n\n   with(zoo1, sum(vara + varb))\n\n\n\nOn Tue, May 25, 2010 at 9:11 AM, Matthieu Stigler\n<matthieu.stigler at gmail.com> wrote:\n> Hi\n>\n> When importi",
       "thread_id": "thread-62ace02c8bb9",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006158.html"
     },
     {
       "id": "msg-00780e203f47",
@@ -1046,7 +1101,8 @@
       "body_snippet": "On Tue, 25 May 2010, Matthieu Stigler wrote:\n\n> Hi\n>\n> When importing a big data frame, I like to \"attach\" its variables so \n> they are direclty available. I don't see how to do this with zoo... Does ",
       "thread_id": "thread-62ace02c8bb9",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006159.html"
     },
     {
       "id": "msg-a35811129a4a",
@@ -1065,7 +1121,8 @@
       "body_snippet": "Thanks to all of you for your prompt answer!\n\nattach(as.list(zoo1))\n\nis the solution that best fit my needs!\n\nThanks!\n\nMatthieu\n\n\nAchim Zeileis a ?crit :\n> On Tue, 25 May 2010, Matthieu Stigler wrote:",
       "thread_id": "thread-62ace02c8bb9",
       "thread_depth": 2,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006160.html"
     },
     {
       "id": "msg-4750a6b60474",
@@ -1085,7 +1142,8 @@
       "body_snippet": "On Tue, May 25, 2010 at 03:28:42PM +0200, Matthieu Stigler wrote:\n> Thanks to all of you for your prompt answer!\n>\n> attach(as.list(zoo1))\n>\n> is the solution that best fit my needs!\n\nYou do realise t",
       "thread_id": "thread-62ace02c8bb9",
       "thread_depth": 3,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006161.html"
     },
     {
       "id": "msg-ddebeb54acd4",
@@ -1106,7 +1164,8 @@
       "body_snippet": "The majority of the time is taken by as.list.zoo, not by attach\nitself.  At any rate, normally the fact that it takes an entire second\nto do this for a large object is not important since we only atta",
       "thread_id": "thread-62ace02c8bb9",
       "thread_depth": 4,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006162.html"
     },
     {
       "id": "msg-89cfb6847751",
@@ -1128,7 +1187,8 @@
       "body_snippet": "On Tue, May 25, 2010 at 11:05:15AM -0400, Gabor Grothendieck wrote:\n> The majority of the time is taken by as.list.zoo, not by attach\n> itself.  \n\nI agree. I just wanted to say that with data frames, ",
       "thread_id": "thread-62ace02c8bb9",
       "thread_depth": 5,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006163.html"
     },
     {
       "id": "msg-139dba2952b6",
@@ -1152,6 +1212,7 @@
       "thread_id": "thread-62ace02c8bb9",
       "thread_depth": 6,
       "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006164.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100525/275bb784/attachment.pl"
       ]
@@ -1171,6 +1232,7 @@
       "thread_id": "thread-5b75828ac000",
       "thread_depth": 0,
       "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006165.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100526/2537170f/attachment.pl"
       ]
@@ -1191,7 +1253,8 @@
       "body_snippet": "Here is Quantlib for R:\nhttp://cran.r-project.org/web/packages/RQuantLib/index.html\n\nthanks,\n\nSamuel\n\nbalakrishnan.ilango at thomsonreuters.com wrote:\n> Hi,\n>  \n> I have been searching for ta-lib and ",
       "thread_id": "thread-5b75828ac000",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006167.html"
     },
     {
       "id": "msg-045055e806cf",
@@ -1210,6 +1273,7 @@
       "thread_id": "thread-5b75828ac000",
       "thread_depth": 1,
       "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006166.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20100526/4ac5835d/attachment.pl"
       ]
@@ -1231,7 +1295,8 @@
       "body_snippet": "On 26 May 2010 at 06:17, Jeff Ryan wrote:\n| There is no ta-lib in R, but there is a great TA package called TTR:\n\nAnd I'd argue that TA-lib with its fixed-width array is a poor match anyway.\n \n| http:",
       "thread_id": "thread-5b75828ac000",
       "thread_depth": 2,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006168.html"
     },
     {
       "id": "msg-65fd20fa3740",
@@ -1247,7 +1312,8 @@
       "body_snippet": "On this same topic, I just took a look at the list of functions from the\nquantlib library compiled within R, and I do not see the functions\nrelated to inflation related securities. Inflation functiona",
       "thread_id": "thread-5b75828ac000",
       "thread_depth": 3,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006169.html"
     },
     {
       "id": "msg-74a5281d369a",
@@ -1259,11 +1325,12 @@
       "subject_clean": "R/Rmetrics Meielisalp Summer School and User/Developer Workshop 2010",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "Computational Finance and Financial Engineering\n1st R/Rmetrics Summer School and 4th User/Developer Meeting\nMeielisalp, Lake Thune Switzerland, June 27 - July 1, 2010\n                \nLate Registration: https://www.rmetrics.org/meielisalp2010-registration\nStudents: Apply for Student Scholarships\nwww.rmetrics.org\n\n\n                        ***  Rmetrics 2010  -  Don't miss it !  ***\n                           \n\nThe Summer School and User/Developer Meeting focus on topics from \n\"Computational Finance and Financial Engineering\" and on the use of \nR/Rmetrics in finance, insurance and related fields.\n\nThe Summer School morning sessions have four tutorials given by key note \nspeakers covering topics from time series analysis, stochastic \ndifferential equations, and risk management. The tutorials are together \nwith practical exercises.\n\nSummer School Lecturers:\n    * Alexander McNeil, Heriot-Watt University, Edinburgh, UK\n      Copulas with Examples in R\n    * Eckhard Platen, University of Technology Sydney, Australia\n      A Benchmark Approach to Computative Finance\n    * Nakahiro Yoshida, Math Sciences, University of Tokyo, Japan\n      Inference for Discretely Observed Diffusion Processes\n    * Eric Zivot, Economics Department, University Washington, Seattle, USA\n      Analysis of High Frequency Data in R\n\nThe afternoon User/Developer Meetings are dedicated to contributed talks \nand presentations reflecting the wide range of fields in which R and \nRmetrics are used in finance and insurance to analyze and model data. \nThe goal is to bring together students, researchers, developers, \npractitioners, and users from finance and insurance providing a platform \nfor common discussions and exchange of ideas.\n\nInvited and Contributed Presentations:\n    * Wolfgang Breymann, Cash Flow Modeling and Valuation of a Swiss \nPension Fund, Zurich\n    * Bernhard Brabec, to be announced, Zurich\n    * Yohan Chalabi, Outlier Resistant GARCH Modeling, Zurich\n    * Karim Chine, Elastic-R: A Google docs-like Portal for Data \nAnalysis in the Cloud, London\n    * Alexander Eisl, Exploring the Performance of Government Debt \nIssuance, Vienna\n    * Andrew Ellis, Rmetrics2AMPL: An R Optimization Interface for AMPL, \nZurich\n    * Adam Ghandar, Fuzzy Logic Valuation Rules for Hedge Fund \nManagement, Adelaide\n    * Patrick Henaff, A Normalized Measure of Model Risk, Brest/Rennes\n    * Stefano M. Iacus, Model Identification for Discretely Observed \nStochastic Differential Equations, Milano\n    * Vikram Kuriyan, to be announced, New-York\n    * Dominik Locher, Optimally Balanced and Diversified Portfolios: A \nnew Approach for Depot Analysis, Zurich\n    * Mahendra Mehta, Recent Financial Crisis A look, Perspective and \nLessons, Mumbai\n    * Sebastian P?rez Saaibi, R/Rmetrics Generator Tool for Google \nMotion Charts, Zurich\n    * Wolfgang Polasek, Sales Response Functions (SRF) with Stochastic \nDerivative Constraints, Vienna\n    * Charles Roosen, Mainstream Application Development with R, Chippenham\n    * Stefan Theussl, Many Solvers, One Interface - ROI, the R \nOptimization Infrastructure Package, Vienna\n    * Marc Wildi, Financial Trading: Fundamental and Intrinsic  \nPerspectives, Zurich\n    * Diethelm W?rtz, The Hull, the Feasible Set, and Portfolio Risk \nSurfaces, Zurich\n     ... this list is still incomplete, about 25 papers will be presented.\n\n\nCall for Papers:\nWe invite to submit abstracts presenting innovations or exciting \napplications covering the whole spectrum of computational topics in \nfinance, insurance and related fields. To submit an abstract email your \npdf file to submissions [at] rmetrics.org. Please keep abstracts to one \npage. The abstracts will become available in an online abstract booklet. \nSubmission will be considered on a rolling admission basis.\n\nScholarship for Students:\nA limited number of scholarships are available for full-time Bachelor \nand Master students which include a reduction on the accommodation fees \n(total accommodation fees would be 90.00 CHF). Please send a letter of \nmotivation and a recommendation letter from your supervisor to \nsubmissions [at] rmetrics.org. Note that only applications send from an \nemail address affiliated to an university will be accepted. Deadline to \napply for scholarship is June 1.\n\nOrganization:\n    Rmetrics Association, co-organized by\n    Swiss Federal Institute of Technology, Zurich.\n\nConference Chairs:\n    Diethelm Wuertz, Swiss Federal Institute of Technology, Zurich CH\n    Stefano Iacus, University of Milano, Milano, IT\n    Mahendra Mehta, Neural Tech Technologies, Mumbai, IN\n    David Scott, University of Auckland, Auckland, NZ\n\nConference Office:\n    Yohan Chalabi, Swiss Federal Institute of Technology, Zurich CH\n    Andrew Ellis, Swiss Federal Institute of Technology, Zurich CH\n\nSupported by:\n    Rmetrics Association Zurich\n    ETH Zurich\n    REvolution Computing\n    ...\n\nVisit:\n    http://www.rmetrics.org/meielisalp2010\n    http://www.rmetrics.org/meielisalp2010-registration",
+      "body_plain": "Computational Finance and Financial Engineering\n1st R/Rmetrics Summer School and 4th User/Developer Meeting\nMeielisalp, Lake Thune Switzerland, June 27 - July 1, 2010\n                \nLate Registration: https://www.rmetrics.org/meielisalp2010-registration\nStudents: Apply for Student Scholarships\nwww.rmetrics.org\n\n\n                        ***  Rmetrics 2010  -  Don't miss it !  ***\n                           \n\nThe Summer School and User/Developer Meeting focus on topics from \n\"Computational Finance and Financial Engineering\" and on the use of \nR/Rmetrics in finance, insurance and related fields.\n\nThe Summer School morning sessions have four tutorials given by key note \nspeakers covering topics from time series analysis, stochastic \ndifferential equations, and risk management. The tutorials are together \nwith practical exercises.\n\nSummer School Lecturers:\n    * Alexander McNeil, Heriot-Watt University, Edinburgh, UK\n      Copulas with Examples in R\n    * Eckhard Platen, University of Technology Sydney, Australia\n      A Benchmark Approach to Computative Finance\n    * Nakahiro Yoshida, Math Sciences, University of Tokyo, Japan\n      Inference for Discretely Observed Diffusion Processes\n    * Eric Zivot, Economics Department, University Washington, Seattle, USA\n      Analysis of High Frequency Data in R\n\nThe afternoon User/Developer Meetings are dedicated to contributed talks \nand presentations reflecting the wide range of fields in which R and \nRmetrics are used in finance and insurance to analyze and model data. \nThe goal is to bring together students, researchers, developers, \npractitioners, and users from finance and insurance providing a platform \nfor common discussions and exchange of ideas.\n\nInvited and Contributed Presentations:\n    * Wolfgang Breymann, Cash Flow Modeling and Valuation of a Swiss \nPension Fund, Zurich\n    * Bernhard Brabec, to be announced, Zurich\n    * Yohan Chalabi, Outlier Resistant GARCH Modeling, Zurich\n    * Karim Chine, Elastic-R: A Google docs-like Portal for Data \nAnalysis in the Cloud, London\n    * Alexander Eisl, Exploring the Performance of Government Debt \nIssuance, Vienna\n    * Andrew Ellis, Rmetrics2AMPL: An R Optimization Interface for AMPL, \nZurich\n    * Adam Ghandar, Fuzzy Logic Valuation Rules for Hedge Fund \nManagement, Adelaide\n    * Patrick Henaff, A Normalized Measure of Model Risk, Brest/Rennes\n    * Stefano M. Iacus, Model Identification for Discretely Observed \nStochastic Differential Equations, Milano\n    * Vikram Kuriyan, to be announced, New-York\n    * Dominik Locher, Optimally Balanced and Diversified Portfolios: A \nnew Approach for Depot Analysis, Zurich\n    * Mahendra Mehta, Recent Financial Crisis A look, Perspective and \nLessons, Mumbai\n    * Sebastian Pérez Saaibi, R/Rmetrics Generator Tool for Google \nMotion Charts, Zurich\n    * Wolfgang Polasek, Sales Response Functions (SRF) with Stochastic \nDerivative Constraints, Vienna\n    * Charles Roosen, Mainstream Application Development with R, Chippenham\n    * Stefan Theussl, Many Solvers, One Interface - ROI, the R \nOptimization Infrastructure Package, Vienna\n    * Marc Wildi, Financial Trading: Fundamental and Intrinsic  \nPerspectives, Zurich\n    * Diethelm Würtz, The Hull, the Feasible Set, and Portfolio Risk \nSurfaces, Zurich\n     ... this list is still incomplete, about 25 papers will be presented.\n\n\nCall for Papers:\nWe invite to submit abstracts presenting innovations or exciting \napplications covering the whole spectrum of computational topics in \nfinance, insurance and related fields. To submit an abstract email your \npdf file to submissions [at] rmetrics.org. Please keep abstracts to one \npage. The abstracts will become available in an online abstract booklet. \nSubmission will be considered on a rolling admission basis.\n\nScholarship for Students:\nA limited number of scholarships are available for full-time Bachelor \nand Master students which include a reduction on the accommodation fees \n(total accommodation fees would be 90.00 CHF). Please send a letter of \nmotivation and a recommendation letter from your supervisor to \nsubmissions [at] rmetrics.org. Note that only applications send from an \nemail address affiliated to an university will be accepted. Deadline to \napply for scholarship is June 1.\n\nOrganization:\n    Rmetrics Association, co-organized by\n    Swiss Federal Institute of Technology, Zurich.\n\nConference Chairs:\n    Diethelm Wuertz, Swiss Federal Institute of Technology, Zurich CH\n    Stefano Iacus, University of Milano, Milano, IT\n    Mahendra Mehta, Neural Tech Technologies, Mumbai, IN\n    David Scott, University of Auckland, Auckland, NZ\n\nConference Office:\n    Yohan Chalabi, Swiss Federal Institute of Technology, Zurich CH\n    Andrew Ellis, Swiss Federal Institute of Technology, Zurich CH\n\nSupported by:\n    Rmetrics Association Zurich\n    ETH Zurich\n    REvolution Computing\n    ...\n\nVisit:\n    http://www.rmetrics.org/meielisalp2010\n    http://www.rmetrics.org/meielisalp2010-registration",
       "body_snippet": "Computational Finance and Financial Engineering\n1st R/Rmetrics Summer School and 4th User/Developer Meeting\nMeielisalp, Lake Thune Switzerland, June 27 - July 1, 2010\n                \nLate Registratio",
       "thread_id": "thread-74a5281d369a",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006170.html"
     },
     {
       "id": "msg-50d8eb5d7b0a",
@@ -1275,11 +1342,12 @@
       "subject_clean": "Help with ugarchfit in rgarch library to estimate egarch (or igarch) models",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "I am trying to use ugarchfit() in the rgarch library but regardless of\nthe class of stock.ba (e.g., unclassed, ts, zoo, xts), which is a?ts\nobject of monthly stock returns (single stock) and I would like to fit\nan eGARCH model, but I keep getting this error using a new install of\nrgarch?in R 2.10.1:\n\n> stock.ba.egarch <- ugarchfit(stock.ba, spec)\nError in UseMethod(\"ugarchfit\") :\n? no applicable method for 'ugarchfit' applied to an object of class \"ts\"\n\nHere's the (relevant) code\n\nstock.ba <- window(stock, start=c(1831, 1), end=c(2010, 2))\nspec <- ugarchspec(variance.model = list(model = \"eGARCH\"))\nstock.ba.egarch <- ugarchfit(stock.ba, spec)\n\nThanks!",
-      "body_snippet": "I am trying to use ugarchfit() in the rgarch library but regardless of\nthe class of stock.ba (e.g., unclassed, ts, zoo, xts), which is a?ts\nobject of monthly stock returns (single stock) and I would l",
+      "body_plain": "I am trying to use ugarchfit() in the rgarch library but regardless of\nthe class of stock.ba (e.g., unclassed, ts, zoo, xts), which is a ts\nobject of monthly stock returns (single stock) and I would like to fit\nan eGARCH model, but I keep getting this error using a new install of\nrgarch in R 2.10.1:\n\n> stock.ba.egarch <- ugarchfit(stock.ba, spec)\nError in UseMethod(\"ugarchfit\") :\n  no applicable method for 'ugarchfit' applied to an object of class \"ts\"\n\nHere's the (relevant) code\n\nstock.ba <- window(stock, start=c(1831, 1), end=c(2010, 2))\nspec <- ugarchspec(variance.model = list(model = \"eGARCH\"))\nstock.ba.egarch <- ugarchfit(stock.ba, spec)\n\nThanks!",
+      "body_snippet": "I am trying to use ugarchfit() in the rgarch library but regardless of\nthe class of stock.ba (e.g., unclassed, ts, zoo, xts), which is a ts\nobject of monthly stock returns (single stock) and I would l",
       "thread_id": "thread-50d8eb5d7b0a",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006171.html"
     },
     {
       "id": "msg-44bb3f5e6c61",
@@ -1297,7 +1365,8 @@
       "body_snippet": "Hi,\nTry:\nstock.ba.egarch <- ugarchfit(spec, stock.ba)\nelse make sure to pass the arguments named.\n\nRegards,\nAlexios Ghalanos\n\nSent from my iPhone\n\nOn May 27, 2010, at 9:21 PM, Richard Herron  \n<richar",
       "thread_id": "thread-50d8eb5d7b0a",
       "thread_depth": 1,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006172.html"
     },
     {
       "id": "msg-0c924c5db652",
@@ -1313,7 +1382,8 @@
       "body_snippet": "If you explain me the process, I think I can help. \n\n\nJorge Nieves\n\n\n-----Original Message-----\nFrom: Joseph Wang [mailto:joequant at gmail.com] \nSent: Friday, May 28, 2010 09:47 AM\nTo: Jorge Nieves\nC",
       "thread_id": "thread-0c924c5db652",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006173.html"
     },
     {
       "id": "msg-e076a31d4e19",
@@ -1329,7 +1399,8 @@
       "body_snippet": "Ok.. I will take a look in detail tonight.  \n\n\nJorge Nieves\nMoore Capital \nTelephone 212.782.7083\nFax 212.642.7644\n\n-----Original Message-----\nFrom: Joseph Wang [mailto:joequant at gmail.com] \nSent: F",
       "thread_id": "thread-e076a31d4e19",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006174.html"
     },
     {
       "id": "msg-6317881831d1",
@@ -1341,11 +1412,12 @@
       "subject_clean": "How to use RDCOMClient (RBloomberg 0.1-11) without Admin rights",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "I?m using RBloomberg since November on a Windows XP machine and it works \nvery well. Now I had to install it on another Bloomberg machine which \nhas the same hard- and software installation. But every time I tried to \nconnect to Bloomberg over COM Api (RDCOMClient) - RGUI crashed. After \nsearching a lot in the internet I found that a lot of people have \nproblems to use RBloomberg (version with RDCOMClient) without \nadministrator rights. Funny ? because the user on the pc were the \ndownload worked also had no admin rights. Therefore I tested a lot with \nRDCOMClient and the Excel Examples and came to the conclusion that the \nproblem isn?t a RBloomberg Problem ? it?s only a problem with the \nRDCOMclient.\n\n\nThe problem can be tested with these lines of code (part of test2.R from \nRDCOMClient):\n\nlibrary(RDCOMClient)\nxl <- COMCreate(\"Excel.Application\")\nxl[[\"Visible\"]] <- TRUE # here - RGUI crashes!\n\n\nRGUI.exe crashes after using/accessing a COM Object which was already \ncreated. Why?\n\nAfter searching a lot in different forums and giving access-rights to \nthe different directories (like R, RDCOMClient, Bloomberg/API) I didn?t \ncame to a solution.\n\nOnly when I tried to read the source code of RDCOM-Client I discovered \nsomething strange. In some errorcase a log-file ?RDCOM.err? will be \ncreated directly in the root directory of C:\\\n\nThe Problem is that in most companies normal users do not have access \nrights to the root directory of C:\\ and so the error log file can not be \nwritten (if it isn?t created) or changed (append with new text). In this \ncase ? RGUI crashes.\n\nIf an admin creates this file (if it doesn?t exists) and give the user \nfull access (read, write, change) to this file, the RDCOMClient will \nwork ? at least it worked on my pc.\n\nA better solution would be to change the source code of RDCOMClient in \nCOMError.cpp ? and change there the path from C:\\\\RDCOM.err to a \nlocation where the user is allowed to write/change files . e.g. a user \ndirectory.\n\nI hope I can help other users with this information to use this great \nlibrary on pc's without admin rights.\n\nBest regards\nThomas Schubert\n\nPS: By the way - c:\\RDCOM.err can get very very huge..",
-      "body_snippet": "I?m using RBloomberg since November on a Windows XP machine and it works \nvery well. Now I had to install it on another Bloomberg machine which \nhas the same hard- and software installation. But every",
+      "body_plain": "I’m using RBloomberg since November on a Windows XP machine and it works \nvery well. Now I had to install it on another Bloomberg machine which \nhas the same hard- and software installation. But every time I tried to \nconnect to Bloomberg over COM Api (RDCOMClient) - RGUI crashed. After \nsearching a lot in the internet I found that a lot of people have \nproblems to use RBloomberg (version with RDCOMClient) without \nadministrator rights. Funny – because the user on the pc were the \ndownload worked also had no admin rights. Therefore I tested a lot with \nRDCOMClient and the Excel Examples and came to the conclusion that the \nproblem isn’t a RBloomberg Problem – it’s only a problem with the \nRDCOMclient.\n\n\nThe problem can be tested with these lines of code (part of test2.R from \nRDCOMClient):\n\nlibrary(RDCOMClient)\nxl <- COMCreate(\"Excel.Application\")\nxl[[\"Visible\"]] <- TRUE # here - RGUI crashes!\n\n\nRGUI.exe crashes after using/accessing a COM Object which was already \ncreated. Why?\n\nAfter searching a lot in different forums and giving access-rights to \nthe different directories (like R, RDCOMClient, Bloomberg/API) I didn’t \ncame to a solution.\n\nOnly when I tried to read the source code of RDCOM-Client I discovered \nsomething strange. In some errorcase a log-file “RDCOM.err” will be \ncreated directly in the root directory of C:\\\n\nThe Problem is that in most companies normal users do not have access \nrights to the root directory of C:\\ and so the error log file can not be \nwritten (if it isn’t created) or changed (append with new text). In this \ncase – RGUI crashes.\n\nIf an admin creates this file (if it doesn’t exists) and give the user \nfull access (read, write, change) to this file, the RDCOMClient will \nwork – at least it worked on my pc.\n\nA better solution would be to change the source code of RDCOMClient in \nCOMError.cpp – and change there the path from C:\\\\RDCOM.err to a \nlocation where the user is allowed to write/change files . e.g. a user \ndirectory.\n\nI hope I can help other users with this information to use this great \nlibrary on pc's without admin rights.\n\nBest regards\nThomas Schubert\n\nPS: By the way - c:\\RDCOM.err can get very very huge..",
+      "body_snippet": "I’m using RBloomberg since November on a Windows XP machine and it works \nvery well. Now I had to install it on another Bloomberg machine which \nhas the same hard- and software installation. But every",
       "thread_id": "thread-6317881831d1",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006175.html"
     },
     {
       "id": "msg-ecea01400326",
@@ -1364,7 +1436,8 @@
       "body_snippet": "If you already had the functions implemented, I can help you\nintegrating them into R using RQuantLib..\n\n-k\n\nOn Wed, May 26, 2010 at 10:02 AM, Jorge Nieves\n<jorge.nieves at moorecap.com> wrote:\n>\n> On ",
       "thread_id": "thread-5b75828ac000",
       "thread_depth": 4,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006176.html"
     },
     {
       "id": "msg-28c286794eb2",
@@ -1380,7 +1453,8 @@
       "body_snippet": "Khanh,\n\n\n\nI am not sure if you have seen Joseph Wang's earlier emails today. He indicated that there is some work related to adding the inflation functions into the \"Quantlib-SWIG.\"  I am checking det",
       "thread_id": "thread-5b75828ac000",
       "thread_depth": 5,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006177.html"
     },
     {
       "id": "msg-466dc16e094d",
@@ -1399,7 +1473,8 @@
       "body_snippet": "Jorge,\n\nOn 28 May 2010 at 15:22, Jorge Nieves wrote:\n| I am not sure if you have seen Joseph Wang's earlier emails today. He indicated that there is some work related to adding the inflation functions",
       "thread_id": "thread-5b75828ac000",
       "thread_depth": 6,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006178.html"
     },
     {
       "id": "msg-c1ec1920215d",
@@ -1415,7 +1490,8 @@
       "body_snippet": "Dirk  thanks for clarifying. Indeed, I do not know the difference from one to another. I am for the most part an end user.  I honestly do not the details of what it is involved for having the QuantLib",
       "thread_id": "thread-5b75828ac000",
       "thread_depth": 7,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006179.html"
     },
     {
       "id": "msg-559dd90b8a4a",
@@ -1427,11 +1503,12 @@
       "subject_clean": "How to use RDCOMClient (RBloomberg 0.1-11) without Admin rights",
       "in_reply_to": "<24683729.421275301504215.JavaMail.ana@Ana-Nelsons-MacBook.local>",
       "references": [],
-      "body_plain": "Hi, Thomas,\n\nMany thanks for looking into this in such detail. I will pass this suggestion on to the maintainers of RDCOMClient.\n\nThere is a newer version of RBloomberg using the Java API available at findata.org, which will soon be the default version of RBloomberg.\n\nRegards,\nAna\n\n\n\n----- Original Message -----\nFrom: \"schubert\" <schubert74 at gmx.net>\nTo: r-sig-finance at stat.math.ethz.ch\nSent: Friday, 28 May, 2010 18:38:10 GMT +00:00 GMT Britain, Ireland, Portugal\nSubject: [R-SIG-Finance] How to use RDCOMClient (RBloomberg 0.1-11) without Admin rights\n\nI?m using RBloomberg since November on a Windows XP machine and it works \nvery well. Now I had to install it on another Bloomberg machine which \nhas the same hard- and software installation. But every time I tried to \nconnect to Bloomberg over COM Api (RDCOMClient) - RGUI crashed. After \nsearching a lot in the internet I found that a lot of people have \nproblems to use RBloomberg (version with RDCOMClient) without \nadministrator rights. Funny ? because the user on the pc were the \ndownload worked also had no admin rights. Therefore I tested a lot with \nRDCOMClient and the Excel Examples and came to the conclusion that the \nproblem isn?t a RBloomberg Problem ? it?s only a problem with the \nRDCOMclient.\n\n\nThe problem can be tested with these lines of code (part of test2.R from \nRDCOMClient):\n\nlibrary(RDCOMClient)\nxl <- COMCreate(\"Excel.Application\")\nxl[[\"Visible\"]] <- TRUE # here - RGUI crashes!\n\n\nRGUI.exe crashes after using/accessing a COM Object which was already \ncreated. Why?\n\nAfter searching a lot in different forums and giving access-rights to \nthe different directories (like R, RDCOMClient, Bloomberg/API) I didn?t \ncame to a solution.\n\nOnly when I tried to read the source code of RDCOM-Client I discovered \nsomething strange. In some errorcase a log-file ?RDCOM.err? will be \ncreated directly in the root directory of C:\\\n\nThe Problem is that in most companies normal users do not have access \nrights to the root directory of C:\\ and so the error log file can not be \nwritten (if it isn?t created) or changed (append with new text). In this \ncase ? RGUI crashes.\n\nIf an admin creates this file (if it doesn?t exists) and give the user \nfull access (read, write, change) to this file, the RDCOMClient will \nwork ? at least it worked on my pc.\n\nA better solution would be to change the source code of RDCOMClient in \nCOMError.cpp ? and change there the path from C:\\\\RDCOM.err to a \nlocation where the user is allowed to write/change files . e.g. a user \ndirectory.\n\nI hope I can help other users with this information to use this great \nlibrary on pc's without admin rights.\n\nBest regards\nThomas Schubert\n\nPS: By the way - c:\\RDCOM.err can get very very huge..\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.",
+      "body_plain": "Hi, Thomas,\n\nMany thanks for looking into this in such detail. I will pass this suggestion on to the maintainers of RDCOMClient.\n\nThere is a newer version of RBloomberg using the Java API available at findata.org, which will soon be the default version of RBloomberg.\n\nRegards,\nAna\n\n\n\n----- Original Message -----\nFrom: \"schubert\" <schubert74 at gmx.net>\nTo: r-sig-finance at stat.math.ethz.ch\nSent: Friday, 28 May, 2010 18:38:10 GMT +00:00 GMT Britain, Ireland, Portugal\nSubject: [R-SIG-Finance] How to use RDCOMClient (RBloomberg 0.1-11) without Admin rights\n\nI’m using RBloomberg since November on a Windows XP machine and it works \nvery well. Now I had to install it on another Bloomberg machine which \nhas the same hard- and software installation. But every time I tried to \nconnect to Bloomberg over COM Api (RDCOMClient) - RGUI crashed. After \nsearching a lot in the internet I found that a lot of people have \nproblems to use RBloomberg (version with RDCOMClient) without \nadministrator rights. Funny – because the user on the pc were the \ndownload worked also had no admin rights. Therefore I tested a lot with \nRDCOMClient and the Excel Examples and came to the conclusion that the \nproblem isn’t a RBloomberg Problem – it’s only a problem with the \nRDCOMclient.\n\n\nThe problem can be tested with these lines of code (part of test2.R from \nRDCOMClient):\n\nlibrary(RDCOMClient)\nxl <- COMCreate(\"Excel.Application\")\nxl[[\"Visible\"]] <- TRUE # here - RGUI crashes!\n\n\nRGUI.exe crashes after using/accessing a COM Object which was already \ncreated. Why?\n\nAfter searching a lot in different forums and giving access-rights to \nthe different directories (like R, RDCOMClient, Bloomberg/API) I didn’t \ncame to a solution.\n\nOnly when I tried to read the source code of RDCOM-Client I discovered \nsomething strange. In some errorcase a log-file “RDCOM.err” will be \ncreated directly in the root directory of C:\\\n\nThe Problem is that in most companies normal users do not have access \nrights to the root directory of C:\\ and so the error log file can not be \nwritten (if it isn’t created) or changed (append with new text). In this \ncase – RGUI crashes.\n\nIf an admin creates this file (if it doesn’t exists) and give the user \nfull access (read, write, change) to this file, the RDCOMClient will \nwork – at least it worked on my pc.\n\nA better solution would be to change the source code of RDCOMClient in \nCOMError.cpp – and change there the path from C:\\\\RDCOM.err to a \nlocation where the user is allowed to write/change files . e.g. a user \ndirectory.\n\nI hope I can help other users with this information to use this great \nlibrary on pc's without admin rights.\n\nBest regards\nThomas Schubert\n\nPS: By the way - c:\\RDCOM.err can get very very huge..\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. If you want to post, subscribe first.\n-- Also note that this is not the r-help list where general R questions should go.",
       "body_snippet": "Hi, Thomas,\n\nMany thanks for looking into this in such detail. I will pass this suggestion on to the maintainers of RDCOMClient.\n\nThere is a newer version of RBloomberg using the Java API available at",
       "thread_id": "thread-559dd90b8a4a",
       "thread_depth": 0,
-      "month": "2010-05"
+      "month": "2010-05",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2010q2/006180.html"
     }
   ],
   "threads": [

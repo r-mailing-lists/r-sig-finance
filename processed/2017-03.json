@@ -13,11 +13,12 @@
       "subject_clean": "Syntax - symbol problem",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "Hi,\n\nI?m using Interactive Brokers (IB) data feed running through R code (R studio) with moving average filters on futures contracts.\n\nI have listed the contracts in an excel sheet.  The sheet has 4 columns, contract (or ticker) i.e. ?CLJ7\" for April 2007 Crude Oil, Security Type ?Future?, Exchange ?NYMEX? and Use 1 or 0 to activate the excel line (contract) or not.  \n\nMy program works perfectly for Nymex energy contracts (CL, NG, RB, HO), Nymex metals (GC, SI, etc.), Globex mini S&P (ES).  However, the program stops working and has an error when running Globex Euro FX (6E), Japanese Yen (6J) and the other currencies.  Note that the currency contracts have the same syntax as the Nymex Energy, and Nymex metals, namely ?TickerMonthYear\" (6EM7, CLJ7, GCJ7 etc.)  \n\n1.  Does anyone know why the program fails to recognize the currency futures contracts?  Any suggestions?\n\nGrains are also a problem.  IB uses a different symbol structure, namely Ticker MONth YEar  ?ZS MONabbrev YEar? (ZS JUL 17). \n\n2.  How would you solve for one code to read both the CL contracts and the Grains ticker, knowing that the symbol structure is different?  Any ideas?\n\nI can send a short code and excel sheet test list to better demonstrate the issue.  \n\nThanks for your help.\n\nChristian",
-      "body_snippet": "Hi,\n\nI?m using Interactive Brokers (IB) data feed running through R code (R studio) with moving average filters on futures contracts.\n\nI have listed the contracts in an excel sheet.  The sheet has 4 c",
+      "body_plain": "Hi,\n\nI’m using Interactive Brokers (IB) data feed running through R code (R studio) with moving average filters on futures contracts.\n\nI have listed the contracts in an excel sheet.  The sheet has 4 columns, contract (or ticker) i.e. “CLJ7\" for April 2007 Crude Oil, Security Type “Future”, Exchange “NYMEX” and Use 1 or 0 to activate the excel line (contract) or not.  \n\nMy program works perfectly for Nymex energy contracts (CL, NG, RB, HO), Nymex metals (GC, SI, etc.), Globex mini S&P (ES).  However, the program stops working and has an error when running Globex Euro FX (6E), Japanese Yen (6J) and the other currencies.  Note that the currency contracts have the same syntax as the Nymex Energy, and Nymex metals, namely “TickerMonthYear\" (6EM7, CLJ7, GCJ7 etc.)  \n\n1.  Does anyone know why the program fails to recognize the currency futures contracts?  Any suggestions?\n\nGrains are also a problem.  IB uses a different symbol structure, namely Ticker MONth YEar  “ZS MONabbrev YEar” (ZS JUL 17). \n\n2.  How would you solve for one code to read both the CL contracts and the Grains ticker, knowing that the symbol structure is different?  Any ideas?\n\nI can send a short code and excel sheet test list to better demonstrate the issue.  \n\nThanks for your help.\n\nChristian",
+      "body_snippet": "Hi,\n\nI’m using Interactive Brokers (IB) data feed running through R code (R studio) with moving average filters on futures contracts.\n\nI have listed the contracts in an excel sheet.  The sheet has 4 c",
       "thread_id": "thread-3562941a76d0",
       "thread_depth": 0,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014216.html"
     },
     {
       "id": "msg-b6767813d528",
@@ -31,11 +32,12 @@
       "references": [
         "<281ECE85-4B83-4661-9800-EC23C2646C05@infomaniak.ch>"
       ],
-      "body_plain": "On Wed, 01 Mar 2017, Christian Lear writes:\n\n> Hi,\n>\n> I?m using Interactive Brokers (IB) data feed running through R code (R\n> studio) with moving average filters on futures contracts.\n>\n> I have listed the contracts in an excel sheet.  The sheet has 4\n> columns, contract (or ticker) i.e. ?CLJ7\" for April 2007 Crude Oil,\n> Security Type ?Future?, Exchange ?NYMEX? and Use 1 or 0 to activate\n> the excel line (contract) or not.\n>\n> My program works perfectly for Nymex energy contracts (CL, NG, RB,\n> HO), Nymex metals (GC, SI, etc.), Globex mini S&P (ES).  However, the\n> program stops working and has an error when running Globex Euro FX\n> (6E), Japanese Yen (6J) and the other currencies.  Note that the\n> currency contracts have the same syntax as the Nymex Energy, and Nymex\n> metals, namely ?TickerMonthYear\" (6EM7, CLJ7, GCJ7 etc.)\n>\n> 1.  Does anyone know why the program fails to\n> recognize the currency futures contracts?  Any\n> suggestions?\n>\n> Grains are also a problem.  IB uses a different symbol structure,\n> namely Ticker MONth YEar ?ZS MONabbrev YEar? (ZS JUL 17).\n>\n> 2.  How would you solve for one code to read both the\n> CL contracts and the Grains ticker, knowing that the\n> symbol structure is different?  Any ideas?\n>\n> I can send a short code and excel sheet test list to better\n> demonstrate the issue.\n>\n> Thanks for your help.\n>\n> Christian\n>\n\n1) In my experience, you need four attributes to\n   reliably specify a contract: the local symbol, the\n   exchange, the currency and the security type. For\n   6E futures, that would mean\n\n   symbol = 6EH7\n   exchange = GLOBEX\n   currency = USD\n   type = FUT\n\n2) An easy and _safe_ way is to keep a list/database of\n   contracts with the four mentioned attributes, and\n   then refer to this list when contract information is\n   needed.\n\n\n-- \nEnrico Schumann\nLucerne, Switzerland\nhttp://enricoschumann.net",
-      "body_snippet": "On Wed, 01 Mar 2017, Christian Lear writes:\n\n> Hi,\n>\n> I?m using Interactive Brokers (IB) data feed running through R code (R\n> studio) with moving average filters on futures contracts.\n>\n> I have lis",
+      "body_plain": "On Wed, 01 Mar 2017, Christian Lear writes:\n\n> Hi,\n>\n> I’m using Interactive Brokers (IB) data feed running through R code (R\n> studio) with moving average filters on futures contracts.\n>\n> I have listed the contracts in an excel sheet.  The sheet has 4\n> columns, contract (or ticker) i.e. “CLJ7\" for April 2007 Crude Oil,\n> Security Type “Future”, Exchange “NYMEX” and Use 1 or 0 to activate\n> the excel line (contract) or not.\n>\n> My program works perfectly for Nymex energy contracts (CL, NG, RB,\n> HO), Nymex metals (GC, SI, etc.), Globex mini S&P (ES).  However, the\n> program stops working and has an error when running Globex Euro FX\n> (6E), Japanese Yen (6J) and the other currencies.  Note that the\n> currency contracts have the same syntax as the Nymex Energy, and Nymex\n> metals, namely “TickerMonthYear\" (6EM7, CLJ7, GCJ7 etc.)\n>\n> 1.  Does anyone know why the program fails to\n> recognize the currency futures contracts?  Any\n> suggestions?\n>\n> Grains are also a problem.  IB uses a different symbol structure,\n> namely Ticker MONth YEar “ZS MONabbrev YEar” (ZS JUL 17).\n>\n> 2.  How would you solve for one code to read both the\n> CL contracts and the Grains ticker, knowing that the\n> symbol structure is different?  Any ideas?\n>\n> I can send a short code and excel sheet test list to better\n> demonstrate the issue.\n>\n> Thanks for your help.\n>\n> Christian\n>\n\n1) In my experience, you need four attributes to\n   reliably specify a contract: the local symbol, the\n   exchange, the currency and the security type. For\n   6E futures, that would mean\n\n   symbol = 6EH7\n   exchange = GLOBEX\n   currency = USD\n   type = FUT\n\n2) An easy and _safe_ way is to keep a list/database of\n   contracts with the four mentioned attributes, and\n   then refer to this list when contract information is\n   needed.\n\n\n-- \nEnrico Schumann\nLucerne, Switzerland\nhttp://enricoschumann.net",
+      "body_snippet": "On Wed, 01 Mar 2017, Christian Lear writes:\n\n> Hi,\n>\n> I’m using Interactive Brokers (IB) data feed running through R code (R\n> studio) with moving average filters on futures contracts.\n>\n> I have lis",
       "thread_id": "thread-3562941a76d0",
       "thread_depth": 1,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014217.html"
     },
     {
       "id": "msg-fb1f5b8d70b8",
@@ -50,11 +52,12 @@
         "<281ECE85-4B83-4661-9800-EC23C2646C05@infomaniak.ch>",
         "<87vart71ad.fsf@enricoschumann.net>"
       ],
-      "body_plain": "Thank you, Enrico, for your suggestion.\n\nIt does not seem to get the data from IB on the currency contracts.  Looking at the database / list closer, the second page defining the moving averages has a default USD input.  So I do have 4 attributes, which may be the reason I am getting data for metals and energies.  If anyone out there is using IB successfully on currency futures contracts, grains and options on all of the above, thanks for letting me know outside of the mailing list to avoid clogging it.\n\nCheers,\n\nChristian\n\n> On Mar 1, 2017, at 11:13 AM, Enrico Schumann <es at enricoschumann.net> wrote:\n> \n> On Wed, 01 Mar 2017, Christian Lear writes:\n> \n>> Hi,\n>> \n>> I?m using Interactive Brokers (IB) data feed running through R code (R\n>> studio) with moving average filters on futures contracts.\n>> \n>> I have listed the contracts in an excel sheet.  The sheet has 4\n>> columns, contract (or ticker) i.e. ?CLJ7\" for April 2007 Crude Oil,\n>> Security Type ?Future?, Exchange ?NYMEX? and Use 1 or 0 to activate\n>> the excel line (contract) or not.\n>> \n>> My program works perfectly for Nymex energy contracts (CL, NG, RB,\n>> HO), Nymex metals (GC, SI, etc.), Globex mini S&P (ES).  However, the\n>> program stops working and has an error when running Globex Euro FX\n>> (6E), Japanese Yen (6J) and the other currencies.  Note that the\n>> currency contracts have the same syntax as the Nymex Energy, and Nymex\n>> metals, namely ?TickerMonthYear\" (6EM7, CLJ7, GCJ7 etc.)\n>> \n>> 1.  Does anyone know why the program fails to\n>> recognize the currency futures contracts?  Any\n>> suggestions?\n>> \n>> Grains are also a problem.  IB uses a different symbol structure,\n>> namely Ticker MONth YEar ?ZS MONabbrev YEar? (ZS JUL 17).\n>> \n>> 2.  How would you solve for one code to read both the\n>> CL contracts and the Grains ticker, knowing that the\n>> symbol structure is different?  Any ideas?\n>> \n>> I can send a short code and excel sheet test list to better\n>> demonstrate the issue.\n>> \n>> Thanks for your help.\n>> \n>> Christian\n>> \n> \n> 1) In my experience, you need four attributes to\n>   reliably specify a contract: the local symbol, the\n>   exchange, the currency and the security type. For\n>   6E futures, that would mean\n> \n>   symbol = 6EH7\n>   exchange = GLOBEX\n>   currency = USD\n>   type = FUT\n> \n> 2) An easy and _safe_ way is to keep a list/database of\n>   contracts with the four mentioned attributes, and\n>   then refer to this list when contract information is\n>   needed.\n> \n> \n> -- \n> Enrico Schumann\n> Lucerne, Switzerland\n> http://enricoschumann.net\n>",
+      "body_plain": "Thank you, Enrico, for your suggestion.\n\nIt does not seem to get the data from IB on the currency contracts.  Looking at the database / list closer, the second page defining the moving averages has a default USD input.  So I do have 4 attributes, which may be the reason I am getting data for metals and energies.  If anyone out there is using IB successfully on currency futures contracts, grains and options on all of the above, thanks for letting me know outside of the mailing list to avoid clogging it.\n\nCheers,\n\nChristian\n\n> On Mar 1, 2017, at 11:13 AM, Enrico Schumann <es at enricoschumann.net> wrote:\n> \n> On Wed, 01 Mar 2017, Christian Lear writes:\n> \n>> Hi,\n>> \n>> I’m using Interactive Brokers (IB) data feed running through R code (R\n>> studio) with moving average filters on futures contracts.\n>> \n>> I have listed the contracts in an excel sheet.  The sheet has 4\n>> columns, contract (or ticker) i.e. “CLJ7\" for April 2007 Crude Oil,\n>> Security Type “Future”, Exchange “NYMEX” and Use 1 or 0 to activate\n>> the excel line (contract) or not.\n>> \n>> My program works perfectly for Nymex energy contracts (CL, NG, RB,\n>> HO), Nymex metals (GC, SI, etc.), Globex mini S&P (ES).  However, the\n>> program stops working and has an error when running Globex Euro FX\n>> (6E), Japanese Yen (6J) and the other currencies.  Note that the\n>> currency contracts have the same syntax as the Nymex Energy, and Nymex\n>> metals, namely “TickerMonthYear\" (6EM7, CLJ7, GCJ7 etc.)\n>> \n>> 1.  Does anyone know why the program fails to\n>> recognize the currency futures contracts?  Any\n>> suggestions?\n>> \n>> Grains are also a problem.  IB uses a different symbol structure,\n>> namely Ticker MONth YEar “ZS MONabbrev YEar” (ZS JUL 17).\n>> \n>> 2.  How would you solve for one code to read both the\n>> CL contracts and the Grains ticker, knowing that the\n>> symbol structure is different?  Any ideas?\n>> \n>> I can send a short code and excel sheet test list to better\n>> demonstrate the issue.\n>> \n>> Thanks for your help.\n>> \n>> Christian\n>> \n> \n> 1) In my experience, you need four attributes to\n>   reliably specify a contract: the local symbol, the\n>   exchange, the currency and the security type. For\n>   6E futures, that would mean\n> \n>   symbol = 6EH7\n>   exchange = GLOBEX\n>   currency = USD\n>   type = FUT\n> \n> 2) An easy and _safe_ way is to keep a list/database of\n>   contracts with the four mentioned attributes, and\n>   then refer to this list when contract information is\n>   needed.\n> \n> \n> -- \n> Enrico Schumann\n> Lucerne, Switzerland\n> http://enricoschumann.net\n>",
       "body_snippet": "Thank you, Enrico, for your suggestion.\n\nIt does not seem to get the data from IB on the currency contracts.  Looking at the database / list closer, the second page defining the moving averages has a ",
       "thread_id": "thread-3562941a76d0",
       "thread_depth": 2,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014218.html"
     },
     {
       "id": "msg-6f13b52602dc",
@@ -70,7 +73,8 @@
       "body_snippet": "Christian,\n\nIn some old configuration file, I found the following for IB currency futures:\n\nSymbol,Expiry,Exchange,Type\nEUR,201206,GLOBEX,FUT\n\nMaybe it helps.\n\nDr. Adrian Trapletti\n\nSteinstrasse 9b, 8",
       "thread_id": "thread-6f13b52602dc",
       "thread_depth": 0,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014219.html"
     },
     {
       "id": "msg-8f3840de7d83",
@@ -88,7 +92,8 @@
       "body_snippet": "Hi everybody,\n\ncan help me to understand exactly how this rule works?\n\nadd.rule(my.strategy, name='ruleSignal',\n          arguments = list(sigcol='upTrend', sigval=TRUE,\n                           rep",
       "thread_id": "thread-6f13b52602dc",
       "thread_depth": 1,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014220.html"
     },
     {
       "id": "msg-4ca6e9d063e9",
@@ -104,7 +109,8 @@
       "body_snippet": "Hello,\n\nI am trying to parallelize applyStrategy() to make it faster when applied to multiple symbols. The reproducible code below only contains 3 symbols thus it finishes fast however when I apply it",
       "thread_id": "thread-4ca6e9d063e9",
       "thread_depth": 0,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014221.html"
     },
     {
       "id": "msg-b9867432b4af",
@@ -122,7 +128,8 @@
       "body_snippet": "I suspect you're running up against communication and memory management\ntime and resource contention. ?\n\napplyIndicators and applySignals should all be using vectorized code,\nso the potential benefit ",
       "thread_id": "thread-4ca6e9d063e9",
       "thread_depth": 1,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014222.html"
     },
     {
       "id": "msg-f0b63c48c63d",
@@ -141,7 +148,8 @@
       "body_snippet": "Atakan,\n\nWhat kind of computer do you have? Number of cores, memory, hyperthreaded or not?\n\n/Brian Does this package take advantage of hyperthreading? By your comment it suggests it does for multiple ",
       "thread_id": "thread-4ca6e9d063e9",
       "thread_depth": 2,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014223.html"
     },
     {
       "id": "msg-bdc309408501",
@@ -161,7 +169,8 @@
       "body_snippet": "Hi Frank,\n\nI just thought of an idea based on your suggestion. Instead of trying to implement a foreach loop, I will try to subset my symbol set into different R sessions with the create a new r sessi",
       "thread_id": "thread-4ca6e9d063e9",
       "thread_depth": 3,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014224.html"
     },
     {
       "id": "msg-457bc7a4734b",
@@ -182,7 +191,8 @@
       "body_snippet": "Hi Atakan,\n\nI use a batch file to run most of my R programs. That way I just have to get\nit right once and then I can run it many times. The following is a simple\nbatch command, scatter_plot.bat,  to ",
       "thread_id": "thread-4ca6e9d063e9",
       "thread_depth": 4,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014225.html"
     },
     {
       "id": "msg-a616233f004e",
@@ -205,7 +215,8 @@
       "body_snippet": "No, I have not seen this. Thanks.\n\n \n\nMy post was more to point out how I structure data when I'm running a\ncompute intensive program written in C. I thought this might help Atakam\nthink of a way to s",
       "thread_id": "thread-a616233f004e",
       "thread_depth": 0,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014226.html"
     },
     {
       "id": "msg-2b8da6e94c64",
@@ -221,7 +232,8 @@
       "body_snippet": "Hello everybody,\n\nI'm using quantstrat apply.paramset to optimize some parameters but my \nsimulations runs for a long time...\n\nI'm trying to stop bad simulations BEFORE they finish basing on some \nind",
       "thread_id": "thread-2b8da6e94c64",
       "thread_depth": 0,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014227.html"
     },
     {
       "id": "msg-857869ed330a",
@@ -239,7 +251,8 @@
       "body_snippet": "Would you attach an example to your post? Something that we can run using\ncopy and paste to R console, with some data?\n\nThanks,\n\nFrank\nChicago\n\n-----Original Message-----\nFrom: R-SIG-Finance [mailto:r",
       "thread_id": "thread-2b8da6e94c64",
       "thread_depth": 1,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014228.html"
     },
     {
       "id": "msg-7fdb5e7a2072",
@@ -258,7 +271,8 @@
       "body_snippet": "Hi Frank,\n\nI don't have code to share: every simulation is fine...\n\nIn other words my problem is:\n\n1) In which function of quantstrat can I insert some custom code to stop \nsimulation execution at a s",
       "thread_id": "thread-2b8da6e94c64",
       "thread_depth": 2,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014229.html"
     },
     {
       "id": "msg-624bced5baa8",
@@ -278,7 +292,8 @@
       "body_snippet": "How are you planning to calculate this statistic to 'stop trading'? \n\nIf you're using net profit, drawdown, etc., these are typically\ncalculated after the backtest is over, e.g. using updatePortf and\n",
       "thread_id": "thread-2b8da6e94c64",
       "thread_depth": 3,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014230.html"
     },
     {
       "id": "msg-b97a4d196678",
@@ -299,7 +314,8 @@
       "body_snippet": "Hi Brain,\n\nthanks for your answers.\n\nSee following answers below.\n\nDiego\n\n\nOn 14/03/2017 18:02, Brian G. Peterson wrote:\n> How are you planning to calculate this statistic to 'stop trading'?\nFor me it",
       "thread_id": "thread-2b8da6e94c64",
       "thread_depth": 4,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014231.html"
     },
     {
       "id": "msg-48145fc2f654",
@@ -315,7 +331,8 @@
       "body_snippet": "Hello everybody,\n\nI have been using the random_portfolios function from the\n`PortfolioAnalytics` package to simulate the range of possibilities for\nreturn paths at each step under various portfolio co",
       "thread_id": "thread-48145fc2f654",
       "thread_depth": 0,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014232.html"
     },
     {
       "id": "msg-44d5ec9649a2",
@@ -333,7 +350,8 @@
       "body_snippet": "On Mon, 2017-03-20 at 15:09 -0400, Kevin Dhingra wrote:\n> I have been using the random_portfolios function from the\n> `PortfolioAnalytics` package to simulate the range of possibilities\n> for return p",
       "thread_id": "thread-48145fc2f654",
       "thread_depth": 1,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014233.html"
     },
     {
       "id": "msg-0cf5b3691784",
@@ -352,7 +370,8 @@
       "body_snippet": "Brian,\n\nThank you for a quick reply. I will soon be working on that problem and\nfrom what I have played with so far, it is unlikely that for our example\n~2k portfolios will be enough (really hoping it",
       "thread_id": "thread-48145fc2f654",
       "thread_depth": 2,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014234.html"
     },
     {
       "id": "msg-58eb19ecdb65",
@@ -372,7 +391,8 @@
       "body_snippet": "Kevin,\n\nCan you give us a sense of the number of assets in the portfolio and\nthe constraints? That will help us understand where the potential\nbottlenecks are in the random portfolio generation. For e",
       "thread_id": "thread-48145fc2f654",
       "thread_depth": 3,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014235.html"
     },
     {
       "id": "msg-dfd2112100eb",
@@ -393,7 +413,8 @@
       "body_snippet": "Hi Ross,\n\nSure. Even though I have not profiled the bottlenecks quite in detail as of\nyet, i will give you a decent idea of the problem I am working with. I can\nhave multiple indices with as much as 2",
       "thread_id": "thread-48145fc2f654",
       "thread_depth": 4,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014236.html"
     },
     {
       "id": "msg-d7f5fdfc1bd5",
@@ -415,7 +436,8 @@
       "body_snippet": "For this type of problem, I would probably generate one set of random \nportfolios and just reuse that set of feasible portfolios...  My usual \nrule is n-assets + 1-2k feasible portfolios.  You can get",
       "thread_id": "thread-48145fc2f654",
       "thread_depth": 5,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014237.html"
     },
     {
       "id": "msg-23fac0141360",
@@ -438,7 +460,8 @@
       "body_snippet": "Brian,\n\nYes I think that will be a good starting point. My universe would not\nchange a lot (I will be working with 10-15 benchmarks at a time and I guess\nI can generate a reusable set for each indepen",
       "thread_id": "thread-48145fc2f654",
       "thread_depth": 6,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014238.html"
     },
     {
       "id": "msg-8532ed2364f7",
@@ -454,7 +477,8 @@
       "body_snippet": "Please look at my package rportfolios.  It allows you to construct individual and samples of random portfolios that satisfy a wide range of constraints ( e.g., long only, short only, long short portfo",
       "thread_id": "thread-8532ed2364f7",
       "thread_depth": 0,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014239.html"
     },
     {
       "id": "msg-0136d21c25e7",
@@ -478,7 +502,8 @@
       "body_snippet": "The process you describe is pretty standard for an investment-committee \ndriven process.\n\nI'm going to suggest that you don't really want to change the \nconstraints that often.  For example, box const",
       "thread_id": "thread-48145fc2f654",
       "thread_depth": 7,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014240.html"
     },
     {
       "id": "msg-a81711a7de4b",
@@ -503,7 +528,8 @@
       "body_snippet": "Just wanted to point out an example of what Brian mentioned for\nvisualizing the feasible space with different constraint sets.\nVisualizations here\nhttp://rossb34.github.io/PortfolioAnalyticsPresentati",
       "thread_id": "thread-48145fc2f654",
       "thread_depth": 8,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014241.html"
     },
     {
       "id": "msg-169b9103b878",
@@ -521,7 +547,8 @@
       "body_snippet": "On 03/21/2017 07:00 AM, r-sig-finance-request at r-project.org wrote:\n> Send R-SIG-Finance mailing list submissions to\n> \tr-sig-finance at r-project.org\n>\n> To subscribe or unsubscribe via the World W",
       "thread_id": "thread-169b9103b878",
       "thread_depth": 0,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014242.html"
     },
     {
       "id": "msg-bb17c2de7a51",
@@ -547,7 +574,8 @@
       "body_snippet": "Brian, Ross and Frednovo,\n\nThis has been extremely helpful. I think now I have a lot better\nunderstanding of how to think about the problem at hand. Appreciate it.\n\nRegards,\nKshitij Dhingra\n\nOn Tue, M",
       "thread_id": "thread-48145fc2f654",
       "thread_depth": 9,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014243.html"
     },
     {
       "id": "msg-ef2e6cf24207",
@@ -566,7 +594,8 @@
       "body_snippet": "Hi Joe,\n\nSure that is a valid point. We spin up EC2 instances all the time and it\nworks well with R. For this particular problem, we are working with a\nproprietary algorithm that we do not feel comfor",
       "thread_id": "thread-169b9103b878",
       "thread_depth": 1,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014244.html"
     },
     {
       "id": "msg-957cf4774bc7",
@@ -586,7 +615,8 @@
       "body_snippet": "Kshitij,\n\nI am not an expert either, just digging in to the cloud.  But AWS does \nhave security built in to it. You can select a linux server flavor, add \nusers, create a S2 data buckets.  Then genera",
       "thread_id": "thread-169b9103b878",
       "thread_depth": 2,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014245.html"
     },
     {
       "id": "msg-f1bf191fb8ac",
@@ -611,7 +641,8 @@
       "body_snippet": "On Tue, Mar 21, 2017 at 5:41 AM, Brian G. Peterson <brian at braverock.com> wrote:\n>\n<snip>\n> To answer the question of whether Rcpp will help is somewhat complex. I'm\n> confident that some of the nes",
       "thread_id": "thread-48145fc2f654",
       "thread_depth": 8,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014246.html"
     },
     {
       "id": "msg-6e764b075689",
@@ -627,7 +658,8 @@
       "body_snippet": "Hi everyone,\n\nI'm trying to use the rmgarch package to estimate a multivariate GARCH\nmodel and then use those parameters to simulate paths forward.  I've gotten\nas far as creating a goGARCHsim object ",
       "thread_id": "thread-6e764b075689",
       "thread_depth": 0,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014247.html"
     },
     {
       "id": "msg-809ce247cac7",
@@ -645,7 +677,8 @@
       "body_snippet": "library(rmgarch)\ndata(\"dji30ret\")\nspec<-gogarchspec(mean.model=list(model=\"AR\"),ica = \"radical\")\nfit=gogarchfit(spec,dji30ret[,1:5])\nsim=gogarchsim(fit,n.sim = 1000,m.sim=1,startMethod = \"sample\",rsee",
       "thread_id": "thread-6e764b075689",
       "thread_depth": 1,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014248.html"
     },
     {
       "id": "msg-d544fff6523d",
@@ -664,7 +697,8 @@
       "body_snippet": "Alexios,\n\nThanks again for your help.\nI'm getting some counterintuitive results with the seriesSim output.  When\nI run your exact example above and then compute cor(sim at msim$seriesSim[[1]]),\nI get ",
       "thread_id": "thread-6e764b075689",
       "thread_depth": 2,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014249.html"
     },
     {
       "id": "msg-e6fe660139fd",
@@ -684,7 +718,8 @@
       "body_snippet": "Try using model=\"VAR\" instead of \"AR\"....will check to see if something\nis amiss otherwise.\n\nA.\n\nOn 24/03/2017 13:42, Josh Segal wrote:\n> Alexios,\n>\n> Thanks again for your help.\n> I'm getting some co",
       "thread_id": "thread-6e764b075689",
       "thread_depth": 3,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014250.html"
     },
     {
       "id": "msg-ad08f4b65a92",
@@ -700,7 +735,8 @@
       "body_snippet": "Dear colleges,\n\nmy research department is working with big data and the capability of our local computers is close to the end (20 GB RAM). We aim therefore to implement a cloud/parallel solution.\nDo y",
       "thread_id": "thread-ad08f4b65a92",
       "thread_depth": 0,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014251.html"
     },
     {
       "id": "msg-62cd74722049",
@@ -718,7 +754,8 @@
       "body_snippet": "Look at Apache Spark and SparkR.\n\nhttp://spark.apache.org/docs/latest/sparkr.html\n\nTom\n\nOn Fri, Mar 24, 2017 at 4:15 PM, Cajias Marcelo <Marcelo.Cajias at patrizia.ag>\nwrote:\n\n> Dear colleges,\n>\n> my ",
       "thread_id": "thread-ad08f4b65a92",
       "thread_depth": 1,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014252.html"
     },
     {
       "id": "msg-e75a1e1b8adf",
@@ -739,7 +776,8 @@
       "body_snippet": "VAR seems ok, while AR and constant are not\n\nShould I only use VAR with GOGARCH?\n\nOn Fri, Mar 24, 2017 at 3:43 PM, alexios galanos <alexios at 4dscape.com>\nwrote:\n\n> Try using model=\"VAR\" instead of \"",
       "thread_id": "thread-6e764b075689",
       "thread_depth": 4,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014253.html"
     },
     {
       "id": "msg-35ed30645b8b",
@@ -761,7 +799,8 @@
       "body_snippet": "Yes...will check this weekend to see whether something may have gone amiss in the AR/Constant simulation. Check my bitbucket repo by next week to see if any changes were committed and reinstall from t",
       "thread_id": "thread-6e764b075689",
       "thread_depth": 5,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014254.html"
     },
     {
       "id": "msg-ed8710dc2ddd",
@@ -784,7 +823,8 @@
       "body_snippet": "Will do, thanks again!\n\nOn Fri, Mar 24, 2017 at 5:17 PM, Alexios Ghalanos <alexios at 4dscape.com>\nwrote:\n\n> Yes...will check this weekend to see whether something may have gone amiss\n> in the AR/Cons",
       "thread_id": "thread-6e764b075689",
       "thread_depth": 6,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014255.html"
     },
     {
       "id": "msg-636534dda9a9",
@@ -808,7 +848,8 @@
       "body_snippet": "Josh, I've pushed a fix to the repo. Try downloading now and\nre-installing. Apparently the returned matrix was\nconstructed badly, aligning the vectors by row rather than by\ncolumn...good catch. I'll t",
       "thread_id": "thread-6e764b075689",
       "thread_depth": 7,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014256.html"
     },
     {
       "id": "msg-53d5e27ee7fe",
@@ -834,7 +875,8 @@
       "body_snippet": "FYI- I have found it very useful to use random portfolios to verify that\nyour optimization is actually doing something. Particular mandates get so\nbogged down by constraints (liquidity, box, sector, i",
       "thread_id": "thread-48145fc2f654",
       "thread_depth": 9,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014257.html"
     },
     {
       "id": "msg-18ee1efb4e39",
@@ -857,7 +899,8 @@
       "body_snippet": "I'm coming significantly late to the thread, but I'll throw in a bit of \nmy view on the required number of random portfolios to generate.\n\nI think it depends a whole lot on what you are doing.\n\nIf you",
       "thread_id": "thread-48145fc2f654",
       "thread_depth": 6,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014258.html"
     },
     {
       "id": "msg-caefe36d82d0",
@@ -882,7 +925,8 @@
       "body_snippet": "The recent version works for me, thanks very much\n\n\nOn Fri, Mar 24, 2017 at 7:05 PM alexios galanos <alexios at 4dscape.com> wrote:\n\n> Josh, I've pushed a fix to the repo. Try downloading now and\n> re",
       "thread_id": "thread-6e764b075689",
       "thread_depth": 8,
-      "month": "2017-03"
+      "month": "2017-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2017q1/014259.html"
     }
   ],
   "threads": [
