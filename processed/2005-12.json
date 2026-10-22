@@ -17,7 +17,8 @@
       "body_snippet": "Dear R-brains,\n\nI'm rather new to state-space models and would benefit from the extra\nconfidence in using the excellent package sspir.\n\nIn a one-factor model, If I am trying to do a simple regression ",
       "thread_id": "thread-2ae9e2e005a9",
       "thread_depth": 0,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000565.html"
     },
     {
       "id": "msg-6c6c2322b4e1",
@@ -31,11 +32,12 @@
       "references": [
         "<2310043c0512010412j5298187cv4599b4acc056abfc@mail.gmail.com>"
       ],
-      "body_plain": "Dear Tariq Khan\n \nThe initial conditions m0 and C0 can be specified according to your needs. If you are a Bayesian (as in West&Harrison 1997), you will use m0 and C0 to express your prior information. If you use a vague prior, you will give a high weight to your observations in the beginning, and the influence of the prior will die out fast. \n \nThe values of m0 and C0 could also stem from several time-series and express a random effect of the level of the individual series.\n \nFinally, you may estimate m0 and C0 using maximum likelihood estimation. This is not done in sspir (but the log-likelihood value is provided from a run of the filter).\n \nOne crude way of specifying m0 and C0 would be to use the estimates from a static model, i.e.\n \nss$ss$m0[1:2,] <- coef(lm(y~x,data=dfrm))\nss$ss$C0[1:2,1:2] <- summary(lm(y~x,data=dfrm))$cov.unscaled\nsmooth.params3 <- kfs(ss)$m\nts.plot(t(smooth.params3))\n\nNote that the 'kfs' function is a shortcut for using smoother(kfilter()).\n \nNote also, that your variance parameters are both set to unity. Again, you may discuss how to set these either by previous knowledge or by maximum likelihood estimation. It is set using\n \nss$ss$phi[1]   <- 2 # observational variance\nss$ss$phi[2]   <- .5# variance of the beta-parameter\n \nHope this helps,\n \nClaus\n \n________________________________\nClaus Dethlefsen, Msc, PhD\nStatistiker ved Kardiovaskul?rt Forskningscenter\n\n \nForskningens Hus\nAalborg Sygehus \nSdr. Skovvej 15\n9000 Aalborg\n\nTlf:   9932 6863\nemail: aas.claus.dethlefsen at nja.dk <mailto:aas.claus.dethlefsen at nja.dk> \n\n________________________________\n\nFra: ?Tariq Khan [mailto:tariq.khan at gmail.com]\nSendt: to 01-12-2005 13:12\nTil: R-help at stat.math.ethz.ch; R-sig-finance at stat.math.ethz.ch\nCc: Claus Dethlefsen / Aalborg Sygehus\nEmne: Kalman Smoothing - time-variant parameters (sspir)\n\n\n\nDear R-brains,\n\nI'm rather new to state-space models and would benefit from the extra\nconfidence in using the excellent package sspir.\n\nIn a one-factor model, If I am trying to do a simple regression where\nI assume the intercept is constant and the 'Beta' is changing, how do\nI do that? How do i Initialize the filter (i.e. what is appropriate to\nset m0, and C0 for the example below)?\n\nThe model I want is: y = alpha + beta + err1; beta_(t+1) = beta_t + err2\n\nI thought of the following:\nlibrary(mvtnorm) # (1)\nlibrary(sspir)\n# Let's get some data so we can all try this at home\ndfrm <- data.frame(\n                   y =\nc(0.02,0.04,-0.03,0.02,0,0.01,0.04,0.03,-0.01,0.04,-0.01,0.05,0.04,\n                         \n0.03,0.01,-0.01,-0.01,-0.03,0.02,-0.04,-0.05,-0.02,-0.04,0,0.02,0,\n                        \n-0.01,-0.01,0.01,0.09,0.03,0.03,0.05,0.04,-0.01,0.05,0.03,0.01,\n                          0.04,0.01,-0.01,-0.02,-0.01,-0.01,\n0.06,0.03,0.02,0.03,0.03,0.04,\n                          0.03,0.04,-0.02,-0.03,0.04,0.03,0.05,0.02,0.03,-0.1),\n                   x = c(-0.03,-0.01,0.07,-0.03,-0.07,0.05,0.02,-0.05,-0.04,\n                           -0.02,-0.19,0.07,0.09,0.01,0.01,0,0.05,0,-0.02,-0.09,\n                           -0.12,-0.01,-0.13,0.04,0.04,-0.07,-0.05,-0.03,\n                           -0.01,0.11,0.06,0.03,0.06,0.06,-0.01,0.07,0.01,\n                          \n0,0.07,0.04,-0.02,0,-0.03,0.04,-0.04,-0.01,0.03,0.02,0.05,0.04,\n                            0.05,0.03,0,-0.04,0.05,0.05,0.06,0.02,0.04,-0.06)\n)\nss <- ssm(y ~ tvar(x), time = 1:nrow(dfrm), family=gaussian(link=\"identity\"),\n               data=dfrm)\nsmooth.params <- smoother(kfilter(ss$ss))$m\n\n(1) I read in http://ww.math.aau.dk/~mbn/Teaching/MarkovE05/Lecture3.pdf\nthat this is requred as there is a bug in sspir.\n\nTo what should I set ss$ss$m0 and ss$ss$C0? (I did notice that\nsmoother() replaces these, but it still matters what I initialize it\nto in the first place)\n\nMany thanks!\n\nTariq Khan",
+      "body_plain": "Dear Tariq Khan\n \nThe initial conditions m0 and C0 can be specified according to your needs. If you are a Bayesian (as in West&Harrison 1997), you will use m0 and C0 to express your prior information. If you use a vague prior, you will give a high weight to your observations in the beginning, and the influence of the prior will die out fast. \n \nThe values of m0 and C0 could also stem from several time-series and express a random effect of the level of the individual series.\n \nFinally, you may estimate m0 and C0 using maximum likelihood estimation. This is not done in sspir (but the log-likelihood value is provided from a run of the filter).\n \nOne crude way of specifying m0 and C0 would be to use the estimates from a static model, i.e.\n \nss$ss$m0[1:2,] <- coef(lm(y~x,data=dfrm))\nss$ss$C0[1:2,1:2] <- summary(lm(y~x,data=dfrm))$cov.unscaled\nsmooth.params3 <- kfs(ss)$m\nts.plot(t(smooth.params3))\n\nNote that the 'kfs' function is a shortcut for using smoother(kfilter()).\n \nNote also, that your variance parameters are both set to unity. Again, you may discuss how to set these either by previous knowledge or by maximum likelihood estimation. It is set using\n \nss$ss$phi[1]   <- 2 # observational variance\nss$ss$phi[2]   <- .5# variance of the beta-parameter\n \nHope this helps,\n \nClaus\n \n________________________________\nClaus Dethlefsen, Msc, PhD\nStatistiker ved Kardiovaskulært Forskningscenter\n\n \nForskningens Hus\nAalborg Sygehus \nSdr. Skovvej 15\n9000 Aalborg\n\nTlf:   9932 6863\nemail: aas.claus.dethlefsen at nja.dk <mailto:aas.claus.dethlefsen at nja.dk> \n\n________________________________\n\nFra: ¨Tariq Khan [mailto:tariq.khan at gmail.com]\nSendt: to 01-12-2005 13:12\nTil: R-help at stat.math.ethz.ch; R-sig-finance at stat.math.ethz.ch\nCc: Claus Dethlefsen / Aalborg Sygehus\nEmne: Kalman Smoothing - time-variant parameters (sspir)\n\n\n\nDear R-brains,\n\nI'm rather new to state-space models and would benefit from the extra\nconfidence in using the excellent package sspir.\n\nIn a one-factor model, If I am trying to do a simple regression where\nI assume the intercept is constant and the 'Beta' is changing, how do\nI do that? How do i Initialize the filter (i.e. what is appropriate to\nset m0, and C0 for the example below)?\n\nThe model I want is: y = alpha + beta + err1; beta_(t+1) = beta_t + err2\n\nI thought of the following:\nlibrary(mvtnorm) # (1)\nlibrary(sspir)\n# Let's get some data so we can all try this at home\ndfrm <- data.frame(\n                   y =\nc(0.02,0.04,-0.03,0.02,0,0.01,0.04,0.03,-0.01,0.04,-0.01,0.05,0.04,\n                         \n0.03,0.01,-0.01,-0.01,-0.03,0.02,-0.04,-0.05,-0.02,-0.04,0,0.02,0,\n                        \n-0.01,-0.01,0.01,0.09,0.03,0.03,0.05,0.04,-0.01,0.05,0.03,0.01,\n                          0.04,0.01,-0.01,-0.02,-0.01,-0.01,\n0.06,0.03,0.02,0.03,0.03,0.04,\n                          0.03,0.04,-0.02,-0.03,0.04,0.03,0.05,0.02,0.03,-0.1),\n                   x = c(-0.03,-0.01,0.07,-0.03,-0.07,0.05,0.02,-0.05,-0.04,\n                           -0.02,-0.19,0.07,0.09,0.01,0.01,0,0.05,0,-0.02,-0.09,\n                           -0.12,-0.01,-0.13,0.04,0.04,-0.07,-0.05,-0.03,\n                           -0.01,0.11,0.06,0.03,0.06,0.06,-0.01,0.07,0.01,\n                          \n0,0.07,0.04,-0.02,0,-0.03,0.04,-0.04,-0.01,0.03,0.02,0.05,0.04,\n                            0.05,0.03,0,-0.04,0.05,0.05,0.06,0.02,0.04,-0.06)\n)\nss <- ssm(y ~ tvar(x), time = 1:nrow(dfrm), family=gaussian(link=\"identity\"),\n               data=dfrm)\nsmooth.params <- smoother(kfilter(ss$ss))$m\n\n(1) I read in http://ww.math.aau.dk/~mbn/Teaching/MarkovE05/Lecture3.pdf\nthat this is requred as there is a bug in sspir.\n\nTo what should I set ss$ss$m0 and ss$ss$C0? (I did notice that\nsmoother() replaces these, but it still matters what I initialize it\nto in the first place)\n\nMany thanks!\n\nTariq Khan",
       "body_snippet": "Dear Tariq Khan\n \nThe initial conditions m0 and C0 can be specified according to your needs. If you are a Bayesian (as in West&Harrison 1997), you will use m0 and C0 to express your prior information.",
       "thread_id": "thread-2ae9e2e005a9",
       "thread_depth": 1,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000574.html"
     },
     {
       "id": "msg-0a260850fd31",
@@ -51,7 +53,8 @@
       "body_snippet": "In method rev.timeDate\n\n > rev(timeSequence(len=20))\n[1] \"Honolulu\"\n[1] [2004-01-09] [2004-01-08] [2004-01-07] [2004-01-06] [2004-01-05]  \n[2004-01-04] [2004-01-03] [2004-01-02]\n[9] [2004-01-01]\n\n\n\nNo",
       "thread_id": "thread-0a260850fd31",
       "thread_depth": 0,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000566.html"
     },
     {
       "id": "msg-35024e044c50",
@@ -69,7 +72,8 @@
       "body_snippet": "# FIX:\n\nrev.timeDate =\nfunction (x)\n{\n    if (Sys.getenv(\"TZ\")[[1]] != \"GMT\")\n        warning(\"Set timezone to GMT!\")\n    if (!inherits(x, \"timeDate\"))\n        stop(\"Wrong class type\")\n    # Replace:\n",
       "thread_id": "thread-0a260850fd31",
       "thread_depth": 1,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000567.html"
     },
     {
       "id": "msg-e958b4571388",
@@ -85,7 +89,8 @@
       "body_snippet": "I sent a question to the general Help. I received an answer from Patrick\nBurns, and he suggested me to post it here. The question is how to use batch\nfiles that call R in an effective way. More:\n\nWhat",
       "thread_id": "thread-e958b4571388",
       "thread_depth": 0,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000568.html"
     },
     {
       "id": "msg-76e5140d636a",
@@ -103,7 +108,8 @@
       "body_snippet": "On 2 December 2005 at 14:15, Molins, Jordi wrote:\n| I sent a question to the general Help. I received an answer from Patrick\n| Burns, and he suggested me to post it here. The question is how to use ba",
       "thread_id": "thread-e958b4571388",
       "thread_depth": 1,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000569.html"
     },
     {
       "id": "msg-bce824e6c7a4",
@@ -121,7 +127,8 @@
       "body_snippet": "See ?socketConnection or if they supply a COM object see the\nRDCOMClient or rcom packages.  In that case there is no need for\nanything beyond R.\n\nOn 12/2/05, Molins, Jordi <Jordi.Molins at drkw.com> w",
       "thread_id": "thread-e958b4571388",
       "thread_depth": 1,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000570.html"
     },
     {
       "id": "msg-f2d942e05143",
@@ -137,7 +144,8 @@
       "body_snippet": "Dear All,\nI am learning C++ for financial applications and I am toying around with the \"basic\" routines provided by the financial recipes site http://finance.bi.no/~bernt/gcc_prog/\n\nIt would be useful",
       "thread_id": "thread-f2d942e05143",
       "thread_depth": 0,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000575.html"
     },
     {
       "id": "msg-b07ace707f19",
@@ -153,7 +161,8 @@
       "body_snippet": "Of course, I have access to several databases. The data from the exchange is\na single price, so it does not seem necessary to me to save this price into\na database.\n\nThank you to all replies I have go",
       "thread_id": "thread-b07ace707f19",
       "thread_depth": 0,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000571.html"
     },
     {
       "id": "msg-2844109f59c2",
@@ -171,7 +180,8 @@
       "body_snippet": "Have you looked at Dirk's  RQuantlib source code that will give you a \ngood idea on how to wrap c++  functions.\nAnd ofcourse the R-ext manual is useful.\n\nBest,\nKris\n\n\n\nL.Isella wrote:\n\n>Dear All,\n>I a",
       "thread_id": "thread-f2d942e05143",
       "thread_depth": 1,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000576.html"
     },
     {
       "id": "msg-bd5d4260cc97",
@@ -189,7 +199,8 @@
       "body_snippet": "I just got 15 hits from 'RSiteSearch(\"cross spectrum\")' and 12 from \n'RSiteSearch(\"coherency\")'.  I doubt if all are relevant to your \nquestion, but the first in each list seems relevant.\n\n\t  If you w",
       "thread_id": "thread-bd5d4260cc97",
       "thread_depth": 0,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000577.html"
     },
     {
       "id": "msg-0c19d2fcb2de",
@@ -205,7 +216,8 @@
       "body_snippet": ">\n>\n>I sent a question to the general Help. I received an answer from Patrick\n>Burns, and he suggested me to post it here. The question is how to use batch\n>files that call R in an effective way. More",
       "thread_id": "thread-0c19d2fcb2de",
       "thread_depth": 0,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000578.html"
     },
     {
       "id": "msg-a56f8d90f68c",
@@ -221,7 +233,8 @@
       "body_snippet": "Hello,\n\nI have been using the NIG-functions in the fBasics package\ntrying to determine some european call prices using a NIG\ndistribution, but seemed to have hit a wall.\n\nBasically, the process (as I ",
       "thread_id": "thread-a56f8d90f68c",
       "thread_depth": 0,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000579.html"
     },
     {
       "id": "msg-d2f346d99efe",
@@ -240,7 +253,8 @@
       "body_snippet": "Hello,\n\n> I am not sure of a few things you are doing\n>\n\nAs it turns out - neither was I.  I was able to narrow the problem\ndown and identify my programing error.  I apologize for the noise\non the lis",
       "thread_id": "thread-a56f8d90f68c",
       "thread_depth": 2,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000582.html"
     },
     {
       "id": "msg-63d5d257abc5",
@@ -256,7 +270,8 @@
       "body_snippet": "Version 3 of POP Portfolio Construction Suite is now available.\n\nChanges include:\nNow available for Linux as well as Windows.\n\nFaster optimization, especially when a large number of assets are traded.",
       "thread_id": "thread-63d5d257abc5",
       "thread_depth": 0,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000580.html"
     },
     {
       "id": "msg-692df1a721f0",
@@ -274,7 +289,8 @@
       "body_snippet": "I am not sure of a few things you are doing\n\nThe BS volatility in your function below is what you compute as \"sd\"  \nbelow I don't think that makes sense. You'd have to\nimply the bs volatility from NiG",
       "thread_id": "thread-a56f8d90f68c",
       "thread_depth": 1,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000581.html"
     },
     {
       "id": "msg-099eda25439d",
@@ -294,7 +310,8 @@
       "body_snippet": ">>>>> \"dkf\" == dkf  <dkf at specere.com>\n>>>>>     on Wed, 7 Dec 2005 00:23:34 +0700 (ICT) writes:\n\n    dkf> Hello,\n    >> I am not sure of a few things you are doing\n\n    dkf> As it turns out - neith",
       "thread_id": "thread-a56f8d90f68c",
       "thread_depth": 3,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000583.html"
     },
     {
       "id": "msg-c877f12a0175",
@@ -306,11 +323,12 @@
       "subject_clean": "RV: please ...i need help...",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "> -----Mensaje original-----\n> De:\tRicardo Zambrano Aguilera \n> Enviado el:\tlunes, 05 de diciembre de 2005 17:06\n> Para:\t'r-sig-finance at stat.math.ethz.ch'\n> Asunto:\tplease ...i need help...\n> \n> hello everyone my name is ricardo and i leave in santiago ,Chile i?m 23 years old, and i?m close to graduated from engineering with mention in stats\n> my problem follows me every time.\n> to graduated i must to do a paper work based in modelling the change type, between different coins. specially dollar - peso ,trought GARCH models, besides i need to create to my bank (the place where i?m doing my thesis), a system to calculate the Var (value at risk), but i have problems to calculate the var in a portfolio standar (just like a regular client of the bank) .   i don?t know, call me a oldie fashion , but i like to work in R, actually  i?m doing my job with the package tseries...\n> BUT i did hear, that the splus 7.0 has a super module called finmetrics...   but i understand that R has a similar module the r-sig-finance it?s true this????????\n> if is true  i would like to have it , can you help me??\n> por favor , le habla un studiante de un pais tercer mundista, en donde el banco no puede comprar la licencia de splus\n> BYE",
+      "body_plain": "> -----Mensaje original-----\n> De:\tRicardo Zambrano Aguilera \n> Enviado el:\tlunes, 05 de diciembre de 2005 17:06\n> Para:\t'r-sig-finance at stat.math.ethz.ch'\n> Asunto:\tplease ...i need help...\n> \n> hello everyone my name is ricardo and i leave in santiago ,Chile i´m 23 years old, and i´m close to graduated from engineering with mention in stats\n> my problem follows me every time.\n> to graduated i must to do a paper work based in modelling the change type, between different coins. specially dollar - peso ,trought GARCH models, besides i need to create to my bank (the place where i´m doing my thesis), a system to calculate the Var (value at risk), but i have problems to calculate the var in a portfolio standar (just like a regular client of the bank) .   i don´t know, call me a oldie fashion , but i like to work in R, actually  i´m doing my job with the package tseries...\n> BUT i did hear, that the splus 7.0 has a super module called finmetrics...   but i understand that R has a similar module the r-sig-finance it´s true this????????\n> if is true  i would like to have it , can you help me??\n> por favor , le habla un studiante de un pais tercer mundista, en donde el banco no puede comprar la licencia de splus\n> BYE",
       "body_snippet": "> -----Mensaje original-----\n> De:\tRicardo Zambrano Aguilera \n> Enviado el:\tlunes, 05 de diciembre de 2005 17:06\n> Para:\t'r-sig-finance at stat.math.ethz.ch'\n> Asunto:\tplease ...i need help...\n> \n> he",
       "thread_id": "thread-c877f12a0175",
       "thread_depth": 0,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000584.html"
     },
     {
       "id": "msg-9fe948cd1e2b",
@@ -326,7 +344,8 @@
       "body_snippet": "I recognize that this question is more Yahoo-related not directly\nR-related, but I'm trying to better understand some of the details of\nthe yahooImport() function. Specifically, I'm looking for the\nde",
       "thread_id": "thread-9fe948cd1e2b",
       "thread_depth": 0,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000585.html"
     },
     {
       "id": "msg-05e1fd0b1b96",
@@ -342,7 +361,8 @@
       "body_snippet": "Perhaps this website may be of help:\n\nhttp://www.gummy-stuff.org/Yahoo-data.htm\n\n-- Guy\n\n\nGuy Yollin\nSenior Financial Engineer\nInsightful Corporation\nwww.insightful.com\ngyollin at insightful.com\n\n\n---",
       "thread_id": "thread-05e1fd0b1b96",
       "thread_depth": 0,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000586.html"
     },
     {
       "id": "msg-d05bd097f23b",
@@ -376,7 +396,8 @@
       "body_snippet": "Dear R-Users,\n\nI'm searching for somebody who can support me or even likes to \ncollaborate with\nme in setting up an R-package for \"constrained maximim log-likelihood\" \nparameter\nestimation.\n\nFor examp",
       "thread_id": "thread-781a3573e84d",
       "thread_depth": 0,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000588.html"
     },
     {
       "id": "msg-055484ed1a34",
@@ -392,7 +413,8 @@
       "body_snippet": "Dear All,\nI am trying to implement some portfolio optimization techinique going beyond mean/variance optimization (e.g. including higher order moments in the quantity to maximize or using non-quadrati",
       "thread_id": "thread-055484ed1a34",
       "thread_depth": 0,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000589.html"
     },
     {
       "id": "msg-2834120b4a7f",
@@ -410,7 +432,8 @@
       "body_snippet": "On Tue, Dec 13, 2005 at 01:18:16PM +0000, Diethelm Wuertz wrote:\n\n> Modern state of the art algorithms, like SQP algorithms as\n> implemented in Gauss, Matlab, Ox, take about a few seconds.\n\nI'm curiou",
       "thread_id": "thread-781a3573e84d",
       "thread_depth": 1,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000590.html"
     },
     {
       "id": "msg-bfcf465ccb2b",
@@ -428,7 +451,8 @@
       "body_snippet": "Hello Lorenzo,\nI am assuming that you are already familiar with the offerings of the\nbook, \"Modern Portfolio Optimization with NuOPT, S-PLUS and S+BAYES\"\n[Springer 2005] at\n\nhttp://www.springer.com/sg",
       "thread_id": "thread-bfcf465ccb2b",
       "thread_depth": 0,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000591.html"
     },
     {
       "id": "msg-03e1fec3a244",
@@ -447,7 +471,8 @@
       "body_snippet": "Andrew Piskorski <atp <at> piskorski.com> writes:\n\n> \n> On Tue, Dec 13, 2005 at 01:18:16PM +0000, Diethelm Wuertz wrote:\n> \n> > Modern state of the art algorithms, like SQP algorithms as\n> > implement",
       "thread_id": "thread-781a3573e84d",
       "thread_depth": 2,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000592.html"
     },
     {
       "id": "msg-836033e7e707",
@@ -465,7 +490,8 @@
       "body_snippet": "On Fri, Dec 16, 2005 at 08:45:34AM +0000, Max wrote:\n\n> I would be interested to hear why you suspect that they would\n> implement this algorithm in Fortran or C, btw - wouldn't it be\n> easier to imple",
       "thread_id": "thread-781a3573e84d",
       "thread_depth": 3,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000593.html"
     },
     {
       "id": "msg-6aed5e17fe6a",
@@ -484,7 +510,8 @@
       "body_snippet": "Andrew Piskorski <atp <at> piskorski.com> writes:\n> For the same reason that AFAIK nearly all real-world numerical\n> libraries are written in either C or Fortran - for speed.\n\nFor the stuff that I wri",
       "thread_id": "thread-781a3573e84d",
       "thread_depth": 4,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000594.html"
     },
     {
       "id": "msg-599d459c76de",
@@ -500,7 +527,8 @@
       "body_snippet": "Hi r-sig: I tried this on r-help first a few days ago with no hits, so sorry\nfor xposting....\n\n\n-----Original Message-----\nFrom: Andy Bunn [mailto:abunn at whrc.org]\nSent: Friday, December 16, 2005 11",
       "thread_id": "thread-599d459c76de",
       "thread_depth": 0,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000595.html"
     },
     {
       "id": "msg-31c11e51260a",
@@ -516,7 +544,8 @@
       "body_snippet": "I have attached a time-series r. I find that I am able to use the\ngarch() function in the tseries package to estimate a GARCH(1,1)\nmodel. But it fails to get convergence for the GARCH(1,0) -- i.e.,\nAR",
       "thread_id": "thread-31c11e51260a",
       "thread_depth": 0,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000596.html"
     },
     {
       "id": "msg-247ff392484b",
@@ -532,7 +561,8 @@
       "body_snippet": "I will not be reading email  between Dec 24th and January 1st.",
       "thread_id": "thread-247ff392484b",
       "thread_depth": 0,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000597.html"
     },
     {
       "id": "msg-30904fc210b7",
@@ -548,7 +578,8 @@
       "body_snippet": "I will not be reading email  between Dec 24th and January 1st.",
       "thread_id": "thread-30904fc210b7",
       "thread_depth": 0,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000598.html"
     },
     {
       "id": "msg-8834e461b74b",
@@ -564,7 +595,8 @@
       "body_snippet": "I will not be reading email  between Dec 24th and January 1st.",
       "thread_id": "thread-8834e461b74b",
       "thread_depth": 0,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000599.html"
     },
     {
       "id": "msg-e30a1884b7b0",
@@ -582,7 +614,8 @@
       "body_snippet": "Have you received a reply to this post?  I haven't seen one.\n\n\t  I ran the script you included with your post.  For the garch(1,1) \nmodel, I got an answer with a message \"FALSE CONVERGENCE\".  For the ",
       "thread_id": "thread-31c11e51260a",
       "thread_depth": 1,
-      "month": "2005-12"
+      "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000600.html"
     },
     {
       "id": "msg-0353778c128d",
@@ -602,6 +635,7 @@
       "thread_id": "thread-31c11e51260a",
       "thread_depth": 2,
       "month": "2005-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2005q4/000601.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20051230/dd9e155b/attachment.pl"
       ]

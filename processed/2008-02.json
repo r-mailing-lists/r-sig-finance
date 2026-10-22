@@ -13,11 +13,12 @@
       "subject_clean": "Bloomberg Data Import to R",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "hi robert,\n\ni?ve got a problem with the bloomberg data import. usually all works \nwell, but sometimes it seems that nothing is downloaded at all from \nbloomberg.\n\nexample: i wanted to download px_last for 900 us-stocks beginning with \n19900101 (giving him the appropriate chron-date format). the download \nstarts, the downloaded data is stored and written out to a file. new \ndata is being concatenated with the old data (column by column) until \nall 900 stocks are downloaded. during this process the download breaks \ndown, and the strange thing is, that it does happen SOMETIMES and not at \nthe same place (i.e. not at stock number 390, but at number 401 at one \ntime and 789 at other time). sometimes it does not happen at all. also, \nwhen i resume the download, i.e. tell him to download the data from \nwhere he stopped, it then works.\n\nso i checked the functions in your package and the problem really seems \nto be with the download itself. what happens is: in the function \n<blpGetHistoricalData> the object <lst> is NULL. this makes the command \n\"attr(lst, \"num.of.date.cols\")  <- 1\" to throw an error, because he is \nnot able to assign an attribute to a NULL object:\n\"attr(lst, \"num.of.date.cols\") <- 1 : attempt to set an attribute on \nNULL\". the object <lst> becomes then a data.frame of the dimension \n[0:number.of.tickers], which obviously is not what one would expect to get.\n\nmy question is: have you ever experienced such a problem? the problem \nseems to become more probable, the more data one downloads from bloomberg.\n\nhere are some infos on my environment:\n\nR 2.5.1\nwindows xp on the bloomberg terminal\nchron 2.3.16\nRBloomberg 0.1-10\nRDCOMClient 0.91-0\nzoo 1.4-2\n\ni?ve been talking to bloomberg about this problem, as well. they assured \nme that it is not about the amount of data i was downloading. so there \nmust be something else.\n\nthx in advance for your help,\n\nmarcin",
-      "body_snippet": "hi robert,\n\ni?ve got a problem with the bloomberg data import. usually all works \nwell, but sometimes it seems that nothing is downloaded at all from \nbloomberg.\n\nexample: i wanted to download px_last",
+      "body_plain": "hi robert,\n\ni´ve got a problem with the bloomberg data import. usually all works \nwell, but sometimes it seems that nothing is downloaded at all from \nbloomberg.\n\nexample: i wanted to download px_last for 900 us-stocks beginning with \n19900101 (giving him the appropriate chron-date format). the download \nstarts, the downloaded data is stored and written out to a file. new \ndata is being concatenated with the old data (column by column) until \nall 900 stocks are downloaded. during this process the download breaks \ndown, and the strange thing is, that it does happen SOMETIMES and not at \nthe same place (i.e. not at stock number 390, but at number 401 at one \ntime and 789 at other time). sometimes it does not happen at all. also, \nwhen i resume the download, i.e. tell him to download the data from \nwhere he stopped, it then works.\n\nso i checked the functions in your package and the problem really seems \nto be with the download itself. what happens is: in the function \n<blpGetHistoricalData> the object <lst> is NULL. this makes the command \n\"attr(lst, \"num.of.date.cols\")  <- 1\" to throw an error, because he is \nnot able to assign an attribute to a NULL object:\n\"attr(lst, \"num.of.date.cols\") <- 1 : attempt to set an attribute on \nNULL\". the object <lst> becomes then a data.frame of the dimension \n[0:number.of.tickers], which obviously is not what one would expect to get.\n\nmy question is: have you ever experienced such a problem? the problem \nseems to become more probable, the more data one downloads from bloomberg.\n\nhere are some infos on my environment:\n\nR 2.5.1\nwindows xp on the bloomberg terminal\nchron 2.3.16\nRBloomberg 0.1-10\nRDCOMClient 0.91-0\nzoo 1.4-2\n\ni´ve been talking to bloomberg about this problem, as well. they assured \nme that it is not about the amount of data i was downloading. so there \nmust be something else.\n\nthx in advance for your help,\n\nmarcin",
+      "body_snippet": "hi robert,\n\ni´ve got a problem with the bloomberg data import. usually all works \nwell, but sometimes it seems that nothing is downloaded at all from \nbloomberg.\n\nexample: i wanted to download px_last",
       "thread_id": "thread-1f5b9e6a6afd",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002560.html"
     },
     {
       "id": "msg-f2cec51035be",
@@ -34,6 +35,7 @@
       "thread_id": "thread-f2cec51035be",
       "thread_depth": 0,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002561.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080201/ebf510a0/attachment.pl"
       ]
@@ -52,7 +54,8 @@
       "body_snippet": "Dear zoo experts,\nWhile I follow the custom x-axis example in the help file for plot.zoo(), it\nis not clear to me how to easily display ticks at \"natural\" intervals, such\nas months/weeks/days.\nFor exa",
       "thread_id": "thread-6ba9fbe86e08",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002074.html"
     },
     {
       "id": "msg-57c90418137a",
@@ -70,7 +73,8 @@
       "body_snippet": "Markus,\n\nI can't necessarily help with the zoo example, but...\n\nThe quantmod package has a charting facility that does what I think you want.\n\nGenerally speaking you can pass any zoo object into chart",
       "thread_id": "thread-6ba9fbe86e08",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002075.html"
     },
     {
       "id": "msg-8c29968f8c06",
@@ -88,7 +92,8 @@
       "body_snippet": "plot.zoo uses whatever axis function is available for whatever class you\nare using.\n\nFor example, if you are using Date as your time class then\naxis.Date from R is used as default.\n\nThe latest version",
       "thread_id": "thread-6ba9fbe86e08",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002076.html"
     },
     {
       "id": "msg-cf4088c9dd0a",
@@ -104,7 +109,8 @@
       "body_snippet": "Hi!\n\n1) The documentation for the zoo package indicates a function lag.zoo .\nI can't find it when I try to use it or do a help(lag.zoo). I can find all the \nother zoo functions I tried so far (allthou",
       "thread_id": "thread-cf4088c9dd0a",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002077.html"
     },
     {
       "id": "msg-d405346f9fb7",
@@ -122,7 +128,8 @@
       "body_snippet": "On Feb 1, 2008 3:29 PM, MAB <MichelBeck at sbcglobal.net> wrote:\n> Hi!\n>\n> 1) The documentation for the zoo package indicates a function lag.zoo .\n> I can't find it when I try to use it or do a help(l",
       "thread_id": "thread-cf4088c9dd0a",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002078.html"
     },
     {
       "id": "msg-5278438b43a9",
@@ -140,7 +147,8 @@
       "body_snippet": "On 1 February 2008 at 20:29, MAB wrote:\n| 1) The documentation for the zoo package indicates a function lag.zoo .\n| I can't find it when I try to use it or do a help(lag.zoo). I can find all the \n| ot",
       "thread_id": "thread-cf4088c9dd0a",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002079.html"
     },
     {
       "id": "msg-d094355f8a4a",
@@ -157,6 +165,7 @@
       "thread_id": "thread-d094355f8a4a",
       "thread_depth": 0,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002080.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080201/c7265067/attachment.pl"
       ]
@@ -177,7 +186,8 @@
       "body_snippet": "On 1 February 2008 at 19:55, tom soyer wrote:\n| simulate.garch of S+. I assume that there is no simulate.garch in R. I am\n\nWell you could always test your assumption.  A quick\n\n\t> RSiteSearch(\"simulat",
       "thread_id": "thread-d094355f8a4a",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002081.html"
     },
     {
       "id": "msg-731ad8aa0548",
@@ -197,6 +207,7 @@
       "thread_id": "thread-d094355f8a4a",
       "thread_depth": 2,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002082.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080201/49c36f8b/attachment.pl"
       ]
@@ -216,6 +227,7 @@
       "thread_id": "thread-864746c75d79",
       "thread_depth": 0,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002083.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080202/33f2fdcb/attachment.pl"
       ]
@@ -236,7 +248,8 @@
       "body_snippet": "Hi, Tom: \n\n      The file 'scripts\\ch03.R' in the FinTS package includes a brief \ndescription of attempts to use garch{tseries} and garchFit{fGarch}.  I \ndon't understand either function very well, bu",
       "thread_id": "thread-864746c75d79",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002084.html"
     },
     {
       "id": "msg-e72c59c735cc",
@@ -256,6 +269,7 @@
       "thread_id": "thread-864746c75d79",
       "thread_depth": 2,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002085.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080202/e46f152a/attachment.pl"
       ]
@@ -278,7 +292,8 @@
       "body_snippet": "I got only one hit for\n\n      RSiteSearch(\"egarch\", \"fun\")\n\nThat was for GarchOxInterface {fGarch}\n\n      Spencer\n\ntom soyer wrote:\n> Thnaks Spencer. I am glad I am not the only one that find garch \n>",
       "thread_id": "thread-864746c75d79",
       "thread_depth": 3,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002086.html"
     },
     {
       "id": "msg-51f079e36f2d",
@@ -295,6 +310,7 @@
       "thread_id": "thread-51f079e36f2d",
       "thread_depth": 0,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002087.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080202/dd6e4155/attachment.pl"
       ]
@@ -319,6 +335,7 @@
       "thread_id": "thread-864746c75d79",
       "thread_depth": 4,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002088.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080202/7dc903f8/attachment.pl"
       ]
@@ -339,7 +356,8 @@
       "body_snippet": "tom soyer wrote:\n> Hi,\n> \n> I have a question with regard to different GARCH notations I found in the\n> literature, and I am wondering if anyone knows how to reconcile these\n> differences. Below are t",
       "thread_id": "thread-51f079e36f2d",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002089.html"
     },
     {
       "id": "msg-941905ef299c",
@@ -359,6 +377,7 @@
       "thread_id": "thread-51f079e36f2d",
       "thread_depth": 2,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002090.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080202/9524cee4/attachment.pl"
       ]
@@ -381,7 +400,8 @@
       "body_snippet": "tom soyer wrote:\n> Thanks Brian. Sorry about the reference being not clear. Here is my 2nd try:\n>  \n> Zivot: MFTSWS, 2003 edition. [1] page 212, equation 7.1, and [2] page \n> 216, equation 7.5\n> Engle",
       "thread_id": "thread-51f079e36f2d",
       "thread_depth": 3,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002091.html"
     },
     {
       "id": "msg-bf591d73e6b6",
@@ -402,7 +422,8 @@
       "body_snippet": "Brian G. Peterson wrote:\n\n> [... skip (about some references) ...]\n>\n>>Eq's [1],[3],[5] in your list all refer to an AR(1) model for the \n>>returns, of the variance modified by a white-noise parameter",
       "thread_id": "thread-51f079e36f2d",
       "thread_depth": 4,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002092.html"
     },
     {
       "id": "msg-bc5930641cd3",
@@ -422,7 +443,8 @@
       "body_snippet": "tom soyer wrote:\n\n>Thnaks Spencer. I am glad I am not the only one that find garch strange. I\n>guess I will give up on it too. It seems that garchFit and garchSim are very\n>good. They have been giving",
       "thread_id": "thread-864746c75d79",
       "thread_depth": 3,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002093.html"
     },
     {
       "id": "msg-4280bef7d379",
@@ -438,7 +460,8 @@
       "body_snippet": "I think the equations can be regarded as equivalent. As Patrick pointed\nout the main difference is if you write the mean equation in\nstandardized residuals or not.\n\n<In Zivot's book, MFTSWS, the GARCH",
       "thread_id": "thread-4280bef7d379",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002094.html"
     },
     {
       "id": "msg-846ce8af8601",
@@ -461,6 +484,7 @@
       "thread_id": "thread-51f079e36f2d",
       "thread_depth": 5,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002095.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080203/b153131e/attachment.pl"
       ]
@@ -487,6 +511,7 @@
       "thread_id": "thread-51f079e36f2d",
       "thread_depth": 6,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002096.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080203/c49f1577/attachment.pl"
       ]
@@ -514,6 +539,7 @@
       "thread_id": "thread-51f079e36f2d",
       "thread_depth": 7,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002097.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080203/13cd7883/attachment.pl"
       ]
@@ -538,6 +564,7 @@
       "thread_id": "thread-864746c75d79",
       "thread_depth": 4,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002098.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080203/b5f6f23e/attachment.pl"
       ]
@@ -562,7 +589,8 @@
       "body_snippet": "tom soyer wrote:\n\n> Patrick, I am sorry maybe I didn't explain it well. I was thinking \n> using arma to estimate the mean, and garch for the conditional \n> variance. Does that make sense?\n\n\nYes, that ",
       "thread_id": "thread-864746c75d79",
       "thread_depth": 5,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002099.html"
     },
     {
       "id": "msg-8c727c38fdd7",
@@ -586,6 +614,7 @@
       "thread_id": "thread-864746c75d79",
       "thread_depth": 6,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002100.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080203/1e43ef6a/attachment.pl"
       ]
@@ -604,7 +633,8 @@
       "body_snippet": "1. Can I use garch model on price series or do I need to transform it to return,  for example ret<-diff(log(x))?\n2. If yes, then how can I predict the future values, while I am working with return? \n3",
       "thread_id": "thread-82d1486dd641",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002101.html"
     },
     {
       "id": "msg-4749630b83a7",
@@ -628,7 +658,8 @@
       "body_snippet": "* Can 'garchFit' estimate the degrees of freedom for Student's t \nshocks? \n\n      It has arguments \"include.skew, include.shape\", but I don't know \nwhat they do (and haven't taken the time to read the",
       "thread_id": "thread-864746c75d79",
       "thread_depth": 7,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002102.html"
     },
     {
       "id": "msg-d679459016e8",
@@ -646,7 +677,8 @@
       "body_snippet": "The whitened residuals are assumed to be serially uncorrelated.  \nTherefore, sqrt(cumsum(estimated variance)) should give an estimate of \nthe standard deviations of the predictions. \n\nIn particular, c",
       "thread_id": "thread-82d1486dd641",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002103.html"
     },
     {
       "id": "msg-6bfccdf5cb26",
@@ -662,7 +694,8 @@
       "body_snippet": "<1. Can I use garch model on price series or do I need to transform it\nto <return, for example ret<-diff(log(x))?\n\nYou cannot use GARCH models on price series since they will not be\nstationary in most",
       "thread_id": "thread-6bfccdf5cb26",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002104.html"
     },
     {
       "id": "msg-c44a4a0caa3d",
@@ -682,7 +715,8 @@
       "body_snippet": "I was able to track down the problem that causes R-Swig to fail in 2.6.\n\nIn 2.5, I am able to use the set method against '$' and '$<-' to cause \nexpressions like r$d to get dispatched to get and set f",
       "thread_id": "thread-c44a4a0caa3d",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002105.html"
     },
     {
       "id": "msg-1d5aef76e761",
@@ -699,6 +733,7 @@
       "thread_id": "thread-1d5aef76e761",
       "thread_depth": 0,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002106.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080203/bfbcafe8/attachment.pl"
       ]
@@ -720,6 +755,7 @@
       "thread_id": "thread-1d5aef76e761",
       "thread_depth": 1,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002107.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080203/a9892a79/attachment.pl"
       ]
@@ -741,7 +777,8 @@
       "body_snippet": "The help page for garchFit says \"@h.t :  \" a numeric vector with the \nconditional variances.\"  It says the same thing for \"@sigma.t\", but \nthat's clearly a typo:  sigma.t = the conditional standard de",
       "thread_id": "thread-1d5aef76e761",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002108.html"
     },
     {
       "id": "msg-e1253594c1be",
@@ -762,6 +799,7 @@
       "thread_id": "thread-1d5aef76e761",
       "thread_depth": 3,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002109.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080203/c991bc13/attachment.pl"
       ]
@@ -780,7 +818,8 @@
       "body_snippet": "Hi John,\n\nfor whatever reason I missed this thread in September 2007. \nThanks to Lukas Elmiger how pointed out directly to me this problem, I\nmade the following changes in the development branch of fC",
       "thread_id": "thread-fdc0fac5525b",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002110.html"
     },
     {
       "id": "msg-1f22461ff906",
@@ -799,7 +838,8 @@
       "body_snippet": "Dirk Eddelbuettel <edd <at> debian.org> writes:\n\n> \n> \n> On 1 February 2008 at 20:29, MAB wrote:\n> | 1) The documentation for the zoo package indicates a function lag.zoo .\n> | I can't find it when I ",
       "thread_id": "thread-cf4088c9dd0a",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002111.html"
     },
     {
       "id": "msg-4567dc125067",
@@ -815,7 +855,8 @@
       "body_snippet": "Hi!\n\nI am trying to diff data imported from Excel.\nI use the package xlsReadWrite.\n\nAfter I load the following XL spreadsheet\n\nC_Dates C_Price C_Prices_edit         C_Return_Raw        C_Return_edit\n1",
       "thread_id": "thread-4567dc125067",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002112.html"
     },
     {
       "id": "msg-96b295d07cac",
@@ -835,7 +876,8 @@
       "body_snippet": "On 4 February 2008 at 17:35, MAB wrote:\n| So do I understand correctly that I should not attempt to use a function \n| lag.zoo but should use the function lag after loading the zoo library?\n\nCorrect:\n\n",
       "thread_id": "thread-cf4088c9dd0a",
       "thread_depth": 3,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002113.html"
     },
     {
       "id": "msg-bf8b5e1d9a63",
@@ -853,7 +895,8 @@
       "body_snippet": "On 4 February 2008 at 19:00, MAB wrote:\n| I am trying to diff data imported from Excel.\n\nDid you read the discussion in the 'R Data Import/Export' manual?\nSee http://cran.r-project.org/doc/manuals/R-d",
       "thread_id": "thread-4567dc125067",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002114.html"
     },
     {
       "id": "msg-db09d573bbc3",
@@ -871,7 +914,8 @@
       "body_snippet": "MAB wrote:\n> Eventually the easiest seems to be to make sure each column in the spreadsheet\n> starts with a numeric, and replace it once the object is in R.\n> \n> There is probably a better way.\n\nI ten",
       "thread_id": "thread-4567dc125067",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002115.html"
     },
     {
       "id": "msg-cd73e7948116",
@@ -890,7 +934,8 @@
       "body_snippet": "Dirk Eddelbuettel <edd <at> debian.org> writes:\n\n> \n> \n> On 4 February 2008 at 19:00, MAB wrote:\n> | I am trying to diff data imported from Excel.\n> \n> Did you read the discussion in the 'R Data Impor",
       "thread_id": "thread-4567dc125067",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002116.html"
     },
     {
       "id": "msg-43861e5670e9",
@@ -908,7 +953,8 @@
       "body_snippet": "I've had good luck with 'read.xls{gdata}', but that could have the \nsame problem. \n\n      If this still gives you problems, you could put your favorite \n'read.*(...)' in a function that tests columns ",
       "thread_id": "thread-4567dc125067",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002117.html"
     },
     {
       "id": "msg-6ae436baa94c",
@@ -927,7 +973,8 @@
       "body_snippet": "Regarding read.xls in gdata note that it passes the ... to read.csv so you\ncould specify na.strings= which should avoid the problem\nif its just due to the #NA strings.\n\nOn Mon, Feb 4, 2008 at 2:57 PM,",
       "thread_id": "thread-4567dc125067",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002118.html"
     },
     {
       "id": "msg-7ccd0859ceef",
@@ -944,6 +991,7 @@
       "thread_id": "thread-7ccd0859ceef",
       "thread_depth": 0,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002562.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080204/e9d1b643/attachment.pl"
       ]
@@ -962,7 +1010,8 @@
       "body_snippet": "Hi\n\nI am looking at using heat maps to display the\nvariation in a portfolio weights as the efficient\nfrontier is traversed.\n\nHas anyone tried using heat maps for this purpose, and\nare they the right t",
       "thread_id": "thread-c3d5b307e72d",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002563.html"
     },
     {
       "id": "msg-7d32de6a7ce1",
@@ -978,7 +1027,8 @@
       "body_snippet": "All,\n\nHere my modest contribution (not sure it will actually solve the issue).\nComments are welcome !\n\nRgds\n\n# ############################################################################\n# RXLS\n# ###",
       "thread_id": "thread-7d32de6a7ce1",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002119.html"
     },
     {
       "id": "msg-284078c6b004",
@@ -997,6 +1047,7 @@
       "thread_id": "thread-4567dc125067",
       "thread_depth": 1,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002120.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080205/ffe127f1/attachment.pl"
       ]
@@ -1015,7 +1066,8 @@
       "body_snippet": "Hi all,\n\nI am playing around with the S-Plus ... and I am wondering how to\nconnect it back and forth with Matlab?\n\nFor example, how do I call S-Plus from within Matlab and how do I call\nMatlab from wi",
       "thread_id": "thread-2a4460dedb2b",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002121.html"
     },
     {
       "id": "msg-4e138480e9a7",
@@ -1031,7 +1083,8 @@
       "body_snippet": "Hi all,\n\nDoes anybody have the source code of stochastic volatility models in R\nor Matlab, for example, the Bayesian based or the simulation based SV\nestimations as described by Prof Eric Zivot in the",
       "thread_id": "thread-4e138480e9a7",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002122.html"
     },
     {
       "id": "msg-eb57e7b7a7e8",
@@ -1049,7 +1102,8 @@
       "body_snippet": "Michael wrote:\n> Does anybody have the source code of stochastic volatility models in R\n> or Matlab, for example, the Bayesian based or the simulation based SV\n> estimations as described by Prof Eric ",
       "thread_id": "thread-4e138480e9a7",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002123.html"
     },
     {
       "id": "msg-9b9f0812eccc",
@@ -1067,7 +1121,8 @@
       "body_snippet": "Michael wrote:\n> Hi all,\n> \n> I am playing around with the S-Plus ... and I am wondering how to\n> connect it back and forth with Matlab?\n> \n> For example, how do I call S-Plus from within Matlab and h",
       "thread_id": "thread-2a4460dedb2b",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002124.html"
     },
     {
       "id": "msg-09459fcdd88d",
@@ -1083,7 +1138,8 @@
       "body_snippet": "Hi!\n\nWe, a management and technology consultants company in financial\nservices, are planning a large scale use of R in a bank. We would like\nto use R as calculation kernel for creating ratings of spec",
       "thread_id": "thread-09459fcdd88d",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002564.html"
     },
     {
       "id": "msg-b641a43a53f1",
@@ -1099,7 +1155,8 @@
       "body_snippet": "Brian,\nFor acf chart, how to see the value of confidence\nintervals? any reference on the calculation of this?\nare they just 1/sqrt(size)? \n\nBelow is my R screen, no information on confidence\nintervals",
       "thread_id": "thread-b641a43a53f1",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002125.html"
     },
     {
       "id": "msg-6768f5bf86ff",
@@ -1117,7 +1174,8 @@
       "body_snippet": "The confidence intervals seem to be computed in plot.acf, not in \nacf.  Do \"getAnywhere(plot.acf)\", then search for 'clim'.  That just \nidentified the following for me: \n\n    clim0 <- if (with.ci)\n   ",
       "thread_id": "thread-b641a43a53f1",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002126.html"
     },
     {
       "id": "msg-b3e3e673f908",
@@ -1136,7 +1194,8 @@
       "body_snippet": "Okay I am ordering the book...\n\nDoes anybody know any recent papers discussing about comparison about\nthese SV estimation methods? Moreover, where do I find those source\ncodes in public domain?\n\nThank",
       "thread_id": "thread-4e138480e9a7",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002127.html"
     },
     {
       "id": "msg-8c1398b7fc40",
@@ -1152,7 +1211,8 @@
       "body_snippet": "Guys,\n\nI'm importing high frequency time series data into R. I'm using the zoo\ntimeseries class which works quite well.\n\nAt the moment the times of my series are specified as milliseconds since\nepoch.",
       "thread_id": "thread-8c1398b7fc40",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002128.html"
     },
     {
       "id": "msg-ad52d64ffd2f",
@@ -1171,7 +1231,8 @@
       "body_snippet": "I had time to investigate this this morning, and came to the same \nconclusion as Spencer.  Sorry for the earlier confusion.\n\nYou can see all the code for acf,pacf, and plot.acf here:\n\nhttps://svn.r-pr",
       "thread_id": "thread-b641a43a53f1",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002129.html"
     },
     {
       "id": "msg-9dd6b0bb723d",
@@ -1191,7 +1252,8 @@
       "body_snippet": "Michael wrote:\n> Okay I am ordering the book...\n> \n> Does anybody know any recent papers discussing about comparison about\n> these SV estimation methods? \n\nI don't have any paper references handy.  I ",
       "thread_id": "thread-4e138480e9a7",
       "thread_depth": 3,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002130.html"
     },
     {
       "id": "msg-8d4c7815c002",
@@ -1207,7 +1269,8 @@
       "body_snippet": "Thanks for Brian and Spencer's help!\nI tried to understand the two formulas below by google\nand books I have but have no success so far. Can\nanyone give me a hint how to reach these results? \n\nSorry f",
       "thread_id": "thread-b641a43a53f1",
       "thread_depth": 3,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002131.html"
     },
     {
       "id": "msg-84ccf250eaca",
@@ -1225,7 +1288,8 @@
       "body_snippet": "Try this:\n\nlibrary(zoo)\nz <- zoo(1:10, 1001:1010)\n\nNow <- Sys.time()\nEpoch <- Now - as.numeric(Now)\nzct <- aggregate(z, time(z) + Epoch, force)\n\n# If you like you can convert it to chron\n# from there;",
       "thread_id": "thread-8c1398b7fc40",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002132.html"
     },
     {
       "id": "msg-8200d6f71200",
@@ -1241,7 +1305,8 @@
       "body_snippet": "Here is a beginner question:\nwhat would be your perferred method if we want to\nsimulate the stock market for back testing a trading\nstrategy? \nUsing sp500 daily data as example, if given the\nknowledge",
       "thread_id": "thread-8200d6f71200",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002133.html"
     },
     {
       "id": "msg-f70286f31e7f",
@@ -1259,7 +1324,8 @@
       "body_snippet": "On 8 February 2008 at 10:49, guiseppe.milicia at hsbcib.com wrote:\n| Guys,\n| \n| I'm importing high frequency time series data into R. I'm using the zoo\n| timeseries class which works quite well.\n| \n| ",
       "thread_id": "thread-8c1398b7fc40",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002134.html"
     },
     {
       "id": "msg-0332635871cf",
@@ -1277,7 +1343,8 @@
       "body_snippet": "elton wang wrote:\n> Here is a beginner question:\n> what would be your perferred method if we want to\n> simulate the stock market for back testing a trading\n> strategy? \n> Using sp500 daily data as exa",
       "thread_id": "thread-8200d6f71200",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002135.html"
     },
     {
       "id": "msg-cf8fccd72fb6",
@@ -1295,7 +1362,8 @@
       "body_snippet": "On Friday 08 February 2008 8:05:20 am elton wang wrote:\n> I tried to understand the two formulas below by google\n> and books I have but have no success so far.\n\n?plot.acf\nConfidence limits assume a wh",
       "thread_id": "thread-b641a43a53f1",
       "thread_depth": 4,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002136.html"
     },
     {
       "id": "msg-e78049a06259",
@@ -1314,7 +1382,8 @@
       "body_snippet": "Peter Carl wrote:\n> On Friday 08 February 2008 8:05:20 am elton wang wrote:\n>> I tried to understand the two formulas below by google\n>> and books I have but have no success so far.\n> \n> ?plot.acf\n> C",
       "thread_id": "thread-b641a43a53f1",
       "thread_depth": 5,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002137.html"
     },
     {
       "id": "msg-ab1912347da7",
@@ -1333,7 +1402,8 @@
       "body_snippet": "A quick comment:\n\nI think options('digits.secs'=6) might need to be set as well to be\nable to see the fractional part of the second.\n\nJeff\n\nOn Feb 8, 2008 8:45 AM, Dirk Eddelbuettel <edd at debian.org",
       "thread_id": "thread-8c1398b7fc40",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002138.html"
     },
     {
       "id": "msg-191050db1ffe",
@@ -1353,7 +1423,8 @@
       "body_snippet": "On 8 February 2008 at 10:38, Jeff Ryan wrote:\n| A quick comment:\n| \n| I think options('digits.secs'=6) might need to be set as well to be\n| able to see the fractional part of the second.\n\nQuite so, it",
       "thread_id": "thread-8c1398b7fc40",
       "thread_depth": 3,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002139.html"
     },
     {
       "id": "msg-091abd5e93d3",
@@ -1371,7 +1442,8 @@
       "body_snippet": "MAB <MichelBeck <at> sbcglobal.Net> writes:\n\nHi!\n\nWhen I plot the time-series in a zoo object using plot.zoo they are all drawn \nsuccessively on the same graphics device. If there are more than 10 ser",
       "thread_id": "thread-cf4088c9dd0a",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002140.html"
     },
     {
       "id": "msg-6c74bbd2ab71",
@@ -1390,7 +1462,8 @@
       "body_snippet": "If you want some on one page and others on another page\nissue two plot.zoo commands.\n\nplot(z[,1:2])\nplot(z[,3:4])\n\nAlso look at xyplot.zoo which gives you the facilities of lattice xyplot\nwith zoo obj",
       "thread_id": "thread-cf4088c9dd0a",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002141.html"
     },
     {
       "id": "msg-cc48626ed7b1",
@@ -1410,7 +1483,8 @@
       "body_snippet": "One other point.\n\nIf you only plot a single panel (there can be multiple time series in\neach panel)\nat a time then you can use mfrow.  For example,  this works:\n\nlibrary(zoo)\nopar <- par(mfrow = c(2,2",
       "thread_id": "thread-cf4088c9dd0a",
       "thread_depth": 3,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002142.html"
     },
     {
       "id": "msg-9b93d54e881f",
@@ -1426,7 +1500,8 @@
       "body_snippet": "Thanks for Brian's reply.\nto make this  more relevant to this list, what\nfunctions in R can do bootstrap resampling while\nkeeping the autocorrelation in the original data? (I\nonly know function of sam",
       "thread_id": "thread-8200d6f71200",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002143.html"
     },
     {
       "id": "msg-c1145af9a2e4",
@@ -1445,7 +1520,8 @@
       "body_snippet": "On 9 February 2008 at 07:05, elton wang wrote:\n| Thanks for Brian's reply.\n| to make this  more relevant to this list, what\n| functions in R can do bootstrap resampling while\n| keeping the autocorrela",
       "thread_id": "thread-8200d6f71200",
       "thread_depth": 3,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002144.html"
     },
     {
       "id": "msg-d6ffae0744cd",
@@ -1465,7 +1541,8 @@
       "body_snippet": "Dirk Eddelbuettel wrote:\n> On 9 February 2008 at 07:05, elton wang wrote:\n> | Thanks for Brian's reply.\n> | to make this  more relevant to this list, what\n> | functions in R can do bootstrap resamplin",
       "thread_id": "thread-8200d6f71200",
       "thread_depth": 4,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002145.html"
     },
     {
       "id": "msg-8cf8f5cdb510",
@@ -1483,7 +1560,8 @@
       "body_snippet": "This is just to remind you that this year's UseR! conference is\nschedule for August 12-14 in Dortmund, with preconference tutorials on\nAugust 11.  For details, see the conference web site\n\"www.statist",
       "thread_id": "thread-8cf8f5cdb510",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002146.html"
     },
     {
       "id": "msg-52a4cd7bcd58",
@@ -1501,7 +1579,8 @@
       "body_snippet": "You may want to check the package meboot and the underlying theory.  The\napproach does maintain the dependence structure of your time series and\nworks both in an univariate or multivariate setting.\n\nA",
       "thread_id": "thread-8200d6f71200",
       "thread_depth": 3,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002147.html"
     },
     {
       "id": "msg-1d9716ab99d8",
@@ -1522,7 +1601,8 @@
       "body_snippet": "To all:\n\nThe best reference that I am aware of on boostrap methods, in general, and \nblock resampling iw the Davison and Hinkley book, Bootstrap Methods and \ntheir Applications.  I have used block res",
       "thread_id": "thread-8200d6f71200",
       "thread_depth": 5,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002148.html"
     },
     {
       "id": "msg-9e547d02f451",
@@ -1539,6 +1619,7 @@
       "thread_id": "thread-9e547d02f451",
       "thread_depth": 0,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002149.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080211/ffb91951/attachment.pl"
       ]
@@ -1557,7 +1638,8 @@
       "body_snippet": "Dear all,\n\nI am experimenting with Rmetrics and the fImport library...\n\nDJret<-(yahooSeries(symbols = c(\"^DJI\"), from = NULL, to = NULL, \n    nDaysBack = 408, quote = c(\"Close\"), \n    aggregation = c(",
       "thread_id": "thread-9e547d02f451",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002150.html"
     },
     {
       "id": "msg-4781d71111d6",
@@ -1573,7 +1655,8 @@
       "body_snippet": "On Mon, 11 Feb 2008, Vorlow Constantinos wrote:\n\n> I am experimenting with Rmetrics and the fImport library...\n\nThe usual pointer: these are *packages* not *libraries*.\n\n> Can you run stats, regressio",
       "thread_id": "thread-4781d71111d6",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002151.html"
     },
     {
       "id": "msg-86e777819de6",
@@ -1591,7 +1674,8 @@
       "body_snippet": ">...what functions in R can do bootstrap resampling while\n>keeping the autocorrelation in the original data? (I\n>only know function of sample()). Would this resmapled\n>data do any good on back testing",
       "thread_id": "thread-8200d6f71200",
       "thread_depth": 3,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002152.html"
     },
     {
       "id": "msg-5a2f20a243de",
@@ -1608,6 +1692,7 @@
       "thread_id": "thread-5a2f20a243de",
       "thread_depth": 0,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002153.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080211/c8c1747a/attachment.pl"
       ]
@@ -1630,7 +1715,8 @@
       "body_snippet": "The reason R-swig was not working on 2.6 was that the C code was not setting \nthe S4 flag.  On 2.5, R would still treat it as an S4 class, but in 2.6, it \nis necessary to have this flag set for it to ",
       "thread_id": "thread-c44a4a0caa3d",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002154.html"
     },
     {
       "id": "msg-a0919216c661",
@@ -1648,7 +1734,8 @@
       "body_snippet": "A simple solution to making all common R time series classes into a more 'data.frame/matrix/zoo' style object is available in the new 'xts' package on CRAN with the most recent source and windows buil",
       "thread_id": "thread-9e547d02f451",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002155.html"
     },
     {
       "id": "msg-83b227c3d5f1",
@@ -1666,7 +1753,8 @@
       "body_snippet": "Yohan Chalabi <chalabi <at> phys.ethz.ch> writes:\n\n> \n> Hi John,\n> \n> for whatever reason I missed this thread in September 2007. \n> Thanks to Lukas Elmiger how pointed out directly to me this problem",
       "thread_id": "thread-fdc0fac5525b",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002156.html"
     },
     {
       "id": "msg-01a3450b62e3",
@@ -1684,7 +1772,8 @@
       "body_snippet": "Why do you say that 'garch' requires more observations than 'garchFit'?  \nCan you outline documentation or tests you've performed? \n\nSpencer\n\ntom soyer wrote:\n> Hi,\n>\n> It seems that the minimum sampl",
       "thread_id": "thread-5a2f20a243de",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002157.html"
     },
     {
       "id": "msg-fb55aca6625b",
@@ -1704,6 +1793,7 @@
       "thread_id": "thread-5a2f20a243de",
       "thread_depth": 2,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002158.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080212/42ca9c68/attachment.pl"
       ]
@@ -1723,6 +1813,7 @@
       "thread_id": "thread-31846a531d18",
       "thread_depth": 0,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002159.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080212/a5839db8/attachment.pl"
       ]
@@ -1743,7 +1834,8 @@
       "body_snippet": "tom soyer wrote:\n> I loaded fBasics, and I can access the data sets from MoFiTs. But I am\n> wondering if it is possible to see what's in the data set from the R\n> console. Right now I just look up the",
       "thread_id": "thread-31846a531d18",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002160.html"
     },
     {
       "id": "msg-6a68576e0831",
@@ -1762,7 +1854,8 @@
       "body_snippet": "Brian G. Peterson wrote:\n> tom soyer wrote:\n>> I loaded fBasics, and I can access the data sets from MoFiTs. But I am\n>> wondering if it is possible to see what's in the data set from the R\n>> console",
       "thread_id": "thread-31846a531d18",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002161.html"
     },
     {
       "id": "msg-fa87831e6c5d",
@@ -1779,6 +1872,7 @@
       "thread_id": "thread-fa87831e6c5d",
       "thread_depth": 0,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002162.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080212/b6bacf25/attachment.pl"
       ]
@@ -1797,7 +1891,8 @@
       "body_snippet": "I've enjoyed your prosthelytizing of xts of late... the syntax you\njust highlighted looks appealing.  I've found zoo powerful, and xts\nappears to be a useful extension.\n\nOne question r.e. xts vs. data",
       "thread_id": "thread-3317c777eaa0",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002163.html"
     },
     {
       "id": "msg-a989e8e61be1",
@@ -1815,7 +1910,8 @@
       "body_snippet": "On Feb 13, 2008 8:17 AM, icosa atropa <icos.atropa at gmail.com> wrote:\n> I've enjoyed your prosthelytizing of xts of late... the syntax you\n> just highlighted looks appealing.  I've found zoo powerfu",
       "thread_id": "thread-3317c777eaa0",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002164.html"
     },
     {
       "id": "msg-8fb1af2cb8d5",
@@ -1831,7 +1927,8 @@
       "body_snippet": "On Wed, 13 Feb 2008, Gabor Grothendieck wrote:\n\n> zoo is modelled on the \"ts\" class, not on the \"data.frame\" class.\n> In R, the way it works is that $ is used on list-based objects\n> and not on array-",
       "thread_id": "thread-3317c777eaa0",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002165.html"
     },
     {
       "id": "msg-1e1361bdab37",
@@ -1850,7 +1947,8 @@
       "body_snippet": "Hi everyone,\n\nI agree that the '$' operator seems like a nice addition.  The only\nproblem that I see is:\n\nfrom help('$')\n...\n The default methods work somewhat differently for atomic vectors,\n     mat",
       "thread_id": "thread-3317c777eaa0",
       "thread_depth": 3,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002166.html"
     },
     {
       "id": "msg-5b9ef5b26218",
@@ -1870,7 +1968,8 @@
       "body_snippet": "In comparing garch{tseries} with garchFit{fGarch}, it seems that \nthe latter is more general, as it allows simultaneous estimation of an \narma model with possibly nonnormal garch or aparch noise, whil",
       "thread_id": "thread-5a2f20a243de",
       "thread_depth": 3,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002167.html"
     },
     {
       "id": "msg-e14dc8f0c010",
@@ -1886,7 +1985,8 @@
       "body_snippet": "On Wed, 13 Feb 2008, Spencer Graves wrote:\n\n>       In comparing garch{tseries} with garchFit{fGarch}, it seems that\n> the latter is more general, as it allows simultaneous estimation of an\n> arma mod",
       "thread_id": "thread-5a2f20a243de",
       "thread_depth": 4,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002168.html"
     },
     {
       "id": "msg-3a62f57e025b",
@@ -1904,7 +2004,8 @@
       "body_snippet": "Hi, Achim: \n\n      Thanks for the reply. \n\n      Is it fair to say that 'garchFit' is newer and uses a more general \nand robust algorithm? \n\n      Or are there circumstances under which 'garch' would ",
       "thread_id": "thread-5a2f20a243de",
       "thread_depth": 5,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002169.html"
     },
     {
       "id": "msg-4e06f049817d",
@@ -1920,7 +2021,8 @@
       "body_snippet": "I'm looking at the Rmetrics Reference Card in the section called \"Additional\nFunctions\" under the heading \"Additional Trading Indicators\" and I'm\nwondering where the garmanKlassTA function went.  When",
       "thread_id": "thread-4e06f049817d",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002170.html"
     },
     {
       "id": "msg-540de3eae91e",
@@ -1938,7 +2040,8 @@
       "body_snippet": "Hi Ken,\n\nI *think* it is\n\ngarmanklassTA\n\nno caps:\n\n> garmanklassTA\nfunction (open, high, low, close)\n{\n    TS = is.timeSeries(open)\n    if (TS) {\n        x = open\n        open = as.vector(open)\n      ",
       "thread_id": "thread-4e06f049817d",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002171.html"
     },
     {
       "id": "msg-85c867f5037f",
@@ -1954,7 +2057,8 @@
       "body_snippet": "Spencer,\n\nI'll try to answer your questions but just as a disclaimer: I'm really no\nexpert in GARCH estimation. Also I have just read some parts of the\ngarch() and garchFit() code and the authors of t",
       "thread_id": "thread-5a2f20a243de",
       "thread_depth": 6,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002172.html"
     },
     {
       "id": "msg-f0725fc7ace4",
@@ -1973,7 +2077,8 @@
       "body_snippet": "Thanks Jeff, that works.  \n\nThe Rmetrics Reference Card has the \"K\" in Klass capitalized.  Doohhh!\n\n\n\nJeff Ryan wrote:\n> \n> Hi Ken,\n> \n> I *think* it is\n> \n> garmanklassTA\n> \n> no caps:\n> \n>> garmankl",
       "thread_id": "thread-4e06f049817d",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002173.html"
     },
     {
       "id": "msg-61352094b315",
@@ -1993,7 +2098,8 @@
       "body_snippet": "I used the backup help tool:\n\ngrep 'garman' fTrading/*/*\n\nas I couldn't find any docs either.\n\nJeff\n\nOn Feb 13, 2008 3:25 PM, Ken Spriggs <ksspriggs at gmail.com> wrote:\n>\n> Thanks Jeff, that works.\n>",
       "thread_id": "thread-4e06f049817d",
       "thread_depth": 3,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002174.html"
     },
     {
       "id": "msg-6e98e034c77f",
@@ -2013,7 +2119,8 @@
       "body_snippet": "It looks like help('$') and help('is.atomic') raise some interesting\nts and zoo implementation questions. I understand that zoo is modeled\non ts; I didn't really appreciate until now that ts was atomi",
       "thread_id": "thread-3317c777eaa0",
       "thread_depth": 4,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002175.html"
     },
     {
       "id": "msg-d490ab2fd85b",
@@ -2034,7 +2141,8 @@
       "body_snippet": "See interspersed comments.\n\nOn Thu, Feb 14, 2008 at 2:00 AM, icosa atropa <icos.atropa at gmail.com> wrote:\n> It looks like help('$') and help('is.atomic') raise some interesting\n> ts and zoo implemen",
       "thread_id": "thread-3317c777eaa0",
       "thread_depth": 5,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002176.html"
     },
     {
       "id": "msg-e2fa4b1bb977",
@@ -2050,7 +2158,8 @@
       "body_snippet": "Just a few comments in addition to Gabor's:\n\n> > It looks like help('$') and help('is.atomic') raise some interesting\n> > ts and zoo implementation questions. I understand that zoo is modeled\n> > on t",
       "thread_id": "thread-3317c777eaa0",
       "thread_depth": 6,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002177.html"
     },
     {
       "id": "msg-5800b311d8ce",
@@ -2069,7 +2178,8 @@
       "body_snippet": ">>>> \"JB\" == Joe Byers <ecjbosu at aol.com>\n>>>> on Tue, 12 Feb 2008 16:29:55 +0000 (UTC)\n\n   JB> I am working on adding Haug's Multiasset greeks to the fExotics\n   JB> package.\n   JB> Are you interes",
       "thread_id": "thread-fdc0fac5525b",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002178.html"
     },
     {
       "id": "msg-0a63eef1e6a0",
@@ -2088,7 +2198,8 @@
       "body_snippet": ">>>> \"AZ\" == Achim Zeileis <Achim.Zeileis at wu-wien.ac.at>\n>>>> on Wed, 13 Feb 2008 22:22:58 +0100 (CET)\n\n\n   AZ> As far as I can see, Diethelm and Yohan have been quite busy\n   AZ> improving\n   AZ> ",
       "thread_id": "thread-5a2f20a243de",
       "thread_depth": 7,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002179.html"
     },
     {
       "id": "msg-979484c8d020",
@@ -2108,7 +2219,8 @@
       "body_snippet": "Dear Yohan: \n\n      Thanks for your work on this. \n\n      If you haven't already, could you please add descriptions of the \narguments delta, skew and shape to the help page:  How are they defined, \ne.",
       "thread_id": "thread-5a2f20a243de",
       "thread_depth": 8,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002181.html"
     },
     {
       "id": "msg-114541eff3c0",
@@ -2124,7 +2236,8 @@
       "body_snippet": "Yohan,\n\nthanks for info!\n\n> We have implemented a new optimization scheme  \"mnfb\" in the\n> devel-version of fGarch\n> (https://svn.r-project.org/Rmetrics/trunk/fGarch). It is actually the\n> same fortra",
       "thread_id": "thread-5a2f20a243de",
       "thread_depth": 8,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002180.html"
     },
     {
       "id": "msg-b36aa52b50f7",
@@ -2140,7 +2253,8 @@
       "body_snippet": "Hello.\nDoes anybody know where garch function in S_plus store the fitted values, like fit at fitted  in garchFit, package fGarch??\nWhen I type  names(fit), I got this\n[1] \"residuals\" \"sigma.t\" \"df.res",
       "thread_id": "thread-b36aa52b50f7",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002182.html"
     },
     {
       "id": "msg-cc9e3c78f677",
@@ -2158,7 +2272,8 @@
       "body_snippet": "The fitted values can be obtained using the extractor function fitted as\nin fitted(fit) given your example below.\n\nNote, the fitted values can also be calculated by fit$series -\nfit$residuals which is",
       "thread_id": "thread-b36aa52b50f7",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002183.html"
     },
     {
       "id": "msg-9416d7ef00b8",
@@ -2174,7 +2289,8 @@
       "body_snippet": "Hello\nI want to predict the future values of time series with Garch\nWhen I specified my model like this:\nlibrary(fGarch)\nret <- diff(log(x))*100\nfit = garchFit(~arma(1,0,0)+garch(1, 1), data =ret)\npre",
       "thread_id": "thread-9416d7ef00b8",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002184.html"
     },
     {
       "id": "msg-f86b15b08c34",
@@ -2192,7 +2308,8 @@
       "body_snippet": "Hi, Yohan: \n\n      I want to thank you again for working to improve 'garchFit' and \nthe documentation. \n\n      I wonder if you have time to also improve the documentation for \n'predict.garchFit', incl",
       "thread_id": "thread-9416d7ef00b8",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002185.html"
     },
     {
       "id": "msg-c1e9c3973663",
@@ -2209,6 +2326,7 @@
       "thread_id": "thread-c1e9c3973663",
       "thread_depth": 0,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002186.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080217/e72d9c6d/attachment.pl"
       ]
@@ -2228,6 +2346,7 @@
       "thread_id": "thread-245c8dba71d8",
       "thread_depth": 0,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002187.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080218/86f2b85f/attachment.pl"
       ]
@@ -2248,7 +2367,8 @@
       "body_snippet": "On 18 February 2008 at 12:30, Attiglah, Mama wrote:\n| Hi room, \n| Just want to find out if we do have any package in R that simulates a\n| multivariate data using historical values.\n| What about the si",
       "thread_id": "thread-245c8dba71d8",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002188.html"
     },
     {
       "id": "msg-b570b889cb45",
@@ -2260,11 +2380,12 @@
       "subject_clean": "Quick and simple Simulation of a multivariatereturns",
       "in_reply_to": "<D84557769CE9ED47AC31686731990DCB0CD2652B@INCLCW03A.corp.statestr.com>",
       "references": [],
-      "body_plain": "Hi Mama\n\nYou can use the package 'ghyp' to fit a multivariate generalized hyperbolic distribution (or a (symmetric) special case) to your data and sample from that distribution afterwards like\n\nlibrary(ghyp)\ndata(smi.stocks)\nfit.mv <- fit.ghypmv(smi.stocks)\nsim.data <- rghyp(10000, fit.mv)\n\n\nBest regards\nDavid\n\n--\nDavid L?thi\nidp - Institute of Data Analysis and Process Design\nZurich University of Applied Sciences\nPostfach 805\nCH-8401 Winterthur\n\nE-mail: david.luethi at zhaw.ch\nPhone: 058 934 78 03\nhttp://www.idp.zhaw.ch \n--\n\n\n-----Urspr?ngliche Nachricht-----\nVon: r-sig-finance-bounces at stat.math.ethz.ch [mailto:r-sig-finance-bounces at stat.math.ethz.ch] Im Auftrag von Attiglah, Mama\nGesendet: Montag, 18. Februar 2008 13:30\nAn: R-SIG-Finance\nBetreff: [R-SIG-Finance] Quick and simple Simulation of a multivariatereturns\n\n\nHi room, \nJust want to find out if we do have any package in R that simulates a multivariate data using historical values. What about the simulation but with a long term views on some metrics, i.e. Mean, Volatility, correlation, etc... Example, I have a 2 years time series of the returns on 5 asset classes and I want to project the future returns just on a simulation basis. (It needs not preserve necessarily their time dependency distribution). Any model or any Monte Carlo methods or bootstrapping should do, including a simple block or row re-sampling with repetition. \nPlease reply on the basic of a multivariate historical data. This is not a portfolio simulation but a simulation of the portfolio constituents. \nAny information is highly appreciated.\nThanks \n-----\nMama Attiglah, PhD\nQuantitative Research Analyst\nAdvanced Research Center\nState Street Bank\n+44(0)20 7698 6290 (Direct Line)\n+44 (0)207 004 2968 (Direct Fax)\nPlease visit our Web site at \nwww.ssga.com\n\n\n\t[[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.",
+      "body_plain": "Hi Mama\n\nYou can use the package 'ghyp' to fit a multivariate generalized hyperbolic distribution (or a (symmetric) special case) to your data and sample from that distribution afterwards like\n\nlibrary(ghyp)\ndata(smi.stocks)\nfit.mv <- fit.ghypmv(smi.stocks)\nsim.data <- rghyp(10000, fit.mv)\n\n\nBest regards\nDavid\n\n--\nDavid Lüthi\nidp - Institute of Data Analysis and Process Design\nZurich University of Applied Sciences\nPostfach 805\nCH-8401 Winterthur\n\nE-mail: david.luethi at zhaw.ch\nPhone: 058 934 78 03\nhttp://www.idp.zhaw.ch \n--\n\n\n-----Ursprüngliche Nachricht-----\nVon: r-sig-finance-bounces at stat.math.ethz.ch [mailto:r-sig-finance-bounces at stat.math.ethz.ch] Im Auftrag von Attiglah, Mama\nGesendet: Montag, 18. Februar 2008 13:30\nAn: R-SIG-Finance\nBetreff: [R-SIG-Finance] Quick and simple Simulation of a multivariatereturns\n\n\nHi room, \nJust want to find out if we do have any package in R that simulates a multivariate data using historical values. What about the simulation but with a long term views on some metrics, i.e. Mean, Volatility, correlation, etc... Example, I have a 2 years time series of the returns on 5 asset classes and I want to project the future returns just on a simulation basis. (It needs not preserve necessarily their time dependency distribution). Any model or any Monte Carlo methods or bootstrapping should do, including a simple block or row re-sampling with repetition. \nPlease reply on the basic of a multivariate historical data. This is not a portfolio simulation but a simulation of the portfolio constituents. \nAny information is highly appreciated.\nThanks \n-----\nMama Attiglah, PhD\nQuantitative Research Analyst\nAdvanced Research Center\nState Street Bank\n+44(0)20 7698 6290 (Direct Line)\n+44 (0)207 004 2968 (Direct Fax)\nPlease visit our Web site at \nwww.ssga.com\n\n\n\t[[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.",
       "body_snippet": "Hi Mama\n\nYou can use the package 'ghyp' to fit a multivariate generalized hyperbolic distribution (or a (symmetric) special case) to your data and sample from that distribution afterwards like\n\nlibrar",
       "thread_id": "thread-245c8dba71d8",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002189.html"
     },
     {
       "id": "msg-d695bf57c52f",
@@ -2276,11 +2397,12 @@
       "subject_clean": "Quick and simple Simulation of amultivariatereturns",
       "in_reply_to": "<206E81C5DB06934283543543C0E5CDCB5BFE04@langouste.zhaw.ch>",
       "references": [],
-      "body_plain": "Thanks David, I will certainly have a thorough look at it and may probably get back to you tomorrow. \n\nOnce again, thanks. \nMama \n-----\nMama Attiglah, PhD\nQuantitative Research Analyst\nAdvanced Research Center\nState Street Bank\n+44(0)20 7698 6290 (Direct Line)\n+44 (0)207 004 2968 (Direct Fax)\nPlease visit our Web site at \nwww.ssga.com\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of L?thi David (luda)\nSent: 18 February 2008 15:21\nTo: R-SIG-Finance\nSubject: Re: [R-SIG-Finance] Quick and simple Simulation of amultivariatereturns\n\nHi Mama\n\nYou can use the package 'ghyp' to fit a multivariate generalized hyperbolic distribution (or a (symmetric) special case) to your data and sample from that distribution afterwards like\n\nlibrary(ghyp)\ndata(smi.stocks)\nfit.mv <- fit.ghypmv(smi.stocks)\nsim.data <- rghyp(10000, fit.mv)\n\n\nBest regards\nDavid\n\n--\nDavid L?thi\nidp - Institute of Data Analysis and Process Design\nZurich University of Applied Sciences\nPostfach 805\nCH-8401 Winterthur\n\nE-mail: david.luethi at zhaw.ch\nPhone: 058 934 78 03\nhttp://www.idp.zhaw.ch \n--\n\n\n-----Urspr?ngliche Nachricht-----\nVon: r-sig-finance-bounces at stat.math.ethz.ch [mailto:r-sig-finance-bounces at stat.math.ethz.ch] Im Auftrag von Attiglah, Mama\nGesendet: Montag, 18. Februar 2008 13:30\nAn: R-SIG-Finance\nBetreff: [R-SIG-Finance] Quick and simple Simulation of a multivariatereturns\n\n\nHi room, \nJust want to find out if we do have any package in R that simulates a multivariate data using historical values. What about the simulation but with a long term views on some metrics, i.e. Mean, Volatility, correlation, etc... Example, I have a 2 years time series of the returns on 5 asset classes and I want to project the future returns just on a simulation basis. (It needs not preserve necessarily their time dependency distribution). Any model or any Monte Carlo methods or bootstrapping should do, including a simple block or row re-sampling with repetition. \nPlease reply on the basic of a multivariate historical data. This is not a portfolio simulation but a simulation of the portfolio constituents. \nAny information is highly appreciated.\nThanks \n-----\nMama Attiglah, PhD\nQuantitative Research Analyst\nAdvanced Research Center\nState Street Bank\n+44(0)20 7698 6290 (Direct Line)\n+44 (0)207 004 2968 (Direct Fax)\nPlease visit our Web site at \nwww.ssga.com\n\n\n\t[[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.",
+      "body_plain": "Thanks David, I will certainly have a thorough look at it and may probably get back to you tomorrow. \n\nOnce again, thanks. \nMama \n-----\nMama Attiglah, PhD\nQuantitative Research Analyst\nAdvanced Research Center\nState Street Bank\n+44(0)20 7698 6290 (Direct Line)\n+44 (0)207 004 2968 (Direct Fax)\nPlease visit our Web site at \nwww.ssga.com\n\n-----Original Message-----\nFrom: r-sig-finance-bounces at stat.math.ethz.ch [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Lüthi David (luda)\nSent: 18 February 2008 15:21\nTo: R-SIG-Finance\nSubject: Re: [R-SIG-Finance] Quick and simple Simulation of amultivariatereturns\n\nHi Mama\n\nYou can use the package 'ghyp' to fit a multivariate generalized hyperbolic distribution (or a (symmetric) special case) to your data and sample from that distribution afterwards like\n\nlibrary(ghyp)\ndata(smi.stocks)\nfit.mv <- fit.ghypmv(smi.stocks)\nsim.data <- rghyp(10000, fit.mv)\n\n\nBest regards\nDavid\n\n--\nDavid Lüthi\nidp - Institute of Data Analysis and Process Design\nZurich University of Applied Sciences\nPostfach 805\nCH-8401 Winterthur\n\nE-mail: david.luethi at zhaw.ch\nPhone: 058 934 78 03\nhttp://www.idp.zhaw.ch \n--\n\n\n-----Ursprüngliche Nachricht-----\nVon: r-sig-finance-bounces at stat.math.ethz.ch [mailto:r-sig-finance-bounces at stat.math.ethz.ch] Im Auftrag von Attiglah, Mama\nGesendet: Montag, 18. Februar 2008 13:30\nAn: R-SIG-Finance\nBetreff: [R-SIG-Finance] Quick and simple Simulation of a multivariatereturns\n\n\nHi room, \nJust want to find out if we do have any package in R that simulates a multivariate data using historical values. What about the simulation but with a long term views on some metrics, i.e. Mean, Volatility, correlation, etc... Example, I have a 2 years time series of the returns on 5 asset classes and I want to project the future returns just on a simulation basis. (It needs not preserve necessarily their time dependency distribution). Any model or any Monte Carlo methods or bootstrapping should do, including a simple block or row re-sampling with repetition. \nPlease reply on the basic of a multivariate historical data. This is not a portfolio simulation but a simulation of the portfolio constituents. \nAny information is highly appreciated.\nThanks \n-----\nMama Attiglah, PhD\nQuantitative Research Analyst\nAdvanced Research Center\nState Street Bank\n+44(0)20 7698 6290 (Direct Line)\n+44 (0)207 004 2968 (Direct Fax)\nPlease visit our Web site at \nwww.ssga.com\n\n\n\t[[alternative HTML version deleted]]\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.\n\n_______________________________________________\nR-SIG-Finance at stat.math.ethz.ch mailing list\nhttps://stat.ethz.ch/mailman/listinfo/r-sig-finance\n-- Subscriber-posting only. \n-- If you want to post, subscribe first.",
       "body_snippet": "Thanks David, I will certainly have a thorough look at it and may probably get back to you tomorrow. \n\nOnce again, thanks. \nMama \n-----\nMama Attiglah, PhD\nQuantitative Research Analyst\nAdvanced Resear",
       "thread_id": "thread-245c8dba71d8",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002190.html"
     },
     {
       "id": "msg-d8a98e0acb52",
@@ -2296,7 +2418,8 @@
       "body_snippet": "I saw the messages on garch vs garchFit - minimum sample size  and my\nexperinces are the same. For < 500 obs garchFit() often fails and < 1000\ngarch() fails.\n\nIn fact, using garchSim to create test da",
       "thread_id": "thread-d8a98e0acb52",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002566.html"
     },
     {
       "id": "msg-e546a8d3511c",
@@ -2310,11 +2433,12 @@
       "references": [
         "<D84557769CE9ED47AC31686731990DCB0D09A837@INCLCW03A.corp.statestr.com>"
       ],
-      "body_plain": "Hello Mama\n\nI'm not sure I understood well what you need but if you want to have \nresidual bootstrap or simulation of a simple VAR model, I added such \nfunction today in the repo of the package tsDyn.\n\nThe function TVAR_simul allows you to make a raw residual bootstrap with \ngiven data (or instead of resampling, generating new residuals of same \nvariance), or simulate data with given parameter matrix and residual \nvariance. Block sized bootstrap could be included, I think it is not too \ndifficult, just find out how to resample with block for a usual sequence.\n\nThe function is not available on the current version of the package but \nif you are on Linux (sorry for Windows, I don't know) you just need:\n\nsvn checkout http://tsdyn.googlecode.com/svn/trunk/ tsdyn-read-only\ncd tsdyn\nsudo R CMD INSTALL tsDyn\n\n\nNote that the function may contain errors! I hope not, but...\n\nBest regards\n\nMatthieu\n\n\n\n\nAttiglah, Mama a ?crit :\n> Thanks David, I will certainly have a thorough look at it and may probably get back to you tomorrow. \n>\n> Once again, thanks. \n> Mama \n> -----\n> Mama Attiglah, PhD\n> Quantitative Research Analyst\n> Advanced Research Center\n> State Street Bank\n> +44(0)20 7698 6290 (Direct Line)\n> +44 (0)207 004 2968 (Direct Fax)\n> Please visit our Web site at \n> www.ssga.com\n>\n> -----Original Message-----\n> From: r-sig-finance-bounces at stat.math.ethz.ch [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of L?thi David (luda)\n> Sent: 18 February 2008 15:21\n> To: R-SIG-Finance\n> Subject: Re: [R-SIG-Finance] Quick and simple Simulation of amultivariatereturns\n>\n> Hi Mama\n>\n> You can use the package 'ghyp' to fit a multivariate generalized hyperbolic distribution (or a (symmetric) special case) to your data and sample from that distribution afterwards like\n>\n> library(ghyp)\n> data(smi.stocks)\n> fit.mv <- fit.ghypmv(smi.stocks)\n> sim.data <- rghyp(10000, fit.mv)\n>\n>\n> Best regards\n> David\n>\n> --\n> David L?thi\n> idp - Institute of Data Analysis and Process Design\n> Zurich University of Applied Sciences\n> Postfach 805\n> CH-8401 Winterthur\n>\n> E-mail: david.luethi at zhaw.ch\n> Phone: 058 934 78 03\n> http://www.idp.zhaw.ch \n> --\n>\n>\n> -----Urspr?ngliche Nachricht-----\n> Von: r-sig-finance-bounces at stat.math.ethz.ch [mailto:r-sig-finance-bounces at stat.math.ethz.ch] Im Auftrag von Attiglah, Mama\n> Gesendet: Montag, 18. Februar 2008 13:30\n> An: R-SIG-Finance\n> Betreff: [R-SIG-Finance] Quick and simple Simulation of a multivariatereturns\n>\n>\n> Hi room, \n> Just want to find out if we do have any package in R that simulates a multivariate data using historical values. What about the simulation but with a long term views on some metrics, i.e. Mean, Volatility, correlation, etc... Example, I have a 2 years time series of the returns on 5 asset classes and I want to project the future returns just on a simulation basis. (It needs not preserve necessarily their time dependency distribution). Any model or any Monte Carlo methods or bootstrapping should do, including a simple block or row re-sampling with repetition. \n> Please reply on the basic of a multivariate historical data. This is not a portfolio simulation but a simulation of the portfolio constituents. \n> Any information is highly appreciated.\n> Thanks \n> -----\n> Mama Attiglah, PhD\n> Quantitative Research Analyst\n> Advanced Research Center\n> State Street Bank\n> +44(0)20 7698 6290 (Direct Line)\n> +44 (0)207 004 2968 (Direct Fax)\n> Please visit our Web site at \n> www.ssga.com\n>\n>\n> \t[[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.\n>\n>",
+      "body_plain": "Hello Mama\n\nI'm not sure I understood well what you need but if you want to have \nresidual bootstrap or simulation of a simple VAR model, I added such \nfunction today in the repo of the package tsDyn.\n\nThe function TVAR_simul allows you to make a raw residual bootstrap with \ngiven data (or instead of resampling, generating new residuals of same \nvariance), or simulate data with given parameter matrix and residual \nvariance. Block sized bootstrap could be included, I think it is not too \ndifficult, just find out how to resample with block for a usual sequence.\n\nThe function is not available on the current version of the package but \nif you are on Linux (sorry for Windows, I don't know) you just need:\n\nsvn checkout http://tsdyn.googlecode.com/svn/trunk/ tsdyn-read-only\ncd tsdyn\nsudo R CMD INSTALL tsDyn\n\n\nNote that the function may contain errors! I hope not, but...\n\nBest regards\n\nMatthieu\n\n\n\n\nAttiglah, Mama a écrit :\n> Thanks David, I will certainly have a thorough look at it and may probably get back to you tomorrow. \n>\n> Once again, thanks. \n> Mama \n> -----\n> Mama Attiglah, PhD\n> Quantitative Research Analyst\n> Advanced Research Center\n> State Street Bank\n> +44(0)20 7698 6290 (Direct Line)\n> +44 (0)207 004 2968 (Direct Fax)\n> Please visit our Web site at \n> www.ssga.com\n>\n> -----Original Message-----\n> From: r-sig-finance-bounces at stat.math.ethz.ch [mailto:r-sig-finance-bounces at stat.math.ethz.ch] On Behalf Of Lüthi David (luda)\n> Sent: 18 February 2008 15:21\n> To: R-SIG-Finance\n> Subject: Re: [R-SIG-Finance] Quick and simple Simulation of amultivariatereturns\n>\n> Hi Mama\n>\n> You can use the package 'ghyp' to fit a multivariate generalized hyperbolic distribution (or a (symmetric) special case) to your data and sample from that distribution afterwards like\n>\n> library(ghyp)\n> data(smi.stocks)\n> fit.mv <- fit.ghypmv(smi.stocks)\n> sim.data <- rghyp(10000, fit.mv)\n>\n>\n> Best regards\n> David\n>\n> --\n> David Lüthi\n> idp - Institute of Data Analysis and Process Design\n> Zurich University of Applied Sciences\n> Postfach 805\n> CH-8401 Winterthur\n>\n> E-mail: david.luethi at zhaw.ch\n> Phone: 058 934 78 03\n> http://www.idp.zhaw.ch \n> --\n>\n>\n> -----Ursprüngliche Nachricht-----\n> Von: r-sig-finance-bounces at stat.math.ethz.ch [mailto:r-sig-finance-bounces at stat.math.ethz.ch] Im Auftrag von Attiglah, Mama\n> Gesendet: Montag, 18. Februar 2008 13:30\n> An: R-SIG-Finance\n> Betreff: [R-SIG-Finance] Quick and simple Simulation of a multivariatereturns\n>\n>\n> Hi room, \n> Just want to find out if we do have any package in R that simulates a multivariate data using historical values. What about the simulation but with a long term views on some metrics, i.e. Mean, Volatility, correlation, etc... Example, I have a 2 years time series of the returns on 5 asset classes and I want to project the future returns just on a simulation basis. (It needs not preserve necessarily their time dependency distribution). Any model or any Monte Carlo methods or bootstrapping should do, including a simple block or row re-sampling with repetition. \n> Please reply on the basic of a multivariate historical data. This is not a portfolio simulation but a simulation of the portfolio constituents. \n> Any information is highly appreciated.\n> Thanks \n> -----\n> Mama Attiglah, PhD\n> Quantitative Research Analyst\n> Advanced Research Center\n> State Street Bank\n> +44(0)20 7698 6290 (Direct Line)\n> +44 (0)207 004 2968 (Direct Fax)\n> Please visit our Web site at \n> www.ssga.com\n>\n>\n> \t[[alternative HTML version deleted]]\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.\n>\n> _______________________________________________\n> R-SIG-Finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n> -- Subscriber-posting only. \n> -- If you want to post, subscribe first.\n>\n>",
       "body_snippet": "Hello Mama\n\nI'm not sure I understood well what you need but if you want to have \nresidual bootstrap or simulation of a simple VAR model, I added such \nfunction today in the repo of the package tsDyn.",
       "thread_id": "thread-245c8dba71d8",
       "thread_depth": 3,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002191.html"
     },
     {
       "id": "msg-a12a3e98eee2",
@@ -2335,7 +2459,8 @@
       "body_snippet": ">>>> \"SG\" == Spencer Graves <spencer.graves at pdf.com>\n>>>> on Fri, 15 Feb 2008 07:51:22 -0800\n\n   SG> If you haven't already, could you please add descriptions of the\n   SG> arguments delta, skew an",
       "thread_id": "thread-5a2f20a243de",
       "thread_depth": 9,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002192.html"
     },
     {
       "id": "msg-fa027fb05f09",
@@ -2351,7 +2476,8 @@
       "body_snippet": "Hi - I have a trade price series whose file is really big. My first question is, is there any existing routine in R to extract OHLC (Open-High-Low-Close) of specified interval from irregular trade pri",
       "thread_id": "thread-fa027fb05f09",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002193.html"
     },
     {
       "id": "msg-31ebba6b4f9b",
@@ -2369,7 +2495,8 @@
       "body_snippet": "Hi,\n\nThe package 'xts' (the function in question previously part of\n'quantmod') has a nice and fast aggregation function that allows you\nto create OHLC from any univariate series, or from an existing ",
       "thread_id": "thread-fa027fb05f09",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002194.html"
     },
     {
       "id": "msg-bd3b1aa0fcdf",
@@ -2388,7 +2515,8 @@
       "body_snippet": "I wanted to clarify my comment with respect to timeDate:\n\n>\n>  The GMT issue has been discussed here many times over - try\n>  Sys.setenv(TZ='GMT') for starters.  You are probably better off _not_\n>  u",
       "thread_id": "thread-fa027fb05f09",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002195.html"
     },
     {
       "id": "msg-d27b44a7c9d4",
@@ -2408,7 +2536,8 @@
       "body_snippet": "On Wed, Feb 20, 2008 at 11:46 AM, Jeff Ryan <jeff.a.ryan at gmail.com> wrote:\n> I wanted to clarify my comment with respect to timeDate:\n>\n> >\n> >  The GMT issue has been discussed here many times ove",
       "thread_id": "thread-fa027fb05f09",
       "thread_depth": 3,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002196.html"
     },
     {
       "id": "msg-131a26daf685",
@@ -2429,7 +2558,8 @@
       "body_snippet": "Gabor,\n\nThanks for pointing that out.\n\nI meant to say 'an updated' table.  The one from 4/1 is very useful\nindeed - I'd just like to see how 'timeDate' fits into the mix, as\nwell as any updates since ",
       "thread_id": "thread-fa027fb05f09",
       "thread_depth": 4,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002197.html"
     },
     {
       "id": "msg-96a4b8939ec8",
@@ -2445,7 +2575,8 @@
       "body_snippet": "R-Sig-Finance:\n\nI'd like to announce the alpha version of a new package IBrokers:\n\nDesigned to provide native R access to Interactive Brokers' trading\nplatform, it is currently in a very alpha stage. ",
       "thread_id": "thread-96a4b8939ec8",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002198.html"
     },
     {
       "id": "msg-a17a69809e2f",
@@ -2461,7 +2592,8 @@
       "body_snippet": "Can you somehow use the convenient abline() function in zoo plots ?\nI am mainly looking for an easy way of adding vertical lines at specific\nlocations to my zoo plots.\n\nThanks!\n\nMarkus",
       "thread_id": "thread-a17a69809e2f",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002199.html"
     },
     {
       "id": "msg-d8044440095d",
@@ -2479,7 +2611,8 @@
       "body_snippet": "Sure. Here are two examples with plot.zoo:\n\nlibrary(zoo)\n\n# single panel\nz <- zoo(1:10)\nplot(z)\nabline(v = 5)\n\n# multipanel\nplot(merge(z, lag(z, -1)), panel = function(x, y, ...) {lines(x, y);\nabline(",
       "thread_id": "thread-a17a69809e2f",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002200.html"
     },
     {
       "id": "msg-f62cabdd0ff1",
@@ -2497,7 +2630,8 @@
       "body_snippet": "On 22 February 2008 at 14:14, Markus Loecher wrote:\n| Can you somehow use the convenient abline() function in zoo plots ?\n| I am mainly looking for an easy way of adding vertical lines at specific\n| l",
       "thread_id": "thread-a17a69809e2f",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002201.html"
     },
     {
       "id": "msg-64ae7b809873",
@@ -2514,6 +2648,7 @@
       "thread_id": "thread-64ae7b809873",
       "thread_depth": 0,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002202.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080223/a2df3657/attachment.pl"
       ]
@@ -2534,7 +2669,8 @@
       "body_snippet": "Hi Tom,\n\nThis gets the job done in almost all cases - there is an exception in\n08, of which I don't have in front of me. At the very least it will\nget you started.\n\n> library(quantmod)\nLoading require",
       "thread_id": "thread-64ae7b809873",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002203.html"
     },
     {
       "id": "msg-7f29647c044d",
@@ -2552,7 +2688,8 @@
       "body_snippet": "There isn't much magic here btw:\n\n> futures.expiry\nfunction (x)\n{\n    which(format(index(x), \"%d\") > 14 & format(index(x), \"%d\") <\n        22 & format(index(x), \"%w\") == 5 & as.numeric(months(x,\n     ",
       "thread_id": "thread-64ae7b809873",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002204.html"
     },
     {
       "id": "msg-40bfddfe3e2b",
@@ -2570,7 +2707,8 @@
       "body_snippet": "On Sat, Feb 23, 2008 at 10:24 AM, tom soyer <tom.soyer at gmail.com> wrote:\n> Are there built-in R functions that return both the nearest and the next\n> nearest quarterly settlement dates for options ",
       "thread_id": "thread-64ae7b809873",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002205.html"
     },
     {
       "id": "msg-312d075d123e",
@@ -2586,7 +2724,8 @@
       "body_snippet": "I've encountered two differences between versions 9.5 and 9.6 in the results\nI get for of the chart.Histogram function :\n\ni) The y axis (density) limits are fixed at 0,10 but they used to follow the\nd",
       "thread_id": "thread-312d075d123e",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002567.html"
     },
     {
       "id": "msg-9bb587dac7a8",
@@ -2602,7 +2741,8 @@
       "body_snippet": "Hi, All: \n\n      What facilities are available in R for IGARCH estimation -- apart \nfrom \"GarchOxInterface {fGarch}\", which seems to require separate \npurchase and installation of Ox. \n\n      Thanks,\n",
       "thread_id": "thread-9bb587dac7a8",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002206.html"
     },
     {
       "id": "msg-8c9acb29e78b",
@@ -2618,7 +2758,8 @@
       "body_snippet": "Hi, All:\n\n     What facilities are available in R for GARCH-M estimation, defined \nin Tsay (2005, p. 123) as follows: \n\n\n      r[t] = mu + c*s[t]^2 + a[t],\n\n      a[t] = s[t]*e[t],\n\n      s[t]^2 = alp",
       "thread_id": "thread-8c9acb29e78b",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002207.html"
     },
     {
       "id": "msg-3958edce15c4",
@@ -2637,7 +2778,8 @@
       "body_snippet": "Just to be complete:\n\nMarch 2008 expiry is on the 22nd, but the last trading day for those\ncontracts is the 20th, as the 21st is an exchange holiday due to the\nearly Easter.\n\nhttp://www.optionsclearin",
       "thread_id": "thread-64ae7b809873",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002208.html"
     },
     {
       "id": "msg-9f670b7120c4",
@@ -2653,7 +2795,8 @@
       "body_snippet": "Hi all,\n\nCould anybody point me to some overview/survey papers about using\nparticle filters and sequential monte carlo methods to estimate\nstochastic volatilities? I couldn't find any such articles gi",
       "thread_id": "thread-9f670b7120c4",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002209.html"
     },
     {
       "id": "msg-3e5e22f9074a",
@@ -2669,7 +2812,8 @@
       "body_snippet": "Hello guys\nI have this question. How to fit the garch model and print all his fitted values. \ny=c+at  at=vt*sigma   vt=N(0,1)\n\n\nlibrary(fGarch)\nfit = garchFit(~garch(1, 1), data =ret )\n\nc<-fit at fitt",
       "thread_id": "thread-3e5e22f9074a",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002210.html"
     },
     {
       "id": "msg-37c3eb86df9c",
@@ -2687,7 +2831,8 @@
       "body_snippet": "babel at centrum.sk wrote:\n> Hello guys\n> I have this question. How to fit the garch model and print all his fitted values. \n> y=c+at  at=vt*sigma   vt=N(0,1)\n>\n>\n> library(fGarch)\n> fit = garchFit(~g",
       "thread_id": "thread-3e5e22f9074a",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002211.html"
     },
     {
       "id": "msg-0de74540a943",
@@ -2705,7 +2850,8 @@
       "body_snippet": "I need to modify my earlier response.\n\nlibrary(FinTS)\ndata(sp500)\nspFit00.11a <- garchFit(sp500~garch(1,1), data=as.numeric(sp500))\nat <- spFit00.11a at residuals\nquantile(at)\n           0%          2",
       "thread_id": "thread-3e5e22f9074a",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002212.html"
     },
     {
       "id": "msg-3c05154a0cbb",
@@ -2723,7 +2869,8 @@
       "body_snippet": "Hello again, if someone can help with the ohlcPlot problem i would be very\ngrateful indeed !\nAt least i think its a bit weird, both commands used are within the Rmetrics\nsuite, the data\ndownloaded wit",
       "thread_id": "thread-3c05154a0cbb",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002568.html"
     },
     {
       "id": "msg-e5fc36fefede",
@@ -2741,7 +2888,8 @@
       "body_snippet": "Jeff,\n\nMany thanks for putting together this package.  It should be very useful.\n\nI am having trouble using it.  I know it's 0.0-1, but I would like to\nstart using it.  I have R 2.6.2, latest IB Works",
       "thread_id": "thread-96a4b8939ec8",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002213.html"
     },
     {
       "id": "msg-1a671bd6ddb3",
@@ -2760,7 +2908,8 @@
       "body_snippet": "Hi Adrian,\n\nI probably should have made it version 0.0-0001 :)\n\nI didn't mention in the docs - but you need to have the TWS\nconfigured as you would for any client:\n\nConfigure => Api => All Api setting",
       "thread_id": "thread-96a4b8939ec8",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002214.html"
     },
     {
       "id": "msg-504949f650d8",
@@ -2777,6 +2926,7 @@
       "thread_id": "thread-504949f650d8",
       "thread_depth": 0,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002215.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080224/3dee8fa2/attachment.pl"
       ]
@@ -2796,6 +2946,7 @@
       "thread_id": "thread-590000d92d6d",
       "thread_depth": 0,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002216.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080225/eef07dff/attachment.pl"
       ]
@@ -2814,7 +2965,8 @@
       "body_snippet": "I've recently become interested in implementing style analysis as described by \nWilliam Sharpe in:\n  http://www.stanford.edu/~wfsharpe/art/sa/sa.htm\n\nIn particular, I want to implement the 'constraine",
       "thread_id": "thread-4a7f036f8843",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002217.html"
     },
     {
       "id": "msg-5b0ec2890782",
@@ -2832,7 +2984,8 @@
       "body_snippet": "Try it with monthly returns of a mutual fund, including bond & stock\nindices. Bond mutual funds should have little weight for stocks and\nvice-versa.\n\nYou may want to do a principal components analysis",
       "thread_id": "thread-4a7f036f8843",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002218.html"
     },
     {
       "id": "msg-a70f442d5a84",
@@ -2844,11 +2997,12 @@
       "subject_clean": "modifiedVaR at  coskewness, cokurtosis, and higher beta co-moments of the return",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "Hello, i think in the formula at the line with the quantil's its something wrong with the modified VaR\n\nif ( p == 0.95 ) {\n        zc = -1.96\n\n\nzc is for alpha = 0.025 and not for 0.05 \nor not ?\n\nhave a nice day\n\n_____________________________________________________________________\nUnbegrenzter Speicherplatz f?r Ihr E-Mail Postfach? Jetzt aktivieren!\nhttp://www.digitaledienste.web.de/freemail/club/lp/?lp=7",
+      "body_plain": "Hello, i think in the formula at the line with the quantil's its something wrong with the modified VaR\n\nif ( p == 0.95 ) {\n        zc = -1.96\n\n\nzc is for alpha = 0.025 and not for 0.05 \nor not ?\n\nhave a nice day\n\n_____________________________________________________________________\nUnbegrenzter Speicherplatz für Ihr E-Mail Postfach? Jetzt aktivieren!\nhttp://www.digitaledienste.web.de/freemail/club/lp/?lp=7",
       "body_snippet": "Hello, i think in the formula at the line with the quantil's its something wrong with the modified VaR\n\nif ( p == 0.95 ) {\n        zc = -1.96\n\n\nzc is for alpha = 0.025 and not for 0.05 \nor not ?\n\nhave",
       "thread_id": "thread-a70f442d5a84",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002569.html"
     },
     {
       "id": "msg-cab23d7e43a2",
@@ -2864,7 +3018,8 @@
       "body_snippet": "Hello guys\nWhy residuals in R are different than in matlab. Here is example\nfit = garchFit(~garch(1, 1), data =ret)\nres1<-fit at residuals\ngarch11<-ret-res1\ngarch11 = 0.0001074985  0.0001074985   0.00",
       "thread_id": "thread-cab23d7e43a2",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002219.html"
     },
     {
       "id": "msg-2f939ca21f7a",
@@ -2882,7 +3037,8 @@
       "body_snippet": "Your example is not self contained, and I'm unable to replicate it. \n\n      Consider the following (from ch03.R in the 'FinTS' package): \n\nlibrary(FinTS)\nlibrary(fGarch)\ndata(sp500)\nspFit00.11a <- gar",
       "thread_id": "thread-cab23d7e43a2",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002220.html"
     },
     {
       "id": "msg-bb70b8f46bd3",
@@ -2899,6 +3055,7 @@
       "thread_id": "thread-bb70b8f46bd3",
       "thread_depth": 0,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002221.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080227/2dae8a29/attachment.pl"
       ]
@@ -2917,7 +3074,8 @@
       "body_snippet": "Dear all,\nUsing RBloomberg, how do I get historical prices, one per day, but always at a certain time (17:00h for example)?\nThanks\n\n\nLes informations contenues dans ce message sont confidentielles et ",
       "thread_id": "thread-4ea81d2394a9",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002222.html"
     },
     {
       "id": "msg-fe3b915eed0f",
@@ -2934,6 +3092,7 @@
       "thread_id": "thread-fe3b915eed0f",
       "thread_depth": 0,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002223.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080227/de676d3d/attachment.pl"
       ]
@@ -2954,7 +3113,8 @@
       "body_snippet": "This has been a perennial problem for me trying to match up different\nzones.\nIf it is just a matter of which close, you might be able to set your\ndefault times through, e.g. PDFG.\nIt will have to be s",
       "thread_id": "thread-4ea81d2394a9",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002224.html"
     },
     {
       "id": "msg-678e6313b8b7",
@@ -2972,7 +3132,8 @@
       "body_snippet": "apply is not a generic function with class-specific methods.  Try this:\n\ndo.call(cbind, lapply(as.list(xts.ts), to.weekly))\n\n\nOn Wed, Feb 27, 2008 at 9:26 AM, Murali Menon <feanor0 at hotmail.com> wro",
       "thread_id": "thread-fe3b915eed0f",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002225.html"
     },
     {
       "id": "msg-a1b20141fafd",
@@ -2989,6 +3150,7 @@
       "thread_id": "thread-a1b20141fafd",
       "thread_depth": 0,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002226.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080227/c279ffb8/attachment.pl"
       ]
@@ -3009,7 +3171,8 @@
       "body_snippet": "Try this:\n\ntime(merge(xts.ts, yts.ts, all = FALSE))\n\nSee ?merge.zoo\n\n\nOn Wed, Feb 27, 2008 at 10:37 AM, Murali Menon <feanor0 at hotmail.com> wrote:\n>\n> Hi,\n>\n> Another index-related query on xts. If ",
       "thread_id": "thread-a1b20141fafd",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002227.html"
     },
     {
       "id": "msg-8d0f57f3e8b7",
@@ -3027,7 +3190,8 @@
       "body_snippet": "Hi Murali:\n\nTry:\n\n> xts.ts[which(rownames(xts.ts) %in% rownames(yts.ts))]\n\nThe problem is that the first '2007-02-10' is getting interpreted as a\n'date' index, if you will, and discarding the rest:\n\nT",
       "thread_id": "thread-a1b20141fafd",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002228.html"
     },
     {
       "id": "msg-a6980922a863",
@@ -3045,7 +3209,8 @@
       "body_snippet": "I now see things I didn't see before: \n\n           (1) With \"garch11<-ret-res1\", garch11 = mu.  Since the model \nis \"~garch(1,1)\", I'd be worried if it were otherwise, because the model \nfor the 'mean",
       "thread_id": "thread-bb70b8f46bd3",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002229.html"
     },
     {
       "id": "msg-97974d9db46b",
@@ -3063,7 +3228,8 @@
       "body_snippet": "Murali,\n\nThe core issue with to.period is that it is aggregating a series by period and tabulating the opening, closing, max (high) and min (low) value over these periods.\n\nThe resultant object is by ",
       "thread_id": "thread-fe3b915eed0f",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002230.html"
     },
     {
       "id": "msg-3f5d555c14c0",
@@ -3079,7 +3245,8 @@
       "body_snippet": "I am exploring robust portfolio optimization.  I have historical daily data\nfor 20 stocks over 2 year period.  i'd like to simulate 1,000 datasets of 1\nyear each that have autocorrelation and cross-co",
       "thread_id": "thread-3f5d555c14c0",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002571.html"
     },
     {
       "id": "msg-1ed9a10034ba",
@@ -3097,7 +3264,8 @@
       "body_snippet": "Hi,\n\nTo my knowledge, the Bloomberg API does not provide the functionality of\ntimeseries snapped at a user-specified timestamp (if I'm mistaken on\nthis point, please let me know and I'll incorporate t",
       "thread_id": "thread-1ed9a10034ba",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002231.html"
     },
     {
       "id": "msg-57ea27953b41",
@@ -3147,7 +3315,8 @@
       "body_snippet": "I am puzzled by the following observation. It seems that aggregating \nover POSIX timestamps sometimes returns duplicate entries in the output.\nFor example:\n\ntmp <- zoo(cumsum(rnorm(35041)), order.by =",
       "thread_id": "thread-1556cbe5fd1d",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002234.html"
     },
     {
       "id": "msg-5cee9cb0cae0",
@@ -3165,7 +3334,8 @@
       "body_snippet": "Its a problem with daylight savings time.  If you use chron\nor do this first:\n\nSys.setenv(TZ = \"GMT\")\n\nto put your session into GMT time then daylight savings time\nwon't exist and the problem does not",
       "thread_id": "thread-1556cbe5fd1d",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002235.html"
     },
     {
       "id": "msg-6a7337583686",
@@ -3181,7 +3351,8 @@
       "body_snippet": "Hi all,\n\nWe followed some books and sample codes and did some EMM estimation,\nonly to find it won't be able to generate forecast.\n\nThis is because in the stochastic volatility models we are estimating",
       "thread_id": "thread-6a7337583686",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002236.html"
     },
     {
       "id": "msg-662090d17d4c",
@@ -3197,7 +3368,8 @@
       "body_snippet": "I've heard opinions that GARCH/SV volatility models\nare not better on forecasting than simple exponential\nmoving average volatilities or even rolling window\nhistorical vol.\nAny practitioners mind comm",
       "thread_id": "thread-6a7337583686",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002237.html"
     },
     {
       "id": "msg-94eb813d02b4",
@@ -3213,7 +3385,8 @@
       "body_snippet": "I can't say much about Garch/SV being better or worse but I know that's\nthere an approximate functional equivalence between exponential smoothing\nand a regular moving average ( i.e: rolling window ). ",
       "thread_id": "thread-6a7337583686",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002238.html"
     },
     {
       "id": "msg-4b08af8a5bbc",
@@ -3231,7 +3404,8 @@
       "body_snippet": "Michael,\n\nIf I understand correctly, you've used some EMM algorithms to estimate\nthe parameters of a stochastic volatility model.\n\nIf this is the case you should now be able to use Monte Carlo methods",
       "thread_id": "thread-6a7337583686",
       "thread_depth": 1,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002239.html"
     },
     {
       "id": "msg-4aad9e15f184",
@@ -3250,7 +3424,8 @@
       "body_snippet": "Hi Guy,\n\nThanks for your help! Yes, we have the coefficient estimated using\nEMM. And we followed those papers.\n\nJust want to check my understanding about your suggestion:\n\nDo you mean that after we ob",
       "thread_id": "thread-6a7337583686",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002240.html"
     },
     {
       "id": "msg-70a6db4a818d",
@@ -3269,7 +3444,8 @@
       "body_snippet": "Hi Spencer,\n\nI checked this morning your issue with garch(1,0). \n\nIn fGarch package the conditional variance of the GARCH(p,q) is defined as\n\n  \\sigma_t^2  =  \\omega \n                  + \\sum_{i=1}^p ",
       "thread_id": "thread-9416d7ef00b8",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002241.html"
     },
     {
       "id": "msg-5f931e4c41cf",
@@ -3287,7 +3463,8 @@
       "body_snippet": "(This is not being sent to R-help.  It is considered\nimpolite to cross-post messages, especially on topics\nthat are purely financial.)\n\nAs always, the answer is, \"That depends.\"\n\nThe key question is t",
       "thread_id": "thread-6a7337583686",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002242.html"
     },
     {
       "id": "msg-e304d4e68a4f",
@@ -3304,6 +3481,7 @@
       "thread_id": "thread-6a7337583686",
       "thread_depth": 3,
       "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002243.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20080229/a301707d/attachment.pl"
       ]
@@ -3327,7 +3505,8 @@
       "body_snippet": "Hi Jeff,\n\nsuppose tick data looks like this:\n01/06/2007,00:35:33,2795.,9,\n01/06/2007,01:13:14,2799.,1,\n01/06/2007,01:13:49,2799.75,5,\n01/06/2007,01:19:24,2799.75,4,\n01/06/2007,01:20:00,2800.,6,\n01/06/",
       "thread_id": "thread-57ea27953b41",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002244.html"
     },
     {
       "id": "msg-a3fbb45f7999",
@@ -3347,7 +3526,8 @@
       "body_snippet": "Hi Michael,\n\nYes, this is what I'm suggesting.  Bear in mind, your model estimation\nprocess should have also resulted in volatility estimates for t-1, t-2,\netc.\n\nYour simulation will require one or mo",
       "thread_id": "thread-6a7337583686",
       "thread_depth": 3,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002245.html"
     },
     {
       "id": "msg-af06cd443210",
@@ -3363,7 +3543,8 @@
       "body_snippet": "But I doubt this is not a one-step forecast.\nFor one-step cast, you only need start from today's\nvalue and simulate one step ahead. you need to use the\norignal innovations as of today instead of simul",
       "thread_id": "thread-6a7337583686",
       "thread_depth": 4,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002246.html"
     },
     {
       "id": "msg-023ac676e20d",
@@ -3382,7 +3563,8 @@
       "body_snippet": "Hi Guy and Elton,\n\nThanks for the replies.\n\nHowever this is exactly the weird thing about EMM. It simulates the\nlatent variables when doing the estimating itself. So there is no\nclear estimates of the",
       "thread_id": "thread-6a7337583686",
       "thread_depth": 5,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002247.html"
     },
     {
       "id": "msg-0b85f4e58f74",
@@ -3398,7 +3580,8 @@
       "body_snippet": "R-Financiers,\nAre there R functions available for extracting the risk-neutral\nprobability distribution from option prices?\n\nA paper reviewing the many techniques available is available below:\nhttp://w",
       "thread_id": "thread-0b85f4e58f74",
       "thread_depth": 0,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002248.html"
     },
     {
       "id": "msg-347cdf7d0bd1",
@@ -3414,7 +3597,8 @@
       "body_snippet": "For simple SV models (e.g. log normal ar(1)), the model can be written in\nstate space form and the the Kalman filter may be used to forecast the\nlatent volatility. See Harvey, Ruiz and Shephard's pape",
       "thread_id": "thread-6a7337583686",
       "thread_depth": 2,
-      "month": "2008-02"
+      "month": "2008-02",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2008q1/002249.html"
     }
   ],
   "threads": [

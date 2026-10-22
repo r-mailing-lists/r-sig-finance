@@ -17,7 +17,8 @@
       "body_snippet": "Hi,\n\nI begin with R and and I would like to use the stableFit function of \nthe fBasics package. But when I compute this function, I have the \nfollowing error message :\n\nErreur dans .qStableFit(x, dopl",
       "thread_id": "thread-dbfef47318d0",
       "thread_depth": 0,
-      "month": "2006-12"
+      "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001161.html"
     },
     {
       "id": "msg-4768fd66a145",
@@ -33,7 +34,8 @@
       "body_snippet": "Hi everybody,\n\ni've spent a lot of time trying to fix the following problem:\n\ni'm trying to load into R several dataframes with stocks data through:\n\ndat<-lapply(1:Number.of.contracts,function(x) {\n  ",
       "thread_id": "thread-4768fd66a145",
       "thread_depth": 0,
-      "month": "2006-12"
+      "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001162.html"
     },
     {
       "id": "msg-9891454d265e",
@@ -49,7 +51,8 @@
       "body_snippet": "The html help file for factors gives\n\nTo ?revert? a factor f to its original numeric values, as.numeric(levels(f))[f]\nis recommended and slightly more efficient than as.numeric(as.character(f)).\n\n\nJoh",
       "thread_id": "thread-9891454d265e",
       "thread_depth": 0,
-      "month": "2006-12"
+      "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001163.html"
     },
     {
       "id": "msg-753aff6e82a8",
@@ -65,7 +68,8 @@
       "body_snippet": "I have previously posted several functions for analysis of the higher \nmoments of a returns distribution here:\n\nhttp://braverock.com/brian/R/extra_moments.R\n\nincluding a function to calculate modified",
       "thread_id": "thread-753aff6e82a8",
       "thread_depth": 0,
-      "month": "2006-12"
+      "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001164.html"
     },
     {
       "id": "msg-9968fdcb5d5e",
@@ -83,7 +87,8 @@
       "body_snippet": "Brian,\n\nIt looks like you are trying to calculate Marginal VAR (using \nriskmetrics' definition of marginal VAR) You should checkout riskmetrics \nweb site www.riskmetrics.com.  Pages 69-70 of their doc",
       "thread_id": "thread-753aff6e82a8",
       "thread_depth": 1,
-      "month": "2006-12"
+      "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001165.html"
     },
     {
       "id": "msg-fe9c9e6f06c0",
@@ -101,7 +106,8 @@
       "body_snippet": "Brian,\n\nAfter reading your documented links.  The two source your are using \nconfuse the definitions of IVAR and Marginal VAR as describe in the risk \nmetrics documents.  IVAR in your first source is ",
       "thread_id": "thread-753aff6e82a8",
       "thread_depth": 1,
-      "month": "2006-12"
+      "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001166.html"
     },
     {
       "id": "msg-d2a65441946d",
@@ -120,7 +126,8 @@
       "body_snippet": "On Wednesday 06 December 2006 10:03, Joe W. Byers wrote:\n> Brian,\n>\n> After reading your documented links.  The two source you are using\n> confuse the definitions of IVAR and Marginal VAR as describe ",
       "thread_id": "thread-753aff6e82a8",
       "thread_depth": 2,
-      "month": "2006-12"
+      "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001167.html"
     },
     {
       "id": "msg-f9f6864b8598",
@@ -132,11 +139,12 @@
       "subject_clean": "GARCH/APARCH with fSeries",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "Hi,\n\nI try to make VaR predictions with different GARCH setups, and have some questions about the implementation with fSeries.\n\n1) Is the following setup correct to predict the one-step ahead VaR with skewed t GARCH(1,1)?\n  \n  (retdata contains the daily returns)\n\n   st.fit<-sstdFit(retdata)\n   g.fit<-garchFit(formula=~garch(1,1),\n                   data=retdata,\n                   cond.dist=\"dsstd\",\n                   skew=st.fit$est['xi']\n                   shape=st.fit$est['nu']\n                   include.shape=T,\n                   include.skew=T,\n                   include.mean=T)\t\n   param<-predict(g.fit,1)\n   g.os.pred<-qsstd(0.05,mean=as.numeric(param['meanForecast']),\n                    sd=as.numeric(param['standardDeviation']),\n                    nu=as.numeric(g.fit at fit$params$params['shape']),\n                    xi=as.numeric(g.fit at fit$params$params['skew']))\n\n2) How to predict the 5day VaR within that setup? (not the daily VaR in 5   \n   days!) Are the predicted values in predict(g.fit,5)[5,] those for the  \n   daily mean and sd in 5 days?\n\n3) When using the same setup as in 1) but now for skewed t APARCH(1,1) \n   (formula=~APARCH(1,1)) I get extremly large predicted standard  \n   deviations of 0.3 and larger (in contrast to 0.02 of the skewed t  \n   GARCH(1,1) setup). I think that isn?t reasonable and therefore I have\n   doubts if my implementation in 1) is correct. \n\nKind regards,\n\nMartin\n--",
+      "body_plain": "Hi,\n\nI try to make VaR predictions with different GARCH setups, and have some questions about the implementation with fSeries.\n\n1) Is the following setup correct to predict the one-step ahead VaR with skewed t GARCH(1,1)?\n  \n  (retdata contains the daily returns)\n\n   st.fit<-sstdFit(retdata)\n   g.fit<-garchFit(formula=~garch(1,1),\n                   data=retdata,\n                   cond.dist=\"dsstd\",\n                   skew=st.fit$est['xi']\n                   shape=st.fit$est['nu']\n                   include.shape=T,\n                   include.skew=T,\n                   include.mean=T)\t\n   param<-predict(g.fit,1)\n   g.os.pred<-qsstd(0.05,mean=as.numeric(param['meanForecast']),\n                    sd=as.numeric(param['standardDeviation']),\n                    nu=as.numeric(g.fit at fit$params$params['shape']),\n                    xi=as.numeric(g.fit at fit$params$params['skew']))\n\n2) How to predict the 5day VaR within that setup? (not the daily VaR in 5   \n   days!) Are the predicted values in predict(g.fit,5)[5,] those for the  \n   daily mean and sd in 5 days?\n\n3) When using the same setup as in 1) but now for skewed t APARCH(1,1) \n   (formula=~APARCH(1,1)) I get extremly large predicted standard  \n   deviations of 0.3 and larger (in contrast to 0.02 of the skewed t  \n   GARCH(1,1) setup). I think that isn´t reasonable and therefore I have\n   doubts if my implementation in 1) is correct. \n\nKind regards,\n\nMartin\n--",
       "body_snippet": "Hi,\n\nI try to make VaR predictions with different GARCH setups, and have some questions about the implementation with fSeries.\n\n1) Is the following setup correct to predict the one-step ahead VaR with",
       "thread_id": "thread-f9f6864b8598",
       "thread_depth": 0,
-      "month": "2006-12"
+      "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001168.html"
     },
     {
       "id": "msg-1d265b19941b",
@@ -148,11 +156,12 @@
       "subject_clean": "troubles with the weights in the VaR function",
       "in_reply_to": null,
       "references": [],
-      "body_plain": "hi there\n\ni have some troubles with VaR ( value at risk function)\nto be more specific, with the weights in the VaR function\n\n\nwhen i run the example:\nequalWeights = rep(1/4, 4)\nalpha = 0.10\n# Value at Risk:\nVaR(myAssets, equalWeights, alpha)\n\neverything is ok\n\n\n\nBUT \n\nwhen i read my own data set, and try to have my own weights, i have the following message :\n\nErreur dans `names<-.default`(`*tmp*`, value = \"VaR\") : \n        attribut 'names' [1] doit ?tre de m?me longueur que le vecteur [0]\n\nwhich can be translated as:\n\nerror in `names<-.default`(`*tmp*`, value = \"VaR\") : \n\tattribute 'names' [1] must have the same length as vector [0]\n\n\n\ni have no idea of what it means\n:-(\n\n\ni printed the names of my data, and it was exactely the same as the names in the VaR example\n\n\n\nwhen returning this message, R returns at the same time the computation of the VaR, but using the default (equal weights); in my case it is not possible to have different weights :-(\n\n\n\n\ndid anyone face the same problem?\nif yes, how to solve it\n\n\nthx in advance\n\n\nregards\n\n\nmanu",
+      "body_plain": "hi there\n\ni have some troubles with VaR ( value at risk function)\nto be more specific, with the weights in the VaR function\n\n\nwhen i run the example:\nequalWeights = rep(1/4, 4)\nalpha = 0.10\n# Value at Risk:\nVaR(myAssets, equalWeights, alpha)\n\neverything is ok\n\n\n\nBUT \n\nwhen i read my own data set, and try to have my own weights, i have the following message :\n\nErreur dans `names<-.default`(`*tmp*`, value = \"VaR\") : \n        attribut 'names' [1] doit être de même longueur que le vecteur [0]\n\nwhich can be translated as:\n\nerror in `names<-.default`(`*tmp*`, value = \"VaR\") : \n\tattribute 'names' [1] must have the same length as vector [0]\n\n\n\ni have no idea of what it means\n:-(\n\n\ni printed the names of my data, and it was exactely the same as the names in the VaR example\n\n\n\nwhen returning this message, R returns at the same time the computation of the VaR, but using the default (equal weights); in my case it is not possible to have different weights :-(\n\n\n\n\ndid anyone face the same problem?\nif yes, how to solve it\n\n\nthx in advance\n\n\nregards\n\n\nmanu",
       "body_snippet": "hi there\n\ni have some troubles with VaR ( value at risk function)\nto be more specific, with the weights in the VaR function\n\n\nwhen i run the example:\nequalWeights = rep(1/4, 4)\nalpha = 0.10\n# Value at",
       "thread_id": "thread-1d265b19941b",
       "thread_depth": 0,
-      "month": "2006-12"
+      "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001169.html"
     },
     {
       "id": "msg-ba2e125aa1d3",
@@ -170,7 +179,8 @@
       "body_snippet": "We previously released our functions for dealing with higher moments of \nthe return distribution, including coskewness, cokurtosis, and Modified \nCornish-Fisher VaR.  That release post may be found he",
       "thread_id": "thread-ba2e125aa1d3",
       "thread_depth": 0,
-      "month": "2006-12"
+      "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001170.html"
     },
     {
       "id": "msg-5b1964181fef",
@@ -186,7 +196,8 @@
       "body_snippet": "Hello everybody,\n\nI would like to apply the anderson-darling test in order to determine \nif my data follows a stable law.\nI cannot find table of critical values for the stable distribution. \nDoes anyo",
       "thread_id": "thread-5b1964181fef",
       "thread_depth": 0,
-      "month": "2006-12"
+      "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001173.html"
     },
     {
       "id": "msg-9b9689ca7d6f",
@@ -203,6 +214,7 @@
       "thread_id": "thread-9b9689ca7d6f",
       "thread_depth": 0,
       "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001171.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061214/a14c5320/attachment.pl"
       ]
@@ -223,7 +235,8 @@
       "body_snippet": "On 12/14/06, r-sig-finance-request at stat.math.ethz.ch\n<r-sig-finance-request at stat.math.ethz.ch> wrote:\n> Send R-SIG-Finance mailing list submissions to\n> \tr-sig-finance at stat.math.ethz.ch\n>\n> T",
       "thread_id": "thread-f17b25e20cd7",
       "thread_depth": 0,
-      "month": "2006-12"
+      "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001172.html"
     },
     {
       "id": "msg-6688691a0e3b",
@@ -239,7 +252,8 @@
       "body_snippet": "Dear useRs,\n\nCSDA and ERCIM jointly organize the workshop\n\n  Computational and Financial Econometrics\n  April 20-22, 2007\n  University of Geneva, Switzerland\n  http://www.csdassn.org/europe/CFE07/\n\nIn",
       "thread_id": "thread-6688691a0e3b",
       "thread_depth": 0,
-      "month": "2006-12"
+      "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001174.html"
     },
     {
       "id": "msg-f451add06e7d",
@@ -255,7 +269,8 @@
       "body_snippet": "Has anyone here had any experience with semi variance and its kin\noutside of VaR?\n\n    jab\n-- \nJohn Bollinger, CFA, CMT\nwww.BollingerBands.com\n\nIf you advance far enough, you arrive at the beginning.",
       "thread_id": "thread-f451add06e7d",
       "thread_depth": 0,
-      "month": "2006-12"
+      "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001175.html"
     },
     {
       "id": "msg-d1c130601649",
@@ -273,7 +288,8 @@
       "body_snippet": "On Wednesday 27 December 2006 13:45, BBands wrote:\n> Has anyone here had any experience with semi variance and its kin\n> outside of VaR?\n\nWe implemented semideviation and downside deviation here:\n\nhtt",
       "thread_id": "thread-f451add06e7d",
       "thread_depth": 1,
-      "month": "2006-12"
+      "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001176.html"
     },
     {
       "id": "msg-9ea79bd73350",
@@ -291,7 +307,8 @@
       "body_snippet": "BBands wrote:\n> Has anyone here had any experience with semi variance and its kin\n> outside of VaR?\n>\n>     jab\n>   \nWell this gets used in optimization. There is also another performance \nmeasure the",
       "thread_id": "thread-f451add06e7d",
       "thread_depth": 1,
-      "month": "2006-12"
+      "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001177.html"
     },
     {
       "id": "msg-78b712c1f1a9",
@@ -310,7 +327,8 @@
       "body_snippet": "On Wednesday 27 December 2006 20:09, Krishna Kumar wrote:\n> BBands wrote:\n> > Has anyone here had any experience with semi variance and its kin\n> > outside of VaR?\n> >\n> >     jab\n>\n> Well this gets u",
       "thread_id": "thread-f451add06e7d",
       "thread_depth": 2,
-      "month": "2006-12"
+      "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001178.html"
     },
     {
       "id": "msg-670ce685ad84",
@@ -326,7 +344,8 @@
       "body_snippet": "Just on a related tangent, here is an interesting paper, \"On the Maximum\nDrawdown of a Brownian Motion\",\nhttp://alumnus.caltech.edu/~amir/drawdown-jrnl.pdf .\n\nThere was also an interesting article by ",
       "thread_id": "thread-f451add06e7d",
       "thread_depth": 2,
-      "month": "2006-12"
+      "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001179.html"
     },
     {
       "id": "msg-7cfe899d03ba",
@@ -345,7 +364,8 @@
       "body_snippet": "On 12/27/06, Brian G. Peterson <brian at braverock.com> wrote:\n> We implemented semideviation and downside deviation here:\n>\n> https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001170.html\n\nYes, I s",
       "thread_id": "thread-f451add06e7d",
       "thread_depth": 2,
-      "month": "2006-12"
+      "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001180.html"
     },
     {
       "id": "msg-afe21233babd",
@@ -365,7 +385,8 @@
       "body_snippet": "On Thursday 28 December 2006 09:36, BBands wrote:\n> On 12/27/06, Brian G. Peterson <brian at braverock.com> wrote:\n> > We implemented semideviation and downside deviation here:\n> >\n> > https://stat.et",
       "thread_id": "thread-f451add06e7d",
       "thread_depth": 3,
-      "month": "2006-12"
+      "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001181.html"
     },
     {
       "id": "msg-dd13d77f40d2",
@@ -382,6 +403,7 @@
       "thread_id": "thread-dd13d77f40d2",
       "thread_depth": 0,
       "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001182.html",
       "restored_from": [
         "https://stat.ethz.ch/pipermail/r-sig-finance/attachments/20061229/afc01fd1/attachment.pl"
       ]
@@ -402,7 +424,8 @@
       "body_snippet": "Jeffrey Todd Lins wrote:\n> Just on a related tangent, here is an interesting paper, \"On the Maximum\n> Drawdown of a Brownian Motion\",\n> http://alumnus.caltech.edu/~amir/drawdown-jrnl.pdf .\n>\n> There w",
       "thread_id": "thread-f451add06e7d",
       "thread_depth": 3,
-      "month": "2006-12"
+      "month": "2006-12",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q4/001183.html"
     }
   ],
   "threads": [
