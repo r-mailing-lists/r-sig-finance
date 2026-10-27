@@ -468,7 +468,8 @@
       "body_snippet": "Roger,\n\nroger bos writes:\n > Jeff/Dave,\n > \n > The seven page summary doc looks nice and I would be interested in helping\n > out.  I use R for my alpha models and would like to start using the porfoli",
       "thread_id": "thread-9e95415c438e",
       "thread_depth": 2,
-      "month": "2006-03"
+      "month": "2006-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q1/000717.html"
     },
     {
       "id": "msg-23874a884cb3",
@@ -551,7 +552,8 @@
       "body_snippet": "Roger,\n\n > 1) I see that summary(p) shows you the first few names in a portfolio.  Is\n > there a way to see all the holdings (say all 50)?\n\nThe number of stocks to display in summary() hasn't yet been",
       "thread_id": "thread-9e95415c438e",
       "thread_depth": 4,
-      "month": "2006-03"
+      "month": "2006-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q1/000721.html"
     },
     {
       "id": "msg-ec9d2823d445",
@@ -697,11 +699,12 @@
       "references": [
         "<000e01c64d7b$371447f0$4501a8c0@DDG0MG21>"
       ],
-      "body_plain": "P. H?naff wrote:\n\n>I'm a rank beginner in R and R-metrics, but experienced in matlab and other languages. I'm strugling with date arithmetics in R. I'm doing statistical analysis on financial time series, using its, which uses POSIXct objects to measure time. What is the best way to perform simple date arithmetic with these objects? I do not care about h/m/s, nor do I care about daylight saving time. Example of a problem I faced:\n>\n>Add one day to 3-apr-2005. (daylight saving starts on 4-apr-2005).\n>If I do\n>  \n>\n>>as.POSIXct(\"2005-04-03\") + 86400\n>>    \n>>\nin Rmetrics use:\n\nmyFinCenter = \"GMT\" # for daily dates\ntimeDate(\"2005-04-03\")\n[1] \"GMT\"\n[1] [2005-04-03]\ntimeDate(\"2005-04-03\") + 3*24*3600\n[1] \"GMT\"\n[1] [2005-04-06]\n\n# Living in Zurich\nmyFinCenter = \"Zurich\"\ntimeDate(\"2005-04-03\")\n[1] \"Zurich\"\n[1] [2005-04-03 02:00:00]\ntimeDate(\"2005-04-03\") + 3*24*3600\n[1] \"Zurich\"\n[1] [2005-04-06 02:00:00]\n\n# Use for Daily dates:\ntimeDate(\"2005-04-03\", zone = \"Zurich\")\n[1] \"Zurich\"\n[1] [2005-04-03]\ntimeDate(\"2005-04-03\", zone = \"Zurich\") + 3*24*3600\n[1] \"Zurich\"\n[1] [2005-04-06]\n\n\n>I get 1 a.m. on the 4th of april.\n>\n>So, I do something like\n>  \n>\n>>dt1 <- as.POSIXct(\"2005-04-03\")\n>>x1 <- timeDate(dt1)\n>>x2 <- timeNdayOnOrAfter(x1, n=2)\n>>dt2 <- as.POSIXct(as.POSIXlt(x2))\n>>    \n>>\n>\n>There has to be something simpler!\n>\n>Another problem. The tseries and timeDate packages seem to require that one changes his timezone environment variable to GMT. This is not really possible in a corporate environment. Is there a work-around?\n>  \n>\nIt is no longer necessary to specify the timezone. This holds since the \nlatest\nversion 221.10065 (download it from CRAN).\nFor daily dates just be sure that the time zone where you recorded the data\n(zone=...) and the time zone where you use your data (FinCenter=..) are\nspecified as the same. both GMT, or the financial Center where you are\nliving and your operating system's time zone environment variable is set.\n(Note, this is not necessarily the same timezone your clock works on your\nwindows box, which doesn't make use of the Windows time zone environment\nvariable TZ).\n\nPlease let me know if you have further questions (or problems) with \ntimeDate()\nDiethelm\n\n>Any help will be much appreciated.\n>\n>Patrick Henaff\n>\n>\t[[alternative HTML version deleted]]\n>\n>_______________________________________________\n>R-sig-finance at stat.math.ethz.ch mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>  \n>",
-      "body_snippet": "P. H?naff wrote:\n\n>I'm a rank beginner in R and R-metrics, but experienced in matlab and other languages. I'm strugling with date arithmetics in R. I'm doing statistical analysis on financial time ser",
+      "body_plain": "P. Hénaff wrote:\n\n>I'm a rank beginner in R and R-metrics, but experienced in matlab and other languages. I'm strugling with date arithmetics in R. I'm doing statistical analysis on financial time series, using its, which uses POSIXct objects to measure time. What is the best way to perform simple date arithmetic with these objects? I do not care about h/m/s, nor do I care about daylight saving time. Example of a problem I faced:\n>\n>Add one day to 3-apr-2005. (daylight saving starts on 4-apr-2005).\n>If I do\n>  \n>\n>>as.POSIXct(\"2005-04-03\") + 86400\n>>    \n>>\nin Rmetrics use:\n\nmyFinCenter = \"GMT\" # for daily dates\ntimeDate(\"2005-04-03\")\n[1] \"GMT\"\n[1] [2005-04-03]\ntimeDate(\"2005-04-03\") + 3*24*3600\n[1] \"GMT\"\n[1] [2005-04-06]\n\n# Living in Zurich\nmyFinCenter = \"Zurich\"\ntimeDate(\"2005-04-03\")\n[1] \"Zurich\"\n[1] [2005-04-03 02:00:00]\ntimeDate(\"2005-04-03\") + 3*24*3600\n[1] \"Zurich\"\n[1] [2005-04-06 02:00:00]\n\n# Use for Daily dates:\ntimeDate(\"2005-04-03\", zone = \"Zurich\")\n[1] \"Zurich\"\n[1] [2005-04-03]\ntimeDate(\"2005-04-03\", zone = \"Zurich\") + 3*24*3600\n[1] \"Zurich\"\n[1] [2005-04-06]\n\n\n>I get 1 a.m. on the 4th of april.\n>\n>So, I do something like\n>  \n>\n>>dt1 <- as.POSIXct(\"2005-04-03\")\n>>x1 <- timeDate(dt1)\n>>x2 <- timeNdayOnOrAfter(x1, n=2)\n>>dt2 <- as.POSIXct(as.POSIXlt(x2))\n>>    \n>>\n>\n>There has to be something simpler!\n>\n>Another problem. The tseries and timeDate packages seem to require that one changes his timezone environment variable to GMT. This is not really possible in a corporate environment. Is there a work-around?\n>  \n>\nIt is no longer necessary to specify the timezone. This holds since the \nlatest\nversion 221.10065 (download it from CRAN).\nFor daily dates just be sure that the time zone where you recorded the data\n(zone=...) and the time zone where you use your data (FinCenter=..) are\nspecified as the same. both GMT, or the financial Center where you are\nliving and your operating system's time zone environment variable is set.\n(Note, this is not necessarily the same timezone your clock works on your\nwindows box, which doesn't make use of the Windows time zone environment\nvariable TZ).\n\nPlease let me know if you have further questions (or problems) with \ntimeDate()\nDiethelm\n\n>Any help will be much appreciated.\n>\n>Patrick Henaff\n>\n>\t[[alternative HTML version deleted]]\n>\n>_______________________________________________\n>R-sig-finance at stat.math.ethz.ch mailing list\n>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>\n>  \n>",
+      "body_snippet": "P. Hénaff wrote:\n\n>I'm a rank beginner in R and R-metrics, but experienced in matlab and other languages. I'm strugling with date arithmetics in R. I'm doing statistical analysis on financial time ser",
       "thread_id": "thread-110ac60e3bd6",
       "thread_depth": 1,
-      "month": "2006-03"
+      "month": "2006-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q1/000729.html"
     },
     {
       "id": "msg-f47c81b71a0b",
@@ -734,11 +737,12 @@
       "references": [
         "<000e01c64d7b$371447f0$4501a8c0@DDG0MG21>"
       ],
-      "body_plain": "On Wed, 22 Mar 2006 00:38:20 -0600 P. H?naff wrote:\n\n> I'm a rank beginner in R and R-metrics, but experienced in matlab and\n> other languages. I'm strugling with date arithmetics in R. I'm doing\n> statistical analysis on financial time series, using its, which uses\n> POSIXct objects to measure time. What is the best way to perform\n> simple date arithmetic with these objects? I do not care about h/m/s,\n> nor do I care about daylight saving time.\n\nIn that case I would recommend to go with the \"Date\" class available in\nbase R, e.g.\n  as.Date(\"2005-04-03\") + 0:10\nwhich should be rather self-explanatory.\n\nThe package zoo provides time series infrastructure where the time\ninformation can be stored in \"Date\" (or virtually any other class).\n  library(\"zoo\")\n  z <- zoo(rnorm(11), as.Date(\"2005-04-03\") + 0:10)\n  plot(z)\n\nhth,\nZ",
-      "body_snippet": "On Wed, 22 Mar 2006 00:38:20 -0600 P. H?naff wrote:\n\n> I'm a rank beginner in R and R-metrics, but experienced in matlab and\n> other languages. I'm strugling with date arithmetics in R. I'm doing\n> st",
+      "body_plain": "On Wed, 22 Mar 2006 00:38:20 -0600 P. Hénaff wrote:\n\n> I'm a rank beginner in R and R-metrics, but experienced in matlab and\n> other languages. I'm strugling with date arithmetics in R. I'm doing\n> statistical analysis on financial time series, using its, which uses\n> POSIXct objects to measure time. What is the best way to perform\n> simple date arithmetic with these objects? I do not care about h/m/s,\n> nor do I care about daylight saving time.\n\nIn that case I would recommend to go with the \"Date\" class available in\nbase R, e.g.\n  as.Date(\"2005-04-03\") + 0:10\nwhich should be rather self-explanatory.\n\nThe package zoo provides time series infrastructure where the time\ninformation can be stored in \"Date\" (or virtually any other class).\n  library(\"zoo\")\n  z <- zoo(rnorm(11), as.Date(\"2005-04-03\") + 0:10)\n  plot(z)\n\nhth,\nZ",
+      "body_snippet": "On Wed, 22 Mar 2006 00:38:20 -0600 P. Hénaff wrote:\n\n> I'm a rank beginner in R and R-metrics, but experienced in matlab and\n> other languages. I'm strugling with date arithmetics in R. I'm doing\n> st",
       "thread_id": "thread-110ac60e3bd6",
       "thread_depth": 1,
-      "month": "2006-03"
+      "month": "2006-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q1/000731.html"
     },
     {
       "id": "msg-cad07134804c",
@@ -1049,11 +1053,12 @@
       "references": [
         "<800F3C4ADCFCA643A919EF7C140A045A0941F689@LLANQUIHUE.corpgroup.cl>"
       ],
-      "body_plain": "I'm not familiar with the \"ast\" library.  I couldn't find it on CRAN \n(www.r-project.org -> CRAN -> [select a mirror] -> packages).  That does \nNOT mean it's not any good;  it just means that the author(s) / \nmaintainer(s) have not submitted it.  RSiteSearch(\"ast package\") \nrevealed that other users have similarly asked about \"ast\" (e.g.,\nhttp://finzi.psych.upenn.edu/R/Rhelp02a/archive/62346.html).\n\n\t  Have you asked Prof. Masarotto why he has not contributed it to CRAN? \n  I don't know, but I can speculate that he might want to debug it more, \nor he may need to enhance the documentation to meet CRAN standards.  Of \ncourse, if you volunteered to do some of this for him, you might be able \nto help make it happen;  this is after all how the R project has grown.\n\n\t  hope this helps,\n\t  spencer graves\n\nRicardo Zambrano Aguilera wrote:\n\n> Hi everyone , i have a big doubt.\n>  the ast library  to me was always useful, but recently i?m was \n> analyzing the whole concept specially, the arimaId , and i think that, this package actually is not official.\n> that?s my question... why not??\n> thanks a lot \n> \n> \n> \n> \n> \n> \n> \n> \n> \n> \n> \n> \n> \n> \n> \n> \n> \n> \n>>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>\n> \n> \n> _______________________________________________\n> R-sig-finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance",
+      "body_plain": "I'm not familiar with the \"ast\" library.  I couldn't find it on CRAN \n(www.r-project.org -> CRAN -> [select a mirror] -> packages).  That does \nNOT mean it's not any good;  it just means that the author(s) / \nmaintainer(s) have not submitted it.  RSiteSearch(\"ast package\") \nrevealed that other users have similarly asked about \"ast\" (e.g.,\nhttp://finzi.psych.upenn.edu/R/Rhelp02a/archive/62346.html).\n\n\t  Have you asked Prof. Masarotto why he has not contributed it to CRAN? \n  I don't know, but I can speculate that he might want to debug it more, \nor he may need to enhance the documentation to meet CRAN standards.  Of \ncourse, if you volunteered to do some of this for him, you might be able \nto help make it happen;  this is after all how the R project has grown.\n\n\t  hope this helps,\n\t  spencer graves\n\nRicardo Zambrano Aguilera wrote:\n\n> Hi everyone , i have a big doubt.\n>  the ast library  to me was always useful, but recently i´m was \n> analyzing the whole concept specially, the arimaId , and i think that, this package actually is not official.\n> that´s my question... why not??\n> thanks a lot \n> \n> \n> \n> \n> \n> \n> \n> \n> \n> \n> \n> \n> \n> \n> \n> \n> \n> \n>>https://stat.ethz.ch/mailman/listinfo/r-sig-finance\n>>\n> \n> \n> _______________________________________________\n> R-sig-finance at stat.math.ethz.ch mailing list\n> https://stat.ethz.ch/mailman/listinfo/r-sig-finance",
       "body_snippet": "I'm not familiar with the \"ast\" library.  I couldn't find it on CRAN \n(www.r-project.org -> CRAN -> [select a mirror] -> packages).  That does \nNOT mean it's not any good;  it just means that the auth",
       "thread_id": "thread-c942ded5ef55",
       "thread_depth": 1,
-      "month": "2006-03"
+      "month": "2006-03",
+      "source_url": "https://stat.ethz.ch/pipermail/r-sig-finance/2006q1/000748.html"
     }
   ],
   "threads": [
