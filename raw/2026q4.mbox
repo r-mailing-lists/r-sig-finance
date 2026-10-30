@@ -1,0 +1,340 @@
+From @@8098 @end|ng |rom nyu@edu  Thu Oct 29 22:05:34 2026
+From: @@8098 @end|ng |rom nyu@edu (Anatoly Schmidt)
+Date: Thu, 29 Oct 2026 17:05:34 -0400
+Subject: [R-SIG-Finance] TSMARCH DCC
+Message-ID: <CAOTSzf=gDRn3oH3bcbHtZtTBxMQdzgKtZh9Rp5aWWt42w1TtNA@mail.gmail.com>
+
+IThis is my first trial with tsmarch (please see the code below).
+It gives me an error:
+
+Error in set(x, j = name, value = value) :
+  Supplied 5 items to be assigned to 19 items of column 'value'. If
+you wish to 'recycle' the RHS please use rep() to make this intent
+clear to readers of your code.
+
+
+I tried to debug with ChatGPT. One suggestion was to run str(pars, max.level
+= 2)
+It gave:
+   $ rt1: num [1:7] -7.91e-02 3.20e-01 -4.86e-02 -4.18e-01 2.17e-06 ... $
+rt2: num [1:9] 5.47e-01 -6.21e-01 3.47e-06 2.14e-18 7.16e-03 ... $ : num
+0.0241 $ : num 0.955 $ : num 6.19
+
+The conclusion was:
+
+pars list contains five elements:
+
+   - rt1: 7 marginal-model parameters
+   - rt2: 9 marginal-model parameters
+   - 0.0241: DCC alpha
+   - 0.955: DCC beta
+   - 6.19: Student-t degrees of freedom
+
+The asymmetry parameter gamma_1 = 0 is fixed, so it is not included among
+the estimated parameters.
+*The problem is that tsmarch 1.0.0 appears to be treating this mixed list
+as though it were a numeric vector.* That explains why the score
+calculation fails at dcc_pars/2
+
+And that was it...
+Thanks much, Alec
+----------------------------------------------------------
+# ARMA-GARCH-DCC for tsmarch
+
+rm(list = ls())
+library(quantmod)
+library(tseries)
+library(forecast)
+library(tsmarch)
+library(tsgarch)
+library(moments)
+
+source("C:/R/get_prices.R")
+start.time <- Sys.time()
+#parameters
+datasource <- "Y"
+version <- 1
+tkr1 <- "SPY"
+tkr2 <- "XLK"
+startDate<-"2006-01-02"
+endDate<-"2008-12-31"
+
+ka1 <- 2
+kb1 <- 2
+km1 <- 1
+kn1 <- 1
+
+ka2 <- 1
+kb2 <- 1
+km2 <- 2
+kn2 <- 2
+garch1 <- "garch"
+garch2 <- "gjrgarch"
+
+DCC_outfile_name <- paste(tkr1, tkr2, garch1, garch2, ka1, kb1, km1, kn1,
+                          ka2, kb2, km2, kn2,startDate, endDate, version,
+sep = "-")
+dcc_outfile <- paste0("C:/DCC/output/", DCC_outfile_name, ".csv")
+
+#reading in prices
+pricefile_name1 <- paste("prc",tkr1, startDate, endDate, datasource, sep =
+"-")
+pricefile1 <- paste0("C:/DCC/prices/", pricefile_name1, ".csv")
+stat_outfile_name1 <- paste("stat",tkr1, startDate, endDate, sep = "-")
+stat_outfile1 <- paste0("C:/DCC/output/", stat_outfile_name1, ".csv")
+
+if(file.exists(pricefile1)) {
+  prices1 <- read.zoo(pricefile1, sep = ",", index = 1, header = TRUE,
+check.names = FALSE)
+  prices1 <- as.xts(prices1)
+  cat("Prices read from existing file ",pricefile1, "\n\n")
+} else {
+  cat("Cannot find existing price file.\n")
+  prices1 <- get_prices(basket = tkr1, start = startDate, end = endDate,
+datasource = datasource, outfile = pricefile1)
+}
+
+prc1 <- coredata(prices1)
+rt1 <- dailyReturn(prices1)
+
+pricefile_name2 <- paste("prc",tkr2, startDate, endDate, datasource, sep =
+"-")
+pricefile2 <- paste0("C:/DCC/prices/", pricefile_name2, ".csv")
+stat_outfile_name2 <- paste("stat",tkr2, startDate, endDate, sep = "-")
+stat_outfile2 <- paste0("C:/DCC/output/", stat_outfile_name2, ".csv")
+
+if(file.exists(pricefile2)) {
+  prices2 <- read.zoo(pricefile2, sep = ",", index = 1, header = TRUE,
+check.names = FALSE)
+  prices2 <- as.xts(prices2)
+  cat("Prices read from existing file ",pricefile2, "\n\n")
+} else {
+  cat("Cannot find existing price file.\n")
+  prices2 <- get_prices(basket = tkr2, start = startDate, end = endDate,
+datasource = datasource, outfile = pricefile2)
+}
+
+prc2 <- coredata(prices2)
+rt2 <- dailyReturn(prices2)
+
+# Asset1:
+fit1 <- garch_modelspec(
+  y <- rt1,
+  #returns[, "rt1"],
+  model = garch1,
+  order = c(km1, kn1),
+  arma = c(ka1, kb1)
+) |>
+  estimate(keep_tmb = TRUE)
+
+# Asset2:
+fit2 <- garch_modelspec(
+  #returns[, "rt2"],
+  y <-rt2,
+  model = garch2,
+  order = c(km2, kn2),
+  arma = c(ka2, kb2)
+) |>
+  estimate(keep_tmb = TRUE)
+
+fits <- to_multi_estimate(list(fit1, fit2))
+
+names(fits) <- c("rt1", "rt2")
+
+dcc_fit <- dcc_modelspec(
+  fits,
+  dynamics = "dcc",
+  distribution = "mvt"
+) |>
+  estimate()
+
+summary(dcc_fit)
+
+# Conditional correlation matrices
+R <- tscor(dcc_fit)
+
+# Inspect the returned object
+str(R)
+
+	[[alternative HTML version deleted]]
+
+
+From @|ex|o@ @end|ng |rom 4d@c@pe@com  Thu Oct 29 22:19:02 2026
+From: @|ex|o@ @end|ng |rom 4d@c@pe@com (Alexios Galanos)
+Date: Thu, 29 Oct 2026 14:19:02 -0700
+Subject: [R-SIG-Finance] TSMARCH DCC
+In-Reply-To: <CAOTSzf=gDRn3oH3bcbHtZtTBxMQdzgKtZh9Rp5aWWt42w1TtNA@mail.gmail.com>
+References: <CAOTSzf=gDRn3oH3bcbHtZtTBxMQdzgKtZh9Rp5aWWt42w1TtNA@mail.gmail.com>
+Message-ID: <799CFCB1-A107-4EC0-8EEA-2D0A28624B10@4dscape.com>
+
+Hi Anatoly,
+
+I plan to release an update to tsmarch over the weekend to accommodate the new tsgarch ARMA functionality and will test this against the example you provided.
+
+Thanks,
+
+Alexios
+
+> On Oct 29, 2026, at 14:06, Anatoly Schmidt via R-SIG-Finance <r-sig-finance at r-project.org> wrote:
+> 
+> ?IThis is my first trial with tsmarch (please see the code below).
+> It gives me an error:
+> 
+> Error in set(x, j = name, value = value) :
+>  Supplied 5 items to be assigned to 19 items of column 'value'. If
+> you wish to 'recycle' the RHS please use rep() to make this intent
+> clear to readers of your code.
+> 
+> 
+> I tried to debug with ChatGPT. One suggestion was to run str(pars, max.level
+> = 2)
+> It gave:
+>   $ rt1: num [1:7] -7.91e-02 3.20e-01 -4.86e-02 -4.18e-01 2.17e-06 ... $
+> rt2: num [1:9] 5.47e-01 -6.21e-01 3.47e-06 2.14e-18 7.16e-03 ... $ : num
+> 0.0241 $ : num 0.955 $ : num 6.19
+> 
+> The conclusion was:
+> 
+> pars list contains five elements:
+> 
+>   - rt1: 7 marginal-model parameters
+>   - rt2: 9 marginal-model parameters
+>   - 0.0241: DCC alpha
+>   - 0.955: DCC beta
+>   - 6.19: Student-t degrees of freedom
+> 
+> The asymmetry parameter gamma_1 = 0 is fixed, so it is not included among
+> the estimated parameters.
+> *The problem is that tsmarch 1.0.0 appears to be treating this mixed list
+> as though it were a numeric vector.* That explains why the score
+> calculation fails at dcc_pars/2
+> 
+> And that was it...
+> Thanks much, Alec
+> ----------------------------------------------------------
+> # ARMA-GARCH-DCC for tsmarch
+> 
+> rm(list = ls())
+> library(quantmod)
+> library(tseries)
+> library(forecast)
+> library(tsmarch)
+> library(tsgarch)
+> library(moments)
+> 
+> source("C:/R/get_prices.R")
+> start.time <- Sys.time()
+> #parameters
+> datasource <- "Y"
+> version <- 1
+> tkr1 <- "SPY"
+> tkr2 <- "XLK"
+> startDate<-"2006-01-02"
+> endDate<-"2008-12-31"
+> 
+> ka1 <- 2
+> kb1 <- 2
+> km1 <- 1
+> kn1 <- 1
+> 
+> ka2 <- 1
+> kb2 <- 1
+> km2 <- 2
+> kn2 <- 2
+> garch1 <- "garch"
+> garch2 <- "gjrgarch"
+> 
+> DCC_outfile_name <- paste(tkr1, tkr2, garch1, garch2, ka1, kb1, km1, kn1,
+>                          ka2, kb2, km2, kn2,startDate, endDate, version,
+> sep = "-")
+> dcc_outfile <- paste0("C:/DCC/output/", DCC_outfile_name, ".csv")
+> 
+> #reading in prices
+> pricefile_name1 <- paste("prc",tkr1, startDate, endDate, datasource, sep =
+> "-")
+> pricefile1 <- paste0("C:/DCC/prices/", pricefile_name1, ".csv")
+> stat_outfile_name1 <- paste("stat",tkr1, startDate, endDate, sep = "-")
+> stat_outfile1 <- paste0("C:/DCC/output/", stat_outfile_name1, ".csv")
+> 
+> if(file.exists(pricefile1)) {
+>  prices1 <- read.zoo(pricefile1, sep = ",", index = 1, header = TRUE,
+> check.names = FALSE)
+>  prices1 <- as.xts(prices1)
+>  cat("Prices read from existing file ",pricefile1, "\n\n")
+> } else {
+>  cat("Cannot find existing price file.\n")
+>  prices1 <- get_prices(basket = tkr1, start = startDate, end = endDate,
+> datasource = datasource, outfile = pricefile1)
+> }
+> 
+> prc1 <- coredata(prices1)
+> rt1 <- dailyReturn(prices1)
+> 
+> pricefile_name2 <- paste("prc",tkr2, startDate, endDate, datasource, sep =
+> "-")
+> pricefile2 <- paste0("C:/DCC/prices/", pricefile_name2, ".csv")
+> stat_outfile_name2 <- paste("stat",tkr2, startDate, endDate, sep = "-")
+> stat_outfile2 <- paste0("C:/DCC/output/", stat_outfile_name2, ".csv")
+> 
+> if(file.exists(pricefile2)) {
+>  prices2 <- read.zoo(pricefile2, sep = ",", index = 1, header = TRUE,
+> check.names = FALSE)
+>  prices2 <- as.xts(prices2)
+>  cat("Prices read from existing file ",pricefile2, "\n\n")
+> } else {
+>  cat("Cannot find existing price file.\n")
+>  prices2 <- get_prices(basket = tkr2, start = startDate, end = endDate,
+> datasource = datasource, outfile = pricefile2)
+> }
+> 
+> prc2 <- coredata(prices2)
+> rt2 <- dailyReturn(prices2)
+> 
+> # Asset1:
+> fit1 <- garch_modelspec(
+>  y <- rt1,
+>  #returns[, "rt1"],
+>  model = garch1,
+>  order = c(km1, kn1),
+>  arma = c(ka1, kb1)
+> ) |>
+>  estimate(keep_tmb = TRUE)
+> 
+> # Asset2:
+> fit2 <- garch_modelspec(
+>  #returns[, "rt2"],
+>  y <-rt2,
+>  model = garch2,
+>  order = c(km2, kn2),
+>  arma = c(ka2, kb2)
+> ) |>
+>  estimate(keep_tmb = TRUE)
+> 
+> fits <- to_multi_estimate(list(fit1, fit2))
+> 
+> names(fits) <- c("rt1", "rt2")
+> 
+> dcc_fit <- dcc_modelspec(
+>  fits,
+>  dynamics = "dcc",
+>  distribution = "mvt"
+> ) |>
+>  estimate()
+> 
+> summary(dcc_fit)
+> 
+> # Conditional correlation matrices
+> R <- tscor(dcc_fit)
+> 
+> # Inspect the returned object
+> str(R)
+> 
+>    [[alternative HTML version deleted]]
+> 
+> _______________________________________________
+> R-SIG-Finance at r-project.org mailing list
+> https://stat.ethz.ch/mailman/listinfo/r-sig-finance
+> -- Subscriber-posting only. If you want to post, subscribe first.
+> -- Also note that this is not the r-help list where general R questions should go.
+
+
